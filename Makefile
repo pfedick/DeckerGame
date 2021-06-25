@@ -15,13 +15,12 @@ OBJECTS=compile/main.o \
 	compile/ui.o \
 	
 	
-TEXMAKER_CFLAGS	= -ggdb -Wall  -Itools/texmaker $(EXTRA_CFLAGS) `ppl6-config --cflags release` `ppl7-config --cflags debug core gfx`
-TEXMAKER_LIB	= -L/usr/local/lib `ppl6-config --libs release` `ppl7-config --libs debug core gfx`  -lstdc++
+TEXMAKER_CFLAGS	= -ggdb -Wall  -Itools/texmaker $(EXTRA_CFLAGS) `ppl7-config --cflags release` `ppl7-config --cflags debug core gfx`
+TEXMAKER_LIB	= -L/usr/local/lib `ppl7-config --libs release` -lstdc++
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
 
 
 LIBDEP	:= $(shell ppl7-config --ppllib debug)
-LIBDEP_PPL6	:= $(shell ppl6-config --ppllib release)
 	
 $(PROGRAM): $(OBJECTS) $(LIBDEP)
 	$(CC) -o $(PROGRAM) $(OBJECTS) $(CFLAGS) $(LIB)
@@ -29,17 +28,17 @@ $(PROGRAM): $(OBJECTS) $(LIBDEP)
 
 all: $(PROGRAM)
 
-texmaker: $(TEXMAKER_OBJECTS) $(LIBDEP_PPL6) $(LIBDEP)
+texmaker: $(TEXMAKER_OBJECTS) $(LIBDEP)
 	$(CC) -o texmaker $(TEXMAKER_OBJECTS) $(TEXMAKER_CFLAGS) $(TEXMAKER_LIB)
 	-chmod 755 texmaker
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) texmaker *.core
 	
-sprites: texmaker
-	./texmaker.exe -s res/charlie/*.png -t res/charlie.tex -w 1024 -h 1024 -px 115 -py 226
-	./texmaker.exe -s res/bricks/*.png -t res/bricks.tex -w 1024 -h 1024 --pivot_detection bricks
-	./texmaker.exe -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
+sprites:
+	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 64 -py 127 -x res/george
+	./texmaker -s lightwave/Render/bricks/*.png -t res/bricks.tex -w 1024 -h 1024 --pivot_detection bricks -x res/bricks
+	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
 	-mkdir -p compile 

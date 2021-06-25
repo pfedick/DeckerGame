@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ppl6.h>
+#include <ppl7.h>
 
 void help()
 {
@@ -23,6 +23,7 @@ void help()
 		"   -d TEXT Description\n"
 		"   -x FILE Speichert jede fertige Textur als PNG\n"
 		"   --pivot_detection  params|bricks\n"
+		"   --help  zeigt diese Hilfe an\n"
 
 		);
 }
@@ -82,17 +83,17 @@ void loadFromListfile(const char* listfile, TextureFile& Tex)
 
 int main(int argc, char **argv)
 {
-	const char *listfile=ppl6::getargv(argc,argv,"-f");
-	const char *source=ppl6::getargv(argc,argv,"-s");
-	const char *target=ppl6::getargv(argc,argv,"-t");
-	const char *savepng=ppl6::getargv(argc,argv,"-x");
-	const char *pivot_detection=ppl6::getargv(argc,argv,"--pivot_detection");
+	ppl7::String listfile=ppl7::GetArgv(argc,argv,"-f");
+	ppl7::String source=ppl7::GetArgv(argc,argv,"-s");
+	ppl7::String target=ppl7::GetArgv(argc,argv,"-t");
+	ppl7::String savepng=ppl7::GetArgv(argc,argv,"-x");
+	ppl7::String pivot_detection=ppl7::GetArgv(argc,argv,"--pivot_detection");
 
-	if ((source==NULL && listfile==NULL) || target==NULL || argc<2) {
+	if (ppl7::HaveArgv(argc,argv,"--help") || (source.isEmpty() && listfile.isEmpty()) || target.isEmpty() || argc<2) {
 		help();
 		return 0;
 	}
-	if (source!=NULL && listfile!=NULL) {
+	if (source.notEmpty() && listfile.notEmpty()) {
 		help();
 		return 1;
 	}
@@ -101,38 +102,38 @@ int main(int argc, char **argv)
 
 	TextureFile Tex;
 
-	const char *tmp;
-	if ((tmp=ppl6::getargv(argc,argv,"-a"))) Tex.SetAuthor(tmp);
-	if ((tmp=ppl6::getargv(argc,argv,"-c"))) Tex.SetCopyright(tmp);
-	if ((tmp=ppl6::getargv(argc,argv,"-n"))) Tex.SetName(tmp);
-	if ((tmp=ppl6::getargv(argc,argv,"-d"))) Tex.SetDescription(tmp);
+	ppl7::String Tmp;
+	Tmp=ppl7::GetArgv(argc,argv,"-a"); if (Tmp.notEmpty()) Tex.SetAuthor(Tmp);
+	Tmp=ppl7::GetArgv(argc,argv,"-c"); if (Tmp.notEmpty()) Tex.SetCopyright(Tmp);
+	Tmp=ppl7::GetArgv(argc,argv,"-n"); if (Tmp.notEmpty()) Tex.SetName(Tmp);
+	Tmp=ppl7::GetArgv(argc,argv,"-d"); if (Tmp.notEmpty()) Tex.SetDescription(Tmp);
 
-	if (pivot_detection) {
-		printf ("test: %s\n", pivot_detection);
-		if (strcmp(pivot_detection,"params")==0) Tex.SetPivotDetection(PIVOT_PARAMS);
-		else if (strcmp(pivot_detection,"bricks")==0) Tex.SetPivotDetection(PIVOT_BRICKS);
+	if (pivot_detection.notEmpty()) {
+		printf ("test: %s\n", (const char*) pivot_detection);
+		if (pivot_detection=="params") Tex.SetPivotDetection(PIVOT_PARAMS);
+		else if (pivot_detection=="bricks") Tex.SetPivotDetection(PIVOT_BRICKS);
 		else {
-			printf ("ERROR: unknwon pivot_detection algorithm [%s]\n", pivot_detection);
+			printf ("ERROR: unknwon pivot_detection algorithm [%s]\n", (const char*)pivot_detection);
 			return (1);
 		}
 	}
 
 	int t,w,h,px,py;
-	t=ppl6::atoi(ppl6::getargv(argc,argv,"-mt"));
-	w=ppl6::atoi(ppl6::getargv(argc,argv,"-w"));
-	h=ppl6::atoi(ppl6::getargv(argc,argv,"-h"));
-	px=ppl6::atoi(ppl6::getargv(argc,argv,"-px"));
-	py=ppl6::atoi(ppl6::getargv(argc,argv,"-py"));
+	t=ppl7::GetArgv(argc,argv,"-mt").toInt();
+	w=ppl7::GetArgv(argc,argv,"-w").toInt();
+	h=ppl7::GetArgv(argc,argv,"-h").toInt();
+	px=ppl7::GetArgv(argc,argv,"-px").toInt();
+	py=ppl7::GetArgv(argc,argv,"-py").toInt();
 
 	Tex.SetMaxTextureNum(t);
 	if (w>0 && h==0) h=w;
 	if (h>0 && w==0) w=h;
 	if (w>0) Tex.SetTextureSize(w,h);
 
-	if (source) {
+	if (source.notEmpty()) {
 		int ret=loadFromDirectory(source, px, py, Tex);
 		if (ret!=0) return ret;
-	} else if (listfile) {
+	} else if (listfile.notEmpty()) {
 		try {
 			loadFromListfile(listfile, Tex);
 		} catch (const ppl7::Exception &ex) {
@@ -142,7 +143,7 @@ int main(int argc, char **argv)
 
 	}
 
-	if (savepng) {
+	if (savepng.notEmpty()) {
 		printf("Speichere Texturen als PNG...\n");
 		Tex.SaveTextures(savepng);
 	}
