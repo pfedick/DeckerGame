@@ -157,7 +157,7 @@ void Sprite::loadIndex(ppl7::PFPChunk *chunk)
 		item.Pivot.y=Peek16(p+14+2);
 		item.Offset.x=Peek16(p+18+0);
 		item.Offset.y=Peek16(p+18+2);
-		SpriteList.add(item.id,item);
+		SpriteList.insert(std::pair<int,SpriteIndexItem>(item.id,item));
 		p+=22;
 	}
 }
@@ -243,7 +243,10 @@ void Sprite::load(SDL &sdl, FileObject &ff)
 void Sprite::draw(SDL_Renderer *renderer, int x, int y, int id) const
 {
 	// Sprite im Index finden
-	const SpriteIndexItem &item=SpriteList.find(id);
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it==SpriteList.end()) return;
+	const SpriteIndexItem &item=it->second;
 	SDL_Rect tr;
 	tr.x=x+item.Offset.x-item.Pivot.x;
 	tr.y=y+item.Offset.y-item.Pivot.y;
@@ -265,5 +268,5 @@ int Sprite::numTextures() const
 
 int Sprite::numSprites() const
 {
-	return (int)SpriteList.num();
+	return (int)SpriteList.size();
 }

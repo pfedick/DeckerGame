@@ -18,7 +18,7 @@ Game::~Game()
 
 void Game::loadGrafix()
 {
-	Sprite_Charlie.load(sdl, "res/charlie.tex");
+	Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
 	Bricks.load(sdl, "res/bricks.tex");
 	Cursor.load(sdl, "res/cursor.tex");
@@ -26,11 +26,12 @@ void Game::loadGrafix()
 
 void Game::createWindow()
 {
-	setFlags(ppl7::tk::Window::DefaultFullscreen);
+	setFlags(ppl7::tk::Window::DefaultWindow);
 	setWindowTitle("DeckerGame");
 	setRGBFormat(ppl7::grafix::RGBFormat::A8R8G8B8);
 	setBackgroundColor(ppl7::grafix::Color(0,0,0,0));
 	ppl7::grafix::Size desktop=wm->desktopResolution();
+	desktop.height-=80;
 	setSize(desktop);
 	wm->createWindow(*this);
 	sdl.setRenderer((SDL_Renderer *)getRenderer());
@@ -40,7 +41,7 @@ void Game::createWindow()
 void Game::initUi()
 {
 	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	ppl7::grafix::Size desktop=wm->desktopResolution();
+	const ppl7::grafix::Size &desktop=clientSize();
 	ppl7::tk::Label *label;
 
 	ppl7::tk::Frame *title_frame=new ppl7::tk::Frame(0,0,desktop.width,32);
@@ -165,12 +166,12 @@ void Game::run()
 		for (int i=0;i<8;i++) {
 			Bricks.draw(renderer,431+i*62,656-35+i*4,1);
 		}
-		Sprite_Charlie.draw(renderer,400,400,c);
-		Sprite_Charlie.draw(renderer,656,400,c+50);
+		Sprite_George.draw(renderer,400,400,c);
+		Sprite_George.draw(renderer,656,400,c+50);
 		if (c%20<10)
-			Sprite_Charlie.draw(renderer,400+5*62,620,c%20+40);
+			Sprite_George.draw(renderer,400+5*62,620,c%20+40);
 		else
-			Sprite_Charlie.draw(renderer,400+5*62,620,c%20+80);
+			Sprite_George.draw(renderer,400+5*62,620,c%20+80);
 		c++;
 		if (c>=40) c=0;
 		//displayHUD();

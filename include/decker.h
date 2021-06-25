@@ -82,7 +82,6 @@ class Sprite
 			int id;
 			SDL_Texture *tex;
 			SDL_Rect r;
-			//ppl7::grafix::Rect r;
 			ppl7::grafix::Point Pivot;
 			ppl7::grafix::Point Offset;
 
@@ -99,8 +98,7 @@ class Sprite
 			}
 		};
 		std::map<int,SDL_Texture*> TextureMap;
-		//ppl7::AVLTree<int,SpriteTexture> TextureList;
-		ppl7::AVLTree<int,SpriteIndexItem> SpriteList;
+		std::map<int,SpriteIndexItem> SpriteList;
 
 		void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk);
 		void loadIndex(ppl7::PFPChunk *chunk);
@@ -152,7 +150,7 @@ private:
 	ppl7::tk::WindowManager *wm;
 	//ppl7::tk::Window window;
 	void loadGrafix();
-	Sprite Sprite_Charlie;
+	Sprite Sprite_George;
 	Sprite Bricks;
 	Sprite Cursor;
 	Level level;
