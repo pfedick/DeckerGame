@@ -36,8 +36,8 @@ clean:
 	-rm -f compile/*.o $(PROGRAM) texmaker *.core
 	
 sprites:
-	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 64 -py 127 -x res/george
-	./texmaker -s lightwave/Render/bricks/*.png -t res/bricks.tex -w 1024 -h 1024 --pivot_detection bricks -x res/bricks
+	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 128 -py 127 -x res/george
+	./texmaker -s lightwave/Render/bricks/*.png -t res/bricks.tex -w 512 -h 512 --pivot_detection bricks -x res/bricks
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
 	
 compile/main.o: src/main.cpp Makefile include/decker.h

@@ -8,6 +8,8 @@ Game::Game()
 {
 	tex_level_grid=NULL;
 	wm=ppl7::tk::GetWindowManager();
+	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
+	wm->setWidgetStyle(s);
 }
 
 Game::~Game()
@@ -20,7 +22,7 @@ void Game::loadGrafix()
 {
 	Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
-	Bricks.load(sdl, "res/bricks.tex");
+	Bricks.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
 	Cursor.load(sdl, "res/cursor.tex");
 }
 
@@ -35,6 +37,7 @@ void Game::createWindow()
 	setSize(desktop);
 	wm->createWindow(*this);
 	sdl.setRenderer((SDL_Renderer *)getRenderer());
+	SDL_ShowCursor(SDL_DISABLE);
 
 }
 
@@ -160,26 +163,42 @@ void Game::run()
 		}
 		*/
 
-		for (int i=0;i<10;i++) {
-			Bricks.draw(renderer,400+i*62,656+i*4,10);
+		for (int y=1080;y>100;y-=38) {
+			for (int x=0;x<1920;x+=64) {
+				Bricks.draw(renderer,x,y,0);
+			}
 		}
+		/*
+		for (int i=0;i<10;i++) {
+			Bricks.draw(renderer,400+i*64,656,0);
+		}
+		*/
+		/*
 		for (int i=0;i<8;i++) {
 			Bricks.draw(renderer,431+i*62,656-35+i*4,1);
 		}
-		Sprite_George.draw(renderer,400,400,c);
+		*/
+		for (int y=100;y<1080;y+=200) {
+			for (int x=0;x<1920;x+=200) {
+				Sprite_George.draw(renderer,x,y,c);
+			}
+		}
+				/*
+		//Sprite_George.draw(renderer,400,400,c);
 		Sprite_George.draw(renderer,656,400,c+50);
 		if (c%20<10)
 			Sprite_George.draw(renderer,400+5*62,620,c%20+40);
 		else
 			Sprite_George.draw(renderer,400+5*62,620,c%20+80);
+			*/
 		c++;
-		if (c>=40) c=0;
+		if (c>=50) c=0;
 		//displayHUD();
 		//SDL_RenderCopy(renderer, gui_tex, NULL, NULL);
-		drawGrid(0);
+		//drawGrid(0);
 		mouse=wm->getMouseState();
-		Cursor.draw(renderer,mouse.p.x,mouse.p.y,0);
 		drawWidgets();
+		Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
 		presentScreen();
 
 		//WorldCoords.x+=1;

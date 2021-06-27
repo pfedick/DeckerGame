@@ -100,14 +100,14 @@ class Sprite
 		std::map<int,SDL_Texture*> TextureMap;
 		std::map<int,SpriteIndexItem> SpriteList;
 
-		void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk);
+		void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
 		void loadIndex(ppl7::PFPChunk *chunk);
 
 	public:
 		Sprite();
 		~Sprite();
-		void load(SDL &sdl, const ppl7::String &filename);
-		void load(SDL &sdl, ppl7::FileObject &ff);
+		void load(SDL &sdl, const ppl7::String &filename, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
+		void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
 		void clear();
 		void draw(SDL_Renderer *renderer, int x, int y, int id) const;
 		int numTextures() const;
@@ -148,6 +148,7 @@ class Game : private ppl7::tk::Window
 private:
 	SDL sdl;
 	ppl7::tk::WindowManager *wm;
+	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
 	void loadGrafix();
 	Sprite Sprite_George;

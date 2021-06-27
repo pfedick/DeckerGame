@@ -162,7 +162,7 @@ void Sprite::loadIndex(ppl7::PFPChunk *chunk)
 	}
 }
 
-void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk)
+void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &tint)
 {
 	Compression Comp;
 	Comp.usePrefix(Compression::Prefix_V2);
@@ -189,32 +189,44 @@ void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk)
 	// Nun erstellen wir ein neues Image
 	ppl7::grafix::Image surface;
 	surface.create(width,height,rgbformat);
-	//printf ("load texture: id=%d, width=%d, height=%d\n", id, width, height);
-	for (int y=0;y<height;y++) {
-		for (int x=0;x<width;x++) {
-			ppl7::grafix::Color c(Peek8(buffer+2),Peek8(buffer+1),Peek8(buffer),Peek8(buffer+3));
-			//printf ("%X,",c.alpha());
-			//if (rgbformat==grafix::RGBFormat::A8R8G8B8) {
+	if (tint.rgb()) {
+		printf ("tint\n");
+		for (int y=0;y<height;y++) {
+			for (int x=0;x<width;x++) {
+				ppl7::grafix::Color c(Peek8(buffer+2),Peek8(buffer+1),Peek8(buffer),Peek8(buffer+3));
+				if (c.alpha()) {
+					int brightness=c.brightness();
+					ppl7::grafix::Color tinted(tint.red()*brightness/255,
+							tint.green()*brightness/255,
+							tint.blue()*brightness/255,
+							c.alpha());
+					surface.putPixel(x,y,tinted);
+				}
+				buffer+=4;
+			}
+		}
+	} else {
+		printf ("no tint\n");
+		for (int y=0;y<height;y++) {
+			for (int x=0;x<width;x++) {
+				ppl7::grafix::Color c(Peek8(buffer+2),Peek8(buffer+1),Peek8(buffer),Peek8(buffer+3));
 				surface.putPixel(x,y,c);
 				buffer+=4;
-			//}
+			}
 		}
-		//printf ("\n");
 	}
-	//ppl7::grafix::ImageFilter_PNG png;
-	//png.saveFile("tex.png", surface);
 	SDL_Texture *tex=sdl.createTexture(surface);
 	TextureMap.insert(std::pair<int, SDL_Texture*>(id,tex));
 }
 
-void Sprite::load(SDL &sdl, const String &filename)
+void Sprite::load(SDL &sdl, const String &filename, const ppl7::grafix::Color &tint)
 {
 	File ff;
 	ff.open(filename);
-	load(sdl, ff);
+	load(sdl, ff, tint);
 }
 
-void Sprite::load(SDL &sdl, FileObject &ff)
+void Sprite::load(SDL &sdl, FileObject &ff, const ppl7::grafix::Color &tint)
 {
 	PFPFile File;
 	clear();
@@ -229,7 +241,7 @@ void Sprite::load(SDL &sdl, FileObject &ff)
 	File.reset(it);
 	while ((chunk=File.findNextChunk(it,"SURF"))) {
 		//printf ("load SURF\n");
-		loadTexture(sdl, chunk);
+		loadTexture(sdl, chunk, tint);
 	}
 	// Index Chunks laden
 	File.reset(it);
