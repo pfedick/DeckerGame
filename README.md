@@ -41,6 +41,11 @@ The game will be open source and uses the [Simple DirectMedia Layer](https://www
 I don't know. This is one of my hobbies, but I have others, too :-)
 Maybe I will never finish it or decide to do something else. We will see...
 
+## How to compile
+
+TODO
+
+
 
 
 
