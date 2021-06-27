@@ -27,12 +27,12 @@ The game is in very early development, which means I know a few things I want to
 - compose soundtrack
 - create sound effects
 - build the world/levels
+- story?
 
 ## On what platforms will the game be available
 My target platforms are:
 
 - Linux (development is done on Fedora 34)
-- FreeBSD
 - Windows 10
 
 The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/) library, which is available on many platforms. So in therory it should be possible to compile it on any platform with a c++ compiler and the SDL library.
