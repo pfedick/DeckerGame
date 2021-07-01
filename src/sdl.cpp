@@ -178,9 +178,16 @@ ppl7::grafix::Size SDL::getWindowSize() const
 	return ppl7::grafix::Size(desktop.w, desktop.h);
 }
 
-void SDL::startFrame()
+ppl7::grafix::Rect SDL::getClientWindow() const
 {
-	SDL_SetRenderDrawColor(renderer, 255, 0x00, 0x00, 255);
+	SDL_Rect desktop;
+	SDL_GetDisplayBounds(0,&desktop);
+	return ppl7::grafix::Rect(desktop.x, desktop.y, desktop.w, desktop.h);
+}
+
+void SDL::startFrame(const ppl7::grafix::Color &background)
+{
+	SDL_SetRenderDrawColor(renderer, background.red(), background.green(), background.blue(), 255);
 	SDL_RenderClear(renderer);
 }
 

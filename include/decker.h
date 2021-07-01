@@ -28,6 +28,9 @@
 EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);
 
+#define TILE_WIDTH 64
+#define TILE_HEIGHT 38
+
 
 class FPS
 {
@@ -65,11 +68,12 @@ public:
 	SDL_Texture *createTexture(const ppl7::grafix::Drawable &d);
 	SDL_Texture *createStreamingTexture(int width, int height);
 	void destroyTexture(SDL_Texture *texture);
-	void startFrame();
+	void startFrame(const ppl7::grafix::Color &background);
 	SDL_Renderer *getRenderer();
 	void present();
 
 	ppl7::grafix::Size getWindowSize() const;
+	ppl7::grafix::Rect getClientWindow() const;
 };
 
 
@@ -120,13 +124,22 @@ class Tile
 
 };
 
+class Plane
+{
+private:
+public:
+	Plane();
+	~Plane();
+	void clear();
+	void create(int width, int height, int tile_width, int tile_height);
+};
+
 
 class Level
 {
 private:
 	SDL_Renderer *renderer;
-	Tile ****tiles;
-	int width, height, layers;
+	Plane PlayerPlane;
 
 	void clear();
 
@@ -137,11 +150,20 @@ public:
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
 	void setRenderer(SDL_Renderer *renderer);
-	void setTileSize(int width, int height);
-	void draw(int layer, int x, int y);
+	void draw(int player_x, int player_y);
+};
+
+
+class Resources
+{
+public:
+	Sprite Sprite_George;
+	Sprite Tiles;
+	Sprite Cursor;
 
 };
 
+class Player;
 
 class Game : private ppl7::tk::Window
 {
@@ -151,9 +173,7 @@ private:
 	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
 	void loadGrafix();
-	Sprite Sprite_George;
-	Sprite Bricks;
-	Sprite Cursor;
+	Resources resources;
 	Level level;
 	SDL_Texture* tex_level_grid;
 	ppl7::grafix::Size desktopSize;
@@ -173,7 +193,9 @@ private:
 
 	void moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse);
 
+	ppl7::grafix::Point PlayerCoords;
 
+	Player *player;
 
 public:
 	Game();

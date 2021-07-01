@@ -13,6 +13,8 @@ OBJECTS=compile/main.o \
 	compile/level.o \
 	compile/fps.o \
 	compile/ui.o \
+	compile/plane.o \
+	compile/player.o
 	
 	
 TEXMAKER_CFLAGS	= -ggdb -Wall  -Itools/texmaker $(EXTRA_CFLAGS) `ppl7-config --cflags release` `ppl7-config --cflags debug core gfx`
@@ -37,7 +39,7 @@ clean:
 	
 sprites:
 	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 128 -py 127 -x res/george
-	./texmaker -s lightwave/Render/bricks/*.png -t res/bricks.tex -w 512 -h 512 --pivot_detection bricks -x res/bricks
+	./texmaker -s lightwave/Render/tiles/*.png -t res/tiles.tex -w 512 -h 512 --pivot_detection bricks -x res/tiles
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
@@ -67,6 +69,14 @@ compile/fps.o: src/fps.cpp Makefile include/decker.h
 compile/ui.o: src/ui.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CC) -o compile/ui.o -c src/ui.cpp $(CFLAGS)
+
+compile/plane.o: src/plane.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CC) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
+
+compile/player.o: src/player.cpp Makefile include/player.h
+	-mkdir -p compile 
+	$(CC) -o compile/player.o -c src/player.cpp $(CFLAGS)
 
 	
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h

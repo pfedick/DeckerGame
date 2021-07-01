@@ -1,6 +1,6 @@
 #include "decker.h"
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include <SDL.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
@@ -18,6 +18,7 @@ void start()
 	Game game;
 	game.init();
 	game.run();
+
 }
 
 int WinMain()

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <SDL.h>
 #include <ppl7-grafix.h>
+#include "player.h"
 
 Game::Game()
 {
@@ -10,20 +11,26 @@ Game::Game()
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
 	wm->setWidgetStyle(s);
+	Style=s;
+	player=NULL;
+	exit_button=NULL;
+	statusbar=NULL;
+	quitGame=false;
 }
 
 Game::~Game()
 {
+	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
 	wm->destroyWindow(*this);
 }
 
 void Game::loadGrafix()
 {
-	Sprite_George.load(sdl, "res/george.tex");
+	resources.Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
-	Bricks.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
-	Cursor.load(sdl, "res/cursor.tex");
+	resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
+	resources.Cursor.load(sdl, "res/cursor.tex");
 }
 
 void Game::createWindow()
@@ -65,6 +72,8 @@ void Game::init()
 	createWindow();
 	initUi();
 	desktopSize=sdl.getWindowSize();
+	PlayerCoords.x=desktopSize.width/2;
+	PlayerCoords.y=desktopSize.height/2;
 	loadGrafix();
 	gui_font.setName("Default");
 	gui_font.setSize(12);
@@ -74,6 +83,12 @@ void Game::init()
 	gui_font.setShadowColor(ppl7::grafix::Color(0,0,0,0));
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
+	if (player) delete player;
+	player=new Player();
+	player->setGameWindow(sdl.getClientWindow());
+	player->setSpriteResource(resources.Sprite_George);
+
+
 
 }
 
@@ -145,6 +160,8 @@ void Game::run()
 	quitGame=false;
 	int c=0;
 	while (!quitGame) {
+		double now=ppl7::GetMicrotime();
+		player->update(now);
 		wm->handleEvents();
 		fps.update();
 		statusbar->setFps(fps.getFPS());
@@ -152,9 +169,9 @@ void Game::run()
 		moveWorldWhenMouseIsInBorder(mouse);
 		statusbar->setMouse(mouse);
 		statusbar->setWorldCoords(WorldCoords);
-		sdl.startFrame();
+		sdl.startFrame(Style.windowBackgroundColor);
 
-		Bricks.draw(renderer,400,400,7);
+		//Bricks.draw(renderer,400,400,7);
 		/*
 		for (int y=0;y<1080;y+=100) {
 			for (int x=0;x<1920;x+=100) {
@@ -162,12 +179,13 @@ void Game::run()
 			}
 		}
 		*/
-
+		/*
 		for (int y=1080;y>100;y-=38) {
 			for (int x=0;x<1920;x+=64) {
 				Bricks.draw(renderer,x,y,0);
 			}
 		}
+		*/
 		/*
 		for (int i=0;i<10;i++) {
 			Bricks.draw(renderer,400+i*64,656,0);
@@ -178,12 +196,16 @@ void Game::run()
 			Bricks.draw(renderer,431+i*62,656-35+i*4,1);
 		}
 		*/
+		/*
 		for (int y=100;y<1080;y+=200) {
 			for (int x=0;x<1920;x+=200) {
 				Sprite_George.draw(renderer,x,y,c);
 			}
 		}
+		*/
+		player->draw(renderer);
 				/*
+				 *
 		//Sprite_George.draw(renderer,400,400,c);
 		Sprite_George.draw(renderer,656,400,c+50);
 		if (c%20<10)
@@ -198,7 +220,7 @@ void Game::run()
 		//drawGrid(0);
 		mouse=wm->getMouseState();
 		drawWidgets();
-		Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
+		resources.Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
 		presentScreen();
 
 		//WorldCoords.x+=1;
