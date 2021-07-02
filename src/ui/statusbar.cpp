@@ -1,6 +1,6 @@
 #include "ui.h"
 
-namespace Decker {
+namespace Decker::ui {
 
 StatusBar::StatusBar(int x, int y, int width, int height)
 : ppl7::tk::Frame(x,y,width,height)

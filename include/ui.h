@@ -12,7 +12,11 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 
+class Game;
+class Sprite;
+
 namespace Decker {
+namespace ui {
 
 using namespace ppl7;
 using namespace ppl7::grafix;
@@ -40,7 +44,40 @@ public:
 
 };
 
+class MainMenue : public ppl7::tk::Frame
+{
+private:
+	ppl7::tk::Button *exit_button;
+	ppl7::tk::Button *edit_tiles_button;
+	Game *game;
 
+
+public:
+	MainMenue(int x, int y, int width, int height, Game *game);
+
+	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+
+
+};
+
+class TilesSelection : public ppl7::tk::Frame
+{
+private:
+	//ppl7::tk::Button *exit_button;
+	//ppl7::tk::Button *edit_tiles_button;
+	Game *game;
+	::Sprite *tiles;
+
+
+public:
+	TilesSelection(int x, int y, int width, int height, Game *game, ::Sprite *tiles);
+
+	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+
+
+};
+
+}	// EOF namespace ui
 }	// EOF namespace Decker
 
 #endif /* INCLUDE_DECKER_UI_H_ */

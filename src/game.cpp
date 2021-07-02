@@ -13,8 +13,9 @@ Game::Game()
 	wm->setWidgetStyle(s);
 	Style=s;
 	player=NULL;
-	exit_button=NULL;
+	mainmenue=NULL;
 	statusbar=NULL;
+	tiles_selection=NULL;
 	quitGame=false;
 }
 
@@ -50,20 +51,16 @@ void Game::createWindow()
 
 void Game::initUi()
 {
-	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
 	const ppl7::grafix::Size &desktop=clientSize();
-	ppl7::tk::Label *label;
+	//ppl7::tk::Label *label;
 
-	ppl7::tk::Frame *title_frame=new ppl7::tk::Frame(0,0,desktop.width,32);
-	this->addChild(title_frame);
+	mainmenue=new Decker::ui::MainMenue(0,0,desktop.width,32, this);
+	this->addChild(mainmenue);
 
-	exit_button=new ppl7::tk::Button(desktop.width-100,0,100,32,"Exit");
-	exit_button->setIcon(gfx->Toolbar.getDrawable(68));
-	exit_button->setEventHandler(this);
-	title_frame->addChild(exit_button);
 
 	// Bottom Frame
-	statusbar=new Decker::StatusBar(0,desktop.height-32,desktop.width,32);
+	statusbar=new Decker::ui::StatusBar(0,desktop.height-32,desktop.width,32);
 	this->addChild(statusbar);
 }
 
@@ -239,12 +236,19 @@ void Game::closeEvent(ppl7::tk::Event *e)
 	quitGame=true;
 }
 
-void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
+
+void Game::showTilesSelection()
 {
-	if (event->widget()==exit_button) {
-		quitGame=true;
+	if (tiles_selection) {
+		this->removeChild(tiles_selection);
+		delete(tiles_selection);
+		tiles_selection=NULL;
+	} else {
+		tiles_selection=new Decker::ui::TilesSelection(0,32,300,statusbar->y()-2,this,&resources.Tiles);
+		this->addChild(tiles_selection);
 	}
 }
+
 
 
 

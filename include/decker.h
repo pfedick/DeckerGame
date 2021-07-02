@@ -178,8 +178,9 @@ private:
 	SDL_Texture* tex_level_grid;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
-	ppl7::tk::Button *exit_button;
-	Decker::StatusBar *statusbar;
+	Decker::ui::MainMenue *mainmenue;
+	Decker::ui::StatusBar *statusbar;
+	Decker::ui::TilesSelection *tiles_selection;
 
 	FPS fps;
 
@@ -206,7 +207,10 @@ public:
 	// EventHandler
 	void quitEvent(ppl7::tk::Event *event);
 	void closeEvent(ppl7::tk::Event *event);
-	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+
+	void showTilesSelection();
+
+
 };
 
 

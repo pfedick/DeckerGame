@@ -190,7 +190,7 @@ void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &t
 	ppl7::grafix::Image surface;
 	surface.create(width,height,rgbformat);
 	if (tint.rgb()) {
-		printf ("tint\n");
+		//printf ("tint\n");
 		for (int y=0;y<height;y++) {
 			for (int x=0;x<width;x++) {
 				ppl7::grafix::Color c(Peek8(buffer+2),Peek8(buffer+1),Peek8(buffer),Peek8(buffer+3));
@@ -206,7 +206,7 @@ void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &t
 			}
 		}
 	} else {
-		printf ("no tint\n");
+		//printf ("no tint\n");
 		for (int y=0;y<height;y++) {
 			for (int x=0;x<width;x++) {
 				ppl7::grafix::Color c(Peek8(buffer+2),Peek8(buffer+1),Peek8(buffer),Peek8(buffer+3));

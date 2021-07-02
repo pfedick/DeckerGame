@@ -12,7 +12,9 @@ OBJECTS=compile/main.o \
 	compile/sprite.o \
 	compile/level.o \
 	compile/fps.o \
-	compile/ui.o \
+	compile/ui_statusbar.o \
+	compile/ui_menue.o \
+	compile/ui_tileselection.o \
 	compile/plane.o \
 	compile/player.o
 	
@@ -66,10 +68,6 @@ compile/fps.o: src/fps.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CC) -o compile/fps.o -c src/fps.cpp $(CFLAGS)
 
-compile/ui.o: src/ui.cpp Makefile include/ui.h
-	-mkdir -p compile 
-	$(CC) -o compile/ui.o -c src/ui.cpp $(CFLAGS)
-
 compile/plane.o: src/plane.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CC) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
@@ -78,7 +76,19 @@ compile/player.o: src/player.cpp Makefile include/player.h
 	-mkdir -p compile 
 	$(CC) -o compile/player.o -c src/player.cpp $(CFLAGS)
 
-	
+compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CC) -o compile/ui_statusbar.o -c src/ui/statusbar.cpp $(CFLAGS)
+
+compile/ui_menue.o: src/ui/menue.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CC) -o compile/ui_menue.o -c src/ui/menue.cpp $(CFLAGS)
+
+compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CC) -o compile/ui_tileselection.o -c src/ui/tileselection.cpp $(CFLAGS)
+
+
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h
 	-mkdir -p compile 
 	$(CC) -o compile/texm_main.o -c tools/texmaker/main.cpp $(TEXMAKER_CFLAGS)
