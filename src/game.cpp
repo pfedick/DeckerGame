@@ -30,8 +30,10 @@ void Game::loadGrafix()
 {
 	resources.Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
-	resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
+	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
+	resources.Tiles.load(sdl, "res/tiles.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
+	resources.uiTiles.load("res/tiles.tex");
 }
 
 void Game::createWindow()
@@ -49,7 +51,7 @@ void Game::createWindow()
 
 }
 
-SDL_Renderer *Game::getRenderer()
+SDL_Renderer *Game::getSDLRenderer()
 {
 	return sdl.getRenderer();
 }
@@ -251,7 +253,7 @@ void Game::showTilesSelection()
 		delete(tiles_selection);
 		tiles_selection=NULL;
 	} else {
-		tiles_selection=new Decker::ui::TilesSelection(0,32,300,statusbar->y()-2,this,&resources.Tiles);
+		tiles_selection=new Decker::ui::TilesSelection(0,32,300,statusbar->y()-2,this,&resources.uiTiles);
 		this->addChild(tiles_selection);
 	}
 }

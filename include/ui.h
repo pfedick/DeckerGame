@@ -82,13 +82,13 @@ class TilesSelection : public ppl7::tk::Frame
 {
 private:
 	Game *game;
-	::Sprite *tiles;
+	ppl7::grafix::Sprite *tiles;
 
 	Scrollbar *scrollbar;
 
 
 public:
-	TilesSelection(int x, int y, int width, int height, Game *game, ::Sprite *tiles);
+	TilesSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
 
 	virtual void paint(Drawable &draw);
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);

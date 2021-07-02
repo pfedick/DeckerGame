@@ -161,6 +161,8 @@ public:
 	Sprite Tiles;
 	Sprite Cursor;
 
+	ppl7::grafix::Sprite uiTiles;
+
 };
 
 class Player;
@@ -210,7 +212,7 @@ public:
 
 	void showTilesSelection();
 
-	SDL_Renderer *getRenderer();
+	SDL_Renderer *getSDLRenderer();
 
 
 };
