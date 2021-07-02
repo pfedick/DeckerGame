@@ -23,11 +23,14 @@ void start()
 
 int WinMain()
 {
+	start();
+	return 0;
 	try {
 		start();
 		return 0;
 	} catch (const ppl7::Exception &ex) {
 		ex.print();
+		throw;
 		return 1;
 	}
 	return 0;

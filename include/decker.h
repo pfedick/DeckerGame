@@ -210,6 +210,8 @@ public:
 
 	void showTilesSelection();
 
+	SDL_Renderer *getRenderer();
+
 
 };
 

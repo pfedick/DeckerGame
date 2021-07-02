@@ -49,6 +49,12 @@ void Game::createWindow()
 
 }
 
+SDL_Renderer *Game::getRenderer()
+{
+	return sdl.getRenderer();
+}
+
+
 void Game::initUi()
 {
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
@@ -67,11 +73,12 @@ void Game::initUi()
 void Game::init()
 {
 	createWindow();
+	loadGrafix();
 	initUi();
 	desktopSize=sdl.getWindowSize();
 	PlayerCoords.x=desktopSize.width/2;
 	PlayerCoords.y=desktopSize.height/2;
-	loadGrafix();
+
 	gui_font.setName("Default");
 	gui_font.setSize(12);
 	gui_font.setBold(true);

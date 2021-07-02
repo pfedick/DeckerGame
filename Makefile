@@ -15,8 +15,9 @@ OBJECTS=compile/main.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_tileselection.o \
+	compile/ui_scrollbar.o \
 	compile/plane.o \
-	compile/player.o
+	compile/player.o 
 	
 	
 TEXMAKER_CFLAGS	= -ggdb -Wall  -Itools/texmaker $(EXTRA_CFLAGS) `ppl7-config --cflags release` `ppl7-config --cflags debug core gfx`
@@ -87,6 +88,10 @@ compile/ui_menue.o: src/ui/menue.cpp Makefile include/ui.h
 compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CC) -o compile/ui_tileselection.o -c src/ui/tileselection.cpp $(CFLAGS)
+
+compile/ui_scrollbar.o: src/ui/scrollbar.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CC) -o compile/ui_scrollbar.o -c src/ui/scrollbar.cpp $(CFLAGS)
 
 
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h
