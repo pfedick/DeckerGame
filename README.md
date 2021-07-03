@@ -42,8 +42,31 @@ I don't know. This is one of my hobbies, but I have others, too :-)
 Maybe I will never finish it or decide to do something else. We will see...
 
 ## How to compile
+### Requirements
+The following Tools/Libraries are required:
+- gcc or clang with c++ support (C++11 or greater)
+- gnu make
+- pcre
+- sdl2
+- iconv
+- zlib
+- bz2
+- png
 
+#### Fedora 34
+    sudo dnf install -y gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
+        bzip2-devel libpng-devel
+        
+#### Windows 10 with mingw64
 TODO
+
+### Checkout and compile
+
+    git clone --recurse-submodules https://github.com/pfedick/DeckerGame.git
+    ./configure
+    make -j
+    
+    
 
 
 
