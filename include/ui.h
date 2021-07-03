@@ -65,6 +65,9 @@ class Scrollbar : public ppl7::tk::Widget
 private:
 	ppl7::tk::Button *up_button;
 	ppl7::tk::Button *down_button;
+	int size;
+	int pos;
+
 public:
 	Scrollbar(int x, int y, int width, int height);
 
@@ -84,12 +87,17 @@ private:
 	Game *game;
 	ppl7::grafix::Sprite *tiles;
 	Scrollbar *scrollbar;
-	int selectedTile;
+	int selected_tile;
 public:
 	TilesFrame(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
 	virtual void paint(Drawable &draw);
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
+	void valueChangedEvent(ppl7::tk::Event *event, int value);
+
+	void setSelectedTile(int nr);
+	int selectedTile() const;
 
 };
 
@@ -104,6 +112,9 @@ public:
 	TilesSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
 
 	//virtual void paint(Drawable &draw);
+
+	void setSelectedTile(int nr);
+	int selectedTile() const;
 
 
 

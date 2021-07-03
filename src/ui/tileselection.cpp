@@ -6,6 +6,7 @@ namespace Decker::ui {
 TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles)
 : ppl7::tk::Frame(x,y,width,height)
 {
+	selected_tile=0;
 	this->game=game;
 	this->tiles=tiles;
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
@@ -14,7 +15,9 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game, ppl7::gr
 	ppl7::grafix::Rect client=this->clientRect();
 	scrollbar=new Scrollbar(width-30,0,29,client.height());
 	scrollbar->setName("tiles-scrollbar");
-	selectedTile=0;
+	scrollbar->setSize(tiles->numSprites()/4+1);
+	scrollbar->setEventHandler(this);
+
 	this->addChild(scrollbar);
 
 }
@@ -29,17 +32,21 @@ void TilesFrame::paint(Drawable &draw)
 	//SDL_Renderer *renderer=game->getSDLRenderer();
 	ppl7::grafix::Color white(245,245,242,255);
 	int x=0, y=0;
-	for (int i=0;i<tiles->numSprites();i++) {
-		tiles->draw(draw, 2+x, 66+y,i);
-		if (i==selectedTile) {
-			draw.drawRect(2+x,2+y,66+x,66+y,white);
-			draw.drawRect(3+x,3+y,65+x,65+y,white);
+	try {
+		for (int i=scrollbar->position()*4;i<tiles->numSprites();i++) {
+			tiles->draw(draw, 2+x, 66+y,i);
+			if (i==selected_tile) {
+				draw.drawRect(2+x,2+y,66+x,66+y,white);
+				draw.drawRect(3+x,3+y,65+x,65+y,white);
+			}
+			x+=64;
+			if (x>255) {
+				x=0;
+				y+=64;
+			}
+
 		}
-		x+=64;
-		if (x>255) {
-			x=0;
-			y+=64;
-		}
+	} catch (...) {
 
 	}
 	//draw.drawRect(0,0,w,h,Color(0,255,0,255));
@@ -48,22 +55,61 @@ void TilesFrame::paint(Drawable &draw)
 void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	//printf("x=%d, y=%d\n", event->p.x, event->p.y);
-	int newtile=(event->p.y/64)*4+(event->p.x/64);
-	if (selectedTile!=newtile && newtile<tiles->numSprites()) {
-		selectedTile=newtile;
-		needsRedraw();
+	if (event->widget()==this && event->buttonMask&MouseState::Left) {
+		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
+		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
+			selected_tile=newtile;
+			needsRedraw();
+		}
 	}
 }
 
 void TilesFrame::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 {
 	//printf("x=%d, y=%d\n", event->p.x, event->p.y);
-	if (event->buttonMask&MouseState::Left) {
-		int newtile=(event->p.y/64)*4+(event->p.x/64);
-		if (selectedTile!=newtile && newtile<tiles->numSprites()) {
-			selectedTile=newtile;
+	if (event->widget()==this && event->buttonMask&MouseState::Left) {
+		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
+		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
+			selected_tile=newtile;
 			needsRedraw();
 		}
+	}
+}
+
+void TilesFrame::setSelectedTile(int nr)
+{
+	if (nr!=selected_tile && nr<tiles->numSprites()) {
+		selected_tile=nr;
+		ppl7::grafix::Rect client=this->clientRect();
+		int max_visible=client.height()/64;
+
+		needsRedraw();
+	}
+}
+
+int TilesFrame::selectedTile() const
+{
+	return selected_tile;
+}
+
+void TilesFrame::mouseWheelEvent(ppl7::tk::MouseEvent *event)
+{
+	/*
+	printf("TilesFrame::mouseWheelEvent: %d,%d\n", event->wheel.x,
+			event->wheel.y);
+			*/
+	if (event->wheel.y!=0) {
+		scrollbar->setPosition(scrollbar->position()+event->wheel.y*-1);
+		needsRedraw();
+	}
+}
+
+void TilesFrame::valueChangedEvent(ppl7::tk::Event *event, int value)
+{
+	//printf("TilesFrame::valueChangedEvent\n");
+	if (event->widget()==scrollbar) {
+		//printf("TilesFrame::valueChangedEvent\n");
+		needsRedraw();
 	}
 }
 
@@ -75,10 +121,21 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game, 
 {
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
-	tilesframe=new TilesFrame(5,50,client.width()-10, client.height()-60, game, tiles);
+	//tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
+	tilesframe=new TilesFrame(5,200,client.width()-10, 300, game, tiles);
 
 	this->addChild(tilesframe);
 
+}
+
+void TilesSelection::setSelectedTile(int nr)
+{
+	tilesframe->setSelectedTile(nr);
+}
+
+int TilesSelection::selectedTile() const
+{
+	return tilesframe->selectedTile();
 }
 
 
