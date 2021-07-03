@@ -57,9 +57,13 @@ The following Tools/Libraries are required:
 - bz2
 - png
 
-#### Fedora 34
-    sudo dnf install -y gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
+#### Fedora
+    sudo dnf install -y git gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
         bzip2-devel libpng-devel
+        
+#### Ubuntu
+    sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
+        libpng-dev libfreetype-dev
         
 #### Windows 10 with mingw64
 TODO
