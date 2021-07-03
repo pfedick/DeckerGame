@@ -1,8 +1,5 @@
 name: C/C++ CI
 
-variables:
-    GIT_SUBMODULE_STRATEGY: recursive
-
 on:
   push:
     branches: [ main ]
@@ -16,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: checkout_submodules
+      run: git submodule update --init --recursive
     - name: configure
       run: ./configure
     - name: make
