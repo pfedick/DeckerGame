@@ -1,10 +1,3 @@
-/*
- * decker.h
- *
- *  Created on: 03.10.2017
- *      Author: patrick
- */
-
 #ifndef INCLUDE_DECKER_UI_H_
 #define INCLUDE_DECKER_UI_H_
 
