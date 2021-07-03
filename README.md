@@ -1,3 +1,5 @@
+[![C/C++ CI](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml)
+
 # Decker - The Game
 
 <p align="center">
