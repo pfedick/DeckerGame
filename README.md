@@ -65,6 +65,7 @@ TODO
 ### Checkout and compile
 
     git clone --recurse-submodules https://github.com/pfedick/DeckerGame.git
+    cd DeckerGame
     ./configure
     make -j
     
