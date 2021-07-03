@@ -122,7 +122,7 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game, 
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
 	//tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
-	tilesframe=new TilesFrame(5,200,client.width()-10, 300, game, tiles);
+	tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
 
 	this->addChild(tilesframe);
 
