@@ -26,6 +26,8 @@ The game is in very early development, which means I know a few things I want to
 - create graphics
 - compose soundtrack
 - create sound effects
+- ui
+- world editor
 - build the world/levels
 - story?
 
