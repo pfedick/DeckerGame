@@ -66,6 +66,9 @@ TODO
     ./configure
     make -j
     
+    # run the game:
+    ./decker
+    
     
 
 
