@@ -71,6 +71,14 @@ TODO
     # run the game:
     ./decker
     
+If you already cloned the project and want to update to the newest version:
+
+    git pull
+    git submodule update --init --recursive
+    ./configure
+    make -j
+    
+    
     
 
 
