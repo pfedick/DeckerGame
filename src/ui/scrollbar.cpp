@@ -8,8 +8,14 @@ Scrollbar::Scrollbar(int x, int y, int width, int height)
 : ppl7::tk::Widget()
 {
 	this->create(x,y,width,height);
-	up_button=NULL;
-	down_button=NULL;
+	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	WindowManager *wm=ppl7::tk::GetWindowManager();
+	up_button=new ppl7::tk::Button(0,0,width-5,25);
+	down_button=new ppl7::tk::Button(0,height-25,width-5,25);
+	up_button->setIcon(wm->ButtonSymbols.getDrawable(3));
+	down_button->setIcon(wm->ButtonSymbols.getDrawable(4));
+	addChild(up_button);
+	addChild(down_button);
 }
 
 ppl7::String Scrollbar::widgetType() const
@@ -19,7 +25,9 @@ ppl7::String Scrollbar::widgetType() const
 void Scrollbar::paint(Drawable &draw)
 {
 	//Widget::paint(draw);
-	draw.cls();
+	const WidgetStyle &style=GetWidgetStyle();
+	Color scrollarea=style.windowBackgroundColor*1.2f;
+	draw.cls(scrollarea);
 }
 
 void Scrollbar::mouseDownEvent(ppl7::tk::MouseEvent *event)

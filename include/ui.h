@@ -78,20 +78,33 @@ public:
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
-class TilesSelection : public ppl7::tk::Frame
+class TilesFrame : public ppl7::tk::Frame
 {
 private:
 	Game *game;
 	ppl7::grafix::Sprite *tiles;
-
 	Scrollbar *scrollbar;
+	int selectedTile;
+public:
+	TilesFrame(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
+	virtual void paint(Drawable &draw);
+	void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
+
+};
+
+class TilesSelection : public ppl7::tk::Frame
+{
+private:
+	Game *game;
+	TilesFrame *tilesframe;
 
 
 public:
 	TilesSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
 
-	virtual void paint(Drawable &draw);
-	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+	//virtual void paint(Drawable &draw);
+
 
 
 };

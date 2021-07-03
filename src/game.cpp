@@ -70,6 +70,8 @@ void Game::initUi()
 	// Bottom Frame
 	statusbar=new Decker::ui::StatusBar(0,desktop.height-32,desktop.width,32);
 	this->addChild(statusbar);
+
+	showTilesSelection();
 }
 
 void Game::init()
@@ -253,7 +255,7 @@ void Game::showTilesSelection()
 		delete(tiles_selection);
 		tiles_selection=NULL;
 	} else {
-		tiles_selection=new Decker::ui::TilesSelection(0,32,300,statusbar->y()-2,this,&resources.uiTiles);
+		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this,&resources.uiTiles);
 		this->addChild(tiles_selection);
 	}
 }

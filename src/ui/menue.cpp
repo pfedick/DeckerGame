@@ -8,13 +8,14 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 : ppl7::tk::Frame(x,y,width,height)
 {
 	this->game=game;
+	ppl7::grafix::Size s=this->clientSize();
 	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	exit_button=new ppl7::tk::Button(width-100,0,100,height,"Exit");
+	exit_button=new ppl7::tk::Button(s.width-100,0,100,s.height,"Exit");
 	exit_button->setIcon(gfx->Toolbar.getDrawable(68));
 	exit_button->setEventHandler(this);
 	this->addChild(exit_button);
 
-	edit_tiles_button=new ppl7::tk::Button(3,0,60,height,"Tiles");
+	edit_tiles_button=new ppl7::tk::Button(0,0,60,s.height,"Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 }
