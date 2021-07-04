@@ -321,19 +321,22 @@ dnl Check for nasm
 AC_MSG_NOTICE(checking if we can use assembly)
 use_asm="none"
 report_have_nasm="no"
-case $target in
-	i?86*|x86*|amd64*)
-		AC_CHECK_NASM(2.0.0,
-			report_have_nasm="yes"
-		)
-		;;
-esac
+#case $target in
+#	i?86*|x86*|amd64*)
+#		AC_CHECK_NASM(2.0.0,
+#			report_have_nasm="yes"
+#		)
+#		;;
+#esac
 
 case $target in
 	x86_64*|amd64*)
 		AC_DEFINE(HAVE_AMD64,1,)
 		;;
 esac		
+
+
+	
 
 if test $report_have_nasm = "yes"
 then
