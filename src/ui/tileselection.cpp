@@ -34,7 +34,7 @@ void TilesFrame::paint(Drawable &draw)
 	int x=0, y=0;
 	try {
 		for (int i=scrollbar->position()*4;i<tiles->numSprites();i++) {
-			tiles->draw(draw, 2+x, 66+y,i);
+			tiles->draw(draw, 2+x, 2+y,i);
 			if (i==selected_tile) {
 				draw.drawRect(2+x,2+y,66+x,66+y,white);
 				draw.drawRect(3+x,3+y,65+x,65+y,white);

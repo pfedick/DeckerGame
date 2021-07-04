@@ -30,6 +30,7 @@ OBJECTS=compile/main.o \
 	compile/ui_tileselection.o \
 	compile/ui_scrollbar.o \
 	compile/plane.o \
+	compile/tile.o \
 	compile/player.o 
 	
 	
@@ -59,7 +60,8 @@ clean:
 	
 sprites:
 	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 128 -py 127 -x res/george
-	./texmaker -s lightwave/Render/tiles/*.png -t res/tiles.tex -w 512 -h 512 --pivot_detection bricks -x res/tiles
+	./texmaker -s lightwave/Render/tiles/*.png -t res/tiles.tex -w 512 -h 512 -px 0 -py 0 -x res/tiles
+	#./texmaker -s lightwave/Render/tiles/*.png -t res/tiles.tex -w 512 -h 512 --pivot_detection bricks -x res/tiles
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
@@ -89,6 +91,10 @@ compile/fps.o: src/fps.cpp Makefile include/decker.h
 compile/plane.o: src/plane.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
+
+compile/tile.o: src/tile.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
 
 compile/player.o: src/player.cpp Makefile include/player.h
 	-mkdir -p compile 
