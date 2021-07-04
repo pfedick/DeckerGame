@@ -22,8 +22,7 @@ EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);
 
 #define TILE_WIDTH 64
-#define TILE_HEIGHT 38
-
+#define TILE_HEIGHT 64
 
 class FPS
 {
@@ -114,36 +113,37 @@ class Sprite
 
 class Tile
 {
+public:
+	enum TileType {
+		NonBlocking,
+		Blocking,
+		SteepRampLeft,
+		SteepRampRight,
+		ShallowRampLeft,
+		ShallowRampRight,
+	};
+	TileType type;
+	int tileset[3];
+	int tileno[3];
 
+	Tile(int tileset, int tileno, TileType type=Blocking, int z=0);
+	void setType(TileType type);
+	void set(int tileset, int tileno, int z=0);
+	void draw(SDL_Renderer *renderer, int x, int y) const;
 };
 
 class Plane
 {
 private:
+	Tile **tilematrix;
+	int width, height;
 public:
 	Plane();
 	~Plane();
 	void clear();
 	void create(int width, int height, int tile_width, int tile_height);
-};
-
-
-class Level
-{
-private:
-	SDL_Renderer *renderer;
-	Plane PlayerPlane;
-
-	void clear();
-
-public:
-	Level();
-	~Level();
-	void create(int width, int height, int layers);
-	void load(const ppl7::String &Filename);
-	void save(const ppl7::String &Filename);
-	void setRenderer(SDL_Renderer *renderer);
-	void draw(int player_x, int player_y);
+	void setTile(int x, int y, int tileset, int tileno);
+	const Tile *get(int x, int y) const;
 };
 
 
@@ -157,6 +157,28 @@ public:
 	ppl7::grafix::Sprite uiTiles;
 
 };
+
+
+class Level
+{
+private:
+	Plane PlayerPlane;
+	ppl7::grafix::Rect viewport;
+	Sprite *tileset[10];
+
+	void clear();
+
+public:
+	Level();
+	~Level();
+	void setTileset(int no, Sprite *tileset);
+	void create(int width, int height);
+	void load(const ppl7::String &Filename);
+	void save(const ppl7::String &Filename);
+	void drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &playercoords);
+	void setViewport(const ppl7::grafix::Rect &r);
+};
+
 
 class Player;
 
@@ -173,6 +195,7 @@ private:
 	SDL_Texture* tex_level_grid;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
+	ppl7::grafix::Rect viewport;
 	Decker::ui::MainMenue *mainmenue;
 	Decker::ui::StatusBar *statusbar;
 	Decker::ui::TilesSelection *tiles_selection;

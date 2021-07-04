@@ -70,16 +70,20 @@ void Game::initUi()
 	// Bottom Frame
 	statusbar=new Decker::ui::StatusBar(0,desktop.height-32,desktop.width,32);
 	this->addChild(statusbar);
+	viewport.y1=33;
+	viewport.y2=desktop.height-33;
 
-	showTilesSelection();
+
 }
 
 void Game::init()
 {
 	createWindow();
 	loadGrafix();
-	initUi();
+
 	desktopSize=sdl.getWindowSize();
+	viewport=sdl.getClientWindow();
+	initUi();
 	PlayerCoords.x=desktopSize.width/2;
 	PlayerCoords.y=desktopSize.height/2;
 
@@ -93,9 +97,15 @@ void Game::init()
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player();
-	player->setGameWindow(sdl.getClientWindow());
+	//player->setGameWindow(sdl.getClientWindow());
+
 	player->setSpriteResource(resources.Sprite_George);
 
+	level.create(255,255);
+	level.setTileset(1, &resources.Tiles);
+	//level.setRenderer
+
+	showTilesSelection();
 
 
 }
@@ -166,7 +176,6 @@ void Game::run()
 	SDL_Renderer *renderer=sdl.getRenderer();
 	//SDL_Event event;
 	quitGame=false;
-	int c=0;
 	while (!quitGame) {
 		double now=ppl7::GetMicrotime();
 		player->update(now);
@@ -178,51 +187,13 @@ void Game::run()
 		statusbar->setMouse(mouse);
 		statusbar->setWorldCoords(WorldCoords);
 		sdl.startFrame(Style.windowBackgroundColor);
+		level.setViewport(viewport);
+		player->setGameWindow(viewport);
 
-		//Bricks.draw(renderer,400,400,7);
-		/*
-		for (int y=0;y<1080;y+=100) {
-			for (int x=0;x<1920;x+=100) {
-				Sprite_Charlie.draw(renderer,x,y,c);
-			}
-		}
-		*/
-		/*
-		for (int y=1080;y>100;y-=38) {
-			for (int x=0;x<1920;x+=64) {
-				Bricks.draw(renderer,x,y,0);
-			}
-		}
-		*/
-		/*
-		for (int i=0;i<10;i++) {
-			Bricks.draw(renderer,400+i*64,656,0);
-		}
-		*/
-		/*
-		for (int i=0;i<8;i++) {
-			Bricks.draw(renderer,431+i*62,656-35+i*4,1);
-		}
-		*/
-		/*
-		for (int y=100;y<1080;y+=200) {
-			for (int x=0;x<1920;x+=200) {
-				Sprite_George.draw(renderer,x,y,c);
-			}
-		}
-		*/
+		level.drawPlayerPlane(renderer,PlayerCoords);
+
 		player->draw(renderer);
-				/*
-				 *
-		//Sprite_George.draw(renderer,400,400,c);
-		Sprite_George.draw(renderer,656,400,c+50);
-		if (c%20<10)
-			Sprite_George.draw(renderer,400+5*62,620,c%20+40);
-		else
-			Sprite_George.draw(renderer,400+5*62,620,c%20+80);
-			*/
-		c++;
-		if (c>=50) c=0;
+
 		//displayHUD();
 		//SDL_RenderCopy(renderer, gui_tex, NULL, NULL);
 		//drawGrid(0);
@@ -230,11 +201,7 @@ void Game::run()
 		drawWidgets();
 		resources.Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
 		presentScreen();
-
-		//WorldCoords.x+=1;
-		//WorldCoords.y+=1;
 	}
-
 }
 
 void Game::quitEvent(ppl7::tk::Event *e)
@@ -254,9 +221,11 @@ void Game::showTilesSelection()
 		this->removeChild(tiles_selection);
 		delete(tiles_selection);
 		tiles_selection=NULL;
+		viewport.x1=0;
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this,&resources.uiTiles);
 		this->addChild(tiles_selection);
+		viewport.x1=300;
 	}
 }
 
