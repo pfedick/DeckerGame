@@ -4,30 +4,49 @@
 
 class SDL_Renderer;
 class Sprite;
+
+class AnimationCycle
+{
+private:
+	int *cycle;
+	int index;
+	int size;
+	int endframe;
+	bool loop;
+	bool finished;
+
+public:
+	AnimationCycle();
+	void setStaticFrame(int nr);
+	void start(int *cycle_array, int size, bool loop, int endframe);
+	void update();
+	int getFrame() const;
+	bool isFinished() const;
+
+};
+
 class Player
 {
 private:
 	int world_x;
 	int world_y;
 	int x,y;
-	int sprite_nr;
+	ppl7::grafix::Point velocity;
 	const Sprite *sprite_resource;
 	ppl7::grafix::Rect world;
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
-	bool running;
+	AnimationCycle animation;
 
 	enum PlayerMovement {
 		Stand,
-		StandLeft,
-		StandRight,
-		TurnLeft,
-		TurnRight,
-		MoveLeft,
-		MoveRight,
-		MoveToMid,
-
+		Turn,
+		Walk,
+		Run,
+		Pickup,
+		Climb,
+		Jump
 	};
 	enum PlayerOrientation {
 		Left,
@@ -36,7 +55,10 @@ private:
 		Back
 	};
 	PlayerMovement movement=Stand;
-	PlayerMovement lastmovement=Stand;
+	PlayerOrientation orientation=Front;
+	PlayerOrientation turnTarget;
+
+	void turn(PlayerOrientation target);
 
 public:
 	Player();
