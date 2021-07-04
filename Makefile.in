@@ -68,6 +68,7 @@ texmaker: $(TEXMAKER_OBJECTS) pplib/release/release/libppl7-gfx.a pplib/release/
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) texmaker *.core
+	cd pplib && $(MAKE) clean
 	
 sprites:
 	./texmaker -s lightwave/Render/george/*.png -t res/george.tex -w 1024 -h 1024 -px 128 -py 127 -x res/george
