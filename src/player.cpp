@@ -62,7 +62,7 @@ void Player::update(double time)
 
 		} else if (movement==MoveRight) {
 			sprite_nr+=1;
-			if (sprite_nr>17) sprite_nr=9;
+			if (sprite_nr>16) sprite_nr=9;
 		} else if (movement==MoveToMid) {
 			if (lastmovement==StandLeft) {
 				sprite_nr+=1;
