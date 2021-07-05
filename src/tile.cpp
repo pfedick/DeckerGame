@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 
-Tile::Tile(int tileset, int tileno, TileType type, int z)
+Tile::Tile(int tileset, int tileno, int z, TileType type)
 {
 	for (int i=0;i<3;i++) {
 		this->tileset[i]=0;
@@ -28,14 +28,3 @@ void Tile::setType(TileType type)
 	this->type=type;
 }
 
-void Tile::draw(SDL_Renderer *renderer, int x, int y) const
-{
-	/*
-	for (int z=0;z<3;z++) {
-		printf("z=%d\n", z);
-		if (tile->tileset[z]) {
-			tileset[tile->tileset[z]]->draw(renderer,x*64,y*64,tile->tileno[z]);
-		}
-	}
-	*/
-}

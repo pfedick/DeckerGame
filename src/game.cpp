@@ -187,7 +187,10 @@ void Game::run()
 		fps.update();
 		statusbar->setFps(fps.getFPS());
 		ppl7::tk::MouseState mouse=wm->getMouseState();
-		moveWorldOnMouseClick(mouse);
+		if (mouse.p.inside(viewport)) {
+			moveWorldOnMouseClick(mouse);
+			handleMouseDrawInWorld(mouse);
+		}
 		statusbar->setMouse(mouse);
 		statusbar->setWorldCoords(WorldCoords);
 		statusbar->setPlayerCoords(PlayerCoords);
@@ -236,6 +239,21 @@ void Game::showTilesSelection()
 	}
 }
 
+void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
+{
+	if (!tiles_selection) return;
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	if (state[SDL_SCANCODE_LSHIFT]) return;
+	int x=(mouse.p.x-viewport.x1+WorldCoords.x)/64;
+	int y=(mouse.p.y-viewport.y1+WorldCoords.y)/64;
 
+	int selectedTile=tiles_selection->selectedTile();
+
+	if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
+		level.PlayerPlane.setTile(x,y,0,1,selectedTile);
+	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
+		level.PlayerPlane.clearTile(x,y,0);
+	}
+}
 
 

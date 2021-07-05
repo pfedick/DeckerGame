@@ -126,10 +126,11 @@ public:
 	int tileset[3];
 	int tileno[3];
 
-	Tile(int tileset, int tileno, TileType type=Blocking, int z=0);
+	Tile(int tileset, int tileno, int z=0, TileType type=Blocking);
 	void setType(TileType type);
 	void set(int tileset, int tileno, int z=0);
-	void draw(SDL_Renderer *renderer, int x, int y) const;
+	int getTileset(int z);
+	int getTileNo(int z);
 };
 
 class Plane
@@ -142,7 +143,8 @@ public:
 	~Plane();
 	void clear();
 	void create(int width, int height, int tile_width, int tile_height);
-	void setTile(int x, int y, int tileset, int tileno);
+	void setTile(int x, int y, int z, int tileset, int tileno);
+	void clearTile(int x, int y, int z);
 	const Tile *get(int x, int y) const;
 };
 
@@ -161,6 +163,7 @@ public:
 
 class Level
 {
+	friend class Game;
 private:
 	Plane PlayerPlane;
 	ppl7::grafix::Rect viewport;
@@ -212,9 +215,9 @@ private:
 	void createWindow();
 	void initUi();
 	void drawGrid();
-
+	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
-
+	void handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse);
 	ppl7::grafix::Point PlayerCoords;
 
 	Player *player;
@@ -233,7 +236,7 @@ public:
 
 	SDL_Renderer *getSDLRenderer();
 
-	void moveWorld(int offset_x, int offset_y);
+
 
 };
 
