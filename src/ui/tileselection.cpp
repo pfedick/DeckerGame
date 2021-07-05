@@ -27,9 +27,6 @@ void TilesFrame::paint(Drawable &draw)
 	Frame::paint(draw);
 	int w=width()-1;
 	int h=height()-1;
-	//Drawable client=clientDrawable(draw);
-	// ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	//SDL_Renderer *renderer=game->getSDLRenderer();
 	ppl7::grafix::Color white(245,245,242,255);
 	int x=0, y=0;
 	try {
@@ -49,12 +46,10 @@ void TilesFrame::paint(Drawable &draw)
 	} catch (...) {
 
 	}
-	//draw.drawRect(0,0,w,h,Color(0,255,0,255));
 }
 
 void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
-	//printf("x=%d, y=%d\n", event->p.x, event->p.y);
 	if (event->widget()==this && event->buttonMask&MouseState::Left) {
 		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
 		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
@@ -66,7 +61,6 @@ void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent *event)
 
 void TilesFrame::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 {
-	//printf("x=%d, y=%d\n", event->p.x, event->p.y);
 	if (event->widget()==this && event->buttonMask&MouseState::Left) {
 		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
 		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
@@ -94,10 +88,6 @@ int TilesFrame::selectedTile() const
 
 void TilesFrame::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 {
-	/*
-	printf("TilesFrame::mouseWheelEvent: %d,%d\n", event->wheel.x,
-			event->wheel.y);
-			*/
 	if (event->wheel.y!=0) {
 		scrollbar->setPosition(scrollbar->position()+event->wheel.y*-1);
 		needsRedraw();
@@ -106,9 +96,7 @@ void TilesFrame::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 
 void TilesFrame::valueChangedEvent(ppl7::tk::Event *event, int value)
 {
-	//printf("TilesFrame::valueChangedEvent\n");
 	if (event->widget()==scrollbar) {
-		//printf("TilesFrame::valueChangedEvent\n");
 		needsRedraw();
 	}
 }
@@ -121,9 +109,7 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game, 
 {
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
-	//tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
 	tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
-
 	this->addChild(tilesframe);
 
 }

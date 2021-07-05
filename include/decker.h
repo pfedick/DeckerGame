@@ -200,15 +200,18 @@ private:
 	Decker::ui::StatusBar *statusbar;
 	Decker::ui::TilesSelection *tiles_selection;
 
+
 	FPS fps;
 
 	ppl7::grafix::Point WorldCoords;
+	ppl7::grafix::Point WorldMoveStart;
+	bool worldIsMoving;
 
 	bool quitGame;
 
 	void createWindow();
 	void initUi();
-	void drawGrid(int layer);
+	void drawGrid();
 
 	void moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse);
 
@@ -230,6 +233,7 @@ public:
 
 	SDL_Renderer *getSDLRenderer();
 
+	void moveWorld(int offset_x, int offset_y);
 
 };
 

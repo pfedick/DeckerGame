@@ -17,6 +17,7 @@ Game::Game()
 	statusbar=NULL;
 	tiles_selection=NULL;
 	quitGame=false;
+	worldIsMoving=false;
 }
 
 Game::~Game()
@@ -110,65 +111,87 @@ void Game::init()
 
 }
 
-void Game::drawGrid(int layer)
+void Game::drawGrid()
 {
-	static ppl7::grafix::Point LastPos;
-	static int LastLayer;
 	if (!tex_level_grid) {
 		tex_level_grid=sdl.createStreamingTexture(desktopSize.width, desktopSize.height);
-		LastLayer=-1;
-	}
-
-	if (layer!=LastLayer || LastPos!=WorldCoords) {
 		ppl7::grafix::Drawable draw=sdl.lockTexture(tex_level_grid);
-		draw.cls(0);
 		ppl7::grafix::Color white(255,255,255,128);
 		ppl7::grafix::Color black(0,0,0,128);
-		int bricks_x=desktopSize.width/62+1;
-		int brick_shift_y=bricks_x*4;
-		int right=bricks_x*62;
-		int wx=WorldCoords.x%62;
-		int wy=WorldCoords.y%33;
-		int pre_y=(brick_shift_y/33)*33;
 
-		for (int y=32-wy-pre_y;y<desktopSize.height;y+=33) {
-			draw.lineAA(0,y+1,right,y+brick_shift_y+1,black);
-			draw.lineAA(0,y,right,y+brick_shift_y,white);
+		draw.cls(0);
+		for (int x=0;x<desktopSize.width;x+=64) {
+			draw.line(x,0,x,desktopSize.height,black);
+			draw.line(x+1,0,x+1,desktopSize.height,white);
 		}
-		for (int x=0-wx;x<desktopSize.width;x+=62) {
-			draw.line(x+31,32,x+31,desktopSize.height,black);
-			draw.line(x+1,32,x+1,desktopSize.height,black);
-			draw.line(x,32,x,desktopSize.height,white);
+		for (int y=0;y<desktopSize.height;y+=64) {
+			draw.line(0,y,desktopSize.width,y ,black);
+			draw.line(0,y+1,desktopSize.width,y+1 ,white);
 		}
-
-
 		sdl.unlockTexture(tex_level_grid);
-		LastLayer=layer;
-		LastPos=WorldCoords;
 	}
 	SDL_Renderer *renderer=sdl.getRenderer();
-	SDL_RenderCopy(renderer, tex_level_grid, NULL, NULL);
+	SDL_Rect target;
+	target.x=viewport.x1-(WorldCoords.x%64);
+	target.y=viewport.y1-(WorldCoords.y%64);
+	target.w=desktopSize.width;
+	target.h=desktopSize.height;
+	SDL_RenderCopy(renderer, tex_level_grid, NULL, &target);
+}
+
+void Game::moveWorld(int offset_x, int offset_y)
+{
+	if (offset_x==0 && offset_y==0) return;
+	WorldCoords.x+=offset_x;
+	WorldCoords.y+=offset_y;
+	if (WorldCoords.x<0) WorldCoords.x=0;
+	if (WorldCoords.x>62000) WorldCoords.x=62000;
+	if (WorldCoords.y<0) WorldCoords.y=0;
+	if (WorldCoords.y>62000) WorldCoords.y=62000;
 }
 
 void Game::moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse)
 {
-	if (mouse.p.x<5 && WorldCoords.x>0) {
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	if (worldIsMoving) {
+		if ((mouse.buttonMask & ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT]) {
+			//printf("Move\n");
+			moveWorld(WorldMoveStart.x-mouse.p.x, WorldMoveStart.y-mouse.p.y);
+			WorldMoveStart=mouse.p;
+		} else {
+			worldIsMoving=false;
+			//printf("End\n");
+		}
+	} else {
+		//printf("mouse.buttonMask=%d\n", mouse.button);
+		if ((mouse.buttonMask & ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT]) {
+			//printf("Start\n");
+			worldIsMoving=true;
+			WorldMoveStart=mouse.p;
+		} else {
+			worldIsMoving=false;;
+		}
+
+	}
+	/*
+	if (mouse)
+	if (mouse.p.x<10 && WorldCoords.x>0) {
 		WorldCoords.x-=4;
 		if (WorldCoords.x<0) WorldCoords.x=0;
 	}
-	if (mouse.p.x>desktopSize.width-5 && WorldCoords.x<62000) {
+	if (mouse.p.x>desktopSize.width-10 && WorldCoords.x<62000) {
 		WorldCoords.x+=4;
 		if (WorldCoords.x>62000) WorldCoords.x=62000;
 	}
-	if (mouse.p.y<5 && WorldCoords.y>0) {
+	if (mouse.p.y<10 && WorldCoords.y>0) {
 		WorldCoords.y-=4;
 		if (WorldCoords.y<0) WorldCoords.y=0;
 	}
-	if (mouse.p.y>desktopSize.height-5 && WorldCoords.y<62000) {
+	if (mouse.p.y>desktopSize.height-100 && WorldCoords.y<62000) {
 		WorldCoords.y+=4;
 		if (WorldCoords.y>62000) WorldCoords.y=62000;
 	}
-
+	*/
 }
 
 void Game::run()
@@ -193,6 +216,8 @@ void Game::run()
 		level.drawPlayerPlane(renderer,PlayerCoords);
 
 		player->draw(renderer);
+
+		if (tiles_selection) drawGrid();
 
 		//displayHUD();
 		//SDL_RenderCopy(renderer, gui_tex, NULL, NULL);
