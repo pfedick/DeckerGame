@@ -150,7 +150,7 @@ void Game::moveWorld(int offset_x, int offset_y)
 	if (WorldCoords.y>62000) WorldCoords.y=62000;
 }
 
-void Game::moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse)
+void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	if (worldIsMoving) {
@@ -173,25 +173,6 @@ void Game::moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse)
 		}
 
 	}
-	/*
-	if (mouse)
-	if (mouse.p.x<10 && WorldCoords.x>0) {
-		WorldCoords.x-=4;
-		if (WorldCoords.x<0) WorldCoords.x=0;
-	}
-	if (mouse.p.x>desktopSize.width-10 && WorldCoords.x<62000) {
-		WorldCoords.x+=4;
-		if (WorldCoords.x>62000) WorldCoords.x=62000;
-	}
-	if (mouse.p.y<10 && WorldCoords.y>0) {
-		WorldCoords.y-=4;
-		if (WorldCoords.y<0) WorldCoords.y=0;
-	}
-	if (mouse.p.y>desktopSize.height-100 && WorldCoords.y<62000) {
-		WorldCoords.y+=4;
-		if (WorldCoords.y>62000) WorldCoords.y=62000;
-	}
-	*/
 }
 
 void Game::run()
@@ -206,14 +187,14 @@ void Game::run()
 		fps.update();
 		statusbar->setFps(fps.getFPS());
 		ppl7::tk::MouseState mouse=wm->getMouseState();
-		moveWorldWhenMouseIsInBorder(mouse);
+		moveWorldOnMouseClick(mouse);
 		statusbar->setMouse(mouse);
 		statusbar->setWorldCoords(WorldCoords);
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
 		player->setGameWindow(viewport);
 
-		level.drawPlayerPlane(renderer,PlayerCoords);
+		level.drawPlayerPlane(renderer,WorldCoords);
 
 		player->draw(renderer);
 

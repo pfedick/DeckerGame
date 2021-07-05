@@ -50,17 +50,26 @@ void Level::save(const ppl7::String &Filename)
 
 }
 
-void Level::drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &playercoords)
+void Level::drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords)
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
-	for (int y=0;y<20;y++) {
-		for (int x=0;x<30;x++) {
-			const Tile *tile=PlayerPlane.get(x,y);
+	int tiles_width=viewport.width()/64+1;
+	int tiles_height=viewport.height()/64+1;
+	int offset_x=worldcoords.x%64;
+	int offset_y=worldcoords.y%64;
+	int start_x=worldcoords.x/64;
+	int start_y=worldcoords.y/64;
+	int x1=viewport.x1-offset_x;
+	int y1=viewport.y1-offset_y;
+
+	for (int y=0;y<tiles_height;y++) {
+		for (int x=0;x<tiles_width;x++) {
+			const Tile *tile=PlayerPlane.get(x+start_x,y+start_y);
 			if (tile) {
 				for (int z=0;z<3;z++) {
 					if (tile->tileset[z] && tileset[tile->tileset[z]]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->tileset[z]]->draw(renderer,viewport.x1+x*64,viewport.y1+y*64,tile->tileno[z]);
+						tileset[tile->tileset[z]]->draw(renderer,x1+x*64,y1+y*64,tile->tileno[z]);
 					}
 				}
 			}

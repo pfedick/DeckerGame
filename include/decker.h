@@ -175,7 +175,7 @@ public:
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
-	void drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &playercoords);
+	void drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords);
 	void setViewport(const ppl7::grafix::Rect &r);
 };
 
@@ -213,7 +213,7 @@ private:
 	void initUi();
 	void drawGrid();
 
-	void moveWorldWhenMouseIsInBorder(const ppl7::tk::MouseState &mouse);
+	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
 
 	ppl7::grafix::Point PlayerCoords;
 
