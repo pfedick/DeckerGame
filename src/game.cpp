@@ -190,6 +190,7 @@ void Game::run()
 		moveWorldOnMouseClick(mouse);
 		statusbar->setMouse(mouse);
 		statusbar->setWorldCoords(WorldCoords);
+		statusbar->setPlayerCoords(PlayerCoords);
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
 		player->setGameWindow(viewport);

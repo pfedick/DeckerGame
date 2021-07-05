@@ -21,6 +21,7 @@ private:
 	ppl7::tk::Label *fps_label;
 	ppl7::tk::Label *mouse_coords;
 	ppl7::tk::Label *world_coords;
+	ppl7::tk::Label *player_coords;
 	ppl7::tk::Label *mouse_buttons;
 	ppl7::tk::Label *time_label;
 
@@ -31,6 +32,7 @@ public:
 	void setFps(int fps);
 	void setMouse(const MouseState &mouse);
 	void setWorldCoords(const Point &p);
+	void setPlayerCoords(const Point &p);
 
 	// Events
 	void timerEvent(Event *event);

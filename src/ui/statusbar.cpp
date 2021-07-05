@@ -36,6 +36,12 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 	world_coords->setFont(font_bold);
 	this->addChild(world_coords);
 
+	label=new ppl7::tk::Label (490,0,55,32,"Player:");
+	this->addChild(label);
+	player_coords=new ppl7::tk::Label (550,0,80,32,"?", ppl7::tk::Frame::Inset);
+	player_coords->setFont(font_bold);
+	this->addChild(player_coords);
+
 	label=new ppl7::tk::Label (width-112,0,50,32,"Zeit:");
 	this->addChild(label);
 	time_label=new ppl7::tk::Label (width-80,0,80,32,"?", ppl7::tk::Frame::Inset);
@@ -63,6 +69,12 @@ void StatusBar::setWorldCoords(const Point &p)
 {
 	world_coords->setText(ppl7::ToString("%d / %d",p.x, p.y));
 }
+
+void StatusBar::setPlayerCoords(const Point &p)
+{
+	player_coords->setText(ppl7::ToString("%d / %d",p.x, p.y));
+}
+
 
 void StatusBar::timerEvent(Event *event)
 {
