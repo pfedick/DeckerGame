@@ -55,6 +55,24 @@ public:
 	virtual void mouseDownEvent(MouseEvent *event);
 };
 
+class RadioButton : public ppl7::tk::Label
+{
+private:
+	bool	ischecked;
+
+public:
+	RadioButton();
+	RadioButton(int x, int y, int width, int height, const String &text=String(), bool checked=false);
+	~RadioButton();
+	bool checked() const;
+	void setChecked(bool checked);
+
+	virtual String widgetType() const;
+	virtual void paint(Drawable &draw);
+	virtual void mouseDownEvent(MouseEvent *event);
+};
+
+
 }	// EOF namespace ui
 }	// EOF namespace Decker
 

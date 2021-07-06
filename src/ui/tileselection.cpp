@@ -112,6 +112,15 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game, 
 	tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
 	this->addChild(tilesframe);
 
+	RadioButton *radio1=new RadioButton(5,5,client.width()-10,25,"Radio 1", true);
+	this->addChild(radio1);
+
+	RadioButton *radio2=new RadioButton(5,30,client.width()-10,55,"Radio 2");
+	this->addChild(radio2);
+
+	RadioButton *radio3=new RadioButton(5,60,client.width()-10,85,"Radio 3");
+	this->addChild(radio3);
+
 }
 
 void TilesSelection::setSelectedTile(int nr)
