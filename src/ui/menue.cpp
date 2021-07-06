@@ -30,8 +30,13 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->quitEvent(NULL);
 	} else if (event->widget()==edit_tiles_button) {
 		game->showTilesSelection();
-
 	}
+}
+
+bool MainMenue::showGrid() const
+{
+	if (show_grid_checkbox) return show_grid_checkbox->checked();
+	return false;
 }
 
 } //EOF namespace Decker

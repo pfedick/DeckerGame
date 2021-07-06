@@ -55,7 +55,7 @@ public:
 	MainMenue(int x, int y, int width, int height, Game *game);
 
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
-
+	bool showGrid() const;
 
 };
 

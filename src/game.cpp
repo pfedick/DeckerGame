@@ -202,7 +202,7 @@ void Game::run()
 
 		player->draw(renderer);
 
-		if (tiles_selection) drawGrid();
+		if (mainmenue->showGrid()) drawGrid();
 
 		//displayHUD();
 		//SDL_RenderCopy(renderer, gui_tex, NULL, NULL);
