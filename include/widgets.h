@@ -52,6 +52,7 @@ public:
 
 	virtual String widgetType() const;
 	virtual void paint(Drawable &draw);
+	virtual void mouseDownEvent(MouseEvent *event);
 };
 
 }	// EOF namespace ui

@@ -19,7 +19,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	show_grid_checkbox=new CheckBox(70,0,80,s.height,"show grid");
+	show_grid_checkbox=new CheckBox(70,0,100,s.height,"show grid");
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
 }
