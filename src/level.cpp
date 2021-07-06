@@ -1,6 +1,7 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <SDL.h>
 #include <ppl7-grafix.h>
 
@@ -30,7 +31,7 @@ void Level::setTileset(int no, Sprite *tileset)
 void Level::create(int width, int height)
 {
 	clear();
-	PlayerPlane.create(width, height, TILE_WIDTH, TILE_HEIGHT);
+	PlayerPlane.create(width, height);
 
 }
 
@@ -42,11 +43,48 @@ void Level::setViewport(const ppl7::grafix::Rect &r)
 
 void Level::load(const ppl7::String &Filename)
 {
+	clear();
+	ppl7::File ff;
+	ff.open(Filename, ppl7::File::READ);
+	ppl7::ByteArray ba;
+	ff.read(ba,12);
+	const char *buffer=ba.toCharPtr();
+	if (memcmp(buffer,"Decker",7)!=0) {
+		printf("Invalid Fileformat\n");
+		return;
+	}
+	//ppl7::HexDump(buffer,12);
+	//ppl7::HexDump(buffer+7,5);
+	size_t size=ppl7::Peek32(buffer+7);
+	int id=ppl7::Peek8(buffer+11);
+	//printf ("Loading chunk of size %zd with id %d\n", size,id);
+	//printf("filesize: %zd, pos=%zd\n",ff.size(),ff.tell());
+	if (id==1) {
+		//printf ("Chunk-size: %zd\n",size);
+		ff.read(ba,size-5);
+		//printf("bytes read: %zd\n",ba.size());
+		//ba.hexDump(256);
+		PlayerPlane.load(ba);
+	}
+	//printf ("size: %d, id=%d", size, id);
 
+
+	//create(256,256);
+
+
+	ff.close();
 }
 
 void Level::save(const ppl7::String &Filename)
 {
+	ppl7::File ff;
+	ff.open(Filename, ppl7::File::WRITE);
+	char *buffer[20];
+	memcpy(buffer,"Decker",7);
+	ff.write(buffer,7);
+	PlayerPlane.save(ff,1);
+
+	ff.close();
 
 }
 

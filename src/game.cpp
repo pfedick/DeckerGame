@@ -102,7 +102,8 @@ void Game::init()
 
 	player->setSpriteResource(resources.Sprite_George);
 
-	level.create(255,255);
+	//level.create(255,255);
+	level.load("level/test.lvl");
 	level.setTileset(1, &resources.Tiles);
 	//level.setRenderer
 
@@ -254,6 +255,17 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
 		level.PlayerPlane.clearTile(x,y,0);
 	}
+}
+
+void Game::save()
+{
+	level.save("level/test.lvl");
+}
+
+void Game::load()
+{
+	printf ("Game::load\n");
+	level.load("level/test.lvl");
 }
 
 

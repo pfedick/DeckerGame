@@ -126,6 +126,7 @@ public:
 	int tileset[3];
 	int tileno[3];
 
+	Tile(TileType type=NonBlocking);
 	Tile(int tileset, int tileno, int z=0, TileType type=Blocking);
 	void setType(TileType type);
 	void set(int tileset, int tileno, int z=0);
@@ -142,10 +143,13 @@ public:
 	Plane();
 	~Plane();
 	void clear();
-	void create(int width, int height, int tile_width, int tile_height);
+	void create(int width, int height);
 	void setTile(int x, int y, int z, int tileset, int tileno);
+	void setType(int x, int y,  Tile::TileType type);
 	void clearTile(int x, int y, int z);
 	const Tile *get(int x, int y) const;
+	void save(ppl7::FileObject &file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr &ba);
 };
 
 
@@ -235,6 +239,9 @@ public:
 	void showTilesSelection();
 
 	SDL_Renderer *getSDLRenderer();
+
+	void save();
+	void load();
 
 
 

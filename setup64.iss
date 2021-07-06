@@ -42,6 +42,7 @@ Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 ;Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
 Source: "res/*.tex"; DestDir: "{app}/res"; Flags: ignoreversion;
+Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 
 Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;

@@ -15,11 +15,20 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	exit_button->setEventHandler(this);
 	this->addChild(exit_button);
 
-	edit_tiles_button=new ppl7::tk::Button(0,0,60,s.height,"Tiles");
+	save_button=new ppl7::tk::Button(0,0,60,s.height,"Save");
+	save_button->setEventHandler(this);
+	this->addChild(save_button);
+
+	load_button=new ppl7::tk::Button(62,0,60,s.height,"Load");
+	load_button->setEventHandler(this);
+	this->addChild(load_button);
+
+
+	edit_tiles_button=new ppl7::tk::Button(127,0,60,s.height,"Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	show_grid_checkbox=new CheckBox(70,0,100,s.height,"show grid");
+	show_grid_checkbox=new CheckBox(200,0,100,s.height,"show grid");
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
 }
@@ -30,6 +39,11 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->quitEvent(NULL);
 	} else if (event->widget()==edit_tiles_button) {
 		game->showTilesSelection();
+	} else if (event->widget()==save_button) {
+		game->save();
+
+	} else if (event->widget()==load_button) {
+		game->load();
 	}
 }
 
