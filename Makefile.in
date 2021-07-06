@@ -28,7 +28,10 @@ OBJECTS=compile/main.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_tileselection.o \
-	compile/ui_scrollbar.o \
+	compile/widgets_scrollbar.o \
+	compile/widgets_checkbox.o \
+	compile/widgets_radiobutton.o \
+	compile/widgets_groupbox.o \
 	compile/plane.o \
 	compile/tile.o \
 	compile/player.o 
@@ -112,9 +115,21 @@ compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CXX) -o compile/ui_tileselection.o -c src/ui/tileselection.cpp $(CFLAGS)
 
-compile/ui_scrollbar.o: src/ui/scrollbar.cpp Makefile include/ui.h
+compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
 	-mkdir -p compile 
-	$(CXX) -o compile/ui_scrollbar.o -c src/ui/scrollbar.cpp $(CFLAGS)
+	$(CXX) -o compile/widgets_scrollbar.o -c src/widgets/scrollbar.cpp $(CFLAGS)
+
+compile/widgets_checkbox.o: src/widgets/checkbox.cpp Makefile include/widgets.h
+	-mkdir -p compile 
+	$(CXX) -o compile/widgets_checkbox.o -c src/widgets/checkbox.cpp $(CFLAGS)
+
+compile/widgets_radiobutton.o: src/widgets/radiobutton.cpp Makefile include/widgets.h
+	-mkdir -p compile 
+	$(CXX) -o compile/widgets_radiobutton.o -c src/widgets/radiobutton.cpp $(CFLAGS)
+
+compile/widgets_groupbox.o: src/widgets/groupbox.cpp Makefile include/widgets.h
+	-mkdir -p compile 
+	$(CXX) -o compile/widgets_groupbox.o -c src/widgets/groupbox.cpp $(CFLAGS)
 
 
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h

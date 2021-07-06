@@ -4,6 +4,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
+#include "widgets.h"
 
 class Game;
 class Sprite;
@@ -14,6 +15,8 @@ namespace ui {
 using namespace ppl7;
 using namespace ppl7::grafix;
 using namespace ppl7::tk;
+
+
 
 class StatusBar : public ppl7::tk::Frame
 {
@@ -44,6 +47,7 @@ class MainMenue : public ppl7::tk::Frame
 private:
 	ppl7::tk::Button *exit_button;
 	ppl7::tk::Button *edit_tiles_button;
+	CheckBox *show_grid_checkbox;
 	Game *game;
 
 
@@ -53,27 +57,6 @@ public:
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
 
 
-};
-
-class Scrollbar : public ppl7::tk::Widget
-{
-private:
-	ppl7::tk::Button *up_button;
-	ppl7::tk::Button *down_button;
-	int size;
-	int pos;
-
-public:
-	Scrollbar(int x, int y, int width, int height);
-
-	void setSize(int size);
-	void setPosition(int position);
-	int position() const;
-	virtual String widgetType() const;
-	virtual void paint(Drawable &draw);
-
-
-	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
 class TilesFrame : public ppl7::tk::Frame
