@@ -4,6 +4,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
+#include <list>
 
 class Game;
 class Sprite;
@@ -70,6 +71,54 @@ public:
 	virtual String widgetType() const;
 	virtual void paint(Drawable &draw);
 	virtual void mouseDownEvent(MouseEvent *event);
+};
+
+class ComboBox : public ppl7::tk::Widget
+{
+private:
+	ppl7::tk::Label *dropdown_button;
+	ppl7::String myCurrentText;
+	ppl7::String myCurrentIdentifier;
+	size_t myCurrentIndex;
+
+	class SelectionFrame : public ppl7::tk::Frame
+	{
+	private:
+	public:
+		SelectionFrame(int x, int y, int width, int height);
+	};
+
+	SelectionFrame *selection;
+
+	class ComboBoxItem
+	{
+	public:
+		ppl7::String text;
+		ppl7::String identifier;
+		size_t index;
+	};
+	std::list<ComboBoxItem> items;
+
+
+public:
+	ComboBox();
+	ComboBox(int x, int y, int width, int height);
+
+	void setCurrentText(const ppl7::String &text);
+	ppl7::String currentText() const;
+	ppl7::String currentIdentifier() const;
+
+	void setCurrentIndex(size_t index);
+	size_t currentIndex() const;
+
+	void clear();
+
+	void add(const ppl7::String &text, const ppl7::String &identifier=ppl7::String());
+
+	virtual String widgetType() const;
+	virtual void paint(Drawable &draw);
+	virtual void mouseDownEvent(MouseEvent *event);
+	virtual void mouseWheelEvent(MouseEvent *event);
 };
 
 
