@@ -18,6 +18,7 @@ Game::Game()
 	tiles_selection=NULL;
 	quitGame=false;
 	worldIsMoving=false;
+	tex_sky=NULL;
 }
 
 Game::~Game()
@@ -35,6 +36,13 @@ void Game::loadGrafix()
 	resources.Tiles.load(sdl, "res/tiles.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.uiTiles.load("res/tiles.tex");
+
+	ppl7::grafix::Image img;
+	img.load("res/sky2.png");
+	tex_sky=sdl.createStreamingTexture(img.width(), img.height());
+	ppl7::grafix::Drawable draw=sdl.lockTexture(tex_sky);
+	draw.blt(img);
+	sdl.unlockTexture(tex_sky);
 }
 
 void Game::createWindow()
@@ -203,6 +211,18 @@ void Game::run()
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
 		player->setGameWindow(viewport);
+		SDL_Rect target;
+		target.x=viewport.x1;
+		target.y=viewport.y1;
+		target.w=desktopSize.width;
+		target.h=desktopSize.height;
+		SDL_Rect source;
+		ppl7::grafix::Point c=WorldCoords*0.1f;
+		source.x=c.x;
+		source.y=c.y;
+		source.w=desktopSize.width;
+		source.h=desktopSize.height;
+		SDL_RenderCopy(renderer, tex_sky, &source, &target);
 
 		// Draw Planes and Sprites
 		level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);

@@ -203,6 +203,7 @@ private:
 	Resources resources;
 	Level level;
 	SDL_Texture* tex_level_grid;
+	SDL_Texture* tex_sky;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
