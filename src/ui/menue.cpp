@@ -51,6 +51,18 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	show_tiletypes_checkbox->setEventHandler(this);
 	this->addChild(show_tiletypes_checkbox);
 
+
+	ppl7::tk::Label *label=new Label(740,0,100,s.height,"active Plane: ");
+	this->addChild(label);
+
+	active_plane_combobox=new ComboBox(840,0,150,s.height);
+	active_plane_combobox->add("PlayerPlane");
+	active_plane_combobox->add("FrontPlane");
+	active_plane_combobox->add("FarPlane");
+
+	this->addChild(active_plane_combobox);
+
+
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
@@ -77,6 +89,12 @@ bool MainMenue::showTileTypes() const
 {
 	if (show_tiletypes_checkbox) return show_tiletypes_checkbox->checked();
 	return false;
+}
+
+int MainMenue::currentPlane() const
+{
+	if (active_plane_combobox) return active_plane_combobox->currentIndex();
+	return 0;
 }
 
 

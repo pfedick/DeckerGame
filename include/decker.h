@@ -195,6 +195,7 @@ public:
 	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
 	void drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void setViewport(const ppl7::grafix::Rect &r);
+	Plane &plane(int id);
 };
 
 

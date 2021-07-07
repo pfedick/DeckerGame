@@ -32,6 +32,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_checkbox.o \
 	compile/widgets_radiobutton.o \
 	compile/widgets_groupbox.o \
+	compile/widgets_combobox.o \
 	compile/plane.o \
 	compile/tile.o \
 	compile/player.o 
@@ -131,6 +132,10 @@ compile/widgets_radiobutton.o: src/widgets/radiobutton.cpp Makefile include/widg
 compile/widgets_groupbox.o: src/widgets/groupbox.cpp Makefile include/widgets.h
 	-mkdir -p compile 
 	$(CXX) -o compile/widgets_groupbox.o -c src/widgets/groupbox.cpp $(CFLAGS)
+
+compile/widgets_combobox.o: src/widgets/combobox.cpp Makefile include/widgets.h
+	-mkdir -p compile 
+	$(CXX) -o compile/widgets_combobox.o -c src/widgets/combobox.cpp $(CFLAGS)
 
 
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h

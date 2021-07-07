@@ -5,6 +5,8 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 
+static double planeFactor[]={1.0f, 1.0f, 0.5f};
+
 Game::Game()
 {
 	tex_level_grid=NULL;
@@ -143,10 +145,13 @@ void Game::drawGrid()
 		}
 		sdl.unlockTexture(tex_level_grid);
 	}
+	int currentPlane=mainmenue->currentPlane();
+	ppl7::grafix::Point c=WorldCoords*planeFactor[currentPlane];
+
 	SDL_Renderer *renderer=sdl.getRenderer();
 	SDL_Rect target;
-	target.x=viewport.x1-(WorldCoords.x%64);
-	target.y=viewport.y1-(WorldCoords.y%64);
+	target.x=viewport.x1-(c.x%64);
+	target.y=viewport.y1-(c.y%64);
 	target.w=desktopSize.width;
 	target.h=desktopSize.height;
 	SDL_RenderCopy(renderer, tex_level_grid, NULL, &target);
@@ -274,17 +279,18 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 {
 	if (!tiles_selection) return;
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	int currentPlane=mainmenue->currentPlane();
 	if (state[SDL_SCANCODE_LSHIFT]) return;
-	ppl7::grafix::Point coords=WorldCoords*1.0f;
+	ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
 	int x=(mouse.p.x-viewport.x1+coords.x)/64;
 	int y=(mouse.p.y-viewport.y1+coords.y)/64;
 
 	int selectedTile=tiles_selection->selectedTile();
 
 	if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
-		level.PlayerPlane.setTile(x,y,0,1,selectedTile);
+		level.plane(currentPlane).setTile(x,y,0,1,selectedTile);
 	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-		level.PlayerPlane.clearTile(x,y,0);
+		level.plane(currentPlane).clearTile(x,y,0);
 	}
 }
 

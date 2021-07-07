@@ -56,6 +56,8 @@ private:
 	ppl7::tk::Button *edit_enemies_button;
 	CheckBox *show_grid_checkbox;
 	CheckBox *show_tiletypes_checkbox;
+	ComboBox *active_plane_combobox;
+
 	Game *game;
 
 
@@ -65,6 +67,7 @@ public:
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
 	bool showGrid() const;
 	bool showTileTypes() const;
+	int currentPlane() const;
 
 };
 
