@@ -31,6 +31,10 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	show_grid_checkbox=new CheckBox(200,0,100,s.height,"show grid");
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
+	show_tiletypes_checkbox=new CheckBox(300,0,130,s.height,"show tile types");
+	show_tiletypes_checkbox->setEventHandler(this);
+	this->addChild(show_tiletypes_checkbox);
+
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
@@ -52,6 +56,13 @@ bool MainMenue::showGrid() const
 	if (show_grid_checkbox) return show_grid_checkbox->checked();
 	return false;
 }
+
+bool MainMenue::showTileTypes() const
+{
+	if (show_tiletypes_checkbox) return show_tiletypes_checkbox->checked();
+	return false;
+}
+
 
 } //EOF namespace Decker
 

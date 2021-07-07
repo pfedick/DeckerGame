@@ -121,6 +121,8 @@ public:
 		SteepRampRight,
 		ShallowRampLeft,
 		ShallowRampRight,
+		Ladder,
+		Water
 	};
 	TileType type;
 	int tileset[3];
@@ -159,8 +161,10 @@ public:
 	Sprite Sprite_George;
 	Sprite Tiles;
 	Sprite Cursor;
+	Sprite TileTypes;
 
 	ppl7::grafix::Sprite uiTiles;
+	ppl7::grafix::Sprite uiTileTypes;
 
 };
 
@@ -174,6 +178,7 @@ private:
 	Plane FrontPlane;
 	ppl7::grafix::Rect viewport;
 	Sprite *tileset[10];
+	Sprite *tiletypes;
 
 	void clear();
 
@@ -181,11 +186,12 @@ public:
 	Level();
 	~Level();
 	void setTileset(int no, Sprite *tileset);
+	void setTileTypesSprites(Sprite *sprites);
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
 	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
-
+	void drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void setViewport(const ppl7::grafix::Rect &r);
 };
 

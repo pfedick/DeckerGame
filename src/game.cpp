@@ -35,7 +35,10 @@ void Game::loadGrafix()
 	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
 	resources.Tiles.load(sdl, "res/tiles.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
+	resources.TileTypes.load(sdl, "res/tiletypes.tex");
 	resources.uiTiles.load("res/tiles.tex");
+	resources.uiTileTypes.load("res/tiletypes.tex");
+
 
 	ppl7::grafix::Image img;
 	img.load("res/sky2.png");
@@ -113,6 +116,7 @@ void Game::init()
 	//level.create(255,255);
 	level.load("level/test.lvl");
 	level.setTileset(1, &resources.Tiles);
+	level.setTileTypesSprites(&resources.TileTypes);
 	//level.setRenderer
 
 	showTilesSelection();
@@ -229,7 +233,7 @@ void Game::run()
 		level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
 		player->draw(renderer);
 		level.drawPlane(renderer,level.FrontPlane, WorldCoords);
-
+		if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
 		// Grid
 		if (mainmenue->showGrid()) drawGrid();
 

@@ -47,9 +47,11 @@ class MainMenue : public ppl7::tk::Frame
 private:
 	ppl7::tk::Button *exit_button;
 	ppl7::tk::Button *edit_tiles_button;
+
 	ppl7::tk::Button *save_button;
 	ppl7::tk::Button *load_button;
 	CheckBox *show_grid_checkbox;
+	CheckBox *show_tiletypes_checkbox;
 	Game *game;
 
 
@@ -58,6 +60,7 @@ public:
 
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
 	bool showGrid() const;
+	bool showTileTypes() const;
 
 };
 
