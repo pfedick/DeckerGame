@@ -50,6 +50,10 @@ private:
 
 	ppl7::tk::Button *save_button;
 	ppl7::tk::Button *load_button;
+
+	ppl7::tk::Button *edit_tiletypes_button;
+	ppl7::tk::Button *edit_sprites_button;
+	ppl7::tk::Button *edit_enemies_button;
 	CheckBox *show_grid_checkbox;
 	CheckBox *show_tiletypes_checkbox;
 	Game *game;

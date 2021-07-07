@@ -25,8 +25,8 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game, ppl7::gr
 void TilesFrame::paint(Drawable &draw)
 {
 	Frame::paint(draw);
-	int w=width()-1;
-	int h=height()-1;
+	//int w=width()-1;
+	//int h=height()-1;
 	ppl7::grafix::Color white(245,245,242,255);
 	int x=0, y=0;
 	try {
@@ -74,8 +74,8 @@ void TilesFrame::setSelectedTile(int nr)
 {
 	if (nr!=selected_tile && nr<tiles->numSprites()) {
 		selected_tile=nr;
-		ppl7::grafix::Rect client=this->clientRect();
-		int max_visible=client.height()/64;
+		//ppl7::grafix::Rect client=this->clientRect();
+		//int max_visible=client.height()/64;
 
 		needsRedraw();
 	}

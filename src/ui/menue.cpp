@@ -15,23 +15,39 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	exit_button->setEventHandler(this);
 	this->addChild(exit_button);
 
-	save_button=new ppl7::tk::Button(0,0,60,s.height,"Save");
+	save_button=new ppl7::tk::Button(0,0,64,s.height,"Save");
+	save_button->setIcon(gfx->Toolbar.getDrawable(33));
 	save_button->setEventHandler(this);
 	this->addChild(save_button);
 
-	load_button=new ppl7::tk::Button(62,0,60,s.height,"Load");
+	load_button=new ppl7::tk::Button(66,0,64,s.height,"Load");
+	load_button->setIcon(gfx->Toolbar.getDrawable(32));
 	load_button->setEventHandler(this);
 	this->addChild(load_button);
 
 
-	edit_tiles_button=new ppl7::tk::Button(127,0,60,s.height,"Tiles");
+	edit_tiles_button=new ppl7::tk::Button(140,0,60,s.height,"Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	show_grid_checkbox=new CheckBox(200,0,100,s.height,"show grid");
+	edit_tiletypes_button=new ppl7::tk::Button(202,0,80,s.height,"TileTypes");
+	edit_tiletypes_button->setEventHandler(this);
+	this->addChild(edit_tiletypes_button);
+
+	edit_sprites_button=new ppl7::tk::Button(284,0,70,s.height,"Sprites");
+	edit_sprites_button->setEventHandler(this);
+	this->addChild(edit_sprites_button);
+
+	edit_enemies_button=new ppl7::tk::Button(356,0,70,s.height,"Enemies");
+	edit_enemies_button->setEventHandler(this);
+	this->addChild(edit_enemies_button);
+
+
+
+	show_grid_checkbox=new CheckBox(500,0,100,s.height,"show grid");
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
-	show_tiletypes_checkbox=new CheckBox(300,0,130,s.height,"show tile types");
+	show_tiletypes_checkbox=new CheckBox(600,0,130,s.height,"show tile types");
 	show_tiletypes_checkbox->setEventHandler(this);
 	this->addChild(show_tiletypes_checkbox);
 

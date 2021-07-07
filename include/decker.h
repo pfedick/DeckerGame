@@ -119,8 +119,10 @@ public:
 		Blocking,
 		SteepRampLeft,
 		SteepRampRight,
-		ShallowRampLeft,
-		ShallowRampRight,
+		ShallowRampLeftLower,
+		ShallowRampLeftUpper,
+		ShallowRampRightUpper,
+		ShallowRampRightLower,
 		Ladder,
 		Water
 	};
