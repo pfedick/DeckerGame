@@ -169,7 +169,9 @@ class Level
 {
 	friend class Game;
 private:
+	Plane FarPlane;
 	Plane PlayerPlane;
+	Plane FrontPlane;
 	ppl7::grafix::Rect viewport;
 	Sprite *tileset[10];
 
@@ -182,7 +184,8 @@ public:
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
-	void drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords);
+	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
+
 	void setViewport(const ppl7::grafix::Rect &r);
 };
 
@@ -218,6 +221,7 @@ private:
 
 	void createWindow();
 	void initUi();
+	void updateUi(const ppl7::tk::MouseState &mouse);
 	void drawGrid();
 	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);

@@ -155,7 +155,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	if (worldIsMoving) {
-		if ((mouse.buttonMask & ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT]) {
+		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Move\n");
 			moveWorld(WorldMoveStart.x-mouse.p.x, WorldMoveStart.y-mouse.p.y);
 			WorldMoveStart=mouse.p;
@@ -165,7 +165,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 		}
 	} else {
 		//printf("mouse.buttonMask=%d\n", mouse.button);
-		if ((mouse.buttonMask & ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT]) {
+		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Start\n");
 			worldIsMoving=true;
 			WorldMoveStart=mouse.p;
@@ -176,40 +176,46 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 	}
 }
 
+void Game::updateUi(const ppl7::tk::MouseState &mouse)
+{
+	fps.update();
+	statusbar->setFps(fps.getFPS());
+	statusbar->setMouse(mouse);
+	statusbar->setWorldCoords(WorldCoords);
+	statusbar->setPlayerCoords(PlayerCoords);
+}
+
 void Game::run()
 {
 	SDL_Renderer *renderer=sdl.getRenderer();
-	//SDL_Event event;
 	quitGame=false;
 	while (!quitGame) {
 		double now=ppl7::GetMicrotime();
 		player->update(now);
 		wm->handleEvents();
-		fps.update();
-		statusbar->setFps(fps.getFPS());
 		ppl7::tk::MouseState mouse=wm->getMouseState();
+		updateUi(mouse);
+		// Handle Mouse events inside World
 		if (mouse.p.inside(viewport)) {
 			moveWorldOnMouseClick(mouse);
 			handleMouseDrawInWorld(mouse);
 		}
-		statusbar->setMouse(mouse);
-		statusbar->setWorldCoords(WorldCoords);
-		statusbar->setPlayerCoords(PlayerCoords);
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
 		player->setGameWindow(viewport);
 
-		level.drawPlayerPlane(renderer,WorldCoords);
-
+		// Draw Planes and Sprites
+		level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);
+		level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
 		player->draw(renderer);
+		level.drawPlane(renderer,level.FrontPlane, WorldCoords);
 
+		// Grid
 		if (mainmenue->showGrid()) drawGrid();
 
-		//displayHUD();
-		//SDL_RenderCopy(renderer, gui_tex, NULL, NULL);
-		//drawGrid(0);
-		mouse=wm->getMouseState();
+		// Widgets
 		drawWidgets();
+		// Mouse
 		resources.Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
 		presentScreen();
 	}
@@ -245,8 +251,9 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	if (!tiles_selection) return;
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_LSHIFT]) return;
-	int x=(mouse.p.x-viewport.x1+WorldCoords.x)/64;
-	int y=(mouse.p.y-viewport.y1+WorldCoords.y)/64;
+	ppl7::grafix::Point coords=WorldCoords*1.0f;
+	int x=(mouse.p.x-viewport.x1+coords.x)/64;
+	int y=(mouse.p.y-viewport.y1+coords.y)/64;
 
 	int selectedTile=tiles_selection->selectedTile();
 

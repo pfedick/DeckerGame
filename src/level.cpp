@@ -20,6 +20,8 @@ Level::~Level()
 void Level::clear()
 {
 	PlayerPlane.clear();
+	FarPlane.clear();
+	FrontPlane.clear();
 }
 
 void Level::setTileset(int no, Sprite *tileset)
@@ -47,30 +49,34 @@ void Level::load(const ppl7::String &Filename)
 	ppl7::File ff;
 	ff.open(Filename, ppl7::File::READ);
 	ppl7::ByteArray ba;
-	ff.read(ba,12);
+	ff.read(ba,7);
 	const char *buffer=ba.toCharPtr();
 	if (memcmp(buffer,"Decker",7)!=0) {
 		printf("Invalid Fileformat\n");
 		return;
 	}
-	//ppl7::HexDump(buffer,12);
-	//ppl7::HexDump(buffer+7,5);
-	size_t size=ppl7::Peek32(buffer+7);
-	int id=ppl7::Peek8(buffer+11);
-	//printf ("Loading chunk of size %zd with id %d\n", size,id);
-	//printf("filesize: %zd, pos=%zd\n",ff.size(),ff.tell());
-	if (id==1) {
-		//printf ("Chunk-size: %zd\n",size);
-		ff.read(ba,size-5);
-		//printf("bytes read: %zd\n",ba.size());
-		//ba.hexDump(256);
-		PlayerPlane.load(ba);
+	while(!ff.eof()) {
+		try {
+			size_t bytes_read=ff.read(ba,5);
+			if (bytes_read!=5) break;
+			buffer=ba.toCharPtr();
+			size_t size=ppl7::Peek32(buffer);
+			int id=ppl7::Peek8(buffer+4);
+			bytes_read=ff.read(ba,size-5);
+			if (bytes_read!=size-5) break;
+			if (id==1) {
+				PlayerPlane.load(ba);
+			} else if (id==2) {
+				FrontPlane.load(ba);
+			} else if (id==3) {
+				FarPlane.load(ba);
+			}
+		} catch (const ppl7::EndOfFileException &) {
+			break;
+		}
 	}
-	//printf ("size: %d, id=%d", size, id);
-
-
-	//create(256,256);
-
+	//FrontPlane.create(256,256);
+	//FarPlane.create(256,256);
 
 	ff.close();
 }
@@ -83,12 +89,14 @@ void Level::save(const ppl7::String &Filename)
 	memcpy(buffer,"Decker",7);
 	ff.write(buffer,7);
 	PlayerPlane.save(ff,1);
+	FrontPlane.save(ff,2);
+	FarPlane.save(ff,3);
 
 	ff.close();
 
 }
 
-void Level::drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords)
+void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	int tiles_width=viewport.width()/64+1;
@@ -102,7 +110,7 @@ void Level::drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &w
 
 	for (int y=0;y<tiles_height;y++) {
 		for (int x=0;x<tiles_width;x++) {
-			const Tile *tile=PlayerPlane.get(x+start_x,y+start_y);
+			const Tile *tile=plane.get(x+start_x,y+start_y);
 			if (tile) {
 				for (int z=0;z<3;z++) {
 					if (tile->tileset[z] && tileset[tile->tileset[z]]) {
@@ -113,6 +121,6 @@ void Level::drawPlayerPlane(SDL_Renderer *renderer, const ppl7::grafix::Point &w
 			}
 		}
 	}
-
 }
+
 
