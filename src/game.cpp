@@ -234,11 +234,15 @@ void Game::run()
 		SDL_RenderCopy(renderer, tex_sky, &source, &target);
 
 		// Draw Planes and Sprites
-		level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);
-		level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
+		if (mainmenue->farPlaneVisible())
+			level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);
+		if (mainmenue->playerPlaneVisible())
+			level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
 		player->draw(renderer);
-		level.drawPlane(renderer,level.FrontPlane, WorldCoords);
-		if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
+		if (mainmenue->frontPlaneVisible())
+			level.drawPlane(renderer,level.FrontPlane, WorldCoords);
+		if (mainmenue->playerPlaneVisible())
+			if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
 		// Grid
 		if (mainmenue->showGrid()) drawGrid();
 
@@ -288,9 +292,12 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	int selectedTile=tiles_selection->selectedTile();
 
 	if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
-		level.plane(currentPlane).setTile(x,y,0,1,selectedTile);
+		level.plane(currentPlane).setTile(x,y,
+				tiles_selection->currentLayer(),
+				1,
+				selectedTile);
 	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-		level.plane(currentPlane).clearTile(x,y,0);
+		level.plane(currentPlane).clearTile(x,y,tiles_selection->currentLayer());
 	}
 }
 

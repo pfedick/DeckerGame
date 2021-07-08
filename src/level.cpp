@@ -105,8 +105,8 @@ void Level::save(const ppl7::String &Filename)
 void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
-	int tiles_width=viewport.width()/64+1;
-	int tiles_height=viewport.height()/64+1;
+	int tiles_width=viewport.width()/64+2;
+	int tiles_height=viewport.height()/64+2;
 	int offset_x=worldcoords.x%64;
 	int offset_y=worldcoords.y%64;
 	int start_x=worldcoords.x/64;
@@ -133,8 +133,8 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	if (!tiletypes) return;
-	int tiles_width=viewport.width()/64+1;
-	int tiles_height=viewport.height()/64+1;
+	int tiles_width=viewport.width()/64+2;
+	int tiles_height=viewport.height()/64+2;
 	int offset_x=worldcoords.x%64;
 	int offset_y=worldcoords.y%64;
 	int start_x=worldcoords.x/64;

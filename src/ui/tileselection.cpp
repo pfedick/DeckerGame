@@ -112,14 +112,15 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game, 
 	tilesframe=new TilesFrame(5,200,client.width()-10, client.height()-200, game, tiles);
 	this->addChild(tilesframe);
 
-	RadioButton *radio1=new RadioButton(5,5,client.width()-10,25,"Radio 1", true);
-	this->addChild(radio1);
+	this->addChild(new ppl7::tk::Label(5,180,70,20,"Layer: "));
+	layer0=new RadioButton(60,180,50,20,"0", true);
+	this->addChild(layer0);
 
-	RadioButton *radio2=new RadioButton(5,30,client.width()-10,55,"Radio 2");
-	this->addChild(radio2);
+	layer1=new RadioButton(110,180,50,20,"1");
+	this->addChild(layer1);
 
-	RadioButton *radio3=new RadioButton(5,60,client.width()-10,85,"Radio 3");
-	this->addChild(radio3);
+	layer2=new RadioButton(160,180,50,20,"2");
+	this->addChild(layer2);
 
 }
 
@@ -131,6 +132,15 @@ void TilesSelection::setSelectedTile(int nr)
 int TilesSelection::selectedTile() const
 {
 	return tilesframe->selectedTile();
+}
+
+int TilesSelection::currentLayer() const
+{
+	if (layer0->checked()) return 0;
+	if (layer1->checked()) return 1;
+	if (layer2->checked()) return 2;
+
+	return 0;
 }
 
 

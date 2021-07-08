@@ -56,6 +56,10 @@ private:
 	ppl7::tk::Button *edit_enemies_button;
 	CheckBox *show_grid_checkbox;
 	CheckBox *show_tiletypes_checkbox;
+	CheckBox *visible_plane_player_checkbox;
+	CheckBox *visible_plane_front_checkbox;
+	CheckBox *visible_plane_far_checkbox;
+
 	ComboBox *active_plane_combobox;
 
 	Game *game;
@@ -68,6 +72,10 @@ public:
 	bool showGrid() const;
 	bool showTileTypes() const;
 	int currentPlane() const;
+
+	bool playerPlaneVisible() const;
+	bool frontPlaneVisible() const;
+	bool farPlaneVisible() const;
 
 };
 
@@ -96,6 +104,9 @@ class TilesSelection : public ppl7::tk::Frame
 private:
 	Game *game;
 	TilesFrame *tilesframe;
+	RadioButton *layer0;
+	RadioButton *layer1;
+	RadioButton *layer2;
 
 
 public:
@@ -105,6 +116,8 @@ public:
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
+
+	int currentLayer() const;
 
 
 
