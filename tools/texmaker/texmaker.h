@@ -6,7 +6,8 @@
 enum PIVOT_DETECTION
 {
 	PIVOT_PARAMS=0,
-	PIVOT_BRICKS=1
+	PIVOT_BRICKS=1,
+	PIVOT_LOWER_MIDDLE=2
 };
 
 
@@ -48,6 +49,7 @@ private:
 	int twidth, theight, maxtnum;
 	PIVOT_DETECTION pivot_detection;
 	void detectPivotBricks(const ppl7::grafix::Drawable &surface, int &px, int &py);
+	void detectPivotLowerMiddle(const ppl7::grafix::Drawable &surface, int &px, int &py);
 	void addIndexChunk();
 	void addTextureChunks();
 

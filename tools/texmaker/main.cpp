@@ -140,6 +140,7 @@ int main(int argc, char **argv)
 		printf ("test: %s\n", (const char*) pivot_detection);
 		if (pivot_detection=="params") Tex.SetPivotDetection(PIVOT_PARAMS);
 		else if (pivot_detection=="bricks") Tex.SetPivotDetection(PIVOT_BRICKS);
+		else if (pivot_detection=="lower_middle") Tex.SetPivotDetection(PIVOT_LOWER_MIDDLE);
 		else {
 			printf ("ERROR: unknwon pivot_detection algorithm [%s]\n", (const char*)pivot_detection);
 			return (1);
@@ -162,6 +163,7 @@ int main(int argc, char **argv)
 
 	if (source.notEmpty()) {
 		if (ppl7::File::exists(source)) {
+			printf ("source=%s\n", (const char *)source);
 			ppl7::DirEntry d=ppl7::File::statFile(source);
 			if (d.isFile()) {
 				int ret=loadFromFile(source, px, py, Tex, sx, sy);

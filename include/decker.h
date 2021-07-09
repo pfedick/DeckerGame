@@ -161,11 +161,15 @@ class Resources
 {
 public:
 	Sprite Sprite_George;
+	Sprite Nature;
+	Sprite Trees;
 	Sprite Tiles;
+	Sprite Tiles_Nature;
 	Sprite Cursor;
 	Sprite TileTypes;
 
 	ppl7::grafix::Sprite uiTiles;
+	ppl7::grafix::Sprite uiTilesNature;
 	ppl7::grafix::Sprite uiTileTypes;
 
 };

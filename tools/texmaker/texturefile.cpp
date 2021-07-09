@@ -93,6 +93,8 @@ int TextureFile::AddFile(const ppl7::String &filename, int id, int pivotx, int p
 	int height=r.height();
 	if (pivot_detection==PIVOT_BRICKS) {
 		detectPivotBricks(surface,pivotx,pivoty);
+	} else if (pivot_detection==PIVOT_LOWER_MIDDLE) {
+		detectPivotLowerMiddle(surface,pivotx,pivoty);
 	}
 	printf ("Dimensions: (%i/%i)-(%i/%i) = %i x %i, Pivot: %d/%d\n",
 			r.left(),r.top(),r.right(),r.bottom(),width,height,
@@ -118,6 +120,24 @@ void TextureFile::detectPivotBricks(const ppl7::grafix::Drawable &surface, int &
 		}
 	}
 }
+
+void TextureFile::detectPivotLowerMiddle(const ppl7::grafix::Drawable &surface, int &px, int &py)
+{
+	px=surface.width()/2;
+	py=999999;
+	for (int y=surface.height()-1;y>=0;y--) {
+		for (int x=0;x<surface.width();x++) {
+			ppl7::grafix::Color c=surface.getPixel(x,y);
+			// Wenn der AlphaWert > 0 ist, haben wir einen gültigen Pixel
+			if (c.alpha()>0) {
+				py=y;
+				return;
+			}
+		}
+	}
+}
+
+
 
 
 int TextureFile::AddSurface(ppl7::grafix::Drawable &surface, ppl7::grafix::Rect *r, int id, int pivotx, int pivoty)

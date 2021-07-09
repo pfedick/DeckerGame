@@ -36,10 +36,15 @@ void Game::loadGrafix()
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
 	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
 	resources.Tiles.load(sdl, "res/tiles.tex");
+	resources.Tiles_Nature.load(sdl, "res/tiles_nature.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
+	resources.Nature.load(sdl, "res/nature.tex");
+	resources.Trees.load(sdl, "res/trees.tex");
+
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
 	resources.uiTiles.load("res/tiles.tex");
 	resources.uiTileTypes.load("res/tiletypes.tex");
+	resources.uiTilesNature.load("res/tiles_nature.tex");
 
 
 	ppl7::grafix::Image img;
