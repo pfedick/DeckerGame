@@ -55,6 +55,34 @@ int loadFromDirectory(const char* source, int px, int py, TextureFile& Tex) {
 	return 0;
 }
 
+int loadFromFile(const ppl7::String &source, int px, int py, TextureFile& Tex, int sx, int sy) {
+	int id = 0;
+	if (sx<=0 || sy<=0) {
+		printf ("ERROR: parameters -sx and -sy are required!\n");
+		return 1;
+	}
+	ppl7::grafix::Image img;
+	ppl7::grafix::Rect r;
+	//ppl7::grafix::Point p;
+	//ppl7::grafix::Size s(sx,sy);
+
+	img.load(source);
+	for (r.y1=0;r.y1<img.height();r.y1+=sy) {
+		r.y2=r.y1+sy;
+		for (r.x1=0;r.x1<img.width();r.x1+=sx) {
+			r.x2=r.x1+sx;
+			if (!Tex.AddSurface(img, &r, id, px, py)) {
+				printf("Could not add surface to Texture\n");
+				return 1;
+			}
+			id++;
+		}
+
+	}
+	return 0;
+}
+
+
 void loadFromListfile(const char* listfile, TextureFile& Tex)
 {
 
@@ -118,12 +146,14 @@ int main(int argc, char **argv)
 		}
 	}
 
-	int t,w,h,px,py;
+	int t,w,h,px,py,sx, sy;
 	t=ppl7::GetArgv(argc,argv,"-mt").toInt();
 	w=ppl7::GetArgv(argc,argv,"-w").toInt();
 	h=ppl7::GetArgv(argc,argv,"-h").toInt();
 	px=ppl7::GetArgv(argc,argv,"-px").toInt();
 	py=ppl7::GetArgv(argc,argv,"-py").toInt();
+	sx=ppl7::GetArgv(argc,argv,"-sx").toInt();
+	sy=ppl7::GetArgv(argc,argv,"-sy").toInt();
 
 	Tex.SetMaxTextureNum(t);
 	if (w>0 && h==0) h=w;
@@ -131,8 +161,19 @@ int main(int argc, char **argv)
 	if (w>0) Tex.SetTextureSize(w,h);
 
 	if (source.notEmpty()) {
-		int ret=loadFromDirectory(source, px, py, Tex);
-		if (ret!=0) return ret;
+		if (ppl7::File::exists(source)) {
+			ppl7::DirEntry d=ppl7::File::statFile(source);
+			if (d.isFile()) {
+				int ret=loadFromFile(source, px, py, Tex, sx, sy);
+				if (ret!=0) return ret;
+			} else {
+				printf("ERROR: this is not a file [%s]\n", (const char*)source);
+				return 1;
+			}
+		} else {
+			int ret=loadFromDirectory(source, px, py, Tex);
+			if (ret!=0) return ret;
+		}
 	} else if (listfile.notEmpty()) {
 		try {
 			loadFromListfile(listfile, Tex);
