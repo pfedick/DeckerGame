@@ -62,16 +62,14 @@ int loadFromFile(const ppl7::String &source, int px, int py, TextureFile& Tex, i
 		return 1;
 	}
 	ppl7::grafix::Image img;
-	ppl7::grafix::Rect r;
-	//ppl7::grafix::Point p;
-	//ppl7::grafix::Size s(sx,sy);
+	ppl7::grafix::Point p;
+	ppl7::grafix::Size s(sx,sy);
 
 	img.load(source);
-	for (r.y1=0;r.y1<img.height();r.y1+=sy) {
-		r.y2=r.y1+sy;
-		for (r.x1=0;r.x1<img.width();r.x1+=sx) {
-			r.x2=r.x1+sx;
-			if (!Tex.AddSurface(img, &r, id, px, py)) {
+	for (p.y=0;p.y<img.height();p.y+=sy) {
+		for (p.x=0;p.x<img.width();p.x+=sx) {
+			ppl7::grafix::Drawable d=img.getDrawable(p, s);
+			if (!Tex.AddSurface(d, NULL, id, px, py)) {
 				printf("Could not add surface to Texture\n");
 				return 1;
 			}
