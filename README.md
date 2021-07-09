@@ -13,25 +13,34 @@ It features George Decker, one of the main characters of my Lego(tm) stopmotion 
 
 
 ## What's the status of the game?
-The game is in very early development, which means I know a few things I want to build into it, but I have to figure out how to do it. This includes:
-- which resolution should the game have
-- what ist the best size for tiles and sprites?
-- how to build and render the tile-based world (tiles, layers)
-- how to move in the world (side scrolling, paralax)
+The game is in very early development, which means I know a few things I want to build into it,
+but I have to figure out how to do it.
+
+### Things which are ongoing
 - how to implement the sprites?
+- create graphics
+- ui
+- world editor
+
+### Things I have to do or figure out
+- which resolution should the game have
+- what is the best size for tiles and sprites?
 - movement of sprites
 - how to control the main character?
 - collision detection
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall) 
 - how does sound work with SDL?
 - how to integrate sound track and sound effects
-- create graphics
 - compose soundtrack
 - create sound effects
-- ui
-- world editor
 - build the world/levels
 - story?
+There is probably more, which I'm not aware of, yet ;-)
+
+### Things I have finished
+- how to build and render the tile-based world (tiles, layers)
+- how to move in the world (side scrolling, paralax)
+
 
 ## On what platforms will the game be available
 My target platforms are:
