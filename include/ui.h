@@ -10,6 +10,7 @@ class Game;
 class Sprite;
 
 #define MAX_TILESETS 10
+#define MAX_SPRITESETS 10
 
 namespace Decker {
 namespace ui {

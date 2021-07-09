@@ -8,6 +8,14 @@
 #include "ui.h"
 #include <map>
 
+#ifndef MAX_TILESETS
+#define MAX_TILESETS 10
+#endif
+
+
+#ifndef MAX_SPRITESETS
+#define MAX_SPRITESETS 10
+#endif
 
 #define STR_VALUE(arg)      #arg
 #define EXCEPTION(name,inherit)	class name : public inherit { public: \
@@ -183,7 +191,7 @@ private:
 	Plane PlayerPlane;
 	Plane FrontPlane;
 	ppl7::grafix::Rect viewport;
-	Sprite *tileset[10];
+	Sprite *tileset[MAX_TILESETS+1];
 	Sprite *tiletypes;
 
 	void clear();
