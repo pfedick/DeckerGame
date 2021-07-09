@@ -123,6 +123,7 @@ void Game::init()
 	//level.create(255,255);
 	level.load("level/test.lvl");
 	level.setTileset(1, &resources.Tiles);
+	level.setTileset(2, &resources.Tiles_Nature);
 	level.setTileTypesSprites(&resources.TileTypes);
 	//level.setRenderer
 
@@ -278,7 +279,10 @@ void Game::showTilesSelection()
 		tiles_selection=NULL;
 		viewport.x1=0;
 	} else {
-		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this,&resources.uiTiles);
+		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
+		tiles_selection->setTileTypesSprites(&resources.uiTileTypes);
+		tiles_selection->setTileSet(1,"Bricks", &resources.uiTiles);
+		tiles_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
 	}
@@ -295,11 +299,12 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	int y=(mouse.p.y-viewport.y1+coords.y)/64;
 
 	int selectedTile=tiles_selection->selectedTile();
+	int selectedTileSet=tiles_selection->currentTileSet();
 
 	if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
 		level.plane(currentPlane).setTile(x,y,
 				tiles_selection->currentLayer(),
-				1,
+				selectedTileSet,
 				selectedTile);
 	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
 		level.plane(currentPlane).clearTile(x,y,tiles_selection->currentLayer());

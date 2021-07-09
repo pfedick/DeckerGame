@@ -9,6 +9,8 @@
 class Game;
 class Sprite;
 
+#define MAX_TILESETS 10
+
 namespace Decker {
 namespace ui {
 
@@ -87,7 +89,7 @@ private:
 	Scrollbar *scrollbar;
 	int selected_tile;
 public:
-	TilesFrame(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
+	TilesFrame(int x, int y, int width, int height, Game *game);
 	virtual void paint(Drawable &draw);
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
@@ -96,6 +98,7 @@ public:
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
+	void setSprites(ppl7::grafix::Sprite *tiles);
 
 };
 
@@ -104,21 +107,35 @@ class TilesSelection : public ppl7::tk::Frame
 private:
 	Game *game;
 	TilesFrame *tilesframe;
+	TilesFrame *tiletypesframe;
 	RadioButton *layer0;
 	RadioButton *layer1;
 	RadioButton *layer2;
+	ComboBox *tileset_combobox;
+
+	ppl7::String tilesetName[MAX_TILESETS+1];
+	ppl7::grafix::Sprite *tilesets[MAX_TILESETS+1];
+
+	int tileset;
+
 
 
 public:
-	TilesSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiles);
+	TilesSelection(int x, int y, int width, int height, Game *game);
 
 	//virtual void paint(Drawable &draw);
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
-
+	void setCurrentTileSet(int id);
+	int currentTileSet() const;
+	int currentTileType() const;
+	void setTileSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *tiles);
+	void setTileTypesSprites(ppl7::grafix::Sprite *tiles);
 	int currentLayer() const;
 
+
+	void valueChangedEvent(ppl7::tk::Event *event, int value);
 
 
 };

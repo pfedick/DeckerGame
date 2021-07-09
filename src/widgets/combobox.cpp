@@ -56,7 +56,6 @@ void ComboBox::setCurrentIndex(size_t index)
 			needsRedraw();
 		}
 	}
-
 }
 
 size_t ComboBox::currentIndex() const
@@ -109,8 +108,15 @@ void ComboBox::mouseWheelEvent(MouseEvent *event)
 	//printf ("Wheel: %d\n", event->wheel.y);
 	if (event->wheel.y<0 && myCurrentIndex<items.size()-1) {
 		setCurrentIndex(myCurrentIndex+1);
+		ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+		ev.setWidget(this);
+		valueChangedEvent(&ev, myCurrentIndex);
+
 	} else if (event->wheel.y>0 && myCurrentIndex>0) {
 		setCurrentIndex(myCurrentIndex-1);
+		ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+		ev.setWidget(this);
+		valueChangedEvent(&ev, myCurrentIndex);
 	}
 }
 
