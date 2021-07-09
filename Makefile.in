@@ -28,6 +28,8 @@ OBJECTS=compile/main.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_tileselection.o \
+	compile/ui_tiletypeselection.o \
+	compile/ui_tilesframe.o \
 	compile/widgets_scrollbar.o \
 	compile/widgets_checkbox.o \
 	compile/widgets_radiobutton.o \
@@ -119,6 +121,15 @@ compile/ui_menue.o: src/ui/menue.cpp Makefile include/ui.h
 compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CXX) -o compile/ui_tileselection.o -c src/ui/tileselection.cpp $(CFLAGS)
+
+compile/ui_tiletypeselection.o: src/ui/tiletypeselection.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CXX) -o compile/ui_tiletypeselection.o -c src/ui/tiletypeselection.cpp $(CFLAGS)
+
+compile/ui_tilesframe.o: src/ui/tilesframe.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CXX) -o compile/ui_tilesframe.o -c src/ui/tilesframe.cpp $(CFLAGS)
+
 
 compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
 	-mkdir -p compile 

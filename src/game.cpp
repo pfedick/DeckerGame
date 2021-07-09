@@ -21,6 +21,7 @@ Game::Game()
 	quitGame=false;
 	worldIsMoving=false;
 	tex_sky=NULL;
+	tiletype_selection=NULL;
 }
 
 Game::~Game()
@@ -273,6 +274,13 @@ void Game::closeEvent(ppl7::tk::Event *e)
 
 void Game::showTilesSelection()
 {
+	if (tiletype_selection) {
+		this->removeChild(tiletype_selection);
+		delete(tiletype_selection);
+		tiletype_selection=NULL;
+		viewport.x1=0;
+		mainmenue->setShowTileTypes(false);
+	}
 	if (tiles_selection) {
 		this->removeChild(tiles_selection);
 		delete(tiles_selection);
@@ -280,7 +288,6 @@ void Game::showTilesSelection()
 		viewport.x1=0;
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		tiles_selection->setTileTypesSprites(&resources.uiTileTypes);
 		tiles_selection->setTileSet(1,"Bricks", &resources.uiTiles);
 		tiles_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(tiles_selection);
@@ -288,26 +295,65 @@ void Game::showTilesSelection()
 	}
 }
 
+void Game::showTileTypeSelection()
+{
+	if (tiles_selection) {
+		this->removeChild(tiles_selection);
+		delete(tiles_selection);
+		tiles_selection=NULL;
+		viewport.x1=0;
+	}
+	if (tiletype_selection) {
+		this->removeChild(tiletype_selection);
+		delete(tiletype_selection);
+		tiletype_selection=NULL;
+		viewport.x1=0;
+		mainmenue->setShowTileTypes(false);
+	} else {
+		tiletype_selection=new Decker::ui::TileTypeSelection(0,33,300,statusbar->y()-2-33,this, &resources.uiTileTypes);
+		this->addChild(tiletype_selection);
+		viewport.x1=300;
+		mainmenue->setShowTileTypes(true);
+		mainmenue->setCurrentPlane(0);
+	}
+}
+
+
+
 void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 {
-	if (!tiles_selection) return;
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
-	int currentPlane=mainmenue->currentPlane();
 	if (state[SDL_SCANCODE_LSHIFT]) return;
-	ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
-	int x=(mouse.p.x-viewport.x1+coords.x)/64;
-	int y=(mouse.p.y-viewport.y1+coords.y)/64;
 
-	int selectedTile=tiles_selection->selectedTile();
-	int selectedTileSet=tiles_selection->currentTileSet();
+	if (tiletype_selection) {
+		ppl7::grafix::Point coords=WorldCoords*planeFactor[0];
+		int x=(mouse.p.x-viewport.x1+coords.x)/64;
+		int y=(mouse.p.y-viewport.y1+coords.y)/64;
+		Tile::TileType type=(Tile::TileType)tiletype_selection->tileType();
+		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
+			level.plane(0).setType(x,y,type);
+		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
+			level.plane(0).setType(x,y,Tile::TileType::NonBlocking);
+		}
+	} else if (tiles_selection) {
+		int currentPlane=mainmenue->currentPlane();
 
-	if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
-		level.plane(currentPlane).setTile(x,y,
-				tiles_selection->currentLayer(),
-				selectedTileSet,
-				selectedTile);
-	} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-		level.plane(currentPlane).clearTile(x,y,tiles_selection->currentLayer());
+		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
+		int x=(mouse.p.x-viewport.x1+coords.x)/64;
+		int y=(mouse.p.y-viewport.y1+coords.y)/64;
+
+		int selectedTile=tiles_selection->selectedTile();
+		int selectedTileSet=tiles_selection->currentTileSet();
+		int currentLayer=tiles_selection->currentLayer();
+
+		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
+			level.plane(currentPlane).setTile(x,y,
+					currentLayer,
+					selectedTileSet,
+					selectedTile);
+		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
+			level.plane(currentPlane).clearTile(x,y,tiles_selection->currentLayer());
+		}
 	}
 }
 

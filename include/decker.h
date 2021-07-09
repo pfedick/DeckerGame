@@ -131,7 +131,7 @@ public:
 	int tileno[3];
 
 	Tile(TileType type=NonBlocking);
-	Tile(int tileset, int tileno, int z=0, TileType type=Blocking);
+	Tile(int tileset, int tileno, int z=0, TileType type=NonBlocking);
 	void setType(TileType type);
 	void set(int tileset, int tileno, int z=0);
 	int getTileset(int z);
@@ -223,6 +223,7 @@ private:
 	Decker::ui::MainMenue *mainmenue;
 	Decker::ui::StatusBar *statusbar;
 	Decker::ui::TilesSelection *tiles_selection;
+	Decker::ui::TileTypeSelection *tiletype_selection;
 
 
 	FPS fps;
@@ -255,6 +256,7 @@ public:
 	void closeEvent(ppl7::tk::Event *event);
 
 	void showTilesSelection();
+	void showTileTypeSelection();
 
 	SDL_Renderer *getSDLRenderer();
 

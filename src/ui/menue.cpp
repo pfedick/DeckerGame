@@ -83,6 +83,8 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->quitEvent(NULL);
 	} else if (event->widget()==edit_tiles_button) {
 		game->showTilesSelection();
+	} else if (event->widget()==edit_tiletypes_button) {
+			game->showTileTypeSelection();
 	} else if (event->widget()==save_button) {
 		game->save();
 
@@ -102,6 +104,17 @@ bool MainMenue::showTileTypes() const
 	if (show_tiletypes_checkbox) return show_tiletypes_checkbox->checked();
 	return false;
 }
+
+void MainMenue::setShowTileTypes(bool flag)
+{
+	if (show_tiletypes_checkbox) show_tiletypes_checkbox->setChecked(flag);
+}
+
+void MainMenue::setCurrentPlane(int index)
+{
+	if (active_plane_combobox) active_plane_combobox->setCurrentIndex(index);
+}
+
 
 int MainMenue::currentPlane() const
 {

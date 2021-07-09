@@ -74,6 +74,8 @@ public:
 	bool showGrid() const;
 	bool showTileTypes() const;
 	int currentPlane() const;
+	void setShowTileTypes(bool show);
+	void setCurrentPlane(int index);
 
 	bool playerPlaneVisible() const;
 	bool frontPlaneVisible() const;
@@ -107,7 +109,6 @@ class TilesSelection : public ppl7::tk::Frame
 private:
 	Game *game;
 	TilesFrame *tilesframe;
-	TilesFrame *tiletypesframe;
 	RadioButton *layer0;
 	RadioButton *layer1;
 	RadioButton *layer2;
@@ -129,9 +130,7 @@ public:
 	int selectedTile() const;
 	void setCurrentTileSet(int id);
 	int currentTileSet() const;
-	int currentTileType() const;
 	void setTileSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *tiles);
-	void setTileTypesSprites(ppl7::grafix::Sprite *tiles);
 	int currentLayer() const;
 
 
@@ -139,6 +138,21 @@ public:
 
 
 };
+
+class TileTypeSelection : public ppl7::tk::Frame
+{
+private:
+	Game *game;
+	TilesFrame *tiletypesframe;
+
+public:
+	TileTypeSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiletypes);
+
+	void setTileType(int nr);
+	int tileType() const;
+};
+
+
 
 }	// EOF namespace ui
 }	// EOF namespace Decker
