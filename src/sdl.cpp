@@ -140,6 +140,24 @@ SDL_Texture *SDL::createStreamingTexture(int width, int height)
 	return texture;
 }
 
+SDL_Texture *SDL::createRenderTargetTexture(int width, int height)
+{
+	SDL_Texture *texture;
+	texture=SDL_CreateTexture(renderer,
+				SDL_PIXELFORMAT_ARGB8888,
+				SDL_TEXTUREACCESS_TARGET,
+				width,
+				height);
+	if (!texture) {
+		ppl7::String err(SDL_GetError());
+		throw SDLException("Couldn't create texture: "+err);
+	}
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	return texture;
+}
+
+
+
 SDL_Texture *SDL::createTexture(const ppl7::grafix::Drawable &d)
 {
 	SDL_Surface* surface=SDL_CreateRGBSurfaceWithFormat(0,

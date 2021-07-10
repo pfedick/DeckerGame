@@ -128,13 +128,5 @@ void Plane::load(const ppl7::ByteArrayPtr &ba)
 	}
 }
 
-Plane &Level::plane(int id)
-{
-	if (id==0) return PlayerPlane;
-	if (id==1) return FrontPlane;
-	if (id==2) return FarPlane;
-	return PlayerPlane;
-
-}
 
 

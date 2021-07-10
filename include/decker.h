@@ -47,9 +47,7 @@ public:
 class SDL
 {
 private:
-	//SDL_Window *window;
 	SDL_Renderer *renderer;
-
 	bool screensaver_enabled;
 
 
@@ -57,16 +55,12 @@ private:
 public:
 	SDL();
 	~SDL();
-	/*
-	void createWindow();
-	void destroyWindow();
-	void loop();
-	*/
 	void setRenderer(SDL_Renderer *r);
 	ppl7::grafix::Drawable lockTexture(SDL_Texture *texture);
 	void unlockTexture(SDL_Texture *texture);
 	SDL_Texture *createTexture(const ppl7::grafix::Drawable &d);
 	SDL_Texture *createStreamingTexture(int width, int height);
+	SDL_Texture *createRenderTargetTexture(int width, int height);
 	void destroyTexture(SDL_Texture *texture);
 	void startFrame(const ppl7::grafix::Color &background);
 	SDL_Renderer *getRenderer();
@@ -114,9 +108,34 @@ class Sprite
 		void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
 		void clear();
 		void draw(SDL_Renderer *renderer, int x, int y, int id) const;
+		void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 		int numTextures() const;
 		int numSprites() const;
 		SDL_Texture *findTexture(int id) const;
+};
+
+class SpriteSystem
+{
+private:
+	class Item
+	{
+	public:
+		Sprite *sprite;
+		int x;
+		int y;
+		int sprite_no;
+		float scale;
+	};
+	std::list<SpriteSystem::Item> sprite_list;
+
+public:
+	SpriteSystem();
+	~SpriteSystem();
+	void addSprite(int x, int y, Sprite *sprite, int sprite_no, float sprite_scale=1.0f);
+
+	void updateVisibleSpriteList();
+	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
+
 };
 
 class Tile
@@ -151,6 +170,8 @@ class Plane
 private:
 	Tile **tilematrix;
 	int width, height;
+	//SpriteSystem spritessystem[2];
+
 public:
 	Plane();
 	~Plane();
@@ -175,10 +196,12 @@ public:
 	Sprite Tiles_Nature;
 	Sprite Cursor;
 	Sprite TileTypes;
+	Sprite Sprites_Nature;
 
 	ppl7::grafix::Sprite uiTiles;
 	ppl7::grafix::Sprite uiTilesNature;
 	ppl7::grafix::Sprite uiTileTypes;
+	ppl7::grafix::Sprite uiSpritesNature;
 
 };
 
@@ -192,7 +215,10 @@ private:
 	Plane FrontPlane;
 	ppl7::grafix::Rect viewport;
 	Sprite *tileset[MAX_TILESETS+1];
+	Sprite *spriteset[MAX_SPRITESETS+1];
 	Sprite *tiletypes;
+
+	SpriteSystem spritessystem;
 
 	void clear();
 
@@ -201,13 +227,17 @@ public:
 	~Level();
 	void setTileset(int no, Sprite *tileset);
 	void setTileTypesSprites(Sprite *sprites);
+	void setSpriteset(int no, Sprite *tileset);
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
 	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
+	void drawSprites(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void setViewport(const ppl7::grafix::Rect &r);
 	Plane &plane(int id);
+
+	void updateVisibleSpriteLists();
 };
 
 
@@ -232,7 +262,8 @@ private:
 	Decker::ui::StatusBar *statusbar;
 	Decker::ui::TilesSelection *tiles_selection;
 	Decker::ui::TileTypeSelection *tiletype_selection;
-
+	Decker::ui::SpriteSelection *sprite_selection;
+	Decker::ui::WorldWidget *world_widget;
 
 	FPS fps;
 
@@ -246,9 +277,14 @@ private:
 	void initUi();
 	void updateUi(const ppl7::tk::MouseState &mouse);
 	void drawGrid();
+	void drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
 	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
 	void handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse);
+	void closeTileTypeSelection();
+	void closeTileSelection();
+	void closeSpriteSelection();
+
 	ppl7::grafix::Point PlayerCoords;
 
 	Player *player;
@@ -262,9 +298,13 @@ public:
 	// EventHandler
 	void quitEvent(ppl7::tk::Event *event);
 	void closeEvent(ppl7::tk::Event *event);
+	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+	void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 
 	void showTilesSelection();
 	void showTileTypeSelection();
+	void showSpriteSelection();
 
 	SDL_Renderer *getSDLRenderer();
 

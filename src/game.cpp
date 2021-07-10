@@ -22,6 +22,8 @@ Game::Game()
 	worldIsMoving=false;
 	tex_sky=NULL;
 	tiletype_selection=NULL;
+	sprite_selection=NULL;
+	world_widget=NULL;
 }
 
 Game::~Game()
@@ -41,11 +43,14 @@ void Game::loadGrafix()
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.Nature.load(sdl, "res/nature.tex");
 	resources.Trees.load(sdl, "res/trees.tex");
-
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
+	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
+
 	resources.uiTiles.load("res/tiles.tex");
 	resources.uiTileTypes.load("res/tiletypes.tex");
 	resources.uiTilesNature.load("res/tiles_nature.tex");
+	resources.uiSpritesNature.load("res/sprites_nature_ui.tex");
 
 
 	ppl7::grafix::Image img;
@@ -93,6 +98,10 @@ void Game::initUi()
 	viewport.y1=33;
 	viewport.y2=desktop.height-33;
 
+	world_widget=new Decker::ui::WorldWidget();
+	world_widget->create(0,33,desktop.width, desktop.height-32-33);
+	world_widget->setEventHandler(this);
+	this->addChild(world_widget);
 
 }
 
@@ -125,6 +134,7 @@ void Game::init()
 	level.load("level/test.lvl");
 	level.setTileset(1, &resources.Tiles);
 	level.setTileset(2, &resources.Tiles_Nature);
+	level.setSpriteset(1, &resources.Sprites_Nature);
 	level.setTileTypesSprites(&resources.TileTypes);
 	//level.setRenderer
 
@@ -215,6 +225,7 @@ void Game::run()
 	quitGame=false;
 	while (!quitGame) {
 		double now=ppl7::GetMicrotime();
+		level.updateVisibleSpriteLists();	// => TODO: own Thread
 		player->update(now);
 		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
@@ -243,8 +254,11 @@ void Game::run()
 		// Draw Planes and Sprites
 		if (mainmenue->farPlaneVisible())
 			level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);
-		if (mainmenue->playerPlaneVisible())
+		if (mainmenue->playerPlaneVisible()) {
 			level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
+			level.drawSprites(renderer, WorldCoords);
+			if (sprite_selection) drawSelectedSprite(renderer, mouse.p);
+		}
 		player->draw(renderer);
 		if (mainmenue->frontPlaneVisible())
 			level.drawPlane(renderer,level.FrontPlane, WorldCoords);
@@ -271,50 +285,88 @@ void Game::closeEvent(ppl7::tk::Event *e)
 	quitGame=true;
 }
 
-
-void Game::showTilesSelection()
+void Game::closeTileTypeSelection()
 {
 	if (tiletype_selection) {
 		this->removeChild(tiletype_selection);
 		delete(tiletype_selection);
 		tiletype_selection=NULL;
 		viewport.x1=0;
+		world_widget->setViewport(viewport);
 		mainmenue->setShowTileTypes(false);
 	}
+}
+
+void Game::closeTileSelection()
+{
 	if (tiles_selection) {
 		this->removeChild(tiles_selection);
 		delete(tiles_selection);
 		tiles_selection=NULL;
 		viewport.x1=0;
+		world_widget->setViewport(viewport);
+	}
+}
+
+void Game::closeSpriteSelection()
+{
+	if (sprite_selection) {
+		this->removeChild(sprite_selection);
+		delete(sprite_selection);
+		sprite_selection=NULL;
+		viewport.x1=0;
+		world_widget->setViewport(viewport);
+	}
+}
+
+
+
+void Game::showTilesSelection()
+{
+	closeTileTypeSelection();
+	closeSpriteSelection();
+	if (tiles_selection) {
+		closeTileSelection();
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
 		tiles_selection->setTileSet(1,"Bricks", &resources.uiTiles);
 		tiles_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
+		world_widget->setViewport(viewport);
 	}
 }
 
 void Game::showTileTypeSelection()
 {
-	if (tiles_selection) {
-		this->removeChild(tiles_selection);
-		delete(tiles_selection);
-		tiles_selection=NULL;
-		viewport.x1=0;
-	}
+	closeSpriteSelection();
+	closeTileSelection();
 	if (tiletype_selection) {
-		this->removeChild(tiletype_selection);
-		delete(tiletype_selection);
-		tiletype_selection=NULL;
-		viewport.x1=0;
+		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
 	} else {
 		tiletype_selection=new Decker::ui::TileTypeSelection(0,33,300,statusbar->y()-2-33,this, &resources.uiTileTypes);
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
+		world_widget->setViewport(viewport);
 		mainmenue->setShowTileTypes(true);
 		mainmenue->setCurrentPlane(0);
+	}
+}
+
+void Game::showSpriteSelection()
+{
+	closeTileTypeSelection();
+	closeTileSelection();
+	if (sprite_selection) {
+		closeSpriteSelection();
+	} else {
+		sprite_selection=new Decker::ui::SpriteSelection(0,33,300,statusbar->y()-2-33,this);
+		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
+		//sprite_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
+		this->addChild(sprite_selection);
+		viewport.x1=300;
+		world_widget->setViewport(viewport);
 	}
 }
 
@@ -357,6 +409,19 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	}
 }
 
+void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+{
+	if (!sprite_selection) return;
+	if (!mouse.inside(viewport)) return;
+	int nr=sprite_selection->selectedSprite()*4;
+	int spriteset=sprite_selection->currentSpriteSet();
+	float scale=sprite_selection->spriteScale();
+	if (!level.spriteset[spriteset]) return;
+	level.spriteset[spriteset]->drawScaled(renderer,
+			mouse.x, mouse.y, nr, scale);
+
+}
+
 void Game::save()
 {
 	level.save("level/test.lvl");
@@ -366,6 +431,40 @@ void Game::load()
 {
 	printf ("Game::load\n");
 	level.load("level/test.lvl");
+}
+
+void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
+{
+	if (world_widget!=NULL && event->widget()==world_widget) {
+		//printf ("click\n");
+	}
+}
+
+void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
+{
+	if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+		if (!event->p.inside(viewport)) return;
+		int nr=sprite_selection->selectedSprite()*4+ppl7::rand(0, 3);
+		int spriteset=sprite_selection->currentSpriteSet();
+		float scale=sprite_selection->spriteScale();
+		if (!level.spriteset[spriteset]) return;
+		level.spritessystem.addSprite(event->p.x+WorldCoords.x,
+				event->p.y+WorldCoords.y,
+				level.spriteset[spriteset], nr, scale);
+		//printf ("down\n");
+	}
+}
+
+void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
+{
+	if (sprite_selection!=NULL && event->widget()==world_widget) {
+		if (!event->p.inside(viewport)) return;
+		float scale=sprite_selection->spriteScale();
+		if (event->wheel.y<0 && scale>0.1) scale-=0.1;
+		else if (event->wheel.y>0 && scale<1) scale+=0.1;
+		//printf ("scale: %0.1f\n",scale);
+		sprite_selection->setSpriteScale(scale);
+	}
 }
 
 

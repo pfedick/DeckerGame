@@ -153,6 +153,48 @@ public:
 	int tileType() const;
 };
 
+class SpriteSelection : public ppl7::tk::Frame
+{
+private:
+	Game *game;
+	TilesFrame *tilesframe;
+	RadioButton *layer0;
+	RadioButton *layer1;
+	ComboBox *tileset_combobox;
+
+	ppl7::String tilesetName[MAX_TILESETS+1];
+	ppl7::grafix::Sprite *tilesets[MAX_TILESETS+1];
+
+	int tileset;
+	float scale;
+
+
+
+public:
+	SpriteSelection(int x, int y, int width, int height, Game *game);
+
+	//virtual void paint(Drawable &draw);
+
+	void setSelectedSprite(int nr);
+	int selectedSprite() const;
+	void setCurrentSpriteSet(int id);
+	int currentSpriteSet() const;
+	void setSpriteScale(float factor);
+	float spriteScale() const;
+	void setSpriteSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *sprites);
+	int currentLayer() const;
+	void valueChangedEvent(ppl7::tk::Event *event, int value);
+};
+
+class WorldWidget : public ppl7::tk::Widget
+{
+private:
+public:
+	void setViewport(const ppl7::grafix::Rect &viewport);
+
+
+};
+
 
 
 }	// EOF namespace ui

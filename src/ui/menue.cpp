@@ -84,7 +84,9 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 	} else if (event->widget()==edit_tiles_button) {
 		game->showTilesSelection();
 	} else if (event->widget()==edit_tiletypes_button) {
-			game->showTileTypeSelection();
+		game->showTileTypeSelection();
+	} else if (event->widget()==edit_sprites_button) {
+		game->showSpriteSelection();
 	} else if (event->widget()==save_button) {
 		game->save();
 

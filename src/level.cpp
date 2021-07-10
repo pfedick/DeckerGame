@@ -7,8 +7,11 @@
 
 Level::Level()
 {
-	for (int i=0;i<10;i++) {
+	for (int i=0;i<=MAX_TILESETS;i++) {
 		tileset[i]=NULL;
+	}
+	for (int i=0;i<=MAX_SPRITESETS;i++) {
+		spriteset[i]=NULL;
 	}
 	tiletypes=NULL;
 }
@@ -31,6 +34,12 @@ void Level::setTileset(int no, Sprite *tileset)
 	this->tileset[no]=tileset;
 }
 
+void Level::setSpriteset(int no, Sprite *tileset)
+{
+	if (no<0 || no>MAX_SPRITESETS) return;
+	this->spriteset[no]=tileset;
+}
+
 void Level::setTileTypesSprites(Sprite *sprites)
 {
 	tiletypes=sprites;
@@ -46,6 +55,15 @@ void Level::create(int width, int height)
 void Level::setViewport(const ppl7::grafix::Rect &r)
 {
 	viewport=r;
+}
+
+Plane &Level::plane(int id)
+{
+	if (id==0) return PlayerPlane;
+	if (id==1) return FrontPlane;
+	if (id==2) return FarPlane;
+	return PlayerPlane;
+
 }
 
 
@@ -152,5 +170,14 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 	}
 }
 
+void Level::drawSprites(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const
+{
+	spritessystem.draw(renderer, viewport, worldcoords);
+}
+
+void Level::updateVisibleSpriteLists()
+{
+	spritessystem.updateVisibleSpriteList();
+}
 
 
