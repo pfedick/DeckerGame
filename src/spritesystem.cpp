@@ -148,10 +148,20 @@ int SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
 		printf ("checking: x=%d, y=%d, item.id=%d, item.x=%d, item.y=%d, item.w=%d, item.h=%d\n",
 				p.x,p.y,item.id, item.boundary.x1, item.boundary.y1,
 				item.boundary.width(), item.boundary.height());
-		*/
+		 */
 		if (p.inside(item.boundary)) {
 			//printf ("possible match: %d\n", item.id);
-			bestmatch=item.id;
+			if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
+				const ppl7::grafix::Drawable draw=spriteset[item.sprite_set]->getDrawable(item.sprite_no);
+				if (draw.width()) {
+					int x=p.x-item.boundary.x1;
+					int y=p.y-item.boundary.y1;
+					ppl7::grafix::Color c=draw.getPixel(x/item.scale, y/item.scale);
+					if (c.alpha()>92) bestmatch=item.id;
+				}
+			}
+
+
 		}
 	}
 	return bestmatch;

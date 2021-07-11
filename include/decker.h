@@ -129,6 +129,7 @@ public:
 	void drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
+	const ppl7::grafix::Drawable getDrawable(int id) const;
 	void enableMemoryBuffer(bool enabled);
 	void enableSDLBuffer(bool enabled);
 	void enableCollisionDetection(bool enabled);

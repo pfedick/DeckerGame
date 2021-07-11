@@ -347,6 +347,20 @@ void Sprite::draw(ppl7::grafix::Drawable &target, int x, int y, int id) const
 	target.bltAlpha(*item.drawable,r,x+item.Offset.x-item.Pivot.x, y+item.Offset.y-item.Pivot.y);
 }
 
+const ppl7::grafix::Drawable Sprite::getDrawable(int id) const
+{
+	ppl7::grafix::Drawable draw;
+	if (!bMemoryBufferd) return draw;
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it==SpriteList.end()) return draw;
+	const SpriteIndexItem &item=it->second;
+	if (!item.drawable) return draw;
+	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
+	draw=(*item.drawable).getDrawable(r);
+	return draw;
+}
+
 void Sprite::draw(SDL_Renderer *renderer, int x, int y, int id) const
 {
 	if (!bSDLBufferd) return;

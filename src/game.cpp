@@ -52,6 +52,7 @@ void Game::loadGrafix()
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
 	resources.Sprites_Nature.enableOutlines(true);
+	resources.Sprites_Nature.enableMemoryBuffer(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
 
 	//resources.uiTiles.load("res/tiles.tex");
