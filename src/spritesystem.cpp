@@ -155,6 +155,10 @@ void SpriteSystem::modifySprite(const SpriteSystem::Item &item)
 		intitem.y=item.y;
 		intitem.z=item.z;
 		intitem.scale=item.scale;
+		if (intitem.sprite_set<=MAX_SPRITESETS && this->spriteset[intitem.sprite_set]!=NULL) {
+			intitem.boundary=this->spriteset[intitem.sprite_set]->spriteBoundary(intitem.sprite_no,
+					intitem.scale,intitem.x,intitem.y);
+		}
 	}
 }
 

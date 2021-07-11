@@ -525,6 +525,7 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 		sprite_mode=SpriteModeEdit;
 		selected_sprite=sprite;
 		selected_sprite_system=&ss;
+		sprite_move_start=mouse;
 	} else {
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
@@ -547,6 +548,21 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 				selected_sprite_system=NULL;
 			}
 		}
+	}
+}
+
+void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
+{
+	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
+			&& sprite_mode==SpriteModeEdit && selected_sprite.id>=0
+			&& selected_sprite_system!=NULL) {
+		ppl7::grafix::Point diff=event->p-sprite_move_start;
+		selected_sprite.x+=diff.x;
+		selected_sprite.y+=diff.y;
+		selected_sprite_system->modifySprite(selected_sprite);
+		//printf("Move: %d, %d\n", diff.x, diff.y);
+		sprite_move_start=event->p;
+
 	}
 }
 

@@ -360,6 +360,7 @@ private:
 	spriteMode sprite_mode;
 	SpriteSystem::Item selected_sprite;
 	SpriteSystem *selected_sprite_system;
+	ppl7::grafix::Point sprite_move_start;
 
 
 public:
@@ -375,6 +376,7 @@ public:
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 	void keyDownEvent(ppl7::tk::KeyEvent *event);
+	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
 
 	void showTilesSelection();
 	void showTileTypeSelection();
