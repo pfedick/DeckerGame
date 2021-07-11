@@ -55,8 +55,15 @@ void Level::setTileTypesSprites(Sprite *sprites)
 void Level::create(int width, int height)
 {
 	clear();
+	FarPlane.create(width, height);
 	PlayerPlane.create(width, height);
-
+	FrontPlane.create(width, height);
+	FarSprites[0].clear();
+	FarSprites[1].clear();
+	PlayerSprites[0].clear();
+	PlayerSprites[1].clear();
+	FrontSprites[0].clear();
+	FrontSprites[1].clear();
 }
 
 void Level::setViewport(const ppl7::grafix::Rect &r)

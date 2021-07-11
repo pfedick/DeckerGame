@@ -25,20 +25,25 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	load_button->setEventHandler(this);
 	this->addChild(load_button);
 
+	new_button=new ppl7::tk::Button(130,0,64,s.height,"New");
+	new_button->setIcon(gfx->Toolbar.getDrawable(31));
+	new_button->setEventHandler(this);
+	this->addChild(new_button);
 
-	edit_tiles_button=new ppl7::tk::Button(140,0,60,s.height,"Tiles");
+
+	edit_tiles_button=new ppl7::tk::Button(140+60,0,60,s.height,"Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	edit_tiletypes_button=new ppl7::tk::Button(202,0,80,s.height,"TileTypes");
+	edit_tiletypes_button=new ppl7::tk::Button(202+60,0,80,s.height,"TileTypes");
 	edit_tiletypes_button->setEventHandler(this);
 	this->addChild(edit_tiletypes_button);
 
-	edit_sprites_button=new ppl7::tk::Button(284,0,70,s.height,"Sprites");
+	edit_sprites_button=new ppl7::tk::Button(284+60,0,70,s.height,"Sprites");
 	edit_sprites_button->setEventHandler(this);
 	this->addChild(edit_sprites_button);
 
-	edit_enemies_button=new ppl7::tk::Button(356,0,70,s.height,"Enemies");
+	edit_enemies_button=new ppl7::tk::Button(356+60,0,70,s.height,"Enemies");
 	edit_enemies_button->setEventHandler(this);
 	this->addChild(edit_enemies_button);
 
@@ -89,7 +94,8 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->showSpriteSelection();
 	} else if (event->widget()==save_button) {
 		game->save();
-
+	} else if (event->widget()==new_button) {
+		game->clearLevel();
 	} else if (event->widget()==load_button) {
 		game->load();
 	}

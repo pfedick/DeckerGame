@@ -56,6 +56,7 @@ private:
 
 	ppl7::tk::Button *save_button;
 	ppl7::tk::Button *load_button;
+	ppl7::tk::Button *new_button;
 
 	ppl7::tk::Button *edit_tiletypes_button;
 	ppl7::tk::Button *edit_sprites_button;

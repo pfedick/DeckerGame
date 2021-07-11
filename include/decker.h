@@ -386,6 +386,7 @@ public:
 
 	void save();
 	void load();
+	void clearLevel();
 
 
 

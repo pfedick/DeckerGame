@@ -458,6 +458,15 @@ void Game::load()
 	level.load("level/test.lvl");
 }
 
+void Game::clearLevel()
+{
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	WorldCoords.setPoint(0,0);
+	level.create(256,256);
+}
+
 void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
 {
 	if (world_widget!=NULL && event->widget()==world_widget) {
