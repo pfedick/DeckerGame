@@ -6,7 +6,7 @@ namespace Decker::ui {
 TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game)
 : ppl7::tk::Frame(x,y,width,height)
 {
-	selected_tile=0;
+	selected_tile=-1;
 	this->game=game;
 	this->tiles=NULL;
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
@@ -27,12 +27,13 @@ void TilesFrame::setSprites(Sprite *tiles)
 {
 	this->tiles=tiles;
 	scrollbar->setSize(tiles->numSprites()/4+1);
-	setSelectedTile(0);
+	setSelectedTile(-1);
 	needsRedraw();
 }
 
 void TilesFrame::paint(ppl7::grafix::Drawable &draw)
 {
+	//printf ("selected_tile=%d\n",selected_tile);
 	Frame::paint(draw);
 	//int w=width()-1;
 	//int h=height()-1;

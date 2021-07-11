@@ -128,6 +128,7 @@ public:
 	void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 	void drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
+	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
 	void enableMemoryBuffer(bool enabled);
 	void enableSDLBuffer(bool enabled);
 	void enableCollisionDetection(bool enabled);
@@ -142,17 +143,17 @@ private:
 	class Item
 	{
 	public:
+		int id;
 		int x;			// 4 Byte
 		int y;			// 4 Byte
 		int z;			// 2 Byte
 		int sprite_set;	// 2 Byte
 		int sprite_no;	// 2 Byte
 		float scale;	// 4 Byte	==> 18 Byte
-		int width;
-		int height;
+		ppl7::grafix::Rect boundary;
 	};
 	ppl7::Mutex mutex;
-	std::list<SpriteSystem::Item> sprite_list;
+	std::map<int, SpriteSystem::Item> sprite_list;
 	std::map<uint64_t,SpriteSystem::Item> visible_sprite_map;
 	Sprite *spriteset[MAX_SPRITESETS+1];
 	bool bSpritesVisible;
@@ -169,6 +170,9 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
+	int findMatchingSprite(const ppl7::grafix::Point &p) const;
+
+	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 
 	size_t count() const;
 	size_t countVisible() const;
@@ -339,10 +343,19 @@ private:
 	void closeTileTypeSelection();
 	void closeTileSelection();
 	void closeSpriteSelection();
+	void selectSprite(const ppl7::grafix::Point &mouse);
 
 	ppl7::grafix::Point PlayerCoords;
 
 	Player *player;
+
+	enum spriteMode {
+		spriteModeDraw,
+		SpriteModeEdit
+	};
+	spriteMode sprite_mode;
+	int selected_sprite_id;
+	SpriteSystem *selected_sprite_system;
 
 public:
 	Game();

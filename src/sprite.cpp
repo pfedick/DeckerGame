@@ -420,6 +420,20 @@ ppl7::grafix::Size Sprite::spriteSize(int id, float scale_factor) const
 	return s;
 }
 
+ppl7::grafix::Rect Sprite::spriteBoundary(int id, float scale_factor, int x, int y) const
+{
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	ppl7::grafix::Rect r;
+	if (it==SpriteList.end()) return r;
+	const SpriteIndexItem &item=it->second;
+	r.x1=x+(item.Offset.x-item.Pivot.x)*scale_factor;
+	r.y1=y+(item.Offset.y-item.Pivot.y)*scale_factor;
+	r.x2=r.x1+(int)((float)item.r.w*scale_factor);
+	r.y2=r.y1+(int)((float)item.r.h*scale_factor);
+	return r;
+}
+
 
 int Sprite::numTextures() const
 {

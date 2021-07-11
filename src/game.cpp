@@ -24,6 +24,9 @@ Game::Game()
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
 	world_widget=NULL;
+	sprite_mode=spriteModeDraw;
+	selected_sprite_system=NULL;
+	selected_sprite_id=-1;
 }
 
 Game::~Game()
@@ -371,6 +374,9 @@ void Game::showSpriteSelection()
 		//sprite_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
+		sprite_mode=spriteModeDraw;
+		selected_sprite_id=-1;
+		selected_sprite_system=NULL;
 		world_widget->setViewport(viewport);
 	}
 }
@@ -403,7 +409,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		int selectedTileSet=tiles_selection->currentTileSet();
 		int currentLayer=tiles_selection->currentLayer();
 
-		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
+		if (mouse.buttonMask==ppl7::tk::MouseState::Left && selectedTile>=0) {
 			level.plane(currentPlane).setTile(x,y,
 					currentLayer,
 					selectedTileSet,
@@ -417,15 +423,27 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
 {
 	if (!sprite_selection) return;
-	if (!mouse.inside(viewport)) return;
-	int nr=sprite_selection->selectedSprite()*4;
-	int spriteset=sprite_selection->currentSpriteSet();
-	float scale=sprite_selection->spriteScale();
-	if (!level.spriteset[spriteset]) return;
-	level.spriteset[spriteset]->drawScaled(renderer,
-			mouse.x, mouse.y, nr, scale);
-	level.spriteset[spriteset]->drawOutlines(renderer,
+	if (sprite_selection->selectedSprite()>=0 && sprite_mode!=spriteModeDraw) {
+		selected_sprite_system=NULL;
+		sprite_mode=spriteModeDraw;
+	}
+	if (sprite_mode==SpriteModeEdit && selected_sprite_id>=0 && selected_sprite_system!=NULL) {
+		int currentPlane=mainmenue->currentPlane();
+		//printf ("drawing selected sprite\n");
+		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
+				WorldCoords*planeFactor[currentPlane],selected_sprite_id);
+	} else if (sprite_mode==spriteModeDraw) {
+		if (!mouse.inside(viewport)) return;
+		int nr=sprite_selection->selectedSprite()*4;
+		if (nr<0) return;
+		int spriteset=sprite_selection->currentSpriteSet();
+		float scale=sprite_selection->spriteScale();
+		if (!level.spriteset[spriteset]) return;
+		level.spriteset[spriteset]->drawScaled(renderer,
 				mouse.x, mouse.y, nr, scale);
+		level.spriteset[spriteset]->drawOutlines(renderer,
+					mouse.x, mouse.y, nr, scale);
+	}
 }
 
 void Game::save()
@@ -449,7 +467,12 @@ void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
 void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
-		int nr=sprite_selection->selectedSprite()*4+ppl7::rand(0, 3);
+		int nr=sprite_selection->selectedSprite()*4;
+		if (nr<0) {
+			selectSprite(event->p);
+			return;
+		}
+		if (sprite_mode!=spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
@@ -461,7 +484,12 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		ss.addSprite(event->p.x+coords.x,
 				event->p.y+coords.y,
 				0,
-				spriteset, nr, scale);
+				spriteset, nr+ppl7::rand(0, 3), scale);
+	} else if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
+		sprite_selection->setSelectedSprite(-1);
+		sprite_mode=spriteModeDraw;
+		selected_sprite_id=-1;
+		selected_sprite_system=NULL;
 	}
 }
 
@@ -474,6 +502,28 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 		//printf ("scale: %0.1f\n",scale);
 		sprite_selection->setSpriteScale(scale);
 	}
+}
+
+void Game::selectSprite(const ppl7::grafix::Point &mouse)
+{
+	int currentPlane=mainmenue->currentPlane();
+	ppl7::grafix::Point world=mouse+WorldCoords*planeFactor[currentPlane];
+	int layer=sprite_selection->currentLayer();
+	if (layer<0 || layer>1) return;
+
+	SpriteSystem &ss=level.spritesystem(currentPlane, layer);
+	int sprite_id=ss.findMatchingSprite(world);
+	if (sprite_id>=0) {
+		//printf ("Selected Sprite: %d\n",sprite_id);
+		sprite_mode=SpriteModeEdit;
+		selected_sprite_id=sprite_id;
+		selected_sprite_system=&ss;
+	} else {
+		selected_sprite_id=-1;
+		selected_sprite_system=NULL;
+	}
+	//printf ("versuche sprite zu finden...\n");
+
 }
 
 

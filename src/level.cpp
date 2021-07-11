@@ -213,19 +213,22 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 
 void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player)
 {
-	FarSprites[0].draw(renderer, viewport,worldcoords*0.5f);
-	drawPlane(renderer,FarPlane, worldcoords*0.5f);
-	FarSprites[1].draw(renderer, viewport,worldcoords*0.5f);
-
-	PlayerSprites[0].draw(renderer, viewport,worldcoords);
-	drawPlane(renderer,PlayerPlane, worldcoords);
-	PlayerSprites[1].draw(renderer, viewport,worldcoords);
-	player->draw(renderer);
-
-	FrontSprites[0].draw(renderer, viewport,worldcoords);
-	drawPlane(renderer,FrontPlane, worldcoords);
-	FrontSprites[1].draw(renderer, viewport,worldcoords);
-
+	if (FarPlane.isVisible()) {
+		FarSprites[0].draw(renderer, viewport,worldcoords*0.5f);
+		drawPlane(renderer,FarPlane, worldcoords*0.5f);
+		FarSprites[1].draw(renderer, viewport,worldcoords*0.5f);
+	}
+	if (PlayerPlane.isVisible()) {
+		PlayerSprites[0].draw(renderer, viewport,worldcoords);
+		drawPlane(renderer,PlayerPlane, worldcoords);
+		PlayerSprites[1].draw(renderer, viewport,worldcoords);
+		player->draw(renderer);
+	}
+	if (FrontPlane.isVisible()) {
+		FrontSprites[0].draw(renderer, viewport,worldcoords);
+		drawPlane(renderer,FrontPlane, worldcoords);
+		FrontSprites[1].draw(renderer, viewport,worldcoords);
+	}
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)

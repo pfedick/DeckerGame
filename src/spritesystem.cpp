@@ -42,20 +42,17 @@ void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, 
 {
 	//printf ("x=%d, y=%d\n",x,y);
 	SpriteSystem::Item item;
+	item.id=(int)sprite_list.size()+1;
 	item.x=x;
 	item.y=y;
 	item.z=z;
 	item.sprite_no=sprite_no;
 	item.sprite_set=spriteset;
 	item.scale=sprite_scale;
-	item.width=0;
-	item.height=0;
 	if (item.sprite_set<=MAX_SPRITESETS && this->spriteset[item.sprite_set]!=NULL) {
-		ppl7::grafix::Size s=this->spriteset[item.sprite_set]->spriteSize(sprite_no,sprite_scale);
-		item.width=s.width;
-		item.height=s.height;
+		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no,sprite_scale,x,y);
 	}
-	sprite_list.push_back(item);
+	sprite_list.insert(std::pair<int,SpriteSystem::Item>(item.id,item));
 
 }
 
@@ -63,15 +60,16 @@ void SpriteSystem::updateVisibleSpriteList(const ppl7::grafix::Point &worldcoord
 {
 	if (!bSpritesVisible) return;
 	visible_sprite_map.clear();
-	std::list<SpriteSystem::Item>::const_iterator it;
+	std::map<int, SpriteSystem::Item>::const_iterator it;
 	int width=viewport.width();
 	int height=viewport.height();
 	for (it=sprite_list.begin();it!=sprite_list.end();++it) {
-		const SpriteSystem::Item &item=(*it);
+		const SpriteSystem::Item &item=(it->second);
 		if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
 			int x=item.x-worldcoords.x;
 			int y=item.y-worldcoords.y;
-			if (x+item.width>0 && y+item.height>0 && x-item.width<width && y-item.height<height ) {
+			if (x+item.boundary.width()>0 && y+item.boundary.height()>0
+					&& x-item.boundary.width()<width && y-item.boundary.height()<height ) {
 				uint64_t id=((uint64_t)item.z<<32&0x0000ffff00000000)|(uint64_t)(item.y<<16)|(uint64_t)item.x;
 				visible_sprite_map.insert(std::pair<uint64_t,SpriteSystem::Item>(id,item));
 			}
@@ -120,6 +118,45 @@ void SpriteSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 
 }
 
+void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
+{
+	if (!bSpritesVisible) return;
+	std::map<int,SpriteSystem::Item>::const_iterator it;
+	it=sprite_list.find(id);
+	if (it!=sprite_list.end()) {
+		const SpriteSystem::Item &item=(it->second);
+		//printf ("found sprite to draw: %d\n",item.id);
+		if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
+			//printf ("----: %d\n",item.id);
+			spriteset[item.sprite_set]->drawOutlines(renderer,
+					item.x+viewport.x1-worldcoords.x,
+					item.y+viewport.y1-worldcoords.y,
+					item.sprite_no, item.scale);
+		}
+	}
+}
+
+int SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
+{
+	if (!bSpritesVisible) return -1;
+	int bestmatch=-1;
+	//printf ("Try to find sprite\n");
+	std::map<uint64_t,SpriteSystem::Item>::const_iterator it;
+	for (it=visible_sprite_map.begin();it!=visible_sprite_map.end();++it) {
+		const SpriteSystem::Item &item=(it->second);
+		/*
+		printf ("checking: x=%d, y=%d, item.id=%d, item.x=%d, item.y=%d, item.w=%d, item.h=%d\n",
+				p.x,p.y,item.id, item.boundary.x1, item.boundary.y1,
+				item.boundary.width(), item.boundary.height());
+		*/
+		if (p.inside(item.boundary)) {
+			//printf ("possible match: %d\n", item.id);
+			bestmatch=item.id;
+		}
+	}
+	return bestmatch;
+}
+
 void SpriteSystem::save(ppl7::FileObject &file, unsigned char id) const
 {
 	if (sprite_list.size()==0) return;
@@ -127,9 +164,9 @@ void SpriteSystem::save(ppl7::FileObject &file, unsigned char id) const
 	ppl7::Poke32(buffer+0,0);
 	ppl7::Poke8(buffer+4,id);
 	size_t p=5;
-	std::list<SpriteSystem::Item>::const_iterator it;
+	std::map<int, SpriteSystem::Item>::const_iterator it;
 	for (it=sprite_list.begin();it!=sprite_list.end();++it) {
-		const SpriteSystem::Item &item=(*it);
+		const SpriteSystem::Item &item=(it->second);
 		ppl7::Poke32(buffer+p,item.x);
 		ppl7::Poke32(buffer+p+4,item.y);
 		ppl7::Poke16(buffer+p+8,item.z);
