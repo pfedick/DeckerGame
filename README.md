@@ -17,7 +17,6 @@ The game is in very early development, which means I know a few things I want to
 but I have to figure out how to do it.
 
 ### Things which are ongoing
-- how to implement the sprites?
 - create graphics
 - ui
 - world editor
@@ -25,8 +24,9 @@ but I have to figure out how to do it.
 ### Things I have to do or figure out
 - which resolution should the game have
 - what is the best size for tiles and sprites?
-- movement of sprites
+- how to implement interactive objects/enemies
 - how to control the main character?
+- physics
 - collision detection
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall) 
 - how does sound work with SDL?
@@ -38,8 +38,10 @@ but I have to figure out how to do it.
 There is probably more, which I'm not aware of, yet ;-)
 
 ### Things I have finished
+- basic ui for editing and testing the world
 - how to build and render the tile-based world (tiles, layers)
 - how to move in the world (side scrolling, paralax)
+- how to implement the sprites?
 
 
 ## On what platforms will the game be available
