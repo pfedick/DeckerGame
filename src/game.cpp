@@ -137,12 +137,12 @@ void Game::init()
 	player->setSpriteResource(resources.Sprite_George);
 
 	//level.create(255,255);
-	level.load("level/test.lvl");
 	level.setTileset(1, &resources.Tiles);
 	level.setTileset(2, &resources.Tiles_Nature);
 	level.setSpriteset(1, &resources.Sprites_Nature);
 	level.setTileTypesSprites(&resources.TileTypes);
 	//level.setRenderer
+	level.load("level/test.lvl");
 
 	showTilesSelection();
 
@@ -223,6 +223,8 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 	statusbar->setMouse(mouse);
 	statusbar->setWorldCoords(WorldCoords);
 	statusbar->setPlayerCoords(PlayerCoords);
+	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
+
 }
 
 void Game::run()
@@ -458,6 +460,7 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
 		ss.addSprite(event->p.x+coords.x,
 				event->p.y+coords.y,
+				0,
 				spriteset, nr, scale);
 	}
 }

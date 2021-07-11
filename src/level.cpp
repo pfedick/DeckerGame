@@ -128,10 +128,15 @@ void Level::load(const ppl7::String &Filename)
 			break;
 		}
 	}
-	//FrontPlane.create(256,256);
-	//FarPlane.create(256,256);
+
 
 	ff.close();
+	/*
+	// For performance-testing of sprite system
+	for (int i=0;i<1000000;i++) {
+		PlayerSprites[0].addSprite(ppl7::rand(0,50000), ppl7::rand(1000,50000), 0, 1, ppl7::rand(0,52*4), 1.0f);
+	}
+	*/
 }
 
 void Level::save(const ppl7::String &Filename)
@@ -225,12 +230,38 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)
 {
-	FarSprites[0].updateVisibleSpriteList(worldcoords, viewport);
-	FarSprites[1].updateVisibleSpriteList(worldcoords, viewport);
+	FarSprites[0].updateVisibleSpriteList(worldcoords*0.5, viewport);
+	FarSprites[1].updateVisibleSpriteList(worldcoords*0.5, viewport);
 	PlayerSprites[0].updateVisibleSpriteList(worldcoords, viewport);
 	PlayerSprites[1].updateVisibleSpriteList(worldcoords, viewport);
 	FrontSprites[0].updateVisibleSpriteList(worldcoords, viewport);
 	FrontSprites[1].updateVisibleSpriteList(worldcoords, viewport);
 }
+
+size_t Level::countSprites() const
+{
+	size_t total=0;
+	total+=FarSprites[0].count();
+	total+=FarSprites[1].count();
+	total+=PlayerSprites[0].count();
+	total+=PlayerSprites[1].count();
+	total+=FrontSprites[0].count();
+	total+=FrontSprites[1].count();
+	return total;
+}
+
+size_t Level::countVisibleSprites() const
+{
+	size_t total=0;
+	total+=FarSprites[0].countVisible();
+	total+=FarSprites[1].countVisible();
+	total+=PlayerSprites[0].countVisible();
+	total+=PlayerSprites[1].countVisible();
+	total+=FrontSprites[0].countVisible();
+	total+=FrontSprites[1].countVisible();
+	return total;
+}
+
+
 
 

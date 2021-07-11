@@ -408,6 +408,17 @@ void Sprite::drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float sc
 	SDL_RenderCopy(renderer, item.outlines, &item.r, &tr);
 }
 
+ppl7::grafix::Size Sprite::spriteSize(int id, float scale_factor) const
+{
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	ppl7::grafix::Size s;
+	if (it==SpriteList.end()) return s;
+	const SpriteIndexItem &item=it->second;
+	s.width=(int)((float)item.r.w*scale_factor);
+	s.height=(int)((float)item.r.h*scale_factor);
+	return s;
+}
 
 
 int Sprite::numTextures() const

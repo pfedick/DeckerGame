@@ -113,6 +113,9 @@ private:
 	void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
 	void loadIndex(ppl7::PFPChunk *chunk);
 	void generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src);
+	SDL_Texture *findTexture(int id) const;
+	SDL_Texture *findOutlines(int id) const;
+	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
 
 public:
 	Sprite();
@@ -124,15 +127,13 @@ public:
 	void draw(SDL_Renderer *renderer, int x, int y, int id) const;
 	void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 	void drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
+	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	void enableMemoryBuffer(bool enabled);
 	void enableSDLBuffer(bool enabled);
 	void enableCollisionDetection(bool enabled);
 	void enableOutlines(bool enabled);
 	int numTextures() const;
 	int numSprites() const;
-	SDL_Texture *findTexture(int id) const;
-	SDL_Texture *findOutlines(int id) const;
-	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
 };
 
 class SpriteSystem
@@ -150,7 +151,9 @@ private:
 		int width;
 		int height;
 	};
+	ppl7::Mutex mutex;
 	std::list<SpriteSystem::Item> sprite_list;
+	std::map<uint64_t,SpriteSystem::Item> visible_sprite_map;
 	Sprite *spriteset[MAX_SPRITESETS+1];
 	bool bSpritesVisible;
 
@@ -158,7 +161,7 @@ public:
 	SpriteSystem();
 	~SpriteSystem();
 	void clear();
-	void addSprite(int x, int y, int spriteset, int sprite_no, float sprite_scale=1.0f);
+	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale);
 	void setVisible(bool visible);
 	bool isVisible() const;
 	void setSpriteset(int no, Sprite *spriteset);
@@ -166,6 +169,9 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
+
+	size_t count() const;
+	size_t countVisible() const;
 };
 
 class Tile
@@ -284,6 +290,10 @@ public:
 	Plane &plane(int id);
 	SpriteSystem &spritesystem(int plane, int layer);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
+
+	size_t countSprites() const;
+	size_t countVisibleSprites() const;
+
 };
 
 

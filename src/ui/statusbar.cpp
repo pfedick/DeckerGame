@@ -36,11 +36,16 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 	world_coords->setFont(font_bold);
 	this->addChild(world_coords);
 
-	label=new ppl7::tk::Label (490,0,55,32,"Player:");
-	this->addChild(label);
+	this->addChild(new ppl7::tk::Label (490,0,55,32,"Player:"));
 	player_coords=new ppl7::tk::Label (550,0,80,32,"?", ppl7::tk::Frame::Inset);
 	player_coords->setFont(font_bold);
 	this->addChild(player_coords);
+
+	this->addChild(new ppl7::tk::Label (640,0,140,32,"Sprites total / visible:"));
+	sprite_count=new ppl7::tk::Label (780,0,120,32,"?", ppl7::tk::Frame::Inset);
+	sprite_count->setFont(font_bold);
+	this->addChild(sprite_count);
+
 
 	label=new ppl7::tk::Label (width-112,0,50,32,"Zeit:");
 	this->addChild(label);
@@ -73,6 +78,11 @@ void StatusBar::setWorldCoords(const ppl7::grafix::Point &p)
 void StatusBar::setPlayerCoords(const ppl7::grafix::Point &p)
 {
 	player_coords->setText(ppl7::ToString("%d / %d",p.x, p.y));
+}
+
+void StatusBar::setSpriteCount(size_t total, size_t visible)
+{
+	sprite_count->setText(ppl7::ToString("%zd / %zd",total, visible));
 }
 
 
