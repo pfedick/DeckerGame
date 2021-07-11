@@ -26,7 +26,7 @@ Game::Game()
 	world_widget=NULL;
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
-	selected_sprite_id=-1;
+	selected_sprite.id=-1;
 }
 
 Game::~Game()
@@ -376,7 +376,7 @@ void Game::showSpriteSelection()
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
-		selected_sprite_id=-1;
+		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
 		world_widget->setViewport(viewport);
 	}
@@ -428,11 +428,11 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 		selected_sprite_system=NULL;
 		sprite_mode=spriteModeDraw;
 	}
-	if (sprite_mode==SpriteModeEdit && selected_sprite_id>=0 && selected_sprite_system!=NULL) {
+	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
 		int currentPlane=mainmenue->currentPlane();
 		//printf ("drawing selected sprite\n");
 		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
-				WorldCoords*planeFactor[currentPlane],selected_sprite_id);
+				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
 	} else if (sprite_mode==spriteModeDraw) {
 		if (!mouse.inside(viewport)) return;
 		int nr=sprite_selection->selectedSprite()*4;
@@ -489,7 +489,7 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 	} else if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;
-		selected_sprite_id=-1;
+		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
 	}
 }
@@ -497,10 +497,17 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 {
 	if (sprite_selection!=NULL && event->widget()==world_widget) {
-		float scale=sprite_selection->spriteScale();
-		if (event->wheel.y<0 && scale>0.1) scale-=0.1;
-		else if (event->wheel.y>0 && scale<1.0) scale+=0.1;
-		sprite_selection->setSpriteScale(scale);
+		if (sprite_mode==spriteModeDraw) {
+			float scale=sprite_selection->spriteScale();
+			if (event->wheel.y<0 && scale>0.1) scale-=0.1;
+			else if (event->wheel.y>0 && scale<1.0) scale+=0.1;
+			sprite_selection->setSpriteScale(scale);
+		} else if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
+			//printf ("wheel\n");
+			if (event->wheel.y<0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.1;
+			else if (event->wheel.y>0 && selected_sprite.scale<1.0) selected_sprite.scale+=0.1;
+			selected_sprite_system->modifySprite(selected_sprite);
+		}
 	}
 }
 
@@ -516,10 +523,10 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 	if (sprite.id>=0) {
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
-		selected_sprite_id=sprite.id;
+		selected_sprite=sprite;
 		selected_sprite_system=&ss;
 	} else {
-		selected_sprite_id=-1;
+		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
 	}
 	//printf ("versuche sprite zu finden...\n");
@@ -530,13 +537,13 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 {
 	if (event->widget()==world_widget) {
-		if (sprite_mode==SpriteModeEdit && selected_sprite_id>=0
+		if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0
 				&& selected_sprite_system!=NULL) {
 			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
 					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
 				//printf ("KeyEvent\n");
-				selected_sprite_system->deleteSprite(selected_sprite_id);
-				selected_sprite_id=0;
+				selected_sprite_system->deleteSprite(selected_sprite.id);
+				selected_sprite.id=-1;
 				selected_sprite_system=NULL;
 			}
 		}

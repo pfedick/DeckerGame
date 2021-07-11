@@ -145,9 +145,17 @@ void SpriteSystem::deleteSprite(int id)
 	}
 }
 
-void SpriteSystem::modifySprite(int id, int x, int y, int z, float sprite_scale)
+void SpriteSystem::modifySprite(const SpriteSystem::Item &item)
 {
-
+	std::map<int,SpriteSystem::Item>::iterator it;
+	it=sprite_list.find(item.id);
+	if (it!=sprite_list.end()) {
+		SpriteSystem::Item &intitem=(it->second);
+		intitem.x=item.x;
+		intitem.y=item.y;
+		intitem.z=item.z;
+		intitem.scale=item.scale;
+	}
 }
 
 

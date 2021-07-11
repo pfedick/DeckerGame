@@ -166,7 +166,7 @@ public:
 	void clear();
 	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale);
 	void deleteSprite(int id);
-	void modifySprite(int id, int x, int y, int z, float sprite_scale);
+	void modifySprite(const SpriteSystem::Item &item);
 	void setVisible(bool visible);
 	bool isVisible() const;
 	void setSpriteset(int no, Sprite *spriteset);
@@ -358,8 +358,9 @@ private:
 		SpriteModeEdit
 	};
 	spriteMode sprite_mode;
-	int selected_sprite_id;
+	SpriteSystem::Item selected_sprite;
 	SpriteSystem *selected_sprite_system;
+
 
 public:
 	Game();
