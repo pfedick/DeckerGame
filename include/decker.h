@@ -165,6 +165,8 @@ public:
 	~SpriteSystem();
 	void clear();
 	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale);
+	void deleteSprite(int id);
+	void modifySprite(int id, int x, int y, int z, float sprite_scale);
 	void setVisible(bool visible);
 	bool isVisible() const;
 	void setSpriteset(int no, Sprite *spriteset);
@@ -371,6 +373,7 @@ public:
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
+	void keyDownEvent(ppl7::tk::KeyEvent *event);
 
 	void showTilesSelection();
 	void showTileTypeSelection();

@@ -136,6 +136,21 @@ void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 	}
 }
 
+void SpriteSystem::deleteSprite(int id)
+{
+	std::map<int,SpriteSystem::Item>::const_iterator it;
+	it=sprite_list.find(id);
+	if (it!=sprite_list.end()) {
+		sprite_list.erase(it);
+	}
+}
+
+void SpriteSystem::modifySprite(int id, int x, int y, int z, float sprite_scale)
+{
+
+}
+
+
 SpriteSystem::Item SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
 {
 	SpriteSystem::Item bestmatchItem;

@@ -514,6 +514,7 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 	SpriteSystem &ss=level.spritesystem(currentPlane, layer);
 	SpriteSystem::Item sprite=ss.findMatchingSprite(world);
 	if (sprite.id>=0) {
+		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
 		selected_sprite_id=sprite.id;
 		selected_sprite_system=&ss;
@@ -525,4 +526,20 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 
 }
 
+
+void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
+{
+	if (event->widget()==world_widget) {
+		if (sprite_mode==SpriteModeEdit && selected_sprite_id>=0
+				&& selected_sprite_system!=NULL) {
+			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
+					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
+				//printf ("KeyEvent\n");
+				selected_sprite_system->deleteSprite(selected_sprite_id);
+				selected_sprite_id=0;
+				selected_sprite_system=NULL;
+			}
+		}
+	}
+}
 
