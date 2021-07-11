@@ -136,10 +136,11 @@ void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 	}
 }
 
-int SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
+SpriteSystem::Item SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
 {
-	if (!bSpritesVisible) return -1;
-	int bestmatch=-1;
+	SpriteSystem::Item bestmatchItem;
+	bestmatchItem.id=-1;
+	if (!bSpritesVisible) return bestmatchItem;
 	//printf ("Try to find sprite\n");
 	std::map<uint64_t,SpriteSystem::Item>::const_iterator it;
 	for (it=visible_sprite_map.begin();it!=visible_sprite_map.end();++it) {
@@ -157,14 +158,14 @@ int SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
 					int x=p.x-item.boundary.x1;
 					int y=p.y-item.boundary.y1;
 					ppl7::grafix::Color c=draw.getPixel(x/item.scale, y/item.scale);
-					if (c.alpha()>92) bestmatch=item.id;
+					if (c.alpha()>92) {
+						bestmatchItem=item;
+					}
 				}
 			}
-
-
 		}
 	}
-	return bestmatch;
+	return bestmatchItem;
 }
 
 void SpriteSystem::save(ppl7::FileObject &file, unsigned char id) const

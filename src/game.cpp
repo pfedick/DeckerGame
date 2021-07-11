@@ -513,11 +513,13 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 	if (layer<0 || layer>1) return;
 
 	SpriteSystem &ss=level.spritesystem(currentPlane, layer);
-	int sprite_id=ss.findMatchingSprite(world);
-	if (sprite_id>=0) {
-		//printf ("Selected Sprite: %d\n",sprite_id);
+	SpriteSystem::Item sprite=ss.findMatchingSprite(world);
+	if (sprite.id>=0) {
+		printf ("Selected Sprite: %d, spriteset=%d, sprintno=%d\n",sprite.id, sprite.sprite_set, sprite.sprite_no);
+		//sprite_selection->setCurrentSpriteSet(sprite.sprite_set);
+		//sprite_selection->setSelectedSprite(sprite.sprite_no/4);
 		sprite_mode=SpriteModeEdit;
-		selected_sprite_id=sprite_id;
+		selected_sprite_id=sprite.id;
 		selected_sprite_system=&ss;
 	} else {
 		selected_sprite_id=-1;

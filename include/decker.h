@@ -140,7 +140,7 @@ public:
 
 class SpriteSystem
 {
-private:
+public:
 	class Item
 	{
 	public:
@@ -153,6 +153,7 @@ private:
 		float scale;	// 4 Byte	==> 18 Byte
 		ppl7::grafix::Rect boundary;
 	};
+private:
 	ppl7::Mutex mutex;
 	std::map<int, SpriteSystem::Item> sprite_list;
 	std::map<uint64_t,SpriteSystem::Item> visible_sprite_map;
@@ -171,7 +172,7 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
-	int findMatchingSprite(const ppl7::grafix::Point &p) const;
+	SpriteSystem::Item findMatchingSprite(const ppl7::grafix::Point &p) const;
 
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 
