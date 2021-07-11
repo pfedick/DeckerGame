@@ -38,19 +38,25 @@ void Game::loadGrafix()
 	resources.Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
 	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
+	resources.Tiles.enableMemoryBuffer(true);
 	resources.Tiles.load(sdl, "res/tiles.tex");
+	resources.Tiles_Nature.enableMemoryBuffer(true);
 	resources.Tiles_Nature.load(sdl, "res/tiles_nature.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.Nature.load(sdl, "res/nature.tex");
 	resources.Trees.load(sdl, "res/trees.tex");
+	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
+	resources.Sprites_Nature.enableOutlines(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
 
-	resources.uiTiles.load("res/tiles.tex");
-	resources.uiTileTypes.load("res/tiletypes.tex");
-	resources.uiTilesNature.load("res/tiles_nature.tex");
-	resources.uiSpritesNature.load("res/sprites_nature_ui.tex");
+	//resources.uiTiles.load("res/tiles.tex");
+	//resources.uiTileTypes.load("res/tiletypes.tex");
+	//resources.uiTilesNature.load("res/tiles_nature.tex");
+	resources.uiSpritesNature.enableSDLBuffer(false);
+	resources.uiSpritesNature.enableMemoryBuffer(true);
+	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
 
 
 	ppl7::grafix::Image img;
@@ -326,8 +332,8 @@ void Game::showTilesSelection()
 		closeTileSelection();
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		tiles_selection->setTileSet(1,"Bricks", &resources.uiTiles);
-		tiles_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
+		tiles_selection->setTileSet(1,"Bricks", &resources.Tiles);
+		tiles_selection->setTileSet(2,"Nature", &resources.Tiles_Nature);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -342,7 +348,7 @@ void Game::showTileTypeSelection()
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
 	} else {
-		tiletype_selection=new Decker::ui::TileTypeSelection(0,33,300,statusbar->y()-2-33,this, &resources.uiTileTypes);
+		tiletype_selection=new Decker::ui::TileTypeSelection(0,33,300,statusbar->y()-2-33,this, &resources.TileTypes);
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);

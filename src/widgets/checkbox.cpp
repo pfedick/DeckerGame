@@ -9,7 +9,7 @@ CheckBox::CheckBox()
 	ischecked=false;
 }
 
-CheckBox::CheckBox(int x, int y, int width, int height, const String &text, bool checked) // @suppress("Class members should be properly initialized")
+CheckBox::CheckBox(int x, int y, int width, int height, const ppl7::String &text, bool checked) // @suppress("Class members should be properly initialized")
 : ppl7::tk::Label(x,y,width,height,text)
 {
 	ischecked=checked;
@@ -37,10 +37,10 @@ void CheckBox::setChecked(bool checked)
 }
 
 
-void CheckBox::paint(Drawable &draw)
+void CheckBox::paint(ppl7::grafix::Drawable &draw)
 {
-	const WidgetStyle &style=GetWidgetStyle();
-	Drawable d=draw.getDrawable(16,0, draw.width()-16, draw.height());
+	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+	ppl7::grafix::Drawable d=draw.getDrawable(16,0, draw.width()-16, draw.height());
 	Label::paint(d);
 	int y1=draw.height()/2-7;
 	int y2=draw.height()/2+7;
@@ -49,7 +49,7 @@ void CheckBox::paint(Drawable &draw)
 	if (ischecked) draw.fillRect(5,y1+3,13,y2-3,this->color());
 }
 
-void CheckBox::mouseDownEvent(MouseEvent *event)
+void CheckBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	ischecked=!ischecked;
 	needsRedraw();

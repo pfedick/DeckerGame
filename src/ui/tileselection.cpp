@@ -66,7 +66,7 @@ int TilesSelection::currentTileSet() const
 	return tileset;
 }
 
-void TilesSelection::setTileSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *sprites)
+void TilesSelection::setTileSet(int id, const ppl7::String &name, Sprite *sprites)
 {
 	if (id<1 || id>MAX_TILESETS) return;
 	tilesets[id]=sprites;

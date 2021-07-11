@@ -12,10 +12,11 @@ class Sprite;
 namespace Decker {
 namespace ui {
 
+/*
 using namespace ppl7;
 using namespace ppl7::grafix;
 using namespace ppl7::tk;
-
+*/
 
 
 class Scrollbar : public ppl7::tk::Widget
@@ -32,8 +33,8 @@ public:
 	void setSize(int size);
 	void setPosition(int position);
 	int position() const;
-	virtual String widgetType() const;
-	virtual void paint(Drawable &draw);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
 
 
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
@@ -46,14 +47,14 @@ private:
 
 public:
 	CheckBox();
-	CheckBox(int x, int y, int width, int height, const String &text=String(), bool checked=false);
+	CheckBox(int x, int y, int width, int height, const ppl7::String &text=ppl7::String(), bool checked=false);
 	~CheckBox();
 	bool checked() const;
 	void setChecked(bool checked);
 
-	virtual String widgetType() const;
-	virtual void paint(Drawable &draw);
-	virtual void mouseDownEvent(MouseEvent *event);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
 class RadioButton : public ppl7::tk::Label
@@ -63,14 +64,14 @@ private:
 
 public:
 	RadioButton();
-	RadioButton(int x, int y, int width, int height, const String &text=String(), bool checked=false);
+	RadioButton(int x, int y, int width, int height, const ppl7::String &text=ppl7::String(), bool checked=false);
 	~RadioButton();
 	bool checked() const;
 	void setChecked(bool checked);
 
-	virtual String widgetType() const;
-	virtual void paint(Drawable &draw);
-	virtual void mouseDownEvent(MouseEvent *event);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
 class ComboBox : public ppl7::tk::Widget
@@ -115,10 +116,10 @@ public:
 
 	void add(const ppl7::String &text, const ppl7::String &identifier=ppl7::String());
 
-	virtual String widgetType() const;
-	virtual void paint(Drawable &draw);
-	virtual void mouseDownEvent(MouseEvent *event);
-	virtual void mouseWheelEvent(MouseEvent *event);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 };
 
 

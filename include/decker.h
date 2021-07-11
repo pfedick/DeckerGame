@@ -73,45 +73,60 @@ public:
 
 class Sprite
 {
-	private:
-		class SpriteIndexItem
-		{
-		public:
-			int id;
-			SDL_Texture *tex;
-			SDL_Rect r;
-			ppl7::grafix::Point Pivot;
-			ppl7::grafix::Point Offset;
-
-			SpriteIndexItem()
-			{
-				id=0;
-				tex=NULL;
-			}
-			SpriteIndexItem(const SpriteIndexItem &other)
-				:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
-			{
-				id=other.id;
-				tex=other.tex;
-			}
-		};
-		std::map<int,SDL_Texture*> TextureMap;
-		std::map<int,SpriteIndexItem> SpriteList;
-
-		void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
-		void loadIndex(ppl7::PFPChunk *chunk);
-
+private:
+	class SpriteIndexItem
+	{
 	public:
-		Sprite();
-		~Sprite();
-		void load(SDL &sdl, const ppl7::String &filename, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
-		void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
-		void clear();
-		void draw(SDL_Renderer *renderer, int x, int y, int id) const;
-		void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
-		int numTextures() const;
-		int numSprites() const;
-		SDL_Texture *findTexture(int id) const;
+		int id;
+		SDL_Texture *tex;
+		const ppl7::grafix::Drawable *drawable;
+		SDL_Rect r;
+		ppl7::grafix::Point Pivot;
+		ppl7::grafix::Point Offset;
+
+		SpriteIndexItem()
+		{
+			id=0;
+			tex=NULL;
+			drawable=NULL;
+		}
+		SpriteIndexItem(const SpriteIndexItem &other)
+		:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
+		{
+			id=other.id;
+			tex=other.tex;
+			drawable=other.drawable;
+		}
+	};
+	std::map<int,SDL_Texture*> TextureMap;
+	std::map<int,ppl7::grafix::Image> InMemoryTextureMap;
+	std::map<int,SpriteIndexItem> SpriteList;
+
+	bool bSDLBufferd;
+	bool bMemoryBufferd;
+	bool bOutlinesEnabled;
+	bool bCollisionDetectionEnabled;
+
+	void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
+	void loadIndex(ppl7::PFPChunk *chunk);
+
+public:
+	Sprite();
+	~Sprite();
+	void load(SDL &sdl, const ppl7::String &filename, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
+	void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
+	void clear();
+	void draw(ppl7::grafix::Drawable &target, int x, int y, int id) const;
+	void draw(SDL_Renderer *renderer, int x, int y, int id) const;
+	void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
+	void enableMemoryBuffer(bool enabled);
+	void enableSDLBuffer(bool enabled);
+	void enableCollisionDetection(bool enabled);
+	void enableOutlines(bool enabled);
+	int numTextures() const;
+	int numSprites() const;
+	SDL_Texture *findTexture(int id) const;
+	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
 };
 
 class SpriteSystem
@@ -210,10 +225,10 @@ public:
 	Sprite TileTypes;
 	Sprite Sprites_Nature;
 
-	ppl7::grafix::Sprite uiTiles;
-	ppl7::grafix::Sprite uiTilesNature;
-	ppl7::grafix::Sprite uiTileTypes;
-	ppl7::grafix::Sprite uiSpritesNature;
+	//ppl7::grafix::Sprite uiTiles;
+	//ppl7::grafix::Sprite uiTilesNature;
+	//ppl7::grafix::Sprite uiTileTypes;
+	Sprite uiSpritesNature;
 
 };
 class Player;

@@ -10,7 +10,7 @@ namespace Decker::ui {
 		ischecked=false;
 	}
 
-	RadioButton::RadioButton(int x, int y, int width, int height, const String &text, bool checked) // @suppress("Class members should be properly initialized")
+	RadioButton::RadioButton(int x, int y, int width, int height, const ppl7::String &text, bool checked) // @suppress("Class members should be properly initialized")
 	: ppl7::tk::Label(x,y,width,height,text)
 	{
 		ischecked=checked;
@@ -54,10 +54,10 @@ namespace Decker::ui {
 	}
 
 
-	void RadioButton::paint(Drawable &draw)
+	void RadioButton::paint(ppl7::grafix::Drawable &draw)
 	{
-		const WidgetStyle &style=GetWidgetStyle();
-		Drawable d=draw.getDrawable(16,0, draw.width()-16, draw.height());
+		const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+		ppl7::grafix::Drawable d=draw.getDrawable(16,0, draw.width()-16, draw.height());
 		Label::paint(d);
 		int y1=draw.height()/2;
 		draw.circle(9,y1,7,style.frameBorderColorLight);
@@ -65,7 +65,7 @@ namespace Decker::ui {
 		if (ischecked) draw.floodFill(9,y1,this->color(), style.frameBorderColorLight);
 	}
 
-	void RadioButton::mouseDownEvent(MouseEvent *event)
+	void RadioButton::mouseDownEvent(ppl7::tk::MouseEvent *event)
 	{
 		setChecked(true);
 	}

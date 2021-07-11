@@ -14,7 +14,7 @@ ComboBox::ComboBox(int x, int y, int width, int height)
 {
 	selection=NULL;
 	create(x,y,width,height);
-	WindowManager *wm=ppl7::tk::GetWindowManager();
+	ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	myCurrentIndex=0;
 
 	dropdown_button=new ppl7::tk::Label(width-24,0,20,height);
@@ -82,28 +82,28 @@ void ComboBox::clear()
 	needsRedraw();
 }
 
-String ComboBox::widgetType() const
+ppl7::String ComboBox::widgetType() const
 {
 	return "ComboBox";
 }
 
-void ComboBox::paint(Drawable &draw)
+void ComboBox::paint(ppl7::grafix::Drawable &draw)
 {
-	const WidgetStyle &style=GetWidgetStyle();
+	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
 	int w=width()-1;
 	int h=height()-1;
 	draw.cls(style.buttonBackgroundColor);
 	draw.drawRect(0,0,w,h,style.frameBorderColorLight);
-	Font myFont=style.buttonFont;
+	ppl7::grafix::Font myFont=style.buttonFont;
 	myFont.setColor(style.labelFontColor);
-	myFont.setOrientation(Font::TOP);
-	Size s=myFont.measure(myCurrentText);
+	myFont.setOrientation(ppl7::grafix::Font::TOP);
+	ppl7::grafix::Size s=myFont.measure(myCurrentText);
 	draw.print(myFont,4,(draw.height()-s.height)>>1,myCurrentText);
 
 
 }
 
-void ComboBox::mouseWheelEvent(MouseEvent *event)
+void ComboBox::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 {
 	//printf ("Wheel: %d\n", event->wheel.y);
 	if (event->wheel.y<0 && myCurrentIndex<items.size()-1) {
@@ -120,7 +120,7 @@ void ComboBox::mouseWheelEvent(MouseEvent *event)
 	}
 }
 
-void ComboBox::mouseDownEvent(MouseEvent *event)
+void ComboBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	if (event->widget()==dropdown_button) {
 		if (selection) {

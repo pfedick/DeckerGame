@@ -48,7 +48,7 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 	time_label->setFont(font_bold);
 	this->addChild(time_label);
 
-	WindowManager *wm=GetWindowManager();
+	ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	wm->startTimer(this, 1000);
 	timerEvent(NULL);
 
@@ -59,24 +59,24 @@ void StatusBar::setFps(int fps)
 	fps_label->setText(ppl7::ToString("%d",fps));
 }
 
-void StatusBar::setMouse(const MouseState &mouse)
+void StatusBar::setMouse(const ppl7::tk::MouseState &mouse)
 {
 	mouse_coords->setText(ppl7::ToString("%d / %d",mouse.p.x, mouse.p.y));
 	mouse_buttons->setText(ppl7::ToString("%d",mouse.buttonMask));
 }
 
-void StatusBar::setWorldCoords(const Point &p)
+void StatusBar::setWorldCoords(const ppl7::grafix::Point &p)
 {
 	world_coords->setText(ppl7::ToString("%d / %d",p.x, p.y));
 }
 
-void StatusBar::setPlayerCoords(const Point &p)
+void StatusBar::setPlayerCoords(const ppl7::grafix::Point &p)
 {
 	player_coords->setText(ppl7::ToString("%d / %d",p.x, p.y));
 }
 
 
-void StatusBar::timerEvent(Event *event)
+void StatusBar::timerEvent(ppl7::tk::Event *event)
 {
 	ppl7::DateTime now=ppl7::DateTime::currentTime();
 	time_label->setText(now.get("%H:%M:%S"));

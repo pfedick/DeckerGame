@@ -52,7 +52,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	this->addChild(show_tiletypes_checkbox);
 
 
-	ppl7::tk::Label *label=new Label(740,0,100,s.height,"active Plane: ");
+	ppl7::tk::Label *label=new ppl7::tk::Label(740,0,100,s.height,"active Plane: ");
 	this->addChild(label);
 
 	active_plane_combobox=new ComboBox(840,0,150,s.height);
@@ -62,7 +62,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 	this->addChild(active_plane_combobox);
 
-	label=new Label(1000,0,100,s.height,"visible Planes:");
+	label=new ppl7::tk::Label(1000,0,100,s.height,"visible Planes:");
 	this->addChild(label);
 
 	visible_plane_player_checkbox=new CheckBox(1110,0,80,s.height,"Player", true);

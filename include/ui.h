@@ -15,10 +15,11 @@ class Sprite;
 namespace Decker {
 namespace ui {
 
+/*
 using namespace ppl7;
 using namespace ppl7::grafix;
 using namespace ppl7::tk;
-
+*/
 
 
 class StatusBar : public ppl7::tk::Frame
@@ -36,12 +37,12 @@ public:
 	StatusBar(int x, int y, int width, int height);
 
 	void setFps(int fps);
-	void setMouse(const MouseState &mouse);
-	void setWorldCoords(const Point &p);
-	void setPlayerCoords(const Point &p);
+	void setMouse(const ppl7::tk::MouseState &mouse);
+	void setWorldCoords(const ppl7::grafix::Point &p);
+	void setPlayerCoords(const ppl7::grafix::Point &p);
 
 	// Events
-	void timerEvent(Event *event);
+	void timerEvent(ppl7::tk::Event *event);
 
 };
 
@@ -88,12 +89,12 @@ class TilesFrame : public ppl7::tk::Frame
 {
 private:
 	Game *game;
-	ppl7::grafix::Sprite *tiles;
+	Sprite *tiles;
 	Scrollbar *scrollbar;
 	int selected_tile;
 public:
 	TilesFrame(int x, int y, int width, int height, Game *game);
-	virtual void paint(Drawable &draw);
+	virtual void paint(ppl7::grafix::Drawable &draw);
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
 	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
@@ -101,7 +102,7 @@ public:
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
-	void setSprites(ppl7::grafix::Sprite *tiles);
+	void setSprites(Sprite *tiles);
 
 };
 
@@ -116,7 +117,7 @@ private:
 	ComboBox *tileset_combobox;
 
 	ppl7::String tilesetName[MAX_TILESETS+1];
-	ppl7::grafix::Sprite *tilesets[MAX_TILESETS+1];
+	Sprite *tilesets[MAX_TILESETS+1];
 
 	int tileset;
 
@@ -131,7 +132,7 @@ public:
 	int selectedTile() const;
 	void setCurrentTileSet(int id);
 	int currentTileSet() const;
-	void setTileSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *tiles);
+	void setTileSet(int id, const ppl7::String &name, Sprite *tiles);
 	int currentLayer() const;
 
 
@@ -147,7 +148,7 @@ private:
 	TilesFrame *tiletypesframe;
 
 public:
-	TileTypeSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiletypes);
+	TileTypeSelection(int x, int y, int width, int height, Game *game, Sprite *tiletypes);
 
 	void setTileType(int nr);
 	int tileType() const;
@@ -163,7 +164,7 @@ private:
 	ComboBox *tileset_combobox;
 
 	ppl7::String tilesetName[MAX_SPRITESETS+1];
-	ppl7::grafix::Sprite *tilesets[MAX_SPRITESETS+1];
+	Sprite *tilesets[MAX_SPRITESETS+1];
 
 	int tileset;
 	float scale;
@@ -181,7 +182,7 @@ public:
 	int currentSpriteSet() const;
 	void setSpriteScale(float factor);
 	float spriteScale() const;
-	void setSpriteSet(int id, const ppl7::String &name, ppl7::grafix::Sprite *sprites);
+	void setSpriteSet(int id, const ppl7::String &name, Sprite *sprites);
 	int currentLayer() const;
 	void valueChangedEvent(ppl7::tk::Event *event, int value);
 };

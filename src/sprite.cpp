@@ -115,11 +115,35 @@ using namespace ppl7;
 
 Sprite::Sprite()
 {
+	bMemoryBufferd=false;
+	bOutlinesEnabled=false;
+	bCollisionDetectionEnabled=false;
+	bSDLBufferd=true;
 }
 
 Sprite::~Sprite()
 {
 	clear();
+}
+
+void Sprite::enableMemoryBuffer(bool enabled)
+{
+	bMemoryBufferd=enabled;
+}
+
+void Sprite::enableSDLBuffer(bool enabled)
+{
+	bSDLBufferd=enabled;
+}
+
+void Sprite::enableCollisionDetection(bool enabled)
+{
+	bCollisionDetectionEnabled=enabled;
+}
+
+void Sprite::enableOutlines(bool enabled)
+{
+	bOutlinesEnabled=enabled;
 }
 
 void Sprite::clear()
@@ -140,6 +164,16 @@ SDL_Texture *Sprite::findTexture(int id) const
 	return NULL;
 }
 
+const ppl7::grafix::Drawable *Sprite::findInMemoryTexture(int id) const
+{
+	if (bMemoryBufferd) {
+		std::map<int,ppl7::grafix::Image>::const_iterator it;
+		it=InMemoryTextureMap.find(id);
+		if (it!=InMemoryTextureMap.end()) return &it->second;
+	}
+	return NULL;
+}
+
 void Sprite::loadIndex(ppl7::PFPChunk *chunk)
 {
 	char *buffer=(char*)chunk->data();
@@ -149,6 +183,7 @@ void Sprite::loadIndex(ppl7::PFPChunk *chunk)
 	for (int i=0;i<num;i++) {
 		item.id=Peek32(p+0);
 		item.tex=findTexture(Peek16(p+4));
+		item.drawable=findInMemoryTexture(Peek16(p+4));
 		item.r.x=Peek16(p+6+0);
 		item.r.y=Peek16(p+6+2);
 		item.r.w=Peek16(p+6+4)+1-item.r.x;
@@ -215,8 +250,13 @@ void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &t
 			}
 		}
 	}
-	SDL_Texture *tex=sdl.createTexture(surface);
-	TextureMap.insert(std::pair<int, SDL_Texture*>(id,tex));
+	if (bMemoryBufferd) {
+		InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id,surface));
+	}
+	if (bSDLBufferd) {
+		SDL_Texture *tex=sdl.createTexture(surface);
+		TextureMap.insert(std::pair<int, SDL_Texture*>(id,tex));
+	}
 }
 
 void Sprite::load(SDL &sdl, const String &filename, const ppl7::grafix::Color &tint)
@@ -250,6 +290,18 @@ void Sprite::load(SDL &sdl, FileObject &ff, const ppl7::grafix::Color &tint)
 		//printf ("load INDX\n");
 		loadIndex(chunk);
 	}
+}
+
+void Sprite::draw(ppl7::grafix::Drawable &target, int x, int y, int id) const
+{
+	if (!bMemoryBufferd) return;
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it==SpriteList.end()) return;
+	const SpriteIndexItem &item=it->second;
+	if (!item.drawable) return;
+	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
+	target.bltAlpha(*item.drawable,r,x+item.Offset.x-item.Pivot.x, y+item.Offset.y-item.Pivot.y);
 }
 
 void Sprite::draw(SDL_Renderer *renderer, int x, int y, int id) const

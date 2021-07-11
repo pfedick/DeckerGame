@@ -23,7 +23,7 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game)
 
 }
 
-void TilesFrame::setSprites(ppl7::grafix::Sprite *tiles)
+void TilesFrame::setSprites(Sprite *tiles)
 {
 	this->tiles=tiles;
 	scrollbar->setSize(tiles->numSprites()/4+1);
@@ -31,7 +31,7 @@ void TilesFrame::setSprites(ppl7::grafix::Sprite *tiles)
 	needsRedraw();
 }
 
-void TilesFrame::paint(Drawable &draw)
+void TilesFrame::paint(ppl7::grafix::Drawable &draw)
 {
 	Frame::paint(draw);
 	//int w=width()-1;
@@ -64,7 +64,7 @@ void TilesFrame::paint(Drawable &draw)
 void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	if (tiles==NULL) return;
-	if (event->widget()==this && event->buttonMask&MouseState::Left) {
+	if (event->widget()==this && event->buttonMask&ppl7::tk::MouseState::Left) {
 		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
 		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
 			selected_tile=newtile;
@@ -76,7 +76,7 @@ void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent *event)
 void TilesFrame::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 {
 	if (tiles==NULL) return;
-	if (event->widget()==this && event->buttonMask&MouseState::Left) {
+	if (event->widget()==this && event->buttonMask&ppl7::tk::MouseState::Left) {
 		int newtile=(event->p.y/64)*4+(event->p.x/64)+scrollbar->position()*4;
 		if (selected_tile!=newtile && newtile<tiles->numSprites()) {
 			selected_tile=newtile;

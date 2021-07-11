@@ -4,7 +4,7 @@
 namespace Decker::ui {
 
 
-TileTypeSelection::TileTypeSelection(int x, int y, int width, int height, Game *game, ppl7::grafix::Sprite *tiletypes)
+TileTypeSelection::TileTypeSelection(int x, int y, int width, int height, Game *game, Sprite *tiletypes)
 : ppl7::tk::Frame(x,y,width,height)
 {
 	this->game=game;

@@ -9,7 +9,7 @@ Scrollbar::Scrollbar(int x, int y, int width, int height) // @suppress("Class me
 {
 	this->create(x,y,width,height);
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	WindowManager *wm=ppl7::tk::GetWindowManager();
+	ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	up_button=new ppl7::tk::Button(0,0,width-5,25);
 	down_button=new ppl7::tk::Button(0,height-25,width-5,25);
 	up_button->setIcon(wm->ButtonSymbols.getDrawable(3));
@@ -49,11 +49,11 @@ int Scrollbar::position() const
 	return pos;
 }
 
-void Scrollbar::paint(Drawable &draw)
+void Scrollbar::paint(ppl7::grafix::Drawable &draw)
 {
 	//Widget::paint(draw);
-	const WidgetStyle &style=GetWidgetStyle();
-	Color scrollarea=style.windowBackgroundColor*1.2f;
+	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+	ppl7::grafix::Color scrollarea=style.windowBackgroundColor*1.2f;
 	draw.cls(scrollarea);
 }
 
