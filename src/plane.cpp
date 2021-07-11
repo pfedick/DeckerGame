@@ -9,7 +9,7 @@ Plane::Plane()
 	tilematrix=NULL;
 	width=0;
 	height=0;
-
+	bTilesVisible=true;
 }
 
 Plane::~Plane()
@@ -73,6 +73,16 @@ const Tile *Plane::get(int x, int y) const
 {
 	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return NULL;
 	return tilematrix[y*width+x];
+}
+
+void Plane::setVisible(bool visible)
+{
+	bTilesVisible=visible;
+}
+
+bool Plane::isVisible() const
+{
+	return bTilesVisible;
 }
 
 void Plane::save(ppl7::FileObject &file, unsigned char id) const

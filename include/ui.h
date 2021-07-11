@@ -162,8 +162,8 @@ private:
 	RadioButton *layer1;
 	ComboBox *tileset_combobox;
 
-	ppl7::String tilesetName[MAX_TILESETS+1];
-	ppl7::grafix::Sprite *tilesets[MAX_TILESETS+1];
+	ppl7::String tilesetName[MAX_SPRITESETS+1];
+	ppl7::grafix::Sprite *tilesets[MAX_SPRITESETS+1];
 
 	int tileset;
 	float scale;

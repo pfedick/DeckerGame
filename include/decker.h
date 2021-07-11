@@ -120,22 +120,31 @@ private:
 	class Item
 	{
 	public:
-		Sprite *sprite;
-		int x;
-		int y;
-		int sprite_no;
-		float scale;
+		int x;			// 4 Byte
+		int y;			// 4 Byte
+		int z;			// 2 Byte
+		int sprite_set;	// 2 Byte
+		int sprite_no;	// 2 Byte
+		float scale;	// 4 Byte	==> 18 Byte
+		int width;
+		int height;
 	};
 	std::list<SpriteSystem::Item> sprite_list;
+	Sprite *spriteset[MAX_SPRITESETS+1];
+	bool bSpritesVisible;
 
 public:
 	SpriteSystem();
 	~SpriteSystem();
-	void addSprite(int x, int y, Sprite *sprite, int sprite_no, float sprite_scale=1.0f);
-
-	void updateVisibleSpriteList();
+	void clear();
+	void addSprite(int x, int y, int spriteset, int sprite_no, float sprite_scale=1.0f);
+	void setVisible(bool visible);
+	bool isVisible() const;
+	void setSpriteset(int no, Sprite *spriteset);
+	void updateVisibleSpriteList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
-
+	void save(ppl7::FileObject &file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr &ba);
 };
 
 class Tile
@@ -171,6 +180,7 @@ private:
 	Tile **tilematrix;
 	int width, height;
 	//SpriteSystem spritessystem[2];
+	bool bTilesVisible;
 
 public:
 	Plane();
@@ -183,6 +193,8 @@ public:
 	const Tile *get(int x, int y) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
+	void setVisible(bool visible);
+	bool isVisible() const;
 };
 
 
@@ -204,7 +216,7 @@ public:
 	ppl7::grafix::Sprite uiSpritesNature;
 
 };
-
+class Player;
 
 class Level
 {
@@ -213,35 +225,47 @@ private:
 	Plane FarPlane;
 	Plane PlayerPlane;
 	Plane FrontPlane;
+	SpriteSystem FarSprites[2];
+	SpriteSystem PlayerSprites[2];
+	SpriteSystem FrontSprites[2];
+
 	ppl7::grafix::Rect viewport;
 	Sprite *tileset[MAX_TILESETS+1];
 	Sprite *spriteset[MAX_SPRITESETS+1];
 	Sprite *tiletypes;
-
-	SpriteSystem spritessystem;
-
 	void clear();
+
+	enum LevelChunkId {
+		chunkPlayerPlane=1,
+		chunkFrontPlane=2,
+		chunkFarPlane=3,
+		chunkPlayerSpritesLayer0=10,
+		chunkPlayerSpritesLayer1=11,
+		chunkFrontSpritesLayer0=12,
+		chunkFrontSpritesLayer1=13,
+		chunkFarSpritesLayer0=14,
+		chunkFarSpritesLayer1=15,
+	};
 
 public:
 	Level();
 	~Level();
 	void setTileset(int no, Sprite *tileset);
 	void setTileTypesSprites(Sprite *sprites);
-	void setSpriteset(int no, Sprite *tileset);
+	void setSpriteset(int no, Sprite *spriteset);
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
+	void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player);
 	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
-	void drawSprites(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void setViewport(const ppl7::grafix::Rect &r);
 	Plane &plane(int id);
-
-	void updateVisibleSpriteLists();
+	SpriteSystem &spritesystem(int plane, int layer);
+	void updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 };
 
 
-class Player;
 
 class Game : private ppl7::tk::Window
 {

@@ -43,9 +43,9 @@ int SpriteSelection::selectedSprite() const
 
 int SpriteSelection::currentLayer() const
 {
-	if (layer0->checked()) return 0;
-	if (layer1->checked()) return 1;
-	return 0;
+	if (layer0->checked()) return 1;
+	if (layer1->checked()) return 0;
+	return 1;
 }
 
 void SpriteSelection::setCurrentSpriteSet(int id)

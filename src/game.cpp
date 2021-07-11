@@ -225,7 +225,7 @@ void Game::run()
 	quitGame=false;
 	while (!quitGame) {
 		double now=ppl7::GetMicrotime();
-		level.updateVisibleSpriteLists();	// => TODO: own Thread
+		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
 		player->update(now);
 		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
@@ -252,16 +252,13 @@ void Game::run()
 		SDL_RenderCopy(renderer, tex_sky, &source, &target);
 
 		// Draw Planes and Sprites
-		if (mainmenue->farPlaneVisible())
-			level.drawPlane(renderer,level.FarPlane, WorldCoords*0.5f);
-		if (mainmenue->playerPlaneVisible()) {
-			level.drawPlane(renderer,level.PlayerPlane, WorldCoords);
-			level.drawSprites(renderer, WorldCoords);
-			if (sprite_selection) drawSelectedSprite(renderer, mouse.p);
-		}
-		player->draw(renderer);
-		if (mainmenue->frontPlaneVisible())
-			level.drawPlane(renderer,level.FrontPlane, WorldCoords);
+		level.FarPlane.setVisible(mainmenue->farPlaneVisible());
+		level.PlayerPlane.setVisible(mainmenue->playerPlaneVisible());
+		level.FrontPlane.setVisible(mainmenue->frontPlaneVisible());
+		level.draw(renderer, WorldCoords,player);
+
+
+		drawSelectedSprite(renderer, mouse.p);
 		if (mainmenue->playerPlaneVisible())
 			if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
 		// Grid
@@ -419,7 +416,6 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 	if (!level.spriteset[spriteset]) return;
 	level.spriteset[spriteset]->drawScaled(renderer,
 			mouse.x, mouse.y, nr, scale);
-
 }
 
 void Game::save()
@@ -443,25 +439,27 @@ void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
 void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
-		if (!event->p.inside(viewport)) return;
 		int nr=sprite_selection->selectedSprite()*4+ppl7::rand(0, 3);
 		int spriteset=sprite_selection->currentSpriteSet();
 		float scale=sprite_selection->spriteScale();
+		int layer=sprite_selection->currentLayer();
+		if (layer<0 || layer>1 || spriteset>MAX_SPRITESETS) return;
 		if (!level.spriteset[spriteset]) return;
-		level.spritessystem.addSprite(event->p.x+WorldCoords.x,
-				event->p.y+WorldCoords.y,
-				level.spriteset[spriteset], nr, scale);
-		//printf ("down\n");
+		int currentPlane=mainmenue->currentPlane();
+		SpriteSystem &ss=level.spritesystem(currentPlane, layer);
+		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
+		ss.addSprite(event->p.x+coords.x,
+				event->p.y+coords.y,
+				spriteset, nr, scale);
 	}
 }
 
 void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 {
 	if (sprite_selection!=NULL && event->widget()==world_widget) {
-		if (!event->p.inside(viewport)) return;
 		float scale=sprite_selection->spriteScale();
 		if (event->wheel.y<0 && scale>0.1) scale-=0.1;
-		else if (event->wheel.y>0 && scale<1) scale+=0.1;
+		else if (event->wheel.y>0 && scale<2.0) scale+=0.1;
 		//printf ("scale: %0.1f\n",scale);
 		sprite_selection->setSpriteScale(scale);
 	}
