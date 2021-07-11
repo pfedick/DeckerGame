@@ -422,6 +422,8 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 	if (!level.spriteset[spriteset]) return;
 	level.spriteset[spriteset]->drawScaled(renderer,
 			mouse.x, mouse.y, nr, scale);
+	level.spriteset[spriteset]->drawOutlines(renderer,
+				mouse.x, mouse.y, nr, scale);
 }
 
 void Game::save()
@@ -465,7 +467,7 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 	if (sprite_selection!=NULL && event->widget()==world_widget) {
 		float scale=sprite_selection->spriteScale();
 		if (event->wheel.y<0 && scale>0.1) scale-=0.1;
-		else if (event->wheel.y>0 && scale<2.0) scale+=0.1;
+		else if (event->wheel.y>0 && scale<1.0) scale+=0.1;
 		//printf ("scale: %0.1f\n",scale);
 		sprite_selection->setSpriteScale(scale);
 	}

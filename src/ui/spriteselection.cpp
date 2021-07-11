@@ -74,7 +74,7 @@ void SpriteSelection::setSpriteSet(int id, const ppl7::String &name, Sprite *spr
 
 void SpriteSelection::setSpriteScale(float factor)
 {
-	if (factor>=0.1f && factor<=1.0f) scale=factor;
+	if (factor>=0.1f && factor<=2.0f) scale=factor;
 }
 
 float SpriteSelection::spriteScale() const

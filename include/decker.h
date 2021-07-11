@@ -79,6 +79,7 @@ private:
 	public:
 		int id;
 		SDL_Texture *tex;
+		SDL_Texture *outlines;
 		const ppl7::grafix::Drawable *drawable;
 		SDL_Rect r;
 		ppl7::grafix::Point Pivot;
@@ -87,7 +88,7 @@ private:
 		SpriteIndexItem()
 		{
 			id=0;
-			tex=NULL;
+			tex=outlines=NULL;
 			drawable=NULL;
 		}
 		SpriteIndexItem(const SpriteIndexItem &other)
@@ -95,10 +96,12 @@ private:
 		{
 			id=other.id;
 			tex=other.tex;
+			outlines=other.outlines;
 			drawable=other.drawable;
 		}
 	};
 	std::map<int,SDL_Texture*> TextureMap;
+	std::map<int,SDL_Texture*> OutlinesTextureMap;
 	std::map<int,ppl7::grafix::Image> InMemoryTextureMap;
 	std::map<int,SpriteIndexItem> SpriteList;
 
@@ -109,6 +112,7 @@ private:
 
 	void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
 	void loadIndex(ppl7::PFPChunk *chunk);
+	void generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src);
 
 public:
 	Sprite();
@@ -119,6 +123,7 @@ public:
 	void draw(ppl7::grafix::Drawable &target, int x, int y, int id) const;
 	void draw(SDL_Renderer *renderer, int x, int y, int id) const;
 	void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
+	void drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
 	void enableMemoryBuffer(bool enabled);
 	void enableSDLBuffer(bool enabled);
 	void enableCollisionDetection(bool enabled);
@@ -126,6 +131,7 @@ public:
 	int numTextures() const;
 	int numSprites() const;
 	SDL_Texture *findTexture(int id) const;
+	SDL_Texture *findOutlines(int id) const;
 	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
 };
 
