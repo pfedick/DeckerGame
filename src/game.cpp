@@ -430,7 +430,6 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 	}
 	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
 		int currentPlane=mainmenue->currentPlane();
-		//printf ("drawing selected sprite\n");
 		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
 				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
 	} else if (sprite_mode==spriteModeDraw) {
@@ -454,7 +453,6 @@ void Game::save()
 
 void Game::load()
 {
-	printf ("Game::load\n");
 	level.load("level/test.lvl");
 }
 

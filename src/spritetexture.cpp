@@ -288,8 +288,8 @@ void SpriteTexture::generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image
 			ppl7::grafix::Color cr=src.getPixel(x+1,y);
 			ppl7::grafix::Color cu=src.getPixel(x,y-1);
 			ppl7::grafix::Color cd=src.getPixel(x,y+1);
-			if (c.alpha()>92 && (cl.alpha()<=92 || cr.alpha()<=92 ||
-					cu.alpha()<=92 || cd.alpha()<=92)) {
+			if (c.alpha()>192 && (cl.alpha()<=192 || cr.alpha()<=192 ||
+					cu.alpha()<=192 || cd.alpha()<=192)) {
 				surface.putPixel(x, y, white);
 				surface.putPixel(x+1, y, white);
 				surface.putPixel(x, y+1, white);

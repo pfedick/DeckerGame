@@ -4,6 +4,19 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 
+SpriteSystem::Item::Item()
+{
+	spritesystem=NULL;
+	texture=NULL;
+	id=0;
+	x=0;
+	y=0;
+	z=0;
+	sprite_set=0;
+	sprite_no=0;
+	scale=1.0f;
+}
+
 SpriteSystem::SpriteSystem()
 {
 	bSpritesVisible=true;
@@ -49,7 +62,9 @@ void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, 
 	item.sprite_no=sprite_no;
 	item.sprite_set=spriteset;
 	item.scale=sprite_scale;
+	item.spritesystem=this;
 	if (item.sprite_set<=MAX_SPRITESETS && this->spriteset[item.sprite_set]!=NULL) {
+		item.texture=this->spriteset[item.sprite_set];
 		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no,sprite_scale,x,y);
 	}
 	sprite_list.insert(std::pair<int,SpriteSystem::Item>(item.id,item));
@@ -65,7 +80,7 @@ void SpriteSystem::updateVisibleSpriteList(const ppl7::grafix::Point &worldcoord
 	int height=viewport.height();
 	for (it=sprite_list.begin();it!=sprite_list.end();++it) {
 		const SpriteSystem::Item &item=(it->second);
-		if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
+		if (item.texture) {
 			int x=item.x-worldcoords.x;
 			int y=item.y-worldcoords.y;
 			if (x+item.boundary.width()>0 && y+item.boundary.height()>0
@@ -96,26 +111,13 @@ void SpriteSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 	std::map<uint64_t,SpriteSystem::Item>::const_iterator it;
 	for (it=visible_sprite_map.begin();it!=visible_sprite_map.end();++it) {
 		const SpriteSystem::Item &item=(it->second);
-		if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
-			spriteset[item.sprite_set]->drawScaled(renderer,
+		if (item.texture) {
+			item.texture->drawScaled(renderer,
 					item.x+viewport.x1-worldcoords.x,
 					item.y+viewport.y1-worldcoords.y,
 					item.sprite_no, item.scale);
 		}
 	}
-	/*
-
-	std::list<SpriteSystem::Item>::const_iterator it;
-	for (it=sprite_list.begin();it!=sprite_list.end();++it) {
-		if ((*it).sprite_set<=MAX_SPRITESETS && spriteset[(*it).sprite_set]!=NULL) {
-			spriteset[(*it).sprite_set]->drawScaled(renderer,
-					(*it).x+viewport.x1-worldcoords.x,
-					(*it).y+viewport.y1-worldcoords.y,
-					(*it).sprite_no, (*it).scale);
-		}
-	}
-	*/
-
 }
 
 void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
@@ -125,10 +127,8 @@ void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 	it=sprite_list.find(id);
 	if (it!=sprite_list.end()) {
 		const SpriteSystem::Item &item=(it->second);
-		//printf ("found sprite to draw: %d\n",item.id);
-		if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
-			//printf ("----: %d\n",item.id);
-			spriteset[item.sprite_set]->drawOutlines(renderer,
+		if (item.texture) {
+			item.texture->drawOutlines(renderer,
 					item.x+viewport.x1-worldcoords.x,
 					item.y+viewport.y1-worldcoords.y,
 					item.sprite_no, item.scale);
@@ -155,8 +155,8 @@ void SpriteSystem::modifySprite(const SpriteSystem::Item &item)
 		intitem.y=item.y;
 		intitem.z=item.z;
 		intitem.scale=item.scale;
-		if (intitem.sprite_set<=MAX_SPRITESETS && this->spriteset[intitem.sprite_set]!=NULL) {
-			intitem.boundary=this->spriteset[intitem.sprite_set]->spriteBoundary(intitem.sprite_no,
+		if (intitem.texture) {
+			intitem.boundary=intitem.texture->spriteBoundary(intitem.sprite_no,
 					intitem.scale,intitem.x,intitem.y);
 		}
 	}
@@ -172,15 +172,10 @@ SpriteSystem::Item SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p
 	std::map<uint64_t,SpriteSystem::Item>::const_iterator it;
 	for (it=visible_sprite_map.begin();it!=visible_sprite_map.end();++it) {
 		const SpriteSystem::Item &item=(it->second);
-		/*
-		printf ("checking: x=%d, y=%d, item.id=%d, item.x=%d, item.y=%d, item.w=%d, item.h=%d\n",
-				p.x,p.y,item.id, item.boundary.x1, item.boundary.y1,
-				item.boundary.width(), item.boundary.height());
-		 */
 		if (p.inside(item.boundary)) {
 			//printf ("possible match: %d\n", item.id);
-			if (item.sprite_set<=MAX_SPRITESETS && spriteset[item.sprite_set]!=NULL) {
-				const ppl7::grafix::Drawable draw=spriteset[item.sprite_set]->getDrawable(item.sprite_no);
+			if (item.texture) {
+				const ppl7::grafix::Drawable draw=item.texture->getDrawable(item.sprite_no);
 				if (draw.width()) {
 					int x=p.x-item.boundary.x1;
 					int y=p.y-item.boundary.y1;

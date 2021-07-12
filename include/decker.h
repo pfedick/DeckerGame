@@ -144,6 +144,9 @@ public:
 	class Item
 	{
 	public:
+		Item();
+		SpriteSystem	*spritesystem;
+		SpriteTexture	*texture;
 		int id;
 		int x;			// 4 Byte
 		int y;			// 4 Byte
