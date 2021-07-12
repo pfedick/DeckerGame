@@ -172,23 +172,24 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	if (!plane.isVisible()) return;
-	int tiles_width=viewport.width()/64+2;
-	int tiles_height=viewport.height()/64+2;
-	int offset_x=worldcoords.x%64;
-	int offset_y=worldcoords.y%64;
-	int start_x=worldcoords.x/64;
-	int start_y=worldcoords.y/64;
+	int tiles_width=viewport.width()/TILE_WIDTH+2;
+	int tiles_height=viewport.height()/TILE_HEIGHT+2;
+	int offset_x=worldcoords.x%TILE_WIDTH;
+	int offset_y=worldcoords.y%TILE_HEIGHT;
+	int start_x=worldcoords.x/TILE_WIDTH;
+	int start_y=worldcoords.y/TILE_HEIGHT;
 	int x1=viewport.x1-offset_x;
-	int y1=viewport.y1-offset_y;
+	int y1=viewport.y1-offset_y+TILE_HEIGHT;
 
-	for (int y=0;y<tiles_height;y++) {
-		for (int x=0;x<tiles_width;x++) {
-			const Tile *tile=plane.get(x+start_x,y+start_y);
-			if (tile) {
-				for (int z=0;z<3;z++) {
+	for (int z=0;z<3;z++) {
+		for (int y=tiles_height;y>=0;y--) {
+			for (int x=0;x<tiles_width;x++) {
+				const Tile *tile=plane.get(x+start_x,y+start_y);
+				if (tile) {
+
 					if (tile->tileset[z]<10 && tileset[tile->tileset[z]]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->tileset[z]]->draw(renderer,x1+x*64,y1+y*64,tile->tileno[z]);
+						tileset[tile->tileset[z]]->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->tileno[z]);
 					}
 				}
 			}
@@ -200,12 +201,12 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	if (!tiletypes) return;
-	int tiles_width=viewport.width()/64+2;
-	int tiles_height=viewport.height()/64+2;
-	int offset_x=worldcoords.x%64;
-	int offset_y=worldcoords.y%64;
-	int start_x=worldcoords.x/64;
-	int start_y=worldcoords.y/64;
+	int tiles_width=viewport.width()/TILE_WIDTH+2;
+	int tiles_height=viewport.height()/TILE_HEIGHT+2;
+	int offset_x=worldcoords.x%TILE_WIDTH;
+	int offset_y=worldcoords.y%TILE_HEIGHT;
+	int start_x=worldcoords.x/TILE_WIDTH;
+	int start_y=worldcoords.y/TILE_HEIGHT;
 	int x1=viewport.x1-offset_x;
 	int y1=viewport.y1-offset_y;
 
@@ -213,7 +214,7 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 		for (int x=0;x<tiles_width;x++) {
 			const Tile *tile=PlayerPlane.get(x+start_x,y+start_y);
 			if (tile!=NULL && tile->type>0) {
-				tiletypes->draw(renderer,x1+x*64,y1+y*64,tile->type);
+				tiletypes->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->type);
 			}
 		}
 	}
@@ -223,31 +224,31 @@ void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &wor
 void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player)
 {
 	if (FarPlane.isVisible()) {
-		FarSprites[0].draw(renderer, viewport,worldcoords*0.5f);
-		drawPlane(renderer,FarPlane, worldcoords*0.5f);
-		FarSprites[1].draw(renderer, viewport,worldcoords*0.5f);
+		FarSprites[0].draw(renderer, viewport,worldcoords*planeFactor[2]);
+		drawPlane(renderer,FarPlane, worldcoords*planeFactor[2]);
+		FarSprites[1].draw(renderer, viewport,worldcoords*planeFactor[2]);
 	}
 	if (PlayerPlane.isVisible()) {
-		PlayerSprites[0].draw(renderer, viewport,worldcoords);
-		drawPlane(renderer,PlayerPlane, worldcoords);
-		PlayerSprites[1].draw(renderer, viewport,worldcoords);
-		player->draw(renderer, viewport, worldcoords);
+		PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
+		PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
 	}
 	if (FrontPlane.isVisible()) {
-		FrontSprites[0].draw(renderer, viewport,worldcoords);
-		drawPlane(renderer,FrontPlane, worldcoords);
-		FrontSprites[1].draw(renderer, viewport,worldcoords);
+		FrontSprites[0].draw(renderer, viewport,worldcoords*planeFactor[1]);
+		drawPlane(renderer,FrontPlane, worldcoords*planeFactor[1]);
+		FrontSprites[1].draw(renderer, viewport,worldcoords*planeFactor[1]);
 	}
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)
 {
-	FarSprites[0].updateVisibleSpriteList(worldcoords*0.5, viewport);
-	FarSprites[1].updateVisibleSpriteList(worldcoords*0.5, viewport);
-	PlayerSprites[0].updateVisibleSpriteList(worldcoords, viewport);
-	PlayerSprites[1].updateVisibleSpriteList(worldcoords, viewport);
-	FrontSprites[0].updateVisibleSpriteList(worldcoords, viewport);
-	FrontSprites[1].updateVisibleSpriteList(worldcoords, viewport);
+	FarSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
+	FarSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
+	PlayerSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
+	PlayerSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
+	FrontSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
+	FrontSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
 }
 
 size_t Level::countSprites() const

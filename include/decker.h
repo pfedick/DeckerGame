@@ -29,8 +29,8 @@
 EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);
 
-#define TILE_WIDTH 64
-#define TILE_HEIGHT 64
+#define TILE_WIDTH 32
+#define TILE_HEIGHT 39
 
 class FPS
 {
@@ -240,20 +240,34 @@ class Resources
 {
 public:
 	SpriteTexture Sprite_George;
-	SpriteTexture Nature;
-	SpriteTexture Trees;
-	SpriteTexture Tiles;
-	SpriteTexture Tiles_Nature;
+	//SpriteTexture Nature;
+	//SpriteTexture Trees;
+	//SpriteTexture Tiles;
+	//SpriteTexture Tiles_Nature;
 	SpriteTexture Cursor;
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
+	SpriteTexture uiSpritesNature;
 
 	SpriteTexture Bricks_White;
+	SpriteTexture Bricks_White_Ui;
+
+	SpriteTexture Bricks_MediumGrey;
+	SpriteTexture Bricks_MediumGrey_Ui;
+
+	SpriteTexture Bricks_DarkGrey;
+	SpriteTexture Bricks_DarkGrey_Ui;
+
+	SpriteTexture Bricks_Green;
+	SpriteTexture Bricks_Green_Ui;
+
+	SpriteTexture Bricks_Red;
+	SpriteTexture Bricks_Red_Ui;
 
 	//ppl7::grafix::Sprite uiTiles;
 	//ppl7::grafix::Sprite uiTilesNature;
 	//ppl7::grafix::Sprite uiTileTypes;
-	SpriteTexture uiSpritesNature;
+
 
 };
 class Player;

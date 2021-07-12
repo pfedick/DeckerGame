@@ -41,13 +41,7 @@ void Game::loadGrafix()
 	resources.Sprite_George.load(sdl, "res/george.tex");
 	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
 	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
-	resources.Tiles.enableMemoryBuffer(true);
-	resources.Tiles.load(sdl, "res/tiles.tex");
-	resources.Tiles_Nature.enableMemoryBuffer(true);
-	resources.Tiles_Nature.load(sdl, "res/tiles_nature.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
-	resources.Nature.load(sdl, "res/nature.tex");
-	resources.Trees.load(sdl, "res/trees.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
@@ -57,11 +51,40 @@ void Game::loadGrafix()
 
 	resources.Bricks_White.enableOutlines(true);
 	resources.Bricks_White.enableMemoryBuffer(true);
-	resources.Bricks_White.load(sdl, "res/bricks.tex");
+	resources.Bricks_White.load(sdl, "res/bricks_white.tex");
+	resources.Bricks_White_Ui.enableSDLBuffer(false);
+	resources.Bricks_White_Ui.enableMemoryBuffer(true);
+	resources.Bricks_White_Ui.load(sdl, "res/bricks_white_ui.tex");
 
-	//resources.uiTiles.load("res/tiles.tex");
-	//resources.uiTileTypes.load("res/tiletypes.tex");
-	//resources.uiTilesNature.load("res/tiles_nature.tex");
+	resources.Bricks_MediumGrey.enableOutlines(true);
+	resources.Bricks_MediumGrey.enableMemoryBuffer(true);
+	resources.Bricks_MediumGrey.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(192,192,192,255));
+	resources.Bricks_MediumGrey_Ui.enableSDLBuffer(false);
+	resources.Bricks_MediumGrey_Ui.enableMemoryBuffer(true);
+	resources.Bricks_MediumGrey_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(192,192,192,255));
+
+	resources.Bricks_DarkGrey.enableOutlines(true);
+	resources.Bricks_DarkGrey.enableMemoryBuffer(true);
+	resources.Bricks_DarkGrey.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(92,92,92,255));
+	resources.Bricks_DarkGrey_Ui.enableSDLBuffer(false);
+	resources.Bricks_DarkGrey_Ui.enableMemoryBuffer(true);
+	resources.Bricks_DarkGrey_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(92,92,92,255));
+
+	resources.Bricks_Green.enableOutlines(true);
+	resources.Bricks_Green.enableMemoryBuffer(true);
+	resources.Bricks_Green.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(32,192,22,255));
+	resources.Bricks_Green_Ui.enableSDLBuffer(false);
+	resources.Bricks_Green_Ui.enableMemoryBuffer(true);
+	resources.Bricks_Green_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(32,192,22,255));
+
+	resources.Bricks_Red.enableOutlines(true);
+	resources.Bricks_Red.enableMemoryBuffer(true);
+	resources.Bricks_Red.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(255,27,22,255));
+	resources.Bricks_Red_Ui.enableSDLBuffer(false);
+	resources.Bricks_Red_Ui.enableMemoryBuffer(true);
+	resources.Bricks_Red_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(255,27,22,255));
+
+
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
 	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
@@ -146,8 +169,13 @@ void Game::init()
 	player->setSpriteResource(resources.Sprite_George);
 
 	//level.create(255,255);
-	level.setTileset(1, &resources.Tiles);
-	level.setTileset(2, &resources.Tiles_Nature);
+	level.setTileset(1, &resources.Bricks_White);
+	level.setTileset(2, &resources.Bricks_MediumGrey);
+	level.setTileset(3, &resources.Bricks_DarkGrey);
+	level.setTileset(4, &resources.Bricks_Green);
+	level.setTileset(5, &resources.Bricks_Red);
+
+	//level.setTileset(2, &resources.Tiles_Nature);
 	level.setSpriteset(1, &resources.Sprites_Nature);
 	level.setSpriteset(2, &resources.Bricks_White);
 	level.setTileTypesSprites(&resources.TileTypes);
@@ -169,11 +197,11 @@ void Game::drawGrid()
 		ppl7::grafix::Color black(0,0,0,128);
 
 		draw.cls(0);
-		for (int x=0;x<desktopSize.width;x+=64) {
+		for (int x=0;x<desktopSize.width;x+=TILE_WIDTH) {
 			draw.line(x,0,x,desktopSize.height,black);
 			draw.line(x+1,0,x+1,desktopSize.height,white);
 		}
-		for (int y=0;y<desktopSize.height;y+=64) {
+		for (int y=0;y<desktopSize.height;y+=TILE_HEIGHT) {
 			draw.line(0,y,desktopSize.width,y ,black);
 			draw.line(0,y+1,desktopSize.width,y+1 ,white);
 		}
@@ -184,8 +212,8 @@ void Game::drawGrid()
 
 	SDL_Renderer *renderer=sdl.getRenderer();
 	SDL_Rect target;
-	target.x=viewport.x1-(c.x%64);
-	target.y=viewport.y1-(c.y%64);
+	target.x=viewport.x1-(c.x%TILE_WIDTH);
+	target.y=viewport.y1-(c.y%TILE_HEIGHT);
 	target.w=desktopSize.width;
 	target.h=desktopSize.height;
 	SDL_RenderCopy(renderer, tex_level_grid, NULL, &target);
@@ -345,8 +373,13 @@ void Game::showTilesSelection()
 		closeTileSelection();
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		tiles_selection->setTileSet(1,"Bricks", &resources.Tiles);
-		tiles_selection->setTileSet(2,"Nature", &resources.Tiles_Nature);
+		tiles_selection->setTileSet(1,"Bricks white", &resources.Bricks_White_Ui);
+		tiles_selection->setTileSet(2,"Bricks medium grey", &resources.Bricks_MediumGrey_Ui);
+		tiles_selection->setTileSet(3,"Bricks dark grey", &resources.Bricks_DarkGrey_Ui);
+		tiles_selection->setTileSet(4,"Bricks green", &resources.Bricks_Green_Ui);
+		tiles_selection->setTileSet(5,"Bricks red", &resources.Bricks_Red_Ui);
+
+		//tiles_selection->setTileSet(2,"Nature", &resources.Tiles_Nature);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -399,8 +432,8 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 
 	if (tiletype_selection) {
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[0];
-		int x=(mouse.p.x-viewport.x1+coords.x)/64;
-		int y=(mouse.p.y-viewport.y1+coords.y)/64;
+		int x=(mouse.p.x-viewport.x1+coords.x)/TILE_WIDTH;
+		int y=(mouse.p.y-viewport.y1+coords.y)/TILE_HEIGHT;
 		Tile::TileType type=(Tile::TileType)tiletype_selection->tileType();
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
 			level.plane(0).setType(x,y,type);
@@ -411,8 +444,8 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		int currentPlane=mainmenue->currentPlane();
 
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
-		int x=(mouse.p.x-viewport.x1+coords.x)/64;
-		int y=(mouse.p.y-viewport.y1+coords.y)/64;
+		int x=(mouse.p.x-viewport.x1+coords.x)/TILE_WIDTH;
+		int y=(mouse.p.y-viewport.y1+coords.y)/TILE_HEIGHT;
 
 		int selectedTile=tiles_selection->selectedTile();
 		int selectedTileSet=tiles_selection->currentTileSet();
@@ -471,7 +504,7 @@ void Game::clearLevel()
 	closeTileSelection();
 	closeSpriteSelection();
 	WorldCoords.setPoint(0,0);
-	level.create(256,256);
+	level.create(512,256);
 }
 
 void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
