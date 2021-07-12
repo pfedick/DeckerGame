@@ -28,8 +28,6 @@ public:
 class Player
 {
 private:
-	int world_x;
-	int world_y;
 	int x,y;
 	ppl7::grafix::Point velocity;
 	const SpriteTexture *sprite_resource;
@@ -65,7 +63,7 @@ public:
 	~Player();
 	void setSpriteResource(const SpriteTexture &resource);
 	void setGameWindow(const ppl7::grafix::Rect &world);
-	void draw(SDL_Renderer *renderer) const;
+	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void move(int x, int y);
 
 	void update(double time);

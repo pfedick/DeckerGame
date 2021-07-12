@@ -231,7 +231,7 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 		PlayerSprites[0].draw(renderer, viewport,worldcoords);
 		drawPlane(renderer,PlayerPlane, worldcoords);
 		PlayerSprites[1].draw(renderer, viewport,worldcoords);
-		player->draw(renderer);
+		player->draw(renderer, viewport, worldcoords);
 	}
 	if (FrontPlane.isVisible()) {
 		FrontSprites[0].draw(renderer, viewport,worldcoords);

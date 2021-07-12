@@ -72,8 +72,6 @@ bool AnimationCycle::isFinished() const
 
 Player::Player()
 {
-	world_x=0;
-	world_y=0;
 	x=y=0;
 	sprite_resource=NULL;
 	next_keycheck=0.0f;
@@ -98,26 +96,21 @@ void Player::setSpriteResource(const SpriteTexture &resource)
 void Player::setGameWindow(const ppl7::grafix::Rect &world)
 {
 	this->world=world;
-	x=world.width()/2+world.left();
-	y=world.height()/2+world.top();
-	world_x=x;
-	world_y=y;
 
 }
 
 void Player::move(int x, int y)
 {
-	world_x=x;
-	world_y=y;
+	this->x=x;
+	this->y=y;
 }
 
 
-void Player::draw(SDL_Renderer *renderer) const
+void Player::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
 {
-	ppl7::grafix::Point p;
-	//if (p.inside(world)) {
-	sprite_resource->draw(renderer,x,y,animation.getFrame());
-	//
+	ppl7::grafix::Point p(x+viewport.x1-worldcoords.x,y+viewport.y1-worldcoords.y);
+	//if (p.inside(viewport))
+	sprite_resource->draw(renderer,p.x,p.y,animation.getFrame());
 }
 
 void Player::turn(PlayerOrientation target)

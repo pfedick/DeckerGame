@@ -248,6 +248,8 @@ public:
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
 
+	SpriteTexture Bricks_White;
+
 	//ppl7::grafix::Sprite uiTiles;
 	//ppl7::grafix::Sprite uiTilesNature;
 	//ppl7::grafix::Sprite uiTileTypes;

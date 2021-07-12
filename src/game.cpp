@@ -55,6 +55,10 @@ void Game::loadGrafix()
 	resources.Sprites_Nature.enableMemoryBuffer(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
 
+	resources.Bricks_White.enableOutlines(true);
+	resources.Bricks_White.enableMemoryBuffer(true);
+	resources.Bricks_White.load(sdl, "res/bricks.tex");
+
 	//resources.uiTiles.load("res/tiles.tex");
 	//resources.uiTileTypes.load("res/tiletypes.tex");
 	//resources.uiTilesNature.load("res/tiles_nature.tex");
@@ -109,7 +113,7 @@ void Game::initUi()
 	viewport.y2=desktop.height-33;
 
 	world_widget=new Decker::ui::WorldWidget();
-	world_widget->create(0,33,desktop.width, desktop.height-32-33);
+	world_widget->create(0,32,desktop.width, desktop.height-64);
 	world_widget->setEventHandler(this);
 	this->addChild(world_widget);
 
@@ -136,6 +140,7 @@ void Game::init()
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player();
+	player->move(830,701);
 	//player->setGameWindow(sdl.getClientWindow());
 
 	player->setSpriteResource(resources.Sprite_George);
@@ -144,11 +149,13 @@ void Game::init()
 	level.setTileset(1, &resources.Tiles);
 	level.setTileset(2, &resources.Tiles_Nature);
 	level.setSpriteset(1, &resources.Sprites_Nature);
+	level.setSpriteset(2, &resources.Bricks_White);
 	level.setTileTypesSprites(&resources.TileTypes);
+
 	//level.setRenderer
 	level.load("level/test.lvl");
 
-	showTilesSelection();
+	//showTilesSelection();
 
 
 }
@@ -372,6 +379,7 @@ void Game::showSpriteSelection()
 	} else {
 		sprite_selection=new Decker::ui::SpriteSelection(0,33,300,statusbar->y()-2-33,this);
 		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(2,"Bricks white", &resources.Bricks_White);
 		//sprite_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
@@ -434,9 +442,10 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
 	} else if (sprite_mode==spriteModeDraw) {
 		if (!mouse.inside(viewport)) return;
-		int nr=sprite_selection->selectedSprite()*4;
+		int nr=sprite_selection->selectedSprite();
 		if (nr<0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
+		if (spriteset==1) nr=nr*4;
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
@@ -475,13 +484,14 @@ void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
 void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
 	if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
-		int nr=sprite_selection->selectedSprite()*4;
+		int nr=sprite_selection->selectedSprite();
 		if (nr<0) {
 			selectSprite(event->p);
 			return;
 		}
 		if (sprite_mode!=spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
+		if (spriteset==1) nr=nr*4+ppl7::rand(0, 3);
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
 		if (layer<0 || layer>1 || spriteset>MAX_SPRITESETS) return;
@@ -492,7 +502,7 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		ss.addSprite(event->p.x+coords.x,
 				event->p.y+coords.y,
 				0,
-				spriteset, nr+ppl7::rand(0, 3), scale);
+				spriteset, nr, scale);
 	} else if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;

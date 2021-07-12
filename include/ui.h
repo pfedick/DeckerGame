@@ -195,7 +195,10 @@ class WorldWidget : public ppl7::tk::Widget
 {
 private:
 public:
+	WorldWidget();
 	void setViewport(const ppl7::grafix::Rect &viewport);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
 
 
 };
