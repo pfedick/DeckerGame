@@ -263,12 +263,18 @@ size_t Level::countSprites() const
 size_t Level::countVisibleSprites() const
 {
 	size_t total=0;
-	total+=FarSprites[0].countVisible();
-	total+=FarSprites[1].countVisible();
-	total+=PlayerSprites[0].countVisible();
-	total+=PlayerSprites[1].countVisible();
-	total+=FrontSprites[0].countVisible();
-	total+=FrontSprites[1].countVisible();
+	if (FarPlane.isVisible()) {
+		total+=FarSprites[0].countVisible();
+		total+=FarSprites[1].countVisible();
+	}
+	if (PlayerPlane.isVisible()) {
+		total+=PlayerSprites[0].countVisible();
+		total+=PlayerSprites[1].countVisible();
+	}
+	if (FrontPlane.isVisible()) {
+		total+=FrontSprites[0].countVisible();
+		total+=FrontSprites[1].countVisible();
+	}
 	return total;
 }
 
