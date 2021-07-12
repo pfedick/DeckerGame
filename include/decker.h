@@ -177,7 +177,7 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
-	SpriteSystem::Item findMatchingSprite(const ppl7::grafix::Point &p) const;
+	bool findMatchingSprite(const ppl7::grafix::Point &p, SpriteSystem::Item &sprite) const;
 
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 
@@ -301,6 +301,7 @@ public:
 	Plane &plane(int id);
 	SpriteSystem &spritesystem(int plane, int layer);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
+	bool findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &worldcoords, SpriteSystem::Item &item, int &plane, int &layer) const;
 
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;

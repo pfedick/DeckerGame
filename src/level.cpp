@@ -6,6 +6,8 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 
+static double planeFactor[]={1.0f, 1.0f, 0.5f};
+
 Level::Level()
 {
 	for (int i=0;i<=MAX_TILESETS;i++) {
@@ -278,6 +280,49 @@ size_t Level::countVisibleSprites() const
 	return total;
 }
 
+bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &worldcoords, SpriteSystem::Item &item, int &plane, int &layer) const
+{
+	if (FrontPlane.isVisible()) {
+		ppl7::grafix::Point coords=p+worldcoords;
+		if (FrontSprites[1].findMatchingSprite(coords, item)) {
+			plane=1;
+			layer=1;
+			return true;
+		}
+		if (FrontSprites[0].findMatchingSprite(coords, item)) {
+			plane=1;
+			layer=0;
+			return true;
+		}
+	}
+	if (PlayerPlane.isVisible()) {
+		ppl7::grafix::Point coords=p+worldcoords;
+		if (PlayerSprites[1].findMatchingSprite(coords, item)) {
+			plane=0;
+			layer=1;
+			return true;
+		}
+		if (PlayerSprites[0].findMatchingSprite(coords, item)) {
+			plane=0;
+			layer=0;
+			return true;
+		}
+	}
+	if (FarPlane.isVisible()) {
+		ppl7::grafix::Point coords=p+worldcoords*planeFactor[2];
+		if (FarSprites[1].findMatchingSprite(coords, item)) {
+			plane=2;
+			layer=1;
+			return true;
+		}
+		if (FarSprites[0].findMatchingSprite(coords, item)) {
+			plane=2;
+			layer=0;
+			return true;
+		}
+	}
+	return false;
+}
 
 
 

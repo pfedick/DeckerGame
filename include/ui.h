@@ -187,6 +187,7 @@ public:
 	float spriteScale() const;
 	void setSpriteSet(int id, const ppl7::String &name, SpriteTexture *sprites);
 	int currentLayer() const;
+	void setCurrentLayer(int layer);
 	void valueChangedEvent(ppl7::tk::Event *event, int value);
 };
 

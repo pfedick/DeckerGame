@@ -163,11 +163,11 @@ void SpriteSystem::modifySprite(const SpriteSystem::Item &item)
 }
 
 
-SpriteSystem::Item SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p) const
+bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p, SpriteSystem::Item &sprite) const
 {
-	SpriteSystem::Item bestmatchItem;
-	bestmatchItem.id=-1;
-	if (!bSpritesVisible) return bestmatchItem;
+	bool found_match=false;
+	sprite.id=-1;
+	if (!bSpritesVisible) return false;
 	//printf ("Try to find sprite\n");
 	std::map<uint64_t,SpriteSystem::Item>::const_iterator it;
 	for (it=visible_sprite_map.begin();it!=visible_sprite_map.end();++it) {
@@ -181,13 +181,14 @@ SpriteSystem::Item SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p
 					int y=p.y-item.boundary.y1;
 					ppl7::grafix::Color c=draw.getPixel(x/item.scale, y/item.scale);
 					if (c.alpha()>92) {
-						bestmatchItem=item;
+						sprite=item;
+						found_match=true;
 					}
 				}
 			}
 		}
 	}
-	return bestmatchItem;
+	return found_match;
 }
 
 void SpriteSystem::save(ppl7::FileObject &file, unsigned char id) const

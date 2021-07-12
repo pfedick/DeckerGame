@@ -48,6 +48,12 @@ int SpriteSelection::currentLayer() const
 	return 1;
 }
 
+void SpriteSelection::setCurrentLayer(int layer)
+{
+	if(layer==1) layer0->setChecked(true);
+	if(layer==0) layer1->setChecked(true);
+}
+
 void SpriteSelection::setCurrentSpriteSet(int id)
 {
 	if (id<1 || id>MAX_TILESETS) return;
@@ -81,6 +87,8 @@ float SpriteSelection::spriteScale() const
 {
 	return scale;
 }
+
+
 
 
 void SpriteSelection::valueChangedEvent(ppl7::tk::Event *event, int value)

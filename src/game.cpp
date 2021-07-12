@@ -520,25 +520,21 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 
 void Game::selectSprite(const ppl7::grafix::Point &mouse)
 {
-	int currentPlane=mainmenue->currentPlane();
-	ppl7::grafix::Point world=mouse+WorldCoords*planeFactor[currentPlane];
-	int layer=sprite_selection->currentLayer();
-	if (layer<0 || layer>1) return;
-
-	SpriteSystem &ss=level.spritesystem(currentPlane, layer);
-	SpriteSystem::Item sprite=ss.findMatchingSprite(world);
-	if (sprite.id>=0) {
+	int plane=0;
+	int layer=0;
+	if (level.findSprite(mouse,WorldCoords, selected_sprite, plane, layer)) {
+		//printf ("found Sprite on plane %d, layer %d\n",plane,layer);
+		mainmenue->setCurrentPlane(plane);
+		sprite_selection->setCurrentLayer(layer);
+		sprite_selection->setCurrentSpriteSet(selected_sprite.sprite_set);
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
-		selected_sprite=sprite;
-		selected_sprite_system=&ss;
+		selected_sprite_system=selected_sprite.spritesystem;
 		sprite_move_start=mouse;
 	} else {
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
 	}
-	//printf ("versuche sprite zu finden...\n");
-
 }
 
 
