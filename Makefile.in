@@ -22,7 +22,7 @@ PROGRAM	= decker
 OBJECTS=compile/main.o \
 	compile/sdl.o \
 	compile/game.o \
-	compile/sprite.o \
+	compile/spritetexture.o \
 	compile/level.o \
 	compile/fps.o \
 	compile/ui_statusbar.o \
@@ -90,9 +90,9 @@ compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h
 	-mkdir -p compile 
 	$(CXX) -o compile/game.o -c src/game.cpp $(CFLAGS)
 
-compile/sprite.o: src/sprite.cpp Makefile include/decker.h
+compile/spritetexture.o: src/spritetexture.cpp Makefile include/decker.h
 	-mkdir -p compile 
-	$(CXX) -o compile/sprite.o -c src/sprite.cpp $(CFLAGS)
+	$(CXX) -o compile/spritetexture.o -c src/spritetexture.cpp $(CFLAGS)
 
 compile/level.o: src/level.cpp Makefile include/decker.h
 	-mkdir -p compile 

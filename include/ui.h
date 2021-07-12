@@ -7,7 +7,7 @@
 #include "widgets.h"
 
 class Game;
-class Sprite;
+class SpriteTexture;
 
 #define MAX_TILESETS 10
 #define MAX_SPRITESETS 10
@@ -92,7 +92,7 @@ class TilesFrame : public ppl7::tk::Frame
 {
 private:
 	Game *game;
-	Sprite *tiles;
+	SpriteTexture *tiles;
 	Scrollbar *scrollbar;
 	int selected_tile;
 public:
@@ -105,7 +105,7 @@ public:
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
-	void setSprites(Sprite *tiles);
+	void setSprites(SpriteTexture *tiles);
 
 };
 
@@ -120,7 +120,7 @@ private:
 	ComboBox *tileset_combobox;
 
 	ppl7::String tilesetName[MAX_TILESETS+1];
-	Sprite *tilesets[MAX_TILESETS+1];
+	SpriteTexture *tilesets[MAX_TILESETS+1];
 
 	int tileset;
 
@@ -135,7 +135,7 @@ public:
 	int selectedTile() const;
 	void setCurrentTileSet(int id);
 	int currentTileSet() const;
-	void setTileSet(int id, const ppl7::String &name, Sprite *tiles);
+	void setTileSet(int id, const ppl7::String &name, SpriteTexture *tiles);
 	int currentLayer() const;
 
 
@@ -151,7 +151,7 @@ private:
 	TilesFrame *tiletypesframe;
 
 public:
-	TileTypeSelection(int x, int y, int width, int height, Game *game, Sprite *tiletypes);
+	TileTypeSelection(int x, int y, int width, int height, Game *game, SpriteTexture *tiletypes);
 
 	void setTileType(int nr);
 	int tileType() const;
@@ -167,7 +167,7 @@ private:
 	ComboBox *tileset_combobox;
 
 	ppl7::String tilesetName[MAX_SPRITESETS+1];
-	Sprite *tilesets[MAX_SPRITESETS+1];
+	SpriteTexture *tilesets[MAX_SPRITESETS+1];
 
 	int tileset;
 	float scale;
@@ -185,7 +185,7 @@ public:
 	int currentSpriteSet() const;
 	void setSpriteScale(float factor);
 	float spriteScale() const;
-	void setSpriteSet(int id, const ppl7::String &name, Sprite *sprites);
+	void setSpriteSet(int id, const ppl7::String &name, SpriteTexture *sprites);
 	int currentLayer() const;
 	void valueChangedEvent(ppl7::tk::Event *event, int value);
 };

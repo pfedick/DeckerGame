@@ -113,7 +113,7 @@ using namespace ppl7;
 
 
 
-Sprite::Sprite()
+SpriteTexture::SpriteTexture()
 {
 	bMemoryBufferd=false;
 	bOutlinesEnabled=false;
@@ -121,32 +121,32 @@ Sprite::Sprite()
 	bSDLBufferd=true;
 }
 
-Sprite::~Sprite()
+SpriteTexture::~SpriteTexture()
 {
 	clear();
 }
 
-void Sprite::enableMemoryBuffer(bool enabled)
+void SpriteTexture::enableMemoryBuffer(bool enabled)
 {
 	bMemoryBufferd=enabled;
 }
 
-void Sprite::enableSDLBuffer(bool enabled)
+void SpriteTexture::enableSDLBuffer(bool enabled)
 {
 	bSDLBufferd=enabled;
 }
 
-void Sprite::enableCollisionDetection(bool enabled)
+void SpriteTexture::enableCollisionDetection(bool enabled)
 {
 	bCollisionDetectionEnabled=enabled;
 }
 
-void Sprite::enableOutlines(bool enabled)
+void SpriteTexture::enableOutlines(bool enabled)
 {
 	bOutlinesEnabled=enabled;
 }
 
-void Sprite::clear()
+void SpriteTexture::clear()
 {
 	std::map<int,SDL_Texture*>::const_iterator it;
 	for (it=TextureMap.begin();it!=TextureMap.end();++it) {
@@ -156,7 +156,7 @@ void Sprite::clear()
 	SpriteList.clear();
 }
 
-SDL_Texture *Sprite::findTexture(int id) const
+SDL_Texture *SpriteTexture::findTexture(int id) const
 {
 	if (bSDLBufferd) {
 		std::map<int,SDL_Texture*>::const_iterator it;
@@ -166,7 +166,7 @@ SDL_Texture *Sprite::findTexture(int id) const
 	return NULL;
 }
 
-SDL_Texture *Sprite::findOutlines(int id) const
+SDL_Texture *SpriteTexture::findOutlines(int id) const
 {
 	if (bOutlinesEnabled) {
 		std::map<int,SDL_Texture*>::const_iterator it;
@@ -177,7 +177,7 @@ SDL_Texture *Sprite::findOutlines(int id) const
 }
 
 
-const ppl7::grafix::Drawable *Sprite::findInMemoryTexture(int id) const
+const ppl7::grafix::Drawable *SpriteTexture::findInMemoryTexture(int id) const
 {
 	if (bMemoryBufferd) {
 		std::map<int,ppl7::grafix::Image>::const_iterator it;
@@ -187,7 +187,7 @@ const ppl7::grafix::Drawable *Sprite::findInMemoryTexture(int id) const
 	return NULL;
 }
 
-void Sprite::loadIndex(ppl7::PFPChunk *chunk)
+void SpriteTexture::loadIndex(ppl7::PFPChunk *chunk)
 {
 	char *buffer=(char*)chunk->data();
 	int num=Peek32(buffer);		// Anzahl Einträge in der Tabelle
@@ -211,7 +211,7 @@ void Sprite::loadIndex(ppl7::PFPChunk *chunk)
 	}
 }
 
-void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &tint)
+void SpriteTexture::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &tint)
 {
 	Compression Comp;
 	Comp.usePrefix(Compression::Prefix_V2);
@@ -276,7 +276,7 @@ void Sprite::loadTexture(SDL &sdl, PFPChunk *chunk, const ppl7::grafix::Color &t
 	}
 }
 
-void Sprite::generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src)
+void SpriteTexture::generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src)
 {
 	ppl7::grafix::Image surface;
 	ppl7::grafix::Color white(255,255,255,255);
@@ -302,14 +302,14 @@ void Sprite::generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src)
 	OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(id,tex));
 }
 
-void Sprite::load(SDL &sdl, const String &filename, const ppl7::grafix::Color &tint)
+void SpriteTexture::load(SDL &sdl, const String &filename, const ppl7::grafix::Color &tint)
 {
 	File ff;
 	ff.open(filename);
 	load(sdl, ff, tint);
 }
 
-void Sprite::load(SDL &sdl, FileObject &ff, const ppl7::grafix::Color &tint)
+void SpriteTexture::load(SDL &sdl, FileObject &ff, const ppl7::grafix::Color &tint)
 {
 	PFPFile File;
 	clear();
@@ -335,7 +335,7 @@ void Sprite::load(SDL &sdl, FileObject &ff, const ppl7::grafix::Color &tint)
 	}
 }
 
-void Sprite::draw(ppl7::grafix::Drawable &target, int x, int y, int id) const
+void SpriteTexture::draw(ppl7::grafix::Drawable &target, int x, int y, int id) const
 {
 	if (!bMemoryBufferd) return;
 	std::map<int,SpriteIndexItem>::const_iterator it;
@@ -347,7 +347,7 @@ void Sprite::draw(ppl7::grafix::Drawable &target, int x, int y, int id) const
 	target.bltAlpha(*item.drawable,r,x+item.Offset.x-item.Pivot.x, y+item.Offset.y-item.Pivot.y);
 }
 
-const ppl7::grafix::Drawable Sprite::getDrawable(int id) const
+const ppl7::grafix::Drawable SpriteTexture::getDrawable(int id) const
 {
 	ppl7::grafix::Drawable draw;
 	if (!bMemoryBufferd) return draw;
@@ -361,7 +361,7 @@ const ppl7::grafix::Drawable Sprite::getDrawable(int id) const
 	return draw;
 }
 
-void Sprite::draw(SDL_Renderer *renderer, int x, int y, int id) const
+void SpriteTexture::draw(SDL_Renderer *renderer, int x, int y, int id) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int,SpriteIndexItem>::const_iterator it;
@@ -376,7 +376,7 @@ void Sprite::draw(SDL_Renderer *renderer, int x, int y, int id) const
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
-void Sprite::drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const
+void SpriteTexture::drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int,SpriteIndexItem>::const_iterator it;
@@ -399,7 +399,7 @@ void Sprite::drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scal
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
-void Sprite::drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const
+void SpriteTexture::drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const
 {
 	if (!bOutlinesEnabled) return;
 	std::map<int,SpriteIndexItem>::const_iterator it;
@@ -422,7 +422,7 @@ void Sprite::drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float sc
 	SDL_RenderCopy(renderer, item.outlines, &item.r, &tr);
 }
 
-ppl7::grafix::Size Sprite::spriteSize(int id, float scale_factor) const
+ppl7::grafix::Size SpriteTexture::spriteSize(int id, float scale_factor) const
 {
 	std::map<int,SpriteIndexItem>::const_iterator it;
 	it=SpriteList.find(id);
@@ -434,7 +434,7 @@ ppl7::grafix::Size Sprite::spriteSize(int id, float scale_factor) const
 	return s;
 }
 
-ppl7::grafix::Rect Sprite::spriteBoundary(int id, float scale_factor, int x, int y) const
+ppl7::grafix::Rect SpriteTexture::spriteBoundary(int id, float scale_factor, int x, int y) const
 {
 	std::map<int,SpriteIndexItem>::const_iterator it;
 	it=SpriteList.find(id);
@@ -449,12 +449,12 @@ ppl7::grafix::Rect Sprite::spriteBoundary(int id, float scale_factor, int x, int
 }
 
 
-int Sprite::numTextures() const
+int SpriteTexture::numTextures() const
 {
 	return (int)TextureMap.size();
 }
 
-int Sprite::numSprites() const
+int SpriteTexture::numSprites() const
 {
 	return (int)SpriteList.size();
 }

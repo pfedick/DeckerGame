@@ -29,13 +29,13 @@ void Level::clear()
 	FrontPlane.clear();
 }
 
-void Level::setTileset(int no, Sprite *tileset)
+void Level::setTileset(int no, SpriteTexture *tileset)
 {
 	if (no<0 || no>9) return;
 	this->tileset[no]=tileset;
 }
 
-void Level::setSpriteset(int no, Sprite *spriteset)
+void Level::setSpriteset(int no, SpriteTexture *spriteset)
 {
 	if (no<0 || no>MAX_SPRITESETS) return;
 	this->spriteset[no]=spriteset;
@@ -47,7 +47,7 @@ void Level::setSpriteset(int no, Sprite *spriteset)
 	FrontSprites[1].setSpriteset(no, spriteset);
 }
 
-void Level::setTileTypesSprites(Sprite *sprites)
+void Level::setTileTypesSprites(SpriteTexture *sprites)
 {
 	tiletypes=sprites;
 }

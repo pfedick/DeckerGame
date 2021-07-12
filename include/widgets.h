@@ -7,7 +7,7 @@
 #include <list>
 
 class Game;
-class Sprite;
+class SpriteTexture;
 
 namespace Decker {
 namespace ui {

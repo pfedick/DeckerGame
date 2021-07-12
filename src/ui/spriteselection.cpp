@@ -62,7 +62,7 @@ int SpriteSelection::currentSpriteSet() const
 	return tileset;
 }
 
-void SpriteSelection::setSpriteSet(int id, const ppl7::String &name, Sprite *sprites)
+void SpriteSelection::setSpriteSet(int id, const ppl7::String &name, SpriteTexture *sprites)
 {
 	if (id<1 || id>MAX_TILESETS) return;
 	tilesets[id]=sprites;

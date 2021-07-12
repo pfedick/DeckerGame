@@ -90,7 +90,7 @@ Player::~Player()
 
 }
 
-void Player::setSpriteResource(const Sprite &resource)
+void Player::setSpriteResource(const SpriteTexture &resource)
 {
 	sprite_resource=&resource;
 }

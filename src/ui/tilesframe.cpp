@@ -23,7 +23,7 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game)
 
 }
 
-void TilesFrame::setSprites(Sprite *tiles)
+void TilesFrame::setSprites(SpriteTexture *tiles)
 {
 	this->tiles=tiles;
 	scrollbar->setSize(tiles->numSprites()/4+1);

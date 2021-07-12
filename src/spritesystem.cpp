@@ -32,7 +32,7 @@ void SpriteSystem::clear()
 	sprite_list.clear();
 }
 
-void SpriteSystem::setSpriteset(int no, Sprite *spriteset)
+void SpriteSystem::setSpriteset(int no, SpriteTexture *spriteset)
 {
 	if (no<0 || no>MAX_SPRITESETS) return;
 	this->spriteset[no]=spriteset;

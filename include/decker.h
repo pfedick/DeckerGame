@@ -71,7 +71,7 @@ public:
 };
 
 
-class Sprite
+class SpriteTexture
 {
 private:
 	class SpriteIndexItem
@@ -118,8 +118,8 @@ private:
 	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
 
 public:
-	Sprite();
-	~Sprite();
+	SpriteTexture();
+	~SpriteTexture();
 	void load(SDL &sdl, const ppl7::String &filename, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
 	void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
 	void clear();
@@ -157,7 +157,7 @@ private:
 	ppl7::Mutex mutex;
 	std::map<int, SpriteSystem::Item> sprite_list;
 	std::map<uint64_t,SpriteSystem::Item> visible_sprite_map;
-	Sprite *spriteset[MAX_SPRITESETS+1];
+	SpriteTexture *spriteset[MAX_SPRITESETS+1];
 	bool bSpritesVisible;
 
 public:
@@ -169,7 +169,7 @@ public:
 	void modifySprite(const SpriteSystem::Item &item);
 	void setVisible(bool visible);
 	bool isVisible() const;
-	void setSpriteset(int no, Sprite *spriteset);
+	void setSpriteset(int no, SpriteTexture *spriteset);
 	void updateVisibleSpriteList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
@@ -236,19 +236,19 @@ public:
 class Resources
 {
 public:
-	Sprite Sprite_George;
-	Sprite Nature;
-	Sprite Trees;
-	Sprite Tiles;
-	Sprite Tiles_Nature;
-	Sprite Cursor;
-	Sprite TileTypes;
-	Sprite Sprites_Nature;
+	SpriteTexture Sprite_George;
+	SpriteTexture Nature;
+	SpriteTexture Trees;
+	SpriteTexture Tiles;
+	SpriteTexture Tiles_Nature;
+	SpriteTexture Cursor;
+	SpriteTexture TileTypes;
+	SpriteTexture Sprites_Nature;
 
 	//ppl7::grafix::Sprite uiTiles;
 	//ppl7::grafix::Sprite uiTilesNature;
 	//ppl7::grafix::Sprite uiTileTypes;
-	Sprite uiSpritesNature;
+	SpriteTexture uiSpritesNature;
 
 };
 class Player;
@@ -265,9 +265,9 @@ private:
 	SpriteSystem FrontSprites[2];
 
 	ppl7::grafix::Rect viewport;
-	Sprite *tileset[MAX_TILESETS+1];
-	Sprite *spriteset[MAX_SPRITESETS+1];
-	Sprite *tiletypes;
+	SpriteTexture *tileset[MAX_TILESETS+1];
+	SpriteTexture *spriteset[MAX_SPRITESETS+1];
+	SpriteTexture *tiletypes;
 	void clear();
 
 	enum LevelChunkId {
@@ -285,9 +285,9 @@ private:
 public:
 	Level();
 	~Level();
-	void setTileset(int no, Sprite *tileset);
-	void setTileTypesSprites(Sprite *sprites);
-	void setSpriteset(int no, Sprite *spriteset);
+	void setTileset(int no, SpriteTexture *tileset);
+	void setTileTypesSprites(SpriteTexture *sprites);
+	void setSpriteset(int no, SpriteTexture *spriteset);
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);

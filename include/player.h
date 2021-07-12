@@ -3,7 +3,7 @@
 #include <ppl7-grafix.h>
 
 class SDL_Renderer;
-class Sprite;
+class SpriteTexture;
 
 class AnimationCycle
 {
@@ -32,7 +32,7 @@ private:
 	int world_y;
 	int x,y;
 	ppl7::grafix::Point velocity;
-	const Sprite *sprite_resource;
+	const SpriteTexture *sprite_resource;
 	ppl7::grafix::Rect world;
 	double next_keycheck;
 	double next_animation;
@@ -63,7 +63,7 @@ private:
 public:
 	Player();
 	~Player();
-	void setSpriteResource(const Sprite &resource);
+	void setSpriteResource(const SpriteTexture &resource);
 	void setGameWindow(const ppl7::grafix::Rect &world);
 	void draw(SDL_Renderer *renderer) const;
 	void move(int x, int y);
