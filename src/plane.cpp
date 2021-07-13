@@ -41,7 +41,7 @@ void Plane::create(int width, int height)
 void Plane::setTile(int x, int y, int z, int tileset, int tileno)
 {
 	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return;
-	if (z<0 || z>=3) return;
+	if (z<0 || z>=MAX_TILESETS) return;
 	if (tilematrix[y*width+x]==NULL) {
 		tilematrix[y*width+x]=new Tile();
 	}

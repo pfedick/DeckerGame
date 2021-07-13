@@ -181,7 +181,7 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 	int x1=viewport.x1-offset_x;
 	int y1=viewport.y1-offset_y+TILE_HEIGHT;
 
-	for (int z=0;z<3;z++) {
+	for (int z=0;z<MAX_TILE_LAYER;z++) {
 		for (int y=tiles_height;y>=0;y--) {
 			for (int x=0;x<tiles_width;x++) {
 				const Tile *tile=plane.get(x+start_x,y+start_y);
