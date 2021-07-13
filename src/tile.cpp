@@ -6,28 +6,19 @@
 
 Tile::Tile(TileType type)
 {
-	for (int i=0;i<3;i++) {
+	for (int i=0;i<MAX_TILE_LAYER;i++) {
 		this->tileset[i]=0;
 		this->tileno[i]=0;
+		this->origin_x[i]=0;
+		this->origin_y[i]=0;
+		this->occupation[i]=TileOccupation::OccupationNone;
 	}
 	this->type=type;
 }
 
-Tile::Tile(int tileset, int tileno, int z, TileType type)
+void Tile::setSprite(int z, int tileset, int tileno)
 {
-	for (int i=0;i<3;i++) {
-		this->tileset[i]=0;
-		this->tileno[i]=0;
-	}
-	this->type=type;
-	if (z<0 || z>2) return;
-	this->tileset[z]=tileset;
-	this->tileno[z]=tileno;
-}
-
-void Tile::set(int tileset, int tileno, int z)
-{
-	if (z<0 || z>2) return;
+	if (z<0 || z>=MAX_TILE_LAYER) return;
 	this->tileset[z]=tileset;
 	this->tileno[z]=tileno;
 }
@@ -37,3 +28,10 @@ void Tile::setType(TileType type)
 	this->type=type;
 }
 
+void Tile::setOccupation(int z, TileOccupation o, int origin_x, int origin_y)
+{
+	if (z<0 || z>=MAX_TILE_LAYER) return;
+	this->occupation[z]=o;
+	this->origin_x[z]=origin_x;
+	this->origin_y[z]=origin_y;
+}

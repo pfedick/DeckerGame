@@ -36,6 +36,17 @@ Game::~Game()
 	wm->destroyWindow(*this);
 }
 
+
+static void loadBricks(SDL &sdl, SpriteTexture &sprites,SpriteTexture &ui, const ppl7::grafix::Color &tint)
+{
+	sprites.enableOutlines(false);
+	sprites.enableMemoryBuffer(false);
+	sprites.load(sdl, "res/bricks_white.tex",tint);
+	ui.enableSDLBuffer(false);
+	ui.enableMemoryBuffer(true);
+	ui.load(sdl,"res/bricks_white_ui.tex",tint);
+}
+
 void Game::loadGrafix()
 {
 	resources.Sprite_George.load(sdl, "res/george.tex");
@@ -55,35 +66,11 @@ void Game::loadGrafix()
 	resources.Bricks_White_Ui.enableSDLBuffer(false);
 	resources.Bricks_White_Ui.enableMemoryBuffer(true);
 	resources.Bricks_White_Ui.load(sdl, "res/bricks_white_ui.tex");
-
-	resources.Bricks_MediumGrey.enableOutlines(true);
-	resources.Bricks_MediumGrey.enableMemoryBuffer(true);
-	resources.Bricks_MediumGrey.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(192,192,192,255));
-	resources.Bricks_MediumGrey_Ui.enableSDLBuffer(false);
-	resources.Bricks_MediumGrey_Ui.enableMemoryBuffer(true);
-	resources.Bricks_MediumGrey_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(192,192,192,255));
-
-	resources.Bricks_DarkGrey.enableOutlines(true);
-	resources.Bricks_DarkGrey.enableMemoryBuffer(true);
-	resources.Bricks_DarkGrey.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(92,92,92,255));
-	resources.Bricks_DarkGrey_Ui.enableSDLBuffer(false);
-	resources.Bricks_DarkGrey_Ui.enableMemoryBuffer(true);
-	resources.Bricks_DarkGrey_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(92,92,92,255));
-
-	resources.Bricks_Green.enableOutlines(true);
-	resources.Bricks_Green.enableMemoryBuffer(true);
-	resources.Bricks_Green.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(32,192,22,255));
-	resources.Bricks_Green_Ui.enableSDLBuffer(false);
-	resources.Bricks_Green_Ui.enableMemoryBuffer(true);
-	resources.Bricks_Green_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(32,192,22,255));
-
-	resources.Bricks_Red.enableOutlines(true);
-	resources.Bricks_Red.enableMemoryBuffer(true);
-	resources.Bricks_Red.load(sdl, "res/bricks_white.tex", ppl7::grafix::Color(255,27,22,255));
-	resources.Bricks_Red_Ui.enableSDLBuffer(false);
-	resources.Bricks_Red_Ui.enableMemoryBuffer(true);
-	resources.Bricks_Red_Ui.load(sdl, "res/bricks_white_ui.tex", ppl7::grafix::Color(255,27,22,255));
-
+	brick_occupation.createFromSpriteTexture(resources.Bricks_White, TILE_WIDTH, TILE_HEIGHT);
+	loadBricks(sdl,resources.Bricks_MediumGrey, resources.Bricks_MediumGrey_Ui,ppl7::grafix::Color(192,192,192,255));
+	loadBricks(sdl,resources.Bricks_DarkGrey, resources.Bricks_DarkGrey_Ui,ppl7::grafix::Color(92,92,92,255));
+	loadBricks(sdl,resources.Bricks_Green, resources.Bricks_Green_Ui,ppl7::grafix::Color(32,192,22,255));
+	loadBricks(sdl,resources.Bricks_Red, resources.Bricks_Red_Ui,ppl7::grafix::Color(255,27,22,255));
 
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
@@ -306,6 +293,7 @@ void Game::run()
 
 
 		drawSelectedSprite(renderer, mouse.p);
+		drawSelectedTile(renderer, mouse.p);
 		if (mainmenue->playerPlaneVisible())
 			if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
 		// Grid
@@ -450,14 +438,30 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		int selectedTile=tiles_selection->selectedTile();
 		int selectedTileSet=tiles_selection->currentTileSet();
 		int currentLayer=tiles_selection->currentLayer();
+		Plane &plane=level.plane(currentPlane);
 
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left && selectedTile>=0) {
-			level.plane(currentPlane).setTile(x,y,
-					currentLayer,
-					selectedTileSet,
-					selectedTile);
+			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
+			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
+				printf ("set %d:%d, layer: %d\n",x,y,currentLayer);
+				plane.setTile(x,y,
+						currentLayer,
+						selectedTileSet,
+						selectedTile);
+				plane.setOccupation(x, y, currentLayer, occupation);
+			}
 		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-			level.plane(currentPlane).clearTile(x,y,tiles_selection->currentLayer());
+			ppl7::grafix::Point origin=plane.getOccupationOrigin(x,y,currentLayer);
+			if (origin.x>=0 && origin.y>=0) {
+				int origin_tile=plane.getTileNo(origin.x,origin.y,currentLayer);
+				if (origin_tile>=0) {
+					BrickOccupation::Matrix occupation=brick_occupation.get(origin_tile);
+					plane.clearOccupation(origin.x, origin.y, currentLayer, occupation);
+				}
+				plane.clearTile(origin.x, origin.y,currentLayer);
+			} else {
+				plane.clearTile(x,y,currentLayer);
+			}
 		}
 	}
 }
@@ -486,6 +490,30 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 		level.spriteset[spriteset]->drawOutlines(renderer,
 					mouse.x, mouse.y, nr, scale);
 	}
+}
+
+void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+{
+	if (!tiles_selection) return;
+	if (!mouse.inside(viewport)) return;
+	int currentPlane=mainmenue->currentPlane();
+	int currentLayer=tiles_selection->currentLayer();
+	int nr=tiles_selection->selectedTile();
+	int tileset=tiles_selection->currentTileSet();
+	if (nr<0 || tileset<0 || tileset>MAX_TILESETS) return;
+	if (!level.tileset[tileset]) return;
+	ppl7::grafix::Point wp=mouse-viewport.topLeft()+WorldCoords*planeFactor[currentPlane];
+	int tx=wp.x/TILE_WIDTH;
+	int ty=wp.y/TILE_HEIGHT;
+	BrickOccupation::Matrix occupation=brick_occupation.get(nr);
+	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
+		//printf ("tx=%d, ty=%d\n",tx,ty);
+		int x=tx*TILE_WIDTH+viewport.x1-WorldCoords.x*planeFactor[currentPlane];;
+		int y=ty*TILE_HEIGHT+viewport.y1-WorldCoords.y*planeFactor[currentPlane];;
+		level.tileset[tileset]->draw(renderer,
+						x, y+TILE_HEIGHT, nr);
+	}
+
 }
 
 void Game::save()

@@ -40,6 +40,7 @@ OBJECTS=compile/main.o \
 	compile/plane.o \
 	compile/tile.o \
 	compile/spritesystem.o \
+	compile/brickoccupation.o \
 	compile/player.o 
 	
 	
@@ -119,6 +120,11 @@ compile/tile.o: src/tile.cpp Makefile include/decker.h
 compile/player.o: src/player.cpp Makefile include/player.h
 	-mkdir -p compile 
 	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
+
+compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/brickoccupation.o -c src/brickoccupation.cpp $(CFLAGS)
+
 
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
 	-mkdir -p compile 
