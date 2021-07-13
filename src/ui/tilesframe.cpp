@@ -43,8 +43,7 @@ void TilesFrame::paint(ppl7::grafix::Drawable &draw)
 	try {
 		for (int i=scrollbar->position()*4;i<tiles->numSprites();i++) {
 			try {
-				ppl7::grafix::Size s=tiles->spriteSize(i, 1.0f);
-				tiles->draw(draw, 2+x+(64-s.width)/2, 2+y+(64-s.height)/2,i);
+				tiles->draw(draw, 2+x, 2+y,i);
 			} catch (...) {
 			}
 			if (i==selected_tile) {
