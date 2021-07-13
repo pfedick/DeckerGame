@@ -17,6 +17,9 @@
 #define MAX_SPRITESETS 10
 #endif
 
+#define MAX_TILE_LAYER 4
+
+
 #define STR_VALUE(arg)      #arg
 #define EXCEPTION(name,inherit)	class name : public inherit { public: \
 	name() throw() {}; \
@@ -29,8 +32,8 @@
 EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);
 
-#define TILE_WIDTH 64
-#define TILE_HEIGHT 64
+#define TILE_WIDTH 32
+#define TILE_HEIGHT 38
 
 class FPS
 {
@@ -200,16 +203,44 @@ public:
 		Ladder,
 		Water
 	};
+	enum TileOccupation {
+		OccupationNone = 0,
+		OccupationPlate0 = 1,
+		OccupationPlate1 = 2,
+		OccupationPlate2 = 4,
+		OccupationBrick = 7
+	};
+	int tileset[MAX_TILE_LAYER];
+	int tileno[MAX_TILE_LAYER];
+	int origin_x[MAX_TILE_LAYER], origin_y[MAX_TILE_LAYER];
+	TileOccupation occupation[MAX_TILE_LAYER];
 	TileType type;
-	int tileset[3];
-	int tileno[3];
 
 	Tile(TileType type=NonBlocking);
-	Tile(int tileset, int tileno, int z=0, TileType type=NonBlocking);
 	void setType(TileType type);
-	void set(int tileset, int tileno, int z=0);
-	int getTileset(int z);
-	int getTileNo(int z);
+	void setSprite(int z, int tileset, int tileno);
+	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);
+};
+
+class BrickOccupation
+{
+public:
+	class Item
+	{
+	public:
+		Item(int x, int y, Tile::TileOccupation o);
+		int x,y;
+		Tile::TileOccupation o;
+	};
+	typedef std::list<BrickOccupation::Item> Matrix;
+private:
+	std::map<int,BrickOccupation::Matrix> tiles;
+	BrickOccupation::Matrix empty;
+public:
+	void createFromSpriteTexture(const SpriteTexture &tex, int brick_width, int brick_height);
+	void createFromImage(int id, const ppl7::grafix::Drawable &img, int brick_width, int brick_height);
+	void set(int id, const BrickOccupation::Matrix &matrix);
+	const BrickOccupation::Matrix &get(int id);
 };
 
 class Plane
@@ -227,12 +258,19 @@ public:
 	void create(int width, int height);
 	void setTile(int x, int y, int z, int tileset, int tileno);
 	void setType(int x, int y,  Tile::TileType type);
+	void setOccupation(int x, int y,  int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
+	Tile::TileOccupation getOccupation(int x, int y, int z);
+	ppl7::grafix::Point getOccupationOrigin(int x, int y, int z);
+	void setOccupation(int x, int y, int z, const BrickOccupation::Matrix &matrix);
+	void clearOccupation(int x, int y, int z, const BrickOccupation::Matrix &matrix);
+	bool isOccupied(int x, int y, int z, const BrickOccupation::Matrix &matrix);
 	void clearTile(int x, int y, int z);
 	const Tile *get(int x, int y) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
 	void setVisible(bool visible);
 	bool isVisible() const;
+	int getTileNo(int x, int y, int z);
 };
 
 
@@ -240,20 +278,37 @@ class Resources
 {
 public:
 	SpriteTexture Sprite_George;
-	SpriteTexture Nature;
-	SpriteTexture Trees;
-	SpriteTexture Tiles;
-	SpriteTexture Tiles_Nature;
+	//SpriteTexture Nature;
+	//SpriteTexture Trees;
+	//SpriteTexture Tiles;
+	//SpriteTexture Tiles_Nature;
 	SpriteTexture Cursor;
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
+	SpriteTexture uiSpritesNature;
+
+	SpriteTexture Bricks_SolidColor;
+	SpriteTexture Bricks_SolidColor_Ui;
 
 	SpriteTexture Bricks_White;
+	SpriteTexture Bricks_White_Ui;
+
+	SpriteTexture Bricks_MediumGrey;
+	SpriteTexture Bricks_MediumGrey_Ui;
+
+	SpriteTexture Bricks_DarkGrey;
+	SpriteTexture Bricks_DarkGrey_Ui;
+
+	SpriteTexture Bricks_Green;
+	SpriteTexture Bricks_Green_Ui;
+
+	SpriteTexture Bricks_Red;
+	SpriteTexture Bricks_Red_Ui;
 
 	//ppl7::grafix::Sprite uiTiles;
 	//ppl7::grafix::Sprite uiTilesNature;
 	//ppl7::grafix::Sprite uiTileTypes;
-	SpriteTexture uiSpritesNature;
+
 
 };
 class Player;
@@ -333,7 +388,7 @@ private:
 	Decker::ui::TileTypeSelection *tiletype_selection;
 	Decker::ui::SpriteSelection *sprite_selection;
 	Decker::ui::WorldWidget *world_widget;
-
+	BrickOccupation brick_occupation;
 	FPS fps;
 
 	ppl7::grafix::Point WorldCoords;
@@ -347,6 +402,7 @@ private:
 	void updateUi(const ppl7::tk::MouseState &mouse);
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
+	void drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
 	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
 	void handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse);

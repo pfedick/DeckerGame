@@ -28,6 +28,9 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game *game)
 	layer2=new RadioButton(160,35,50,20,"2");
 	this->addChild(layer2);
 
+	layer3=new RadioButton(210,35,50,20,"3");
+	this->addChild(layer3);
+
 	tilesframe=new TilesFrame(5,60,client.width()-10, client.height()-60, game);
 	this->addChild(tilesframe);
 
@@ -48,6 +51,7 @@ int TilesSelection::currentLayer() const
 	if (layer0->checked()) return 0;
 	if (layer1->checked()) return 1;
 	if (layer2->checked()) return 2;
+	if (layer3->checked()) return 3;
 
 	return 0;
 }

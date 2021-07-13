@@ -117,6 +117,7 @@ private:
 	RadioButton *layer0;
 	RadioButton *layer1;
 	RadioButton *layer2;
+	RadioButton *layer3;
 	ComboBox *tileset_combobox;
 
 	ppl7::String tilesetName[MAX_TILESETS+1];

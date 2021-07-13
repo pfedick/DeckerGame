@@ -40,6 +40,7 @@ OBJECTS=compile/main.o \
 	compile/plane.o \
 	compile/tile.o \
 	compile/spritesystem.o \
+	compile/brickoccupation.o \
 	compile/player.o 
 	
 	
@@ -75,6 +76,10 @@ sprites:
 	./texmaker -t res/tiles_nature.tex -s res/tiles/nature.png -w 1024 -h 1024 -px 0 -py 0 -x res/tiles_nature -sx 64 -sy 64
 	./texmaker -s "lightwave/Render/sprites_nature/*.png" -t res/sprites_nature.tex -w 2048 -h 2048 --pivot_detection lower_middle -x res/sprites_nature
 	./texmaker -s "lightwave/Render/sprites_nature_ui/*.png" -t res/sprites_nature_ui.tex -w 512 -h 512 -px 0 -py 0 -x res/sprites_nature_ui
+	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 512 -h 512 -px 0 -py 0 -x res/bricks_white_ui
+	./texmaker -s "lightwave/Render/bricks_white/*.png" -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160 -x res/bricks_white
+	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid.tex -w 256 -h 256 -px 0 -py 39
+	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid_ui.tex -w 256 -h 256 -px 0 -py 0
 	./texmaker -s "res/sprites/trees/*.png" -t res/trees.tex -w 1024 -h 1024 --pivot_detection lower_middle -x res/sprites_trees
 	
 	
@@ -117,6 +122,11 @@ compile/tile.o: src/tile.cpp Makefile include/decker.h
 compile/player.o: src/player.cpp Makefile include/player.h
 	-mkdir -p compile 
 	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
+
+compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/brickoccupation.o -c src/brickoccupation.cpp $(CFLAGS)
+
 
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
 	-mkdir -p compile 
