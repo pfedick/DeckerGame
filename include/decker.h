@@ -287,6 +287,8 @@ public:
 	SpriteTexture Sprites_Nature;
 	SpriteTexture uiSpritesNature;
 
+	SpriteTexture Bricks_SolidColor;
+
 	SpriteTexture Bricks_White;
 	SpriteTexture Bricks_White_Ui;
 
