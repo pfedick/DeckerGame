@@ -26,6 +26,7 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game)
 void TilesFrame::setSprites(SpriteTexture *tiles)
 {
 	this->tiles=tiles;
+	printf ("numTiles=%d\n", tiles->numSprites());
 	scrollbar->setSize(tiles->numSprites()/4+1);
 	setSelectedTile(-1);
 	needsRedraw();
@@ -43,7 +44,8 @@ void TilesFrame::paint(ppl7::grafix::Drawable &draw)
 	try {
 		for (int i=scrollbar->position()*4;i<tiles->numSprites();i++) {
 			try {
-				tiles->draw(draw, 2+x, 2+y,i);
+				ppl7::grafix::Size s=tiles->spriteSize(i, 1.0f);
+				tiles->draw(draw, 2+x+(64-s.width)/2, 2+y+(64-s.height)/2,i);
 			} catch (...) {
 			}
 			if (i==selected_tile) {
