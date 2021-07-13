@@ -26,7 +26,6 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game *game)
 void TilesFrame::setSprites(SpriteTexture *tiles)
 {
 	this->tiles=tiles;
-	printf ("numTiles=%d\n", tiles->numSprites());
 	scrollbar->setSize(tiles->numSprites()/4+1);
 	setSelectedTile(-1);
 	needsRedraw();
