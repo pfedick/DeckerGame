@@ -67,8 +67,10 @@ void Game::loadGrafix()
 	resources.Bricks_White_Ui.enableMemoryBuffer(true);
 	resources.Bricks_White_Ui.load(sdl, "res/bricks_white_ui.tex");
 
-	resources.Bricks_SolidColor.enableMemoryBuffer(true);
 	resources.Bricks_SolidColor.load(sdl, "res/bricks_solid.tex");
+	resources.Bricks_SolidColor_Ui.enableMemoryBuffer(true);
+	resources.Bricks_SolidColor_Ui.load(sdl, "res/bricks_solid_ui.tex");
+
 
 	brick_occupation.createFromSpriteTexture(resources.Bricks_White, TILE_WIDTH, TILE_HEIGHT);
 	loadBricks(sdl,resources.Bricks_MediumGrey, resources.Bricks_MediumGrey_Ui,ppl7::grafix::Color(192,192,192,255));
@@ -154,7 +156,7 @@ void Game::init()
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player();
-	player->move(830,701);
+	player->move(830,692);
 	//player->setGameWindow(sdl.getClientWindow());
 
 	player->setSpriteResource(resources.Sprite_George);
@@ -366,7 +368,7 @@ void Game::showTilesSelection()
 		closeTileSelection();
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		tiles_selection->setTileSet(1,"Solid colors", &resources.Bricks_SolidColor);
+		tiles_selection->setTileSet(1,"Solid colors", &resources.Bricks_SolidColor_Ui);
 		tiles_selection->setTileSet(2,"Bricks white", &resources.Bricks_White_Ui);
 		tiles_selection->setTileSet(3,"Bricks medium grey", &resources.Bricks_MediumGrey_Ui);
 		tiles_selection->setTileSet(4,"Bricks dark grey", &resources.Bricks_DarkGrey_Ui);
@@ -447,14 +449,19 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		Plane &plane=level.plane(currentPlane);
 
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left && selectedTile>=0) {
-			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
-			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
-				//printf ("set %d:%d, layer: %d\n",x,y,currentLayer);
-				plane.setTile(x,y,
-						currentLayer,
-						selectedTileSet,
-						selectedTile);
-				plane.setOccupation(x, y, currentLayer, occupation);
+			if (selectedTileSet>1) {
+				BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
+				if (!plane.isOccupied(x, y, currentLayer, occupation)) {
+					//printf ("set %d:%d, layer: %d\n",x,y,currentLayer);
+					plane.setTile(x,y,
+							currentLayer,
+							selectedTileSet,
+							selectedTile);
+					plane.setOccupation(x, y, currentLayer, occupation);
+				}
+			} else {
+				plane.setTile(x,y, currentLayer, selectedTileSet, selectedTile);
+				plane.setOccupation(x, y, currentLayer, Tile::OccupationBrick,-1,-1);
 			}
 		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
 			ppl7::grafix::Point origin=plane.getOccupationOrigin(x,y,currentLayer);

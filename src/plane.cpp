@@ -114,6 +114,7 @@ void Plane::clearTile(int x, int y, int z)
 	if (tilematrix[y*width+x]!=NULL) {
 		tilematrix[y*width+x]->setSprite(z, 0, 0);
 		tilematrix[y*width+x]->setType(Tile::NonBlocking);
+		tilematrix[y*width+x]->setOccupation(z, Tile::OccupationNone);
 	}
 }
 

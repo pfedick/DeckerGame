@@ -172,13 +172,13 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	if (!plane.isVisible()) return;
-	int tiles_width=viewport.width()/TILE_WIDTH+2;
+	int tiles_width=viewport.width()/TILE_WIDTH+9;
 	int tiles_height=viewport.height()/TILE_HEIGHT+2;
 	int offset_x=worldcoords.x%TILE_WIDTH;
 	int offset_y=worldcoords.y%TILE_HEIGHT;
-	int start_x=worldcoords.x/TILE_WIDTH;
+	int start_x=worldcoords.x/TILE_WIDTH-7;
 	int start_y=worldcoords.y/TILE_HEIGHT;
-	int x1=viewport.x1-offset_x;
+	int x1=viewport.x1-offset_x-TILE_WIDTH*7;
 	int y1=viewport.y1-offset_y+TILE_HEIGHT;
 
 	for (int z=0;z<MAX_TILE_LAYER;z++) {

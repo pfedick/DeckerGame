@@ -33,7 +33,7 @@ EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);
 
 #define TILE_WIDTH 32
-#define TILE_HEIGHT 39
+#define TILE_HEIGHT 38
 
 class FPS
 {
@@ -288,6 +288,7 @@ public:
 	SpriteTexture uiSpritesNature;
 
 	SpriteTexture Bricks_SolidColor;
+	SpriteTexture Bricks_SolidColor_Ui;
 
 	SpriteTexture Bricks_White;
 	SpriteTexture Bricks_White_Ui;
