@@ -9,7 +9,7 @@
 #include <map>
 
 #ifndef MAX_TILESETS
-#define MAX_TILESETS 10
+#define MAX_TILESETS 30
 #endif
 
 
@@ -312,6 +312,9 @@ public:
 
 class Resources
 {
+private:
+	void loadBricks(SDL &sdl, int tileset, const ppl7::String &name, int ldraw_material, const ppl7::grafix::Color &tint);
+
 public:
 	SpriteTexture Sprite_George;
 	SpriteTexture Cursor;
@@ -340,14 +343,13 @@ public:
 	class BrickResource
 	{
 	public:
-		int id;
 		ppl7::String name;
-		int lw_material;
+		int ldraw_material;
 		SpriteTexture world;
 		SpriteTexture ui;
+		BrickResource();
 	};
-
-	std::list<BrickResource> bricks;
+	BrickResource bricks[MAX_TILESETS];
 	void loadBricks(SDL &sdl);
 };
 class Player;

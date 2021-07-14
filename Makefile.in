@@ -42,7 +42,8 @@ OBJECTS=compile/main.o \
 	compile/tile.o \
 	compile/spritesystem.o \
 	compile/brickoccupation.o \
-	compile/player.o 
+	compile/player.o \
+	compile/resources.o
 	
 	
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
@@ -100,6 +101,10 @@ compile/spritetexture.o: src/spritetexture.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/spritetexture.o -c src/spritetexture.cpp $(CFLAGS)
 
+compile/resources.o: src/resources.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/resources.o -c src/resources.cpp $(CFLAGS)
+	
 compile/level.o: src/level.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/level.o -c src/level.cpp $(CFLAGS)

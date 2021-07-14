@@ -9,7 +9,7 @@
 class Game;
 class SpriteTexture;
 
-#define MAX_TILESETS 10
+#define MAX_TILESETS 30
 #define MAX_SPRITESETS 10
 
 namespace Decker {
