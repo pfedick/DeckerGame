@@ -191,18 +191,6 @@ public:
 class Tile
 {
 public:
-	enum TileType {
-		NonBlocking,
-		Blocking,
-		SteepRampLeft,
-		SteepRampRight,
-		ShallowRampLeftLower,
-		ShallowRampLeftUpper,
-		ShallowRampRightUpper,
-		ShallowRampRightLower,
-		Ladder,
-		Water
-	};
 	enum TileOccupation {
 		OccupationNone = 0,
 		OccupationPlate0 = 1,
@@ -213,12 +201,12 @@ public:
 	int tileset[MAX_TILE_LAYER];
 	int tileno[MAX_TILE_LAYER];
 	int origin_x[MAX_TILE_LAYER], origin_y[MAX_TILE_LAYER];
+	bool showStuds[MAX_TILE_LAYER];
+	bool block_background;
 	TileOccupation occupation[MAX_TILE_LAYER];
-	TileType type;
 
-	Tile(TileType type=NonBlocking);
-	void setType(TileType type);
-	void setSprite(int z, int tileset, int tileno);
+	Tile();
+	void setSprite(int z, int tileset, int tileno, bool showStuds);
 	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);
 };
 
@@ -256,8 +244,8 @@ public:
 	~Plane();
 	void clear();
 	void create(int width, int height);
-	void setTile(int x, int y, int z, int tileset, int tileno);
-	void setType(int x, int y,  Tile::TileType type);
+	void setTile(int x, int y, int z, int tileset, int tileno, bool showStuds=true);
+	void setBlockBackground(int x, int y, bool block);
 	void setOccupation(int x, int y,  int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
 	Tile::TileOccupation getOccupation(int x, int y, int z);
 	ppl7::grafix::Point getOccupationOrigin(int x, int y, int z);
@@ -273,15 +261,54 @@ public:
 	int getTileNo(int x, int y, int z);
 };
 
+class TileType
+{
+public:
+	enum Type {
+		NonBlocking,
+		Blocking,
+		SteepRampLeft,
+		SteepRampRight,
+		ShallowRampLeftLower,
+		ShallowRampLeftUpper,
+		ShallowRampRightUpper,
+		ShallowRampRightLower,
+		Ladder,
+		Water,
+		Plate1h,
+		Plate2h,
+		Speer,
+		Fire,
+		AirStream
+	};
+};
+
+class TileTypePlane
+{
+private:
+	SpriteTexture *tiletypes;
+	TileType::Type *tilematrix;
+	int width, height;
+
+public:
+	TileTypePlane();
+	~TileTypePlane();
+	void clear();
+	void create(int width, int height);
+	void setType(int x, int y,  TileType::Type type);
+	TileType::Type getType(int x, int y) const;
+	TileType::Type getType(const ppl7::grafix::Point &player) const;
+	int getPlayerGround(const ppl7::grafix::Point &player) const;
+	void setTileTypesSprites(SpriteTexture *sprites);
+	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
+	void save(ppl7::FileObject &file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr &ba);
+};
 
 class Resources
 {
 public:
 	SpriteTexture Sprite_George;
-	//SpriteTexture Nature;
-	//SpriteTexture Trees;
-	//SpriteTexture Tiles;
-	//SpriteTexture Tiles_Nature;
 	SpriteTexture Cursor;
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
@@ -305,10 +332,6 @@ public:
 	SpriteTexture Bricks_Red;
 	SpriteTexture Bricks_Red_Ui;
 
-	//ppl7::grafix::Sprite uiTiles;
-	//ppl7::grafix::Sprite uiTilesNature;
-	//ppl7::grafix::Sprite uiTileTypes;
-
 
 };
 class Player;
@@ -320,6 +343,7 @@ private:
 	Plane FarPlane;
 	Plane PlayerPlane;
 	Plane FrontPlane;
+	TileTypePlane TileTypeMatrix;
 	SpriteSystem FarSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
@@ -327,7 +351,6 @@ private:
 	ppl7::grafix::Rect viewport;
 	SpriteTexture *tileset[MAX_TILESETS+1];
 	SpriteTexture *spriteset[MAX_SPRITESETS+1];
-	SpriteTexture *tiletypes;
 	void clear();
 
 	enum LevelChunkId {
@@ -340,20 +363,19 @@ private:
 		chunkFrontSpritesLayer1=13,
 		chunkFarSpritesLayer0=14,
 		chunkFarSpritesLayer1=15,
+		chunkTileTypes=20
 	};
 
 public:
 	Level();
 	~Level();
 	void setTileset(int no, SpriteTexture *tileset);
-	void setTileTypesSprites(SpriteTexture *sprites);
 	void setSpriteset(int no, SpriteTexture *spriteset);
 	void create(int width, int height);
 	void load(const ppl7::String &Filename);
 	void save(const ppl7::String &Filename);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player);
 	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
-	void drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const;
 	void setViewport(const ppl7::grafix::Rect &r);
 	Plane &plane(int id);
 	SpriteSystem &spritesystem(int plane, int layer);

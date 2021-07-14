@@ -38,24 +38,14 @@ void Plane::create(int width, int height)
 	}
 }
 
-void Plane::setTile(int x, int y, int z, int tileset, int tileno)
+void Plane::setTile(int x, int y, int z, int tileset, int tileno, bool showStuds)
 {
 	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return;
 	if (z<0 || z>=MAX_TILESETS) return;
 	if (tilematrix[y*width+x]==NULL) {
 		tilematrix[y*width+x]=new Tile();
 	}
-	tilematrix[y*width+x]->setSprite(z, tileset, tileno);
-}
-
-void Plane::setType(int x, int y, Tile::TileType type)
-{
-	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return;
-	if (tilematrix[y*width+x]==NULL) {
-		tilematrix[y*width+x]=new Tile(type);
-	} else {
-		tilematrix[y*width+x]->setType(type);
-	}
+	tilematrix[y*width+x]->setSprite(z, tileset, tileno, showStuds);
 }
 
 void Plane::setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x, int origin_y)
@@ -65,6 +55,16 @@ void Plane::setOccupation(int x, int y, int z, Tile::TileOccupation o, int origi
 		tilematrix[y*width+x]=new Tile();
 	}
 	tilematrix[y*width+x]->setOccupation(z, o, origin_x, origin_y);
+}
+
+void Plane::setBlockBackground(int x, int y, bool block)
+{
+	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return;
+	if (tilematrix[y*width+x]==NULL) {
+		tilematrix[y*width+x]=new Tile();
+	}
+	tilematrix[y*width+x]->block_background=block;
+
 }
 
 void Plane::setOccupation(int x, int y, int z, const BrickOccupation::Matrix &matrix)
@@ -112,8 +112,7 @@ void Plane::clearTile(int x, int y, int z)
 	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return;
 	if (z<0 || z>=MAX_TILE_LAYER) return;
 	if (tilematrix[y*width+x]!=NULL) {
-		tilematrix[y*width+x]->setSprite(z, 0, 0);
-		tilematrix[y*width+x]->setType(Tile::NonBlocking);
+		tilematrix[y*width+x]->setSprite(z, 0, 0, true);
 		tilematrix[y*width+x]->setOccupation(z, Tile::OccupationNone);
 	}
 }
@@ -152,7 +151,7 @@ bool Plane::isVisible() const
 void Plane::save(ppl7::FileObject &file, unsigned char id) const
 {
 	if (tilematrix==NULL) return;
-	unsigned char *buffer=(unsigned char*)malloc(width*height*(9+MAX_TILE_LAYER*9));
+	unsigned char *buffer=(unsigned char*)malloc(9+width*height*(MAX_TILE_LAYER*10));
 	ppl7::Poke32(buffer+0,0);
 	ppl7::Poke8(buffer+4,id);
 	ppl7::Poke16(buffer+5,width);
@@ -164,7 +163,7 @@ void Plane::save(ppl7::FileObject &file, unsigned char id) const
 			if (t) {
 				ppl7::Poke16(buffer+p,x);
 				ppl7::Poke16(buffer+p+2,y);
-				ppl7::Poke8(buffer+p+4,t->type);
+				ppl7::Poke8(buffer+p+4,(int)t->block_background);
 				p+=5;
 				for(int z=0;z<MAX_TILE_LAYER;z++) {
 					ppl7::Poke16(buffer+p,t->tileset[z]);
@@ -172,7 +171,8 @@ void Plane::save(ppl7::FileObject &file, unsigned char id) const
 					ppl7::Poke16(buffer+p+4,t->origin_x[z]);
 					ppl7::Poke16(buffer+p+6,t->origin_y[z]);
 					ppl7::Poke8(buffer+p+8,t->occupation[z]);
-					p+=9;
+					ppl7::Poke8(buffer+p+9,t->showStuds[z]);
+					p+=10;
 				}
 			}
 		}
@@ -193,8 +193,7 @@ void Plane::load(const ppl7::ByteArrayPtr &ba)
 	while (p<ba.size()) {
 		int x=ppl7::Peek16(buffer+p);
 		int y=ppl7::Peek16(buffer+p+2);
-		int type=ppl7::Peek8(buffer+p+4);
-		setType(x,y,(Tile::TileType)type);
+		bool block_background=(bool)ppl7::Peek8(buffer+p+4);
 		p+=5;
 		for(int z=0;z<MAX_TILE_LAYER;z++) {
 			int tileset=ppl7::Peek16(buffer+p);
@@ -202,10 +201,12 @@ void Plane::load(const ppl7::ByteArrayPtr &ba)
 			int origin_x=ppl7::Peek16(buffer+p+4);
 			int origin_y=ppl7::Peek16(buffer+p+6);
 			int occupation=ppl7::Peek8(buffer+p+8);
-			setTile(x,y,z,tileset, tileno);
+			bool showStuds=ppl7::Peek8(buffer+p+9);
+			setTile(x,y,z,tileset, tileno, showStuds);
 			setOccupation(x,y,z,(Tile::TileOccupation)occupation,origin_x,origin_y);
-			p+=9;
+			p+=10;
 		}
+		setBlockBackground(x, y, block_background);
 	}
 }
 

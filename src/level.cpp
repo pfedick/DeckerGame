@@ -16,7 +16,6 @@ Level::Level()
 	for (int i=0;i<=MAX_SPRITESETS;i++) {
 		spriteset[i]=NULL;
 	}
-	tiletypes=NULL;
 }
 
 Level::~Level()
@@ -29,6 +28,7 @@ void Level::clear()
 	PlayerPlane.clear();
 	FarPlane.clear();
 	FrontPlane.clear();
+	TileTypeMatrix.clear();
 }
 
 void Level::setTileset(int no, SpriteTexture *tileset)
@@ -49,14 +49,10 @@ void Level::setSpriteset(int no, SpriteTexture *spriteset)
 	FrontSprites[1].setSpriteset(no, spriteset);
 }
 
-void Level::setTileTypesSprites(SpriteTexture *sprites)
-{
-	tiletypes=sprites;
-}
-
 void Level::create(int width, int height)
 {
 	clear();
+	TileTypeMatrix.create(width, height);
 	FarPlane.create(width, height);
 	PlayerPlane.create(width, height);
 	FrontPlane.create(width, height);
@@ -132,6 +128,8 @@ void Level::load(const ppl7::String &Filename)
 				FarSprites[0].load(ba);
 			} else if (id==LevelChunkId::chunkFarSpritesLayer1) {
 				FarSprites[1].load(ba);
+			} else if (id==LevelChunkId::chunkTileTypes) {
+				TileTypeMatrix.load(ba);
 			}
 		} catch (const ppl7::EndOfFileException &) {
 			break;
@@ -158,6 +156,7 @@ void Level::save(const ppl7::String &Filename)
 	PlayerPlane.save(ff,LevelChunkId::chunkPlayerPlane);
 	FrontPlane.save(ff,LevelChunkId::chunkFrontPlane);
 	FarPlane.save(ff,LevelChunkId::chunkFarPlane);
+	TileTypeMatrix.save(ff,LevelChunkId::chunkTileTypes);
 	PlayerSprites[0].save(ff, LevelChunkId::chunkPlayerSpritesLayer0);
 	PlayerSprites[1].save(ff, LevelChunkId::chunkPlayerSpritesLayer1);
 	FrontSprites[0].save(ff, LevelChunkId::chunkFrontSpritesLayer0);
@@ -196,30 +195,6 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 		}
 	}
 }
-
-void Level::drawTileTypes(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords) const
-{
-	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
-	if (!tiletypes) return;
-	int tiles_width=viewport.width()/TILE_WIDTH+2;
-	int tiles_height=viewport.height()/TILE_HEIGHT+2;
-	int offset_x=worldcoords.x%TILE_WIDTH;
-	int offset_y=worldcoords.y%TILE_HEIGHT;
-	int start_x=worldcoords.x/TILE_WIDTH;
-	int start_y=worldcoords.y/TILE_HEIGHT;
-	int x1=viewport.x1-offset_x;
-	int y1=viewport.y1-offset_y;
-
-	for (int y=0;y<tiles_height;y++) {
-		for (int x=0;x<tiles_width;x++) {
-			const Tile *tile=PlayerPlane.get(x+start_x,y+start_y);
-			if (tile!=NULL && tile->type>0) {
-				tiletypes->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->type);
-			}
-		}
-	}
-}
-
 
 void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player)
 {

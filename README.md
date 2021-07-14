@@ -22,13 +22,11 @@ but I have to figure out how to do it.
 - world editor
 
 ### Things I have to do or figure out
-- which resolution should the game have
-- what is the best size for tiles and sprites?
-- how to implement interactive objects/enemies
 - how to control the main character?
 - physics
+- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
+- how to implement interactive objects/enemies
 - collision detection
-- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall) 
 - how does sound work with SDL?
 - how to integrate sound track and sound effects
 - compose soundtrack
@@ -42,6 +40,9 @@ There is probably more, which I'm not aware of, yet ;-)
 - how to build and render the tile-based world (tiles, layers)
 - how to move in the world (side scrolling, paralax)
 - how to implement the sprites?
+- which resolution should the game have
+- what is the best size for tiles and sprites?
+
 
 
 ## On what platforms will the game be available

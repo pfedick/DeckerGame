@@ -172,7 +172,7 @@ void Game::init()
 	//level.setTileset(2, &resources.Tiles_Nature);
 	level.setSpriteset(1, &resources.Sprites_Nature);
 	level.setSpriteset(2, &resources.Bricks_White);
-	level.setTileTypesSprites(&resources.TileTypes);
+	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
 	//level.setRenderer
 	level.load("level/test.lvl");
@@ -302,7 +302,7 @@ void Game::run()
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
 		if (mainmenue->playerPlaneVisible())
-			if (mainmenue->showTileTypes()) level.drawTileTypes(renderer, WorldCoords);
+			if (mainmenue->showTileTypes()) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
 		// Grid
 		if (mainmenue->showGrid()) drawGrid();
 
@@ -430,11 +430,11 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[0];
 		int x=(mouse.p.x-viewport.x1+coords.x)/TILE_WIDTH;
 		int y=(mouse.p.y-viewport.y1+coords.y)/TILE_HEIGHT;
-		Tile::TileType type=(Tile::TileType)tiletype_selection->tileType();
+		TileType::Type type=(TileType::Type)tiletype_selection->tileType();
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
-			level.plane(0).setType(x,y,type);
+			level.TileTypeMatrix.setType(x,y,type);
 		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-			level.plane(0).setType(x,y,Tile::TileType::NonBlocking);
+			level.TileTypeMatrix.setType(x,y,TileType::Type::NonBlocking);
 		}
 	} else if (tiles_selection) {
 		int currentPlane=mainmenue->currentPlane();

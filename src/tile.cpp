@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 
-Tile::Tile(TileType type)
+Tile::Tile()
 {
 	for (int i=0;i<MAX_TILE_LAYER;i++) {
 		this->tileset[i]=0;
@@ -13,19 +13,15 @@ Tile::Tile(TileType type)
 		this->origin_y[i]=0;
 		this->occupation[i]=TileOccupation::OccupationNone;
 	}
-	this->type=type;
+	this->block_background=false;
 }
 
-void Tile::setSprite(int z, int tileset, int tileno)
+void Tile::setSprite(int z, int tileset, int tileno, bool showStuds)
 {
 	if (z<0 || z>=MAX_TILE_LAYER) return;
 	this->tileset[z]=tileset;
 	this->tileno[z]=tileno;
-}
-
-void Tile::setType(TileType type)
-{
-	this->type=type;
+	this->showStuds[z]=showStuds;
 }
 
 void Tile::setOccupation(int z, TileOccupation o, int origin_x, int origin_y)

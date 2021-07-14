@@ -38,6 +38,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_groupbox.o \
 	compile/widgets_combobox.o \
 	compile/plane.o \
+	compile/tiletype.o \
 	compile/tile.o \
 	compile/spritesystem.o \
 	compile/brickoccupation.o \
@@ -76,7 +77,7 @@ sprites:
 	./texmaker -t res/tiles_nature.tex -s res/tiles/nature.png -w 1024 -h 1024 -px 0 -py 0 -x res/tiles_nature -sx 64 -sy 64
 	./texmaker -s "lightwave/Render/sprites_nature/*.png" -t res/sprites_nature.tex -w 2048 -h 2048 --pivot_detection lower_middle -x res/sprites_nature
 	./texmaker -s "lightwave/Render/sprites_nature_ui/*.png" -t res/sprites_nature_ui.tex -w 512 -h 512 -px 0 -py 0 -x res/sprites_nature_ui
-	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 512 -h 512 -px 0 -py 0 -x res/bricks_white_ui
+	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0 -x res/bricks_white_ui
 	./texmaker -s "lightwave/Render/bricks_white/*.png" -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160 -x res/bricks_white
 	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid.tex -w 256 -h 256 -px 0 -py 39
 	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid_ui.tex -w 256 -h 256 -px 0 -py 0
@@ -110,6 +111,10 @@ compile/fps.o: src/fps.cpp Makefile include/decker.h
 compile/plane.o: src/plane.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
+
+compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/tiletype.o -c src/tiletype.cpp $(CFLAGS)
 
 compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
 	-mkdir -p compile 
