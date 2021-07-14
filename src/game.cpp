@@ -73,10 +73,53 @@ void Game::loadGrafix()
 
 
 	brick_occupation.createFromSpriteTexture(resources.Bricks_White, TILE_WIDTH, TILE_HEIGHT);
-	loadBricks(sdl,resources.Bricks_MediumGrey, resources.Bricks_MediumGrey_Ui,ppl7::grafix::Color(192,192,192,255));
-	loadBricks(sdl,resources.Bricks_DarkGrey, resources.Bricks_DarkGrey_Ui,ppl7::grafix::Color(92,92,92,255));
-	loadBricks(sdl,resources.Bricks_Green, resources.Bricks_Green_Ui,ppl7::grafix::Color(32,192,22,255));
-	loadBricks(sdl,resources.Bricks_Red, resources.Bricks_Red_Ui,ppl7::grafix::Color(255,27,22,255));
+	loadBricks(sdl,resources.Bricks_MediumGrey, resources.Bricks_MediumGrey_Ui,ppl7::grafix::Color(0xa0,0xa5,0xa9,255));
+	loadBricks(sdl,resources.Bricks_DarkGrey, resources.Bricks_DarkGrey_Ui,ppl7::grafix::Color(0x6c,0x6c,0x68,255));
+	loadBricks(sdl,resources.Bricks_Green, resources.Bricks_Green_Ui,ppl7::grafix::Color(0x23,0x78,0x41,255));
+	loadBricks(sdl,resources.Bricks_Red, resources.Bricks_Red_Ui,ppl7::grafix::Color(0xc9, 0x1a, 0x09,255));
+	// Black: 4,15,23 (Mat 0)
+	// Blue: 0,68,153 (Mat 1)
+	// Green: 30,98,50 (Mat 2)
+	// Turkise: 0,105,114 (Mat 3)
+	// Red: 161,21,7 (Mat 4)
+	// Pink: 160,90,128 (Mat 5)
+	// Brown: 70,46,31 (Mat 6)
+	// Grey: 124,129,126 (Mat 7)
+	// Tan: 87,88,74 (Mat 8)
+	// Bright Light Blue: 144,168,182 (Mat 9)
+	// Bright Green: 60,127,59 (Mat 10)
+	// Light Red: 194, 90, 75 (Mat 12)
+	// Light Pink: 202,121,138 (Mat 13)
+	// Yellow: 194,164,44 (Mat 14)
+	// White: 204,204,204 (Mat 15)
+	// Light Yellow: 201,18,120 (Mat 18)
+	// Light Tan: 182,164,126 (Mat 19)
+	// Dark Blue: 26,40,141 (Mat 23)
+	// Orange: 203, 110,19 (Mat 25)
+	// Bright Yello Green: 150,186,9 (Mat 27)
+	// Dark Tan: 119,110,92 (Mat 28)
+	//
+
+
+	// Dark Green: 0x18,0x46,0x32
+	// Dark Blue: 0a3463
+
+	// Medium Blue: 5a93db
+	// Bright Green: 4b9f4a
+	// Sand Green: a0bcac
+	// Light Yellow: fbe696
+	// Yellow: f2cd37
+	// Bright Light Orange: f8bb3d
+	// Medium Orange: ffa70b
+	// Tan: e4cd9e
+	// Earth Orange: fa9c1c
+	// Light Orange: f9ba61
+	// Orange: fe8a18
+	// Dark Tan: 958a73
+	// Brown: 583927
+	// Reddish Brown: 582a12
+	// Dark Red: 720e0f
+	//
 
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);

@@ -337,7 +337,18 @@ public:
 	SpriteTexture Bricks_Red;
 	SpriteTexture Bricks_Red_Ui;
 
+	class BrickResource
+	{
+	public:
+		int id;
+		ppl7::String name;
+		int lw_material;
+		SpriteTexture world;
+		SpriteTexture ui;
+	};
 
+	std::list<BrickResource> bricks;
+	void loadBricks(SDL &sdl);
 };
 class Player;
 
