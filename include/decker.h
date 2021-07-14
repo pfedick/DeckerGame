@@ -198,13 +198,18 @@ public:
 		OccupationPlate2 = 4,
 		OccupationBrick = 7
 	};
-	int tileset[MAX_TILE_LAYER];
-	int tileno[MAX_TILE_LAYER];
-	int origin_x[MAX_TILE_LAYER], origin_y[MAX_TILE_LAYER];
-	bool showStuds[MAX_TILE_LAYER];
+	class Layer
+	{
+	public:
+		int tileset;
+		int tileno;
+		int origin_x;
+		int origin_y;
+		TileOccupation occupation;
+		bool showStuds;
+	};
+	Layer layer[MAX_TILE_LAYER];
 	bool block_background;
-	TileOccupation occupation[MAX_TILE_LAYER];
-
 	Tile();
 	void setSprite(int z, int tileset, int tileno, bool showStuds);
 	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);

@@ -185,10 +185,9 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 			for (int x=0;x<tiles_width;x++) {
 				const Tile *tile=plane.get(x+start_x,y+start_y);
 				if (tile) {
-
-					if (tile->tileset[z]<10 && tileset[tile->tileset[z]]) {
+					if (tile->layer[z].tileset<10 && tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->tileset[z]]->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->tileno[z]);
+						tileset[tile->layer[z].tileset]->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->layer[z].tileno);
 					}
 				}
 			}

@@ -91,7 +91,7 @@ Tile::TileOccupation Plane::getOccupation(int x, int y, int z)
 {
 	if (x<0 || x>=width || y<0 || y>=height || tilematrix==NULL) return Tile::TileOccupation::OccupationNone;
 	if (tilematrix[y*width+x]==NULL || z<0 || z>=MAX_TILE_LAYER) return Tile::TileOccupation::OccupationNone;
-	return tilematrix[y*width+x]->occupation[z];
+	return tilematrix[y*width+x]->layer[z].occupation;
 }
 
 bool Plane::isOccupied(int x, int y, int z, const BrickOccupation::Matrix &matrix)
@@ -128,14 +128,14 @@ int Plane::getTileNo(int x, int y, int z)
 	if (z<0||z>=MAX_TILE_LAYER) return -1;
 	const Tile *t=get(x,y);
 	if (!t) return -1;
-	return t->tileno[z];
+	return t->layer[z].tileno;
 }
 
 ppl7::grafix::Point Plane::getOccupationOrigin(int x, int y, int z)
 {
 	const Tile *t=get(x,y);
 	if (t==NULL || z<0 || z>=MAX_TILE_LAYER) return ppl7::grafix::Point(-1, -1);
-	return ppl7::grafix::Point(t->origin_x[z], t->origin_y[z]);
+	return ppl7::grafix::Point(t->layer[z].origin_x, t->layer[z].origin_y);
 }
 
 void Plane::setVisible(bool visible)
@@ -166,12 +166,12 @@ void Plane::save(ppl7::FileObject &file, unsigned char id) const
 				ppl7::Poke8(buffer+p+4,(int)t->block_background);
 				p+=5;
 				for(int z=0;z<MAX_TILE_LAYER;z++) {
-					ppl7::Poke16(buffer+p,t->tileset[z]);
-					ppl7::Poke16(buffer+p+2,t->tileno[z]);
-					ppl7::Poke16(buffer+p+4,t->origin_x[z]);
-					ppl7::Poke16(buffer+p+6,t->origin_y[z]);
-					ppl7::Poke8(buffer+p+8,t->occupation[z]);
-					ppl7::Poke8(buffer+p+9,t->showStuds[z]);
+					ppl7::Poke16(buffer+p,t->layer[z].tileset);
+					ppl7::Poke16(buffer+p+2,t->layer[z].tileno);
+					ppl7::Poke16(buffer+p+4,t->layer[z].origin_x);
+					ppl7::Poke16(buffer+p+6,t->layer[z].origin_y);
+					ppl7::Poke8(buffer+p+8,t->layer[z].occupation);
+					ppl7::Poke8(buffer+p+9,t->layer[z].showStuds);
 					p+=10;
 				}
 			}
