@@ -156,7 +156,9 @@ void Game::init()
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player();
-	player->move(830,692);
+	player->move(3300,1938);
+	WorldCoords.x=3300-viewport.width()/2;
+	WorldCoords.y=1938-viewport.height()/2;
 	//player->setGameWindow(sdl.getClientWindow());
 
 	player->setSpriteResource(resources.Sprite_George);
