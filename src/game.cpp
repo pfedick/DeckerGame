@@ -37,21 +37,9 @@ Game::~Game()
 }
 
 
-static void loadBricks(SDL &sdl, SpriteTexture &sprites,SpriteTexture &ui, const ppl7::grafix::Color &tint)
-{
-	sprites.enableOutlines(false);
-	sprites.enableMemoryBuffer(false);
-	sprites.load(sdl, "res/bricks_white.tex",tint);
-	ui.enableSDLBuffer(false);
-	ui.enableMemoryBuffer(true);
-	ui.load(sdl,"res/bricks_white_ui.tex",tint);
-}
-
 void Game::loadGrafix()
 {
 	resources.Sprite_George.load(sdl, "res/george.tex");
-	//printf ("Sprites loaded: %d\n",Sprite_Charlie.numSprites());
-	//resources.Tiles.load(sdl, "res/bricks.tex", ppl7::grafix::Color(230,220,0,255));
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
@@ -60,24 +48,8 @@ void Game::loadGrafix()
 	resources.Sprites_Nature.enableMemoryBuffer(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
 
-	resources.Bricks_White.enableOutlines(true);
-	resources.Bricks_White.enableMemoryBuffer(true);
-	resources.Bricks_White.load(sdl, "res/bricks_white.tex");
-	resources.Bricks_White_Ui.enableSDLBuffer(false);
-	resources.Bricks_White_Ui.enableMemoryBuffer(true);
-	resources.Bricks_White_Ui.load(sdl, "res/bricks_white_ui.tex");
-
-	resources.Bricks_SolidColor.load(sdl, "res/bricks_solid.tex");
-	resources.Bricks_SolidColor_Ui.enableMemoryBuffer(true);
-	resources.Bricks_SolidColor_Ui.load(sdl, "res/bricks_solid_ui.tex");
-
-	brick_occupation.createFromSpriteTexture(resources.Bricks_White, TILE_WIDTH, TILE_HEIGHT);
-	loadBricks(sdl,resources.Bricks_MediumGrey, resources.Bricks_MediumGrey_Ui,ppl7::grafix::Color(0xa0,0xa5,0xa9,255));
-	loadBricks(sdl,resources.Bricks_DarkGrey, resources.Bricks_DarkGrey_Ui,ppl7::grafix::Color(0x6c,0x6c,0x68,255));
-	loadBricks(sdl,resources.Bricks_Green, resources.Bricks_Green_Ui,ppl7::grafix::Color(0x23,0x78,0x41,255));
-	loadBricks(sdl,resources.Bricks_Red, resources.Bricks_Red_Ui,ppl7::grafix::Color(0xc9, 0x1a, 0x09,255));
-
-
+	resources.loadBricks(sdl);
+	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
 	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
@@ -164,16 +136,10 @@ void Game::init()
 	player->setSpriteResource(resources.Sprite_George);
 
 	//level.create(255,255);
-	level.setTileset(1, &resources.Bricks_SolidColor);
-	level.setTileset(2, &resources.Bricks_White);
-	level.setTileset(3, &resources.Bricks_MediumGrey);
-	level.setTileset(4, &resources.Bricks_DarkGrey);
-	level.setTileset(5, &resources.Bricks_Green);
-	level.setTileset(6, &resources.Bricks_Red);
-
-	//level.setTileset(2, &resources.Tiles_Nature);
+	for (int i=1;i<=resources.getMaxTilesetId();i++) {
+		level.setTileset(i, &resources.bricks[i].world);
+	}
 	level.setSpriteset(1, &resources.Sprites_Nature);
-	level.setSpriteset(2, &resources.Bricks_White);
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
 	//level.setRenderer
@@ -370,14 +336,9 @@ void Game::showTilesSelection()
 		closeTileSelection();
 	} else {
 		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		tiles_selection->setTileSet(1,"Solid colors", &resources.Bricks_SolidColor_Ui);
-		tiles_selection->setTileSet(2,"Bricks white", &resources.Bricks_White_Ui);
-		tiles_selection->setTileSet(3,"Bricks medium grey", &resources.Bricks_MediumGrey_Ui);
-		tiles_selection->setTileSet(4,"Bricks dark grey", &resources.Bricks_DarkGrey_Ui);
-		tiles_selection->setTileSet(5,"Bricks green", &resources.Bricks_Green_Ui);
-		tiles_selection->setTileSet(6,"Bricks red", &resources.Bricks_Red_Ui);
-
-		//tiles_selection->setTileSet(2,"Nature", &resources.Tiles_Nature);
+		for (int i=1;i<=resources.getMaxTilesetId();i++) {
+			tiles_selection->setTileSet(i, resources.bricks[i].name, &resources.bricks[i].ui);
+		}
 		this->addChild(tiles_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -410,8 +371,6 @@ void Game::showSpriteSelection()
 	} else {
 		sprite_selection=new Decker::ui::SpriteSelection(0,33,300,statusbar->y()-2-33,this);
 		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
-		sprite_selection->setSpriteSet(2,"Bricks white", &resources.Bricks_White);
-		//sprite_selection->setTileSet(2,"Nature", &resources.uiTilesNature);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;

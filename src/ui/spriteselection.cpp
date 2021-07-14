@@ -7,7 +7,7 @@ namespace Decker::ui {
 SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game *game)
 : ppl7::tk::Frame(x,y,width,height)
 {
-	for (int i=0;i<=MAX_TILESETS;i++)
+	for (int i=0;i<=MAX_SPRITESETS;i++)
 		tilesets[i]=NULL;
 	tileset=1;
 	this->game=game;
@@ -56,7 +56,7 @@ void SpriteSelection::setCurrentLayer(int layer)
 
 void SpriteSelection::setCurrentSpriteSet(int id)
 {
-	if (id<1 || id>MAX_TILESETS) return;
+	if (id<1 || id>MAX_SPRITESETS) return;
 	if (tilesets[id]==NULL) return;
 	tileset=id;
 	tilesframe->setSprites(tilesets[id]);
@@ -70,7 +70,7 @@ int SpriteSelection::currentSpriteSet() const
 
 void SpriteSelection::setSpriteSet(int id, const ppl7::String &name, SpriteTexture *sprites)
 {
-	if (id<1 || id>MAX_TILESETS) return;
+	if (id<1 || id>MAX_SPRITESETS) return;
 	tilesets[id]=sprites;
 	tilesetName[id]=name;
 	tileset_combobox->add(name,ppl7::ToString("%d",id));

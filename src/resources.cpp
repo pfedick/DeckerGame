@@ -58,6 +58,16 @@ Resources::BrickResource::BrickResource()
 	ldraw_material=-1;
 }
 
+Resources::Resources()
+{
+	max_tileset_id=0;
+}
+
+int Resources::getMaxTilesetId() const
+{
+	return max_tileset_id;
+}
+
 void Resources::loadBricks(SDL &sdl, int tileset, const ppl7::String &name, int ldraw_material, const ppl7::grafix::Color &tint)
 {
 	if (tileset>=MAX_TILESETS) return;
@@ -69,6 +79,7 @@ void Resources::loadBricks(SDL &sdl, int tileset, const ppl7::String &name, int 
 	bricks[tileset].ui.enableSDLBuffer(false);
 	bricks[tileset].ui.enableMemoryBuffer(true);
 	bricks[tileset].ui.load(sdl,"res/bricks_white_ui.tex",tint);
+	if (tileset>max_tileset_id) max_tileset_id=tileset;
 }
 
 void Resources::loadBricks(SDL &sdl)
@@ -92,7 +103,7 @@ void Resources::loadBricks(SDL &sdl)
 	loadBricks(sdl, 6, "Red", 4, ppl7::grafix::Color(161,21,7,255));
 	loadBricks(sdl, 7, "Yellow", 3, ppl7::grafix::Color(0xf2, 0xcd, 0x37,0xff));
 	loadBricks(sdl, 8, "Blue", 1, ppl7::grafix::Color(0x00, 0x55, 0xbf,0xff));
-	loadBricks(sdl, 9, "Black", 1, ppl7::grafix::Color(0x05, 0x31, 0x1d,0xff));
+	loadBricks(sdl, 9, "Black", 1, ppl7::grafix::Color(14, 25, 33,0xff));
 	loadBricks(sdl, 10, "Dark Blue", 63, ppl7::grafix::Color(0x0a, 0x34, 0x63,0xff));
 	loadBricks(sdl, 11, "Medium Blue", 43, ppl7::grafix::Color(0x5a, 0x93, 0xdb,0xff));
 	loadBricks(sdl, 12, "Brown", 6, ppl7::grafix::Color(0x58, 0x39,0x27,0xff));

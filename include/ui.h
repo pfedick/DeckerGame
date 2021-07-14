@@ -9,18 +9,18 @@
 class Game;
 class SpriteTexture;
 
+#ifndef MAX_TILESETS
 #define MAX_TILESETS 30
+#endif
+
+
+#ifndef MAX_SPRITESETS
 #define MAX_SPRITESETS 10
+#endif
+
 
 namespace Decker {
 namespace ui {
-
-/*
-using namespace ppl7;
-using namespace ppl7::grafix;
-using namespace ppl7::tk;
-*/
-
 
 class StatusBar : public ppl7::tk::Frame
 {

@@ -5,8 +5,8 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
-#include "ui.h"
 #include <map>
+#include "ui.h"
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -18,6 +18,8 @@
 #endif
 
 #define MAX_TILE_LAYER 4
+
+
 
 
 #define STR_VALUE(arg)      #arg
@@ -314,31 +316,13 @@ class Resources
 {
 private:
 	void loadBricks(SDL &sdl, int tileset, const ppl7::String &name, int ldraw_material, const ppl7::grafix::Color &tint);
-
+	int max_tileset_id;
 public:
 	SpriteTexture Sprite_George;
 	SpriteTexture Cursor;
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
 	SpriteTexture uiSpritesNature;
-
-	SpriteTexture Bricks_SolidColor;
-	SpriteTexture Bricks_SolidColor_Ui;
-
-	SpriteTexture Bricks_White;
-	SpriteTexture Bricks_White_Ui;
-
-	SpriteTexture Bricks_MediumGrey;
-	SpriteTexture Bricks_MediumGrey_Ui;
-
-	SpriteTexture Bricks_DarkGrey;
-	SpriteTexture Bricks_DarkGrey_Ui;
-
-	SpriteTexture Bricks_Green;
-	SpriteTexture Bricks_Green_Ui;
-
-	SpriteTexture Bricks_Red;
-	SpriteTexture Bricks_Red_Ui;
 
 	class BrickResource
 	{
@@ -349,8 +333,10 @@ public:
 		SpriteTexture ui;
 		BrickResource();
 	};
+	Resources();
 	BrickResource bricks[MAX_TILESETS];
 	void loadBricks(SDL &sdl);
+	int getMaxTilesetId() const;
 };
 class Player;
 
