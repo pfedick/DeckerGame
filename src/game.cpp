@@ -222,6 +222,7 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 	if (player)
 		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
 	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
+	statusbar->setPlayerState(player->getState());
 }
 
 void Game::updateWorldCoords()

@@ -37,14 +37,21 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 	this->addChild(world_coords);
 
 	this->addChild(new ppl7::tk::Label (490,0,55,32,"Player:"));
-	player_coords=new ppl7::tk::Label (550,0,80,32,"?", ppl7::tk::Frame::Inset);
+	player_coords=new ppl7::tk::Label (550,0,120,32,"?", ppl7::tk::Frame::Inset);
 	player_coords->setFont(font_bold);
 	this->addChild(player_coords);
 
-	this->addChild(new ppl7::tk::Label (640,0,140,32,"Sprites total / visible:"));
-	sprite_count=new ppl7::tk::Label (780,0,120,32,"?", ppl7::tk::Frame::Inset);
+	this->addChild(new ppl7::tk::Label (660,0,140,32,"Sprites total / visible:"));
+	sprite_count=new ppl7::tk::Label (800,0,120,32,"?", ppl7::tk::Frame::Inset);
 	sprite_count->setFont(font_bold);
 	this->addChild(sprite_count);
+
+	this->addChild(new ppl7::tk::Label (920,0,100,32,"Player state:"));
+	player_state=new ppl7::tk::Label (1020,0,300,32,"?", ppl7::tk::Frame::Inset);
+	player_state->setFont(font_bold);
+	this->addChild(player_state);
+
+
 
 
 	label=new ppl7::tk::Label (width-112,0,50,32,"Zeit:");
@@ -90,6 +97,11 @@ void StatusBar::timerEvent(ppl7::tk::Event *event)
 {
 	ppl7::DateTime now=ppl7::DateTime::currentTime();
 	time_label->setText(now.get("%H:%M:%S"));
+}
+
+void StatusBar::setPlayerState(const ppl7::String &state)
+{
+	player_state->setText(state);
 }
 
 } //EOF namespace Decker

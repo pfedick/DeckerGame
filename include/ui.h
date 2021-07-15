@@ -32,6 +32,7 @@ private:
 	ppl7::tk::Label *mouse_buttons;
 	ppl7::tk::Label *time_label;
 	ppl7::tk::Label *sprite_count;
+	ppl7::tk::Label *player_state;
 
 
 public:
@@ -42,6 +43,7 @@ public:
 	void setWorldCoords(const ppl7::grafix::Point &p);
 	void setPlayerCoords(const ppl7::grafix::Point &p);
 	void setSpriteCount(size_t total, size_t visible);
+	void setPlayerState(const ppl7::String &state);
 
 	// Events
 	void timerEvent(ppl7::tk::Event *event);

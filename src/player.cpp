@@ -97,11 +97,28 @@ Player::Player()
 	gravity=0.0f;
 	jump_climax=0.0f;
 	acceleration_jump=0.0f;
+	time=0.0f;
 }
 
 Player::~Player()
 {
 
+}
+static const char* movement_string[9]={"Stand",
+		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
+		"Jump","Falling"};
+
+static const char* orientation_string[4]={"Left",
+		"Right", "Front", "Back"};
+
+
+ppl7::String Player::getState() const
+{
+	ppl7::String s;
+	s.setf("%s:%s, velocity: %0.3f:%0.3f", movement_string[movement],
+			orientation_string[orientation],
+			velocity_move.x, velocity_move.y);
+	return s;
 }
 
 void Player::setSpriteResource(const SpriteTexture &resource)
@@ -202,6 +219,7 @@ void Player::update(double time, const TileTypePlane &world)
 	}
 	if (movement==Turn) {
 		if (!animation.isFinished()) return;
+		printf ("debug 2\n");
 		movement=Stand;
 		orientation=turnTarget;
 		velocity_move.stop();
@@ -235,18 +253,47 @@ void Player::update(double time, const TileTypePlane &world)
 				orientation=Right;
 				animation.start(run_cycle_right,sizeof(run_cycle_right)/sizeof(int),true,0);
 			}
-		} else if (keys==KeyboardKeys::Up) {
+		} else if (keys==KeyboardKeys::Up && movement!=Falling && movement!=Jump) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
 				movement=ClimbUp;
 				orientation=Back;
 			} else {
 				if (movement!=Jump) {
 					movement=Jump;
-					orientation=Back;
-					jump_climax=time+1.0f;
-					acceleration_jump=0.1f;
+					orientation=Front;
+					jump_climax=time+0.5f;
+					acceleration_jump=0.5f;
+					animation.setStaticFrame(42);
 				}
 			}
+		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left) && movement!=Falling && movement!=Jump) {
+			movement=Jump;
+			orientation=Left;
+			jump_climax=time+0.5f;
+			acceleration_jump=0.5f;
+			velocity_move.x=-2;
+			animation.setStaticFrame(38);
+		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Right) && movement!=Falling && movement!=Jump) {
+			movement=Jump;
+			orientation=Right;
+			jump_climax=time+0.5f;
+			acceleration_jump=0.5f;
+			velocity_move.x=2;
+			animation.setStaticFrame(39);
+		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left|KeyboardKeys::Shift) && movement!=Falling && movement!=Jump) {
+			movement=Jump;
+			orientation=Left;
+			jump_climax=time+0.5f;
+			acceleration_jump=0.5f;
+			velocity_move.x=-6;
+			animation.setStaticFrame(38);
+		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Right|KeyboardKeys::Shift) && movement!=Falling && movement!=Jump) {
+			movement=Jump;
+			orientation=Right;
+			jump_climax=time+0.5f;
+			acceleration_jump=0.5f;
+			velocity_move.x=6;
+			animation.setStaticFrame(39);
 		} else if (keys==KeyboardKeys::Down) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
 				movement=ClimbDown;
@@ -254,9 +301,10 @@ void Player::update(double time, const TileTypePlane &world)
 			}
 
 		} else {
-			if (movement!=Stand) {
+			if (movement!=Stand && movement!=Jump) {
+				printf ("debug 1\n");
 				stand();
-			} else if (time>idle_timeout && orientation!=Front) {
+			} else if (movement==Stand && time>idle_timeout && orientation!=Front) {
 				turn(Front);
 
 			}
@@ -283,17 +331,23 @@ void Player::updateMovement()
 	} else if (movement==ClimbDown) {
 		velocity_move.y=4;
 	} else if (movement==Jump) {
+		printf ("we are jumping... ");
 		if (jump_climax>time) {
-			if (acceleration_jump<8.0f) acceleration_jump+=0.02f;
-			if (acceleration_jump>8.0f) acceleration_jump=8.0f;
+			if (acceleration_jump<2.0f) acceleration_jump+=0.02f;
+			if (acceleration_jump>2.0f) acceleration_jump=8.0f;
+			printf ("under climax, accelerating %0.3f ", acceleration_jump);
 		} else {
 			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/5.0;
-			if (acceleration_jump<0) {
+			if (acceleration_jump<0.1) {
 				acceleration_jump=0;
+				movement=Falling;
+				printf ("done\n");
 			}
+			printf ("over time, decelerating %0.3f", acceleration_jump);
 		}
 		velocity_move.y-=acceleration_jump;
-
+		if (velocity_move.y<-4.0f) velocity_move.y=-4.0f;
+		printf ("\n");
 
 	} else {
 		velocity_move.y=0;
@@ -344,6 +398,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			for (int cy=1;cy<5;cy++) {
 				if (collision_matrix[0][cy]==TileType::Blocking) {
 					velocity_move.stop();
+					printf ("debug 3a\n");
 					stand();
 				}
 			}
@@ -351,6 +406,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			for (int cy=1;cy<5;cy++) {
 				if (collision_matrix[3][cy]==TileType::Blocking) {
 					velocity_move.stop();
+					printf ("debug 3b\n");
 					stand();
 				}
 			}
@@ -360,6 +416,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 
 void Player::updatePhysics(const TileTypePlane &world)
 {
+	if (movement==Jump) return;
 	bool match=false;
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
