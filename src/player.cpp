@@ -117,6 +117,7 @@ void Player::turn(PlayerOrientation target)
 {
 	movement=Turn;
 	turnTarget=target;
+	velocity.setPoint(0,0);
 	if (orientation==Front) {
 		if (target==Left) {
 			animation.start(turn_from_mid_to_left,sizeof(turn_from_mid_to_left)/sizeof(int),false,0);
@@ -181,6 +182,12 @@ void Player::update(double time)
 				orientation=Right;
 				animation.start(run_cycle_right,sizeof(run_cycle_right)/sizeof(int),true,0);
 			}
+		} else if (state[SDL_SCANCODE_UP]) {
+			movement=ClimbUp;
+			orientation=Back;
+		} else if (state[SDL_SCANCODE_DOWN]) {
+					movement=ClimbDown;
+					orientation=Back;
 
 		} else {
 			if (movement!=Stand) {
@@ -196,5 +203,36 @@ void Player::update(double time)
 			}
 		}
 	}
+	updateMovement();
 
+}
+
+void Player::updateMovement()
+{
+	if (movement==Stand) {
+		velocity.setPoint(0,0);
+		return;
+	}
+	if (movement==Walk) {
+		if (orientation==Left) {
+			velocity.x=-2;
+		} else if (orientation==Right) {
+			velocity.x=2;
+		}
+	} else if (movement==Run) {
+		if (orientation==Left) {
+			velocity.x=-4;
+		} else if (orientation==Right) {
+			velocity.x=4;
+		}
+	} else if (movement==ClimbUp) {
+		velocity.x=0;
+		velocity.y=-2;
+	} else if (movement==ClimbDown) {
+		velocity.x=0;
+		velocity.y=2;
+
+	}
+	x+=velocity.x;
+	y+=velocity.y;
 }

@@ -436,8 +436,7 @@ private:
 	void closeTileSelection();
 	void closeSpriteSelection();
 	void selectSprite(const ppl7::grafix::Point &mouse);
-
-	ppl7::grafix::Point PlayerCoords;
+	void updateWorldCoords();
 
 	Player *player;
 

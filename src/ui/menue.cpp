@@ -80,6 +80,10 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	this->addChild(visible_plane_far_checkbox);
 
 
+	world_follows_player_checkbox=new CheckBox(width-280,0,180,s.height,"World follows player", true);
+	this->addChild(world_follows_player_checkbox);
+
+
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
@@ -145,6 +149,13 @@ bool MainMenue::frontPlaneVisible() const
 bool MainMenue::farPlaneVisible() const
 {
 	if (visible_plane_far_checkbox) return visible_plane_far_checkbox->checked();
+	return true;
+}
+
+
+bool MainMenue::worldFollowsPlayer() const
+{
+	if (world_follows_player_checkbox) return world_follows_player_checkbox->checked();
 	return true;
 }
 

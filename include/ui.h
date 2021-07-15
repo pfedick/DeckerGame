@@ -69,6 +69,8 @@ private:
 
 	ComboBox *active_plane_combobox;
 
+	CheckBox *world_follows_player_checkbox;
+
 	Game *game;
 
 
@@ -85,6 +87,7 @@ public:
 	bool playerPlaneVisible() const;
 	bool frontPlaneVisible() const;
 	bool farPlaneVisible() const;
+	bool worldFollowsPlayer() const;
 
 };
 

@@ -115,9 +115,6 @@ void Game::init()
 	desktopSize=sdl.getWindowSize();
 	viewport=sdl.getClientWindow();
 	initUi();
-	PlayerCoords.x=desktopSize.width/2;
-	PlayerCoords.y=desktopSize.height/2;
-
 	gui_font.setName("Default");
 	gui_font.setSize(12);
 	gui_font.setBold(true);
@@ -129,9 +126,7 @@ void Game::init()
 	if (player) delete player;
 	player=new Player();
 	player->move(3300,1938);
-	WorldCoords.x=3300-viewport.width()/2;
-	WorldCoords.y=1938-viewport.height()/2;
-	//player->setGameWindow(sdl.getClientWindow());
+	updateWorldCoords();
 
 	player->setSpriteResource(resources.Sprite_George);
 
@@ -223,9 +218,20 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 	statusbar->setFps(fps.getFPS());
 	statusbar->setMouse(mouse);
 	statusbar->setWorldCoords(WorldCoords);
-	statusbar->setPlayerCoords(PlayerCoords);
+	if (player)
+		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
 	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
+}
 
+void Game::updateWorldCoords()
+{
+	if (!player) return;
+	int mx=viewport.width()/2;
+	int my=viewport.height()/2;
+	WorldCoords.x=player->x-mx;
+	WorldCoords.y=player->y-my;
+	if (WorldCoords.x<0) WorldCoords.x=0;
+	if (WorldCoords.y<0) WorldCoords.y=0;
 }
 
 void Game::run()
@@ -238,7 +244,12 @@ void Game::run()
 		player->update(now);
 		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
+		if (mainmenue->worldFollowsPlayer())
+			updateWorldCoords();
 		updateUi(mouse);
+
+
+
 		// Handle Mouse events inside World
 		if (mouse.p.inside(viewport)) {
 			moveWorldOnMouseClick(mouse);

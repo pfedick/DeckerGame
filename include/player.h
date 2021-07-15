@@ -28,7 +28,6 @@ public:
 class Player
 {
 private:
-	int x,y;
 	ppl7::grafix::Point velocity;
 	const SpriteTexture *sprite_resource;
 	ppl7::grafix::Rect world;
@@ -43,8 +42,10 @@ private:
 		Walk,
 		Run,
 		Pickup,
-		Climb,
-		Jump
+		ClimbUp,
+		ClimbDown,
+		Jump,
+		Falling
 	};
 	enum PlayerOrientation {
 		Left,
@@ -57,8 +58,10 @@ private:
 	PlayerOrientation turnTarget;
 
 	void turn(PlayerOrientation target);
+	void updateMovement();
 
 public:
+	int x,y;
 	Player();
 	~Player();
 	void setSpriteResource(const SpriteTexture &resource);
