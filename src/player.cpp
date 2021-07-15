@@ -95,6 +95,8 @@ Player::Player()
 	acceleration_airstream=0.0f;
 	acceleration_gravity=0.0f;
 	gravity=0.0f;
+	jump_climax=0.0f;
+	acceleration_jump=0.0f;
 }
 
 Player::~Player()
@@ -164,8 +166,30 @@ void Player::turn(PlayerOrientation target)
 	}
 }
 
+int Player::getKeyboardMatrix(const Uint8 *state)
+{
+	int matrix=0;
+	if (state[SDL_SCANCODE_LEFT]) matrix|=KeyboardKeys::Left;
+	if (state[SDL_SCANCODE_RIGHT]) matrix|=KeyboardKeys::Right;
+	if (state[SDL_SCANCODE_UP]) matrix|=KeyboardKeys::Up;
+	if (state[SDL_SCANCODE_DOWN]) matrix|=KeyboardKeys::Down;
+	if (state[SDL_SCANCODE_LSHIFT]) matrix|=KeyboardKeys::Shift;
+	return matrix;
+}
+
+void Player::stand()
+{
+	movement=Stand;
+	if (orientation==Left) animation.setStaticFrame(0);
+	else if (orientation==Right) animation.setStaticFrame(9);
+	else if (orientation==Front) animation.setStaticFrame(27);
+	else if (orientation==Back) animation.setStaticFrame(28);
+	idle_timeout=time+4.0;
+}
+
 void Player::update(double time, const TileTypePlane &world)
 {
+	this->time=time;
 	updateMovement();
 	checkCollisionWithWorld(world);
 	updatePhysics(world);
@@ -186,49 +210,52 @@ void Player::update(double time, const TileTypePlane &world)
 	if (time>next_keycheck) {
 		next_keycheck=time+0.1f;
 		const Uint8 *state = SDL_GetKeyboardState(NULL);
-		if (state[SDL_SCANCODE_LEFT] && not state[SDL_SCANCODE_LSHIFT]) {
+		int keys=getKeyboardMatrix(state);
+		if (keys==KeyboardKeys::Left) {
 			if (orientation!=Left) { turn(Left); return;}
 			if (movement!=Walk) {
 				movement=Walk;
 				animation.start(walk_cycle_left,sizeof(walk_cycle_left)/sizeof(int),true,0);
-				//animation.start(run_cycle_left,sizeof(run_cycle_left)/sizeof(int),true,0);
 			}
-		} else if (state[SDL_SCANCODE_LEFT] && state[SDL_SCANCODE_LSHIFT]) {
-			//if (orientation!=Left) { turn(Left); return;}
+		} else if (keys==(KeyboardKeys::Left|KeyboardKeys::Shift)) {
 			if (movement!=Run || orientation!=Left ) {
 				movement=Run;
 				orientation=Left;
 				animation.start(run_cycle_left,sizeof(run_cycle_left)/sizeof(int),true,0);
 			}
-		} else if (state[SDL_SCANCODE_RIGHT] && not state[SDL_SCANCODE_LSHIFT]) {
+		} else if (keys==KeyboardKeys::Right) {
 			if (orientation!=Right) { turn(Right); return;}
 			if (movement!=Walk) {
 				movement=Walk;
 				animation.start(walk_cycle_right,sizeof(walk_cycle_right)/sizeof(int),true,0);
-				//animation.start(run_cycle_left,sizeof(run_cycle_left)/sizeof(int),true,0);
 			}
-		} else if (state[SDL_SCANCODE_RIGHT] && state[SDL_SCANCODE_LSHIFT]) {
-			//if (orientation!=Right) { turn(Right); return;}
+		} else if (keys==(KeyboardKeys::Right|KeyboardKeys::Shift)) {
 			if (movement!=Run  || orientation!=Right) {
 				movement=Run;
 				orientation=Right;
 				animation.start(run_cycle_right,sizeof(run_cycle_right)/sizeof(int),true,0);
 			}
-		} else if (state[SDL_SCANCODE_UP]) {
-			movement=ClimbUp;
-			orientation=Back;
-		} else if (state[SDL_SCANCODE_DOWN]) {
-					movement=ClimbDown;
+		} else if (keys==KeyboardKeys::Up) {
+			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
+				movement=ClimbUp;
+				orientation=Back;
+			} else {
+				if (movement!=Jump) {
+					movement=Jump;
 					orientation=Back;
+					jump_climax=time+1.0f;
+					acceleration_jump=0.1f;
+				}
+			}
+		} else if (keys==KeyboardKeys::Down) {
+			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
+				movement=ClimbDown;
+				orientation=Back;
+			}
 
 		} else {
 			if (movement!=Stand) {
-				movement=Stand;
-				if (orientation==Left) animation.setStaticFrame(0);
-				else if (orientation==Right) animation.setStaticFrame(9);
-				else if (orientation==Front) animation.setStaticFrame(27);
-				else if (orientation==Back) animation.setStaticFrame(28);
-				idle_timeout=time+4.0;
+				stand();
 			} else if (time>idle_timeout && orientation!=Front) {
 				turn(Front);
 
@@ -255,6 +282,18 @@ void Player::updateMovement()
 		velocity_move.y=-4;
 	} else if (movement==ClimbDown) {
 		velocity_move.y=4;
+	} else if (movement==Jump) {
+		if (jump_climax>time) {
+			if (acceleration_jump<8.0f) acceleration_jump+=0.02f;
+			if (acceleration_jump>8.0f) acceleration_jump=8.0f;
+		} else {
+			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/5.0;
+			if (acceleration_jump<0) {
+				acceleration_jump=0;
+			}
+		}
+		velocity_move.y-=acceleration_jump;
+
 
 	} else {
 		velocity_move.y=0;
@@ -300,17 +339,19 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		y--;
 	}
 
-	if (movement==Walk || movement==Run) {
+	if (movement==Walk || movement==Run || movement==Jump) {
 		if (orientation==Left) {
 			for (int cy=1;cy<5;cy++) {
 				if (collision_matrix[0][cy]==TileType::Blocking) {
 					velocity_move.stop();
+					stand();
 				}
 			}
 		} else if (orientation==Right) {
 			for (int cy=1;cy<5;cy++) {
 				if (collision_matrix[3][cy]==TileType::Blocking) {
 					velocity_move.stop();
+					stand();
 				}
 			}
 		}

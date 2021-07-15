@@ -41,6 +41,17 @@ public:
 	}
 
 };
+class KeyboardKeys
+{
+public:
+	enum {
+		Left=1,
+		Right=2,
+		Up=4,
+		Down=8,
+		Shift=16,
+	};
+};
 
 class Player
 {
@@ -48,6 +59,7 @@ private:
 	Velocity velocity_move, acceleration;
 	float gravity, acceleration_gravity;
 	float acceleration_airstream;
+	float acceleration_jump;
 	const SpriteTexture *sprite_resource;
 	const SpriteTexture *tiletype_resource;
 
@@ -55,6 +67,8 @@ private:
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
+	double jump_climax;
+	double time;
 	AnimationCycle animation;
 
 	enum PlayerMovement {
@@ -79,9 +93,11 @@ private:
 	PlayerOrientation turnTarget;
 
 	void turn(PlayerOrientation target);
+	void stand();
 	void updateMovement();
 	void checkCollisionWithWorld(const TileTypePlane &world);
 	void updatePhysics(const TileTypePlane &world);
+	int getKeyboardMatrix(const Uint8 *state);
 	int collision_matrix[4][6];
 
 
