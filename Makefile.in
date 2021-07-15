@@ -68,10 +68,13 @@ texmaker: $(TEXMAKER_OBJECTS) ppl7
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) texmaker *.core
+	
+cleanall:
+	-rm -f compile/*.o $(PROGRAM) texmaker *.core
 	cd pplib && $(MAKE) clean
 	
 sprites:
-	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 127 -x res/george
+	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195 -x res/george
 	./texmaker -s "lightwave/Render/tiles/*.png" -t res/tiles.tex -w 512 -h 512 -px 0 -py 0 -x res/tiles
 	./texmaker -s "res/tiletypes/*.png" -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x res/tiletypes
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
