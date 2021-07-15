@@ -45,7 +45,9 @@ public:
 class Player
 {
 private:
-	Velocity velocity_move, velocity_physic, acceleration;
+	Velocity velocity_move, acceleration;
+	float gravity, acceleration_gravity;
+	float acceleration_airstream;
 	const SpriteTexture *sprite_resource;
 	const SpriteTexture *tiletype_resource;
 

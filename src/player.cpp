@@ -92,6 +92,9 @@ Player::Player()
 			collision_matrix[cx][cy]=TileType::NonBlocking;
 		}
 	}
+	acceleration_airstream=0.0f;
+	acceleration_gravity=0.0f;
+	gravity=0.0f;
 }
 
 Player::~Player()
@@ -166,8 +169,8 @@ void Player::update(double time, const TileTypePlane &world)
 	updateMovement();
 	checkCollisionWithWorld(world);
 	updatePhysics(world);
-	x+=velocity_move.x+velocity_physic.x;
-	y+=velocity_move.y+velocity_physic.y;
+	x+=velocity_move.x;
+	y+=velocity_move.y+gravity;
 
 	if (time>next_animation) {
 		next_animation=time+0.056f;
@@ -288,15 +291,12 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 
 	if (collision_matrix[1][5]==TileType::Blocking || collision_matrix[2][5]==TileType::Blocking) {
-		if (velocity_physic.y>0) {
-
-		}
-		acceleration.stop();
-		velocity_physic.stop();
+		acceleration_gravity=0.0f;
+		gravity=0.0f;
 	}
 	if (collision_matrix[1][4]==TileType::Blocking || collision_matrix[2][4]==TileType::Blocking) {
-		acceleration.stop();
-		velocity_physic.stop();
+		acceleration_gravity=0.0f;
+		gravity=0.0f;
 		y--;
 	}
 
@@ -322,29 +322,38 @@ void Player::updatePhysics(const TileTypePlane &world)
 	bool match=false;
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
-			if (acceleration.y<10.0f) acceleration.y+=(0.1f+(acceleration.y/5.0f));
-			if (acceleration.y>10.0f) acceleration.y=10.0f;
-			velocity_physic.y+=acceleration.y;
-			if (velocity_physic.y>10.0f) velocity_physic.y=10.0f;
-			match=true;
-		} else {
-			acceleration.stop();
-			velocity_physic.stop();
+			if (acceleration_gravity<10.0f) acceleration_gravity+=0.2f;
+			if (acceleration_gravity>10.0f) acceleration_gravity=10.0f;
 			match=true;
 		}
-	} else if (collision_matrix[1][4]==TileType::AirStream || collision_matrix[2][4]==TileType::AirStream) {
-		if (acceleration.y<8.0f) acceleration.y+=(0.1f+(acceleration.y/8.0f));
-		if (acceleration.y>8.0f) acceleration.y=8.0f;
-		velocity_physic.y-=acceleration.y;
-		if (velocity_physic.y<-8.0f) velocity_physic.y=-8.0f;
+	}
+	if (acceleration_gravity>0.0f) {
+		if (!match) {
+			acceleration_gravity-=acceleration_gravity/2.0f;
+			if (acceleration_gravity<0.0f) acceleration_gravity=0.0f;
+		}
+		gravity+=acceleration_gravity;
+		if (gravity>10.0f) gravity=10.0f;
+	}
+	match=false;
+	if (collision_matrix[1][4]==TileType::AirStream || collision_matrix[2][4]==TileType::AirStream) {
+		//if (acceleration_airstream<8.0f) acceleration_airstream+=(0.1f+(acceleration_airstream/200.0f));
+		if (acceleration_airstream<8.0f) acceleration_airstream+=0.02f;
+		if (acceleration_airstream>8.0f) acceleration_airstream=8.0f;
 		match=true;
 	}
-	/*
-	if (!match) {
-		if (velocity_physic.y>0)
-		if (acceleration>0)
-		acceleration.stop();
-		velocity_physic.stop();
+	if (acceleration_airstream>0.0f) {
+		if (!match) {
+			acceleration_airstream-=acceleration_airstream/5.0f;
+			if (acceleration_airstream<0.0f) acceleration_airstream=0.0f;
+		}
+		gravity-=acceleration_airstream;
+		if (gravity<-8.0f) gravity=-8.0f;
+
 	}
+	/*
+	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f\n",
+			gravity, acceleration_gravity, acceleration_airstream);
 	*/
+
 }
