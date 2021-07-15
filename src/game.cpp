@@ -125,10 +125,11 @@ void Game::init()
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player();
-	player->move(3300,1938);
+	player->move(3300,1800);
 	updateWorldCoords();
 
 	player->setSpriteResource(resources.Sprite_George);
+	player->setTileTypeResource(resources.TileTypes);
 
 	//level.create(255,255);
 	for (int i=1;i<=resources.getMaxTilesetId();i++) {
@@ -241,7 +242,7 @@ void Game::run()
 	while (!quitGame) {
 		double now=ppl7::GetMicrotime();
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
-		player->update(now);
+		player->update(now, level.TileTypeMatrix);
 		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
