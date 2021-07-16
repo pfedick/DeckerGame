@@ -265,10 +265,12 @@ void Player::update(double time, const TileTypePlane &world)
 			} else {
 				if (movement!=Jump) {
 					movement=Jump;
-					orientation=Front;
 					jump_climax=time+0.1f;
 					acceleration_jump=1.5f;
-					animation.setStaticFrame(42);
+					if (orientation==Front) animation.setStaticFrame(42);
+					else if (orientation==Left) animation.setStaticFrame(40);
+					else if (orientation==Right) animation.setStaticFrame(41);
+					else animation.setStaticFrame(28);
 				}
 			}
 		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left) && movement!=Falling && movement!=Jump) {
@@ -304,6 +306,15 @@ void Player::update(double time, const TileTypePlane &world)
 				movement=ClimbDown;
 				orientation=Back;
 			}
+
+		} else if (keys==(KeyboardKeys::Left) && movement==Jump) {
+			if (!isCollisionLeft()) velocity_move.x=-2;
+		} else if (keys==(KeyboardKeys::Right) && movement==Jump) {
+			if (!isCollisionLeft()) velocity_move.x=2;
+		} else if (keys==(KeyboardKeys::Left|KeyboardKeys::Shift) && movement==Jump) {
+			if (!isCollisionLeft()) velocity_move.x=-6;
+		} else if (keys==(KeyboardKeys::Right|KeyboardKeys::Shift) && movement==Jump) {
+			if (!isCollisionLeft()) velocity_move.x=6;
 
 		} else {
 			if (movement!=Stand && movement!=Jump && movement!=Falling) {
@@ -415,7 +426,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		if (gravity>0.0f) {
 			acceleration_gravity=0.0f;
 			gravity=0.0f;
-			if (movement==Falling || movement==Jump) stand();
+			if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		}
 	}
 	if (collision_matrix[1][4]==TileType::Blocking || collision_matrix[2][4]==TileType::Blocking) {
@@ -426,26 +437,42 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 
 	if (movement==Walk || movement==Run || movement==Jump || movement==Falling) {
 		if (orientation==Left) {
-			for (int cy=1;cy<5;cy++) {
-				if (collision_matrix[0][cy]==TileType::Blocking) {
-					velocity_move.x=0;
-					printf ("debug 3a\n");
-					if (movement!=Jump || movement!=Falling)	stand();
-					else movement=Falling;
-				}
+			if (isCollisionLeft()) {
+				velocity_move.x=0;
+				printf ("debug 3a\n");
+				if (movement!=Jump || movement!=Falling)	stand();
+				else movement=Falling;
 			}
 		} else if (orientation==Right) {
-			for (int cy=1;cy<5;cy++) {
-				if (collision_matrix[3][cy]==TileType::Blocking) {
-					velocity_move.x=0;
-					printf ("debug 3b\n");
-					if (movement!=Jump || movement!=Falling)	stand();
-					else movement=Falling;
+			if (isCollisionRight()) {
+				velocity_move.x=0;
+				printf ("debug 3b\n");
+				if (movement!=Jump || movement!=Falling)	stand();
+				else movement=Falling;
 
-				}
 			}
 		}
 	}
+}
+
+bool Player::isCollisionLeft() const
+{
+	for (int cy=1;cy<5;cy++) {
+		if (collision_matrix[0][cy]==TileType::Blocking) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Player::isCollisionRight() const
+{
+	for (int cy=1;cy<5;cy++) {
+		if (collision_matrix[3][cy]==TileType::Blocking) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void Player::updatePhysics(const TileTypePlane &world)

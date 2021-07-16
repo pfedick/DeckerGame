@@ -100,6 +100,9 @@ private:
 	int getKeyboardMatrix(const Uint8 *state);
 	int collision_matrix[4][6];
 
+	bool isCollisionLeft() const;
+	bool isCollisionRight() const;
+
 
 public:
 	int x,y;
