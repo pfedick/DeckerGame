@@ -49,12 +49,15 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 
 
-	show_grid_checkbox=new CheckBox(500,0,100,s.height,"show grid");
+	show_grid_checkbox=new CheckBox(500,0,62,s.height,"Grid");
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
-	show_tiletypes_checkbox=new CheckBox(600,0,130,s.height,"show tile types");
+	show_tiletypes_checkbox=new CheckBox(562,0,90,s.height,"Tiletypes");
 	show_tiletypes_checkbox->setEventHandler(this);
 	this->addChild(show_tiletypes_checkbox);
+	show_collision_checkbox=new CheckBox(650,0,90,s.height,"Collision");
+	show_collision_checkbox->setEventHandler(this);
+	this->addChild(show_collision_checkbox);
 
 
 	ppl7::tk::Label *label=new ppl7::tk::Label(740,0,100,s.height,"active Plane: ");
@@ -114,6 +117,12 @@ bool MainMenue::showGrid() const
 bool MainMenue::showTileTypes() const
 {
 	if (show_tiletypes_checkbox) return show_tiletypes_checkbox->checked();
+	return false;
+}
+
+bool MainMenue::showCollision() const
+{
+	if (show_collision_checkbox) return show_collision_checkbox->checked();
 	return false;
 }
 

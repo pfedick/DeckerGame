@@ -65,6 +65,7 @@ private:
 	ppl7::tk::Button *edit_enemies_button;
 	CheckBox *show_grid_checkbox;
 	CheckBox *show_tiletypes_checkbox;
+	CheckBox *show_collision_checkbox;
 	CheckBox *visible_plane_player_checkbox;
 	CheckBox *visible_plane_front_checkbox;
 	CheckBox *visible_plane_far_checkbox;
@@ -82,6 +83,7 @@ public:
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
 	bool showGrid() const;
 	bool showTileTypes() const;
+	bool showCollision() const;
 	int currentPlane() const;
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);

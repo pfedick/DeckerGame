@@ -229,7 +229,7 @@ void Game::updateWorldCoords()
 {
 	if (!player) return;
 	int mx=viewport.width()/2;
-	int my=viewport.height()/2;
+	int my=viewport.height()/2+256;
 	WorldCoords.x=player->x-mx;
 	WorldCoords.y=player->y-my;
 	if (WorldCoords.x<0) WorldCoords.x=0;
@@ -282,8 +282,10 @@ void Game::run()
 
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
-		if (mainmenue->playerPlaneVisible())
+		if (mainmenue->playerPlaneVisible()) {
 			if (mainmenue->showTileTypes()) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
+			if (mainmenue->showCollision()) player->drawCollision(renderer, viewport, WorldCoords);
+		}
 		// Grid
 		if (mainmenue->showGrid()) drawGrid();
 
