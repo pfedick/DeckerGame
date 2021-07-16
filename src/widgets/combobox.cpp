@@ -3,12 +3,6 @@
 
 namespace Decker::ui {
 
-ComboBox::ComboBox()
-: ppl7::tk::Widget()
-{
-
-}
-
 ComboBox::ComboBox(int x, int y, int width, int height)
 : ppl7::tk::Widget()
 {
@@ -122,23 +116,30 @@ void ComboBox::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 
 void ComboBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
-	if (event->widget()==dropdown_button) {
-		if (selection) {
-			delete(selection);
-			selection=NULL;
-		} else {
-			// we need the absolute coordinates of this widget on window
-			// and create a new Frame with window as parent and topmost
-
+	if (selection) {
+		delete(selection);
+		selection=NULL;
+	} else {
+		// we need the absolute coordinates of this widget on window
+		// and create a new Frame with window as parent and topmost
+		ppl7::grafix::Point p=absolutePosition();
+		ppl7::tk::Widget *window=getTopmostParent();
+		size_t maxsize=items.size();
+		if (maxsize>10) maxsize=10;
+		selection=new ListWidget(p.x, p.y+this->height(),this->width(),maxsize*30);
+		selection->setTopmost(true);
+		std::list<ComboBoxItem>::const_iterator it;
+		for (it=items.begin();it!=items.end();++it) {
+			selection->add((*it).text, (*it).identifier);
 		}
+		selection->setCurrentText(myCurrentText);
+		window->addChild(selection);
 	}
 }
 
-ComboBox::SelectionFrame::SelectionFrame(int x, int y, int width, int height)
-: ppl7::tk::Frame(x,y,width,height)
-{
 
-}
+
+
 
 } //EOF namespace Decker::ui
 

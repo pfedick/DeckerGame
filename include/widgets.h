@@ -74,6 +74,41 @@ public:
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
+class ListWidget : public ppl7::tk::Frame
+{
+private:
+	Scrollbar *scrollbar;
+	ppl7::String myCurrentText;
+	ppl7::String myCurrentIdentifier;
+	size_t myCurrentIndex;
+	class ListWidgetItem
+	{
+	public:
+		ppl7::String text;
+		ppl7::String identifier;
+		size_t index;
+	};
+	std::list<ListWidgetItem> items;
+public:
+	ListWidget(int x, int y, int width, int height);
+	void setCurrentText(const ppl7::String &text);
+	ppl7::String currentText() const;
+	ppl7::String currentIdentifier() const;
+
+	void setCurrentIndex(size_t index);
+	size_t currentIndex() const;
+
+	void clear();
+
+	void add(const ppl7::String &text, const ppl7::String &identifier=ppl7::String());
+
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
+
+
+};
+
 class ComboBox : public ppl7::tk::Widget
 {
 private:
@@ -81,15 +116,6 @@ private:
 	ppl7::String myCurrentText;
 	ppl7::String myCurrentIdentifier;
 	size_t myCurrentIndex;
-
-	class SelectionFrame : public ppl7::tk::Frame
-	{
-	private:
-	public:
-		SelectionFrame(int x, int y, int width, int height);
-	};
-
-	SelectionFrame *selection;
 
 	class ComboBoxItem
 	{
@@ -100,9 +126,9 @@ private:
 	};
 	std::list<ComboBoxItem> items;
 
+	ListWidget *selection;
 
 public:
-	ComboBox();
 	ComboBox(int x, int y, int width, int height);
 
 	void setCurrentText(const ppl7::String &text);
