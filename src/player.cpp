@@ -380,7 +380,7 @@ void Player::updateMovement()
 
 void Player::checkCollisionWithWorld(const TileTypePlane &world)
 {
-	TileType::Type t;
+	//TileType::Type t;
 	for (int cy=1;cy<5;cy++) {
 		for (int cx=0;cx<4;cx++) {
 			collision_matrix[cx][cy]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
