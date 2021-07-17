@@ -128,6 +128,7 @@ void ComboBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		if (maxsize>10) maxsize=10;
 		selection=new ListWidget(p.x, p.y+this->height(),this->width(),maxsize*30);
 		selection->setTopmost(true);
+		selection->setEventHandler(this);
 		std::list<ComboBoxItem>::const_iterator it;
 		for (it=items.begin();it!=items.end();++it) {
 			selection->add((*it).text, (*it).identifier);
@@ -137,7 +138,20 @@ void ComboBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 	}
 }
 
-
+void ComboBox::valueChangedEvent(ppl7::tk::Event *event, int value)
+{
+	//printf ("ComboBox::valueChangedEvent\n");
+	if (selection!=NULL && event->widget()==selection) {
+		setCurrentIndex(selection->currentIndex());
+		selection->deleteLater();
+		selection=NULL;
+		ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+		ev.setWidget(this);
+		valueChangedEvent(&ev, myCurrentIndex);
+	} else {
+		EventHandler::valueChangedEvent(event, value);
+	}
+}
 
 
 

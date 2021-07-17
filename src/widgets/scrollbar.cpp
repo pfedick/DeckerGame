@@ -38,7 +38,7 @@ void Scrollbar::setSize(int size)
 
 void Scrollbar::setPosition(int position)
 {
-	if (position!=pos && position<=size && position>=0) {
+	if (position!=pos && position<size && position>=0) {
 		pos=position;
 		needsRedraw();
 	}
@@ -67,7 +67,7 @@ void Scrollbar::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		ev.setWidget(this);
 		valueChangedEvent(&ev, pos);
 
-	} else if (event->widget()==down_button && pos<size) {
+	} else if (event->widget()==down_button && pos<size-1) {
 		pos++;
 		needsRedraw();
 		ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
@@ -75,8 +75,6 @@ void Scrollbar::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		valueChangedEvent(&ev, pos);
 	}
 }
-
-
 
 
 } //EOF namespace Decker

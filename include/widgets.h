@@ -81,6 +81,7 @@ private:
 	ppl7::String myCurrentText;
 	ppl7::String myCurrentIdentifier;
 	size_t myCurrentIndex;
+	int mouseOverIndex;
 	class ListWidgetItem
 	{
 	public:
@@ -105,8 +106,10 @@ public:
 	virtual ppl7::String widgetType() const;
 	virtual void paint(ppl7::grafix::Drawable &draw);
 	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
-
-
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void mouseWheelEvent(ppl7::tk::MouseEvent *event);
+	virtual void lostFocusEvent(ppl7::tk::FocusEvent *event);
+	virtual void mouseMoveEvent(ppl7::tk::MouseEvent *event);
 };
 
 class ComboBox : public ppl7::tk::Widget
@@ -146,6 +149,7 @@ public:
 	virtual void paint(ppl7::grafix::Drawable &draw);
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	virtual void mouseWheelEvent(ppl7::tk::MouseEvent *event);
+	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
 };
 
 

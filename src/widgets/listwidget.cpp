@@ -6,12 +6,13 @@ namespace Decker::ui {
 ListWidget::ListWidget(int x, int y, int width, int height)
 : ppl7::tk::Frame(x,y,width, height)
 {
-	setClientOffset(0,0,0,0);
+	setClientOffset(2,2,2,2);
 	scrollbar=NULL;
 	myCurrentIndex=0;
-	scrollbar=new Scrollbar(width-30,0,30,height);
+	scrollbar=new Scrollbar(width-30,0,30,height-4);
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
+	mouseOverIndex=-1;
 }
 
 ppl7::String ListWidget::currentText() const
@@ -59,6 +60,7 @@ void ListWidget::add(const ppl7::String &text, const ppl7::String &identifier)
 	item.index=items.size();
 	items.push_back(item);
 	if (items.size()==1) setCurrentIndex(0);
+	scrollbar->setSize((int)items.size());
 	needsRedraw();
 }
 
@@ -84,33 +86,68 @@ void ListWidget::paint(ppl7::grafix::Drawable &draw)
 	int y=0;
 	ppl7::grafix::Font myFont=style.buttonFont;
 	ppl7::grafix::Color selectionColor=style.frameBackgroundColor*1.4f;
+	ppl7::grafix::Color mouseoverColor=style.frameBackgroundColor*1.7f;
 	std::list<ListWidgetItem>::iterator it;
 	myFont.setColor(style.labelFontColor);
 	myFont.setOrientation(ppl7::grafix::Font::TOP);
-
+	int start=scrollbar->position();
+	int c=0;
 	for (it=items.begin();it!=items.end();++it) {
-		if ((*it).index==myCurrentIndex)
-			draw.fillRect(0, y,w,y+29,selectionColor);
-		ppl7::grafix::Size s=myFont.measure((*it).text);
-		draw.print(myFont,4,y+(30-s.height>>1),(*it).text);
-		draw.line(0,y+30,w,y+30,style.frameBorderColorLight);
-		y+=30;
+		if (start<=c) {
+			if (c==mouseOverIndex)
+				draw.fillRect(0, y,w,y+29,mouseoverColor);
+			else if ((*it).index==myCurrentIndex)
+				draw.fillRect(0, y,w,y+29,selectionColor);
+			ppl7::grafix::Size s=myFont.measure((*it).text);
+			draw.print(myFont,4,y+((30-s.height)>>1),(*it).text);
+			draw.line(0,y+30,w,y+30,style.frameBorderColorLight);
+			y+=30;
+		}
+		c++;
 	}
-	/*
-	draw.cls(style.buttonBackgroundColor);
-	draw.drawRect(0,0,w,h,style.frameBorderColorLight);
-	ppl7::grafix::Font myFont=style.buttonFont;
-	myFont.setColor(style.labelFontColor);
-	myFont.setOrientation(ppl7::grafix::Font::TOP);
-	ppl7::grafix::Size s=myFont.measure(myCurrentText);
-	draw.print(myFont,4,(draw.height()-s.height)>>1,myCurrentText);
-	*/
-
 }
 
 void ListWidget::valueChangedEvent(ppl7::tk::Event *event, int value)
 {
+	if (event->widget()==scrollbar) {
+		this->needsRedraw();
+	} else {
+		EventHandler::valueChangedEvent(event, value);
+	}
+}
 
+void ListWidget::mouseDownEvent(ppl7::tk::MouseEvent *event)
+{
+	size_t index=scrollbar->position()+event->p.y/30;
+	if (index>items.size()) return;
+	setCurrentIndex((size_t)index);
+	ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+	ev.setWidget(this);
+	valueChangedEvent(&ev, myCurrentIndex);
+	needsRedraw();
+}
+
+void ListWidget::mouseWheelEvent(ppl7::tk::MouseEvent *event)
+{
+	if (event->wheel.y<0) {
+		scrollbar->setPosition(scrollbar->position()+1);
+		this->needsRedraw();
+	} else if (event->wheel.y>0) {
+		scrollbar->setPosition(scrollbar->position()-1);
+		this->needsRedraw();
+	}
+}
+
+void ListWidget::mouseMoveEvent(ppl7::tk::MouseEvent *event)
+{
+	mouseOverIndex=scrollbar->position()+event->p.y/30;
+	this->needsRedraw();
+}
+
+
+void ListWidget::lostFocusEvent(ppl7::tk::FocusEvent *event)
+{
+	printf ("ListWidget::lostFocusEvent\n");
 }
 
 } //EOF namespace Decker::ui
