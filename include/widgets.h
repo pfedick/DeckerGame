@@ -26,12 +26,14 @@ private:
 	ppl7::tk::Button *down_button;
 	int size;
 	int pos;
+	int visibleItems;
 
 public:
 	Scrollbar(int x, int y, int width, int height);
 
 	void setSize(int size);
 	void setPosition(int position);
+	void setVisibleItems(int items);
 	int position() const;
 	virtual ppl7::String widgetType() const;
 	virtual void paint(ppl7::grafix::Drawable &draw);

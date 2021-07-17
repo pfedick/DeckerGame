@@ -20,6 +20,7 @@ Scrollbar::Scrollbar(int x, int y, int width, int height) // @suppress("Class me
 	addChild(down_button);
 	size=0;
 	pos=0;
+	visibleItems=0;
 }
 
 ppl7::String Scrollbar::widgetType() const
@@ -44,6 +45,12 @@ void Scrollbar::setPosition(int position)
 	}
 }
 
+void Scrollbar::setVisibleItems(int items)
+{
+	visibleItems=items;
+	needsRedraw();
+}
+
 int Scrollbar::position() const
 {
 	return pos;
@@ -51,10 +58,31 @@ int Scrollbar::position() const
 
 void Scrollbar::paint(ppl7::grafix::Drawable &draw)
 {
-	//Widget::paint(draw);
 	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+	ppl7::grafix::Color light=style.buttonBackgroundColor*1.8f;
+	ppl7::grafix::Color shadow=style.buttonBackgroundColor*0.4f;
+	ppl7::grafix::Color shade1=style.buttonBackgroundColor*1.05f;
+	ppl7::grafix::Color shade2=style.buttonBackgroundColor*0.85f;
+	ppl7::grafix::Drawable indicator=draw.getDrawable(0, 25, draw.width()-2, draw.height()-26);
+	int w=indicator.width()-1;
+	//int h=indicator.height()-1;
+	ppl7::grafix::Rect r1=indicator.rect();
+	if (visibleItems>0 && visibleItems<size) {
+		int pxi=indicator.height()/size;
+		r1.y1=pos*pxi;
+		r1.y2=r1.y1+visibleItems*pxi;
+		if (r1.y2>=indicator.height()) r1.y2=indicator.height()-1;
+	}
+
 	ppl7::grafix::Color scrollarea=style.windowBackgroundColor*1.2f;
-	draw.cls(scrollarea);
+	indicator.cls(scrollarea);
+	indicator.colorGradient(r1,shade1,shade2,1);
+	indicator.line(0,r1.y1,w,r1.y1,light);
+	indicator.line(0,r1.y1,0,r1.y2,light);
+	indicator.line(0,r1.y2,w,r1.y2,shadow);
+	indicator.line(w,r1.y1,w,r1.y2,shadow);
+
+	//draw.fillRect(0,y1,draw.width(),y2,style.frameBorderColorLight);
 }
 
 void Scrollbar::mouseDownEvent(ppl7::tk::MouseEvent *event)

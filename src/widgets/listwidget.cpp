@@ -14,6 +14,7 @@ ListWidget::ListWidget(int x, int y, int width, int height)
 	this->addChild(scrollbar);
 	mouseOverIndex=-1;
 	visibleItems=height/30;
+	scrollbar->setVisibleItems(visibleItems);
 	//printf ("visibleItems=%d\n",visibleItems);
 }
 
@@ -88,7 +89,7 @@ void ListWidget::paint(ppl7::grafix::Drawable &draw)
 	ppl7::tk::Frame::paint(draw);
 	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
 	int w=width()-30;
-	int h=height()-1;
+	//int h=height()-1;
 	int y=0;
 	ppl7::grafix::Font myFont=style.buttonFont;
 	ppl7::grafix::Color selectionColor=style.frameBackgroundColor*1.4f;
@@ -124,13 +125,15 @@ void ListWidget::valueChangedEvent(ppl7::tk::Event *event, int value)
 
 void ListWidget::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
-	size_t index=scrollbar->position()+event->p.y/30;
-	if (index>items.size()) return;
-	setCurrentIndex((size_t)index);
-	ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
-	ev.setWidget(this);
-	valueChangedEvent(&ev, myCurrentIndex);
-	needsRedraw();
+	if (event->p.x<width()-30 && event->widget()==this) {
+		size_t index=scrollbar->position()+event->p.y/30;
+		if (index>items.size()) return;
+		setCurrentIndex((size_t)index);
+		ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+		ev.setWidget(this);
+		valueChangedEvent(&ev, myCurrentIndex);
+		needsRedraw();
+	}
 }
 
 void ListWidget::mouseWheelEvent(ppl7::tk::MouseEvent *event)
@@ -146,8 +149,11 @@ void ListWidget::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 
 void ListWidget::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 {
-	mouseOverIndex=scrollbar->position()+event->p.y/30;
-	this->needsRedraw();
+	if (event->p.x<width()-30 && event->widget()==this) {
+		//printf ("x=%d\n",event->p.x);
+		mouseOverIndex=scrollbar->position()+event->p.y/30;
+		this->needsRedraw();
+	}
 }
 
 
