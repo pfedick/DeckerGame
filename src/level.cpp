@@ -33,7 +33,8 @@ void Level::clear()
 
 void Level::setTileset(int no, SpriteTexture *tileset)
 {
-	if (no<0 || no>9) return;
+	//printf ("Level::setTileset no=%d\n",no);
+	if (no<0 || no>MAX_TILESETS) return;
 	this->tileset[no]=tileset;
 }
 
@@ -185,7 +186,8 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 			for (int x=0;x<tiles_width;x++) {
 				const Tile *tile=plane.get(x+start_x,y+start_y);
 				if (tile) {
-					if (tile->layer[z].tileset<10 && tileset[tile->layer[z].tileset]) {
+					//if (tile->layer[z].tileset>8) printf ("draw %d, %d\n",tile->layer[z].tileset, tile->layer[z].tileno);
+					if (tile->layer[z].tileset<=MAX_TILESETS && tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
 						tileset[tile->layer[z].tileset]->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->layer[z].tileno);
 					}

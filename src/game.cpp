@@ -133,6 +133,7 @@ void Game::init()
 
 	//level.create(255,255);
 	for (int i=1;i<=resources.getMaxTilesetId();i++) {
+		//printf("setTileset %d\n",i);
 		level.setTileset(i, &resources.bricks[i].world);
 	}
 	level.setSpriteset(1, &resources.Sprites_Nature);
@@ -428,7 +429,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 			if (selectedTileSet>1) {
 				BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
 				if (!plane.isOccupied(x, y, currentLayer, occupation)) {
-					//printf ("set %d:%d, layer: %d\n",x,y,currentLayer);
+					//printf ("set %d:%d, layer: %d, tileset: %d, tileno: %d\n",x,y,currentLayer, selectedTileSet,selectedTile );
 					plane.setTile(x,y,
 							currentLayer,
 							selectedTileSet,
