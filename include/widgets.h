@@ -81,6 +81,7 @@ private:
 	ppl7::String myCurrentText;
 	ppl7::String myCurrentIdentifier;
 	size_t myCurrentIndex;
+	size_t visibleItems;
 	int mouseOverIndex;
 	class ListWidgetItem
 	{

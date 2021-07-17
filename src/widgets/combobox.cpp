@@ -133,7 +133,7 @@ void ComboBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		for (it=items.begin();it!=items.end();++it) {
 			selection->add((*it).text, (*it).identifier);
 		}
-		selection->setCurrentText(myCurrentText);
+		selection->setCurrentIndex(myCurrentIndex);
 		window->addChild(selection);
 	}
 }

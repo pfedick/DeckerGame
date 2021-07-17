@@ -13,6 +13,8 @@ ListWidget::ListWidget(int x, int y, int width, int height)
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
 	mouseOverIndex=-1;
+	visibleItems=height/30;
+	//printf ("visibleItems=%d\n",visibleItems);
 }
 
 ppl7::String ListWidget::currentText() const
@@ -40,6 +42,10 @@ void ListWidget::setCurrentIndex(size_t index)
 	for (it=items.begin();it!=items.end();++it) {
 		if ((*it).index==index) {
 			myCurrentIndex=index;
+			size_t start=scrollbar->position();
+			if (start+visibleItems<=index) {
+				scrollbar->setPosition(index);
+			}
 			myCurrentText=(*it).text;
 			myCurrentIdentifier=(*it).identifier;
 			needsRedraw();
