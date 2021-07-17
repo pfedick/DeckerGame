@@ -224,7 +224,7 @@ void Player::update(double time, const TileTypePlane &world)
 	}
 	if (movement==Turn) {
 		if (!animation.isFinished()) return;
-		printf ("debug 2\n");
+		//printf ("debug 2\n");
 		movement=Stand;
 		orientation=turnTarget;
 		velocity_move.stop();
@@ -318,7 +318,7 @@ void Player::update(double time, const TileTypePlane &world)
 
 		} else {
 			if (movement!=Stand && movement!=Jump && movement!=Falling) {
-				printf ("debug 1\n");
+				//printf ("debug 1\n");
 				stand();
 			} else if (movement==Stand && time>idle_timeout && orientation!=Front) {
 				turn(Front);
@@ -347,26 +347,26 @@ void Player::updateMovement()
 	} else if (movement==ClimbDown) {
 		velocity_move.y=4;
 	} else if (movement==Jump) {
-		printf ("we are jumping... ");
+		//printf ("we are jumping... ");
 		if (jump_climax>time) {
 			if (acceleration_jump<2.0f) acceleration_jump+=0.02f;
 			if (acceleration_jump>2.0f) acceleration_jump=8.0f;
-			printf ("under climax, accelerating %0.3f ", acceleration_jump);
+			//printf ("under climax, accelerating %0.3f ", acceleration_jump);
 		} else {
 			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/5.0;
 			if (acceleration_jump<0.01f) {
 				acceleration_jump=0.0;
 				movement=Falling;
-				printf ("done\n");
+				//printf ("done\n");
 			}
-			printf ("over time, decelerating %0.3f", acceleration_jump);
+			//printf ("over time, decelerating %0.3f", acceleration_jump);
 		}
 		velocity_move.y-=acceleration_jump;
 		if (velocity_move.y<-4.0f) velocity_move.y=-4.0f;
 		if (velocity_move.y>-0.1f) {
 			velocity_move.y=0.0f;
 		}
-		printf ("\n");
+		//printf ("\n");
 	} else if (movement==Falling) {
 		if (velocity_move.y<-0.1f) velocity_move.y-=velocity_move.y/3.0f;
 		if (velocity_move.y>-0.1f) velocity_move.y=0;
@@ -401,7 +401,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 
 	if (collision_matrix[1][4]==TileType::Plate2h || collision_matrix[2][4]==TileType::Plate2h) {
 		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+1*(TILE_HEIGHT/3);
-		printf ("Plate2h y=%d, ty=%d\n", y, ty);
+		//printf ("Plate2h y=%d, ty=%d\n", y, ty);
 		if (y>ty) {
 			y-=4;
 			if (y<ty) y=ty;
@@ -411,7 +411,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		}
 	} else if (collision_matrix[1][4]==TileType::Plate1h || collision_matrix[2][4]==TileType::Plate1h) {
 		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+2*(TILE_HEIGHT/3);
-		printf ("Plate1h y=%d, ty=%d\n", y, ty);
+		//printf ("Plate1h y=%d, ty=%d\n", y, ty);
 		if (y>ty) {
 			y-=4;
 			if (y<ty) y=ty;
@@ -439,14 +439,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		if (orientation==Left) {
 			if (isCollisionLeft()) {
 				velocity_move.x=0;
-				printf ("debug 3a\n");
+				//printf ("debug 3a\n");
 				if (movement!=Jump && movement!=Falling)	stand();
 				else movement=Falling;
 			}
 		} else if (orientation==Right) {
 			if (isCollisionRight()) {
 				velocity_move.x=0;
-				printf ("debug 3b\n");
+				//printf ("debug 3b\n");
 				if (movement!=Jump && movement!=Falling)	stand();
 				else movement=Falling;
 
