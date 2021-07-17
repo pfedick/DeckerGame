@@ -35,22 +35,22 @@ they can interact with the player.
 
 ### Things I have to do or figure out
 - create interactive objects / enemies:
-  - locked door
-  - key (used to open a locked door)
-  - gems (can be collected => points)
-  - coins (can be collected  => points)
-  - arrows from wall
-  - speers from ground
-  - rat
-  - scorpion
-  - spider
-  - skeleton
-  - mummy
-  - some kind of angry bird?
-  - dissolving gound
-  - floater
-  - lasers
-  - side wind
+    - locked door
+    - key (used to open a locked door)
+    - gems (can be collected => points)
+    - coins (can be collected  => points)
+    - arrows from wall
+    - speers from ground
+    - rat
+    - scorpion
+    - spider
+    - skeleton
+    - mummy
+    - some kind of angry bird?
+    - dissolving gound
+    - floater
+    - lasers
+    - side wind
   
 - how does sound work with SDL?
 - how to integrate sound track and sound effects
