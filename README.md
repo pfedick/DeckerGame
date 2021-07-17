@@ -13,23 +13,48 @@ It features George Decker, one of the main characters of my Lego(tm) stopmotion 
 
 
 ## What's the status of the game?
-The game is in very early development, which means I know a few things I want to build into it,
-but I have to figure out how to do it.
+The game is in development. I already implemented a user interface to edit the world,
+the graphic engine and a simple physics and collision detection between the player
+and the world. The player can be controlled by the arrow keys and left-shift. But
+movement inside the world is a bit clumsy as physics and collision detection sometimes
+work against each other. But I will figure that out, and I bet at some point I will
+rewrite the whole system ;-)
+
+Next thing to do is fill the world with interactive objects and enemies and see how
+they can interact with the player.
 
 ### Things which are ongoing
+- how to implement interactive objects/enemies
+- how to control the main character?
+- physics
+- collision detection
+- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
 - create graphics
 - ui
 - world editor
 
 ### Things I have to do or figure out
-- how to control the main character?
-- physics
-- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
-- how to implement interactive objects/enemies
-- collision detection
+- create interactive objects / enemies:
+  - locked door
+  - key (used to open a locked door)
+  - gems (can be collected => points)
+  - coins (can be collected  => points)
+  - arrows from wall
+  - speers from ground
+  - rat
+  - scorpion
+  - spider
+  - skeleton
+  - mummy
+  - some kind of angry bird?
+  - dissolving gound
+  - floater
+  - lasers
+  - side wind
+  
 - how does sound work with SDL?
 - how to integrate sound track and sound effects
-- compose soundtrack
+- compose sound track
 - create sound effects
 - build the world/levels
 - story?
@@ -51,7 +76,9 @@ My target platforms are:
 - Linux (development is done on Fedora 34)
 - Windows 10
 
-The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/) library, which is available on many platforms. So in therory it should be possible to compile it on any platform with a c++ compiler and the SDL library.
+The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/)
+library, which is available on many platforms. So in theory it should be possible to
+compile it on any platform with a c++ compiler and the SDL library.
 
 ## When will it come out?
 I don't know. This is one of my hobbies, but I have others, too :-)
@@ -75,7 +102,7 @@ The following Tools/Libraries are required:
         
 #### Ubuntu
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
-        libpng-dev libfreetype-dev
+        libpng-dev
         
 #### Windows 10 with mingw64
 TODO
