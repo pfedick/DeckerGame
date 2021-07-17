@@ -440,14 +440,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			if (isCollisionLeft()) {
 				velocity_move.x=0;
 				printf ("debug 3a\n");
-				if (movement!=Jump || movement!=Falling)	stand();
+				if (movement!=Jump && movement!=Falling)	stand();
 				else movement=Falling;
 			}
 		} else if (orientation==Right) {
 			if (isCollisionRight()) {
 				velocity_move.x=0;
 				printf ("debug 3b\n");
-				if (movement!=Jump || movement!=Falling)	stand();
+				if (movement!=Jump && movement!=Falling)	stand();
 				else movement=Falling;
 
 			}
