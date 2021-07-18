@@ -136,6 +136,7 @@ private:
 
 public:
 	ComboBox(int x, int y, int width, int height);
+	~ComboBox();
 
 	void setCurrentText(const ppl7::String &text);
 	ppl7::String currentText() const;

@@ -19,6 +19,11 @@ ComboBox::ComboBox(int x, int y, int width, int height)
 
 }
 
+ComboBox::~ComboBox()
+{
+	if (selection) delete selection;
+}
+
 
 void ComboBox::setCurrentText(const ppl7::String &text)
 {
