@@ -209,14 +209,31 @@ private:
 	Game *game;
 	//TilesFrame *tilesframe;
 	SpriteTexture *spriteset;
-	TilesFrame *tilesframe;
+	Scrollbar *scrollbar;
+	int selected_object;
 	float scale;
+
+	class Item
+	{
+	public:
+		int id;
+		ppl7::String name;
+		int sprite_no;
+		Item(int id, const ppl7::String &name, int sprite_no);
+	};
+	std::map<size_t,Item> object_map;
+	void addObject(int id, const ppl7::String &name, int sprite_no);
 
 public:
 	ObjectSelection(int x, int y, int width, int height, Game *game);
 	void setSpriteSet(SpriteTexture *texture);
 	void setSpriteScale(float factor);
 	float spriteScale() const;
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	void valueChangedEvent(ppl7::tk::Event *event, int value);
+	void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 
 };
 
