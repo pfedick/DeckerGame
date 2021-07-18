@@ -43,9 +43,9 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	edit_sprites_button->setEventHandler(this);
 	this->addChild(edit_sprites_button);
 
-	edit_enemies_button=new ppl7::tk::Button(356+60,0,70,s.height,"Enemies");
-	edit_enemies_button->setEventHandler(this);
-	this->addChild(edit_enemies_button);
+	edit_objects_button=new ppl7::tk::Button(356+60,0,70,s.height,"Objects");
+	edit_objects_button->setEventHandler(this);
+	this->addChild(edit_objects_button);
 
 
 
@@ -105,6 +105,8 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->showTileTypeSelection();
 	} else if (event->widget()==edit_sprites_button) {
 		game->showSpriteSelection();
+	} else if (event->widget()==edit_objects_button) {
+		game->showObjectsSelection();
 	} else if (event->widget()==save_button) {
 		game->save();
 	} else if (event->widget()==new_button) {

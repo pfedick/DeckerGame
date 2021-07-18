@@ -44,6 +44,11 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 void ObjectSystem::addObject(Object *object)
 {
 	object->id=(uint32_t)object_list.size();
+	if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
+		object->texture=this->spriteset[object->sprite_set];
+		object->updateBoundary();
+	}
+
 	object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
 }
 
@@ -66,6 +71,64 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 		}
 	}
 }
+
+void ObjectSystem::update(double time)
+{
+
+}
+
+void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
+{
+	std::map<uint32_t,Object *>::const_iterator it;
+	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
+		const Object *object=it->second;
+		if (object->texture) {
+			object->texture->drawScaled(renderer,
+					object->p.x+viewport.x1-worldcoords.x,
+					object->p.y+viewport.y1-worldcoords.y,
+					object->sprite_no, object->scale);
+		}
+	}
+}
+
+Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
+{
+	Object *found_object=NULL;
+	std::map<uint32_t,Object *>::const_iterator it;
+	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
+		Object *item=it->second;
+		if (p.inside(item->boundary)) {
+			if (item->texture) {
+				const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
+				if (draw.width()) {
+					int x=p.x-item->boundary.x1;
+					int y=p.y-item->boundary.y1;
+					ppl7::grafix::Color c=draw.getPixel(x/item->scale, y/item->scale);
+					if (c.alpha()>92) {
+						found_object=item;
+					}
+				}
+			}
+		}
+	}
+	return found_object;
+}
+
+void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
+{
+	std::map<uint32_t,Object *>::const_iterator it;
+	it=object_list.find(id);
+	if (it!=object_list.end()) {
+		const Object *item=it->second;
+		if (item->texture) {
+			item->texture->drawOutlines(renderer,
+					item->p.x+viewport.x1-worldcoords.x,
+					item->p.y+viewport.y1-worldcoords.y,
+					item->sprite_no, item->scale);
+		}
+	}
+}
+
 
 size_t ObjectSystem::count() const
 {

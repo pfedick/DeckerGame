@@ -37,6 +37,10 @@ EXCEPTION(SDLException, ppl7::Exception);
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 38
 
+namespace Decker::Objects {
+class ObjectSystem;
+} // EOF namespace Decker::Objects
+
 class FPS
 {
 private:
@@ -328,6 +332,7 @@ public:
 	SpriteTexture uiSpritesPlants;
 	SpriteTexture Sprites_Objects;
 	SpriteTexture uiSpritesObjects;
+	SpriteTexture uiObjects;
 
 	class BrickResource
 	{
@@ -344,7 +349,6 @@ public:
 	int getMaxTilesetId() const;
 };
 class Player;
-class ObjectSystem;
 
 class Level
 {
@@ -361,7 +365,8 @@ private:
 	SpriteSystem BackSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
-	ObjectSystem *objects;
+	Decker::Objects::ObjectSystem *objects;
+
 
 	ppl7::grafix::Rect viewport;
 	SpriteTexture *tileset[MAX_TILESETS+1];
@@ -432,6 +437,7 @@ private:
 	Decker::ui::TilesSelection *tiles_selection;
 	Decker::ui::TileTypeSelection *tiletype_selection;
 	Decker::ui::SpriteSelection *sprite_selection;
+	Decker::ui::ObjectSelection *object_selection;
 	Decker::ui::WorldWidget *world_widget;
 	BrickOccupation brick_occupation;
 	FPS fps;
@@ -454,6 +460,7 @@ private:
 	void closeTileTypeSelection();
 	void closeTileSelection();
 	void closeSpriteSelection();
+	void closeObjectSelection();
 	void selectSprite(const ppl7::grafix::Point &mouse);
 	void updateWorldCoords();
 
@@ -487,6 +494,7 @@ public:
 	void showTilesSelection();
 	void showTileTypeSelection();
 	void showSpriteSelection();
+	void showObjectsSelection();
 
 	SDL_Renderer *getSDLRenderer();
 

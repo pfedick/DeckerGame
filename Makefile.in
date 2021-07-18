@@ -32,6 +32,7 @@ OBJECTS=compile/main.o \
 	compile/ui_tiletypeselection.o \
 	compile/ui_tilesframe.o \
 	compile/ui_worldwidget.o \
+	compile/ui_objectselection.o \
 	compile/widgets_scrollbar.o \
 	compile/widgets_checkbox.o \
 	compile/widgets_radiobutton.o \
@@ -115,7 +116,7 @@ compile/sdl.o: src/sdl.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
 
-compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h
+compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/game.o -c src/game.cpp $(CFLAGS)
 
@@ -220,6 +221,10 @@ compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 compile/ui_spriteselection.o: src/ui/spriteselection.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CXX) -o compile/ui_spriteselection.o -c src/ui/spriteselection.cpp $(CFLAGS)
+
+compile/ui_objectselection.o: src/ui/objectselection.cpp Makefile include/ui.h
+	-mkdir -p compile 
+	$(CXX) -o compile/ui_objectselection.o -c src/ui/objectselection.cpp $(CFLAGS)
 
 compile/ui_tiletypeselection.o: src/ui/tiletypeselection.cpp Makefile include/ui.h
 	-mkdir -p compile 

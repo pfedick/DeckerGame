@@ -50,6 +50,8 @@ public:
 	Object(Type::ObjectType type);
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
+
+	void updateBoundary();
 };
 
 class Collectable : public Object
@@ -134,6 +136,7 @@ public:
 	void clear();
 	void loadSpritesets(SDL &sdl);
 	void addObject(Object *object);
+	void update(double time);
 	void updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;

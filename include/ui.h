@@ -62,7 +62,7 @@ private:
 
 	ppl7::tk::Button *edit_tiletypes_button;
 	ppl7::tk::Button *edit_sprites_button;
-	ppl7::tk::Button *edit_enemies_button;
+	ppl7::tk::Button *edit_objects_button;
 	CheckBox *show_grid_checkbox;
 	CheckBox *show_tiletypes_checkbox;
 	CheckBox *show_collision_checkbox;
@@ -202,6 +202,24 @@ public:
 	void setCurrentLayer(int layer);
 	void valueChangedEvent(ppl7::tk::Event *event, int value);
 };
+
+class ObjectSelection : public ppl7::tk::Frame
+{
+private:
+	Game *game;
+	//TilesFrame *tilesframe;
+	SpriteTexture *spriteset;
+	TilesFrame *tilesframe;
+	float scale;
+
+public:
+	ObjectSelection(int x, int y, int width, int height, Game *game);
+	void setSpriteSet(SpriteTexture *texture);
+	void setSpriteScale(float factor);
+	float spriteScale() const;
+
+};
+
 
 class WorldWidget : public ppl7::tk::Widget
 {

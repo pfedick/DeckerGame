@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "decker.h"
 
 namespace Decker::Objects {
 
@@ -24,6 +25,7 @@ Object::Object(Type::ObjectType type)
 	sprite_set=0;
 	sprite_no=0;
 	id=0;
+	texture=NULL;
 }
 
 Type::ObjectType Object::type() const
@@ -36,6 +38,12 @@ ppl7::String Object::typeName() const
 	return Type::name(myType);
 }
 
+
+void Object::updateBoundary()
+{
+	if (texture)
+		boundary=texture->spriteBoundary(sprite_no,scale,p.x,p.y);
+}
 
 
 }	// EOF namespace Decker::Objects

@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 #include "player.h"
+#include "objects.h"
 
 static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f};
 
@@ -23,6 +24,7 @@ Game::Game()
 	tex_sky=NULL;
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
+	object_selection=NULL;
 	world_widget=NULL;
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
@@ -69,6 +71,12 @@ void Game::loadGrafix()
 	resources.uiSpritesObjects.enableSDLBuffer(false);
 	resources.uiSpritesObjects.enableMemoryBuffer(true);
 	resources.uiSpritesObjects.load(sdl, "res/sprites_objects_ui.tex");
+
+	resources.uiObjects.enableSDLBuffer(false);
+	resources.uiObjects.enableMemoryBuffer(true);
+	resources.uiObjects.load(sdl, "res/objects_ui.tex");
+
+	level.objects->loadSpritesets(sdl);
 
 	ppl7::grafix::Image img;
 	img.load("res/sky2.png");
@@ -156,6 +164,7 @@ void Game::init()
 	level.setSpriteset(3, &resources.Sprites_Objects);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
+
 
 	//level.setRenderer
 	level.load("level/test.lvl");
@@ -362,12 +371,24 @@ void Game::closeSpriteSelection()
 	}
 }
 
+void Game::closeObjectSelection()
+{
+	if (object_selection) {
+		this->removeChild(object_selection);
+		delete(object_selection);
+		object_selection=NULL;
+		viewport.x1=0;
+		world_widget->setViewport(viewport);
+	}
+}
+
 
 
 void Game::showTilesSelection()
 {
 	closeTileTypeSelection();
 	closeSpriteSelection();
+	closeObjectSelection();
 	if (tiles_selection) {
 		closeTileSelection();
 	} else {
@@ -385,6 +406,7 @@ void Game::showTileTypeSelection()
 {
 	closeSpriteSelection();
 	closeTileSelection();
+	closeObjectSelection();
 	if (tiletype_selection) {
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
@@ -402,6 +424,7 @@ void Game::showSpriteSelection()
 {
 	closeTileTypeSelection();
 	closeTileSelection();
+	closeObjectSelection();
 	if (sprite_selection) {
 		closeSpriteSelection();
 	} else {
@@ -417,6 +440,23 @@ void Game::showSpriteSelection()
 		world_widget->setViewport(viewport);
 	}
 }
+
+void Game::showObjectsSelection()
+{
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	if (object_selection) {
+		closeObjectSelection();
+	} else {
+		object_selection=new Decker::ui::ObjectSelection(0,33,300,statusbar->y()-2-33,this);
+		object_selection->setSpriteSet(&resources.uiObjects);
+		this->addChild(object_selection);
+		viewport.x1=300;
+		world_widget->setViewport(viewport);
+	}
+}
+
 
 
 

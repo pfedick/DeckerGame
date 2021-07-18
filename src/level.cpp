@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 #include "player.h"
+#include "objects.h"
 
 static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f};
 
@@ -16,6 +17,7 @@ Level::Level()
 	for (int i=0;i<=MAX_SPRITESETS;i++) {
 		spriteset[i]=NULL;
 	}
+	objects=new Decker::Objects::ObjectSystem();
 }
 
 Level::~Level()
@@ -258,6 +260,7 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 		PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
 		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
 		PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
 		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
 	}
 	if (FrontPlane.isVisible()) {
