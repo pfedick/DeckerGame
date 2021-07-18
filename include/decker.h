@@ -344,6 +344,7 @@ public:
 	int getMaxTilesetId() const;
 };
 class Player;
+class ObjectSystem;
 
 class Level
 {
@@ -360,6 +361,7 @@ private:
 	SpriteSystem BackSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
+	ObjectSystem *objects;
 
 	ppl7::grafix::Rect viewport;
 	SpriteTexture *tileset[MAX_TILESETS+1];
@@ -383,7 +385,8 @@ private:
 		chunkBackSpritesLayer1=17,
 		chunkMiddleSpritesLayer0=18,
 		chunkMiddleSpritesLayer1=19,
-		chunkTileTypes=20
+		chunkTileTypes=20,
+		chunkObjects=30
 	};
 
 public:

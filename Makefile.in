@@ -44,7 +44,19 @@ OBJECTS=compile/main.o \
 	compile/spritesystem.o \
 	compile/brickoccupation.o \
 	compile/player.o \
-	compile/resources.o
+	compile/resources.o \
+	compile/objectsystem.o \
+	compile/object.o \
+	compile/object_collectable.o \
+	compile/object_gem.o \
+	compile/object_coin.o \
+	compile/object_trap.o \
+	compile/object_threespeers.o \
+	compile/object_laserbarrier.o \
+	compile/object_enemy.o \
+	compile/object_rat.o \
+	compile/object_hangingspider.o
+	
 	
 	
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
@@ -115,7 +127,7 @@ compile/resources.o: src/resources.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/resources.o -c src/resources.cpp $(CFLAGS)
 	
-compile/level.o: src/level.cpp Makefile include/decker.h
+compile/level.o: src/level.cpp Makefile include/decker.h include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/level.o -c src/level.cpp $(CFLAGS)
 
@@ -134,6 +146,51 @@ compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
 compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/spritesystem.o -c src/spritesystem.cpp $(CFLAGS)
+
+compile/objectsystem.o: src/objectsystem.cpp Makefile include/objects.h include/decker.h
+	-mkdir -p compile 
+	$(CXX) -o compile/objectsystem.o -c src/objectsystem.cpp $(CFLAGS)
+	
+compile/object.o: src/objects/object.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object.o -c src/objects/object.cpp $(CFLAGS)	
+
+compile/object_collectable.o: src/objects/collectable.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_collectable.o -c src/objects/collectable.cpp $(CFLAGS)	
+
+compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_gem.o -c src/objects/gem.cpp $(CFLAGS)	
+
+compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)	
+
+compile/object_trap.o: src/objects/trap.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_trap.o -c src/objects/trap.cpp $(CFLAGS)	
+
+compile/object_threespeers.o: src/objects/threespeers.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_threespeers.o -c src/objects/threespeers.cpp $(CFLAGS)	
+
+compile/object_laserbarrier.o: src/objects/laserbarrier.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_laserbarrier.o -c src/objects/laserbarrier.cpp $(CFLAGS)	
+
+compile/object_enemy.o: src/objects/enemy.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_enemy.o -c src/objects/enemy.cpp $(CFLAGS)	
+
+compile/object_rat.o: src/objects/rat.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_rat.o -c src/objects/rat.cpp $(CFLAGS)	
+
+compile/object_hangingspider.o: src/objects/hangingspider.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_hangingspider.o -c src/objects/hangingspider.cpp $(CFLAGS)	
+
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h
 	-mkdir -p compile 
