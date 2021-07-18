@@ -18,7 +18,6 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	spriteset=NULL;
 	this->game=game;
 	selected_object=-1;
-	scale=1.0f;
 	ppl7::grafix::Rect client=this->clientRect();
 
 	this->addChild(new ppl7::tk::Label(0,0,width,30,"Object selection:"));
@@ -59,16 +58,6 @@ void ObjectSelection::addObject(int id, const ppl7::String &name, int sprite_no)
 void ObjectSelection::setSpriteSet(SpriteTexture *texture)
 {
 	spriteset=texture;
-}
-
-void ObjectSelection::setSpriteScale(float factor)
-{
-	if (factor>=0.1f && factor<=2.0f) scale=factor;
-}
-
-float ObjectSelection::spriteScale() const
-{
-	return scale;
 }
 
 ppl7::String ObjectSelection::widgetType() const

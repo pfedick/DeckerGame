@@ -51,7 +51,6 @@ public:
 	SpriteTexture	*texture;
 	ppl7::grafix::Rect boundary;
 	uint32_t id;
-	float scale;
 	int sprite_set;
 	int sprite_no;
 	Object(Type::ObjectType type);

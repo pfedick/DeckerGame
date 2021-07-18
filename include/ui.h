@@ -211,7 +211,6 @@ private:
 	SpriteTexture *spriteset;
 	Scrollbar *scrollbar;
 	int selected_object;
-	float scale;
 
 	class Item
 	{
@@ -227,8 +226,6 @@ private:
 public:
 	ObjectSelection(int x, int y, int width, int height, Game *game);
 	void setSpriteSet(SpriteTexture *texture);
-	void setSpriteScale(float factor);
-	float spriteScale() const;
 	int selectedObjectType() const;
 	virtual ppl7::String widgetType() const;
 	virtual void paint(ppl7::grafix::Drawable &draw);

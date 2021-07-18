@@ -34,7 +34,6 @@ ppl7::String Type::name(Type::ObjectType type)
 Object::Object(Type::ObjectType type)
 {
 	myType=type;
-	scale=1.0f;
 	sprite_set=0;
 	sprite_no=0;
 	id=0;
