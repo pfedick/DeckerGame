@@ -349,8 +349,8 @@ void Player::updateMovement()
 	} else if (movement==Jump) {
 		//printf ("we are jumping... ");
 		if (jump_climax>time) {
-			if (acceleration_jump<2.0f) acceleration_jump+=0.02f;
-			if (acceleration_jump>2.0f) acceleration_jump=8.0f;
+			if (acceleration_jump<2.0f) acceleration_jump+=0.1f;
+			if (acceleration_jump>4.0f) acceleration_jump=4.0f;
 			//printf ("under climax, accelerating %0.3f ", acceleration_jump);
 		} else {
 			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/5.0;
@@ -362,7 +362,7 @@ void Player::updateMovement()
 			//printf ("over time, decelerating %0.3f", acceleration_jump);
 		}
 		velocity_move.y-=acceleration_jump;
-		if (velocity_move.y<-4.0f) velocity_move.y=-4.0f;
+		if (velocity_move.y<-8.0f) velocity_move.y=-8.0f;
 		if (velocity_move.y>-0.1f) {
 			velocity_move.y=0.0f;
 		}
