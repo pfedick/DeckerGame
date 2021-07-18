@@ -8,10 +8,11 @@ Scrollbar::Scrollbar(int x, int y, int width, int height) // @suppress("Class me
 : ppl7::tk::Widget()
 {
 	this->create(x,y,width,height);
+	setClientOffset(0,0,0,0);
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
 	ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
-	up_button=new ppl7::tk::Button(0,0,width-5,25);
-	down_button=new ppl7::tk::Button(0,height-25,width-5,25);
+	up_button=new ppl7::tk::Button(0,0,width-2,25);
+	down_button=new ppl7::tk::Button(0,height-25,width-2,25);
 	up_button->setIcon(wm->ButtonSymbols.getDrawable(3));
 	down_button->setIcon(wm->ButtonSymbols.getDrawable(4));
 	up_button->setEventHandler(this);
@@ -63,7 +64,7 @@ void Scrollbar::paint(ppl7::grafix::Drawable &draw)
 	ppl7::grafix::Color shadow=style.buttonBackgroundColor*0.4f;
 	ppl7::grafix::Color shade1=style.buttonBackgroundColor*1.05f;
 	ppl7::grafix::Color shade2=style.buttonBackgroundColor*0.85f;
-	ppl7::grafix::Drawable indicator=draw.getDrawable(0, 25, draw.width()-2, draw.height()-26);
+	ppl7::grafix::Drawable indicator=draw.getDrawable(0, 25, draw.width(), draw.height()-26);
 	int w=indicator.width()-1;
 	//int h=indicator.height()-1;
 	ppl7::grafix::Rect r1=indicator.rect();
@@ -82,6 +83,7 @@ void Scrollbar::paint(ppl7::grafix::Drawable &draw)
 	indicator.line(0,r1.y2,w,r1.y2,shadow);
 	indicator.line(w,r1.y1,w,r1.y2,shadow);
 
+	//ppl7::tk::Widget::paint(draw);
 	//draw.fillRect(0,y1,draw.width(),y2,style.frameBorderColorLight);
 }
 

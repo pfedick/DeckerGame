@@ -8,12 +8,25 @@ namespace Decker::Objects {
 ppl7::String Type::name(Type::ObjectType type)
 {
 	switch (type) {
-	case ObjectType::Coin: return ppl7::String("Coin");
-	case ObjectType::Gem: return ppl7::String("Gem");
-	case ObjectType::Medikit: return ppl7::String("Medikit");
+	case ObjectType::PlayerStartpoint: return ppl7::String("PlayerStartpoint");
 	case ObjectType::Savepoint: return ppl7::String("Savepoint");
+	case ObjectType::Medikit: return ppl7::String("Medikit");
+
+	case ObjectType::Crystal: return ppl7::String("Crystal");
+	case ObjectType::Diamond: return ppl7::String("Diamond");
+	case ObjectType::Coin: return ppl7::String("Coin");
+	case ObjectType::Key: return ppl7::String("Key");
+
+	case ObjectType::Arrow: return ppl7::String("Arrow");
 	case ObjectType::ThreeSpeers: return ppl7::String("ThreeSpeers");
+
 	case ObjectType::Rat: return ppl7::String("Rat");
+	case ObjectType::HangingSpider: return ppl7::String("HangingSpider");
+
+	case ObjectType::FloaterHorizontal: return ppl7::String("FloaterHorizontal");
+	case ObjectType::FloaterVertical: return ppl7::String("FloaterVertical");
+	case ObjectType::Door: return ppl7::String("Door");
+
 	default: return ppl7::String("unknown object type");
 	}
 }

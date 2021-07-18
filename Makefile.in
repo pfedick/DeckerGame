@@ -222,7 +222,7 @@ compile/ui_spriteselection.o: src/ui/spriteselection.cpp Makefile include/ui.h
 	-mkdir -p compile 
 	$(CXX) -o compile/ui_spriteselection.o -c src/ui/spriteselection.cpp $(CFLAGS)
 
-compile/ui_objectselection.o: src/ui/objectselection.cpp Makefile include/ui.h
+compile/ui_objectselection.o: src/ui/objectselection.cpp Makefile include/ui.h include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/ui_objectselection.o -c src/ui/objectselection.cpp $(CFLAGS)
 

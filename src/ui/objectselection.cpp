@@ -1,5 +1,6 @@
 #include "decker.h"
 #include "ui.h"
+#include "objects.h"
 
 namespace Decker::ui {
 
@@ -13,33 +14,41 @@ ObjectSelection::Item::Item(int id, const ppl7::String &name, int sprite_no)
 ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game)
 : ppl7::tk::Frame(x,y,width,height)
 {
+	setClientOffset(4,4,4,4);
 	spriteset=NULL;
 	this->game=game;
 	selected_object=-1;
 	scale=1.0f;
 	ppl7::grafix::Rect client=this->clientRect();
 
-	scrollbar=new Scrollbar(width-34,40,29,client.height()-40);
+	this->addChild(new ppl7::tk::Label(0,0,width,30,"Object selection:"));
+
+	scrollbar=new Scrollbar(client.width()-28,client.y1+32,28,client.height()-40);
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
-
 	this->addChild(scrollbar);
-	addObject(1,"Player startpoint",19);
-	addObject(2,"Savepoint",10);
-	addObject(3,"Medikit",11);
-	addObject(100,"Crystal",0);
-	addObject(101,"Diamond",1);
-	addObject(102,"Coin",12);
-	addObject(103,"Key",8);
-	addObject(200,"Arrow",4);
-	addObject(201,"3 Speets",18);
-	addObject(300,"Rat",5);
-	addObject(301,"hanging Spider",6);
-	addObject(500,"Floater horizontal",13);
-	addObject(501,"Floater vertical",14);
+
+	addObject(Decker::Objects::Type::PlayerStartpoint,"Player startpoint",19);
+	addObject(Decker::Objects::Type::Savepoint,"Savepoint",10);
+	addObject(Decker::Objects::Type::Medikit,"Medikit",11);
+	addObject(Decker::Objects::Type::Crystal,"Crystal",0);
+	addObject(Decker::Objects::Type::Diamond,"Diamond",1);
+	addObject(Decker::Objects::Type::Coin,"Coin",12);
+	addObject(Decker::Objects::Type::Key,"Key",8);
+	addObject(Decker::Objects::Type::Arrow,"Arrow",4);
+	addObject(Decker::Objects::Type::ThreeSpeers,"3 Speers",18);
+	addObject(Decker::Objects::Type::Rat,"Rat",5);
+	addObject(Decker::Objects::Type::HangingSpider,"hanging Spider",6);
+	addObject(Decker::Objects::Type::FloaterHorizontal,"Floater horizontal",13);
+	addObject(Decker::Objects::Type::FloaterVertical,"Floater vertical",14);
 
 	scrollbar->setSize(object_map.size()/2);
-	scrollbar->setVisibleItems((height-40)/160/2);
+	scrollbar->setVisibleItems((height-44)/160/2);
+}
+
+int ObjectSelection::selectedObjectType() const
+{
+	return selected_object;
 }
 
 void ObjectSelection::addObject(int id, const ppl7::String &name, int sprite_no)
@@ -102,13 +111,12 @@ void ObjectSelection::mouseWheelEvent(ppl7::tk::MouseEvent *event)
 
 void ObjectSelection::paint(ppl7::grafix::Drawable &draw)
 {
-
 	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
 	ppl7::grafix::Color myBorderColorLight=style.frameBorderColorLight;
 	ppl7::grafix::Color myBorderColorShadow=style.frameBorderColorShadow;
 	ppl7::grafix::Font myFont=style.labelFont;
-	ppl7::grafix::Color shade1=style.frameBackgroundColor*0.90f;
-	ppl7::grafix::Color shade2=style.frameBackgroundColor*0.70f;
+	ppl7::grafix::Color shade1=style.frameBackgroundColor*0.70f;
+	ppl7::grafix::Color shade2=style.frameBackgroundColor*0.50f;
 
 	ppl7::grafix::Color shade3=style.frameBackgroundColor*1.5f;
 	ppl7::grafix::Color shade4=style.frameBackgroundColor*1.2f;
@@ -118,6 +126,8 @@ void ObjectSelection::paint(ppl7::grafix::Drawable &draw)
 
 	ppl7::tk::Frame::paint(draw);
 	if (!spriteset) return;
+	draw=clientDrawable(draw);
+
 	ppl7::grafix::Color white(245,245,242,255);
 	int x=8, y=40, c=0;
 	std::map<size_t,Item>::const_iterator it;

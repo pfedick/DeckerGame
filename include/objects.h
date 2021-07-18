@@ -13,13 +13,20 @@ class Type
 {
 public:
 	enum ObjectType {
-		Coin,
-		Gem,
-		Medikit,
-		Savepoint,
-		ThreeSpeers,
-		Rat,
-
+		PlayerStartpoint=1,
+		Savepoint=2,
+		Medikit=3,
+		Crystal=100,
+		Diamond=101,
+		Coin=102,
+		Key=103,
+		Arrow=200,
+		ThreeSpeers=201,
+		Rat=300,
+		HangingSpider=301,
+		FloaterHorizontal=500,
+		FloaterVertical=501,
+		Door=502
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
