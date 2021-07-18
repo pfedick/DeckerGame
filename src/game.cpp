@@ -311,6 +311,7 @@ void Game::run()
 
 
 		drawSelectedSprite(renderer, mouse.p);
+		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
 		if (mainmenue->playerPlaneVisible()) {
 			if (mainmenue->showTileTypes()) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
@@ -567,6 +568,38 @@ void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &m
 	}
 
 }
+
+void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+{
+	if (!object_selection) return;
+	if (object_selection->selectedObjectType()>=0 && sprite_mode!=spriteModeDraw) {
+		//selected_sprite_system=NULL;
+		sprite_mode=spriteModeDraw;
+	}
+	/*
+	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
+		int currentPlane=mainmenue->currentPlane();
+		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
+				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
+	} else */
+	if (sprite_mode==spriteModeDraw) {
+		if (!mouse.inside(viewport)) return;
+		int object_type=object_selection->selectedObjectType();
+		if (object_type<0) return;
+		level.objects->drawPlaceSelection(renderer, mouse, object_type);
+		/*
+		int spriteset=sprite_selection->currentSpriteSet();
+		if (spriteset==1) nr=nr*4;
+		float scale=sprite_selection->spriteScale();
+		if (!level.spriteset[spriteset]) return;
+		level.spriteset[spriteset]->drawScaled(renderer,
+				mouse.x, mouse.y, nr, scale);
+		level.spriteset[spriteset]->drawOutlines(renderer,
+					mouse.x, mouse.y, nr, scale);
+		*/
+	}
+}
+
 
 void Game::save()
 {

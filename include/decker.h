@@ -454,6 +454,7 @@ private:
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
 	void drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
+	void drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
 	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
 	void handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse);

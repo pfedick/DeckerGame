@@ -83,10 +83,10 @@ void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		const Object *object=it->second;
 		if (object->texture) {
-			object->texture->drawScaled(renderer,
+			object->texture->draw(renderer,
 					object->p.x+viewport.x1-worldcoords.x,
 					object->p.y+viewport.y1-worldcoords.y,
-					object->sprite_no, object->scale);
+					object->sprite_no);
 		}
 	}
 }
@@ -103,7 +103,7 @@ Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
 				if (draw.width()) {
 					int x=p.x-item->boundary.x1;
 					int y=p.y-item->boundary.y1;
-					ppl7::grafix::Color c=draw.getPixel(x/item->scale, y/item->scale);
+					ppl7::grafix::Color c=draw.getPixel(x, y);
 					if (c.alpha()>92) {
 						found_object=item;
 					}
@@ -124,9 +124,14 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 			item->texture->drawOutlines(renderer,
 					item->p.x+viewport.x1-worldcoords.x,
 					item->p.y+viewport.y1-worldcoords.y,
-					item->sprite_no, item->scale);
+					item->sprite_no, 1.0f);
 		}
 	}
+}
+
+void ObjectSystem::drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type)
+{
+
 }
 
 

@@ -151,7 +151,7 @@ public:
 	void loadState(const ppl7::ByteArrayPtr &ba) const;
 	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
-
+	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
 
 	size_t count() const;
 	size_t countVisible() const;
