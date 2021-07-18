@@ -323,6 +323,10 @@ public:
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
 	SpriteTexture uiSpritesNature;
+	SpriteTexture Sprites_Plants;
+	SpriteTexture uiSpritesPlants;
+	SpriteTexture Sprites_Objects;
+	SpriteTexture uiSpritesObjects;
 
 	class BrickResource
 	{

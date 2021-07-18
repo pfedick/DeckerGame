@@ -48,12 +48,27 @@ void Game::loadGrafix()
 	resources.Sprites_Nature.enableMemoryBuffer(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
 
+	resources.Sprites_Plants.enableOutlines(true);
+	resources.Sprites_Plants.enableMemoryBuffer(true);
+	resources.Sprites_Plants.load(sdl, "res/sprites_plants.tex");
+
+	resources.Sprites_Objects.enableOutlines(true);
+	resources.Sprites_Objects.enableMemoryBuffer(true);
+	resources.Sprites_Objects.load(sdl, "res/sprites_objects.tex");
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
 	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
 
+	resources.uiSpritesPlants.enableSDLBuffer(false);
+	resources.uiSpritesPlants.enableMemoryBuffer(true);
+	resources.uiSpritesPlants.load(sdl, "res/sprites_plants_ui.tex");
+
+	resources.uiSpritesObjects.enableSDLBuffer(false);
+	resources.uiSpritesObjects.enableMemoryBuffer(true);
+	resources.uiSpritesObjects.load(sdl, "res/sprites_objects_ui.tex");
 
 	ppl7::grafix::Image img;
 	img.load("res/sky2.png");
@@ -137,6 +152,9 @@ void Game::init()
 		level.setTileset(i, &resources.bricks[i].world);
 	}
 	level.setSpriteset(1, &resources.Sprites_Nature);
+	level.setSpriteset(2, &resources.Sprites_Plants);
+	level.setSpriteset(3, &resources.Sprites_Objects);
+
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
 	//level.setRenderer
@@ -387,6 +405,8 @@ void Game::showSpriteSelection()
 	} else {
 		sprite_selection=new Decker::ui::SpriteSelection(0,33,300,statusbar->y()-2-33,this);
 		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(2,"Plants", &resources.uiSpritesPlants);
+		sprite_selection->setSpriteSet(3,"Objects", &resources.uiSpritesObjects);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
