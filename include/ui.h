@@ -69,6 +69,8 @@ private:
 	CheckBox *visible_plane_player_checkbox;
 	CheckBox *visible_plane_front_checkbox;
 	CheckBox *visible_plane_far_checkbox;
+	CheckBox *visible_plane_back_checkbox;
+	CheckBox *visible_plane_middle_checkbox;
 
 	ComboBox *active_plane_combobox;
 
@@ -91,6 +93,8 @@ public:
 	bool playerPlaneVisible() const;
 	bool frontPlaneVisible() const;
 	bool farPlaneVisible() const;
+	bool backPlaneVisible() const;
+	bool middlePlaneVisible() const;
 	bool worldFollowsPlayer() const;
 
 };

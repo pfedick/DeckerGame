@@ -240,6 +240,7 @@ public:
 
 class Plane
 {
+	//friend class Level;
 private:
 	Tile **tilematrix;
 	int width, height;
@@ -351,8 +352,12 @@ private:
 	Plane FarPlane;
 	Plane PlayerPlane;
 	Plane FrontPlane;
+	Plane BackPlane;
+	Plane MiddlePlane;
 	TileTypePlane TileTypeMatrix;
 	SpriteSystem FarSprites[2];
+	SpriteSystem MiddleSprites[2];
+	SpriteSystem BackSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
 
@@ -365,12 +370,19 @@ private:
 		chunkPlayerPlane=1,
 		chunkFrontPlane=2,
 		chunkFarPlane=3,
+		chunkBackPlane=4,
+		chunkMiddlePlane=5,
+		chunkNearPlane=6,
 		chunkPlayerSpritesLayer0=10,
 		chunkPlayerSpritesLayer1=11,
 		chunkFrontSpritesLayer0=12,
 		chunkFrontSpritesLayer1=13,
 		chunkFarSpritesLayer0=14,
 		chunkFarSpritesLayer1=15,
+		chunkBackSpritesLayer0=16,
+		chunkBackSpritesLayer1=17,
+		chunkMiddleSpritesLayer0=18,
+		chunkMiddleSpritesLayer1=19,
 		chunkTileTypes=20
 	};
 

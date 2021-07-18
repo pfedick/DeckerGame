@@ -67,6 +67,8 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	active_plane_combobox->add("PlayerPlane");
 	active_plane_combobox->add("FrontPlane");
 	active_plane_combobox->add("FarPlane");
+	active_plane_combobox->add("BackPlane");
+	active_plane_combobox->add("MiddlePlane");
 
 	this->addChild(active_plane_combobox);
 
@@ -79,7 +81,11 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	visible_plane_front_checkbox=new CheckBox(1190,0,70,s.height,"Front", true);
 	this->addChild(visible_plane_front_checkbox);
 
-	visible_plane_far_checkbox=new CheckBox(1260,0,60,s.height,"Far", true);
+	visible_plane_back_checkbox=new CheckBox(1260,0,70,s.height,"Back", true);
+	this->addChild(visible_plane_back_checkbox);
+	visible_plane_middle_checkbox=new CheckBox(1330,0,60,s.height,"Middle", true);
+	this->addChild(visible_plane_middle_checkbox);
+	visible_plane_far_checkbox=new CheckBox(1400,0,60,s.height,"Far", true);
 	this->addChild(visible_plane_far_checkbox);
 
 
@@ -158,6 +164,18 @@ bool MainMenue::frontPlaneVisible() const
 bool MainMenue::farPlaneVisible() const
 {
 	if (visible_plane_far_checkbox) return visible_plane_far_checkbox->checked();
+	return true;
+}
+
+bool MainMenue::backPlaneVisible() const
+{
+	if (visible_plane_back_checkbox) return visible_plane_back_checkbox->checked();
+	return true;
+}
+
+bool MainMenue::middlePlaneVisible() const
+{
+	if (visible_plane_middle_checkbox) return visible_plane_middle_checkbox->checked();
 	return true;
 }
 

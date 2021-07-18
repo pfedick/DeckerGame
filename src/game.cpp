@@ -5,7 +5,7 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 
-static double planeFactor[]={1.0f, 1.0f, 0.5f};
+static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f};
 
 Game::Game()
 {
@@ -296,6 +296,8 @@ void Game::run()
 		level.FarPlane.setVisible(mainmenue->farPlaneVisible());
 		level.PlayerPlane.setVisible(mainmenue->playerPlaneVisible());
 		level.FrontPlane.setVisible(mainmenue->frontPlaneVisible());
+		level.BackPlane.setVisible(mainmenue->backPlaneVisible());
+		level.MiddlePlane.setVisible(mainmenue->middlePlaneVisible());
 		level.draw(renderer, WorldCoords,player);
 
 

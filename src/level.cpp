@@ -6,7 +6,7 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 
-static double planeFactor[]={1.0f, 1.0f, 0.5f};
+static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f};
 
 Level::Level()
 {
@@ -28,7 +28,19 @@ void Level::clear()
 	PlayerPlane.clear();
 	FarPlane.clear();
 	FrontPlane.clear();
+	BackPlane.clear();
+	MiddlePlane.clear();
 	TileTypeMatrix.clear();
+	FarSprites[0].clear();
+	FarSprites[1].clear();
+	PlayerSprites[0].clear();
+	PlayerSprites[1].clear();
+	FrontSprites[0].clear();
+	FrontSprites[1].clear();
+	MiddleSprites[0].clear();
+	MiddleSprites[1].clear();
+	BackSprites[0].clear();
+	BackSprites[1].clear();
 }
 
 void Level::setTileset(int no, SpriteTexture *tileset)
@@ -48,6 +60,11 @@ void Level::setSpriteset(int no, SpriteTexture *spriteset)
 	PlayerSprites[1].setSpriteset(no, spriteset);
 	FrontSprites[0].setSpriteset(no, spriteset);
 	FrontSprites[1].setSpriteset(no, spriteset);
+	BackSprites[0].setSpriteset(no, spriteset);
+	BackSprites[1].setSpriteset(no, spriteset);
+	MiddleSprites[0].setSpriteset(no, spriteset);
+	MiddleSprites[1].setSpriteset(no, spriteset);
+
 }
 
 void Level::create(int width, int height)
@@ -57,12 +74,8 @@ void Level::create(int width, int height)
 	FarPlane.create(width, height);
 	PlayerPlane.create(width, height);
 	FrontPlane.create(width, height);
-	FarSprites[0].clear();
-	FarSprites[1].clear();
-	PlayerSprites[0].clear();
-	PlayerSprites[1].clear();
-	FrontSprites[0].clear();
-	FrontSprites[1].clear();
+	BackPlane.create(width, height);
+	MiddlePlane.create(width, height);
 }
 
 void Level::setViewport(const ppl7::grafix::Rect &r)
@@ -75,6 +88,8 @@ Plane &Level::plane(int id)
 	if (id==0) return PlayerPlane;
 	if (id==1) return FrontPlane;
 	if (id==2) return FarPlane;
+	if (id==3) return BackPlane;
+	if (id==4) return MiddlePlane;
 	return PlayerPlane;
 
 }
@@ -84,6 +99,9 @@ SpriteSystem &Level::spritesystem(int plane, int layer)
 	if (plane==0) return PlayerSprites[layer];
 	if (plane==1) return FrontSprites[layer];
 	if (plane==2) return FarSprites[layer];
+	if (plane==3) return BackSprites[layer];
+	if (plane==4) return MiddleSprites[layer];
+
 	return PlayerSprites[layer];
 }
 
@@ -117,6 +135,10 @@ void Level::load(const ppl7::String &Filename)
 				FrontPlane.load(ba);
 			} else if (id==LevelChunkId::chunkFarPlane) {
 				FarPlane.load(ba);
+			} else if (id==LevelChunkId::chunkBackPlane) {
+				BackPlane.load(ba);
+			} else if (id==LevelChunkId::chunkMiddlePlane) {
+				MiddlePlane.load(ba);
 			} else if (id==LevelChunkId::chunkPlayerSpritesLayer0) {
 				PlayerSprites[0].load(ba);
 			} else if (id==LevelChunkId::chunkPlayerSpritesLayer1) {
@@ -129,6 +151,14 @@ void Level::load(const ppl7::String &Filename)
 				FarSprites[0].load(ba);
 			} else if (id==LevelChunkId::chunkFarSpritesLayer1) {
 				FarSprites[1].load(ba);
+			} else if (id==LevelChunkId::chunkBackSpritesLayer0) {
+				BackSprites[0].load(ba);
+			} else if (id==LevelChunkId::chunkBackSpritesLayer1) {
+				BackSprites[1].load(ba);
+			} else if (id==LevelChunkId::chunkMiddleSpritesLayer0) {
+				MiddleSprites[0].load(ba);
+			} else if (id==LevelChunkId::chunkMiddleSpritesLayer1) {
+				MiddleSprites[1].load(ba);
 			} else if (id==LevelChunkId::chunkTileTypes) {
 				TileTypeMatrix.load(ba);
 			}
@@ -137,6 +167,8 @@ void Level::load(const ppl7::String &Filename)
 		}
 	}
 
+	//BackPlane.create(PlayerPlane.width, PlayerPlane.height);
+	//MiddlePlane.create(PlayerPlane.width, PlayerPlane.height);
 
 	ff.close();
 	/*
@@ -157,6 +189,8 @@ void Level::save(const ppl7::String &Filename)
 	PlayerPlane.save(ff,LevelChunkId::chunkPlayerPlane);
 	FrontPlane.save(ff,LevelChunkId::chunkFrontPlane);
 	FarPlane.save(ff,LevelChunkId::chunkFarPlane);
+	BackPlane.save(ff,LevelChunkId::chunkBackPlane);
+	MiddlePlane.save(ff,LevelChunkId::chunkMiddlePlane);
 	TileTypeMatrix.save(ff,LevelChunkId::chunkTileTypes);
 	PlayerSprites[0].save(ff, LevelChunkId::chunkPlayerSpritesLayer0);
 	PlayerSprites[1].save(ff, LevelChunkId::chunkPlayerSpritesLayer1);
@@ -164,6 +198,12 @@ void Level::save(const ppl7::String &Filename)
 	FrontSprites[1].save(ff, LevelChunkId::chunkFrontSpritesLayer1);
 	FarSprites[0].save(ff, LevelChunkId::chunkFarSpritesLayer0);
 	FarSprites[1].save(ff, LevelChunkId::chunkFarSpritesLayer1);
+	FarSprites[0].save(ff, LevelChunkId::chunkFarSpritesLayer0);
+	FarSprites[1].save(ff, LevelChunkId::chunkFarSpritesLayer1);
+	BackSprites[0].save(ff, LevelChunkId::chunkBackSpritesLayer0);
+	BackSprites[1].save(ff, LevelChunkId::chunkBackSpritesLayer1);
+	MiddleSprites[0].save(ff, LevelChunkId::chunkMiddleSpritesLayer0);
+	MiddleSprites[1].save(ff, LevelChunkId::chunkMiddleSpritesLayer1);
 	ff.close();
 
 }
@@ -204,6 +244,16 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 		drawPlane(renderer,FarPlane, worldcoords*planeFactor[2]);
 		FarSprites[1].draw(renderer, viewport,worldcoords*planeFactor[2]);
 	}
+	if (MiddlePlane.isVisible()) {
+		MiddleSprites[0].draw(renderer, viewport,worldcoords*planeFactor[4]);
+		drawPlane(renderer,MiddlePlane, worldcoords*planeFactor[4]);
+		MiddleSprites[1].draw(renderer, viewport,worldcoords*planeFactor[4]);
+	}
+	if (BackPlane.isVisible()) {
+		BackSprites[0].draw(renderer, viewport,worldcoords*planeFactor[3]);
+		drawPlane(renderer,BackPlane, worldcoords*planeFactor[3]);
+		BackSprites[1].draw(renderer, viewport,worldcoords*planeFactor[3]);
+	}
 	if (PlayerPlane.isVisible()) {
 		PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
 		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
@@ -221,6 +271,10 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, con
 {
 	FarSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
 	FarSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
+	MiddleSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[4], viewport);
+	MiddleSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[4], viewport);
+	BackSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[3], viewport);
+	BackSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[3], viewport);
 	PlayerSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
 	PlayerSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
 	FrontSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
@@ -232,6 +286,10 @@ size_t Level::countSprites() const
 	size_t total=0;
 	total+=FarSprites[0].count();
 	total+=FarSprites[1].count();
+	total+=MiddleSprites[0].count();
+	total+=MiddleSprites[1].count();
+	total+=BackSprites[0].count();
+	total+=BackSprites[1].count();
 	total+=PlayerSprites[0].count();
 	total+=PlayerSprites[1].count();
 	total+=FrontSprites[0].count();
@@ -245,6 +303,14 @@ size_t Level::countVisibleSprites() const
 	if (FarPlane.isVisible()) {
 		total+=FarSprites[0].countVisible();
 		total+=FarSprites[1].countVisible();
+	}
+	if (MiddlePlane.isVisible()) {
+		total+=MiddleSprites[0].countVisible();
+		total+=MiddleSprites[1].countVisible();
+	}
+	if (BackPlane.isVisible()) {
+		total+=BackSprites[0].countVisible();
+		total+=BackSprites[1].countVisible();
 	}
 	if (PlayerPlane.isVisible()) {
 		total+=PlayerSprites[0].countVisible();
@@ -260,7 +326,7 @@ size_t Level::countVisibleSprites() const
 bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &worldcoords, SpriteSystem::Item &item, int &plane, int &layer) const
 {
 	if (FrontPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords;
+		ppl7::grafix::Point coords=p+worldcoords*planeFactor[1];
 		if (FrontSprites[1].findMatchingSprite(coords, item)) {
 			plane=1;
 			layer=1;
@@ -273,7 +339,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (PlayerPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords;
+		ppl7::grafix::Point coords=p+worldcoords*planeFactor[0];
 		if (PlayerSprites[1].findMatchingSprite(coords, item)) {
 			plane=0;
 			layer=1;
@@ -281,6 +347,32 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 		if (PlayerSprites[0].findMatchingSprite(coords, item)) {
 			plane=0;
+			layer=0;
+			return true;
+		}
+	}
+	if (BackPlane.isVisible()) {
+		ppl7::grafix::Point coords=p+worldcoords*planeFactor[3];
+		if (BackSprites[1].findMatchingSprite(coords, item)) {
+			plane=3;
+			layer=1;
+			return true;
+		}
+		if (BackSprites[0].findMatchingSprite(coords, item)) {
+			plane=3;
+			layer=0;
+			return true;
+		}
+	}
+	if (MiddlePlane.isVisible()) {
+		ppl7::grafix::Point coords=p+worldcoords*planeFactor[4];
+		if (MiddleSprites[1].findMatchingSprite(coords, item)) {
+			plane=4;
+			layer=1;
+			return true;
+		}
+		if (MiddleSprites[0].findMatchingSprite(coords, item)) {
+			plane=4;
 			layer=0;
 			return true;
 		}
