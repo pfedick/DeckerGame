@@ -270,11 +270,11 @@ void Game::run()
 	SDL_Renderer *renderer=sdl.getRenderer();
 	quitGame=false;
 	while (!quitGame) {
+		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
 		player->update(now, level.TileTypeMatrix);
 		level.objects->update(now);
-		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
 			updateWorldCoords();
@@ -582,13 +582,10 @@ void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &m
 void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
 {
 	if (!object_selection) return;
-	/*
-	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
-		int currentPlane=mainmenue->currentPlane();
-		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
-				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
-	} else */
-	if (sprite_mode==spriteModeDraw) {
+	if (sprite_mode==SpriteModeEdit && selected_object!=NULL) {
+		level.objects->drawSelectedSpriteOutline(renderer, viewport,
+				WorldCoords,selected_object->id);
+	} else if (sprite_mode==spriteModeDraw) {
 		if (!mouse.inside(viewport)) return;
 		int object_type=object_selection->selectedObjectType();
 		if (object_type<0) return;
@@ -666,9 +663,16 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 {
 	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
 		int object_type=object_selection->selectedObjectType();
-		if (object_type<0 || sprite_mode==SpriteModeSelect) {
+		if (object_type<0 || sprite_mode==SpriteModeSelect || sprite_mode==SpriteModeEdit) {
 			sprite_mode=SpriteModeSelect;
-			//selectObject(event->p);
+			Decker::Objects::Object *object=level.objects->findMatchingObject(event->p+WorldCoords);
+			if (object) {
+				//printf ("found Object with id %d\n", object->id);
+				wm->setKeyboardFocus(world_widget);
+				sprite_mode=SpriteModeEdit;
+				selected_object=object;
+				sprite_move_start=event->p;
+			}
 			return;
 		}
 		if (sprite_mode!=spriteModeDraw) return;
@@ -678,7 +682,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 			selected_object->initial_p.setPoint(event->p.x+coords.x,event->p.y+coords.y);
 			selected_object->p=selected_object->initial_p;
 			level.objects->addObject(selected_object);
-			sprite_mode=SpriteModeEdit;
+			sprite_mode=spriteModeDraw;
 		}
 	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
 		sprite_mode=SpriteModeSelect;
@@ -726,7 +730,7 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 {
 	if (event->widget()==world_widget) {
-		if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0
+		if (sprite_mode==SpriteModeEdit && sprite_selection!=NULL&& selected_sprite.id>=0
 				&& selected_sprite_system!=NULL) {
 			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
 					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
@@ -735,22 +739,42 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 				selected_sprite.id=-1;
 				selected_sprite_system=NULL;
 			}
+		} else if (sprite_mode==SpriteModeEdit && object_selection!=NULL && selected_object!=NULL) {
+			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
+					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
+				//printf ("KeyEvent\n");
+				level.objects->deleteObject(selected_object->id);
+				selected_object=NULL;
+			}
 		}
+
 	}
 }
 
 void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 {
-	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
-			&& sprite_mode==SpriteModeEdit && selected_sprite.id>=0
-			&& selected_sprite_system!=NULL) {
-		ppl7::grafix::Point diff=event->p-sprite_move_start;
-		selected_sprite.x+=diff.x;
-		selected_sprite.y+=diff.y;
-		selected_sprite_system->modifySprite(selected_sprite);
-		//printf("Move: %d, %d\n", diff.x, diff.y);
-		sprite_move_start=event->p;
+	if (sprite_selection!=NULL) {
+		if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
+				&& sprite_mode==SpriteModeEdit && selected_sprite.id>=0
+				&& selected_sprite_system!=NULL) {
+			ppl7::grafix::Point diff=event->p-sprite_move_start;
+			selected_sprite.x+=diff.x;
+			selected_sprite.y+=diff.y;
+			selected_sprite_system->modifySprite(selected_sprite);
+			//printf("Move: %d, %d\n", diff.x, diff.y);
+			sprite_move_start=event->p;
 
+		}
+	} else if (object_selection!=NULL) {
+		if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
+				&& sprite_mode==SpriteModeEdit && selected_object!=NULL) {
+			ppl7::grafix::Point diff=event->p-sprite_move_start;
+			selected_object->initial_p.x+=diff.x;
+			selected_object->initial_p.y+=diff.y;
+			selected_object->p=selected_object->initial_p;
+			selected_object->updateBoundary();
+			sprite_move_start=event->p;
+		}
 	}
 }
 

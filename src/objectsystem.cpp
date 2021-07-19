@@ -56,6 +56,17 @@ void ObjectSystem::addObject(Object *object)
 	object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
 }
 
+void ObjectSystem::deleteObject(int id)
+{
+	std::map<uint32_t,Object *>::const_iterator it;
+	it=object_list.find(id);
+	if (it!=object_list.end()) {
+		Object *object=it->second;
+		object_list.erase(it);
+		delete object;
+	}
+}
+
 void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)
 {
 	visible_object_map.clear();
@@ -142,7 +153,8 @@ Representation getRepresentation(int object_type)
 	switch (object_type) {
 	case Type::Savepoint: return SavePoint::representation();
 	case Type::Medikit: return Medikit::representation();
-	case Type::Crystal: return GemReward::representation();
+	case Type::Diamond: return GemReward::representation();
+	case Type::Crystal: return CrystalReward::representation();
 	case Type::Coin: return CoinReward::representation();
 	case Type::Key: return KeyReward::representation();
 	case Type::Arrow: return Arrow::representation();
@@ -184,6 +196,8 @@ Object * ObjectSystem::getInstance(int object_type) const
 	switch (object_type) {
 	case Type::ThreeSpeers: return new ThreeSpeers();
 	case Type::Coin: return new CoinReward();
+	case Type::Crystal: return new CrystalReward();
+	case Type::Diamond: return new GemReward();
 
 	}
 	return NULL;

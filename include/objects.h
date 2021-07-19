@@ -101,9 +101,23 @@ public:
 class GemReward : public Collectable
 {
 private:
+	double next_animation;
+	AnimationCycle animation;
 public:
 	GemReward();
 	static Representation representation();
+	virtual void update(double time);
+};
+
+class CrystalReward : public Collectable
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+public:
+	CrystalReward();
+	static Representation representation();
+	virtual void update(double time);
 };
 
 class KeyReward : public Collectable
@@ -237,7 +251,7 @@ public:
 	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
-
+	void deleteObject(int id);
 	size_t count() const;
 	size_t countVisible() const;
 
