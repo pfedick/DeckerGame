@@ -4,10 +4,10 @@
 
 namespace Decker::Objects {
 
-Collectable::Collectable(Type::ObjectType type)
-: Object(type)
-{
 
+Representation Arrow::representation()
+{
+	return Representation(Spriteset::GenericObjects, 37);
 }
 
 }	// EOF namespace Decker::Objects

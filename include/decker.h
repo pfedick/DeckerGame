@@ -39,6 +39,7 @@ EXCEPTION(SDLException, ppl7::Exception);
 
 namespace Decker::Objects {
 class ObjectSystem;
+class Object;
 } // EOF namespace Decker::Objects
 
 class FPS
@@ -465,16 +466,21 @@ private:
 	void selectSprite(const ppl7::grafix::Point &mouse);
 	void updateWorldCoords();
 
+	void mouseDownEventOnSprite(ppl7::tk::MouseEvent *event);
+	void mouseDownEventOnObject(ppl7::tk::MouseEvent *event);
+
 	Player *player;
 
 	enum spriteMode {
 		spriteModeDraw,
-		SpriteModeEdit
+		SpriteModeEdit,
+		SpriteModeSelect
 	};
 	spriteMode sprite_mode;
 	SpriteSystem::Item selected_sprite;
 	SpriteSystem *selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
+	Decker::Objects::Object *selected_object;
 
 
 public:
@@ -496,6 +502,7 @@ public:
 	void showTileTypeSelection();
 	void showSpriteSelection();
 	void showObjectsSelection();
+	void setSpriteModeToDraw();
 
 	SDL_Renderer *getSDLRenderer();
 

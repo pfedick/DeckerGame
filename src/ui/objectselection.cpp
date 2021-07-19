@@ -81,6 +81,7 @@ void ObjectSelection::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		it=object_map.find(object_pos);
 		if (it!=object_map.end()) {
 			selected_object=it->second.id;
+			game->setSpriteModeToDraw();
 			needsRedraw();
 		}
 	}

@@ -4,5 +4,10 @@
 
 namespace Decker::Objects {
 
+Representation HangingSpider::representation()
+{
+	return Representation(Spriteset::GenericObjects, 49);
+}
+
 
 }	// EOF namespace Decker::Objects

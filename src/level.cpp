@@ -282,6 +282,7 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, con
 	PlayerSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
 	FrontSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
 	FrontSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
+	objects->updateVisibleObjectList(worldcoords*planeFactor[0], viewport);
 }
 
 size_t Level::countSprites() const

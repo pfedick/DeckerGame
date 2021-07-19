@@ -4,5 +4,9 @@
 
 namespace Decker::Objects {
 
+Representation GemReward::representation()
+{
+	return Representation(Spriteset::GenericObjects, 0);
+}
 
 }	// EOF namespace Decker::Objects

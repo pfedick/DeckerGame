@@ -5,4 +5,10 @@
 namespace Decker::Objects {
 
 
+Trap::Trap(Type::ObjectType type)
+: Object(type)
+{
+
+}
+
 }	// EOF namespace Decker::Objects

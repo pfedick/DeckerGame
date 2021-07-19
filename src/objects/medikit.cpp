@@ -4,10 +4,10 @@
 
 namespace Decker::Objects {
 
-Collectable::Collectable(Type::ObjectType type)
-: Object(type)
+Representation Medikit::representation()
 {
-
+	return Representation(Spriteset::GenericObjects, 83);
 }
+
 
 }	// EOF namespace Decker::Objects

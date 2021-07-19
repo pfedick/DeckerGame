@@ -5,4 +5,9 @@
 namespace Decker::Objects {
 
 
+Representation Rat::representation()
+{
+	return Representation(Spriteset::GenericObjects, 38);
+}
+
 }	// EOF namespace Decker::Objects

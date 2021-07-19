@@ -56,7 +56,14 @@ OBJECTS=compile/main.o \
 	compile/object_laserbarrier.o \
 	compile/object_enemy.o \
 	compile/object_rat.o \
-	compile/object_hangingspider.o
+	compile/object_hangingspider.o \
+	compile/object_savepoint.o \
+	compile/object_medikit.o \
+	compile/object_key.o \
+	compile/object_arrow.o \
+	compile/object_door.o \
+	compile/object_floater.o
+	
 	
 	
 	
@@ -103,9 +110,9 @@ sprites:
 	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0 -x res/bricks_white_ui
 	./texmaker -s "lightwave/Render/bricks_white/*.png" -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160 -x res/bricks_white
 	./texmaker -s "lightwave/Render/objects/ui/*.png" -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
-	./texmaker -s "lightwave/Render/objects/interactive/*.png" -t res/objects.tex -w 1024 -h 1024 -px 256 -py 500
+	./texmaker -s "lightwave/Render/objects/interactive/*.png" -t res/objects.tex -w 1024 -h 1024 -px 256 -py 500 --pivot_detection lower_middle
 	
-	./texmaker -s "lightwave/Render/enemies/3speers/*.png" -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255
+	./texmaker -s "lightwave/Render/enemies/3speers/*.png" -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255 --pivot_detection lower_middle
 	
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
@@ -191,6 +198,31 @@ compile/object_rat.o: src/objects/rat.cpp Makefile include/objects.h
 compile/object_hangingspider.o: src/objects/hangingspider.cpp Makefile include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_hangingspider.o -c src/objects/hangingspider.cpp $(CFLAGS)	
+
+compile/object_key.o: src/objects/key.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_key.o -c src/objects/key.cpp $(CFLAGS)	
+
+compile/object_door.o: src/objects/door.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_door.o -c src/objects/door.cpp $(CFLAGS)	
+
+compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)	
+
+compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_medikit.o -c src/objects/medikit.cpp $(CFLAGS)	
+
+compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_savepoint.o -c src/objects/savepoint.cpp $(CFLAGS)	
+
+compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)	
+
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

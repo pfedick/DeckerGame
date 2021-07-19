@@ -43,6 +43,7 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 
 void ObjectSystem::addObject(Object *object)
 {
+	if (!object) return;
 	object->id=(uint32_t)object_list.size();
 	if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
 		object->texture=this->spriteset[object->sprite_set];
@@ -74,7 +75,11 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 
 void ObjectSystem::update(double time)
 {
-
+	std::map<uint32_t, Object *>::iterator it;
+	for (it=object_list.begin();it!=object_list.end();++it) {
+		Object *object=it->second;
+		object->update(time);
+	}
 }
 
 void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
@@ -129,11 +134,57 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 	}
 }
 
-void ObjectSystem::drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type)
+Representation getRepresentation(int object_type)
 {
-
+	switch (object_type) {
+	case Type::Savepoint: return SavePoint::representation();
+	case Type::Medikit: return Medikit::representation();
+	case Type::Crystal: return GemReward::representation();
+	case Type::Coin: return CoinReward::representation();
+	case Type::Key: return KeyReward::representation();
+	case Type::Arrow: return Arrow::representation();
+	case Type::ThreeSpeers: return ThreeSpeers::representation();
+	case Type::Rat: return Rat::representation();
+	case Type::HangingSpider: return HangingSpider::representation();
+	case Type::FloaterHorizontal: return FloaterHorizontal::representation();
+	case Type::FloaterVertical: return FloaterVertical::representation();
+	default: return Object::representation();
+	}
 }
 
+
+SpriteTexture *ObjectSystem::getTexture(int sprite_set) const
+{
+	if (sprite_set>=0 && sprite_set<Spriteset::MaxSpritesets)
+		return spriteset[sprite_set];
+	return NULL;
+}
+
+void ObjectSystem::drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type)
+{
+	Representation repr=getRepresentation(object_type);
+	if (repr.sprite_set>=0) {
+		SpriteTexture *texture=getTexture(repr.sprite_set);
+		if (texture) {
+			texture->draw(renderer,
+					p.x,
+					p.y,
+					repr.sprite_no);
+			texture->drawOutlines(renderer,p.x,p.y,
+					repr.sprite_no, 1.0f);
+		}
+	}
+}
+
+Object * ObjectSystem::getInstance(int object_type) const
+{
+	switch (object_type) {
+	case Type::ThreeSpeers: return new ThreeSpeers();
+	case Type::Coin: return new CoinReward();
+
+	}
+	return NULL;
+}
 
 size_t ObjectSystem::count() const
 {

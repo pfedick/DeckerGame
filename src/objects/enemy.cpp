@@ -5,4 +5,11 @@
 namespace Decker::Objects {
 
 
+Enemy::Enemy(Type::ObjectType type)
+: Object(type)
+{
+
+}
+
+
 }	// EOF namespace Decker::Objects

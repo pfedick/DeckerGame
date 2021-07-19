@@ -31,6 +31,13 @@ ppl7::String Type::name(Type::ObjectType type)
 	}
 }
 
+Representation::Representation(int sprite_set, int sprite_no)
+{
+	this->sprite_set=sprite_set;
+	this->sprite_no=sprite_no;
+}
+
+
 Object::Object(Type::ObjectType type)
 {
 	myType=type;
@@ -38,6 +45,12 @@ Object::Object(Type::ObjectType type)
 	sprite_no=0;
 	id=0;
 	texture=NULL;
+	collsionDetection=false;
+}
+
+Object::~Object()
+{
+
 }
 
 Type::ObjectType Object::type() const
@@ -57,5 +70,15 @@ void Object::updateBoundary()
 		boundary=texture->spriteBoundary(sprite_no,1.0f,p.x,p.y);
 }
 
+
+Representation Object::representation()
+{
+	return Representation(-1, 0);
+}
+
+void Object::update(double time)
+{
+
+}
 
 }	// EOF namespace Decker::Objects

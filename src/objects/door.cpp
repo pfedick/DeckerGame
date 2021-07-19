@@ -4,10 +4,5 @@
 
 namespace Decker::Objects {
 
-Collectable::Collectable(Type::ObjectType type)
-: Object(type)
-{
-
-}
 
 }	// EOF namespace Decker::Objects

@@ -29,6 +29,7 @@ Game::Game()
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
 	selected_sprite.id=-1;
+	selected_object=NULL;
 }
 
 Game::~Game()
@@ -272,6 +273,7 @@ void Game::run()
 		double now=ppl7::GetMicrotime();
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
 		player->update(now, level.TileTypeMatrix);
+		level.objects->update(now);
 		wm->handleEvents();
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
@@ -455,6 +457,8 @@ void Game::showObjectsSelection()
 		this->addChild(object_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
+		sprite_mode=SpriteModeSelect;
+		selected_object=NULL;
 	}
 }
 
@@ -519,6 +523,12 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 	}
 }
 
+void Game::setSpriteModeToDraw()
+{
+	sprite_mode=spriteModeDraw;
+	selected_object=NULL;
+}
+
 void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
 {
 	if (!sprite_selection) return;
@@ -572,10 +582,6 @@ void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &m
 void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
 {
 	if (!object_selection) return;
-	if (object_selection->selectedObjectType()>=0 && sprite_mode!=spriteModeDraw) {
-		//selected_sprite_system=NULL;
-		sprite_mode=spriteModeDraw;
-	}
 	/*
 	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
 		int currentPlane=mainmenue->currentPlane();
@@ -587,16 +593,6 @@ void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point 
 		int object_type=object_selection->selectedObjectType();
 		if (object_type<0) return;
 		level.objects->drawPlaceSelection(renderer, mouse, object_type);
-		/*
-		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset==1) nr=nr*4;
-		float scale=sprite_selection->spriteScale();
-		if (!level.spriteset[spriteset]) return;
-		level.spriteset[spriteset]->drawScaled(renderer,
-				mouse.x, mouse.y, nr, scale);
-		level.spriteset[spriteset]->drawOutlines(renderer,
-					mouse.x, mouse.y, nr, scale);
-		*/
 	}
 }
 
@@ -629,7 +625,16 @@ void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
-	if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+	if (sprite_selection!=NULL && event->widget()==world_widget) {
+		mouseDownEventOnSprite(event);
+	} else if (object_selection!=NULL && event->widget()==world_widget) {
+		mouseDownEventOnObject(event);
+	}
+}
+
+void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
+{
+	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
 		int nr=sprite_selection->selectedSprite();
 		if (nr<0) {
 			selectSprite(event->p);
@@ -649,11 +654,35 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 				event->p.y+coords.y,
 				0,
 				spriteset, nr, scale);
-	} else if (sprite_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
+	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
+	}
+}
+
+void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
+{
+	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+		int object_type=object_selection->selectedObjectType();
+		if (object_type<0 || sprite_mode==SpriteModeSelect) {
+			sprite_mode=SpriteModeSelect;
+			//selectObject(event->p);
+			return;
+		}
+		if (sprite_mode!=spriteModeDraw) return;
+		selected_object=level.objects->getInstance(object_type);
+		if (selected_object) {
+			ppl7::grafix::Point coords=WorldCoords;
+			selected_object->initial_p.setPoint(event->p.x+coords.x,event->p.y+coords.y);
+			selected_object->p=selected_object->initial_p;
+			level.objects->addObject(selected_object);
+			sprite_mode=SpriteModeEdit;
+		}
+	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
+		sprite_mode=SpriteModeSelect;
+		selected_object=NULL;
 	}
 }
 
