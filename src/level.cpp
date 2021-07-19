@@ -43,6 +43,7 @@ void Level::clear()
 	MiddleSprites[1].clear();
 	BackSprites[0].clear();
 	BackSprites[1].clear();
+	objects->clear();
 }
 
 void Level::setTileset(int no, SpriteTexture *tileset)
@@ -163,6 +164,8 @@ void Level::load(const ppl7::String &Filename)
 				MiddleSprites[1].load(ba);
 			} else if (id==LevelChunkId::chunkTileTypes) {
 				TileTypeMatrix.load(ba);
+			} else if (id==LevelChunkId::chunkObjects) {
+				objects->load(ba);
 			}
 		} catch (const ppl7::EndOfFileException &) {
 			break;
@@ -206,6 +209,7 @@ void Level::save(const ppl7::String &Filename)
 	BackSprites[1].save(ff, LevelChunkId::chunkBackSpritesLayer1);
 	MiddleSprites[0].save(ff, LevelChunkId::chunkMiddleSpritesLayer0);
 	MiddleSprites[1].save(ff, LevelChunkId::chunkMiddleSpritesLayer1);
+	objects->save(ff,LevelChunkId::chunkObjects);
 	ff.close();
 
 }

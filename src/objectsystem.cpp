@@ -7,6 +7,7 @@ namespace Decker::Objects {
 
 ObjectSystem::ObjectSystem()
 {
+	nextid=1;
 	for (int i=0;i<Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
 	}
@@ -26,6 +27,7 @@ void ObjectSystem::clear()
 		object_list.erase(it);
 		delete object;
 	}
+	nextid=1;
 }
 
 void ObjectSystem::loadSpritesets(SDL &sdl)
@@ -44,7 +46,8 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 void ObjectSystem::addObject(Object *object)
 {
 	if (!object) return;
-	object->id=(uint32_t)object_list.size();
+	object->id=nextid;
+	nextid++;
 	if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
 		object->texture=this->spriteset[object->sprite_set];
 		object->updateBoundary();
@@ -185,6 +188,59 @@ Object * ObjectSystem::getInstance(int object_type) const
 	}
 	return NULL;
 }
+
+void ObjectSystem::save(ppl7::FileObject &file, unsigned char id) const
+{
+	if (object_list.size()==0) return;
+	std::map<uint32_t,Object *>::const_iterator it;
+	size_t buffersize=0;
+	for (it=object_list.begin();it!=object_list.end();++it) {
+		Object *object=it->second;
+		buffersize+=object->save_size+1;
+	}
+	unsigned char *buffer=(unsigned char*)malloc(buffersize+5);
+	ppl7::Poke32(buffer+0,0);
+	ppl7::Poke8(buffer+4,id);
+	size_t p=5;
+	for (it=object_list.begin();it!=object_list.end();++it) {
+		Object *object=it->second;
+		ppl7::Poke8(buffer+p,object->save_size+1);
+		size_t bytes_saved=object->save(buffer+p+1,object->save_size);
+		if (bytes_saved==object->save_size && bytes_saved>0) {
+			p+=object->save_size+1;
+			//printf ("saved object %d with size %d\n",object->id, object->save_size+1);
+		}
+	}
+	ppl7::Poke32(buffer+0,p);
+	file.write(buffer,p);
+	free(buffer);
+}
+
+void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
+{
+	clear();
+	size_t p=0;
+	const unsigned char *buffer=(const unsigned char*)ba.toCharPtr();
+	//printf("chunk size=%zd\n",ba.size());
+	while (p<ba.size()) {
+		int save_size=ppl7::Peek8(buffer+p);
+		int type=ppl7::Peek8(buffer+p+1);
+		Object *object=getInstance(type);
+		if (object) {
+			if (object->load(buffer+p+1,save_size-1)) {
+				if (object->id>=nextid) nextid=object->id+1;
+				if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
+					object->texture=this->spriteset[object->sprite_set];
+					object->updateBoundary();
+				}
+				object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
+				//printf ("found object of type %d with size %d\n",type,save_size);
+			}
+		}
+		p+=save_size;
+	}
+}
+
 
 size_t ObjectSystem::count() const
 {

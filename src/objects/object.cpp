@@ -46,6 +46,8 @@ Object::Object(Type::ObjectType type)
 	id=0;
 	texture=NULL;
 	collsionDetection=false;
+	save_size=9;
+	state_size=0;
 }
 
 Object::~Object()
@@ -79,6 +81,26 @@ Representation Object::representation()
 void Object::update(double time)
 {
 
+}
+
+size_t Object::save(unsigned char *buffer, size_t size)
+{
+	if (size<9) return 0;
+	ppl7::Poke8(buffer+0,myType);
+	ppl7::Poke32(buffer+1,id);
+	ppl7::Poke16(buffer+5,initial_p.x);
+	ppl7::Poke16(buffer+7,initial_p.y);
+	return 9;
+}
+
+bool Object::load(const unsigned char *buffer, size_t size)
+{
+	if (size<9) return false;
+	id=ppl7::Peek32(buffer+1);
+	initial_p.x=ppl7::Peek16(buffer+5);
+	initial_p.y=ppl7::Peek16(buffer+7);
+	p=initial_p;
+	return true;
 }
 
 }	// EOF namespace Decker::Objects

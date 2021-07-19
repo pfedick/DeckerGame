@@ -60,6 +60,8 @@ public:
 	uint32_t id;
 	int sprite_set;
 	int sprite_no;
+	unsigned char save_size;
+	unsigned char state_size;
 	bool collsionDetection;
 
 	Object(Type::ObjectType type);
@@ -68,6 +70,8 @@ public:
 	ppl7::String typeName() const;
 	void updateBoundary();
 	virtual void update(double time);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
 
 	static Representation representation();
 };
@@ -208,6 +212,7 @@ public:
 class ObjectSystem
 {
 private:
+	uint32_t nextid;
 	std::map<uint32_t,Object *> object_list;
 	std::map<uint32_t,Object *> visible_object_map;
 	SpriteTexture *spriteset[Spriteset::MaxSpritesets];
