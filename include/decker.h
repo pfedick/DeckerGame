@@ -450,6 +450,7 @@ private:
 	bool quitGame;
 
 	void createWindow();
+	void presentStartupScreen();
 	void initUi();
 	void updateUi(const ppl7::tk::MouseState &mouse);
 	void drawGrid();

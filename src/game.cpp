@@ -131,9 +131,30 @@ void Game::initUi()
 
 }
 
+void Game::presentStartupScreen()
+{
+	ppl7::grafix::Image img;
+	img.load("res/loading.png");
+	SDL_Texture *tex=sdl.createStreamingTexture(img.width(), img.height());
+	ppl7::grafix::Drawable draw=sdl.lockTexture(tex);
+	draw.blt(img);
+	sdl.unlockTexture(tex);
+	sdl.startFrame(Style.windowBackgroundColor);
+	viewport=sdl.getClientWindow();
+	SDL_Rect target;
+	target.x=(viewport.width()-img.width())/2;
+	target.y=(viewport.height()-img.height())/2;
+	target.w=img.width();
+	target.h=img.height();
+	SDL_RenderCopy(sdl.getRenderer(), tex, NULL, &target);
+	sdl.present();
+	sdl.destroyTexture(tex);
+}
+
 void Game::init()
 {
 	createWindow();
+	presentStartupScreen();
 	loadGrafix();
 
 	desktopSize=sdl.getWindowSize();
