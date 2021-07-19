@@ -36,7 +36,7 @@ they can interact with the player.
 ### Things I have to do or figure out
 - create interactive objects / enemies:
     - locked door
-    - key (used to open a locked door)
+    - key (used to unlock a locked door)
     - gems (can be collected => points)
     - coins (can be collected  => points)
     - arrows from wall
@@ -47,7 +47,7 @@ they can interact with the player.
     - skeleton
     - mummy
     - some kind of angry bird?
-    - dissolving gound
+    - dissolving ground
     - floater
     - lasers
     - side wind

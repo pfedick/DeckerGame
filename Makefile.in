@@ -45,6 +45,7 @@ OBJECTS=compile/main.o \
 	compile/spritesystem.o \
 	compile/brickoccupation.o \
 	compile/player.o \
+	compile/animation.o \
 	compile/resources.o \
 	compile/objectsystem.o \
 	compile/object.o \
@@ -167,11 +168,11 @@ compile/object_collectable.o: src/objects/collectable.cpp Makefile include/objec
 	-mkdir -p compile 
 	$(CXX) -o compile/object_collectable.o -c src/objects/collectable.cpp $(CFLAGS)	
 
-compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h
+compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_gem.o -c src/objects/gem.cpp $(CFLAGS)	
 
-compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h
+compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)	
 
@@ -179,7 +180,7 @@ compile/object_trap.o: src/objects/trap.cpp Makefile include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_trap.o -c src/objects/trap.cpp $(CFLAGS)	
 
-compile/object_threespeers.o: src/objects/threespeers.cpp Makefile include/objects.h
+compile/object_threespeers.o: src/objects/threespeers.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_threespeers.o -c src/objects/threespeers.cpp $(CFLAGS)	
 
@@ -207,19 +208,19 @@ compile/object_door.o: src/objects/door.cpp Makefile include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_door.o -c src/objects/door.cpp $(CFLAGS)	
 
-compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h
+compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)	
 
-compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h
+compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h 
 	-mkdir -p compile 
 	$(CXX) -o compile/object_medikit.o -c src/objects/medikit.cpp $(CFLAGS)	
 
-compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h
+compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_savepoint.o -c src/objects/savepoint.cpp $(CFLAGS)	
 
-compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h
+compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)	
 
@@ -229,9 +230,13 @@ compile/tile.o: src/tile.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
 
-compile/player.o: src/player.cpp Makefile include/player.h
+compile/player.o: src/player.cpp Makefile include/player.h include/animation.h
 	-mkdir -p compile 
 	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
+
+compile/animation.o: src/animation.cpp Makefile include/animation.h
+	-mkdir -p compile 
+	$(CXX) -o compile/animation.o -c src/animation.cpp $(CFLAGS)
 
 compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
 	-mkdir -p compile 
