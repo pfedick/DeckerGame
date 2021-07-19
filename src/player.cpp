@@ -329,12 +329,15 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 					y+(TILE_HEIGHT/2)-(5*TILE_HEIGHT)+(cy*TILE_HEIGHT)));
 		}
 	}
+	//collision_matrix[1][0]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-(TILE_HEIGHT*3)+15));
+	//collision_matrix[2][0]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-(TILE_HEIGHT*3)+15));
+
 	collision_matrix[1][4]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1));
 	collision_matrix[2][4]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1));
 
 	for (int cx=0;cx<4;cx++) {
 		collision_matrix[cx][0]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
-				y-(TILE_HEIGHT*5)));
+				y-(TILE_HEIGHT*4)));
 
 		collision_matrix[cx][5]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
 				y));
@@ -363,7 +366,15 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		}
 	}
 
-
+	if (collision_matrix[1][0]==TileType::Blocking || collision_matrix[2][0]==TileType::Blocking) {
+		//printf ("Collsion!\n");
+		acceleration_gravity=0.1f;
+		gravity=1.0f;
+		velocity_move.y=1;
+		acceleration_jump=0.0f;
+		movement=Falling;
+		//if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
+	}
 	if (collision_matrix[1][5]==TileType::Blocking || collision_matrix[2][5]==TileType::Blocking) {
 		if (gravity>0.0f) {
 			acceleration_gravity=0.0f;
@@ -383,14 +394,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 				velocity_move.x=0;
 				//printf ("debug 3a\n");
 				if (movement!=Jump && movement!=Falling)	stand();
-				else movement=Falling;
+				//else movement=Falling;
 			}
 		} else if (orientation==Right) {
 			if (isCollisionRight()) {
 				velocity_move.x=0;
 				//printf ("debug 3b\n");
 				if (movement!=Jump && movement!=Falling)	stand();
-				else movement=Falling;
+				//else movement=Falling;
 
 			}
 		}

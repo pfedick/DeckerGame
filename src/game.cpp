@@ -139,6 +139,7 @@ void Game::presentStartupScreen()
 	ppl7::grafix::Drawable draw=sdl.lockTexture(tex);
 	draw.blt(img);
 	sdl.unlockTexture(tex);
+	wm->handleEvents();
 	sdl.startFrame(Style.windowBackgroundColor);
 	viewport=sdl.getClientWindow();
 	SDL_Rect target;
@@ -148,6 +149,7 @@ void Game::presentStartupScreen()
 	target.h=img.height();
 	SDL_RenderCopy(sdl.getRenderer(), tex, NULL, &target);
 	sdl.present();
+
 	sdl.destroyTexture(tex);
 }
 
