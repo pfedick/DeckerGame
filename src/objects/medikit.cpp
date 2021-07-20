@@ -10,4 +10,13 @@ Representation Medikit::representation()
 }
 
 
+Medikit::Medikit()
+: Collectable(Type::ObjectType::Savepoint)
+{
+	sprite_set=Spriteset::GenericObjects;
+	sprite_no=83;
+	collsionDetection=true;
+	sprite_no_representation=83;
+}
+
 }	// EOF namespace Decker::Objects

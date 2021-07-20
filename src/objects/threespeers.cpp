@@ -24,6 +24,7 @@ ThreeSpeers::ThreeSpeers()
 	state=0;
 	next_state=ppl7::GetMicrotime()+5.0;
 	collsionDetection=false;
+	sprite_no_representation=22;
 }
 
 void ThreeSpeers::update(double time)

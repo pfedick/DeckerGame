@@ -60,9 +60,11 @@ public:
 	uint32_t id;
 	int sprite_set;
 	int sprite_no;
+	int sprite_no_representation;
 	unsigned char save_size;
 	unsigned char state_size;
 	bool collsionDetection;
+	bool visibleAtPlaytime;
 
 	Object(Type::ObjectType type);
 	virtual ~Object();
@@ -75,6 +77,15 @@ public:
 
 	static Representation representation();
 };
+
+class PlayerStartPoint : public Object
+{
+private:
+public:
+	PlayerStartPoint();
+	static Representation representation();
+};
+
 
 class Collectable : public Object
 {
@@ -139,9 +150,13 @@ public:
 class SavePoint : public Collectable
 {
 private:
+	double next_animation;
+	AnimationCycle animation;
+
 public:
 	SavePoint();
 	static Representation representation();
+	virtual void update(double time);
 };
 
 
@@ -244,6 +259,7 @@ public:
 	void update(double time);
 	void updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
+	void drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void save(ppl7::FileObject &file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr &ba);
 	void saveState(ppl7::FileObject &file, unsigned char id) const;

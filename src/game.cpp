@@ -295,6 +295,7 @@ void Game::run()
 	while (!quitGame) {
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
+		level.setEditmode(object_selection!=NULL);
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
 		player->update(now, level.TileTypeMatrix);
 		level.objects->update(now);

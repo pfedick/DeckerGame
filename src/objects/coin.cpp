@@ -17,9 +17,10 @@ CoinReward::CoinReward()
 : Collectable(Type::ObjectType::Coin)
 {
 	sprite_set=Spriteset::GenericObjects;
-	animation.start(coin_rotate,sizeof(coin_rotate)/sizeof(int),true,0);
+	animation.startRandom(coin_rotate,sizeof(coin_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
 	collsionDetection=true;
+	sprite_no_representation=84;
 }
 
 void CoinReward::update(double time)

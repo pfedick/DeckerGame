@@ -6,8 +6,16 @@ namespace Decker::Objects {
 
 Representation KeyReward::representation()
 {
-	return Representation(Spriteset::GenericObjects, 51);
+	return Representation(Spriteset::GenericObjects, 50);
 }
 
+KeyReward::KeyReward()
+: Collectable(Type::ObjectType::Savepoint)
+{
+	sprite_set=Spriteset::GenericObjects;
+	sprite_no=50;
+	collsionDetection=true;
+	sprite_no_representation=50;
+}
 
 }	// EOF namespace Decker::Objects

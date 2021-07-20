@@ -18,6 +18,7 @@ Level::Level()
 		spriteset[i]=NULL;
 	}
 	objects=new Decker::Objects::ObjectSystem();
+	editMode=false;
 }
 
 Level::~Level()
@@ -44,6 +45,11 @@ void Level::clear()
 	BackSprites[0].clear();
 	BackSprites[1].clear();
 	objects->clear();
+}
+
+void Level::setEditmode(bool enabled)
+{
+	editMode=enabled;
 }
 
 void Level::setTileset(int no, SpriteTexture *tileset)
@@ -264,7 +270,10 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 		PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
 		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
 		PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
-		objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
+		if (editMode)
+			objects->drawEditMode(renderer, viewport, worldcoords*planeFactor[0]);
+		else
+			objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
 		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
 	}
 	if (FrontPlane.isVisible()) {

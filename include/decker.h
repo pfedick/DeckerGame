@@ -372,6 +372,8 @@ private:
 	ppl7::grafix::Rect viewport;
 	SpriteTexture *tileset[MAX_TILESETS+1];
 	SpriteTexture *spriteset[MAX_SPRITESETS+1];
+	bool editMode;
+
 	void clear();
 
 	enum LevelChunkId {
@@ -398,6 +400,7 @@ private:
 public:
 	Level();
 	~Level();
+	void setEditmode(bool enabled);
 	void setTileset(int no, SpriteTexture *tileset);
 	void setSpriteset(int no, SpriteTexture *spriteset);
 	void create(int width, int height);

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ppl7.h>
 #include "animation.h"
 
 AnimationCycle::AnimationCycle()
@@ -20,6 +21,13 @@ void AnimationCycle::start(int *cycle_array, int size, bool loop, int endframe)
 	this->endframe=endframe;
 	finished=false;
 	index=0;
+}
+
+void AnimationCycle::startRandom(int *cycle_array, int size, bool loop, int endframe)
+{
+	start(cycle_array,size,loop,endframe);
+	index=ppl7::rand(0, size);
+	if (index>=size) index=0;
 }
 
 void AnimationCycle::setStaticFrame(int nr)

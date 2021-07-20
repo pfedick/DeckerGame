@@ -43,9 +43,11 @@ Object::Object(Type::ObjectType type)
 	myType=type;
 	sprite_set=0;
 	sprite_no=0;
+	sprite_no_representation=0;
 	id=0;
 	texture=NULL;
 	collsionDetection=false;
+	visibleAtPlaytime=true;
 	save_size=9;
 	state_size=0;
 }

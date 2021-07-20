@@ -18,14 +18,14 @@ Representation FloaterVertical::representation()
 FloaterHorizontal::FloaterHorizontal()
 : Object(Type::FloaterHorizontal)
 {
-
+	sprite_no_representation=115;
 }
 
 
 FloaterVertical::FloaterVertical()
 : Object(Type::FloaterVertical)
 {
-
+	sprite_no_representation=116;
 }
 
 }	// EOF namespace Decker::Objects

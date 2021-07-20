@@ -101,7 +101,7 @@ void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 	std::map<uint32_t,Object *>::const_iterator it;
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		const Object *object=it->second;
-		if (object->texture) {
+		if (object->texture!=NULL && object->visibleAtPlaytime==true) {
 			object->texture->draw(renderer,
 					object->p.x+viewport.x1-worldcoords.x,
 					object->p.y+viewport.y1-worldcoords.y,
@@ -109,6 +109,21 @@ void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 		}
 	}
 }
+
+void ObjectSystem::drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
+{
+	std::map<uint32_t,Object *>::const_iterator it;
+	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
+		const Object *object=it->second;
+		if (object->texture) {
+			object->texture->draw(renderer,
+					object->initial_p.x+viewport.x1-worldcoords.x,
+					object->initial_p.y+viewport.y1-worldcoords.y,
+					object->sprite_no_representation);
+		}
+	}
+}
+
 
 Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
 {
@@ -151,6 +166,7 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 Representation getRepresentation(int object_type)
 {
 	switch (object_type) {
+	case Type::PlayerStartpoint: return PlayerStartPoint::representation();
 	case Type::Savepoint: return SavePoint::representation();
 	case Type::Medikit: return Medikit::representation();
 	case Type::Diamond: return GemReward::representation();
@@ -198,6 +214,11 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Coin: return new CoinReward();
 	case Type::Crystal: return new CrystalReward();
 	case Type::Diamond: return new GemReward();
+	case Type::Medikit: return new Medikit();
+	case Type::Savepoint: return new SavePoint();
+	case Type::Key: return new KeyReward();
+	case Type::PlayerStartpoint: return new PlayerStartPoint();
+
 
 	}
 	return NULL;

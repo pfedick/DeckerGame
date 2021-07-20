@@ -15,6 +15,7 @@ public:
 	AnimationCycle();
 	void setStaticFrame(int nr);
 	void start(int *cycle_array, int size, bool loop, int endframe);
+	void startRandom(int *cycle_array, int size, bool loop, int endframe);
 	void update();
 	int getFrame() const;
 	bool isFinished() const;
