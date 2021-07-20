@@ -1,4 +1,5 @@
 #include <map>
+#include <list>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "animation.h"
@@ -265,6 +266,7 @@ public:
 	void saveState(ppl7::FileObject &file, unsigned char id) const;
 	void loadState(const ppl7::ByteArrayPtr &ba) const;
 	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
+	Object *detectCollision(const std::list<ppl7::grafix::Point> &player);
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
 	void deleteObject(int id);

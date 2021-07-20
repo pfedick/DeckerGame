@@ -148,6 +148,32 @@ Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
 	return found_object;
 }
 
+Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &player)
+{
+	std::map<uint32_t,Object *>::const_iterator it;
+	std::list<ppl7::grafix::Point>::const_iterator p_it;
+	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
+		Object *item=it->second;
+		if (item->texture!=NULL && item->collsionDetection==true) {
+			for (p_it=player.begin();p_it!=player.end();++p_it) {
+				if ((*p_it).inside(item->boundary)) {
+					const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
+					if (draw.width()) {
+						int x=(*p_it).x-item->boundary.x1;
+						int y=(*p_it).y-item->boundary.y1;
+						ppl7::grafix::Color c=draw.getPixel(x, y);
+						if (c.alpha()>92) {
+							return item;
+						}
+					}
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+
 void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
 {
 	std::map<uint32_t,Object *>::const_iterator it;
