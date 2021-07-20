@@ -105,4 +105,9 @@ bool Object::load(const unsigned char *buffer, size_t size)
 	return true;
 }
 
+void Object::handleCollision(Player *player)
+{
+
+}
+
 }	// EOF namespace Decker::Objects
