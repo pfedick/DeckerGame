@@ -11,7 +11,7 @@ Representation Medikit::representation()
 
 
 Medikit::Medikit()
-: Collectable(Type::ObjectType::Savepoint)
+: Collectable(Type::ObjectType::Medikit)
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=83;
