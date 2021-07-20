@@ -44,7 +44,6 @@ private:
 	const SpriteTexture *sprite_resource;
 	const SpriteTexture *tiletype_resource;
 
-	ppl7::grafix::Rect world;
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
@@ -91,7 +90,6 @@ public:
 	~Player();
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);
-	void setGameWindow(const ppl7::grafix::Rect &world);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void move(int x, int y);

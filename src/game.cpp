@@ -313,7 +313,6 @@ void Game::run()
 		}
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
-		player->setGameWindow(viewport);
 		SDL_Rect target;
 		target.x=viewport.x1;
 		target.y=viewport.y1;

@@ -73,12 +73,6 @@ void Player::setTileTypeResource(const SpriteTexture &resource)
 	tiletype_resource=&resource;
 }
 
-void Player::setGameWindow(const ppl7::grafix::Rect &world)
-{
-	this->world=world;
-
-}
-
 void Player::move(int x, int y)
 {
 	this->x=x;
