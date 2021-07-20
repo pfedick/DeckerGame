@@ -24,10 +24,6 @@ Next thing to do is fill the world with interactive objects and enemies and see 
 they can interact with the player.
 
 ### Things which are ongoing
-- how to implement interactive objects/enemies
-- how to control the main character?
-- physics
-- collision detection
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
 - create graphics
 - ui
@@ -37,10 +33,7 @@ they can interact with the player.
 - create interactive objects / enemies:
     - locked door
     - key (used to unlock a locked door)
-    - gems (can be collected => points)
-    - coins (can be collected  => points)
     - arrows from wall
-    - speers from ground
     - rat
     - scorpion
     - spider
@@ -51,13 +44,14 @@ they can interact with the player.
     - floater
     - lasers
     - side wind
-  
+- refine physics (especially jumping & falling) 
 - how does sound work with SDL?
 - how to integrate sound track and sound effects
 - compose sound track
 - create sound effects
 - build the world/levels
 - story?
+- save and load of progress in a level
 There is probably more, which I'm not aware of, yet ;-)
 
 ### Things I have finished
@@ -67,7 +61,16 @@ There is probably more, which I'm not aware of, yet ;-)
 - how to implement the sprites?
 - which resolution should the game have
 - what is the best size for tiles and sprites?
-
+- how to implement interactive objects/enemies
+- how to control the main character?
+- physics
+- collision detection
+- create interactive objects / enemies:
+    - spears from ground
+    - gems (can be collected => points)
+    - coins (can be collected  => points)
+    - medikit
+    - savepoint
 
 
 ## On what platforms will the game be available
