@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 #include "player.h"
+#include "objects.h"
 
 static int walk_cycle_left[]={0,1,2,3,4,5,6,7,8};
 static int walk_cycle_right[]={9,10,11,12,13,14,15,16,17};
@@ -40,6 +41,9 @@ Player::Player()
 	jump_climax=0.0f;
 	acceleration_jump=0.0f;
 	time=0.0f;
+	points=0;
+	health=100;
+	lifes=3;
 }
 
 Player::~Player()
@@ -145,10 +149,26 @@ void Player::stand()
 	idle_timeout=time+4.0;
 }
 
-void Player::update(double time, const TileTypePlane &world)
+void Player::addPoints(int points)
+{
+	this->points+=points;
+}
+
+void Player::dropHealth(int points)
+{
+	health-=points;
+	if (health<0) {
+		lifes--;
+		health=100;
+		// TODO: Player::die
+	}
+}
+
+void Player::update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
 {
 	this->time=time;
 	updateMovement();
+	checkCollisionWithObjects(objects);
 	checkCollisionWithWorld(world);
 	updatePhysics(world);
 	x+=velocity_move.x;
@@ -461,5 +481,39 @@ void Player::updatePhysics(const TileTypePlane &world)
 	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f\n",
 			gravity, acceleration_gravity, acceleration_airstream);
 	*/
+
+}
+
+
+void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
+{
+	// we try to find existing pixels inside the player boundary
+	// to build a list with points we want to check against the
+	// objects
+	std::list<ppl7::grafix::Point> checkpoints;
+	checkpoints.push_back(ppl7::grafix::Point(x,y));
+
+	const ppl7::grafix::Drawable &draw=sprite_resource->getDrawable(animation.getFrame());
+	ppl7::grafix::Rect boundary=sprite_resource->spriteBoundary(animation.getFrame(),1.0f,x,y);
+
+	if (draw.width()) {
+		//printf ("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
+		int stepx=boundary.width()/6;
+		int stepy=boundary.height()/6;
+		for (int py=boundary.y1;py<boundary.y2;py+=stepx) {
+			for (int px=boundary.x1;px<boundary.x2;px+=stepy) {
+				ppl7::grafix::Color c=draw.getPixel(px-boundary.x1, py-boundary.y1);
+				if (c.alpha()>92) {
+					checkpoints.push_back(ppl7::grafix::Point(px,py));
+				}
+			}
+		}
+	}
+	//printf ("check collision against %zd points:\n", checkpoints.size());
+
+	Decker::Objects::Object *object=objects->detectCollision(checkpoints);
+	if (!object) return;
+	printf ("Detected Collision with Object: %s, ID: %d\n",
+			(const char*)object->typeName(), object->id);
 
 }

@@ -7,6 +7,10 @@ class SpriteTexture;
 
 #include "animation.h"
 
+namespace Decker::Objects {
+	class ObjectSystem;
+} // EOF namespace Decker::Objects
+
 class Velocity
 {
 public:
@@ -72,10 +76,13 @@ private:
 	PlayerOrientation orientation=Front;
 	PlayerOrientation turnTarget;
 
+	ppl7::grafix::Point lastSavePoint;
+
 	void turn(PlayerOrientation target);
 	void stand();
 	void updateMovement();
 	void checkCollisionWithWorld(const TileTypePlane &world);
+	void checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects);
 	void updatePhysics(const TileTypePlane &world);
 	int getKeyboardMatrix(const Uint8 *state);
 	int collision_matrix[4][6];
@@ -86,8 +93,13 @@ private:
 
 public:
 	int x,y;
+	int points, health, lifes;
+
+
 	Player();
 	~Player();
+	void addPoints(int points);
+	void dropHealth(int points);
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
@@ -95,7 +107,7 @@ public:
 	void move(int x, int y);
 	ppl7::String getState() const;
 
-	void update(double time, const TileTypePlane &world);
+	void update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
 
 
 
