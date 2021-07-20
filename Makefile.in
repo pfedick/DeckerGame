@@ -116,6 +116,13 @@ sprites:
 	
 	./texmaker -s "lightwave/Render/enemies/3speers/*.png" -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255 --pivot_detection lower_middle
 	
+fonts:
+	- rm -rf res/*.fnt6
+	pplfontmaker -t res/notosans-black.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Black.ttf -s "12,20,30,50" --idn --aa4 -n "NotoSans-Black" --zlib -6
+	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Regular.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6
+	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Bold.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6 --isbold
+	
+	
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
 	-mkdir -p compile 
@@ -234,7 +241,7 @@ compile/tile.o: src/tile.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
 
-compile/player.o: src/player.cpp Makefile include/player.h include/animation.h
+compile/player.o: src/player.cpp Makefile include/player.h include/animation.h include/decker.h include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
 
