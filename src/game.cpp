@@ -13,7 +13,6 @@ Game::Game()
 	tex_level_grid=NULL;
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
-	wm->setWidgetStyle(s);
 	Style=s;
 	player=NULL;
 	mainmenue=NULL;
@@ -42,6 +41,16 @@ Game::~Game()
 
 void Game::loadGrafix()
 {
+	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	gfx->loadFont("res/notosans.fnt6", "NotoSans");
+	gfx->loadFont("res/notosans-black.fnt6", "NotoSansBlack");
+	Style.labelFont.setName("NotoSans");
+	Style.buttonFont.setName("NotoSans");
+	Style.buttonFont.setBold(true);
+	Style.inputFont.setName("NotoSans");
+	wm->setWidgetStyle(Style);
+
+	resources.Sprite_George.enableMemoryBuffer(true);
 	resources.Sprite_George.load(sdl, "res/george.tex");
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
@@ -297,7 +306,7 @@ void Game::run()
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection!=NULL);
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
-		player->update(now, level.TileTypeMatrix);
+		player->update(now, level.TileTypeMatrix, level.objects);
 		level.objects->update(now);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
