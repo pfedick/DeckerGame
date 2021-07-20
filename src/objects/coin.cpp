@@ -21,6 +21,7 @@ CoinReward::CoinReward()
 	next_animation=0.0f;
 	collsionDetection=true;
 	sprite_no_representation=84;
+	points=10;
 }
 
 void CoinReward::update(double time)

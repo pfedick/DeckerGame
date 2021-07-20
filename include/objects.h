@@ -7,6 +7,8 @@ class SDL;
 class SDL_Renderer;
 class SpriteTexture;
 
+class Player;
+
 namespace Decker::Objects {
 
 class Type
@@ -75,6 +77,7 @@ public:
 	virtual void update(double time);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void handleCollision(Player *player);
 
 	static Representation representation();
 };
@@ -92,6 +95,7 @@ class Collectable : public Object
 {
 private:
 public:
+	int points;
 	Collectable(Type::ObjectType type);
 };
 

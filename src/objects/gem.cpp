@@ -23,6 +23,7 @@ GemReward::GemReward()
 	next_animation=0.0f;
 	collsionDetection=true;
 	sprite_no_representation=4;
+	points=50;
 }
 
 void GemReward::update(double time)
@@ -50,6 +51,7 @@ CrystalReward::CrystalReward()
 	animation.startRandom(crystal_rotate,sizeof(crystal_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
 	collsionDetection=true;
+	points=100;
 }
 
 void CrystalReward::update(double time)
