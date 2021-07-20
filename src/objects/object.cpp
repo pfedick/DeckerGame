@@ -46,8 +46,9 @@ Object::Object(Type::ObjectType type)
 	sprite_no_representation=0;
 	id=0;
 	texture=NULL;
-	collsionDetection=false;
+	collisionDetection=false;
 	visibleAtPlaytime=true;
+	enabled=true;
 	save_size=9;
 	state_size=0;
 }

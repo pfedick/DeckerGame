@@ -7,6 +7,7 @@ class SpriteTexture;
 
 #include "animation.h"
 
+class TileTypePlane;
 namespace Decker::Objects {
 	class ObjectSystem;
 } // EOF namespace Decker::Objects
@@ -84,7 +85,7 @@ private:
 	void checkCollisionWithWorld(const TileTypePlane &world);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects);
 	void updatePhysics(const TileTypePlane &world);
-	int getKeyboardMatrix(const Uint8 *state);
+	int getKeyboardMatrix(const unsigned char *state);
 	int collision_matrix[4][6];
 
 	bool isCollisionLeft() const;
@@ -100,6 +101,7 @@ public:
 	~Player();
 	void addPoints(int points);
 	void dropHealth(int points);
+	void setSavePoint(const ppl7::grafix::Point &p);
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;

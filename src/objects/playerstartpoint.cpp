@@ -15,7 +15,7 @@ PlayerStartPoint::PlayerStartPoint()
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=151;
-	collsionDetection=false;
+	collisionDetection=false;
 	visibleAtPlaytime=false;
 	sprite_no_representation=151;
 }

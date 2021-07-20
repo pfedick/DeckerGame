@@ -164,6 +164,11 @@ void Player::dropHealth(int points)
 	}
 }
 
+void Player::setSavePoint(const ppl7::grafix::Point &p)
+{
+	lastSavePoint=p;
+}
+
 void Player::update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
 {
 	this->time=time;
@@ -513,7 +518,10 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 
 	Decker::Objects::Object *object=objects->detectCollision(checkpoints);
 	if (!object) return;
+	object->handleCollision(this);
+	/*
 	printf ("Detected Collision with Object: %s, ID: %d\n",
 			(const char*)object->typeName(), object->id);
+			*/
 
 }

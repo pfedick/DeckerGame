@@ -66,8 +66,9 @@ public:
 	int sprite_no_representation;
 	unsigned char save_size;
 	unsigned char state_size;
-	bool collsionDetection;
+	bool collisionDetection;
 	bool visibleAtPlaytime;
+	bool enabled;
 
 	Object(Type::ObjectType type);
 	virtual ~Object();
@@ -97,6 +98,7 @@ private:
 public:
 	int points;
 	Collectable(Type::ObjectType type);
+	virtual void handleCollision(Player *player);
 };
 
 
@@ -150,6 +152,7 @@ private:
 public:
 	Medikit();
 	static Representation representation();
+	virtual void handleCollision(Player *player);
 };
 
 class SavePoint : public Collectable
@@ -162,6 +165,7 @@ public:
 	SavePoint();
 	static Representation representation();
 	virtual void update(double time);
+	virtual void handleCollision(Player *player);
 };
 
 
@@ -183,6 +187,7 @@ public:
 	ThreeSpeers();
 	static Representation representation();
 	virtual void update(double time);
+	virtual void handleCollision(Player *player);
 };
 
 class LaserBarrier : public Trap

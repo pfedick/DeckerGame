@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -21,7 +22,7 @@ SavePoint::SavePoint()
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(savepoint_animation,sizeof(savepoint_animation)/sizeof(int),true,0);
 	next_animation=0.0f;
-	collsionDetection=true;
+	collisionDetection=true;
 	sprite_no_representation=52;
 }
 
@@ -38,6 +39,12 @@ void SavePoint::update(double time)
 	}
 }
 
+void SavePoint::handleCollision(Player *player)
+{
+	player->setSavePoint(p);
+	enabled=false;
+	collisionDetection=false;
+}
 
 
 }	// EOF namespace Decker::Objects

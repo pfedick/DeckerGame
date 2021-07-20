@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "player.h"
 
 
 namespace Decker::Objects {
@@ -23,7 +24,7 @@ ThreeSpeers::ThreeSpeers()
 	next_animation=next_state=0.0f;
 	state=0;
 	next_state=ppl7::GetMicrotime()+5.0;
-	collsionDetection=false;
+	collisionDetection=false;
 	sprite_no_representation=22;
 }
 
@@ -35,8 +36,8 @@ void ThreeSpeers::update(double time)
 		int new_sprite=animation.getFrame();
 		if (new_sprite!=sprite_no) {
 			sprite_no=new_sprite;
-			if (animation.isFinished()==true && collsionDetection==true && state==0)
-				collsionDetection=false;
+			if (animation.isFinished()==true && collisionDetection==true && state==0)
+				collisionDetection=false;
 			updateBoundary();
 		}
 	}
@@ -45,21 +46,24 @@ void ThreeSpeers::update(double time)
 		animation.start(trap_activation,sizeof(trap_activation)/sizeof(int),false,22);
 		sprite_no=animation.getFrame();
 		state=1;
-		collsionDetection=true;
+		collisionDetection=true;
 		updateBoundary();
-
 	}
 	if (state==1 && next_state<time) {
 		next_state=time+10.00;
 		animation.start(trap_deactivation,sizeof(trap_deactivation)/sizeof(int),false,18);
 		sprite_no=animation.getFrame();
 		state=0;
-		collsionDetection=false;
+		collisionDetection=false;
 		updateBoundary();
 
 	}
 
 }
 
+void ThreeSpeers::handleCollision(Player *player)
+{
+	player->dropHealth(2);
+}
 
 }	// EOF namespace Decker::Objects

@@ -101,7 +101,7 @@ void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 	std::map<uint32_t,Object *>::const_iterator it;
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		const Object *object=it->second;
-		if (object->texture!=NULL && object->visibleAtPlaytime==true) {
+		if (object->texture!=NULL && object->enabled==true && object->visibleAtPlaytime==true) {
 			object->texture->draw(renderer,
 					object->p.x+viewport.x1-worldcoords.x,
 					object->p.y+viewport.y1-worldcoords.y,
@@ -154,7 +154,7 @@ Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &play
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		Object *item=it->second;
-		if (item->texture!=NULL && item->collsionDetection==true) {
+		if (item->texture!=NULL && item->collisionDetection==true && item->enabled==true) {
 			for (p_it=player.begin();p_it!=player.end();++p_it) {
 				if ((*p_it).inside(item->boundary)) {
 					const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
@@ -184,7 +184,7 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 			item->texture->drawOutlines(renderer,
 					item->p.x+viewport.x1-worldcoords.x,
 					item->p.y+viewport.y1-worldcoords.y,
-					item->sprite_no, 1.0f);
+					item->sprite_no_representation, 1.0f);
 		}
 	}
 }

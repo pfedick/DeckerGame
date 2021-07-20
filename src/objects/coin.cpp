@@ -19,7 +19,7 @@ CoinReward::CoinReward()
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(coin_rotate,sizeof(coin_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
-	collsionDetection=true;
+	collisionDetection=true;
 	sprite_no_representation=84;
 	points=10;
 }

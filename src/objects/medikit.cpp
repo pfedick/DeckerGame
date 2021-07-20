@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -15,8 +16,16 @@ Medikit::Medikit()
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=83;
-	collsionDetection=true;
+	collisionDetection=true;
 	sprite_no_representation=83;
+}
+
+
+void Medikit::handleCollision(Player *player)
+{
+	player->health=100;
+	enabled=false;
+	collisionDetection=false;
 }
 
 }	// EOF namespace Decker::Objects

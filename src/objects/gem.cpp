@@ -21,7 +21,7 @@ GemReward::GemReward()
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(diamond_rotate,sizeof(diamond_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
-	collsionDetection=true;
+	collisionDetection=true;
 	sprite_no_representation=4;
 	points=50;
 }
@@ -50,7 +50,7 @@ CrystalReward::CrystalReward()
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(crystal_rotate,sizeof(crystal_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
-	collsionDetection=true;
+	collisionDetection=true;
 	points=100;
 }
 

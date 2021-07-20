@@ -14,7 +14,7 @@ KeyReward::KeyReward()
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=50;
-	collsionDetection=true;
+	collisionDetection=true;
 	sprite_no_representation=50;
 }
 
