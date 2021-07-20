@@ -279,6 +279,7 @@ public:
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
 	void deleteObject(int id);
+	ppl7::grafix::Point findPlayerStart() const;
 	size_t count() const;
 	size_t countVisible() const;
 

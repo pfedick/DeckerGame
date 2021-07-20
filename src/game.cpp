@@ -183,6 +183,7 @@ void Game::init()
 	if (player) delete player;
 	player=new Player();
 	player->move(3300,1800);
+	player->setSavePoint(ppl7::grafix::Point(3300,1800));
 	updateWorldCoords();
 
 	player->setSpriteResource(resources.Sprite_George);
@@ -202,6 +203,12 @@ void Game::init()
 
 	//level.setRenderer
 	level.load("level/test.lvl");
+
+	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
+	if (startpoint.x>0) {
+		player->move(startpoint.x, startpoint.y);
+		player->setSavePoint(startpoint);
+	}
 
 	//showTilesSelection();
 

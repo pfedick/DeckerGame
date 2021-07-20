@@ -303,6 +303,17 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 }
 
 
+ppl7::grafix::Point ObjectSystem::findPlayerStart() const
+{
+	std::map<uint32_t, Object *>::const_iterator it;
+	for (it=object_list.begin();it!=object_list.end();++it) {
+		Object *object=it->second;
+		if (object->type()==Decker::Objects::Type::PlayerStartpoint)
+			return object->p;
+	}
+	return ppl7::grafix::Point(0,0);
+}
+
 size_t ObjectSystem::count() const
 {
 	return object_list.size();

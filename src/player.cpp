@@ -160,6 +160,8 @@ void Player::dropHealth(int points)
 	if (health<0) {
 		lifes--;
 		health=100;
+		x=lastSavePoint.x;
+		y=lastSavePoint.y;
 		// TODO: Player::die
 	}
 }
