@@ -136,6 +136,7 @@ void Game::initUi()
 	world_widget=new Decker::ui::WorldWidget();
 	world_widget->create(0,32,desktop.width, desktop.height-64);
 	world_widget->setEventHandler(this);
+	world_widget->setViewport(viewport);
 	this->addChild(world_widget);
 
 }
@@ -284,6 +285,7 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
 	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
 	statusbar->setPlayerState(player->getState());
+	world_widget->updatePlayerStats(player);
 }
 
 void Game::updateWorldCoords()

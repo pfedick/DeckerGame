@@ -18,6 +18,7 @@ class SpriteTexture;
 #define MAX_SPRITESETS 10
 #endif
 
+class Player;
 
 namespace Decker {
 namespace ui {
@@ -236,14 +237,33 @@ public:
 };
 
 
+class StatsFrame : public ppl7::tk::Widget
+{
+private:
+	ppl7::String label;
+	ppl7::String value;
+	ppl7::grafix::Font font;
+
+public:
+	StatsFrame(int x, int y, int width, int height, const ppl7::String &label);
+	void setValue(const ppl7::String &value);
+	virtual ppl7::String widgetType() const;
+	virtual void paint(ppl7::grafix::Drawable &draw);
+
+
+};
+
 class WorldWidget : public ppl7::tk::Widget
 {
 private:
+	StatsFrame *stats_health, *stats_lifes, *stats_points;
 public:
 	WorldWidget();
 	void setViewport(const ppl7::grafix::Rect &viewport);
 	virtual ppl7::String widgetType() const;
 	virtual void paint(ppl7::grafix::Drawable &draw);
+
+	void updatePlayerStats(const Player *player);
 
 
 };
