@@ -131,6 +131,14 @@ int Plane::getTileNo(int x, int y, int z)
 	return t->layer[z].tileno;
 }
 
+int Plane::getTileSet(int x, int y, int z)
+{
+	if (z<0||z>=MAX_TILE_LAYER) return -1;
+	const Tile *t=get(x,y);
+	if (!t) return -1;
+	return t->layer[z].tileset;
+}
+
 ppl7::grafix::Point Plane::getOccupationOrigin(int x, int y, int z)
 {
 	const Tile *t=get(x,y);

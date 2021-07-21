@@ -272,6 +272,7 @@ public:
 	void setVisible(bool visible);
 	bool isVisible() const;
 	int getTileNo(int x, int y, int z);
+	int getTileSet(int x, int y, int z);
 };
 
 class TileType
@@ -451,6 +452,7 @@ private:
 	Decker::ui::ObjectSelection *object_selection;
 	Decker::ui::WorldWidget *world_widget;
 	BrickOccupation brick_occupation;
+	BrickOccupation::Matrix brick_occupation_solid;
 	FPS fps;
 
 	ppl7::grafix::Point WorldCoords;

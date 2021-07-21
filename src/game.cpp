@@ -75,6 +75,11 @@ void Game::loadGrafix()
 
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
+	brick_occupation_solid.push_back(BrickOccupation::Item(0,0,Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(0,1,Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(1,0,Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(1,1,Tile::TileOccupation::OccupationBrick));
+
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
 	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
@@ -545,26 +550,23 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		Plane &plane=level.plane(currentPlane);
 
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left && selectedTile>=0) {
-			if (selectedTileSet>1) {
-				BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
-				if (!plane.isOccupied(x, y, currentLayer, occupation)) {
-					//printf ("set %d:%d, layer: %d, tileset: %d, tileno: %d\n",x,y,currentLayer, selectedTileSet,selectedTile );
-					plane.setTile(x,y,
-							currentLayer,
-							selectedTileSet,
-							selectedTile);
-					plane.setOccupation(x, y, currentLayer, occupation);
-				}
-			} else {
-				plane.setTile(x,y, currentLayer, selectedTileSet, selectedTile);
-				plane.setOccupation(x, y, currentLayer, Tile::OccupationBrick,-1,-1);
+			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
+			if (selectedTileSet==1) occupation=brick_occupation_solid;
+			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
+				plane.setTile(x,y,
+						currentLayer,
+						selectedTileSet,
+						selectedTile);
+				plane.setOccupation(x, y, currentLayer, occupation);
 			}
 		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
 			ppl7::grafix::Point origin=plane.getOccupationOrigin(x,y,currentLayer);
 			if (origin.x>=0 && origin.y>=0) {
 				int origin_tile=plane.getTileNo(origin.x,origin.y,currentLayer);
+				int origin_tileset=plane.getTileSet(origin.x,origin.y,currentLayer);
 				if (origin_tile>=0) {
 					BrickOccupation::Matrix occupation=brick_occupation.get(origin_tile);
+					if (origin_tileset==1) occupation=brick_occupation_solid;
 					plane.clearOccupation(origin.x, origin.y, currentLayer, occupation);
 				}
 				plane.clearTile(origin.x, origin.y,currentLayer);
@@ -621,6 +623,7 @@ void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &m
 	int tx=wp.x/TILE_WIDTH;
 	int ty=wp.y/TILE_HEIGHT;
 	BrickOccupation::Matrix occupation=brick_occupation.get(nr);
+	if (tileset==1) occupation=brick_occupation_solid;
 	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
 		//printf ("tx=%d, ty=%d\n",tx,ty);
 		int x=tx*TILE_WIDTH+viewport.x1-WorldCoords.x*planeFactor[currentPlane];;
