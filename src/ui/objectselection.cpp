@@ -40,6 +40,8 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::HangingSpider,"hanging Spider",6);
 	addObject(Decker::Objects::Type::FloaterHorizontal,"Floater horizontal",13);
 	addObject(Decker::Objects::Type::FloaterVertical,"Floater vertical",14);
+	addObject(Decker::Objects::Type::Mummy,"Mummy",21);
+	addObject(Decker::Objects::Type::Skeleton,"Skeleton",20);
 
 	scrollbar->setSize(object_map.size()/2);
 	scrollbar->setVisibleItems((height-44)/160/2);
