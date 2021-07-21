@@ -26,6 +26,8 @@ public:
 		ThreeSpeers=201,
 		Rat=300,
 		HangingSpider=301,
+		Skeleton=302,
+		Mummy=303,
 		FloaterHorizontal=500,
 		FloaterVertical=501,
 		Door=502
@@ -39,7 +41,9 @@ public:
 	enum SpritesetIds {
 		GenericObjects=0,
 		ThreeSpeers=1,
-		MaxSpritesets=2
+		Skeleton=2,
+		Mummy=3,
+		MaxSpritesets=4
 	};
 };
 

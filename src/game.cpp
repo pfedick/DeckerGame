@@ -52,6 +52,7 @@ void Game::loadGrafix()
 
 	resources.Sprite_George.enableMemoryBuffer(true);
 	resources.Sprite_George.load(sdl, "res/george.tex");
+
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");

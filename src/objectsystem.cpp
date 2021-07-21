@@ -41,6 +41,13 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::ThreeSpeers]->enableMemoryBuffer(true);
 	spriteset[Spriteset::ThreeSpeers]->load(sdl,"res/enemy_3speers.tex");
 
+	spriteset[Spriteset::Mummy]->enableOutlines(true);
+	spriteset[Spriteset::Mummy]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Mummy]->load(sdl,"res/mummy.tex");
+
+	spriteset[Spriteset::Skeleton]->enableOutlines(true);
+	spriteset[Spriteset::Skeleton]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Skeleton]->load(sdl,"res/skeleton.tex");
 }
 
 void ObjectSystem::addObject(Object *object)
