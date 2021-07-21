@@ -188,6 +188,7 @@ void Plane::load(const ppl7::ByteArrayPtr &ba)
 	const char *buffer=ba.toCharPtr();
 	width=ppl7::Peek16(buffer);
 	height=ppl7::Peek16(buffer+2);
+	//printf ("width: %d, height: %d\n",width,height);
 	create(width, height);
 	p+=4;
 	while (p<ba.size()) {

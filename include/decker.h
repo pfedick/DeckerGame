@@ -329,6 +329,8 @@ public:
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;
 	SpriteTexture uiSpritesNature;
+	SpriteTexture Sprites_Nature_Blury;
+	SpriteTexture uiSpritesNatureBlury;
 	SpriteTexture Sprites_Plants;
 	SpriteTexture uiSpritesPlants;
 	SpriteTexture Sprites_Objects;
@@ -360,7 +362,9 @@ private:
 	Plane FrontPlane;
 	Plane BackPlane;
 	Plane MiddlePlane;
+	Plane HorizonPlane;
 	TileTypePlane TileTypeMatrix;
+	SpriteSystem HorizonSprites[2];
 	SpriteSystem FarSprites[2];
 	SpriteSystem MiddleSprites[2];
 	SpriteSystem BackSprites[2];
@@ -383,6 +387,7 @@ private:
 		chunkBackPlane=4,
 		chunkMiddlePlane=5,
 		chunkNearPlane=6,
+		chunkHorizonPlane=7,
 		chunkPlayerSpritesLayer0=10,
 		chunkPlayerSpritesLayer1=11,
 		chunkFrontSpritesLayer0=12,
@@ -394,6 +399,8 @@ private:
 		chunkMiddleSpritesLayer0=18,
 		chunkMiddleSpritesLayer1=19,
 		chunkTileTypes=20,
+		chunkHorizonSpritesLayer0=21,
+		chunkHorizonSpritesLayer1=22,
 		chunkObjects=30
 	};
 

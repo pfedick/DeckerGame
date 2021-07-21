@@ -69,6 +69,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	active_plane_combobox->add("FarPlane");
 	active_plane_combobox->add("BackPlane");
 	active_plane_combobox->add("MiddlePlane");
+	active_plane_combobox->add("HorizonPlane");
 
 	this->addChild(active_plane_combobox);
 

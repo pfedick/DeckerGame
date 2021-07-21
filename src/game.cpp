@@ -6,7 +6,7 @@
 #include "player.h"
 #include "objects.h"
 
-static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f};
+static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
 
 Game::Game()
 {
@@ -69,6 +69,10 @@ void Game::loadGrafix()
 	resources.Sprites_Objects.enableMemoryBuffer(true);
 	resources.Sprites_Objects.load(sdl, "res/sprites_objects.tex");
 
+	resources.Sprites_Nature_Blury.enableOutlines(true);
+	resources.Sprites_Nature_Blury.enableMemoryBuffer(true);
+	resources.Sprites_Nature_Blury.load(sdl, "res/sprites_nature_blury.tex");
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	resources.uiSpritesNature.enableSDLBuffer(false);
@@ -82,6 +86,10 @@ void Game::loadGrafix()
 	resources.uiSpritesObjects.enableSDLBuffer(false);
 	resources.uiSpritesObjects.enableMemoryBuffer(true);
 	resources.uiSpritesObjects.load(sdl, "res/sprites_objects_ui.tex");
+
+	resources.uiSpritesNatureBlury.enableSDLBuffer(false);
+	resources.uiSpritesNatureBlury.enableMemoryBuffer(true);
+	resources.uiSpritesNatureBlury.load(sdl, "res/sprites_nature_blury_ui.tex");
 
 	resources.uiObjects.enableSDLBuffer(false);
 	resources.uiObjects.enableMemoryBuffer(true);
@@ -198,6 +206,7 @@ void Game::init()
 	level.setSpriteset(1, &resources.Sprites_Nature);
 	level.setSpriteset(2, &resources.Sprites_Plants);
 	level.setSpriteset(3, &resources.Sprites_Objects);
+	level.setSpriteset(4, &resources.Sprites_Nature_Blury);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -477,6 +486,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
 		sprite_selection->setSpriteSet(2,"Plants", &resources.uiSpritesPlants);
 		sprite_selection->setSpriteSet(3,"Objects", &resources.uiSpritesObjects);
+		sprite_selection->setSpriteSet(4,"Nature Blury", &resources.uiSpritesNature);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
