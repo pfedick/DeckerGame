@@ -126,7 +126,7 @@ void ObjectSystem::drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect
 			object->texture->draw(renderer,
 					object->initial_p.x+viewport.x1-worldcoords.x,
 					object->initial_p.y+viewport.y1-worldcoords.y,
-					object->sprite_no_representation);
+					object->sprite_no);
 		}
 	}
 }
@@ -191,7 +191,7 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7:
 			item->texture->drawOutlines(renderer,
 					item->p.x+viewport.x1-worldcoords.x,
 					item->p.y+viewport.y1-worldcoords.y,
-					item->sprite_no_representation, 1.0f);
+					item->sprite_no, 1.0f);
 		}
 	}
 }
