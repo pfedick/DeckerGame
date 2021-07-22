@@ -8,6 +8,21 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 : ppl7::tk::Frame(x,y,width,height)
 {
 	this->game=game;
+	visibility=NULL;
+	visibility_plane_player=true;
+	visibility_plane_front=true;
+	visibility_plane_back=true;
+	visibility_plane_middle=true;
+	visibility_plane_far=true;
+	visibility_plane_horizon=true;
+	visibility_sprites=true;
+	visibility_objects=true;
+	visibility_grid=false;
+	visibility_tiletypes=false;
+	visibility_collision=false;
+
+
+
 	ppl7::grafix::Size s=this->clientSize();
 	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
 	exit_button=new ppl7::tk::Button(s.width-100,0,100,s.height,"Exit");
@@ -43,21 +58,13 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	edit_sprites_button->setEventHandler(this);
 	this->addChild(edit_sprites_button);
 
-	edit_objects_button=new ppl7::tk::Button(356+60,0,70,s.height,"Objects");
+	edit_objects_button=new ppl7::tk::Button(416,0,70,s.height,"Objects");
 	edit_objects_button->setEventHandler(this);
 	this->addChild(edit_objects_button);
 
-
-
-	show_grid_checkbox=new CheckBox(500,0,62,s.height,"Grid");
-	show_grid_checkbox->setEventHandler(this);
-	this->addChild(show_grid_checkbox);
-	show_tiletypes_checkbox=new CheckBox(562,0,90,s.height,"Tiletypes");
-	show_tiletypes_checkbox->setEventHandler(this);
-	this->addChild(show_tiletypes_checkbox);
-	show_collision_checkbox=new CheckBox(650,0,90,s.height,"Collision");
-	show_collision_checkbox->setEventHandler(this);
-	this->addChild(show_collision_checkbox);
+	show_visibility_submenu_button=new ppl7::tk::Button(500,0,80,s.height,"Visibility");
+	show_visibility_submenu_button->setEventHandler(this);
+	this->addChild(show_visibility_submenu_button);
 
 
 	ppl7::tk::Label *label=new ppl7::tk::Label(740,0,100,s.height,"active Plane: ");
@@ -73,21 +80,9 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 	this->addChild(active_plane_combobox);
 
-	label=new ppl7::tk::Label(1000,0,100,s.height,"visible Planes:");
-	this->addChild(label);
+	/*
 
-	visible_plane_player_checkbox=new CheckBox(1110,0,80,s.height,"Player", true);
-	this->addChild(visible_plane_player_checkbox);
-
-	visible_plane_front_checkbox=new CheckBox(1190,0,70,s.height,"Front", true);
-	this->addChild(visible_plane_front_checkbox);
-
-	visible_plane_back_checkbox=new CheckBox(1260,0,70,s.height,"Back", true);
-	this->addChild(visible_plane_back_checkbox);
-	visible_plane_middle_checkbox=new CheckBox(1330,0,60,s.height,"Middle", true);
-	this->addChild(visible_plane_middle_checkbox);
-	visible_plane_far_checkbox=new CheckBox(1400,0,60,s.height,"Far", true);
-	this->addChild(visible_plane_far_checkbox);
+	*/
 
 
 	world_follows_player_checkbox=new CheckBox(width-280,0,180,s.height,"World follows player", true);
@@ -114,30 +109,23 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->clearLevel();
 	} else if (event->widget()==load_button) {
 		game->load();
+	} else if (event->widget()==show_visibility_submenu_button) {
+		if (visibility) {
+			delete visibility;
+			visibility=NULL;
+		} else {
+			ppl7::tk::Widget *top=show_visibility_submenu_button->getTopmostParent();
+			ppl7::grafix::Point p=show_visibility_submenu_button->absolutePosition();
+			visibility=new VisibilitySubMenu(p.x,height(),this);
+			top->addChild(visibility);
+		}
 	}
 }
 
-bool MainMenue::showGrid() const
+void MainMenue::setShowTileTypes(bool show)
 {
-	if (show_grid_checkbox) return show_grid_checkbox->checked();
-	return false;
-}
-
-bool MainMenue::showTileTypes() const
-{
-	if (show_tiletypes_checkbox) return show_tiletypes_checkbox->checked();
-	return false;
-}
-
-bool MainMenue::showCollision() const
-{
-	if (show_collision_checkbox) return show_collision_checkbox->checked();
-	return false;
-}
-
-void MainMenue::setShowTileTypes(bool flag)
-{
-	if (show_tiletypes_checkbox) show_tiletypes_checkbox->setChecked(flag);
+	visibility_tiletypes=show;
+	if (visibility) visibility->setShowTileTypes(show);
 }
 
 void MainMenue::setCurrentPlane(int index)
@@ -152,43 +140,102 @@ int MainMenue::currentPlane() const
 	return 0;
 }
 
-bool MainMenue::playerPlaneVisible() const
-{
-	if (visible_plane_player_checkbox) return visible_plane_player_checkbox->checked();
-	return true;
-}
-
-bool MainMenue::frontPlaneVisible() const
-{
-	if (visible_plane_front_checkbox) return visible_plane_front_checkbox->checked();
-	return true;
-}
-
-bool MainMenue::farPlaneVisible() const
-{
-	if (visible_plane_far_checkbox) return visible_plane_far_checkbox->checked();
-	return true;
-}
-
-bool MainMenue::backPlaneVisible() const
-{
-	if (visible_plane_back_checkbox) return visible_plane_back_checkbox->checked();
-	return true;
-}
-
-bool MainMenue::middlePlaneVisible() const
-{
-	if (visible_plane_middle_checkbox) return visible_plane_middle_checkbox->checked();
-	return true;
-}
-
-
 bool MainMenue::worldFollowsPlayer() const
 {
 	if (world_follows_player_checkbox) return world_follows_player_checkbox->checked();
 	return true;
 }
 
+
+VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue *menue)
+: ppl7::tk::Frame(x,y,140,290)
+{
+	this->menue=menue;
+	this->addChild(new ppl7::tk::Label(0,0,100,20,"Misc:"));
+
+
+	show_grid_checkbox=new CheckBox(20,20,100,20,"Grid", menue->visibility_grid);
+	show_grid_checkbox->setEventHandler(this);
+	this->addChild(show_grid_checkbox);
+
+	show_tiletypes_checkbox=new CheckBox(20,40,100,20,"Tiletypes", menue->visibility_tiletypes);
+	show_tiletypes_checkbox->setEventHandler(this);
+	this->addChild(show_tiletypes_checkbox);
+
+	show_collision_checkbox=new CheckBox(20,60,100,20,"Collision", menue->visibility_collision);
+	show_collision_checkbox->setEventHandler(this);
+	this->addChild(show_collision_checkbox);
+
+	show_sprites_checkbox=new CheckBox(20,80,100,20,"Sprites", menue->visibility_sprites);
+	show_sprites_checkbox->setEventHandler(this);
+	this->addChild(show_sprites_checkbox);
+
+	show_objects_checkbox=new CheckBox(20,100,100,20,"Objects", menue->visibility_objects);
+	show_objects_checkbox->setEventHandler(this);
+	this->addChild(show_objects_checkbox);
+
+
+	this->addChild(new ppl7::tk::Label(0,140,100,20,"visible Planes:"));
+
+	visible_plane_front_checkbox=new CheckBox(20,160,100,20,"Front", menue->visibility_plane_front);
+	visible_plane_front_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_front_checkbox);
+
+	visible_plane_player_checkbox=new CheckBox(20,180,100,20,"Player", menue->visibility_plane_player);
+	visible_plane_player_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_player_checkbox);
+
+	visible_plane_back_checkbox=new CheckBox(20,200,100,20,"Back", menue->visibility_plane_back);
+	visible_plane_back_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_back_checkbox);
+
+	visible_plane_middle_checkbox=new CheckBox(20,220,100,20,"Middle", menue->visibility_plane_middle);
+	visible_plane_middle_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_middle_checkbox);
+
+	visible_plane_far_checkbox=new CheckBox(20,240,100,20,"Far", menue->visibility_plane_far);
+	visible_plane_far_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_far_checkbox);
+
+	visible_plane_horizon_checkbox=new CheckBox(20,260,100,20,"Horizon", menue->visibility_plane_horizon);
+	visible_plane_horizon_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_horizon_checkbox);
+
+}
+
+void VisibilitySubMenu::setShowTileTypes(bool show)
+{
+	show_tiletypes_checkbox->setChecked(show);
+}
+
+void VisibilitySubMenu::toggledEvent(ppl7::tk::Event *event, bool checked)
+{
+
+	ppl7::tk::Widget *widget=event->widget();
+	if (widget==visible_plane_player_checkbox) {
+		menue->visibility_plane_player=checked;
+	} else if (widget==visible_plane_front_checkbox) {
+		menue->visibility_plane_front=checked;
+	} else if (widget==visible_plane_far_checkbox) {
+		menue->visibility_plane_far=checked;
+	} else if (widget==visible_plane_back_checkbox) {
+		menue->visibility_plane_back=checked;
+	} else if (widget==visible_plane_middle_checkbox) {
+		menue->visibility_plane_middle=checked;
+	} else if (widget==visible_plane_horizon_checkbox) {
+		menue->visibility_plane_horizon=checked;
+	} else if (widget==show_grid_checkbox) {
+		menue->visibility_grid=checked;
+	} else if (widget==show_tiletypes_checkbox) {
+		menue->visibility_tiletypes=checked;
+	} else if (widget==show_collision_checkbox) {
+		menue->visibility_collision=checked;
+	} else if (widget==show_sprites_checkbox) {
+		menue->visibility_sprites=checked;
+	} else if (widget==show_objects_checkbox) {
+		menue->visibility_objects=checked;
+	};
+}
 
 } //EOF namespace Decker
 

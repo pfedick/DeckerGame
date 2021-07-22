@@ -19,6 +19,8 @@ Level::Level()
 	}
 	objects=new Decker::Objects::ObjectSystem();
 	editMode=false;
+	showSprites=true;
+	showObjects=true;
 }
 
 Level::~Level()
@@ -54,6 +56,16 @@ void Level::clear()
 void Level::setEditmode(bool enabled)
 {
 	editMode=enabled;
+}
+
+void Level::setShowSprites(bool enabled)
+{
+	showSprites=enabled;
+}
+
+void Level::setShowObjects(bool enabled)
+{
+	showObjects=enabled;
 }
 
 void Level::setTileset(int no, SpriteTexture *tileset)
@@ -268,40 +280,42 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player)
 {
 	if (HorizonPlane.isVisible()) {
-		HorizonSprites[0].draw(renderer, viewport,worldcoords*planeFactor[5]);
+		if (showSprites) HorizonSprites[0].draw(renderer, viewport,worldcoords*planeFactor[5]);
 		drawPlane(renderer,HorizonPlane, worldcoords*planeFactor[5]);
-		HorizonSprites[1].draw(renderer, viewport,worldcoords*planeFactor[5]);
+		if (showSprites) HorizonSprites[1].draw(renderer, viewport,worldcoords*planeFactor[5]);
 	}
 
 	if (FarPlane.isVisible()) {
-		FarSprites[0].draw(renderer, viewport,worldcoords*planeFactor[2]);
+		if (showSprites) FarSprites[0].draw(renderer, viewport,worldcoords*planeFactor[2]);
 		drawPlane(renderer,FarPlane, worldcoords*planeFactor[2]);
-		FarSprites[1].draw(renderer, viewport,worldcoords*planeFactor[2]);
+		if (showSprites) FarSprites[1].draw(renderer, viewport,worldcoords*planeFactor[2]);
 	}
 	if (MiddlePlane.isVisible()) {
-		MiddleSprites[0].draw(renderer, viewport,worldcoords*planeFactor[4]);
+		if (showSprites) MiddleSprites[0].draw(renderer, viewport,worldcoords*planeFactor[4]);
 		drawPlane(renderer,MiddlePlane, worldcoords*planeFactor[4]);
-		MiddleSprites[1].draw(renderer, viewport,worldcoords*planeFactor[4]);
+		if (showSprites) MiddleSprites[1].draw(renderer, viewport,worldcoords*planeFactor[4]);
 	}
 	if (BackPlane.isVisible()) {
-		BackSprites[0].draw(renderer, viewport,worldcoords*planeFactor[3]);
+		if (showSprites) BackSprites[0].draw(renderer, viewport,worldcoords*planeFactor[3]);
 		drawPlane(renderer,BackPlane, worldcoords*planeFactor[3]);
-		BackSprites[1].draw(renderer, viewport,worldcoords*planeFactor[3]);
+		if (showSprites) BackSprites[1].draw(renderer, viewport,worldcoords*planeFactor[3]);
 	}
 	if (PlayerPlane.isVisible()) {
-		PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		if (showSprites) PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
 		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
-		PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
-		if (editMode)
-			objects->drawEditMode(renderer, viewport, worldcoords*planeFactor[0]);
-		else
-			objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
+		if (showSprites) PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		if (showObjects) {
+			if (editMode)
+				objects->drawEditMode(renderer, viewport, worldcoords*planeFactor[0]);
+			else
+				objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
+		}
 		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
 	}
 	if (FrontPlane.isVisible()) {
-		FrontSprites[0].draw(renderer, viewport,worldcoords*planeFactor[1]);
+		if (showSprites) FrontSprites[0].draw(renderer, viewport,worldcoords*planeFactor[1]);
 		drawPlane(renderer,FrontPlane, worldcoords*planeFactor[1]);
-		FrontSprites[1].draw(renderer, viewport,worldcoords*planeFactor[1]);
+		if (showSprites) FrontSprites[1].draw(renderer, viewport,worldcoords*planeFactor[1]);
 	}
 }
 

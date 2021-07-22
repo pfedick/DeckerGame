@@ -51,6 +51,30 @@ public:
 
 };
 
+class MainMenue;
+
+class VisibilitySubMenu : public ppl7::tk::Frame
+{
+private:
+	MainMenue *menue;
+	CheckBox *show_grid_checkbox;
+	CheckBox *show_tiletypes_checkbox;
+	CheckBox *show_collision_checkbox;
+	CheckBox *show_sprites_checkbox;
+	CheckBox *show_objects_checkbox;
+	CheckBox *visible_plane_player_checkbox;
+	CheckBox *visible_plane_front_checkbox;
+	CheckBox *visible_plane_far_checkbox;
+	CheckBox *visible_plane_back_checkbox;
+	CheckBox *visible_plane_middle_checkbox;
+	CheckBox *visible_plane_horizon_checkbox;
+
+public:
+	VisibilitySubMenu(int x, int y, MainMenue *menue);
+	void setShowTileTypes(bool show);
+	virtual void toggledEvent(ppl7::tk::Event *event, bool checked);
+};
+
 class MainMenue : public ppl7::tk::Frame
 {
 private:
@@ -64,41 +88,38 @@ private:
 	ppl7::tk::Button *edit_tiletypes_button;
 	ppl7::tk::Button *edit_sprites_button;
 	ppl7::tk::Button *edit_objects_button;
-	CheckBox *show_grid_checkbox;
-	CheckBox *show_tiletypes_checkbox;
-	CheckBox *show_collision_checkbox;
-	CheckBox *visible_plane_player_checkbox;
-	CheckBox *visible_plane_front_checkbox;
-	CheckBox *visible_plane_far_checkbox;
-	CheckBox *visible_plane_back_checkbox;
-	CheckBox *visible_plane_middle_checkbox;
+	ppl7::tk::Button *show_visibility_submenu_button;
+
 
 	ComboBox *active_plane_combobox;
 
 	CheckBox *world_follows_player_checkbox;
-
+	VisibilitySubMenu *visibility;
 	Game *game;
-
 
 public:
 	MainMenue(int x, int y, int width, int height, Game *game);
 
 	void mouseClickEvent(ppl7::tk::MouseEvent *event);
-	bool showGrid() const;
-	bool showTileTypes() const;
-	bool showCollision() const;
 	int currentPlane() const;
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);
 
-	bool playerPlaneVisible() const;
-	bool frontPlaneVisible() const;
-	bool farPlaneVisible() const;
-	bool backPlaneVisible() const;
-	bool middlePlaneVisible() const;
 	bool worldFollowsPlayer() const;
+	bool visibility_plane_player;
+	bool visibility_plane_front;
+	bool visibility_plane_back;
+	bool visibility_plane_middle;
+	bool visibility_plane_far;
+	bool visibility_plane_horizon;
+	bool visibility_sprites;
+	bool visibility_objects;
+	bool visibility_grid;
+	bool visibility_tiletypes;
+	bool visibility_collision;
 
 };
+
 
 class TilesFrame : public ppl7::tk::Frame
 {

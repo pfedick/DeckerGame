@@ -180,7 +180,7 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point &p, SpriteSystem
 					int x=p.x-item.boundary.x1;
 					int y=p.y-item.boundary.y1;
 					ppl7::grafix::Color c=draw.getPixel(x/item.scale, y/item.scale);
-					if (c.alpha()>92) {
+					if (c.alpha()>40) {
 						sprite=item;
 						found_match=true;
 					}

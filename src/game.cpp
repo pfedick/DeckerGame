@@ -360,23 +360,26 @@ void Game::run()
 		SDL_RenderCopy(renderer, tex_sky, &source, &target);
 
 		// Draw Planes and Sprites
-		level.FarPlane.setVisible(mainmenue->farPlaneVisible());
-		level.PlayerPlane.setVisible(mainmenue->playerPlaneVisible());
-		level.FrontPlane.setVisible(mainmenue->frontPlaneVisible());
-		level.BackPlane.setVisible(mainmenue->backPlaneVisible());
-		level.MiddlePlane.setVisible(mainmenue->middlePlaneVisible());
+		level.FarPlane.setVisible(mainmenue->visibility_plane_far);
+		level.PlayerPlane.setVisible(mainmenue->visibility_plane_player);
+		level.FrontPlane.setVisible(mainmenue->visibility_plane_front);
+		level.BackPlane.setVisible(mainmenue->visibility_plane_back);
+		level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
+		level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
+		level.setShowSprites(mainmenue->visibility_sprites);
+		level.setShowObjects(mainmenue->visibility_objects);
 		level.draw(renderer, WorldCoords,player);
 
 
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
-		if (mainmenue->playerPlaneVisible()) {
-			if (mainmenue->showTileTypes()) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
-			if (mainmenue->showCollision()) player->drawCollision(renderer, viewport, WorldCoords);
+		if (mainmenue->visibility_plane_player) {
+			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
+			if (mainmenue->visibility_collision) player->drawCollision(renderer, viewport, WorldCoords);
 		}
 		// Grid
-		if (mainmenue->showGrid()) drawGrid();
+		if (mainmenue->visibility_grid) drawGrid();
 
 		// Widgets
 		drawWidgets();
