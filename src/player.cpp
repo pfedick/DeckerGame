@@ -15,6 +15,8 @@ static int turn_from_mid_to_right[]={27,24,25,26};
 //static int turn_from_back_to_front[]={30,31,32,23,24};
 static int run_cycle_left[]={61,62,63,64,65,66,67,68};
 static int run_cycle_right[]={70,71,72,73,74,75,76,77};
+static int climb_up_cycle[]={91,92,93,94,95,96,97,98,99,100,101};
+static int climb_down_cycle[]={101,100,99,98,97,96,95,94,93,92,91};
 
 
 
@@ -223,8 +225,11 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			}
 		} else if (keys==KeyboardKeys::Up && movement!=Falling && movement!=Falling && movement!=Jump) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
-				movement=ClimbUp;
-				orientation=Back;
+				if (movement!=ClimbUp) {
+					movement=ClimbUp;
+					orientation=Back;
+					animation.start(climb_up_cycle,sizeof(climb_up_cycle)/sizeof(int),true,0);
+				}
 			} else {
 				if (movement!=Jump) {
 					movement=Jump;
@@ -266,8 +271,11 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			animation.setStaticFrame(39);
 		} else if (keys==KeyboardKeys::Down) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
-				movement=ClimbDown;
-				orientation=Back;
+				if (movement!=ClimbDown) {
+					movement=ClimbDown;
+					orientation=Back;
+					animation.start(climb_down_cycle,sizeof(climb_down_cycle)/sizeof(int),true,0);
+				}
 			}
 
 		} else if (keys==(KeyboardKeys::Left) && movement==Jump) {
