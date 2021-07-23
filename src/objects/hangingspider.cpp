@@ -32,18 +32,28 @@ void HangingSpider::update(double time, TileTypePlane &ttplane, Player &player)
 			velocity=0.5f;
 		}
 	} else if (state==1) {
-		if (velocity<8.0) velocity+=0.5f;
+		if (velocity<8.0) velocity+=0.2f;
 		p.y+=velocity;
 		updateBoundary();
-		TileType::Type t=ttplane.getType(ppl7::grafix::Point(p.x, p.y+4));
+		TileType::Type t=ttplane.getType(ppl7::grafix::Point(p.x, p.y+70));
 		if (t!=TileType::NonBlocking) {
 			state=2;
 			next_state=time+(double)ppl7::rand(2,10);
 		}
-	} else if (state==2 && next_state<time) {
-		state=3;
+	} else if (state==2) {
+		if (velocity>0.5) {
+			velocity-=0.4f;
+			p.y+=velocity;
+			updateBoundary();
+		}
+		else {
+			state=3;
+			next_state=time+(double)ppl7::rand(2,10);
+		}
+	} else if (state==3 && next_state<time) {
+		state=4;
 
-	} else if (state==3) {
+	} else if (state==4) {
 		if (p.y>initial_p.y) {
 			p.y-=2;
 			updateBoundary();
@@ -57,7 +67,7 @@ void HangingSpider::update(double time, TileTypePlane &ttplane, Player &player)
 
 void HangingSpider::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
 {
-	SDL_SetRenderDrawColor(renderer,0,0,0,255);
+	SDL_SetRenderDrawColor(renderer,204,204,204,255);
 	SDL_RenderDrawLine(renderer,initial_p.x+coords.x, initial_p.y+coords.y-20,
 			p.x+coords.x, p.y+coords.y-20);
 	SDL_RenderDrawLine(renderer,initial_p.x+coords.x+1, initial_p.y+coords.y-20,
