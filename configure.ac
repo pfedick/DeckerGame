@@ -15,7 +15,6 @@ AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 # Includes
 ###############################################################################
 sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
-sinclude(pplib/autoconf/freetype.m4)
 sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
 sinclude(pplib/autoconf/png.m4)
 sinclude(pplib/autoconf/ax_pthread.m4)
@@ -41,7 +40,6 @@ report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
 report_have_pcre="no"
-report_have_freetype2="no"
 report_have_sdl2="no"
 report_have_png="no"
 report_have_nasm="no"
@@ -302,11 +300,6 @@ AX_PATH_LIB_PCRE(
             ,
             )
        
-AC_CHECK_FT2(9.0.0,
-	AC_DEFINE(HAVE_FREETYPE2, 1, [ Define if you have freetype2. ])
-	report_have_freetype2="yes"
-	, :)
-
 dnl Check for SDL
 report_have_sdl2="no"
 AM_PATH_SDL2([2.0.0],
@@ -409,7 +402,6 @@ AC_SUBST(WINDOWS_WINSOCK_LIBS)
 AC_SUBST(report_have_zlib)
 AC_SUBST(report_have_bzip2)
 AC_SUBST(report_have_png)
-AC_SUBST(report_have_freetype2)
 AC_SUBST(report_have_sdl2)
 AC_SUBST(report_have_pcre)
 AC_SUBST(report_have_iconv)
@@ -430,6 +422,7 @@ LIBIDN_CFLAGS=""
 LIBCURL_CPPFLAGS=""
 LIBLDNS_CFLAGS=""
 IMLIB_CFLAGS=""
+FT2_CFLAGS=""
 
 AC_SUBST(JPEG_CFLAGS)
 AC_SUBST(OPENSSL_INCLUDES)
@@ -478,21 +471,12 @@ AC_MSG_RESULT([
 **
 ** Threads:                $report_have_pthreads
 **
-** Core:
+** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**
-** Graphics:
-**   BMP:                  yes (buildin)
-**   GIF:                  yes (buildin)
-**   TGA:                  yes (buildin)
-**   PPM:                  yes (buildin)
 **   PNG:                  $report_have_png
-**   Freetype 2.x library: $report_have_freetype2
-**
-** Multimedia:
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
 **

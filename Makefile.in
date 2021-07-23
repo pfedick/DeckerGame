@@ -4,17 +4,17 @@ INCLUDE	= -Iinclude -Ipplib/include -I/mingw64/include/SDL2
 CPPFLAGS	= @CPPFLAGS@
 CXXFLAGS	= @CXXFLAGS@
 CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) @CXXFLAGS@ @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ 	@ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@ \
-	@MPG123_CFLAGS@	@SDL2_CFLAGS@ @FT2_CFLAGS@
+	@MPG123_CFLAGS@	@SDL2_CFLAGS@
 LDFLAGS		= @LDFLAGS@
 LIBS_PPL7 = pplib/release/libppl7-tk.a  pplib/release/libppl7-audio.a  pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a
 
 LIBS		= $(LIBS_PPL7)  \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
-	@FT2_LIBS@ @PNG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ -lstdc++
+	@PNG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ -lstdc++
 
 TEXMAKER_LIBS		= pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a  \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
-	@FT2_LIBS@ @PNG_LIBS@ @ICONV_LIBS@ -lstdc++
+	@PNG_LIBS@ @ICONV_LIBS@ -lstdc++
 
 
 PROGRAM	= decker
@@ -64,7 +64,10 @@ OBJECTS=compile/main.o \
 	compile/object_arrow.o \
 	compile/object_door.o \
 	compile/object_floater.o \
-	compile/object_playerstartpoint.o
+	compile/object_playerstartpoint.o \
+	compile/object_breakingground.o \
+	compile/object_skeleton.o \
+	compile/object_mummy.o
 	
 	
 	
@@ -241,6 +244,18 @@ compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include
 compile/object_playerstartpoint.o: src/objects/playerstartpoint.cpp Makefile include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_playerstartpoint.o -c src/objects/playerstartpoint.cpp $(CFLAGS)	
+
+compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_mummyt.o -c src/objects/mummy.cpp $(CFLAGS)	
+
+compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_skeleton.o -c src/objects/skeleton.cpp $(CFLAGS)	
+
+compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_breakingground.o -c src/objects/breakingground.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

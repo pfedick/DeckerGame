@@ -226,12 +226,38 @@ public:
 	static Representation representation();
 };
 
+class Skeleton : public Enemy
+{
+private:
+public:
+	Skeleton();
+	static Representation representation();
+};
+
+class Mummy : public Enemy
+{
+private:
+public:
+	Mummy();
+	static Representation representation();
+};
+
+
 class HangingSpider : public Enemy
 {
 private:
 public:
 	HangingSpider();
 	static Representation representation();
+};
+
+class BreakingGround : public Object
+{
+private:
+public:
+	BreakingGround();
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void handleCollision(Player *player);
 };
 
 class Floater : public Object
@@ -244,7 +270,9 @@ public:
 	Floater(Type::ObjectType type);
 	virtual void update(double time);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void handleCollision(Player *player);
 };
+
 
 class FloaterHorizontal : public Floater
 {

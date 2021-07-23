@@ -646,7 +646,6 @@ report_have_nasm
 report_have_iconv
 report_have_pcre
 report_have_sdl2
-report_have_freetype2
 report_have_png
 report_have_bzip2
 report_have_zlib
@@ -664,9 +663,6 @@ SDL2_CONFIG
 SDL2_FRAMEWORK
 SDL2_LIBS
 SDL2_CFLAGS
-FT2_LIBS
-FT2_CFLAGS
-FT2_CONFIG
 PCRE_CFLAGS
 PCRE_LIBS
 PKGCONFIG
@@ -818,9 +814,6 @@ with_libiconv_prefix
 with_bzip2
 with_zlib
 with_pcre
-with_ft_prefix
-with_ft_exec_prefix
-enable_freetypetest
 with_sdl_prefix
 with_sdl_exec_prefix
 enable_sdltest
@@ -1491,8 +1484,6 @@ Optional Features:
                           speeds up one-time build
   --disable-largefile     omit support for large files
   --disable-rpath         do not hardcode runtime library paths
-       --disable-freetypetest  Do not try to compile and run a test FreeType
-                          program
   --disable-sdltest       Do not try to compile and run a test SDL program
   --disable-sdlframework Do not search for SDL2.framework
 
@@ -1510,9 +1501,6 @@ Optional Packages:
                           /usr/local or /usr if not found in /usr/local]
   --without-zlib          to disable zlib usage completely
   --with-pcre[=prefix]    compile xmlpcre part (via libpcre check)
-       --with-ft-prefix=PREFIX Prefix where FreeType is installed (optional)
-       --with-ft-exec-prefix=PREFIX
-                          Exec prefix where FreeType is installed (optional)
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
   --with-nasm[=PATH]      Prefix where nasm is installed (optional)
@@ -2890,32 +2878,6 @@ ac_config_headers="$ac_config_headers pplib/include/ppl7-config.h"
 
 
 
-# Configure paths for FreeType2
-# Marcelo Magallon 2001-10-26, based on gtk.m4 by Owen Taylor
-#
-# Copyright 2001, 2003 by
-# David Turner, Robert Wilhelm, and Werner Lemberg.
-#
-# This file is part of the FreeType project, and may only be used, modified,
-# and distributed under the terms of the FreeType project license,
-# LICENSE.TXT.  By continuing to use, modify, or distribute this file you
-# indicate that you have read the license and understand and accept it
-# fully.
-#
-# serial 2
-
-# AC_CHECK_FT2([MINIMUM-VERSION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
-# Test for FreeType 2, and define FT2_CFLAGS and FT2_LIBS.
-# MINIMUM-VERSION is what libtool reports; the default is `7.0.1' (this is
-# FreeType 2.0.4).
-#
-
-
-# end of freetype2.m4
-
-
-
-
 # ===========================================================================
 #     http://www.gnu.org/software/autoconf-archive/ax_path_lib_pcre.html
 # ===========================================================================
@@ -3456,7 +3418,6 @@ report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
 report_have_pcre="no"
-report_have_freetype2="no"
 report_have_sdl2="no"
 report_have_png="no"
 report_have_nasm="no"
@@ -13257,258 +13218,6 @@ fi
 
 
 
-# Get the cflags and libraries from the freetype-config script
-   #
-
-# Check whether --with-ft-prefix was given.
-if test "${with_ft_prefix+set}" = set; then :
-  withval=$with_ft_prefix; ft_config_prefix="$withval"
-else
-  ft_config_prefix=""
-fi
-
-
-
-# Check whether --with-ft-exec-prefix was given.
-if test "${with_ft_exec_prefix+set}" = set; then :
-  withval=$with_ft_exec_prefix; ft_config_exec_prefix="$withval"
-else
-  ft_config_exec_prefix=""
-fi
-
-
-   # Check whether --enable-freetypetest was given.
-if test "${enable_freetypetest+set}" = set; then :
-  enableval=$enable_freetypetest;
-else
-  enable_fttest=yes
-fi
-
-
-   if test x$ft_config_exec_prefix != x ; then
-     ft_config_args="$ft_config_args --exec-prefix=$ft_config_exec_prefix"
-     if test x${FT2_CONFIG+set} != xset ; then
-       FT2_CONFIG=$ft_config_exec_prefix/bin/freetype-config
-     fi
-   fi
-
-   if test x$ft_config_prefix != x ; then
-     ft_config_args="$ft_config_args --prefix=$ft_config_prefix"
-     if test x${FT2_CONFIG+set} != xset ; then
-       FT2_CONFIG=$ft_config_prefix/bin/freetype-config
-     fi
-   fi
-
-   # Extract the first word of "freetype-config", so it can be a program name with args.
-set dummy freetype-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_FT2_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $FT2_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_FT2_CONFIG="$FT2_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_FT2_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_FT2_CONFIG" && ac_cv_path_FT2_CONFIG="no"
-  ;;
-esac
-fi
-FT2_CONFIG=$ac_cv_path_FT2_CONFIG
-if test -n "$FT2_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FT2_CONFIG" >&5
-$as_echo "$FT2_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-
-   min_ft_version=9.0.0
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for FreeType -- version >= $min_ft_version" >&5
-$as_echo_n "checking for FreeType -- version >= $min_ft_version... " >&6; }
-   no_ft=""
-   if test "$FT2_CONFIG" = "no" ; then
-     no_ft=yes
-   else
-     FT2_CFLAGS=`$FT2_CONFIG $ft_config_args --cflags`
-     FT2_LIBS=`$FT2_CONFIG $ft_config_args --libs`
-     ft_config_major_version=`$FT2_CONFIG $ft_config_args --version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-     ft_config_minor_version=`$FT2_CONFIG $ft_config_args --version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-     ft_config_micro_version=`$FT2_CONFIG $ft_config_args --version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-     ft_min_major_version=`echo $min_ft_version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-     ft_min_minor_version=`echo $min_ft_version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-     ft_min_micro_version=`echo $min_ft_version | \
-       sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-     if test x$enable_fttest = xyes ; then
-       ft_config_is_lt=""
-       if test $ft_config_major_version -lt $ft_min_major_version ; then
-         ft_config_is_lt=yes
-       else
-         if test $ft_config_major_version -eq $ft_min_major_version ; then
-           if test $ft_config_minor_version -lt $ft_min_minor_version ; then
-             ft_config_is_lt=yes
-           else
-             if test $ft_config_minor_version -eq $ft_min_minor_version ; then
-               if test $ft_config_micro_version -lt $ft_min_micro_version ; then
-                 ft_config_is_lt=yes
-               fi
-             fi
-           fi
-         fi
-       fi
-       if test x$ft_config_is_lt = xyes ; then
-         no_ft=yes
-       else
-         ac_save_CFLAGS="$CFLAGS"
-         ac_save_LIBS="$LIBS"
-         CFLAGS="$CFLAGS $FT2_CFLAGS"
-         LIBS="$FT2_LIBS $LIBS"
-
-         #
-         # Sanity checks for the results of freetype-config to some extent.
-         #
-         if test "$cross_compiling" = yes; then :
-  echo $ECHO_N "cross compiling; assuming OK... $ECHO_C"
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include <stdio.h>
-#include <stdlib.h>
-
-int
-main()
-{
-  FT_Library library;
-  FT_Error  error;
-
-  error = FT_Init_FreeType(&library);
-
-  if (error)
-    return 1;
-  else
-  {
-    FT_Done_FreeType(library);
-    return 0;
-  }
-}
-
-
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-
-else
-  no_ft=yes
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-
-         CFLAGS="$ac_save_CFLAGS"
-         LIBS="$ac_save_LIBS"
-       fi             # test $ft_config_version -lt $ft_min_version
-     fi               # test x$enable_fttest = xyes
-   fi                 # test "$FT2_CONFIG" = "no"
-
-   if test x$no_ft = x ; then
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-$as_echo "#define HAVE_FREETYPE2 1" >>confdefs.h
-
-	report_have_freetype2="yes"
-
-   else
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-     if test "$FT2_CONFIG" = "no" ; then
-       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
-
-  The freetype-config script installed by FreeType 2 could not be found.
-  If FreeType 2 was installed in PREFIX, make sure PREFIX/bin is in
-  your path, or set the FT2_CONFIG environment variable to the
-  full path to freetype-config.
-       " >&5
-$as_echo "$as_me: WARNING:
-
-  The freetype-config script installed by FreeType 2 could not be found.
-  If FreeType 2 was installed in PREFIX, make sure PREFIX/bin is in
-  your path, or set the FT2_CONFIG environment variable to the
-  full path to freetype-config.
-       " >&2;}
-     else
-       if test x$ft_config_is_lt = xyes ; then
-         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
-
-  Your installed version of the FreeType 2 library is too old.
-  If you have different versions of FreeType 2, make sure that
-  correct values for --with-ft-prefix or --with-ft-exec-prefix
-  are used, or set the FT2_CONFIG environment variable to the
-  full path to freetype-config.
-         " >&5
-$as_echo "$as_me: WARNING:
-
-  Your installed version of the FreeType 2 library is too old.
-  If you have different versions of FreeType 2, make sure that
-  correct values for --with-ft-prefix or --with-ft-exec-prefix
-  are used, or set the FT2_CONFIG environment variable to the
-  full path to freetype-config.
-         " >&2;}
-       else
-         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
-
-  The FreeType test program failed to run.  If your system uses
-  shared libraries and they are installed outside the normal
-  system library path, make sure the variable LD_LIBRARY_PATH
-  (or whatever is appropiate for your system) is correctly set.
-         " >&5
-$as_echo "$as_me: WARNING:
-
-  The FreeType test program failed to run.  If your system uses
-  shared libraries and they are installed outside the normal
-  system library path, make sure the variable LD_LIBRARY_PATH
-  (or whatever is appropiate for your system) is correctly set.
-         " >&2;}
-       fi
-     fi
-
-     FT2_CFLAGS=""
-     FT2_LIBS=""
-     :
-   fi
-
-
-
-
 report_have_sdl2="no"
 
 # Check whether --with-sdl-prefix was given.
@@ -14137,7 +13846,6 @@ esac
 
 
 
-
 ###
 JPEG_CFLAGS=""
 OPENSSL_INCLUDES=""
@@ -14151,6 +13859,7 @@ LIBIDN_CFLAGS=""
 LIBCURL_CPPFLAGS=""
 LIBLDNS_CFLAGS=""
 IMLIB_CFLAGS=""
+FT2_CFLAGS=""
 
 
 
@@ -15661,21 +15370,12 @@ fi
 **
 ** Threads:                $report_have_pthreads
 **
-** Core:
+** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**
-** Graphics:
-**   BMP:                  yes (buildin)
-**   GIF:                  yes (buildin)
-**   TGA:                  yes (buildin)
-**   PPM:                  yes (buildin)
 **   PNG:                  $report_have_png
-**   Freetype 2.x library: $report_have_freetype2
-**
-** Multimedia:
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
 **
@@ -15699,21 +15399,12 @@ $as_echo "
 **
 ** Threads:                $report_have_pthreads
 **
-** Core:
+** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**
-** Graphics:
-**   BMP:                  yes (buildin)
-**   GIF:                  yes (buildin)
-**   TGA:                  yes (buildin)
-**   PPM:                  yes (buildin)
 **   PNG:                  $report_have_png
-**   Freetype 2.x library: $report_have_freetype2
-**
-** Multimedia:
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
 **

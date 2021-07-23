@@ -250,6 +250,13 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Savepoint: return new SavePoint();
 	case Type::Key: return new KeyReward();
 	case Type::PlayerStartpoint: return new PlayerStartPoint();
+	case Type::FloaterHorizontal: return new FloaterHorizontal();
+	case Type::FloaterVertical: return new FloaterVertical();
+	case Type::Arrow: return new Arrow();
+	case Type::Rat: return new Rat();
+	case Type::Skeleton: return new Skeleton();
+	case Type::Mummy: return new Mummy();
+
 
 
 	}
