@@ -247,7 +247,7 @@ compile/object_playerstartpoint.o: src/objects/playerstartpoint.cpp Makefile inc
 
 compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
 	-mkdir -p compile 
-	$(CXX) -o compile/object_mummyt.o -c src/objects/mummy.cpp $(CFLAGS)	
+	$(CXX) -o compile/object_mummy.o -c src/objects/mummy.cpp $(CFLAGS)	
 
 compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
 	-mkdir -p compile 
