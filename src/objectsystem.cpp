@@ -106,13 +106,11 @@ void ObjectSystem::update(double time)
 void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
 {
 	std::map<uint32_t,Object *>::const_iterator it;
+	ppl7::grafix::Point coords(viewport.x1-worldcoords.x, viewport.y1-worldcoords.y);
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		const Object *object=it->second;
 		if (object->texture!=NULL && object->enabled==true && object->visibleAtPlaytime==true) {
-			object->texture->draw(renderer,
-					object->p.x+viewport.x1-worldcoords.x,
-					object->p.y+viewport.y1-worldcoords.y,
-					object->sprite_no);
+			object->draw(renderer,coords);
 		}
 	}
 }
@@ -120,12 +118,13 @@ void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewpo
 void ObjectSystem::drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
 {
 	std::map<uint32_t,Object *>::const_iterator it;
+	ppl7::grafix::Point coords(viewport.x1-worldcoords.x, viewport.y1-worldcoords.y);
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		const Object *object=it->second;
 		if (object->texture) {
 			object->texture->draw(renderer,
-					object->initial_p.x+viewport.x1-worldcoords.x,
-					object->initial_p.y+viewport.y1-worldcoords.y,
+					object->initial_p.x+coords.x,
+					object->initial_p.y+coords.y,
 					object->sprite_no);
 		}
 	}

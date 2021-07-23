@@ -4,6 +4,23 @@
 
 namespace Decker::Objects {
 
+Floater::Floater(Type::ObjectType type)
+: Object(type)
+{
+	sprite_no_representation=115;
+	direction=0;
+}
+
+void Floater::update(double time)
+{
+
+}
+
+void Floater::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
+{
+
+}
+
 Representation FloaterHorizontal::representation()
 {
 	return Representation(Spriteset::GenericObjects, 115);
@@ -16,16 +33,21 @@ Representation FloaterVertical::representation()
 }
 
 FloaterHorizontal::FloaterHorizontal()
-: Object(Type::FloaterHorizontal)
+: Floater(Type::FloaterHorizontal)
 {
 	sprite_no_representation=115;
+	direction=0;
 }
 
 
 FloaterVertical::FloaterVertical()
-: Object(Type::FloaterVertical)
+: Floater(Type::FloaterVertical)
 {
 	sprite_no_representation=116;
+	direction=1;
 }
+
+
+
 
 }	// EOF namespace Decker::Objects

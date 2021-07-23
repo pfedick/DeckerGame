@@ -112,6 +112,8 @@ void Resources::loadBricks(SDL &sdl)
 	loadBricks(sdl, 15, "light Orange", 125, ppl7::grafix::Color(0xfa,0x9c,0x1c,0xff));
 	loadBricks(sdl, 16, "Dark Tan", 28, ppl7::grafix::Color(0x95, 0x8a,0x73,0xff));
 	loadBricks(sdl, 17, "Tan", 19, ppl7::grafix::Color(0xe4, 0xcd,0x9e,0xff));
+	loadBricks(sdl, 18, "Bright Green", 10, ppl7::grafix::Color(0x4b, 0x9f,0x4a,0xff));
+	loadBricks(sdl, 19, "Bright Yellow Green (Lime)", 27, ppl7::grafix::Color(0xbb, 0xe9,0x0b,0xff));
 
 
 

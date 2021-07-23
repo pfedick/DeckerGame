@@ -83,7 +83,7 @@ public:
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void handleCollision(Player *player);
-
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	static Representation representation();
 };
 
@@ -204,6 +204,7 @@ public:
 class Arrow : public Trap
 {
 private:
+
 public:
 	Arrow();
 	static Representation representation();
@@ -233,16 +234,27 @@ public:
 	static Representation representation();
 };
 
+class Floater : public Object
+{
+	friend class FloaterVertical;
+	friend class FloaterHorizontal;
+private:
+	int direction;
+public:
+	Floater(Type::ObjectType type);
+	virtual void update(double time);
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+};
 
-class FloaterHorizontal : public Object
+class FloaterHorizontal : public Floater
 {
 private:
 public:
 	FloaterHorizontal();
 	static Representation representation();
-};
+	};
 
-class FloaterVertical : public Object
+class FloaterVertical : public Floater
 {
 private:
 public:

@@ -339,10 +339,9 @@ void Game::run()
 
 
 
-		// Handle Mouse events inside World
+		// TODO: Refactor into Events: Handle Mouse events inside World
 		if (mouse.p.inside(viewport)) {
 			moveWorldOnMouseClick(mouse);
-			handleMouseDrawInWorld(mouse);
 		}
 		sdl.startFrame(Style.windowBackgroundColor);
 		level.setViewport(viewport);
@@ -532,8 +531,8 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 
 	if (tiletype_selection) {
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[0];
-		int x=(mouse.p.x-viewport.x1+coords.x)/TILE_WIDTH;
-		int y=(mouse.p.y-viewport.y1+coords.y)/TILE_HEIGHT;
+		int x=(mouse.p.x+coords.x)/TILE_WIDTH;
+		int y=(mouse.p.y+coords.y)/TILE_HEIGHT;
 		TileType::Type type=(TileType::Type)tiletype_selection->tileType();
 		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
 			level.TileTypeMatrix.setType(x,y,type);
@@ -544,8 +543,8 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
 		int currentPlane=mainmenue->currentPlane();
 
 		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
-		int x=(mouse.p.x-viewport.x1+coords.x)/TILE_WIDTH;
-		int y=(mouse.p.y-viewport.y1+coords.y)/TILE_HEIGHT;
+		int x=(mouse.p.x+coords.x)/TILE_WIDTH;
+		int y=(mouse.p.y+coords.y)/TILE_HEIGHT;
 
 		int selectedTile=tiles_selection->selectedTile();
 		int selectedTileSet=tiles_selection->currentTileSet();
@@ -684,6 +683,8 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		mouseDownEventOnSprite(event);
 	} else if (object_selection!=NULL && event->widget()==world_widget) {
 		mouseDownEventOnObject(event);
+	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
+		handleMouseDrawInWorld(*event);
 	}
 }
 
@@ -833,6 +834,9 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 			selected_object->updateBoundary();
 			sprite_move_start=event->p;
 		}
+	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
+		handleMouseDrawInWorld(*event);
 	}
+
 }
 

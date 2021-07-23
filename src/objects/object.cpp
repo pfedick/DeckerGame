@@ -106,6 +106,14 @@ bool Object::load(const unsigned char *buffer, size_t size)
 	return true;
 }
 
+void Object::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
+{
+	texture->draw(renderer,
+			p.x+coords.x,
+			p.y+coords.y,
+			sprite_no);
+}
+
 void Object::handleCollision(Player *player)
 {
 
