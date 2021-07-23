@@ -9,5 +9,12 @@ Representation HangingSpider::representation()
 	return Representation(Spriteset::GenericObjects, 49);
 }
 
+HangingSpider::HangingSpider()
+:Enemy(Type::ObjectType::HangingSpider)
+{
+	sprite_no=49;
+	sprite_no_representation=49;
+}
+
 
 }	// EOF namespace Decker::Objects

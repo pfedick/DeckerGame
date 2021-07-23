@@ -211,6 +211,8 @@ Representation getRepresentation(int object_type)
 	case Type::HangingSpider: return HangingSpider::representation();
 	case Type::FloaterHorizontal: return FloaterHorizontal::representation();
 	case Type::FloaterVertical: return FloaterVertical::representation();
+	case Type::Skeleton: return Skeleton::representation();
+	case Type::Mummy: return Mummy::representation();
 	default: return Object::representation();
 	}
 }
@@ -256,9 +258,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Rat: return new Rat();
 	case Type::Skeleton: return new Skeleton();
 	case Type::Mummy: return new Mummy();
-
-
-
+	case Type::HangingSpider: return new HangingSpider();
 	}
 	return NULL;
 }
@@ -282,7 +282,8 @@ void ObjectSystem::save(ppl7::FileObject &file, unsigned char id) const
 		size_t bytes_saved=object->save(buffer+p+1,object->save_size);
 		if (bytes_saved==object->save_size && bytes_saved>0) {
 			p+=object->save_size+1;
-			//printf ("saved object %d with size %d\n",object->id, object->save_size+1);
+			//printf ("saved object %d of type %d with size %d\n",
+			//		object->id, object->type(), object->save_size+1);
 		}
 	}
 	ppl7::Poke32(buffer+0,p);
@@ -299,6 +300,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 	while (p<ba.size()) {
 		int save_size=ppl7::Peek8(buffer+p);
 		int type=ppl7::Peek8(buffer+p+1);
+		//printf ("try to load object of type %d, size: %d\n",type, save_size);
 		Object *object=getInstance(type);
 		if (object) {
 			if (object->load(buffer+p+1,save_size-1)) {
@@ -308,7 +310,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 					object->updateBoundary();
 				}
 				object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
-				//printf ("found object of type %d with size %d\n",type,save_size);
+				//printf ("found object %d of type %d with size %d\n",object->id, type,save_size);
 			}
 		}
 		p+=save_size;

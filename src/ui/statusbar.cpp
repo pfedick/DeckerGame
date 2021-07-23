@@ -32,22 +32,27 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 
 	label=new ppl7::tk::Label (340,0,55,32,"World:");
 	this->addChild(label);
-	world_coords=new ppl7::tk::Label (400,0,80,32,"?", ppl7::tk::Frame::Inset);
+	world_coords=new ppl7::tk::Label (400,0,110,32,"?", ppl7::tk::Frame::Inset);
 	world_coords->setFont(font_bold);
 	this->addChild(world_coords);
 
-	this->addChild(new ppl7::tk::Label (490,0,55,32,"Player:"));
-	player_coords=new ppl7::tk::Label (550,0,120,32,"?", ppl7::tk::Frame::Inset);
+	this->addChild(new ppl7::tk::Label (515,0,55,32,"Player:"));
+	player_coords=new ppl7::tk::Label (570,0,110,32,"?", ppl7::tk::Frame::Inset);
 	player_coords->setFont(font_bold);
 	this->addChild(player_coords);
 
-	this->addChild(new ppl7::tk::Label (660,0,140,32,"Sprites total / visible:"));
-	sprite_count=new ppl7::tk::Label (800,0,120,32,"?", ppl7::tk::Frame::Inset);
+	this->addChild(new ppl7::tk::Label (690,0,140,32,"Sprites total/visible:"));
+	sprite_count=new ppl7::tk::Label (835,0,100,32,"?", ppl7::tk::Frame::Inset);
 	sprite_count->setFont(font_bold);
 	this->addChild(sprite_count);
 
-	this->addChild(new ppl7::tk::Label (920,0,100,32,"Player state:"));
-	player_state=new ppl7::tk::Label (1020,0,300,32,"?", ppl7::tk::Frame::Inset);
+	this->addChild(new ppl7::tk::Label (940,0,140,32,"Objects total/visible:"));
+	object_count=new ppl7::tk::Label (1080,0,100,32,"?", ppl7::tk::Frame::Inset);
+	object_count->setFont(font_bold);
+	this->addChild(object_count);
+
+	this->addChild(new ppl7::tk::Label (1190,0,100,32,"Player state:"));
+	player_state=new ppl7::tk::Label (1300,0,300,32,"?", ppl7::tk::Frame::Inset);
 	player_state->setFont(font_bold);
 	this->addChild(player_state);
 
@@ -90,6 +95,11 @@ void StatusBar::setPlayerCoords(const ppl7::grafix::Point &p)
 void StatusBar::setSpriteCount(size_t total, size_t visible)
 {
 	sprite_count->setText(ppl7::ToString("%zd / %zd",total, visible));
+}
+
+void StatusBar::setObjectCount(size_t total, size_t visible)
+{
+	object_count->setText(ppl7::ToString("%zd / %zd",total, visible));
 }
 
 

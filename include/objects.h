@@ -14,23 +14,27 @@ namespace Decker::Objects {
 class Type
 {
 public:
+	// ID must be <256
 	enum ObjectType {
 		PlayerStartpoint=1,
 		Savepoint=2,
 		Medikit=3,
-		Crystal=100,
-		Diamond=101,
-		Coin=102,
-		Key=103,
-		Arrow=200,
-		ThreeSpeers=201,
-		Rat=300,
-		HangingSpider=301,
-		Skeleton=302,
-		Mummy=303,
-		FloaterHorizontal=500,
-		FloaterVertical=501,
-		Door=502
+		Crystal=4,
+		Diamond=5,
+		Coin=6,
+		Key=7,
+		Door=8,
+		FloaterHorizontal=9,
+		FloaterVertical=10,
+		BreakingGround=11,
+		Fire=12,
+		Wind=13,
+		Arrow=100,
+		ThreeSpeers=101,
+		Rat=102,
+		HangingSpider=103,
+		Skeleton=104,
+		Mummy=105
 	};
 	static ppl7::String name(Type::ObjectType type);
 };

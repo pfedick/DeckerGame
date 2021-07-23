@@ -18,6 +18,11 @@ void Floater::update(double time)
 
 void Floater::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
 {
+	Object::draw(renderer, coords);
+}
+
+void Floater::handleCollision(Player *player)
+{
 
 }
 
@@ -36,6 +41,7 @@ FloaterHorizontal::FloaterHorizontal()
 : Floater(Type::FloaterHorizontal)
 {
 	sprite_no_representation=115;
+	sprite_no=115;
 	direction=0;
 }
 
@@ -44,6 +50,7 @@ FloaterVertical::FloaterVertical()
 : Floater(Type::FloaterVertical)
 {
 	sprite_no_representation=116;
+	sprite_no=116;
 	direction=1;
 }
 

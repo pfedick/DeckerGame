@@ -306,6 +306,7 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 	if (player)
 		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
 	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
+	statusbar->setObjectCount(level.objects->count(), level.objects->countVisible());
 	statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
 }
