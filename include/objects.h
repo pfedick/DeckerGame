@@ -233,9 +233,14 @@ public:
 class Skeleton : public Enemy
 {
 private:
+	AnimationCycle animation;
+	double next_state;
+	int state;
 public:
 	Skeleton();
 	static Representation representation();
+	virtual void handleCollision(Player *player);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 class Mummy : public Enemy
