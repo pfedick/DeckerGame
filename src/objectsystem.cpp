@@ -85,8 +85,16 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 		if (object->texture) {
 			int x=object->p.x-worldcoords.x;
 			int y=object->p.y-worldcoords.y;
+			bool isVisible=false;
 			if (x+object->boundary.width()>0 && y+object->boundary.height()>0
-					&& x-object->boundary.width()<width && y-object->boundary.height()<height ) {
+					&& x-object->boundary.width()<width && y-object->boundary.height()<height )
+				isVisible=true;
+			if (object->p!=object->initial_p) {
+				x=object->initial_p.x-worldcoords.x;
+				y=object->initial_p.y-worldcoords.y;
+				if (x>0 && y>0 && x<width && y<height) isVisible=true;
+			}
+			if (isVisible) {
 				uint32_t id=(uint32_t)((object->p.y&0xffff)<<16)|(uint32_t)(object->p.x&0xffff);
 				visible_object_map.insert(std::pair<uint32_t,Object *>(id,object));
 			}
