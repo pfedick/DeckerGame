@@ -28,7 +28,7 @@ ThreeSpeers::ThreeSpeers()
 	sprite_no_representation=22;
 }
 
-void ThreeSpeers::update(double time)
+void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
 		next_animation=time+0.056f;

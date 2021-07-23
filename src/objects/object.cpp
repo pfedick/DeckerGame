@@ -81,7 +81,7 @@ Representation Object::representation()
 	return Representation(-1, 0);
 }
 
-void Object::update(double time)
+void Object::update(double, TileTypePlane &, Player &)
 {
 
 }

@@ -8,7 +8,7 @@ class SDL_Renderer;
 class SpriteTexture;
 
 class Player;
-
+class TileTypePlane;
 namespace Decker::Objects {
 
 class Type
@@ -23,9 +23,9 @@ public:
 		Diamond=5,
 		Coin=6,
 		Key=7,
+		FloaterVertical=10,
 		Door=8,
 		FloaterHorizontal=9,
-		FloaterVertical=10,
 		BreakingGround=11,
 		Fire=12,
 		Wind=13,
@@ -83,7 +83,7 @@ public:
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
 	void updateBoundary();
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void handleCollision(Player *player);
@@ -120,7 +120,7 @@ public:
 	CoinReward();
 	static Representation representation();
 
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 
 };
 
@@ -132,7 +132,7 @@ private:
 public:
 	GemReward();
 	static Representation representation();
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 class CrystalReward : public Collectable
@@ -143,7 +143,7 @@ private:
 public:
 	CrystalReward();
 	static Representation representation();
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 class KeyReward : public Collectable
@@ -172,7 +172,7 @@ private:
 public:
 	SavePoint();
 	static Representation representation();
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player);
 };
 
@@ -194,7 +194,7 @@ private:
 public:
 	ThreeSpeers();
 	static Representation representation();
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player);
 };
 
@@ -250,9 +250,16 @@ public:
 class HangingSpider : public Enemy
 {
 private:
+	double next_state;
+	int state;
+	double velocity;
 public:
 	HangingSpider();
 	static Representation representation();
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void handleCollision(Player *player);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
 };
 
 class BreakingGround : public Object
@@ -262,6 +269,7 @@ public:
 	BreakingGround();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 class Floater : public Object
@@ -272,7 +280,7 @@ private:
 	int direction;
 public:
 	Floater(Type::ObjectType type);
-	virtual void update(double time);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player);
 };
@@ -314,7 +322,7 @@ public:
 	void loadSpritesets(SDL &sdl);
 	void addObject(Object *object);
 	Object *getInstance(int object_type) const;
-	void update(double time);
+	void update(double time, TileTypePlane &ttplane, Player &player);
 	void updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;

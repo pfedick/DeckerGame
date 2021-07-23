@@ -94,12 +94,12 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 	}
 }
 
-void ObjectSystem::update(double time)
+void ObjectSystem::update(double time, TileTypePlane &ttplane, Player &player)
 {
 	std::map<uint32_t, Object *>::iterator it;
 	for (it=object_list.begin();it!=object_list.end();++it) {
 		Object *object=it->second;
-		object->update(time);
+		object->update(time, ttplane, player);
 	}
 }
 
@@ -163,6 +163,7 @@ Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &play
 		if (item->texture!=NULL && item->collisionDetection==true && item->enabled==true) {
 			for (p_it=player.begin();p_it!=player.end();++p_it) {
 				if ((*p_it).inside(item->boundary)) {
+					//printf ("inside boundary\n");
 					const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
 					if (draw.width()) {
 						int x=(*p_it).x-item->boundary.x1;

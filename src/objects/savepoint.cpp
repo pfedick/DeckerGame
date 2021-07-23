@@ -26,7 +26,7 @@ SavePoint::SavePoint()
 	sprite_no_representation=52;
 }
 
-void SavePoint::update(double time)
+void SavePoint::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
 		next_animation=time+0.056f;

@@ -26,7 +26,7 @@ GemReward::GemReward()
 	points=50;
 }
 
-void GemReward::update(double time)
+void GemReward::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
 		next_animation=time+0.056f;
@@ -54,7 +54,7 @@ CrystalReward::CrystalReward()
 	points=100;
 }
 
-void CrystalReward::update(double time)
+void CrystalReward::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
 		next_animation=time+0.056f;

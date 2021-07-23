@@ -24,7 +24,7 @@ CoinReward::CoinReward()
 	points=10;
 }
 
-void CoinReward::update(double time)
+void CoinReward::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
 		next_animation=time+0.056f;

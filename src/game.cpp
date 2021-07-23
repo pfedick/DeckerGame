@@ -332,7 +332,7 @@ void Game::run()
 		level.setEditmode(object_selection!=NULL);
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
 		player->update(now, level.TileTypeMatrix, level.objects);
-		level.objects->update(now);
+		level.objects->update(now, level.TileTypeMatrix, *player);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
 			updateWorldCoords();

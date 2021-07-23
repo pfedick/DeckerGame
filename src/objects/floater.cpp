@@ -11,7 +11,7 @@ Floater::Floater(Type::ObjectType type)
 	direction=0;
 }
 
-void Floater::update(double time)
+void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 {
 
 }
