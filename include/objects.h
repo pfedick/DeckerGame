@@ -312,6 +312,7 @@ private:
 	int direction;
 	double next_state, next_animation;
 	int state;
+	int flame_sprite1, flame_sprite2;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
 public:

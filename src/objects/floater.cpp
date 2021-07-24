@@ -15,6 +15,8 @@ Floater::Floater(Type::ObjectType type)
 	next_animation=0.0f;
 	next_state=ppl7::GetMicrotime()+5.0f;
 	state=0;
+	flame_sprite1=152;
+	flame_sprite2=152;
 }
 
 void Floater::update(double time, TileTypePlane &ttplane, Player &player)
@@ -33,6 +35,10 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 				state=2;
 				next_state=time+5.0f;
 			}
+			if (time>next_animation) {
+				flame_sprite1=ppl7::rand(152,161);
+				next_animation=time+0.06f;
+			}
 		} else if (state==3) {
 			velocity.x=-4;
 			velocity.y=0;
@@ -44,12 +50,26 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 				state=0;
 				next_state=time+5.0f;
 			}
+			if (time>next_animation) {
+				flame_sprite1=ppl7::rand(162,171);
+				next_animation=time+0.06f;
+			}
 		}
 	}
 }
 
 void Floater::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
 {
+	if (direction==0) {
+		if (state==1) texture->draw(renderer,
+				p.x+coords.x-128-32,
+				p.y+coords.y,
+				flame_sprite1);
+		else if (state==3) texture->draw(renderer,
+				p.x+coords.x+128+32,
+				p.y+coords.y,
+				flame_sprite1);
+	}
 	Object::draw(renderer, coords);
 }
 
