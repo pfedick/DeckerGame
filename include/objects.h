@@ -240,9 +240,13 @@ public:
 class Rat : public Enemy
 {
 private:
+	int state;
 public:
 	Rat();
 	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
 };
 
 class Skeleton : public Enemy
