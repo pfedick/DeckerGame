@@ -34,14 +34,10 @@ they can interact with the player.
     - locked door
     - key (used to unlock a locked door)
     - arrows from wall
-    - rat
     - scorpion
-    - spider
     - skeleton
     - mummy
     - some kind of angry bird?
-    - dissolving ground
-    - floater
     - lasers
     - side wind
 - refine physics (especially jumping & falling) 
@@ -71,6 +67,13 @@ There is probably more, which I'm not aware of, yet ;-)
     - coins (can be collected  => points)
     - medikit
     - savepoint
+    - rat
+    - spider
+    - skeleton
+    - mummy
+    - dissolving ground
+    - floater
+    
 
 
 ## On what platforms will the game be available
