@@ -25,10 +25,10 @@ Mummy::Mummy()
 	sprite_no_representation=27;
 	animation.setStaticFrame(27);
 	next_state=ppl7::GetMicrotime()+(double)ppl7::rand(5,20);
-		state=0;
-		next_animation=0.0f;
-		collisionDetection=true;
-		animation.start(turn_from_mid_to_left,sizeof(turn_from_mid_to_left)/sizeof(int),false,0);
+	state=0;
+	next_animation=0.0f;
+	collisionDetection=true;
+	animation.start(turn_from_mid_to_left,sizeof(turn_from_mid_to_left)/sizeof(int),false,0);
 }
 
 void Mummy::update(double time, TileTypePlane &ttplane, Player &player)

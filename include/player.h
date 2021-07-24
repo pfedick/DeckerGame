@@ -80,6 +80,8 @@ private:
 	PlayerOrientation turnTarget;
 
 	ppl7::grafix::Point lastSavePoint;
+	int collision_matrix[4][6];
+
 
 	void turn(PlayerOrientation target);
 	void stand();
@@ -88,7 +90,6 @@ private:
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects);
 	void updatePhysics(const TileTypePlane &world);
 	int getKeyboardMatrix(const unsigned char *state);
-	int collision_matrix[4][6];
 
 	bool isCollisionLeft() const;
 	bool isCollisionRight() const;

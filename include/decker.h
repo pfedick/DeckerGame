@@ -293,7 +293,8 @@ public:
 		Plate2h,
 		Speer,
 		Fire,
-		AirStream
+		AirStream,
+		MaxType			// used for arrays
 	};
 };
 

@@ -361,19 +361,19 @@ void Player::updateMovement()
 
 void Player::checkCollisionWithWorld(const TileTypePlane &world)
 {
+	int collision_type_count[TileType::Type::MaxType];
+	for (int i=0;i<TileType::Type::MaxType;i++) collision_type_count[i]=0;
 	//TileType::Type t;
 	for (int cy=1;cy<5;cy++) {
 		for (int cx=0;cx<4;cx++) {
-			collision_matrix[cx][cy]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
+			TileType::Type t=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
 					y+(TILE_HEIGHT/2)-(5*TILE_HEIGHT)+(cy*TILE_HEIGHT)));
+			collision_matrix[cx][cy]=t;
+			collision_type_count[t]+=1;
 		}
 	}
-	//collision_matrix[1][0]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-(TILE_HEIGHT*3)+15));
-	//collision_matrix[2][0]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-(TILE_HEIGHT*3)+15));
-
 	collision_matrix[1][4]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1));
 	collision_matrix[2][4]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1));
-
 	for (int cx=0;cx<4;cx++) {
 		collision_matrix[cx][0]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
 				y-(TILE_HEIGHT*4)));
@@ -445,6 +445,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			}
 		}
 	}
+
+	if (collision_type_count[TileType::Type::Speer]>0) {
+		this->dropHealth(10);
+	}
+	if (collision_type_count[TileType::Type::Fire]>0) {
+		this->dropHealth(10);
+	}
+
 }
 
 bool Player::isCollisionLeft() const
