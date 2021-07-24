@@ -206,8 +206,8 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 		velocity_move.stop();
 		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
 	}
-	if (time>next_keycheck) {
-		next_keycheck=time+0.1f;
+	//if (time>next_keycheck) {
+		//next_keycheck=time+0.1f;
 		const Uint8 *state = SDL_GetKeyboardState(NULL);
 		int keys=getKeyboardMatrix(state);
 		if (keys==KeyboardKeys::Left) {
@@ -317,7 +317,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 
 			}
 		}
-	}
+	//}
 }
 
 void Player::updateMovement()
