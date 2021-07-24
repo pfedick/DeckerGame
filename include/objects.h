@@ -218,8 +218,25 @@ public:
 class LaserBarrier : public Trap
 {
 private:
+	double next_state;
+	int state;
 public:
-	LaserBarrier();
+	LaserBarrier(Type::ObjectType type);
+	static Representation representation(Type::ObjectType type);
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+};
+
+class Fire : public Trap
+{
+private:
+	double next_animation;
+public:
+	Fire();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 class Arrow : public Trap
@@ -299,8 +316,11 @@ public:
 class BreakingGround : public Object
 {
 private:
+	double next_animation;
+	int state;
 public:
 	BreakingGround();
+	static Representation representation();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);

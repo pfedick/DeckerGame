@@ -67,7 +67,8 @@ OBJECTS=compile/main.o \
 	compile/object_playerstartpoint.o \
 	compile/object_breakingground.o \
 	compile/object_skeleton.o \
-	compile/object_mummy.o
+	compile/object_mummy.o \
+	compile/object_fire.o
 	
 	
 	
@@ -256,6 +257,10 @@ compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
 compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
 	-mkdir -p compile 
 	$(CXX) -o compile/object_breakingground.o -c src/objects/breakingground.cpp $(CFLAGS)	
+
+compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h
+	-mkdir -p compile 
+	$(CXX) -o compile/object_fire.o -c src/objects/fire.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

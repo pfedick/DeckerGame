@@ -223,6 +223,11 @@ Representation getRepresentation(int object_type)
 	case Type::FloaterVertical: return FloaterVertical::representation();
 	case Type::Skeleton: return Skeleton::representation();
 	case Type::Mummy: return Mummy::representation();
+	case Type::Fire: return Fire::representation();
+	case Type::BreakingGround: return BreakingGround::representation();
+	case Type::LaserBeamHorizontal: return LaserBarrier::representation(Type::LaserBeamHorizontal);
+	case Type::LaserBeamVertical: return LaserBarrier::representation(Type::LaserBeamVertical);
+
 	default: return Object::representation();
 	}
 }
@@ -269,6 +274,10 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Skeleton: return new Skeleton();
 	case Type::Mummy: return new Mummy();
 	case Type::HangingSpider: return new HangingSpider();
+	case Type::Fire: return new Fire();
+	case Type::BreakingGround: return new BreakingGround();
+	case Type::LaserBeamHorizontal: return new LaserBarrier(Type::LaserBeamHorizontal);
+	case Type::LaserBeamVertical: return new LaserBarrier(Type::LaserBeamVertical);
 	}
 	return NULL;
 }
