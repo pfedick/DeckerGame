@@ -34,7 +34,9 @@ public:
 		Rat=102,
 		HangingSpider=103,
 		Skeleton=104,
-		Mummy=105
+		Mummy=105,
+		LaserBeamHorizontal=106,
+		LaserBeamVertical=107
 	};
 	static ppl7::String name(Type::ObjectType type);
 };

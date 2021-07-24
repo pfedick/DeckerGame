@@ -34,7 +34,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Diamond,"Diamond",1);
 	addObject(Decker::Objects::Type::Coin,"Coin",12);
 	addObject(Decker::Objects::Type::Key,"Key",8);
-	addObject(Decker::Objects::Type::Arrow,"Arrow",4);
+	addObject(Decker::Objects::Type::Arrow,"Arrow",2);
 	addObject(Decker::Objects::Type::ThreeSpeers,"3 Speers",18);
 	addObject(Decker::Objects::Type::Rat,"Rat",5);
 	addObject(Decker::Objects::Type::HangingSpider,"hanging Spider",6);
@@ -42,6 +42,10 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::FloaterVertical,"Floater vertical",14);
 	addObject(Decker::Objects::Type::Mummy,"Mummy",21);
 	addObject(Decker::Objects::Type::Skeleton,"Skeleton",20);
+	addObject(Decker::Objects::Type::BreakingGround,"breaking Ground",24);
+	addObject(Decker::Objects::Type::LaserBeamHorizontal,"Laserbeam horizontal",27);
+	addObject(Decker::Objects::Type::LaserBeamVertical,"Laserbeam vertical",26);
+	addObject(Decker::Objects::Type::Fire,"Fire",25);
 
 	scrollbar->setSize(object_map.size()/2);
 	scrollbar->setVisibleItems((height-44)/160/2);
