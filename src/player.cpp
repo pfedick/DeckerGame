@@ -241,6 +241,16 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 					else animation.setStaticFrame(28);
 				}
 			}
+		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Shift) && movement!=Falling && movement!=Falling && movement!=Jump) {
+			if (movement!=Jump) {
+				movement=Jump;
+				jump_climax=time+0.5f;
+				acceleration_jump=0.5f;
+				if (orientation==Front) animation.setStaticFrame(42);
+				else if (orientation==Left) animation.setStaticFrame(40);
+				else if (orientation==Right) animation.setStaticFrame(41);
+				else animation.setStaticFrame(28);
+			}
 		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left) && movement!=Falling && movement!=Jump) {
 			movement=Jump;
 			orientation=Left;
