@@ -318,6 +318,9 @@ class BreakingGround : public Object
 private:
 	double next_animation;
 	int state;
+	int layers;
+	int fragment_y;
+	double velocity;
 public:
 	BreakingGround();
 	static Representation representation();
