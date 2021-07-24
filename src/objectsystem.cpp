@@ -395,7 +395,7 @@ bool Collision::onFoot() const
 	bool foot=false;
 	bool upper=false;
 	for (it=collision_points.begin();it!=collision_points.end();++it) {
-		if ((*it).y<-60) upper=true;
+		if ((*it).y<-40) upper=true;
 		else foot=true;
 		//printf("    %d:%d\n",(*it).x, (*it).y);
 	}
