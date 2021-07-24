@@ -310,6 +310,10 @@ class Floater : public Object
 	friend class FloaterHorizontal;
 private:
 	int direction;
+	double next_state, next_animation;
+	int state;
+	ppl7::grafix::Point velocity;
+	AnimationCycle animation;
 public:
 	Floater(Type::ObjectType type);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);

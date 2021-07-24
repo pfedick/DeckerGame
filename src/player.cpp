@@ -46,6 +46,7 @@ Player::Player()
 	points=0;
 	health=100;
 	lifes=3;
+	player_stands_on_object=NULL;
 }
 
 Player::~Player()
@@ -173,10 +174,16 @@ void Player::setSavePoint(const ppl7::grafix::Point &p)
 	lastSavePoint=p;
 }
 
+void Player::setStandingOnObject(Decker::Objects::Object *object)
+{
+	player_stands_on_object=object;
+}
+
 void Player::update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
 {
 	this->time=time;
 	updateMovement();
+	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
 	checkCollisionWithWorld(world);
 	updatePhysics(world);
@@ -426,6 +433,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		gravity=0.0f;
 		y--;
 	}
+	if (player_stands_on_object) {
+		if ((movement==Falling || movement==Jump) && gravity>0.0f) {
+			stand();
+		}
+		acceleration_gravity=0.0f;
+		gravity=0.0f;
+
+	}
 
 	if (movement==Walk || movement==Run || movement==Jump || movement==Falling) {
 		if (orientation==Left) {
@@ -486,9 +501,11 @@ void Player::updatePhysics(const TileTypePlane &world)
 	bool match=false;
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
-			if (acceleration_gravity<10.0f) acceleration_gravity+=0.2f;
-			if (acceleration_gravity>10.0f) acceleration_gravity=10.0f;
-			match=true;
+			if (!player_stands_on_object) {
+				if (acceleration_gravity<10.0f) acceleration_gravity+=0.2f;
+				if (acceleration_gravity>10.0f) acceleration_gravity=10.0f;
+				match=true;
+			}
 		}
 	}
 	if (acceleration_gravity>0.0f) {

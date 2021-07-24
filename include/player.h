@@ -9,6 +9,7 @@ class SpriteTexture;
 
 class TileTypePlane;
 namespace Decker::Objects {
+	class Object;
 	class ObjectSystem;
 } // EOF namespace Decker::Objects
 
@@ -81,6 +82,7 @@ private:
 
 	ppl7::grafix::Point lastSavePoint;
 	int collision_matrix[4][6];
+	Decker::Objects::Object *player_stands_on_object;
 
 
 	void turn(PlayerOrientation target);
@@ -112,6 +114,7 @@ public:
 	void move(int x, int y);
 	PlayerMovement getMovement() const;
 	ppl7::String getState() const;
+	void setStandingOnObject(Decker::Objects::Object *object);
 
 	void update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
 
