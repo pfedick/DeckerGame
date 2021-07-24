@@ -42,7 +42,7 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 		}
 	}
 	if (state==0 && next_state<time) {
-		next_state=time+5.00;
+		next_state=time+ppl7::rand(2,5);
 		animation.start(trap_activation,sizeof(trap_activation)/sizeof(int),false,22);
 		sprite_no=animation.getFrame();
 		state=1;
@@ -50,7 +50,7 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 		updateBoundary();
 	}
 	if (state==1 && next_state<time) {
-		next_state=time+10.00;
+		next_state=time+ppl7::rand(3,6);
 		animation.start(trap_deactivation,sizeof(trap_deactivation)/sizeof(int),false,18);
 		sprite_no=animation.getFrame();
 		state=0;
