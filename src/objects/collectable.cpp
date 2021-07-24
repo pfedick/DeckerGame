@@ -11,7 +11,7 @@ Collectable::Collectable(Type::ObjectType type)
 	points=0;
 }
 
-void Collectable::handleCollision(Player *player)
+void Collectable::handleCollision(Player *player, const Collision &)
 {
 	enabled=false;
 	player->addPoints(points);

@@ -21,7 +21,7 @@ Medikit::Medikit()
 }
 
 
-void Medikit::handleCollision(Player *player)
+void Medikit::handleCollision(Player *player, const Collision &)
 {
 	player->health=100;
 	enabled=false;

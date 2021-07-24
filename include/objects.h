@@ -58,6 +58,20 @@ public:
 	int sprite_set;
 	int sprite_no;
 };
+class Object;
+class Collision
+{
+private:
+	Object *object;
+	std::list<ppl7::grafix::Point> collision_points;
+public:
+	Collision();
+	Collision(const Collision &other);
+	void detect(Object *object, const std::list<ppl7::grafix::Point> &checkpoints, const Player &player);
+	const std::list<ppl7::grafix::Point> &getCollisionPoints() const;
+	Object *getObject() const;
+	bool onFoot() const;
+};
 
 class Object
 {
@@ -86,10 +100,11 @@ public:
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	static Representation representation();
 };
+
 
 class PlayerStartPoint : public Object
 {
@@ -106,7 +121,7 @@ private:
 public:
 	int points;
 	Collectable(Type::ObjectType type);
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 
@@ -160,7 +175,7 @@ private:
 public:
 	Medikit();
 	static Representation representation();
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 class SavePoint : public Collectable
@@ -173,7 +188,7 @@ public:
 	SavePoint();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 
@@ -195,7 +210,7 @@ public:
 	ThreeSpeers();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 class LaserBarrier : public Trap
@@ -234,21 +249,29 @@ class Skeleton : public Enemy
 {
 private:
 	AnimationCycle animation;
-	double next_state;
+	double next_state, next_animation;
+	int velocity=1;
 	int state;
 public:
 	Skeleton();
 	static Representation representation();
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 class Mummy : public Enemy
 {
 private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	int velocity=1;
+	int state;
 public:
 	Mummy();
 	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
 };
 
 
@@ -262,7 +285,7 @@ public:
 	HangingSpider();
 	static Representation representation();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 
 };
@@ -273,7 +296,7 @@ private:
 public:
 	BreakingGround();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
@@ -287,7 +310,7 @@ public:
 	Floater(Type::ObjectType type);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
 

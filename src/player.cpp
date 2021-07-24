@@ -528,7 +528,9 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 
 	Decker::Objects::Object *object=objects->detectCollision(checkpoints);
 	if (!object) return;
-	object->handleCollision(this);
+	Decker::Objects::Collision col;
+	col.detect(object,checkpoints, *this);
+	object->handleCollision(this, col);
 	/*
 	printf ("Detected Collision with Object: %s, ID: %d\n",
 			(const char*)object->typeName(), object->id);

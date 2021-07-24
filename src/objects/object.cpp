@@ -114,7 +114,7 @@ void Object::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) con
 			sprite_no);
 }
 
-void Object::handleCollision(Player *player)
+void Object::handleCollision(Player *player, const Collision &collision)
 {
 
 }

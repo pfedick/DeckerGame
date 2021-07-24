@@ -21,7 +21,7 @@ void Floater::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) co
 	Object::draw(renderer, coords);
 }
 
-void Floater::handleCollision(Player *player)
+void Floater::handleCollision(Player *player, const Collision &collision)
 {
 
 }

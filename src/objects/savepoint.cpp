@@ -39,7 +39,7 @@ void SavePoint::update(double time, TileTypePlane &, Player &)
 	}
 }
 
-void SavePoint::handleCollision(Player *player)
+void SavePoint::handleCollision(Player *player, const Collision &)
 {
 	player->setSavePoint(p);
 	enabled=false;

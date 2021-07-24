@@ -2,6 +2,7 @@
 #include <ppl7-grafix.h>
 #include "objects.h"
 #include "decker.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -347,6 +348,61 @@ size_t ObjectSystem::countVisible() const
 {
 	return visible_object_map.size();
 }
+
+Collision::Collision()
+{
+	object=NULL;
+}
+
+Collision::Collision(const Collision &other)
+{
+	object=other.object;
+	collision_points=other.collision_points;
+}
+
+
+void Collision::detect(Object *object, const std::list<ppl7::grafix::Point> &checkpoints, const Player &player)
+{
+	collision_points.clear();
+	this->object=object;
+	std::list<ppl7::grafix::Point>::const_iterator p_it;
+	const ppl7::grafix::Drawable draw=object->texture->getDrawable(object->sprite_no);
+	for (p_it=checkpoints.begin();p_it!=checkpoints.end();++p_it) {
+		if (draw.width()) {
+			int x=(*p_it).x-object->boundary.x1;
+			int y=(*p_it).y-object->boundary.y1;
+			ppl7::grafix::Color c=draw.getPixel(x, y);
+			if (c.alpha()>92) {
+				collision_points.push_back(ppl7::grafix::Point((*p_it).x-player.x,(*p_it).y-player.y));
+			}
+		}
+	}
+}
+
+const std::list<ppl7::grafix::Point> &Collision::getCollisionPoints() const
+{
+	return collision_points;
+}
+
+Object *Collision::getObject() const
+{
+	return object;
+}
+
+bool Collision::onFoot() const
+{
+	std::list<ppl7::grafix::Point>::const_iterator it;
+	bool foot=false;
+	bool upper=false;
+	for (it=collision_points.begin();it!=collision_points.end();++it) {
+		if ((*it).y<-60) upper=true;
+		else foot=true;
+		//printf("    %d:%d\n",(*it).x, (*it).y);
+	}
+	if (foot==true && upper==false) return true;
+	return false;
+}
+
 
 
 }	// EOF namespace Decker::Objects

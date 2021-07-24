@@ -76,7 +76,7 @@ void HangingSpider::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coor
 	Object::draw(renderer, coords);
 }
 
-void HangingSpider::handleCollision(Player *player)
+void HangingSpider::handleCollision(Player *player, const Collision &)
 {
 	player->dropHealth(2);
 }

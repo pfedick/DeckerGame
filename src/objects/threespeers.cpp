@@ -61,7 +61,7 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 
 }
 
-void ThreeSpeers::handleCollision(Player *player)
+void ThreeSpeers::handleCollision(Player *player, const Collision &)
 {
 	player->dropHealth(2);
 }
