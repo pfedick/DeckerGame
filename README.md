@@ -3,7 +3,7 @@
 # Decker - The Game
 
 <p align="center">
-  <img src="https://github.com/pfedick/DeckerGame/raw/main/lightwave/Render/george/frame_0027.png" />
+  <img src="https://github.com/pfedick/DeckerGame/raw/main/res/screenshots/Screenshot_20210724_193500.jpg" />
 </p>
 
 
