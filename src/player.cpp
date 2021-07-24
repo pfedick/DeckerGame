@@ -135,10 +135,14 @@ int Player::getKeyboardMatrix(const Uint8 *state)
 {
 	int matrix=0;
 	if (state[SDL_SCANCODE_LEFT]) matrix|=KeyboardKeys::Left;
+	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_RIGHT]) matrix|=KeyboardKeys::Right;
+	if (state[SDL_SCANCODE_L] || state[SDL_SCANCODE_D]) matrix|=KeyboardKeys::Right;
 	if (state[SDL_SCANCODE_UP]) matrix|=KeyboardKeys::Up;
+	if (state[SDL_SCANCODE_I] || state[SDL_SCANCODE_W]) matrix|=KeyboardKeys::Up;
 	if (state[SDL_SCANCODE_DOWN]) matrix|=KeyboardKeys::Down;
-	if (state[SDL_SCANCODE_LSHIFT]) matrix|=KeyboardKeys::Shift;
+	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) matrix|=KeyboardKeys::Down;
+	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) matrix|=KeyboardKeys::Shift;
 	return matrix;
 }
 
