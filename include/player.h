@@ -41,21 +41,7 @@ public:
 
 class Player
 {
-private:
-	Velocity velocity_move, acceleration;
-	float gravity, acceleration_gravity;
-	float acceleration_airstream;
-	float acceleration_jump;
-	const SpriteTexture *sprite_resource;
-	const SpriteTexture *tiletype_resource;
-
-	double next_keycheck;
-	double next_animation;
-	double idle_timeout;
-	double jump_climax;
-	double time;
-	AnimationCycle animation;
-
+public:
 	enum PlayerMovement {
 		Stand,
 		Turn,
@@ -73,6 +59,22 @@ private:
 		Front,
 		Back
 	};
+private:
+	Velocity velocity_move, acceleration;
+	float gravity, acceleration_gravity;
+	float acceleration_airstream;
+	float acceleration_jump;
+	const SpriteTexture *sprite_resource;
+	const SpriteTexture *tiletype_resource;
+
+	double next_keycheck;
+	double next_animation;
+	double idle_timeout;
+	double jump_climax;
+	double time;
+	AnimationCycle animation;
+
+
 	PlayerMovement movement=Stand;
 	PlayerOrientation orientation=Front;
 	PlayerOrientation turnTarget;
@@ -107,6 +109,7 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void move(int x, int y);
+	PlayerMovement getMovement() const;
 	ppl7::String getState() const;
 
 	void update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);

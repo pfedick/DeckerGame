@@ -467,6 +467,11 @@ bool Player::isCollisionRight() const
 	return false;
 }
 
+Player::PlayerMovement Player::getMovement() const
+{
+	return movement;
+}
+
 void Player::updatePhysics(const TileTypePlane &world)
 {
 	if (movement==Jump) return;

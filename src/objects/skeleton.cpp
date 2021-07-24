@@ -88,6 +88,8 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 
 void Skeleton::handleCollision(Player *player, const Collision &collision)
 {
+	//Player::PlayerMovement movement=player->getMovement();
+	//if (collision.onFoot()==true && (movement==Player::Jump || movement==Player::Falling)) {
 	if (collision.onFoot()) {
 		state=6;
 		velocity=1;
