@@ -35,10 +35,7 @@ they can interact with the player.
     - key (used to unlock a locked door)
     - arrows from wall
     - scorpion
-    - skeleton
-    - mummy
     - some kind of angry bird?
-    - lasers
     - side wind
 - refine physics (especially jumping & falling) 
 - how does sound work with SDL?
@@ -73,6 +70,7 @@ There is probably more, which I'm not aware of, yet ;-)
     - mummy
     - dissolving ground
     - floater
+    - lasers
     
 
 
