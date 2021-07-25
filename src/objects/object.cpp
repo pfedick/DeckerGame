@@ -51,6 +51,7 @@ Object::Object(Type::ObjectType type)
 	enabled=true;
 	save_size=9;
 	state_size=0;
+	pixelExactCollision=true;
 }
 
 Object::~Object()

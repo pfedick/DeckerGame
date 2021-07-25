@@ -93,6 +93,7 @@ public:
 	bool collisionDetection;
 	bool visibleAtPlaytime;
 	bool enabled;
+	bool pixelExactCollision;
 
 	Object(Type::ObjectType type);
 	virtual ~Object();
@@ -218,8 +219,10 @@ public:
 class LaserBarrier : public Trap
 {
 private:
+	ppl7::grafix::Point start,end;
 	double next_state;
 	int state;
+	int flicker;
 public:
 	LaserBarrier(Type::ObjectType type);
 	static Representation representation(Type::ObjectType type);
