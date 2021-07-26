@@ -29,8 +29,7 @@ sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
 sinclude(pplib/autoconf/ax_check_compile_flag.m4)
 sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
 sinclude(pplib/autoconf/ax_gcc_archflag.m4)
-sinclude(pplib/autoconf/mpg123.m4)
-sinclude(autoconf/ogg.m4)
+sinclude(autoconf/mpg123.m4)
 
 
 report_have_pthreads="no"
@@ -522,6 +521,12 @@ fi
 if test "$report_have_iconv" != "yes"
 then
 	missing="$missing  - libiconv not found
+"
+fi
+
+if test "$report_have_mpg123" != "yes"
+then
+	missing="$missing  - libmpg123 not found
 "
 fi
 

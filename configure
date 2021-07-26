@@ -3411,7 +3411,6 @@ ac_config_headers="$ac_config_headers pplib/include/ppl7-config.h"
 
 
 
-
 report_have_pthreads="no"
 report_have_jpeg="no"
 report_have_mpg123="no"
@@ -11266,18 +11265,22 @@ $as_echo "#define HAVE_PNG 1" >>confdefs.h
 
 
 
-
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we should use libmpg123" >&5
+$as_echo_n "checking if we should use libmpg123... " >&6; }
 
 # Check whether --with-mpg123 was given.
 if test "${with_mpg123+set}" = set; then :
   withval=$with_mpg123; mpg123_prefix="$withval"
 else
-  mpg123_prefix="no"
+  mpg123_prefix="auto"
 fi
 
+	echo "mpg123_prefix=$mpg123_prefix"
 
 	if test "$mpg123_prefix" != "no"
 	then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 		if test "$mpg123_prefix" != "yes"
 		then
 			intMPG123_LIBS="-L $mpg123_prefix/lib -lmpg123"
@@ -15450,6 +15453,12 @@ fi
 if test "$report_have_iconv" != "yes"
 then
 	missing="$missing  - libiconv not found
+"
+fi
+
+if test "$report_have_mpg123" != "yes"
+then
+	missing="$missing  - libmpg123 not found
 "
 fi
 
