@@ -22,6 +22,8 @@
 
 
 
+#ifndef DECKER_EXCEPTION
+#define DECKER_EXCEPTION
 #define STR_VALUE(arg)      #arg
 #define EXCEPTION(name,inherit)	class name : public inherit { public: \
 	name() throw() {}; \
@@ -30,6 +32,7 @@
 		va_end(args); } \
 		virtual const char* what() const throw() { return (STR_VALUE(name)); } \
 	};
+#endif
 
 EXCEPTION(InitializationFailed, ppl7::Exception);
 EXCEPTION(SDLException, ppl7::Exception);

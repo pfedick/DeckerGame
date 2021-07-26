@@ -99,14 +99,15 @@ The following Tools/Libraries are required:
 - zlib
 - bz2
 - png
+- mpg123
 
 #### Fedora
     sudo dnf install -y git gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
-        bzip2-devel libpng-devel
+        bzip2-devel libpng-devel mpg123-devel
         
 #### Ubuntu
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
-        libpng-dev
+        libpng-dev libmpg123-dev
         
 #### Windows 10 with mingw64
 TODO

@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
+#include "audio.h"
 
 void help()
 {
@@ -14,6 +15,12 @@ void start()
 {
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
+
+	/*
+	AudioSystem audio;
+	audio.test();
+	return;
+	*/
 
 	Game game;
 	game.init();

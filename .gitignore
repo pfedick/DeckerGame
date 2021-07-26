@@ -13,3 +13,4 @@
 /.settings/
 /distfiles/
 /decker-cppcheck-build-dir/
+/.vscode/

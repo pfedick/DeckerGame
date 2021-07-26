@@ -68,7 +68,8 @@ OBJECTS=compile/main.o \
 	compile/object_breakingground.o \
 	compile/object_skeleton.o \
 	compile/object_mummy.o \
-	compile/object_fire.o
+	compile/object_fire.o \
+	compile/audiosystem.o
 	
 	
 	
@@ -142,7 +143,7 @@ compile/sdl.o: src/sdl.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
 
-compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h
+compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h
 	-mkdir -p compile 
 	$(CXX) -o compile/game.o -c src/game.cpp $(CFLAGS)
 
@@ -169,6 +170,10 @@ compile/plane.o: src/plane.cpp Makefile include/decker.h
 compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/tiletype.o -c src/tiletype.cpp $(CFLAGS)
+
+compile/audiosystem.o: src/audiosystem.cpp Makefile include/audio.h
+	-mkdir -p compile 
+	$(CXX) -o compile/audiosystem.o -c src/audiosystem.cpp $(CFLAGS)
 
 compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
 	-mkdir -p compile 
