@@ -32,7 +32,7 @@ LaserBarrier::LaserBarrier(Type::ObjectType type)
 void LaserBarrier::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
 {
 	if (state==0) return;
-	if ((flicker&4)==0) return;
+	if ((flicker&3)==0) return;
 	if (type()==Type::LaserBeamHorizontal) {
 		for (int i=start.x;i<end.x;i+=TILE_WIDTH)
 			texture->draw(renderer,
