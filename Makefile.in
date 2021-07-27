@@ -139,236 +139,236 @@ fonts:
 	
 	
 compile/main.o: src/main.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/main.o -c src/main.cpp $(CFLAGS)
 	
 compile/sdl.o: src/sdl.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
 
 compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/game.o -c src/game.cpp $(CFLAGS)
 
 compile/spritetexture.o: src/spritetexture.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/spritetexture.o -c src/spritetexture.cpp $(CFLAGS)
 
 compile/resources.o: src/resources.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/resources.o -c src/resources.cpp $(CFLAGS)
 	
 compile/level.o: src/level.cpp Makefile include/decker.h include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/level.o -c src/level.cpp $(CFLAGS)
 
 compile/fps.o: src/fps.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/fps.o -c src/fps.cpp $(CFLAGS)
 
 compile/plane.o: src/plane.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
 
 compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/tiletype.o -c src/tiletype.cpp $(CFLAGS)
 
 compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/spritesystem.o -c src/spritesystem.cpp $(CFLAGS)
 
 compile/objectsystem.o: src/objectsystem.cpp Makefile include/objects.h include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/objectsystem.o -c src/objectsystem.cpp $(CFLAGS)
 	
 compile/object.o: src/objects/object.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object.o -c src/objects/object.cpp $(CFLAGS)	
 
 compile/object_collectable.o: src/objects/collectable.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_collectable.o -c src/objects/collectable.cpp $(CFLAGS)	
 
 compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_gem.o -c src/objects/gem.cpp $(CFLAGS)	
 
 compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)	
 
 compile/object_trap.o: src/objects/trap.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_trap.o -c src/objects/trap.cpp $(CFLAGS)	
 
 compile/object_threespeers.o: src/objects/threespeers.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_threespeers.o -c src/objects/threespeers.cpp $(CFLAGS)	
 
 compile/object_laserbarrier.o: src/objects/laserbarrier.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_laserbarrier.o -c src/objects/laserbarrier.cpp $(CFLAGS)	
 
 compile/object_enemy.o: src/objects/enemy.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_enemy.o -c src/objects/enemy.cpp $(CFLAGS)	
 
 compile/object_rat.o: src/objects/rat.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_rat.o -c src/objects/rat.cpp $(CFLAGS)	
 
 compile/object_hangingspider.o: src/objects/hangingspider.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_hangingspider.o -c src/objects/hangingspider.cpp $(CFLAGS)	
 
 compile/object_key.o: src/objects/key.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_key.o -c src/objects/key.cpp $(CFLAGS)	
 
 compile/object_door.o: src/objects/door.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_door.o -c src/objects/door.cpp $(CFLAGS)	
 
 compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)	
 
 compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h 
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_medikit.o -c src/objects/medikit.cpp $(CFLAGS)	
 
 compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_savepoint.o -c src/objects/savepoint.cpp $(CFLAGS)	
 
 compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)	
 
 compile/object_playerstartpoint.o: src/objects/playerstartpoint.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_playerstartpoint.o -c src/objects/playerstartpoint.cpp $(CFLAGS)	
 
 compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_mummy.o -c src/objects/mummy.cpp $(CFLAGS)	
 
 compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_skeleton.o -c src/objects/skeleton.cpp $(CFLAGS)	
 
 compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_breakingground.o -c src/objects/breakingground.cpp $(CFLAGS)	
 
 compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/object_fire.o -c src/objects/fire.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
 
 compile/player.o: src/player.cpp Makefile include/player.h include/animation.h include/decker.h include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
 
 compile/animation.o: src/animation.cpp Makefile include/animation.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/animation.o -c src/animation.cpp $(CFLAGS)
 
 compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/brickoccupation.o -c src/brickoccupation.cpp $(CFLAGS)
 
 
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_statusbar.o -c src/ui/statusbar.cpp $(CFLAGS)
 
 compile/ui_menue.o: src/ui/menue.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_menue.o -c src/ui/menue.cpp $(CFLAGS)
 
 compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_tileselection.o -c src/ui/tileselection.cpp $(CFLAGS)
 
 compile/ui_spriteselection.o: src/ui/spriteselection.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_spriteselection.o -c src/ui/spriteselection.cpp $(CFLAGS)
 
 compile/ui_objectselection.o: src/ui/objectselection.cpp Makefile include/ui.h include/objects.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_objectselection.o -c src/ui/objectselection.cpp $(CFLAGS)
 
 compile/ui_tiletypeselection.o: src/ui/tiletypeselection.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_tiletypeselection.o -c src/ui/tiletypeselection.cpp $(CFLAGS)
 
 compile/ui_tilesframe.o: src/ui/tilesframe.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_tilesframe.o -c src/ui/tilesframe.cpp $(CFLAGS)
 
 compile/ui_worldwidget.o: src/ui/worldwidget.cpp Makefile include/ui.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/ui_worldwidget.o -c src/ui/worldwidget.cpp $(CFLAGS)
 
 
 compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_scrollbar.o -c src/widgets/scrollbar.cpp $(CFLAGS)
 
 compile/widgets_checkbox.o: src/widgets/checkbox.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_checkbox.o -c src/widgets/checkbox.cpp $(CFLAGS)
 
 compile/widgets_radiobutton.o: src/widgets/radiobutton.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_radiobutton.o -c src/widgets/radiobutton.cpp $(CFLAGS)
 
 compile/widgets_groupbox.o: src/widgets/groupbox.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_groupbox.o -c src/widgets/groupbox.cpp $(CFLAGS)
 
 compile/widgets_combobox.o: src/widgets/combobox.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_combobox.o -c src/widgets/combobox.cpp $(CFLAGS)
 
 compile/widgets_listwidget.o: src/widgets/listwidget.cpp Makefile include/widgets.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_listwidget.o -c src/widgets/listwidget.cpp $(CFLAGS)
 
 # Audio
 compile/audio_audiosystem.o: src/audio/audiosystem.cpp Makefile include/audio.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/audio_audiosystem.o -c src/audio/audiosystem.cpp $(CFLAGS)
 	
 compile/audio_audiostream.o: src/audio/audiostream.cpp Makefile include/audio.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/audio_audiostream.o -c src/audio/audiostream.cpp $(CFLAGS)
 	
 compile/audio_audiosample.o: src/audio/audiosample.cpp Makefile include/audio.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/audio_audiosample.o -c src/audio/audiosample.cpp $(CFLAGS)
 	
 compile/audio_audioinstance.o: src/audio/audioinstance.cpp Makefile include/audio.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/audio_audioinstance.o -c src/audio/audioinstance.cpp $(CFLAGS)
 
 
 # texmaker
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/texm_main.o -c tools/texmaker/main.cpp $(CFLAGS)
 	
 compile/texm_texture.o: tools/texmaker/texture.cpp Makefile tools/texmaker/texmaker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/texm_texture.o -c tools/texmaker/texture.cpp $(CFLAGS)
 	
 compile/texm_texturefile.o: tools/texmaker/texturefile.cpp Makefile tools/texmaker/texmaker.h
-	-mkdir -p compile 
+	- @mkdir -p compile 
 	$(CXX) -o compile/texm_texturefile.o -c tools/texmaker/texturefile.cpp $(CFLAGS)
 	
