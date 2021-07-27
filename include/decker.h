@@ -7,6 +7,7 @@
 #include <ppl7-tk.h>
 #include <map>
 #include "ui.h"
+#include "audio.h"
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -472,6 +473,7 @@ private:
 	void createWindow();
 	void presentStartupScreen();
 	void initUi();
+	void initAudio();
 	void updateUi(const ppl7::tk::MouseState &mouse);
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
@@ -503,8 +505,11 @@ private:
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object *selected_object;
 
+	AudioStream song[3];
+
 
 public:
+	AudioSystem audio;
 	Game();
 	~Game();
 	void init();

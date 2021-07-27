@@ -1,3 +1,5 @@
+#ifndef INCLUDE_AUDIO_H_
+#define INCLUDE_AUDIO_H_
 #include "stdlib.h"
 #include "stdio.h"
 #include <ppl7.h>
@@ -106,3 +108,5 @@ public:
 	void callback(Uint8* stream, int len);
 
 };
+
+#endif //INCLUDE_AUDIO_H_
