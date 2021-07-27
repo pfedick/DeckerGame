@@ -44,16 +44,32 @@ public:
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 
-class AudioSample : public Audio
+class AudioSample
 {
 private:
 	ppl7::ByteArray buffer;
 public:
 	AudioSample();
 	AudioSample(const ppl7::String &filename);
-	virtual ~AudioSample();
+	~AudioSample();
 	void load(const ppl7::String &filename);
+	size_t size() const;
+	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32 *buffer) const;
+
+};
+
+class AudioInstance : public Audio
+{
+private:
+	size_t position;
+	int volume_left, volume_right;
+public:
+	AudioInstance();
+	AudioInstance(const AudioSample &sample);
+	virtual ~AudioInstance();
+	void load(const AudioSample &sample);
 	void rewind();
+	void setVolume(int left, int right);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 
@@ -75,6 +91,7 @@ public:
 	void initDriver(const ppl7::String &driver_name);	// optional
 	void init(const ppl7::String &device=ppl7::String());
 	void play(Audio *audio);
+	void stop(Audio *audio);
 	void shutdown();
 	void test();
 

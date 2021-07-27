@@ -195,8 +195,10 @@ void AudioSystem::test()
 	printf ("open audio file\n");
 	AudioStream song1("res/audio/PatrickF-ID.mp3");
 	AudioStream song2("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
-	play(&song1);
-	play(&song2);
+	AudioStream song3("/home/patrickf/Patrick F. - Experiments (Album)/027-Patrick F. - ID (Extended Mix).aiff");
+
+	play(&song3);
+	//play(&song2);
 	SDL_Delay(20000); /* let the audio callback play some sound for 5 seconds. */
 
 	shutdown();
