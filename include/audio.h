@@ -35,12 +35,16 @@ class AudioStream : public Audio
 private:
 	ppl7::File ff;
 	ppl7::AudioDecoder *decoder;
+	int volume_left, volume_right;
+	ppl7::STEREOSAMPLE16 *prebuffer;
+	size_t buffersize;
 public:
 	AudioStream();
 	AudioStream(const ppl7::String &filename);
 	virtual ~AudioStream();
 	void open(const ppl7::String &filename);
 	void rewind();
+	void setVolume(int left, int right);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 
@@ -54,22 +58,24 @@ public:
 	~AudioSample();
 	void load(const ppl7::String &filename);
 	size_t size() const;
-	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32 *buffer) const;
+	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32 *buffer, int vol_left=255, int vol_right=255) const;
 
 };
 
 class AudioInstance : public Audio
 {
 private:
+	const AudioSample *sample;
 	size_t position;
 	int volume_left, volume_right;
+	bool loop;
 public:
 	AudioInstance();
 	AudioInstance(const AudioSample &sample);
-	virtual ~AudioInstance();
 	void load(const AudioSample &sample);
 	void rewind();
 	void setVolume(int left, int right);
+	void setLoop(bool loop);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 
@@ -80,6 +86,7 @@ private:
 	ppl7::Mutex mutex;
 	std::set<Audio *> tracks;
 	ppl7::STEREOSAMPLE32 *mixbuffer;
+	int max_tracks;
 
 
 public:
@@ -92,6 +99,7 @@ public:
 	void init(const ppl7::String &device=ppl7::String());
 	void play(Audio *audio);
 	void stop(Audio *audio);
+	bool isPlaying(Audio *audio);
 	void shutdown();
 	void test();
 

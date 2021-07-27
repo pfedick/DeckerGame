@@ -21,7 +21,6 @@ void start()
 	audio.test();
 	return;
 	*/
-
 	Game game;
 	game.init();
 	game.run();

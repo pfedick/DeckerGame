@@ -24,6 +24,7 @@ Next thing to do is fill the world with interactive objects and enemies and see 
 they can interact with the player.
 
 ### Things which are ongoing
+- how to integrate sound track and sound effects into the game
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
 - create graphics
 - ui
@@ -38,8 +39,6 @@ they can interact with the player.
     - some kind of angry bird?
     - side wind
 - refine physics (especially jumping & falling) 
-- how does sound work with SDL?
-- how to integrate sound track and sound effects
 - compose sound track
 - create sound effects
 - build the world/levels
@@ -71,6 +70,8 @@ There is probably more, which I'm not aware of, yet ;-)
     - dissolving ground
     - floater
     - lasers
+- how does sound work with SDL?
+- write the audio engine
     
 
 

@@ -5,9 +5,10 @@
 AudioSystem::AudioSystem()
 {
 	device_id=0;
+	max_tracks=16;
 	mixbuffer=NULL;
 	if(SDL_WasInit(SDL_INIT_AUDIO) == 0) {
-		printf ("SDL_InitSubSystem(SDL_INIT_AUDIO)\n");
+		//printf ("SDL_InitSubSystem(SDL_INIT_AUDIO)\n");
 		if (0!=SDL_InitSubSystem(SDL_INIT_AUDIO)) {
 			throw AudioSystemFailed("could not init audio subsystem!");
 		}
@@ -97,33 +98,65 @@ void AudioSystem::init(const ppl7::String &device)
 
 void AudioSystem::callback(Uint8* stream, int len)
 {
-	//memset(stream,0,len);
-	int samples=len/sizeof(ppl7::STEREOSAMPLE16);
+	size_t samples=len/sizeof(ppl7::STEREOSAMPLE16);
 	memset(mixbuffer,0,samples*sizeof(ppl7::STEREOSAMPLE32));
 	//printf ("callback called, len=%d\n",len);
 	std::set<Audio *>::iterator it;
+	std::set<Audio *> to_remove;
 	mutex.lock();
-	for (it=tracks.begin();it!=tracks.end();++it) {
-		Audio *audio=(*it);
-		audio->addSamples(samples, mixbuffer);
-	}
 	size_t num_tracks=tracks.size();
-	ppl7::STEREOSAMPLE16 *mergebuffer=(ppl7::STEREOSAMPLE16*) stream;
-	for (int i=0;i<samples;i++) {
-		mergebuffer[i].left=mixbuffer[i].left/num_tracks;
-		mergebuffer[i].right=mixbuffer[i].right/num_tracks;
+	if (num_tracks) {
+		for (it=tracks.begin();it!=tracks.end();++it) {
+			Audio *audio=(*it);
+			if (audio->addSamples(samples, mixbuffer)!=samples) {
+				to_remove.insert(audio);
+			}
+		}
+		ppl7::STEREOSAMPLE16 *mergebuffer=(ppl7::STEREOSAMPLE16*) stream;
+		for (size_t i=0;i<samples;i++) {
+			mergebuffer[i].left=mixbuffer[i].left/max_tracks;
+			mergebuffer[i].right=mixbuffer[i].right/max_tracks;
+		}
+		if (to_remove.size()>0) {
+			for (it=to_remove.begin();it!=to_remove.end();++it) {
+				Audio *audio=(*it);
+				std::set<Audio *>::iterator del=tracks.find(audio);
+				if (del!=tracks.end()) {
+					tracks.erase(del);
+				}
+			}
+		}
+	} else {
+		memset(stream,0,len);
 	}
 	mutex.unlock();
-	// TODO: we need to detect when a track is at its end and remove it from the set
 }
 
 void AudioSystem::play(Audio *audio)
 {
 	mutex.lock();
-	tracks.insert(audio);
+	if (tracks.size()<(size_t)max_tracks)
+		tracks.insert(audio);
 	mutex.unlock();
 }
 
+void AudioSystem::stop(Audio *audio)
+{
+	mutex.lock();
+	std::set<Audio *>::iterator it=tracks.find(audio);
+	if (it!=tracks.end()) tracks.erase(it);
+	mutex.unlock();
+}
+
+bool AudioSystem::isPlaying(Audio *audio)
+{
+	bool result=false;
+	mutex.lock();
+	std::set<Audio *>::const_iterator it=tracks.find(audio);
+	if (it!=tracks.end()) result=true;
+	mutex.unlock();
+	return result;
+}
 
 void AudioSystem::test()
 {
@@ -132,14 +165,34 @@ void AudioSystem::test()
 	//initDriver(name_list.front());
 	//enumerateDevices(name_list);
 	init();
-	printf ("open audio file\n");
+	//printf ("open audio file\n");
+	AudioSample sample1("res/audio/95078__sandyrb__the-crash.mp3");
+	AudioSample sample2("res/audio/65232__carbilicon__electr_stereo.mp3");
 	AudioStream song1("res/audio/PatrickF-ID.mp3");
 	AudioStream song2("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
 	AudioStream song3("/home/patrickf/Patrick F. - Experiments (Album)/027-Patrick F. - ID (Extended Mix).aiff");
-
-	play(&song3);
-	//play(&song2);
-	SDL_Delay(20000); /* let the audio callback play some sound for 5 seconds. */
-
+	AudioInstance effect1(sample1);
+	AudioInstance effect2(sample2);
+	AudioInstance effect3(sample1);
+	effect2.setVolume(127, 127);
+	effect2.setLoop(true);
+	play(&effect1);
+	play(&effect2);
+	SDL_Delay(3000);
+	play(&effect3);
+	/*
+	play(&song2);
+	SDL_Delay(2000);
+	song2.setVolume(512, 512);
+	play(&effect2);
+	SDL_Delay(4000);
+	song2.setVolume(1024, 1024);
+	effect1.rewind();
+	play(&effect1);
+	SDL_Delay(10000);
+	stop(&effect2);
+	song2.setVolume(127, 127);
+	*/
+	SDL_Delay(10000);
 	shutdown();
 }
