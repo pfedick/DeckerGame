@@ -69,7 +69,10 @@ OBJECTS=compile/main.o \
 	compile/object_skeleton.o \
 	compile/object_mummy.o \
 	compile/object_fire.o \
-	compile/audiosystem.o
+	compile/audio_audiosystem.o \
+	compile/audio_audiostream.o \
+	compile/audio_audiosample.o \
+	compile/audio_audioinstance.o
 	
 	
 	
@@ -170,10 +173,6 @@ compile/plane.o: src/plane.cpp Makefile include/decker.h
 compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/tiletype.o -c src/tiletype.cpp $(CFLAGS)
-
-compile/audiosystem.o: src/audiosystem.cpp Makefile include/audio.h
-	-mkdir -p compile 
-	$(CXX) -o compile/audiosystem.o -c src/audiosystem.cpp $(CFLAGS)
 
 compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
 	-mkdir -p compile 
@@ -342,7 +341,25 @@ compile/widgets_listwidget.o: src/widgets/listwidget.cpp Makefile include/widget
 	-mkdir -p compile 
 	$(CXX) -o compile/widgets_listwidget.o -c src/widgets/listwidget.cpp $(CFLAGS)
 
+# Audio
+compile/audio_audiosystem.o: src/audio/audiosystem.cpp Makefile include/audio.h
+	-mkdir -p compile 
+	$(CXX) -o compile/audio_audiosystem.o -c src/audio/audiosystem.cpp $(CFLAGS)
+	
+compile/audio_audiostream.o: src/audio/audiostream.cpp Makefile include/audio.h
+	-mkdir -p compile 
+	$(CXX) -o compile/audio_audiostream.o -c src/audio/audiostream.cpp $(CFLAGS)
+	
+compile/audio_audiosample.o: src/audio/audiosample.cpp Makefile include/audio.h
+	-mkdir -p compile 
+	$(CXX) -o compile/audio_audiosample.o -c src/audio/audiosample.cpp $(CFLAGS)
+	
+compile/audio_audioinstance.o: src/audio/audioinstance.cpp Makefile include/audio.h
+	-mkdir -p compile 
+	$(CXX) -o compile/audio_audioinstance.o -c src/audio/audioinstance.cpp $(CFLAGS)
 
+
+# texmaker
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h
 	-mkdir -p compile 
 	$(CXX) -o compile/texm_main.o -c tools/texmaker/main.cpp $(CFLAGS)

@@ -26,7 +26,7 @@ EXCEPTION(UnknownAudioFormat, ppl7::Exception);
 class Audio
 {
 public:
-	virtual ~Audio()=0;
+	virtual ~Audio() {};
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)=0;
 };
 
