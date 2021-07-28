@@ -8,6 +8,7 @@
 #include <map>
 #include "ui.h"
 #include "audio.h"
+#include "audiopool.h"
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -505,11 +506,11 @@ private:
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object *selected_object;
 
-	AudioStream song[3];
+	AudioSystem audiosystem;
+	AudioPool audiopool;
 
 
 public:
-	AudioSystem audio;
 	Game();
 	~Game();
 	void init();

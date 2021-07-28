@@ -1,11 +1,30 @@
 #include "audio.h"
 #include <unistd.h>
 
+Audio::Audio()
+{
+	autoDeleteFlag=false;
+}
+
+Audio::~Audio()
+{
+
+}
+
+void Audio::setAutoDelete(bool flag)
+{
+	autoDeleteFlag=flag;
+}
+
+bool Audio::autoDelete() const
+{
+	return autoDeleteFlag;
+}
+
 
 AudioSystem::AudioSystem()
 {
 	device_id=0;
-	max_tracks=16;
 	mixbuffer=NULL;
 	if(SDL_WasInit(SDL_INIT_AUDIO) == 0) {
 		//printf ("SDL_InitSubSystem(SDL_INIT_AUDIO)\n");
@@ -95,6 +114,13 @@ void AudioSystem::init(const ppl7::String &device)
 	SDL_PauseAudioDevice(device_id, 0); /* start audio playing. */
 }
 
+static inline int clamp(int value)
+{
+	if (value>32767) return 32767;
+	if (value<-32767) return -32767;
+	return value;
+}
+
 
 void AudioSystem::callback(Uint8* stream, int len)
 {
@@ -114,8 +140,8 @@ void AudioSystem::callback(Uint8* stream, int len)
 		}
 		ppl7::STEREOSAMPLE16 *mergebuffer=(ppl7::STEREOSAMPLE16*) stream;
 		for (size_t i=0;i<samples;i++) {
-			mergebuffer[i].left=mixbuffer[i].left/max_tracks;
-			mergebuffer[i].right=mixbuffer[i].right/max_tracks;
+			mergebuffer[i].left=clamp(mixbuffer[i].left);
+			mergebuffer[i].right=clamp(mixbuffer[i].right);
 		}
 		if (to_remove.size()>0) {
 			for (it=to_remove.begin();it!=to_remove.end();++it) {
@@ -123,6 +149,9 @@ void AudioSystem::callback(Uint8* stream, int len)
 				std::set<Audio *>::iterator del=tracks.find(audio);
 				if (del!=tracks.end()) {
 					tracks.erase(del);
+					if (audio->autoDelete()) {
+						delete audio;
+					}
 				}
 			}
 		}
@@ -135,8 +164,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 void AudioSystem::play(Audio *audio)
 {
 	mutex.lock();
-	if (tracks.size()<(size_t)max_tracks)
-		tracks.insert(audio);
+	tracks.insert(audio);
 	mutex.unlock();
 }
 

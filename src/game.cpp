@@ -233,11 +233,9 @@ void Game::init()
 
 void Game::initAudio()
 {
-	audio.init();
-	song[0].open("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
-	song[1].open("res/audio/PatrickF-ID.mp3");
-	song[2].open("res/audio/PatrickF-Sonic_Waves.mp3");
-
+	audiosystem.init();
+	audiopool.load();
+	audiopool.setAudioSystem(&audiosystem);
 }
 
 void Game::drawGrid()
@@ -336,13 +334,15 @@ void Game::run()
 {
 	SDL_Renderer *renderer=sdl.getRenderer();
 	quitGame=false;
-	AudioStream *playing_song=&song[ppl7::rand(0,2)];
-	audio.play(playing_song);
+	AudioStream *playing_song=&audiopool.song[ppl7::rand(0,2)];
+	playing_song->setVolume(128, 128);
+	audiosystem.play(playing_song);
 	while (!quitGame) {
-		if (!audio.isPlaying(playing_song)) {
-			playing_song=&song[ppl7::rand(0,2)];
+		if (!audiosystem.isPlaying(playing_song)) {
+			playing_song=&audiopool.song[ppl7::rand(0,2)];
 			playing_song->rewind();
-			audio.play(playing_song);
+			playing_song->setVolume(192, 192);
+			audiosystem.play(playing_song);
 		}
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();

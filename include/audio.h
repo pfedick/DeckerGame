@@ -27,8 +27,13 @@ EXCEPTION(UnknownAudioFormat, ppl7::Exception);
 
 class Audio
 {
+private:
+	bool autoDeleteFlag;
 public:
-	virtual ~Audio() {};
+	Audio();
+	virtual ~Audio();
+	void setAutoDelete(bool flag);
+	bool autoDelete() const;
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)=0;
 };
 
@@ -71,6 +76,7 @@ private:
 	size_t position;
 	int volume_left, volume_right;
 	bool loop;
+
 public:
 	AudioInstance();
 	AudioInstance(const AudioSample &sample);
@@ -88,7 +94,6 @@ private:
 	ppl7::Mutex mutex;
 	std::set<Audio *> tracks;
 	ppl7::STEREOSAMPLE32 *mixbuffer;
-	int max_tracks;
 
 
 public:
@@ -108,5 +113,6 @@ public:
 	void callback(Uint8* stream, int len);
 
 };
+
 
 #endif //INCLUDE_AUDIO_H_

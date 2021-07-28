@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "audiopool.h"
 
 namespace Decker::Objects {
 
@@ -24,6 +25,7 @@ GemReward::GemReward()
 	collisionDetection=true;
 	sprite_no_representation=4;
 	points=50;
+	sample_id=AudioClip::coin2;
 }
 
 void GemReward::update(double time, TileTypePlane &, Player &)

@@ -72,7 +72,8 @@ OBJECTS=compile/main.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
-	compile/audio_audioinstance.o
+	compile/audio_audioinstance.o \
+	compile/audio_audiopool.o
 	
 	
 	
@@ -357,6 +358,11 @@ compile/audio_audiosample.o: src/audio/audiosample.cpp Makefile include/audio.h
 compile/audio_audioinstance.o: src/audio/audioinstance.cpp Makefile include/audio.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/audio_audioinstance.o -c src/audio/audioinstance.cpp $(CFLAGS)
+
+compile/audio_audiopool.o: src/audio/audiopool.cpp Makefile include/audio.h include/audiopool.h include/exceptions.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/audio_audiopool.o -c src/audio/audiopool.cpp $(CFLAGS)
+
 
 
 # texmaker

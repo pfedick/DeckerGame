@@ -123,6 +123,7 @@ class Collectable : public Object
 private:
 public:
 	int points;
+	int sample_id;
 	Collectable(Type::ObjectType type);
 	virtual void handleCollision(Player *player, const Collision &collision);
 };

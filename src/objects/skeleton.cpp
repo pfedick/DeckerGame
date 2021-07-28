@@ -3,6 +3,8 @@
 #include "objects.h"
 #include "player.h"
 #include "decker.h"
+#include "audiopool.h"
+
 namespace Decker::Objects {
 
 static int walk_cycle_left[]={1,2,3,4,5,6,7,8,22};
@@ -96,6 +98,8 @@ void Skeleton::handleCollision(Player *player, const Collision &collision)
 		collisionDetection=false;
 		//enabled=false;
 		player->addPoints(100);
+		AudioPool &audio=getAudioPool();
+		audio.playOnce(AudioClip::impact);
 
 	} else {
 		player->dropHealth(4);
