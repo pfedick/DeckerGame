@@ -4,10 +4,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{471ED94B-BCB3-4348-9B3F-8BC88C4A2DDA}}
 AppName=DeckerGame
-AppVerName=DeckerGame 0.2.1
+AppVerName=DeckerGame 0.3.0
 AppCopyright=Copyright (C) 2021 Patrick Fedick
-AppVersion=0.2.1.0
-VersionInfoVersion=0.2.1
+AppVersion=0.3.0.0
+VersionInfoVersion=0.3.0
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -16,7 +16,7 @@ DefaultDirName={pf}\Patrick F.-Productions\DeckerGame
 DefaultGroupName=Patrick F.-Productions\DeckerGame
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=DeckerGame-0.2.1-Setup
+OutputBaseFilename=DeckerGame-0.3.0-Setup
 ;SetupIconFile=gui\resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
@@ -44,6 +44,8 @@ Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "res/*.tex"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.fnt6"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.png"; DestDir: "{app}/res"; Flags: ignoreversion;
+Source: "res/audio/*.wav"; DestDir: "{app}/res/audio"; Flags: ignoreversion;
+Source: "res/audio/*.mp3"; DestDir: "{app}/res/audio"; Flags: ignoreversion;
 Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 
 Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -59,7 +61,8 @@ Source: "C:/msys64/mingw64/bin/libwinpthread-1.dll"; DestDir: "{app}"; Flags: ig
 Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/sdl2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libpsl-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libmpg123-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 [Icons]
 Name: "{group}\DeckerGame"; WorkingDir: "{app}"; Filename: "{app}\decker.exe"
