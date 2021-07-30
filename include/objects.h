@@ -29,6 +29,8 @@ public:
 		BreakingGround=11,
 		Fire=12,
 		Wind=13,
+		Vent=14,
+		Speaker=15,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -49,7 +51,8 @@ public:
 		ThreeSpeers=1,
 		Skeleton=2,
 		Mummy=3,
-		MaxSpritesets=4
+		Vent=4,
+		MaxSpritesets=5
 	};
 };
 
