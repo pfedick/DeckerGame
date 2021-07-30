@@ -450,6 +450,7 @@ class ObjectSystem
 {
 private:
 	uint32_t nextid;
+	uint32_t next_spawn_id;
 	std::map<uint32_t,Object *> object_list;
 	std::map<uint32_t,Object *> visible_object_map;
 	SpriteTexture *spriteset[Spriteset::MaxSpritesets];
