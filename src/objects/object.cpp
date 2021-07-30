@@ -51,6 +51,7 @@ Object::Object(Type::ObjectType type)
 	sprite_no_representation=0;
 	id=0;
 	texture=NULL;
+	widget=NULL;
 	collisionDetection=false;
 	visibleAtPlaytime=true;
 	enabled=true;
@@ -63,7 +64,7 @@ Object::Object(Type::ObjectType type)
 
 Object::~Object()
 {
-
+	if (widget) delete widget;
 }
 
 Type::ObjectType Object::type() const
@@ -123,6 +124,11 @@ void Object::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) con
 }
 
 void Object::handleCollision(Player *player, const Collision &collision)
+{
+
+}
+
+void Object::openUi()
 {
 
 }

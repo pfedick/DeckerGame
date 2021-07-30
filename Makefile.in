@@ -72,6 +72,7 @@ OBJECTS=compile/main.o \
 	compile/object_windemitter.o \
 	compile/object_vent.o \
 	compile/object_speaker.o \
+	compile/object_touchemitter.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -284,6 +285,10 @@ compile/object_vent.o: src/objects/vent.cpp Makefile include/objects.h
 compile/object_speaker.o: src/objects/speaker.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_speaker.o -c src/objects/speaker.cpp $(CFLAGS)	
+
+compile/object_touchemitter.o: src/objects/touchemitter.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_touchemitter.o -c src/objects/touchemitter.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

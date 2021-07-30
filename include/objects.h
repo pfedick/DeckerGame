@@ -9,6 +9,11 @@ class SpriteTexture;
 
 class Player;
 class TileTypePlane;
+
+namespace ppl7::tk {
+	class Widget;
+}
+
 namespace Decker::Objects {
 
 class Type
@@ -32,6 +37,7 @@ public:
 		Vent=14,
 		Speaker=15,
 		Particle=16,
+		TouchEmitter=17,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -87,6 +93,7 @@ public:
 	ppl7::grafix::Point p;
 	ppl7::grafix::Point initial_p;
 	SpriteTexture	*texture;
+	ppl7::tk::Widget *widget;
 	ppl7::grafix::Rect boundary;
 	uint32_t id;
 	int sprite_set;
@@ -111,6 +118,7 @@ public:
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void openUi();
 	static Representation representation();
 };
 
@@ -143,6 +151,23 @@ public:
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 
+};
+
+class TouchEmitter : public Object
+{
+private:
+	unsigned char toogle_count;
+	unsigned char max_toggles;
+	unsigned char direction;
+	Type::ObjectType emitted_object;
+
+public:
+	TouchEmitter();
+	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
 };
 
 class Speaker : public Object
@@ -404,6 +429,21 @@ public:
 	static Representation representation();
 };
 
+
+class Door : public Object
+{
+private:
+	bool open;
+	uint32_t key_id;
+
+public:
+	Door();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void handleCollision(Player *player, const Collision &collision);
+
+};
 
 
 class ObjectSystem

@@ -253,6 +253,7 @@ Representation getRepresentation(int object_type)
 	case Type::Vent: return Vent::representation();
 	case Type::WindEmitter: return WindEmitter::representation();
 	case Type::Speaker: return Speaker::representation();
+	case Type::TouchEmitter: return TouchEmitter::representation();
 
 	default: return Object::representation();
 	}
@@ -307,6 +308,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::WindEmitter: return new WindEmitter();
 	case Type::Vent: return new Vent();
 	case Type::Speaker: return new Speaker();
+	case Type::TouchEmitter: return new TouchEmitter();
 	}
 	return NULL;
 }
