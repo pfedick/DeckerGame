@@ -69,7 +69,7 @@ void ObjectSystem::addObject(Object *object)
 {
 	if (!object) return;
 	if (object->spawned) {
-		object->id=next_spawn_id
+		object->id=next_spawn_id;
 		next_spawn_id++;
 	} else {
 		object->id=nextid;
