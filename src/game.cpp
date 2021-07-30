@@ -8,8 +8,16 @@
 
 static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
 
+static ppl7::tk::Window *GameWindow=NULL;
+
+ppl7::tk::Window *GetGameWindow()
+{
+	return GameWindow;
+}
+
 Game::Game()
 {
+	GameWindow=this;
 	tex_level_grid=NULL;
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);

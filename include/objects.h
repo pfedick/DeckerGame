@@ -165,9 +165,11 @@ private:
 	unsigned char touchtype;
 	Type::ObjectType emitted_object;
 	double next_touch_time;
+	ppl7::tk::Widget *ui;
 
 public:
 	TouchEmitter();
+	~TouchEmitter();
 	static Representation representation();
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual size_t save(unsigned char *buffer, size_t size);

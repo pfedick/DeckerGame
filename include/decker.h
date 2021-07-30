@@ -543,6 +543,8 @@ public:
 
 };
 
+ppl7::tk::Window *GetGameWindow();
+
 
 
 

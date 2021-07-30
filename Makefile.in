@@ -39,6 +39,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_groupbox.o \
 	compile/widgets_combobox.o \
 	compile/widgets_listwidget.o \
+	compile/widgets_subwindow.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -364,6 +365,10 @@ compile/widgets_combobox.o: src/widgets/combobox.cpp Makefile include/widgets.h
 compile/widgets_listwidget.o: src/widgets/listwidget.cpp Makefile include/widgets.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/widgets_listwidget.o -c src/widgets/listwidget.cpp $(CFLAGS)
+
+compile/widgets_subwindow.o: src/widgets/subwindow.cpp Makefile include/widgets.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/widgets_subwindow.o -c src/widgets/subwindow.cpp $(CFLAGS)
 
 # Audio
 compile/audio_audiosystem.o: src/audio/audiosystem.cpp Makefile include/audio.h

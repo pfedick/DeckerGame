@@ -1,6 +1,8 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "decker.h"
+#include "widgets.h"
 
 namespace Decker::Objects {
 
@@ -38,7 +40,14 @@ TouchEmitter::TouchEmitter()
 	pixelExactCollision=false;
 	collisionDetection=true;
 	next_touch_time=0.0f;
+	ui=NULL;
 }
+
+TouchEmitter::~TouchEmitter()
+{
+	if (ui) delete ui;
+}
+
 
 
 void TouchEmitter::handleCollision(Player *player, const Collision &collision)
@@ -98,7 +107,20 @@ bool TouchEmitter::load(const unsigned char *buffer, size_t size)
 
 void TouchEmitter::openUi()
 {
-	printf ("UI requested\n");
+	//printf ("UI requested\n");
+	ppl7::tk::Window *gamewin=GetGameWindow();
+	if (ui) {
+		delete ui;
+		ui=NULL;
+	} else {
+		Decker::ui::SubWindow *win=new Decker::ui::SubWindow((gamewin->width()-640)/2,
+				(gamewin->height()-480)/2,
+				640,480);
+		//win->setBackgroundColor(ppl7::grafix::Color(45,50,45,192));
+		win->setWindowTitle("TouchEmitter");
+		gamewin->addChild(win);
+		ui=win;
+	}
 }
 
 TouchParticle::TouchParticle(Type::ObjectType type)

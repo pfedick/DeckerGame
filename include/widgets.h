@@ -156,6 +156,32 @@ public:
 	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
 };
 
+class SubWindow : public ppl7::tk::Widget
+{
+private:
+	ppl7::String WindowTitle;
+	ppl7::grafix::Image WindowIcon;
+	ppl7::grafix::Color	myBackground;
+	ppl7::tk::Button *close_button;
+	ppl7::grafix::Point move_start;
+
+public:
+	SubWindow(int x, int y, int width, int height);
+	~SubWindow();
+
+	const ppl7::String &windowTitle() const;
+	void setWindowTitle(const ppl7::String &title);
+	const ppl7::grafix::Drawable &windowIcon() const;
+	void setWindowIcon(const ppl7::grafix::Drawable &icon);
+	const ppl7::grafix::Color &backgroundColor() const;
+	void setBackgroundColor(const ppl7::grafix::Color &c);
+	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void mouseMoveEvent(ppl7::tk::MouseEvent *event);
+	virtual void mouseClickEvent(ppl7::tk::MouseEvent *event);
+};
+
+
 
 }	// EOF namespace ui
 }	// EOF namespace Decker
