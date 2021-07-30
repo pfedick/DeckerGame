@@ -16,6 +16,7 @@ Collectable::Collectable(Type::ObjectType type)
 void Collectable::handleCollision(Player *player, const Collision &)
 {
 	enabled=false;
+	if (spawned) deleteDefered=true;
 	player->addPoints(points);
 	if (sample_id>0) {
 		AudioPool &audio=getAudioPool();

@@ -521,7 +521,7 @@ public:
 	// EventHandler
 	void quitEvent(ppl7::tk::Event *event);
 	void closeEvent(ppl7::tk::Event *event);
-	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+	//void mouseClickEvent(ppl7::tk::MouseEvent *event);
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 	void keyDownEvent(ppl7::tk::KeyEvent *event);

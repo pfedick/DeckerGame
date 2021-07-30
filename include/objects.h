@@ -70,6 +70,9 @@ public:
 	int sprite_set;
 	int sprite_no;
 };
+
+Representation getRepresentation(int object_type);
+
 class Object;
 class Collision
 {
@@ -159,7 +162,9 @@ private:
 	unsigned char toogle_count;
 	unsigned char max_toggles;
 	unsigned char direction;
+	unsigned char touchtype;
 	Type::ObjectType emitted_object;
+	double next_touch_time;
 
 public:
 	TouchEmitter();
