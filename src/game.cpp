@@ -73,6 +73,10 @@ void Game::loadGrafix()
 	resources.Sprites_Nature_Blury.enableMemoryBuffer(true);
 	resources.Sprites_Nature_Blury.load(sdl, "res/sprites_nature_blury.tex");
 
+	resources.Sprites_Rocks.enableOutlines(true);
+	resources.Sprites_Rocks.enableMemoryBuffer(true);
+	resources.Sprites_Rocks.load(sdl, "res/sprites_rocks.tex");
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	brick_occupation_solid.push_back(BrickOccupation::Item(0,0,Tile::TileOccupation::OccupationBrick));
@@ -95,6 +99,11 @@ void Game::loadGrafix()
 	resources.uiSpritesNatureBlury.enableSDLBuffer(false);
 	resources.uiSpritesNatureBlury.enableMemoryBuffer(true);
 	resources.uiSpritesNatureBlury.load(sdl, "res/sprites_nature_blury_ui.tex");
+
+	resources.uiSpritesRocks.enableSDLBuffer(false);
+	resources.uiSpritesRocks.enableMemoryBuffer(true);
+	resources.uiSpritesRocks.load(sdl, "res/sprites_rocks_ui.tex");
+
 
 	resources.uiObjects.enableSDLBuffer(false);
 	resources.uiObjects.enableMemoryBuffer(true);
@@ -213,6 +222,7 @@ void Game::init()
 	level.setSpriteset(2, &resources.Sprites_Plants);
 	level.setSpriteset(3, &resources.Sprites_Objects);
 	level.setSpriteset(4, &resources.Sprites_Nature_Blury);
+	level.setSpriteset(5, &resources.Sprites_Rocks);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -334,16 +344,20 @@ void Game::run()
 {
 	SDL_Renderer *renderer=sdl.getRenderer();
 	quitGame=false;
+	/*
 	AudioStream *playing_song=&audiopool.song[ppl7::rand(0,2)];
 	playing_song->setVolume(128, 128);
 	audiosystem.play(playing_song);
+	*/
 	while (!quitGame) {
+		/*
 		if (!audiosystem.isPlaying(playing_song)) {
 			playing_song=&audiopool.song[ppl7::rand(0,2)];
 			playing_song->rewind();
 			playing_song->setVolume(192, 192);
 			audiosystem.play(playing_song);
 		}
+		*/
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection!=NULL);
@@ -512,6 +526,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(2,"Plants", &resources.uiSpritesPlants);
 		sprite_selection->setSpriteSet(3,"Objects", &resources.uiSpritesObjects);
 		sprite_selection->setSpriteSet(4,"Nature Blury", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(5,"Rocks", &resources.uiSpritesRocks);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
@@ -619,7 +634,7 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 		int nr=sprite_selection->selectedSprite();
 		if (nr<0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset==1) nr=nr*4;
+		if (spriteset==1 || spriteset==5) nr=nr*4;
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
@@ -716,7 +731,7 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
 		}
 		if (sprite_mode!=spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset==1) nr=nr*4+ppl7::rand(0, 3);
+		if (spriteset==1 || spriteset==5) nr=nr*4+ppl7::rand(0, 3);
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
 		if (layer<0 || layer>1 || spriteset>MAX_SPRITESETS) return;

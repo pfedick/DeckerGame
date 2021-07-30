@@ -343,6 +343,8 @@ public:
 	SpriteTexture Sprites_Objects;
 	SpriteTexture uiSpritesObjects;
 	SpriteTexture uiObjects;
+	SpriteTexture Sprites_Rocks;
+	SpriteTexture uiSpritesRocks;
 
 	class BrickResource
 	{
