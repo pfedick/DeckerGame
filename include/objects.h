@@ -31,6 +31,7 @@ public:
 		WindEmitter=13,
 		Vent=14,
 		Speaker=15,
+		Particle=16,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -98,6 +99,7 @@ public:
 	bool enabled;
 	bool pixelExactCollision;
 	bool spawned;	// not saved, deleted on collection
+	bool deleteDefered;
 
 	Object(Type::ObjectType type);
 	virtual ~Object();
@@ -135,9 +137,12 @@ public:
 class WindEmitter : public Object
 {
 private:
+	double next_birth;
 public:
 	WindEmitter();
 	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
 };
 
 class Speaker : public Object
@@ -437,5 +442,7 @@ public:
 	size_t countVisible() const;
 
 };
+
+ObjectSystem *GetObjectSystem();
 
 } // EOF namespace Decker::Objects

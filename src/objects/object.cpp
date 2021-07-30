@@ -58,6 +58,7 @@ Object::Object(Type::ObjectType type)
 	state_size=0;
 	pixelExactCollision=true;
 	spawned=false;
+	deleteDefered=false;
 }
 
 Object::~Object()

@@ -6,8 +6,16 @@
 
 namespace Decker::Objects {
 
+static ObjectSystem *object_system=NULL;
+
+ObjectSystem *GetObjectSystem()
+{
+	return object_system;
+}
+
 ObjectSystem::ObjectSystem()
 {
+	if (!object_system) object_system=this;
 	nextid=1;
 	for (int i=0;i<Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
@@ -17,6 +25,7 @@ ObjectSystem::ObjectSystem()
 ObjectSystem::~ObjectSystem()
 {
 	clear();
+	if (object_system==this) object_system=NULL;
 }
 
 void ObjectSystem::clear()
@@ -83,11 +92,14 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 {
 	visible_object_map.clear();
 	std::map<uint32_t, Object *>::iterator it;
+	std::list<uint32_t> deleteme;
 	int width=viewport.width();
 	int height=viewport.height();
 	for (it=object_list.begin();it!=object_list.end();++it) {
 		Object *object=it->second;
-		if (object->texture) {
+		if (object->deleteDefered) {
+			deleteme.push_back(it->first);
+		} else if (object->texture) {
 			int x=object->p.x-worldcoords.x;
 			int y=object->p.y-worldcoords.y;
 			bool isVisible=false;
@@ -103,6 +115,12 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 				uint32_t id=(uint32_t)((object->p.y&0xffff)<<16)|(uint32_t)(object->p.x&0xffff);
 				visible_object_map.insert(std::pair<uint32_t,Object *>(id,object));
 			}
+		}
+	}
+	if (deleteme.size()>0) {
+		std::list<uint32_t>::iterator it;
+		for (it=deleteme.begin();it!=deleteme.end();++it) {
+			deleteObject(*it);
 		}
 	}
 }
@@ -150,7 +168,7 @@ Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
 	std::map<uint32_t,Object *>::const_iterator it;
 	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
 		Object *item=it->second;
-		if (p.inside(item->boundary)) {
+		if (p.inside(item->boundary)==true && item->spawned==false) {
 			if (item->texture) {
 				const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
 				if (draw.width()) {
