@@ -49,6 +49,10 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Skeleton]->enableOutlines(true);
 	spriteset[Spriteset::Skeleton]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Skeleton]->load(sdl,"res/skeleton.tex");
+
+	spriteset[Spriteset::Vent]->enableOutlines(true);
+	spriteset[Spriteset::Vent]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Vent]->load(sdl,"res/vent.tex");
 }
 
 void ObjectSystem::addObject(Object *object)
@@ -228,6 +232,9 @@ Representation getRepresentation(int object_type)
 	case Type::BreakingGround: return BreakingGround::representation();
 	case Type::LaserBeamHorizontal: return LaserBarrier::representation(Type::LaserBeamHorizontal);
 	case Type::LaserBeamVertical: return LaserBarrier::representation(Type::LaserBeamVertical);
+	case Type::Vent: return Vent::representation();
+	case Type::WindEmitter: return WindEmitter::representation();
+	case Type::Speaker: return Speaker::representation();
 
 	default: return Object::representation();
 	}
@@ -279,6 +286,9 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::BreakingGround: return new BreakingGround();
 	case Type::LaserBeamHorizontal: return new LaserBarrier(Type::LaserBeamHorizontal);
 	case Type::LaserBeamVertical: return new LaserBarrier(Type::LaserBeamVertical);
+	case Type::WindEmitter: return new WindEmitter();
+	case Type::Vent: return new Vent();
+	case Type::Speaker: return new Speaker();
 	}
 	return NULL;
 }
@@ -290,7 +300,8 @@ void ObjectSystem::save(ppl7::FileObject &file, unsigned char id) const
 	size_t buffersize=0;
 	for (it=object_list.begin();it!=object_list.end();++it) {
 		Object *object=it->second;
-		buffersize+=object->save_size+1;
+		if (!object->spawned)
+			buffersize+=object->save_size+1;
 	}
 	unsigned char *buffer=(unsigned char*)malloc(buffersize+5);
 	ppl7::Poke32(buffer+0,0);
@@ -298,12 +309,14 @@ void ObjectSystem::save(ppl7::FileObject &file, unsigned char id) const
 	size_t p=5;
 	for (it=object_list.begin();it!=object_list.end();++it) {
 		Object *object=it->second;
-		ppl7::Poke8(buffer+p,object->save_size+1);
-		size_t bytes_saved=object->save(buffer+p+1,object->save_size);
-		if (bytes_saved==object->save_size && bytes_saved>0) {
-			p+=object->save_size+1;
-			//printf ("saved object %d of type %d with size %d\n",
-			//		object->id, object->type(), object->save_size+1);
+		if (!object->spawned) {
+			ppl7::Poke8(buffer+p,object->save_size+1);
+			size_t bytes_saved=object->save(buffer+p+1,object->save_size);
+			if (bytes_saved==object->save_size && bytes_saved>0) {
+				p+=object->save_size+1;
+				//printf ("saved object %d of type %d with size %d\n",
+				//		object->id, object->type(), object->save_size+1);
+			}
 		}
 	}
 	ppl7::Poke32(buffer+0,p);

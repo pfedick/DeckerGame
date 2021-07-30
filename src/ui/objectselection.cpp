@@ -48,7 +48,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Fire,"Fire",25);
 	addObject(Decker::Objects::Type::Vent,"Vent",31);
 	addObject(Decker::Objects::Type::Speaker,"Speaker",29);
-	addObject(Decker::Objects::Type::Wind,"Wind emiter",28);
+	addObject(Decker::Objects::Type::WindEmitter,"Wind emiter",28);
 
 
 	scrollbar->setSize(object_map.size()/2);

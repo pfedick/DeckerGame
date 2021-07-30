@@ -28,7 +28,7 @@ public:
 		FloaterHorizontal=9,
 		BreakingGround=11,
 		Fire=12,
-		Wind=13,
+		WindEmitter=13,
 		Vent=14,
 		Speaker=15,
 		Arrow=100,
@@ -97,6 +97,7 @@ public:
 	bool visibleAtPlaytime;
 	bool enabled;
 	bool pixelExactCollision;
+	bool spawned;	// not saved, deleted on collection
 
 	Object(Type::ObjectType type);
 	virtual ~Object();
@@ -117,6 +118,33 @@ class PlayerStartPoint : public Object
 private:
 public:
 	PlayerStartPoint();
+	static Representation representation();
+};
+
+class Vent : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+public:
+	Vent();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+};
+
+class WindEmitter : public Object
+{
+private:
+public:
+	WindEmitter();
+	static Representation representation();
+};
+
+class Speaker : public Object
+{
+private:
+public:
+	Speaker();
 	static Representation representation();
 };
 

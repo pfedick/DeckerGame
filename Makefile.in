@@ -69,6 +69,9 @@ OBJECTS=compile/main.o \
 	compile/object_skeleton.o \
 	compile/object_mummy.o \
 	compile/object_fire.o \
+	compile/object_windemitter.o \
+	compile/object_vent.o \
+	compile/object_speaker.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -269,6 +272,18 @@ compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include
 compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_fire.o -c src/objects/fire.cpp $(CFLAGS)	
+
+compile/object_windemitter.o: src/objects/windemitter.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_windemitter.o -c src/objects/windemitter.cpp $(CFLAGS)	
+
+compile/object_vent.o: src/objects/vent.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_vent.o -c src/objects/vent.cpp $(CFLAGS)	
+
+compile/object_speaker.o: src/objects/speaker.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_speaker.o -c src/objects/speaker.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

@@ -27,6 +27,11 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::FloaterVertical: return ppl7::String("FloaterVertical");
 	case ObjectType::Door: return ppl7::String("Door");
 
+	case ObjectType::Fire: return ppl7::String("Fire");
+	case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
+	case ObjectType::Vent: return ppl7::String("Vent");
+	case ObjectType::Speaker: return ppl7::String("Speaker");
+
 	default: return ppl7::String("unknown object type");
 	}
 }
@@ -52,6 +57,7 @@ Object::Object(Type::ObjectType type)
 	save_size=9;
 	state_size=0;
 	pixelExactCollision=true;
+	spawned=false;
 }
 
 Object::~Object()
