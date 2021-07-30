@@ -7,13 +7,16 @@ namespace Decker::Objects {
 
 Representation TouchEmitter::representation()
 {
-	return Representation(Spriteset::GenericObjects, 37);
+	return Representation(Spriteset::GenericObjects, 238);
 }
 
 
 TouchEmitter::TouchEmitter()
 :Object(Type::ObjectType::TouchEmitter)
 {
+	sprite_set=0;
+	sprite_no=238;
+	sprite_no_representation=239;
 	toogle_count=0;
 	max_toggles=1;
 	direction=0;
