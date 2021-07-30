@@ -56,6 +56,10 @@ StatusBar::StatusBar(int x, int y, int width, int height)
 	player_state->setFont(font_bold);
 	this->addChild(player_state);
 
+	this->addChild(new ppl7::tk::Label (1610,0,100,32,"selected object:"));
+	object_id=new ppl7::tk::Label (1710,0,60,32,"-", ppl7::tk::Frame::Inset);
+	object_id->setFont(font_bold);
+	this->addChild(object_id);
 
 
 
@@ -114,5 +118,13 @@ void StatusBar::setPlayerState(const ppl7::String &state)
 	player_state->setText(state);
 }
 
+void StatusBar::setSelectedObject(int id)
+{
+	if (id>=0) {
+		object_id->setText(ppl7::ToString("%d",id));
+	} else {
+		object_id->setText("-");
+	}
+}
 } //EOF namespace Decker
 

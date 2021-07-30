@@ -17,6 +17,7 @@ ObjectSystem::ObjectSystem()
 {
 	if (!object_system) object_system=this;
 	nextid=1;
+	next_spawn_id=1000000;
 	for (int i=0;i<Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
 	}
@@ -67,8 +68,13 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 void ObjectSystem::addObject(Object *object)
 {
 	if (!object) return;
-	object->id=nextid;
-	nextid++;
+	if (object->spawned) {
+		object->id=next_spawn_id
+		next_spawn_id++;
+	} else {
+		object->id=nextid;
+		nextid++;
+	}
 	if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
 		object->texture=this->spriteset[object->sprite_set];
 		object->updateBoundary();

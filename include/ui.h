@@ -35,6 +35,7 @@ private:
 	ppl7::tk::Label *sprite_count;
 	ppl7::tk::Label *object_count;
 	ppl7::tk::Label *player_state;
+	ppl7::tk::Label *object_id;
 
 
 public:
@@ -47,6 +48,7 @@ public:
 	void setSpriteCount(size_t total, size_t visible);
 	void setObjectCount(size_t total, size_t visible);
 	void setPlayerState(const ppl7::String &state);
+	void setSelectedObject(int id);
 
 	// Events
 	void timerEvent(ppl7::tk::Event *event);

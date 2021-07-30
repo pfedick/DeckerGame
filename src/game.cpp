@@ -327,6 +327,11 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 	statusbar->setObjectCount(level.objects->count(), level.objects->countVisible());
 	statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
+	if (selected_object) {
+		statusbar->setSelectedObject(selected_object->id);
+	} else {
+		statusbar->setSelectedObject(-1);
+	}
 }
 
 void Game::updateWorldCoords()
@@ -769,9 +774,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 		}
 		if (sprite_mode!=spriteModeDraw) return;
 		selected_object=level.objects->getInstance(object_type);
-		printf ("debug 1\n");
 		if (selected_object) {
-			printf ("debug 2\n");
 			ppl7::grafix::Point coords=WorldCoords;
 			selected_object->initial_p.setPoint(event->p.x+coords.x,event->p.y+coords.y);
 			selected_object->p=selected_object->initial_p;
