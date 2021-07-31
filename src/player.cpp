@@ -304,11 +304,15 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			velocity_move.x=6;
 			animation.setStaticFrame(39);
 		} else if (keys==KeyboardKeys::Down) {
-			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
-				if (movement!=ClimbDown) {
-					movement=ClimbDown;
-					orientation=Back;
-					animation.start(climb_down_cycle,sizeof(climb_down_cycle)/sizeof(int),true,0);
+			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder
+					||collision_matrix[1][5]==TileType::Ladder || collision_matrix[2][5]==TileType::Ladder) {
+				if (collision_matrix[1][5]!=TileType::Blocking && collision_matrix[2][5]!=TileType::Blocking) {
+					if (movement!=ClimbDown) {
+						//printf ("climb down\n");
+						movement=ClimbDown;
+						orientation=Back;
+						animation.start(climb_down_cycle,sizeof(climb_down_cycle)/sizeof(int),true,0);
+					}
 				}
 			}
 
@@ -468,13 +472,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 	if (collision_matrix[1][4]==TileType::Blocking || collision_matrix[2][4]==TileType::Blocking) {
 		//printf ("col 1\n");
-		while (world.getType(ppl7::grafix::Point(x,y-1))==TileType::Blocking) {
+		while (world.getType(ppl7::grafix::Point(x,y+1))==TileType::Blocking) {
 			y--;
 		}
 		velocity_move.x=0;
 		velocity_move.y=0;
 		acceleration_gravity=0.0f;
 		gravity=0.0f;
+		if (movement==ClimbDown) stand();
 	}
 
 	if (player_stands_on_object) {
