@@ -472,7 +472,8 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 	if (collision_matrix[1][4]==TileType::Blocking || collision_matrix[2][4]==TileType::Blocking) {
 		//printf ("col 1\n");
-		while (world.getType(ppl7::grafix::Point(x,y+1))==TileType::Blocking) {
+		while (world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1))==TileType::Blocking
+				|| world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1))==TileType::Blocking) {
 			y--;
 		}
 		velocity_move.x=0;
