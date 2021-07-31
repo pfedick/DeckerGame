@@ -430,26 +430,46 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		return;
 	}
 
-	if (collision_matrix[1][4]==TileType::Plate2h || collision_matrix[2][4]==TileType::Plate2h) {
-		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+1*(TILE_HEIGHT/3);
-		//printf ("Plate2h y=%d, ty=%d\n", y, ty);
-		if (y>ty) {
-			y-=4;
-			if (y<ty) y=ty;
-		} else if (y<ty) {
-			y+=4;
+	if (collision_at_pivoty[1]==TileType::Plate2h) {
+		int th=TILE_HEIGHT/3;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th;
+		//printf ("Plate2h 1, y=%d, ty=%d\n", (int)y, ty);
+		if (y<ty) {
+			y+=3;
 			if (y>ty) y=ty;
+		} else if (y>ty) {
+			y-=3;
+			if (y<ty) y=ty;
+		}
+		//y=ty;
+		return;
+	} else if (collision_at_pivoty[0]==TileType::Plate2h) {
+		int th=TILE_HEIGHT/3;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
+		printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
+		//y=ty;
+		return;
+
+	} else if (collision_at_pivoty[1]==TileType::Plate1h) {
+		int th=TILE_HEIGHT/3;
+		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+2*(th);
+		if (y<ty) {
+			y+=3;
+			if (y>ty) y=ty;
+		} else if (y>ty) {
+			y-=3;
+			if (y<ty) y=ty;
 		}
 		return;
-	} else if (collision_matrix[1][4]==TileType::Plate1h || collision_matrix[2][4]==TileType::Plate1h) {
-		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+2*(TILE_HEIGHT/3);
-		//printf ("Plate1h y=%d, ty=%d\n", y, ty);
-		if (y>ty) {
-			y-=4;
-			if (y<ty) y=ty;
-		} else if (y<ty) {
-			y+=4;
+	} else if (collision_at_pivoty[0]==TileType::Plate1h) {
+		int th=TILE_HEIGHT/3;
+		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+2*th;
+		if (y<ty) {
+			y+=3;
 			if (y>ty) y=ty;
+		} else if (y>ty) {
+			y-=3;
+			if (y<ty) y=ty;
 		}
 		return;
 	} else if (collision_at_pivoty[1]==TileType::ShallowRampLeftUpper) {
