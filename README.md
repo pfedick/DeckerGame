@@ -32,6 +32,10 @@ test level is fully playable. The sound engine is finished, too.
     - key (used to unlock a locked door)
     - arrows from wall
     - scorpion
+    - mushroom (white minifig with big red hat and white dots)
+    - huge vent
+    - stamper
+    - Wallenstein + Helena? (from the movie) 
     - some kind of angry bird?
     - side wind
 - refine physics for jumping & falling 
