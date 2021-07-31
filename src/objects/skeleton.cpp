@@ -7,8 +7,8 @@
 
 namespace Decker::Objects {
 
-static int walk_cycle_left[]={1,2,3,4,5,6,7,8,22};
-static int walk_cycle_right[]={10,11,12,13,14,15,16,17,18};
+static int walk_cycle_left[]={1,2,3,4,5,6,7,8};
+static int walk_cycle_right[]={10,11,12,13,14,15,16,17};
 static int turn_from_left_to_right[]={22,23,24,25,26};
 static int turn_from_right_to_left[]={18,19,20,21,22};
 static int turn_from_mid_to_left[]={27,20,21,22};
@@ -52,13 +52,13 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 		updateBoundary();
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x-20, p.y-6));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x-20, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+		if (t1==TileType::Blocking || t1==TileType::EnemyBlocker || t2!=TileType::Blocking) {
 			state=2;
 			animation.setStaticFrame(0);
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==2 && time>next_state) {
-		animation.start(turn_from_left_to_right,sizeof(turn_from_left_to_right)/sizeof(int),false,9);
+		animation.start(turn_from_left_to_right,sizeof(turn_from_left_to_right)/sizeof(int),false,26);
 		state=3;
 	} else if (state==3 && animation.isFinished()) {
 		state=4;
@@ -69,13 +69,13 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 		updateBoundary();
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x+20, p.y-6));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x+20, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+		if (t1==TileType::Blocking || t1==TileType::EnemyBlocker || t2!=TileType::Blocking) {
 			state=5;
 			animation.setStaticFrame(9);
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==5 && time>next_state) {
-		animation.start(turn_from_right_to_left,sizeof(turn_from_right_to_left)/sizeof(int),false,9);
+		animation.start(turn_from_right_to_left,sizeof(turn_from_right_to_left)/sizeof(int),false,22);
 		state=0;
 	} else if (state==6) {
 		velocity++;

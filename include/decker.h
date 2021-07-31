@@ -299,6 +299,7 @@ public:
 		Speer,
 		Fire,
 		AirStream,
+		EnemyBlocker,
 		MaxType			// used for arrays
 	};
 };
