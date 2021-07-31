@@ -13,24 +13,20 @@ It features George Decker, one of the main characters of my Lego(tm) stopmotion 
 
 
 ## What's the status of the game?
-The game is in development. I already implemented a user interface to edit the world,
-the graphic engine and a simple physics and collision detection between the player
-and the world. The player can be controlled by the arrow keys and left-shift. But
-movement inside the world is a bit clumsy as physics and collision detection sometimes
-work against each other. But I will figure that out, and I bet at some point I will
-rewrite the whole system ;-)
-
-Next thing to do is fill the world with interactive objects and enemies and see how
-they can interact with the player.
+The game is in development and I already implemented a lot of the features I
+had in mind, when I started this project. The graphic engine is complete,
+most of the physics is done (it needs a bit fine tuning) and collision detection
+between the player, the world and the objects inside it is working. The
+test level is fully playable. The sound engine is finished, too.
 
 ### Things which are ongoing
-- how to integrate sound track and sound effects into the game
-- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
-- create graphics
-- ui
-- world editor
+- positional sound: objects in the world shot be able to emit sound effects.
+  The loudness and direction (left/right) should depend on the distance to
+  the player.
+- ui for special objects
 
 ### Things I have to do or figure out
+- death animation for objects (player, skeleton, mummy, rat)
 - create interactive objects / enemies:
     - locked door
     - key (used to unlock a locked door)
@@ -38,12 +34,16 @@ they can interact with the player.
     - scorpion
     - some kind of angry bird?
     - side wind
-- refine physics (especially jumping & falling) 
+- refine physics for jumping & falling 
 - compose sound track
 - create sound effects
 - build the world/levels
 - story?
 - save and load of progress in a level
+- create start screen
+- end the game, when player dies and has no lifes rest
+
+
 There is probably more, which I'm not aware of, yet ;-)
 
 ### Things I have finished
@@ -72,7 +72,20 @@ There is probably more, which I'm not aware of, yet ;-)
     - lasers
 - how does sound work with SDL?
 - write the audio engine
-    
+- how to integrate sound track and sound effects into the game    
+- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
+- world editor
+
+## How to control the player
+
+The player can be controlled by the arrow keys or alternatively with "wasd" or "ijkl"
+- cursor up / w / i: climb up a ladder or jump up in the air
+- cursor down / s / k: climb down a ladder
+- cursor left / a / j: walk to the left
+- cursor right / d / l: walk to the right
+- shift left / shift right: walk faster, jump higher
+
+When walking an pressing the key for up, the player will jump in the direction of walking.
 
 
 ## On what platforms will the game be available
