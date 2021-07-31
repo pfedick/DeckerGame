@@ -403,7 +403,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 	collision_at_pivoty[0]=world.getType(ppl7::grafix::Point(x, y-1));
 	collision_at_pivoty[1]=world.getType(ppl7::grafix::Point(x, y));
-	collision_at_pivoty[2]=world.getType(ppl7::grafix::Point(x, y+1));
+	collision_at_pivoty[2]=world.getType(ppl7::grafix::Point(x, y-(TILE_WIDTH/2)));
 	collision_matrix[1][4]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1));
 	collision_matrix[2][4]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1));
 	for (int cx=0;cx<4;cx++) {
@@ -440,6 +440,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			y+=4;
 			if (y>ty) y=ty;
 		}
+		return;
 	} else if (collision_matrix[1][4]==TileType::Plate1h || collision_matrix[2][4]==TileType::Plate1h) {
 		int ty=((int)((y-1)/TILE_HEIGHT))*TILE_HEIGHT+2*(TILE_HEIGHT/3);
 		//printf ("Plate1h y=%d, ty=%d\n", y, ty);
@@ -450,6 +451,49 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			y+=4;
 			if (y>ty) y=ty;
 		}
+		return;
+	} else if (collision_at_pivoty[1]==TileType::ShallowRampLeftUpper) {
+		int tx=(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(th*tx/TILE_WIDTH);
+		//printf ("ShallowRampLeftUpper y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
+	} else if (collision_at_pivoty[1]==TileType::ShallowRampLeftLower) {
+		int tx=(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH);
+		//printf ("ShallowRampLeftLower 1, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
+	} else if (collision_at_pivoty[0]==TileType::ShallowRampLeftLower) {
+		int tx=(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH)-TILE_HEIGHT;
+		//printf ("ShallowRampLeftLower 2, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
+	} else if (collision_at_pivoty[1]==TileType::ShallowRampRightUpper) {
+		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(th*tx/TILE_WIDTH);
+		//printf ("ShallowRampLeftUpper y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
+	} else if (collision_at_pivoty[1]==TileType::ShallowRampRightLower) {
+		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH);
+		//printf ("ShallowRampLeftLower 1, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
+	} else if (collision_at_pivoty[0]==TileType::ShallowRampRightLower) {
+		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
+		int th=TILE_HEIGHT/2;
+		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH)-TILE_HEIGHT;
+		//printf ("ShallowRampLeftLower 2, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
+		y=ty;
+		return;
 	}
 
 	if (collision_matrix[1][0]==TileType::Blocking || collision_matrix[2][0]==TileType::Blocking) {
@@ -552,6 +596,7 @@ void Player::updatePhysics(const TileTypePlane &world)
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
 			if (!player_stands_on_object) {
+				//printf ("gravity\n");
 				if (acceleration_gravity<10.0f) acceleration_gravity+=0.2f;
 				if (acceleration_gravity>10.0f) acceleration_gravity=10.0f;
 				match=true;
@@ -606,7 +651,6 @@ void Player::updatePhysics(const TileTypePlane &world)
 	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f\n",
 			gravity, acceleration_gravity, acceleration_airstream);
 	*/
-
 }
 
 
