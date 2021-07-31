@@ -41,6 +41,7 @@ test level is fully playable. The sound engine is finished, too.
 - refine physics for jumping & falling 
 - compose sound track
 - create sound effects
+- support mono audio files
 - build the world/levels
 - story?
 - save and load of progress in a level
