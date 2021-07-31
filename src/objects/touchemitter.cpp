@@ -1,5 +1,6 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
+#include <ppl7-tk.h>
 #include "objects.h"
 #include "decker.h"
 #include "widgets.h"
@@ -17,6 +18,19 @@ public:
 	TouchParticle(Type::ObjectType type);
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+};
+
+
+class TouchEmitterDialog : public Decker::ui::Dialog
+{
+private:
+	Decker::ui::ComboBox *object_type;
+	Decker::ui::ComboBox *direction;
+	ppl7::tk::LineInput *max_toggles;
+public:
+	TouchEmitterDialog(TouchEmitter *object);
+	~TouchEmitterDialog();
+
 };
 
 Representation TouchEmitter::representation()
@@ -40,12 +54,11 @@ TouchEmitter::TouchEmitter()
 	pixelExactCollision=false;
 	collisionDetection=true;
 	next_touch_time=0.0f;
-	ui=NULL;
 }
 
 TouchEmitter::~TouchEmitter()
 {
-	if (ui) delete ui;
+
 }
 
 
@@ -107,20 +120,8 @@ bool TouchEmitter::load(const unsigned char *buffer, size_t size)
 
 void TouchEmitter::openUi()
 {
-	//printf ("UI requested\n");
-	ppl7::tk::Window *gamewin=GetGameWindow();
-	if (ui) {
-		delete ui;
-		ui=NULL;
-	} else {
-		Decker::ui::SubWindow *win=new Decker::ui::SubWindow((gamewin->width()-640)/2,
-				(gamewin->height()-480)/2,
-				640,480);
-		//win->setBackgroundColor(ppl7::grafix::Color(45,50,45,192));
-		win->setWindowTitle("TouchEmitter");
-		gamewin->addChild(win);
-		ui=win;
-	}
+	TouchEmitterDialog *dialog=new TouchEmitterDialog(this);
+	GetGameWindow()->addChild(dialog);
 }
 
 TouchParticle::TouchParticle(Type::ObjectType type)
@@ -154,6 +155,28 @@ void TouchParticle::update(double time, TileTypePlane &ttplane, Player &player)
 	}
 }
 
+TouchEmitterDialog::TouchEmitterDialog(TouchEmitter *object)
+: Decker::ui::Dialog(640,480)
+{
+	setWindowTitle("TouchEmitter");
+	addChild(new ppl7::tk::Label(0,0,120,30,"Emitted object: "));
+	addChild(new ppl7::tk::Label(0,40,120,30,"direction: "));
+	addChild(new ppl7::tk::Label(0,80,120,30,"max toggles: "));
 
+	object_type=new Decker::ui::ComboBox(120,0,400,30);
+	addChild(object_type);
+
+	direction=new Decker::ui::ComboBox(120,40,400,30);
+	addChild(direction);
+
+	max_toggles=new ppl7::tk::LineInput(120,80,80,30);
+	addChild(max_toggles);
+
+}
+
+TouchEmitterDialog::~TouchEmitterDialog()
+{
+
+}
 
 }	// EOF namespace Decker::Objects

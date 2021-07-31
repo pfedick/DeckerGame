@@ -9,6 +9,7 @@
 class Game;
 class SpriteTexture;
 
+
 namespace Decker {
 namespace ui {
 
@@ -156,7 +157,7 @@ public:
 	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
 };
 
-class SubWindow : public ppl7::tk::Widget
+class Dialog : public ppl7::tk::Widget
 {
 private:
 	ppl7::String WindowTitle;
@@ -166,8 +167,8 @@ private:
 	ppl7::grafix::Point move_start;
 
 public:
-	SubWindow(int x, int y, int width, int height);
-	~SubWindow();
+	Dialog(int width, int height);
+	~Dialog();
 
 	const ppl7::String &windowTitle() const;
 	void setWindowTitle(const ppl7::String &title);
@@ -177,8 +178,6 @@ public:
 	void setBackgroundColor(const ppl7::grafix::Color &c);
 	virtual void paint(ppl7::grafix::Drawable &draw);
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	virtual void mouseMoveEvent(ppl7::tk::MouseEvent *event);
-	virtual void mouseClickEvent(ppl7::tk::MouseEvent *event);
 };
 
 

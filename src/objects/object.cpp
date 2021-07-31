@@ -51,7 +51,6 @@ Object::Object(Type::ObjectType type)
 	sprite_no_representation=0;
 	id=0;
 	texture=NULL;
-	widget=NULL;
 	collisionDetection=false;
 	visibleAtPlaytime=true;
 	enabled=true;
@@ -64,7 +63,7 @@ Object::Object(Type::ObjectType type)
 
 Object::~Object()
 {
-	if (widget) delete widget;
+
 }
 
 Type::ObjectType Object::type() const

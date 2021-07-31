@@ -96,7 +96,7 @@ public:
 	ppl7::grafix::Point p;
 	ppl7::grafix::Point initial_p;
 	SpriteTexture	*texture;
-	ppl7::tk::Widget *widget;
+	//ppl7::tk::Widget *widget;
 	ppl7::grafix::Rect boundary;
 	uint32_t id;
 	int sprite_set;
@@ -165,7 +165,6 @@ private:
 	unsigned char touchtype;
 	Type::ObjectType emitted_object;
 	double next_touch_time;
-	ppl7::tk::Widget *ui;
 
 public:
 	TouchEmitter();
