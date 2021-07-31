@@ -51,7 +51,8 @@ public:
 		ClimbUp,
 		ClimbDown,
 		Jump,
-		Falling
+		Falling,
+		Slide
 	};
 	enum PlayerOrientation {
 		Left,
@@ -81,6 +82,7 @@ private:
 
 	ppl7::grafix::Point lastSavePoint;
 	int collision_matrix[4][6];
+	int collision_at_pivoty[3];
 	Decker::Objects::Object *player_stands_on_object;
 
 
@@ -97,7 +99,7 @@ private:
 
 
 public:
-	int x,y;
+	float x,y;
 	int points, health, lifes;
 
 

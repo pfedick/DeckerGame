@@ -18,6 +18,9 @@ static int run_cycle_right[]={70,71,72,73,74,75,76,77};
 static int climb_up_cycle[]={91,92,93,94,95,96,97,98,99,100,101};
 static int climb_down_cycle[]={101,100,99,98,97,96,95,94,93,92,91};
 
+static int slide_left[]={83,84,85,86};
+static int slide_right[]={79,80,81,82};
+
 
 
 Player::Player()
@@ -37,6 +40,9 @@ Player::Player()
 			collision_matrix[cx][cy]=TileType::NonBlocking;
 		}
 	}
+	collision_at_pivoty[0]=0;
+	collision_at_pivoty[1]=0;
+	collision_at_pivoty[2]=0;
 	acceleration_airstream=0.0f;
 	acceleration_gravity=0.0f;
 	gravity=0.0f;
@@ -53,9 +59,9 @@ Player::~Player()
 {
 
 }
-static const char* movement_string[9]={"Stand",
+static const char* movement_string[10]={"Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling"};
+		"Jump","Falling", "Slide"};
 
 static const char* orientation_string[4]={"Left",
 		"Right", "Front", "Back"};
@@ -90,6 +96,7 @@ void Player::move(int x, int y)
 void Player::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
 {
 	ppl7::grafix::Point p(x+viewport.x1-worldcoords.x,y+viewport.y1-worldcoords.y);
+	if (movement==Slide) p.y+=35;
 	sprite_resource->draw(renderer,p.x,p.y+1,animation.getFrame());
 }
 
@@ -103,6 +110,9 @@ void Player::drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &vie
 			}
 		}
 	}
+	tiletype_resource->draw(renderer,p.x+80,p.y-32,collision_at_pivoty[0]);
+	tiletype_resource->draw(renderer,p.x+80,p.y,collision_at_pivoty[1]);
+	tiletype_resource->draw(renderer,p.x+80,p.y+32,collision_at_pivoty[2]);
 }
 
 
@@ -205,6 +215,9 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 		orientation=turnTarget;
 		velocity_move.stop();
 		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
+	}
+	if (movement==Slide) {
+		return;
 	}
 	//if (time>next_keycheck) {
 		//next_keycheck=time+0.1f;
@@ -322,6 +335,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 
 void Player::updateMovement()
 {
+	if (movement==Slide) return;
 	if (movement==Walk) {
 		if (orientation==Left) {
 			velocity_move.x=-2;
@@ -383,6 +397,9 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			collision_type_count[t]+=1;
 		}
 	}
+	collision_at_pivoty[0]=world.getType(ppl7::grafix::Point(x, y-1));
+	collision_at_pivoty[1]=world.getType(ppl7::grafix::Point(x, y));
+	collision_at_pivoty[2]=world.getType(ppl7::grafix::Point(x, y+1));
 	collision_matrix[1][4]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1));
 	collision_matrix[2][4]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1));
 	for (int cx=0;cx<4;cx++) {
@@ -392,6 +409,21 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		collision_matrix[cx][5]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
 				y));
 
+	}
+	if (movement==Slide) {
+		if (orientation==Left) {
+			if (collision_matrix[1][4]==TileType::Blocking) {
+				stand();
+			}
+		} else {
+			if (collision_matrix[2][4]==TileType::Blocking) {
+				stand();
+			}
+		}
+		while (world.getType(ppl7::grafix::Point(x,y-1))==TileType::Blocking) {
+			y--;
+		}
+		return;
 	}
 
 	if (collision_matrix[1][4]==TileType::Plate2h || collision_matrix[2][4]==TileType::Plate2h) {
@@ -417,7 +449,6 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 
 	if (collision_matrix[1][0]==TileType::Blocking || collision_matrix[2][0]==TileType::Blocking) {
-		//printf ("Collsion!\n");
 		acceleration_gravity=0.1f;
 		gravity=1.0f;
 		velocity_move.y=1;
@@ -425,18 +456,27 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		movement=Falling;
 		//if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 	}
-	if (collision_matrix[1][5]==TileType::Blocking || collision_matrix[2][5]==TileType::Blocking) {
+	if (collision_matrix[1][5]==TileType::Blocking || collision_matrix[2][5]==TileType::Blocking
+			|| collision_matrix[1][5]==TileType::Ladder || collision_matrix[2][5]==TileType::Ladder ) {
 		if (gravity>0.0f) {
+			//printf ("col 2\n");
 			acceleration_gravity=0.0f;
 			gravity=0.0f;
+			y=(y/TILE_HEIGHT)*TILE_HEIGHT;
 			if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		}
 	}
 	if (collision_matrix[1][4]==TileType::Blocking || collision_matrix[2][4]==TileType::Blocking) {
+		//printf ("col 1\n");
+		while (world.getType(ppl7::grafix::Point(x,y-1))==TileType::Blocking) {
+			y--;
+		}
+		velocity_move.x=0;
+		velocity_move.y=0;
 		acceleration_gravity=0.0f;
 		gravity=0.0f;
-		y--;
 	}
+
 	if (player_stands_on_object) {
 		if ((movement==Falling || movement==Jump) && gravity>0.0f) {
 			stand();
@@ -501,7 +541,7 @@ Player::PlayerMovement Player::getMovement() const
 
 void Player::updatePhysics(const TileTypePlane &world)
 {
-	if (movement==Jump) return;
+	if (movement==Jump || movement==Slide) return;
 	bool match=false;
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
@@ -536,6 +576,26 @@ void Player::updatePhysics(const TileTypePlane &world)
 		if (gravity<-8.0f) gravity=-8.0f;
 
 	}
+	if (collision_at_pivoty[1]==TileType::SteepRampLeft && movement!=Slide) {
+		// Start Slide
+		velocity_move.x=-((float)TILE_WIDTH/4.0f);
+		velocity_move.y=((float)TILE_HEIGHT/4.0f);
+		gravity=0.0f;
+		acceleration_gravity=0.0f;
+		movement=Slide;
+		orientation=Left;
+		animation.start(slide_left,sizeof(slide_left)/sizeof(int),false,86);
+	} else if (collision_at_pivoty[1]==TileType::SteepRampRight && movement!=Slide) {
+		// Start Slide
+		velocity_move.x=((float)TILE_WIDTH/4.0f);
+		velocity_move.y=((float)TILE_HEIGHT/4.0f);
+		gravity=0.0f;
+		acceleration_gravity=0.0f;
+		movement=Slide;
+		orientation=Right;
+		animation.start(slide_right,sizeof(slide_right)/sizeof(int),false,82);
+	}
+
 	/*
 	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f\n",
 			gravity, acceleration_gravity, acceleration_airstream);
