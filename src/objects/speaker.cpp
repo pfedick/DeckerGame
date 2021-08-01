@@ -133,6 +133,7 @@ SpeakerDialog::SpeakerDialog(Speaker *object)
 	addChild(new ppl7::tk::Label(0,80,120,30,"max_distance: "));
 
 	sample_name=new Decker::ui::ComboBox(120,0,360,30);
+	sample_name->add("no sound", ppl7::ToString("%d",AudioClip::none));
 	sample_name->add("Birds 1", ppl7::ToString("%d",AudioClip::birds1));
 	sample_name->add("Electric", ppl7::ToString("%d",AudioClip::electric));
 	sample_name->add("Vent 1", ppl7::ToString("%d",AudioClip::vent1));
