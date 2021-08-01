@@ -427,8 +427,10 @@ private:
 	int flame_sprite1, flame_sprite2;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
+	AudioInstance *audio;
 public:
 	Floater(Type::ObjectType type);
+	~Floater();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);

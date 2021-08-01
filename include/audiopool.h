@@ -37,6 +37,7 @@ public:
 		arrow_swoosh,
 		fall,
 		break1,
+		thruster,
 
 		// this must always be the last entry!
 		maxClips

@@ -17,13 +17,33 @@ Floater::Floater(Type::ObjectType type)
 	state=0;
 	flame_sprite1=152;
 	flame_sprite2=152;
+	audio=NULL;
 }
+
+Floater::~Floater()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+}
+
 
 void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 {
+	AudioPool &pool=getAudioPool();
+	if (!audio) {
+		audio=pool.getInstance(AudioClip::thruster);
+		audio->setVolume(0.3f);
+		audio->setPositional(p, 1800);
+		audio->setLoop(true);
+	}
+	audio->setPositional(p, 1800);
 	if (direction==0) {
 		if (next_state<time && (state==0 || state==2)) {
 			state++;
+			pool.playInstance(audio);
 		} else if (state==1) {
 			velocity.x=4;
 			velocity.y=0;
@@ -34,6 +54,7 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 				velocity.setPoint(0,0);
 				state=2;
 				next_state=time+5.0f;
+				pool.stopInstace(audio);
 			}
 			if (time>next_animation) {
 				flame_sprite1=ppl7::rand(152,161);
@@ -48,6 +69,7 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 			if (t1==TileType::Blocking) {
 				velocity.setPoint(0,0);
 				state=0;
+				pool.stopInstace(audio);
 				next_state=time+5.0f;
 			}
 			if (time>next_animation) {

@@ -89,5 +89,6 @@ void AudioPool::load()
 	sample[AudioClip::arrow_swoosh].load("res/audio/arrow-swoosh.mp3");
 	sample[AudioClip::fall].load("res/audio/fall.wav");
 	sample[AudioClip::break1].load("res/audio/break1.wav");
+	sample[AudioClip::thruster].load("res/audio/thruster.wav");
 
 }
