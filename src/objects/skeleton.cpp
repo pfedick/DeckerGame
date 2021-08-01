@@ -12,6 +12,8 @@ static int walk_cycle_right[]={10,11,12,13,14,15,16,17};
 static int turn_from_left_to_right[]={22,23,24,25,26};
 static int turn_from_right_to_left[]={18,19,20,21,22};
 static int turn_from_mid_to_left[]={27,20,21,22};
+static int death_animation[]={91,92,93,94,95,96,97,98,99,100};
+
 
 Representation Skeleton::representation()
 {
@@ -58,6 +60,7 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==2 && time>next_state) {
+		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,255);
 		animation.start(turn_from_left_to_right,sizeof(turn_from_left_to_right)/sizeof(int),false,26);
 		state=3;
 	} else if (state==3 && animation.isFinished()) {
@@ -75,16 +78,17 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==5 && time>next_state) {
+		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,255);
 		animation.start(turn_from_right_to_left,sizeof(turn_from_right_to_left)/sizeof(int),false,22);
 		state=0;
 	} else if (state==6) {
-		velocity++;
-		p.x-=velocity;
-		p.y-=velocity;
-		if (p.x<0 || p.y<0) {
-			enabled=false;
-			state=0;
+		if (animation.isFinished()) {
+			state=7;
+			next_state=time+5.0f;
 		}
+	} else if (state==7 && time>next_state) {
+		enabled=false;
+		state=8;
 	}
 }
 
@@ -93,13 +97,13 @@ void Skeleton::handleCollision(Player *player, const Collision &collision)
 	//Player::PlayerMovement movement=player->getMovement();
 	//if (collision.onFoot()==true && (movement==Player::Jump || movement==Player::Falling)) {
 	if (collision.onFoot()) {
+		animation.start(death_animation,sizeof(death_animation)/sizeof(int),false,100);
 		state=6;
-		velocity=1;
 		collisionDetection=false;
 		//enabled=false;
 		player->addPoints(100);
 		AudioPool &audio=getAudioPool();
-		audio.playOnce(AudioClip::impact);
+		audio.playOnce(AudioClip::skeleton_death);
 
 	} else {
 		player->dropHealth(4);
