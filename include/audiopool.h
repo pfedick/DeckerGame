@@ -35,6 +35,8 @@ public:
 		crystal,
 		birds1,
 		arrow_swoosh,
+		fall,
+		break1,
 
 		// this must always be the last entry!
 		maxClips

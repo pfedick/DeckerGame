@@ -43,7 +43,9 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 		}
 	}
 	if (state==0 && next_state<time) {
-		getAudioPool().playOnce(AudioClip::threespeers_activation,p,1600,1.0f);
+		getAudioPool().playOnce(AudioClip::threespeers_activation,p,1600,0.5f);
+		getAudioPool().playOnce(AudioClip::arrow_swoosh,p,1600,1.0f);
+		getAudioPool().playOnce(AudioClip::break1,p,1600,0.5f);
 		next_state=time+ppl7::rand(2,5);
 		animation.start(trap_activation,sizeof(trap_activation)/sizeof(int),false,22);
 		sprite_no=animation.getFrame();
