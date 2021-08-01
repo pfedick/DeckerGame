@@ -33,6 +33,15 @@ void AudioPool::playOnce(AudioClip::Id id, int volume)
 	audio->play(instance);
 }
 
+void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance, int volume)
+{
+	AudioInstance *instance=new AudioInstance(sample[id]);
+	instance->setVolume(volume,volume);
+	instance->setAutoDelete(true);
+	instance->setPositional(p, max_distance);
+	audio->play(instance);
+}
+
 void AudioPool::load()
 {
 	song[0].open("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
@@ -44,5 +53,21 @@ void AudioPool::load()
 	sample[AudioClip::impact].load("res/audio/221626__ansel__body-impact.mp3");
 	sample[AudioClip::electric].load("res/audio/65232__carbilicon__electr_stereo.mp3");
 	sample[AudioClip::crash].load("res/audio/95078__sandyrb__the-crash.mp3");
+	sample[AudioClip::skeleton_death].load("res/audio/skeleton_break.wav");
+	sample[AudioClip::skeleton_turn].load("res/audio/skeleton_turn.wav");
+	sample[AudioClip::threespeers_activation].load("res/audio/threespeers.mp3");
+	sample[AudioClip::stone_drag_long].load("res/audio/stone_drag_long.mp3");
+	sample[AudioClip::stone_drag_short].load("res/audio/stone_drag_short.mp3");
+	sample[AudioClip::trap1].load("res/audio/trap1.wav");
+	sample[AudioClip::trap2].load("res/audio/trap2.wav");
+	sample[AudioClip::vent1].load("res/audio/vent1.mp3");
+	sample[AudioClip::vent2].load("res/audio/vent2.mp3");
+	sample[AudioClip::wind1].load("res/audio/wind1.mp3");
+	sample[AudioClip::fire1].load("res/audio/fire1.mp3");
+	sample[AudioClip::fire2].load("res/audio/fire2.mp3");
+	sample[AudioClip::light_switch1].load("res/audio/light_switch_1.wav");
+	sample[AudioClip::crystal].load("res/audio/crystal.wav");
+	sample[AudioClip::birds1].load("res/audio/birds.mp3");
+	sample[AudioClip::arrow_swoosh].load("res/audio/arrow-swoosh.mp3");
 
 }

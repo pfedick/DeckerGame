@@ -535,6 +535,7 @@ public:
 	void setSpriteModeToDraw();
 
 	SDL_Renderer *getSDLRenderer();
+	ppl7::grafix::Point getViewPos() const;
 
 	void save();
 	void load();

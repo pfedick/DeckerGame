@@ -9,15 +9,23 @@
 static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
 
 static ppl7::tk::Window *GameWindow=NULL;
+static Game *GameInstance=NULL;
+
 
 ppl7::tk::Window *GetGameWindow()
 {
 	return GameWindow;
 }
 
+ppl7::grafix::Point GetViewPos()
+{
+	return GameInstance->getViewPos();
+}
+
 Game::Game()
 {
 	GameWindow=this;
+	GameInstance=this;
 	tex_level_grid=NULL;
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
@@ -351,6 +359,14 @@ void Game::updateWorldCoords()
 	WorldCoords.y=player->y-my;
 	if (WorldCoords.x<0) WorldCoords.x=0;
 	if (WorldCoords.y<0) WorldCoords.y=0;
+}
+
+ppl7::grafix::Point Game::getViewPos() const
+{
+	ppl7::grafix::Point p=WorldCoords;
+	p.x+=viewport.width()/2;
+	p.y+=viewport.height()/2;
+	return p;
 }
 
 void Game::run()

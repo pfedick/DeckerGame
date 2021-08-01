@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include <ppl7.h>
+#include <ppl7-grafix.h>
 #include <ppl7-audio.h>
 
 #include "audio.h"
@@ -18,8 +19,25 @@ public:
 		impact,
 		electric,
 		crash,
+		skeleton_death,
+		skeleton_turn,
+		threespeers_activation,
+		stone_drag_long,
+		stone_drag_short,
+		trap1,
+		trap2,
+		vent1,
+		vent2,
+		wind1,
+		fire1,
+		fire2,
+		light_switch1,
+		crystal,
+		birds1,
+		arrow_swoosh,
 
-		maxClips,
+		// this must always be the last entry!
+		maxClips
 	};
 };
 
@@ -36,6 +54,7 @@ public:
 	void load();
 	void setAudioSystem(AudioSystem *audio);
 	void playOnce(AudioClip::Id id, int volume=192);
+	void playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance=1600, int volume=192);
 
 };
 

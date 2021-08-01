@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include <ppl7.h>
+#include <ppl7-grafix.h>
 #include <ppl7-audio.h>
 #include <SDL.h>
 #include <list>
@@ -75,7 +76,10 @@ private:
 	const AudioSample *sample;
 	size_t position;
 	int volume_left, volume_right;
+	int max_distance;
 	bool loop;
+	bool positional;
+	ppl7::grafix::Point p;
 
 public:
 	AudioInstance();
@@ -84,6 +88,7 @@ public:
 	void rewind();
 	void setVolume(int left, int right);
 	void setLoop(bool loop);
+	void setPositional(const ppl7::grafix::Point &p, int max_distance=1600);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 

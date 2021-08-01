@@ -101,7 +101,7 @@ void AudioSystem::init(const ppl7::String &device)
 	desired.freq=44100;
 	desired.format=AUDIO_S16LSB;
 	desired.channels=2;
-	desired.samples=4096;
+	desired.samples=1024;
 	desired.callback=AudioSystem_AudioCallback;
 	desired.userdata=this;
 	mixbuffer=(ppl7::STEREOSAMPLE32*)malloc(desired.samples*desired.channels*sizeof(ppl7::STEREOSAMPLE32));
