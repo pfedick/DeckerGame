@@ -57,6 +57,19 @@ void ComboBox::setCurrentIndex(size_t index)
 	}
 }
 
+void ComboBox::setCurrentIdentifier(const ppl7::String &identifier)
+{
+	std::list<ComboBoxItem>::iterator it;
+	for (it=items.begin();it!=items.end();++it) {
+		if ((*it).identifier==identifier) {
+			myCurrentIndex=(*it).index;
+			myCurrentText=(*it).text;
+			myCurrentIdentifier=(*it).identifier;
+			needsRedraw();
+		}
+	}
+}
+
 size_t ComboBox::currentIndex() const
 {
 	return myCurrentIndex;

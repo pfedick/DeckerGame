@@ -182,9 +182,20 @@ public:
 class Speaker : public Object
 {
 private:
+	AudioInstance *audio;
 public:
+	int sample_id;
+	int max_distance;
+	float volume;
+
 	Speaker();
+	~Speaker();
 	static Representation representation();
+	void setSample(int id, float volume, int max_distance=1600);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
 };
 
 

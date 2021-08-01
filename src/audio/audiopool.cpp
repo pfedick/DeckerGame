@@ -55,6 +55,11 @@ void AudioPool::playInstance(AudioInstance *instance)
 	audio->play(instance);
 }
 
+void AudioPool::stopInstace(AudioInstance *instance)
+{
+	audio->stop(instance);
+}
+
 void AudioPool::load()
 {
 	song[0].open("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");

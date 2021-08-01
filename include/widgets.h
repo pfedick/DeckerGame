@@ -140,6 +140,7 @@ public:
 	~ComboBox();
 
 	void setCurrentText(const ppl7::String &text);
+	void setCurrentIdentifier(const ppl7::String &identifier);
 	ppl7::String currentText() const;
 	ppl7::String currentIdentifier() const;
 

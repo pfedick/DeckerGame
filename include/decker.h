@@ -450,6 +450,8 @@ private:
 	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
 	void loadGrafix();
+	AudioSystem audiosystem;
+	AudioPool audiopool;
 	Resources resources;
 	Level level;
 	SDL_Texture* tex_level_grid;
@@ -509,8 +511,6 @@ private:
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object *selected_object;
 
-	AudioSystem audiosystem;
-	AudioPool audiopool;
 
 
 public:
