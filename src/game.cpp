@@ -383,6 +383,11 @@ void Game::run()
 			//playing_song->setVolume(0.5f);
 			audiosystem.play(playing_song);
 		}
+		if (mainmenue->soundTrackEnabled()) {
+			playing_song->setVolume(0.1f);
+		} else {
+			playing_song->setVolume(0.0f);
+		}
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection!=NULL);

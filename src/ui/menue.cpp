@@ -84,6 +84,8 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 	*/
 
+	soundtrack_checkbox=new CheckBox(width-420,0,140,s.height,"play soundtrack", true);
+	this->addChild(soundtrack_checkbox);
 
 	world_follows_player_checkbox=new CheckBox(width-280,0,180,s.height,"World follows player", true);
 	this->addChild(world_follows_player_checkbox);
@@ -145,6 +147,14 @@ bool MainMenue::worldFollowsPlayer() const
 	if (world_follows_player_checkbox) return world_follows_player_checkbox->checked();
 	return true;
 }
+
+
+bool MainMenue::soundTrackEnabled() const
+{
+	if (soundtrack_checkbox) return soundtrack_checkbox->checked();
+	return true;
+}
+
 
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue *menue)

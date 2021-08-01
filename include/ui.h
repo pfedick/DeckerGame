@@ -98,6 +98,7 @@ private:
 	ComboBox *active_plane_combobox;
 
 	CheckBox *world_follows_player_checkbox;
+	CheckBox *soundtrack_checkbox;
 	VisibilitySubMenu *visibility;
 	Game *game;
 
@@ -110,6 +111,7 @@ public:
 	void setCurrentPlane(int index);
 
 	bool worldFollowsPlayer() const;
+	bool soundTrackEnabled() const;
 	bool visibility_plane_player;
 	bool visibility_plane_front;
 	bool visibility_plane_back;
@@ -121,6 +123,8 @@ public:
 	bool visibility_grid;
 	bool visibility_tiletypes;
 	bool visibility_collision;
+
+
 
 };
 
