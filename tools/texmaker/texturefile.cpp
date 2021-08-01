@@ -85,7 +85,9 @@ int TextureFile::AddFile(const ppl7::String &filename, int id, int pivotx, int p
 	}
 	if (empty) {
 		printf ("Grafik hat keinen Inhalt!\n");
-		return 1;
+		r.setRect(0,0,0,0);
+		pivotx=0;
+		return AddSurface(surface,&r,id,0,0);
 	}
 	r.x2++;
 	r.y2++;
@@ -99,8 +101,7 @@ int TextureFile::AddFile(const ppl7::String &filename, int id, int pivotx, int p
 	printf ("Dimensions: (%i/%i)-(%i/%i) = %i x %i, Pivot: %d/%d\n",
 			r.left(),r.top(),r.right(),r.bottom(),width,height,
 			pivotx, pivoty);
-	int ret=AddSurface(surface,&r,id,pivotx,pivoty);
-	return ret;
+	return AddSurface(surface,&r,id,pivotx,pivoty);
 }
 
 void TextureFile::detectPivotBricks(const ppl7::grafix::Drawable &surface, int &px, int &py)
