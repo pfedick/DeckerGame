@@ -128,8 +128,14 @@ The following Tools/Libraries are required:
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
         libpng-dev libmpg123-dev
         
-#### Windows 10 with mingw64
-TODO
+#### Windows 10 with mingw64/msys
+
+For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
+
+    pacman -S git make mingw-w64-x86_64-gcc mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv \
+         mingw-w64-x86_64-bzip2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-mpg123 \
+         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng
+
 
 ### Checkout and compile
 
