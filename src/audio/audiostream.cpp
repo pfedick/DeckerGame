@@ -4,8 +4,7 @@
 AudioStream::AudioStream()
 {
 	decoder=NULL;
-	volume_left=255;
-	volume_right=255;
+	volume=1.0f;
 	buffersize=0;
 	prebuffer=NULL;
 }
@@ -13,8 +12,7 @@ AudioStream::AudioStream()
 AudioStream::AudioStream(const ppl7::String &filename)
 {
 	decoder=NULL;
-	volume_left=255;
-	volume_right=255;
+	volume=1.0f;
 	buffersize=0;
 	prebuffer=NULL;
 	open(filename);
@@ -50,12 +48,11 @@ void AudioStream::rewind()
 	if (decoder) decoder->seekSample(0);
 }
 
-void AudioStream::setVolume(int left, int right)
+void AudioStream::setVolume(float volume)
 {
-	volume_left=left;
-	volume_right=right;
-	if (volume_left<0) volume_left=0;
-	if (volume_right<0) volume_right=0;
+	this->volume=volume;
+	if (this->volume<0) this->volume=0.0f;
+	if (this->volume>1.0) this->volume=1.0f;
 }
 
 size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)
@@ -72,15 +69,15 @@ size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)
 	if (read<num) {
 		memset(prebuffer+read,0,(num-read)*sizeof(ppl7::STEREOSAMPLE16));
 	}
-	if (volume_left==255 && volume_right==255) {
+	if (volume==1.0f) {
 		for (size_t i=0;i<num;i++) {
 			buffer[i].left+=prebuffer[i].left;
 			buffer[i].right+=prebuffer[i].right;
 		}
 	} else {
 		for (size_t i=0;i<num;i++) {
-			buffer[i].left+=prebuffer[i].left*volume_left/255;
-			buffer[i].right+=prebuffer[i].right*volume_right/255;
+			buffer[i].left+=(ppl7::SAMPLE32)((float)prebuffer[i].left*volume);
+			buffer[i].right+=(ppl7::SAMPLE32)((float)prebuffer[i].right*volume);
 		}
 	}
 

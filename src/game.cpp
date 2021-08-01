@@ -373,20 +373,16 @@ void Game::run()
 {
 	SDL_Renderer *renderer=sdl.getRenderer();
 	quitGame=false;
-	/*
-	AudioStream *playing_song=&audiopool.song[ppl7::rand(0,2)];
-	playing_song->setVolume(128, 128);
+	AudioStream *playing_song=&audiopool.song[1];
+	playing_song->setVolume(0.1f);
 	audiosystem.play(playing_song);
-	*/
 	while (!quitGame) {
-		/*
 		if (!audiosystem.isPlaying(playing_song)) {
 			playing_song=&audiopool.song[ppl7::rand(0,2)];
 			playing_song->rewind();
-			playing_song->setVolume(192, 192);
+			//playing_song->setVolume(0.5f);
 			audiosystem.play(playing_song);
 		}
-		*/
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection!=NULL);

@@ -41,7 +41,7 @@ void AudioInstance::setVolume(float volume)
 {
 	this->volume=volume;
 	if (this->volume<0) this->volume=0.0f;
-	if (this->volume>32768) this->volume=32768.0f;
+	if (this->volume>1.0) this->volume=1.0f;
 }
 
 void AudioInstance::setLoop(bool loop)

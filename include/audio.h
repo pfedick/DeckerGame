@@ -43,7 +43,7 @@ class AudioStream : public Audio
 private:
 	ppl7::File ff;
 	ppl7::AudioDecoder *decoder;
-	int volume_left, volume_right;
+	float volume;
 	ppl7::STEREOSAMPLE16 *prebuffer;
 	size_t buffersize;
 public:
@@ -52,7 +52,7 @@ public:
 	virtual ~AudioStream();
 	void open(const ppl7::String &filename);
 	void rewind();
-	void setVolume(int left, int right);
+	void setVolume(float volume);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 
