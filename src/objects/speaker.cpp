@@ -181,7 +181,7 @@ void SpeakerDialog::textChangedEvent(ppl7::tk::Event *event, const ppl7::String 
 			speaker->volume=volume;
 
 	} else 	if (event->widget()==max_distance) {
-		int max_distance=text.toFloat();
+		int max_distance=text.toInt();
 		if (max_distance>0 && max_distance<65535)
 			speaker->max_distance=max_distance;
 
