@@ -3,6 +3,7 @@
 #include "objects.h"
 #include "player.h"
 #include "decker.h"
+#include "audiopool.h"
 
 namespace Decker::Objects {
 
@@ -27,6 +28,16 @@ LaserBarrier::LaserBarrier(Type::ObjectType type)
 	state=ppl7::rand(0,1);
 	pixelExactCollision=false;
 	flicker=0;
+	audio=NULL;
+}
+
+LaserBarrier::~LaserBarrier()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 void LaserBarrier::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const
@@ -65,6 +76,18 @@ void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 	flicker++;
 	if (next_state<time) {
 		if (state==0) {
+			AudioPool &pool=getAudioPool();
+			if (!audio) {
+				audio=pool.getInstance(AudioClip::electric);
+				audio->setVolume(0.05f);
+				audio->setPositional(p, 1600);
+				audio->setLoop(true);
+			}
+			if (audio) {
+				audio->setPositional(p, 1600);
+				pool.playInstance(audio);
+			}
+
 			state=1;
 			//next_state=time+(double)ppl7::rand(4000,8000)/1000.0f;
 			next_state=time+1.0f;
@@ -108,6 +131,9 @@ void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 			}
 		} else {
 			state=0;
+			if (audio) {
+				getAudioPool().stopInstace(audio);
+			}
 			//next_state=time+(double)ppl7::rand(2000,4000)/1000.f;
 			next_state=time+1.0f;
 			collisionDetection=false;

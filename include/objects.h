@@ -305,8 +305,10 @@ private:
 	double next_state;
 	int state;
 	int flicker;
+	AudioInstance *audio;
 public:
 	LaserBarrier(Type::ObjectType type);
+	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
