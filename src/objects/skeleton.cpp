@@ -60,7 +60,7 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==2 && time>next_state) {
-		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,255);
+		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,1.0f);
 		animation.start(turn_from_left_to_right,sizeof(turn_from_left_to_right)/sizeof(int),false,26);
 		state=3;
 	} else if (state==3 && animation.isFinished()) {
@@ -78,7 +78,7 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 			next_state=time+(double)ppl7::rand(1,5);
 		}
 	} else if (state==5 && time>next_state) {
-		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,255);
+		getAudioPool().playOnce(AudioClip::skeleton_turn,p,1600,1.0f);
 		animation.start(turn_from_right_to_left,sizeof(turn_from_right_to_left)/sizeof(int),false,22);
 		state=0;
 	} else if (state==6) {

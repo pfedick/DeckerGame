@@ -25,20 +25,33 @@ void AudioPool::setAudioSystem(AudioSystem *audio)
 	this->audio=audio;
 }
 
-void AudioPool::playOnce(AudioClip::Id id, int volume)
+void AudioPool::playOnce(AudioClip::Id id, float volume)
 {
 	AudioInstance *instance=new AudioInstance(sample[id]);
-	instance->setVolume(volume,volume);
+	instance->setVolume(volume);
 	instance->setAutoDelete(true);
 	audio->play(instance);
 }
 
-void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance, int volume)
+void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance, float volume)
 {
-	AudioInstance *instance=new AudioInstance(sample[id]);
-	instance->setVolume(volume,volume);
-	instance->setAutoDelete(true);
-	instance->setPositional(p, max_distance);
+	if (id<AudioClip::maxClips) {
+		AudioInstance *instance=new AudioInstance(sample[id]);
+		instance->setVolume(volume);
+		instance->setAutoDelete(true);
+		instance->setPositional(p, max_distance);
+		audio->play(instance);
+	}
+}
+
+AudioInstance *AudioPool::getInstance(AudioClip::Id id)
+{
+	if (id<AudioClip::maxClips) return new AudioInstance(sample[id]);
+	return NULL;
+}
+
+void AudioPool::playInstance(AudioInstance *instance)
+{
 	audio->play(instance);
 }
 

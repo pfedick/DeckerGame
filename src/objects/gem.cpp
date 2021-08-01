@@ -54,6 +54,7 @@ CrystalReward::CrystalReward()
 	next_animation=0.0f;
 	collisionDetection=true;
 	points=100;
+	sample_id=AudioClip::crystal;
 }
 
 void CrystalReward::update(double time, TileTypePlane &, Player &)

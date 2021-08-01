@@ -43,7 +43,7 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 		}
 	}
 	if (state==0 && next_state<time) {
-		getAudioPool().playOnce(AudioClip::threespeers_activation,p,1600,200);
+		getAudioPool().playOnce(AudioClip::threespeers_activation,p,1600,1.0f);
 		next_state=time+ppl7::rand(2,5);
 		animation.start(trap_activation,sizeof(trap_activation)/sizeof(int),false,22);
 		sprite_no=animation.getFrame();
@@ -52,7 +52,7 @@ void ThreeSpeers::update(double time, TileTypePlane &, Player &)
 		updateBoundary();
 	}
 	if (state==1 && next_state<time) {
-		getAudioPool().playOnce(AudioClip::stone_drag_short,p,1600,127);
+		getAudioPool().playOnce(AudioClip::stone_drag_short,p,1600,1.0f);
 		next_state=time+ppl7::rand(3,6);
 		animation.start(trap_deactivation,sizeof(trap_deactivation)/sizeof(int),false,18);
 		sprite_no=animation.getFrame();

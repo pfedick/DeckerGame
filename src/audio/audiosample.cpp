@@ -48,15 +48,15 @@ size_t AudioSample::addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32
 	if (position+num>size()) num=size()-position;
 	const ppl7::STEREOSAMPLE16 *samples=(const ppl7::STEREOSAMPLE16 *)this->buffer.ptr();
 	samples+=position;
-	if (vol_left==255 && vol_right==255) {
+	if (vol_left==32768 && vol_right==32768) {
 		for (size_t i=0;i<num;i++) {
 			buffer[i].left+=samples[i].left;
 			buffer[i].right+=samples[i].right;
 		}
 	} else {
 		for (size_t i=0;i<num;i++) {
-			buffer[i].left+=samples[i].left*vol_left/255;
-			buffer[i].right+=samples[i].right*vol_right/255;
+			buffer[i].left+=samples[i].left*vol_left/32768;
+			buffer[i].right+=samples[i].right*vol_right/32768;
 		}
 	}
 

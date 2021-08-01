@@ -53,9 +53,10 @@ public:
 	~AudioPool();
 	void load();
 	void setAudioSystem(AudioSystem *audio);
-	void playOnce(AudioClip::Id id, int volume=192);
-	void playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance=1600, int volume=192);
-
+	AudioInstance *getInstance(AudioClip::Id id);
+	void playOnce(AudioClip::Id id, float volume=1.0f);
+	void playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance=1600, float volume=1.0f);
+	void playInstance(AudioInstance *instance);
 };
 
 AudioPool &getAudioPool();

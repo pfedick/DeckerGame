@@ -202,7 +202,7 @@ void AudioSystem::test()
 	AudioInstance effect1(sample1);
 	AudioInstance effect2(sample2);
 	AudioInstance effect3(sample1);
-	effect2.setVolume(127, 127);
+	effect2.setVolume(32768.0f);
 	effect2.setLoop(true);
 	play(&effect1);
 	play(&effect2);

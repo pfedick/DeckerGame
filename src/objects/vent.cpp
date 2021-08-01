@@ -1,6 +1,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "objects.h"
+#include "audiopool.h"
 
 namespace Decker::Objects {
 
@@ -21,6 +22,7 @@ Vent::Vent()
 	collisionDetection=false;
 	sprite_no_representation=0;
 	next_animation=0;
+	audio=NULL;
 }
 
 void Vent::update(double time, TileTypePlane &, Player &)
@@ -32,6 +34,19 @@ void Vent::update(double time, TileTypePlane &, Player &)
 		sprite_no_representation=sprite_no;
 		updateBoundary();
 	}
+	if (!audio) {
+		AudioPool &pool=getAudioPool();
+		audio=pool.getInstance(AudioClip::vent1);
+		if (audio) {
+			audio->setLoop(true);
+			audio->setPositional(p, 1600);
+			audio->setVolume(0.5f);
+			pool.playInstance(audio);
+		}
+	} else {
+		audio->setPositional(p, 1600);
+	}
+
 }
 
 }	// EOF namespace Decker::Objects

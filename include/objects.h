@@ -14,6 +14,8 @@ namespace ppl7::tk {
 	class Widget;
 }
 
+class AudioInstance;
+
 namespace Decker::Objects {
 
 class Type
@@ -139,6 +141,7 @@ class Vent : public Object
 private:
 	double next_animation;
 	AnimationCycle animation;
+	AudioInstance *audio;
 public:
 	Vent();
 	static Representation representation();
