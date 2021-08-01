@@ -20,13 +20,9 @@ between the player, the world and the objects inside it is working. The
 test level is fully playable. The sound engine is finished, too.
 
 ### Things which are ongoing
-- positional sound: objects in the world shot be able to emit sound effects.
-  The loudness and direction (left/right) should depend on the distance to
-  the player.
 - ui for special objects
 
 ### Things I have to do or figure out
-- death animation for objects (player, skeleton, mummy, rat)
 - create interactive objects / enemies:
     - locked door
     - key (used to unlock a locked door)
@@ -80,6 +76,10 @@ There is probably more, which I'm not aware of, yet ;-)
 - how to integrate sound track and sound effects into the game    
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
 - world editor
+- death animation for objects (player, skeleton)
+- positional sound: objects in the world shot be able to emit sound effects.
+  The loudness and direction (left/right) should depend on the distance to
+  the player.
 
 ## How to control the player
 
