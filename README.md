@@ -20,13 +20,15 @@ between the player, the world and the objects inside it is working. The
 test level is fully playable. The sound engine is finished, too.
 
 ### Things which are ongoing
-- ui for special objects
+
+I created a [kanban board](https://github.com/pfedick/DeckerGame/projects/1) on
+github to track my progress.
+
 
 ### Things I have to do or figure out
 - create interactive objects / enemies:
     - locked door
     - key (used to unlock a locked door)
-    - arrows from wall
     - scorpion
     - mushroom (white minifig with big red hat and white dots)
     - huge vent
@@ -71,6 +73,7 @@ There is probably more, which I'm not aware of, yet ;-)
     - dissolving ground
     - floater
     - lasers
+    - arrows from wall
 - how does sound work with SDL?
 - write the audio engine
 - how to integrate sound track and sound effects into the game    
@@ -80,6 +83,7 @@ There is probably more, which I'm not aware of, yet ;-)
 - positional sound: objects in the world shot be able to emit sound effects.
   The loudness and direction (left/right) should depend on the distance to
   the player.
+- ui for special objects  
 
 ## How to control the player
 
