@@ -21,6 +21,9 @@ static int climb_down_cycle[]={101,100,99,98,97,96,95,94,93,92,91};
 static int slide_left[]={83,84,85,86};
 static int slide_right[]={79,80,81,82};
 
+static int death_animation[]={102,103,105,105,105,106,106,105,105,106,106,
+		105,105,106,106,105,104,105,106,105,104,103,104,105,106};
+
 
 
 Player::Player()
@@ -59,9 +62,9 @@ Player::~Player()
 {
 
 }
-static const char* movement_string[10]={"Stand",
+static const char* movement_string[11]={"Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide"};
+		"Jump","Falling", "Slide", "Dead"};
 
 static const char* orientation_string[4]={"Left",
 		"Right", "Front", "Back"};
@@ -168,18 +171,18 @@ void Player::stand()
 
 void Player::addPoints(int points)
 {
+	if (movement==Dead) return;
 	this->points+=points;
 }
 
 void Player::dropHealth(int points)
 {
+	if (movement==Dead) return;
 	health-=points;
-	if (health<0) {
-		lifes--;
-		health=100;
-		x=lastSavePoint.x;
-		y=lastSavePoint.y;
-		// TODO: Player::die
+	if (health<=0 && movement!=Dead) {
+		health=0;
+		movement=Dead;
+		animation.start(death_animation,sizeof(death_animation)/sizeof(int),false,106);
 	}
 }
 
@@ -196,18 +199,30 @@ void Player::setStandingOnObject(Decker::Objects::Object *object)
 void Player::update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
 {
 	this->time=time;
+	if (time>next_animation) {
+		next_animation=time+0.056f;
+		animation.update();
+	}
+	if (movement==Dead) {
+		if (animation.isFinished()) {
+			lifes--;
+			health=100;
+			x=lastSavePoint.x;
+			y=lastSavePoint.y;
+			stand();
+		}
+		return;
+	}
 	updateMovement();
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
+	if (movement==Dead) return;
 	checkCollisionWithWorld(world);
 	updatePhysics(world);
 	x+=velocity_move.x;
 	y+=velocity_move.y+gravity;
 
-	if (time>next_animation) {
-		next_animation=time+0.056f;
-		animation.update();
-	}
+
 	if (movement==Turn) {
 		if (!animation.isFinished()) return;
 		//printf ("debug 2\n");
@@ -216,7 +231,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 		velocity_move.stop();
 		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
 	}
-	if (movement==Slide) {
+	if (movement==Slide || movement==Dead) {
 		return;
 	}
 	//if (time>next_keycheck) {
@@ -339,7 +354,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 
 void Player::updateMovement()
 {
-	if (movement==Slide) return;
+	if (movement==Slide || movement==Dead) return;
 	if (movement==Walk) {
 		if (orientation==Left) {
 			velocity_move.x=-2;
@@ -390,6 +405,7 @@ void Player::updateMovement()
 
 void Player::checkCollisionWithWorld(const TileTypePlane &world)
 {
+	if (movement==Dead) return;
 	int collision_type_count[TileType::Type::MaxType];
 	for (int i=0;i<TileType::Type::MaxType;i++) collision_type_count[i]=0;
 	//TileType::Type t;
@@ -611,7 +627,7 @@ Player::PlayerMovement Player::getMovement() const
 
 void Player::updatePhysics(const TileTypePlane &world)
 {
-	if (movement==Jump || movement==Slide) return;
+	if (movement==Jump || movement==Slide || movement==Dead) return;
 	bool match=false;
 	if (collision_matrix[1][4]==TileType::NonBlocking && collision_matrix[2][4]==TileType::NonBlocking) {
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
@@ -679,6 +695,7 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 	// we try to find existing pixels inside the player boundary
 	// to build a list with points we want to check against the
 	// objects
+	if (movement==Dead) return;
 	std::list<ppl7::grafix::Point> checkpoints;
 	checkpoints.push_back(ppl7::grafix::Point(x,y));
 

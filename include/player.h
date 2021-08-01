@@ -52,7 +52,8 @@ public:
 		ClimbDown,
 		Jump,
 		Falling,
-		Slide
+		Slide,
+		Dead
 	};
 	enum PlayerOrientation {
 		Left,
