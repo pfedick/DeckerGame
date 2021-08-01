@@ -40,7 +40,7 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 		audio->setLoop(true);
 	}
 	audio->setPositional(p, 1800);
-	if (direction==0) {
+	if (direction==0) {		// horizontal
 		if (next_state<time && (state==0 || state==2)) {
 			state++;
 			pool.playInstance(audio);
@@ -50,7 +50,7 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 			p+=velocity;
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x+64, p.y));
-			if (t1==TileType::Blocking) {
+			if (t1==TileType::Blocking || t1==TileType::EnemyBlocker) {
 				velocity.setPoint(0,0);
 				state=2;
 				next_state=time+5.0f;
@@ -66,7 +66,7 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 			p+=velocity;
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x-64, p.y));
-			if (t1==TileType::Blocking) {
+			if (t1==TileType::Blocking || t1==TileType::EnemyBlocker) {
 				velocity.setPoint(0,0);
 				state=0;
 				pool.stopInstace(audio);
@@ -74,6 +74,45 @@ void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 			}
 			if (time>next_animation) {
 				flame_sprite1=ppl7::rand(162,171);
+				next_animation=time+0.06f;
+			}
+		}
+	} else { // vertical
+		if (next_state<time && (state==0 || state==2)) {
+			state++;
+			pool.playInstance(audio);
+		} else if (state==1) {
+			velocity.x=0;
+			velocity.y=4;
+			p+=velocity;
+			updateBoundary();
+			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y+64));
+			if (t1==TileType::Blocking || t1==TileType::EnemyBlocker) {
+				velocity.setPoint(0,0);
+				state=2;
+				next_state=time+5.0f;
+				pool.stopInstace(audio);
+			}
+			if (time>next_animation) {
+				flame_sprite1=ppl7::rand(172,181);
+				flame_sprite2=ppl7::rand(172,181);
+				next_animation=time+0.06f;
+			}
+		} else if (state==3) {
+			velocity.x=0;
+			velocity.y=-4;
+			p+=velocity;
+			updateBoundary();
+			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y-64));
+			if (t1==TileType::Blocking || t1==TileType::EnemyBlocker) {
+				velocity.setPoint(0,0);
+				state=0;
+				pool.stopInstace(audio);
+				next_state=time+5.0f;
+			}
+			if (time>next_animation) {
+				flame_sprite1=ppl7::rand(172,181);
+				flame_sprite2=ppl7::rand(172,181);
 				next_animation=time+0.06f;
 			}
 		}
@@ -91,6 +130,15 @@ void Floater::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) co
 				p.x+coords.x+128+32,
 				p.y+coords.y,
 				flame_sprite1);
+	} else if (direction==1 && (state==1 || state==3)) {
+		texture->draw(renderer,
+				p.x+coords.x-16,
+				p.y+coords.y+112,
+				flame_sprite1);
+		texture->draw(renderer,
+				p.x+coords.x+16,
+				p.y+coords.y+112,
+				flame_sprite2);
 	}
 	Object::draw(renderer, coords);
 }
