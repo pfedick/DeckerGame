@@ -91,6 +91,9 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	this->addChild(world_follows_player_checkbox);
 
 
+	test_line_edit=new ppl7::tk::LineInput(width-600,0,170,s.height,"test");
+	test_line_edit->setEventHandler(this);
+	this->addChild(test_line_edit);
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
@@ -155,7 +158,10 @@ bool MainMenue::soundTrackEnabled() const
 	return true;
 }
 
-
+void MainMenue::textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text)
+{
+	//printf ("MainMenue::textChangedEvent => %s\n",(const char*)text);
+}
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue *menue)
 : ppl7::tk::Frame(x,y,140,290)

@@ -94,7 +94,7 @@ private:
 	ppl7::tk::Button *edit_objects_button;
 	ppl7::tk::Button *show_visibility_submenu_button;
 
-
+	ppl7::tk::LineInput *test_line_edit;
 	ComboBox *active_plane_combobox;
 
 	CheckBox *world_follows_player_checkbox;
@@ -125,7 +125,7 @@ public:
 	bool visibility_collision;
 
 
-
+	virtual void textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text);
 };
 
 

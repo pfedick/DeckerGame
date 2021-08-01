@@ -22,7 +22,7 @@ public:
 	~SpeakerDialog();
 
 	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
-
+	virtual void textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text);
 };
 
 
@@ -41,7 +41,7 @@ Speaker::Speaker()
 	visibleAtPlaytime=false;
 	sprite_no_representation=215;
 	audio=NULL;
-	sample_id=AudioClip::birds1;
+	sample_id=AudioClip::none;
 	volume=1.0f;
 	save_size+=8;
 	max_distance=1600;
@@ -63,6 +63,7 @@ void Speaker::update(double time, TileTypePlane &ttplane, Player &player)
 		setSample(sample_id,volume,max_distance);
 	} else if (audio) {
 		audio->setPositional(p, max_distance);
+		audio->setVolume(volume);
 	}
 }
 
@@ -101,6 +102,7 @@ void Speaker::setSample(int id, float volume, int max_distance)
 		pool.stopInstace(audio);
 		delete audio;
 		audio=NULL;
+		sample_id=0;
 	}
 	if (id>0) {
 		audio=pool.getInstance((AudioClip::Id)id);
@@ -110,6 +112,7 @@ void Speaker::setSample(int id, float volume, int max_distance)
 			audio->setLoop(true);
 			audio->setPositional(p, max_distance);
 			pool.playInstance(audio);
+			sample_id=id;
 		}
 	}
 }
@@ -166,5 +169,23 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event *event, int value)
 		speaker->setSample(id,speaker->volume,speaker->max_distance);
 	}
 }
+
+void SpeakerDialog::textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text)
+{
+	//printf ("SpeakerDialog::textChangedEvent: >>%s<<",(const char*)text);
+	if (event->widget()==volume) {
+		float volume=text.toFloat();
+		//printf ("new volume: %0.3f\n",volume);
+		if (volume>=0.0f && volume<=1.0f)
+			speaker->volume=volume;
+
+	} else 	if (event->widget()==max_distance) {
+		int max_distance=text.toFloat();
+		if (max_distance>0 && max_distance<65535)
+			speaker->max_distance=max_distance;
+
+	}
+}
+
 
 }	// EOF namespace Decker::Objects
