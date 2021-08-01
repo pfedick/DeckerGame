@@ -329,10 +329,26 @@ public:
 class Arrow : public Trap
 {
 private:
+	int state;
+	double next_state;
+	double min_cooldown_state;
+
+	void fire();
 
 public:
+	int direction;	// 0=up, 1=right, 2=down, 3=left
+	int player_activation_distance;
+	float min_cooldown_time;
+	float max_cooldown_time;
+
 	Arrow();
 	static Representation representation();
+	void changeDirection(int new_direction);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+
 };
 
 
