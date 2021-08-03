@@ -37,6 +37,8 @@ public:
 		Up=4,
 		Down=8,
 		Shift=16,
+		JumpLeft=5,
+		JumpRight=6,
 	};
 };
 
@@ -100,6 +102,8 @@ private:
 
 	bool isCollisionLeft() const;
 	bool isCollisionRight() const;
+
+	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
 
 
 public:

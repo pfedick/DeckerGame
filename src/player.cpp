@@ -240,8 +240,12 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 	if (movement==Slide || movement==Dead) {
 		return;
 	}
+	if (movement==Jump || movement==Falling) {
+		handleKeyboardWhileJumpOrFalling(time, world, objects);
+		return;
+	}
 	//if (time>next_keycheck) {
-		//next_keycheck=time+0.1f;
+	//next_keycheck=time+0.1f;
 		const Uint8 *state = SDL_GetKeyboardState(NULL);
 		int keys=getKeyboardMatrix(state);
 		if (keys==KeyboardKeys::Left) {
@@ -268,7 +272,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 				orientation=Right;
 				animation.start(run_cycle_right,sizeof(run_cycle_right)/sizeof(int),true,0);
 			}
-		} else if (keys==KeyboardKeys::Up && movement!=Falling && movement!=Falling && movement!=Jump) {
+		} else if ((keys==KeyboardKeys::Up || keys==(KeyboardKeys::Up|KeyboardKeys::Shift)) && movement!=Falling && movement!=Jump) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
 				if (movement!=ClimbUp) {
 					movement=ClimbUp;
@@ -278,51 +282,29 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			} else {
 				if (movement!=Jump) {
 					movement=Jump;
-					jump_climax=time+0.1f;
-					acceleration_jump=1.5f;
+					jump_climax=time+0.4f;
+					acceleration_jump=0.5f;
 					if (orientation==Front) animation.setStaticFrame(42);
 					else if (orientation==Left) animation.setStaticFrame(40);
 					else if (orientation==Right) animation.setStaticFrame(41);
 					else animation.setStaticFrame(28);
 				}
 			}
-		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Shift) && movement!=Falling && movement!=Falling && movement!=Jump) {
-			if (movement!=Jump) {
-				movement=Jump;
-				jump_climax=time+0.5f;
-				acceleration_jump=0.5f;
-				if (orientation==Front) animation.setStaticFrame(42);
-				else if (orientation==Left) animation.setStaticFrame(40);
-				else if (orientation==Right) animation.setStaticFrame(41);
-				else animation.setStaticFrame(28);
-			}
-		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left) && movement!=Falling && movement!=Jump) {
+		} else if ((keys&KeyboardKeys::JumpLeft)==KeyboardKeys::JumpLeft) {
 			movement=Jump;
 			orientation=Left;
-			jump_climax=time+0.3f;
+			jump_climax=time+0.4f;
 			acceleration_jump=0.5f;
 			velocity_move.x=-2;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
 			animation.setStaticFrame(38);
-		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Right) && movement!=Falling && movement!=Jump) {
+		} else if ((keys&KeyboardKeys::JumpRight)==KeyboardKeys::JumpRight) {
 			movement=Jump;
 			orientation=Right;
-			jump_climax=time+0.3f;
+			jump_climax=time+0.4f;
 			acceleration_jump=0.5f;
 			velocity_move.x=2;
-			animation.setStaticFrame(39);
-		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Left|KeyboardKeys::Shift) && movement!=Falling && movement!=Jump) {
-			movement=Jump;
-			orientation=Left;
-			jump_climax=time+0.5f;
-			acceleration_jump=0.5f;
-			velocity_move.x=-6;
-			animation.setStaticFrame(38);
-		} else if (keys==(KeyboardKeys::Up|KeyboardKeys::Right|KeyboardKeys::Shift) && movement!=Falling && movement!=Jump) {
-			movement=Jump;
-			orientation=Right;
-			jump_climax=time+0.5f;
-			acceleration_jump=0.5f;
-			velocity_move.x=6;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=6;
 			animation.setStaticFrame(39);
 		} else if (keys==KeyboardKeys::Down) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder
@@ -356,6 +338,23 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			}
 		}
 	//}
+}
+
+void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
+{
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	int keys=getKeyboardMatrix(state);
+	if ((keys&KeyboardKeys::Left) && velocity_move.x==0) {
+		velocity_move.x=-2;
+		if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
+		orientation=Left;
+		animation.setStaticFrame(38);
+	} else if ((keys&KeyboardKeys::Right) && velocity_move.x==0) {
+		velocity_move.x=2;
+		if (keys&KeyboardKeys::Shift) velocity_move.x=6;
+		orientation=Right;
+		animation.setStaticFrame(39);
+	}
 }
 
 void Player::updateMovement()
@@ -464,12 +463,14 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			if (y<ty) y=ty;
 		}
 		//y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[0]==TileType::Plate2h) {
 		int th=TILE_HEIGHT/3;
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
 		printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
 		//y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 
 	} else if (collision_at_pivoty[1]==TileType::Plate1h) {
@@ -482,6 +483,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			y-=3;
 			if (y<ty) y=ty;
 		}
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[0]==TileType::Plate1h) {
 		int th=TILE_HEIGHT/3;
@@ -493,6 +495,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 			y-=3;
 			if (y<ty) y=ty;
 		}
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[1]==TileType::ShallowRampLeftUpper) {
 		int tx=(int)x%TILE_WIDTH;
@@ -500,6 +503,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(th*tx/TILE_WIDTH);
 		//printf ("ShallowRampLeftUpper y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[1]==TileType::ShallowRampLeftLower) {
 		int tx=(int)x%TILE_WIDTH;
@@ -507,6 +511,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH);
 		//printf ("ShallowRampLeftLower 1, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[0]==TileType::ShallowRampLeftLower) {
 		int tx=(int)x%TILE_WIDTH;
@@ -514,6 +519,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH)-TILE_HEIGHT;
 		//printf ("ShallowRampLeftLower 2, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[1]==TileType::ShallowRampRightUpper) {
 		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
@@ -521,6 +527,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(th*tx/TILE_WIDTH);
 		//printf ("ShallowRampLeftUpper y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[1]==TileType::ShallowRampRightLower) {
 		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
@@ -528,6 +535,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH);
 		//printf ("ShallowRampLeftLower 1, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	} else if (collision_at_pivoty[0]==TileType::ShallowRampRightLower) {
 		int tx=TILE_WIDTH-(int)x%TILE_WIDTH;
@@ -535,6 +543,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+TILE_HEIGHT-(th*tx/TILE_WIDTH)-TILE_HEIGHT;
 		//printf ("ShallowRampLeftLower 2, y=%d, ty=%d, tx=%d\n", (int)y, ty, tx);
 		y=ty;
+		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
 	}
 
