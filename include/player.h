@@ -64,6 +64,11 @@ public:
 		Front,
 		Back
 	};
+
+	enum HealthDropReason {
+		Unknown,
+		FallingDeep
+	};
 private:
 	Velocity velocity_move, acceleration;
 	float gravity, acceleration_gravity;
@@ -77,6 +82,7 @@ private:
 	double idle_timeout;
 	double jump_climax;
 	double time;
+	double fallstart;
 	AnimationCycle animation;
 
 
@@ -104,6 +110,7 @@ private:
 	bool isCollisionRight() const;
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
+	void detectFallingDamage(double time);
 
 public:
 	float x,y;
@@ -113,7 +120,7 @@ public:
 	Player();
 	~Player();
 	void addPoints(int points);
-	void dropHealth(int points);
+	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation &repr);
 	void setSavePoint(const ppl7::grafix::Point &p);
 	void setSpriteResource(const SpriteTexture &resource);

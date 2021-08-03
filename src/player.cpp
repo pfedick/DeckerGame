@@ -23,6 +23,9 @@ static int slide_right[]={79,80,81,82};
 
 static int death_animation[]={102,103,105,105,105,106,106,105,105,106,106,
 		105,105,106,106,105,104,105,106,105,104,103,104,105,106};
+static int death_by_falling[]={89,89,106,106,89,89,106,106,89,106,89,106,89,89,
+		106,106,89};
+
 
 
 
@@ -56,6 +59,7 @@ Player::Player()
 	health=100;
 	lifes=3;
 	player_stands_on_object=NULL;
+	fallstart=0.0f;
 }
 
 Player::~Player()
@@ -175,14 +179,18 @@ void Player::addPoints(int points)
 	this->points+=points;
 }
 
-void Player::dropHealth(int points)
+void Player::dropHealth(int points, HealthDropReason reason)
 {
 	if (movement==Dead) return;
 	health-=points;
 	if (health<=0 && movement!=Dead) {
 		health=0;
 		movement=Dead;
-		animation.start(death_animation,sizeof(death_animation)/sizeof(int),false,106);
+		// we can play different animations for different reasons
+		if (reason==FallingDeep)
+			animation.start(death_by_falling,sizeof(death_by_falling)/sizeof(int),false,106);
+		else
+			animation.start(death_animation,sizeof(death_animation)/sizeof(int),false,106);
 	}
 }
 
@@ -219,6 +227,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 		}
 		return;
 	}
+	detectFallingDamage(time);
 	updateMovement();
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
@@ -340,6 +349,25 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 	//}
 }
 
+void Player::detectFallingDamage(double time)
+{
+	if (movement!=Falling && fallstart>0.0f) {
+		double falltime=time-fallstart;
+		//printf ("Falling ended at %0.3f, falltime: %0.3f\n", time, falltime);
+		if (falltime>1.1f) dropHealth(100, HealthDropReason::FallingDeep);
+		else if (falltime>1.0f) dropHealth(80, HealthDropReason::FallingDeep);
+		else if (falltime>0.9f) dropHealth(50, HealthDropReason::FallingDeep);
+		else if (falltime>0.8f) dropHealth(20, HealthDropReason::FallingDeep);
+		fallstart=0.0f;
+	} else if (movement==Falling && fallstart==0.0f && gravity>15.0f) {
+		//printf ("we start to fall at %0.3f\n",time);
+		fallstart=time;
+	} else if (movement==Falling && fallstart>0.0f && time-fallstart>10.0f) {
+		// the player probably falls through the level
+		dropHealth(100);
+	}
+}
+
 void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -406,6 +434,7 @@ void Player::updateMovement()
 		velocity_move.y=0;
 		velocity_move.x=0;
 	}
+	if(gravity>10) movement=Falling;
 }
 
 static TileType::Type filterRelevantTileTypes(TileType::Type t)
@@ -655,8 +684,8 @@ void Player::updatePhysics(const TileTypePlane &world)
 		if (collision_matrix[1][5]==TileType::NonBlocking && collision_matrix[2][5]==TileType::NonBlocking) {
 			if (!player_stands_on_object) {
 				//printf ("gravity\n");
-				if (acceleration_gravity<10.0f) acceleration_gravity+=0.2f;
-				if (acceleration_gravity>10.0f) acceleration_gravity=10.0f;
+				if (acceleration_gravity<6.0f) acceleration_gravity+=0.05f;
+				if (acceleration_gravity>6.0f) acceleration_gravity=6.0f;
 				match=true;
 			}
 		}
@@ -667,7 +696,7 @@ void Player::updatePhysics(const TileTypePlane &world)
 			if (acceleration_gravity<0.0f) acceleration_gravity=0.0f;
 		}
 		gravity+=acceleration_gravity;
-		if (gravity>10.0f) gravity=10.0f;
+		if (gravity>16.0f) gravity=16.0f;
 	}
 	match=false;
 	if (collision_matrix[1][4]==TileType::AirStream || collision_matrix[2][4]==TileType::AirStream) {
