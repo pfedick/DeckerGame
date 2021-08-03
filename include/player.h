@@ -11,6 +11,7 @@ class TileTypePlane;
 namespace Decker::Objects {
 	class Object;
 	class ObjectSystem;
+	class Representation;
 } // EOF namespace Decker::Objects
 
 class Velocity
@@ -86,6 +87,8 @@ private:
 	int collision_at_pivoty[3];
 	Decker::Objects::Object *player_stands_on_object;
 
+	std::map<int,Decker::Objects::Representation> Inventory;
+
 
 	void turn(PlayerOrientation target);
 	void stand();
@@ -108,6 +111,7 @@ public:
 	~Player();
 	void addPoints(int points);
 	void dropHealth(int points);
+	void addInventory(int object_id, const Decker::Objects::Representation &repr);
 	void setSavePoint(const ppl7::grafix::Point &p);
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);

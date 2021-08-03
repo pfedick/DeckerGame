@@ -199,18 +199,7 @@ public:
 };
 
 
-class Collectable : public Object
-{
-private:
-public:
-	int points;
-	int sample_id;
-	Collectable(Type::ObjectType type);
-	virtual void handleCollision(Player *player, const Collision &collision);
-};
-
-
-class CoinReward : public Collectable
+class CoinReward : public Object
 {
 private:
 	double next_animation;
@@ -221,10 +210,10 @@ public:
 	static Representation representation();
 
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
-class GemReward : public Collectable
+class GemReward : public Object
 {
 private:
 	double next_animation;
@@ -233,9 +222,10 @@ public:
 	GemReward();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
-class CrystalReward : public Collectable
+class CrystalReward : public Object
 {
 private:
 	double next_animation;
@@ -244,17 +234,19 @@ public:
 	CrystalReward();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
-class KeyReward : public Collectable
+class KeyReward : public Object
 {
 private:
 public:
 	KeyReward();
 	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
-class Medikit : public Collectable
+class Medikit : public Object
 {
 private:
 public:
@@ -263,7 +255,7 @@ public:
 	virtual void handleCollision(Player *player, const Collision &collision);
 };
 
-class SavePoint : public Collectable
+class SavePoint : public Object
 {
 private:
 	double next_animation;

@@ -186,6 +186,12 @@ void Player::dropHealth(int points)
 	}
 }
 
+void Player::addInventory(int object_id, const Decker::Objects::Representation &repr)
+{
+	Inventory.insert(std::pair<int,Decker::Objects::Representation>(object_id,repr));
+
+}
+
 void Player::setSavePoint(const ppl7::grafix::Point &p)
 {
 	lastSavePoint=p;
