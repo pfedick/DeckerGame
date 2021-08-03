@@ -15,9 +15,9 @@ It features George Decker, one of the main characters of my Lego(tm) stopmotion 
 ## What's the status of the game?
 The game is in development and I already implemented a lot of the features I
 had in mind, when I started this project. The graphic engine is complete,
-most of the physics is done (it needs a bit fine tuning) and collision detection
-between the player, the world and the objects inside it is working. The
-test level is fully playable. The sound engine is finished, too.
+player-physics is done and collision detection between the player, the world
+and the objects inside it is working. The test level is fully playable. The
+sound engine is finished, too.
 
 ### Things which are ongoing
 
@@ -36,7 +36,6 @@ github to track my progress.
     - Wallenstein + Helena? (from the movie) 
     - some kind of angry bird?
     - side wind
-- refine physics for jumping & falling 
 - compose sound track
 - create sound effects
 - support mono audio files
@@ -84,6 +83,7 @@ There is probably more, which I'm not aware of, yet ;-)
   The loudness and direction (left/right) should depend on the distance to
   the player.
 - ui for special objects  
+- refine physics for jumping & falling
 
 ## How to control the player
 
