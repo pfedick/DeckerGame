@@ -408,6 +408,13 @@ void Player::updateMovement()
 	}
 }
 
+static TileType::Type filterRelevantTileTypes(TileType::Type t)
+{
+	if (t==TileType::EnemyBlocker) return TileType::NonBlocking;
+	return t;
+}
+
+
 void Player::checkCollisionWithWorld(const TileTypePlane &world)
 {
 	if (movement==Dead) return;
@@ -418,21 +425,21 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 		for (int cx=0;cx<4;cx++) {
 			TileType::Type t=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
 					y+(TILE_HEIGHT/2)-(5*TILE_HEIGHT)+(cy*TILE_HEIGHT)));
-			collision_matrix[cx][cy]=t;
+			collision_matrix[cx][cy]=filterRelevantTileTypes(t);
 			collision_type_count[t]+=1;
 		}
 	}
-	collision_at_pivoty[0]=world.getType(ppl7::grafix::Point(x, y-1));
-	collision_at_pivoty[1]=world.getType(ppl7::grafix::Point(x, y));
-	collision_at_pivoty[2]=world.getType(ppl7::grafix::Point(x, y-(TILE_WIDTH/2)));
-	collision_matrix[1][4]=world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1));
-	collision_matrix[2][4]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1));
+	collision_at_pivoty[0]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x, y-1)));
+	collision_at_pivoty[1]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x, y)));
+	collision_at_pivoty[2]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x, y-(TILE_WIDTH/2))));
+	collision_matrix[1][4]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x-(TILE_WIDTH/2), y-1)));
+	collision_matrix[2][4]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2), y-1)));
 	for (int cx=0;cx<4;cx++) {
-		collision_matrix[cx][0]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
-				y-(TILE_HEIGHT*4)));
+		collision_matrix[cx][0]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
+				y-(TILE_HEIGHT*4))));
 
-		collision_matrix[cx][5]=world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
-				y));
+		collision_matrix[cx][5]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x+(TILE_WIDTH/2)-2*TILE_WIDTH+(cx*TILE_WIDTH),
+				y)));
 
 	}
 	if (movement==Slide) {

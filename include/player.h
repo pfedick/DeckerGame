@@ -105,7 +105,6 @@ private:
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
 
-
 public:
 	float x,y;
 	int points, health, lifes;
