@@ -50,7 +50,6 @@ OBJECTS=compile/main.o \
 	compile/resources.o \
 	compile/objectsystem.o \
 	compile/object.o \
-	compile/object_collectable.o \
 	compile/object_gem.o \
 	compile/object_coin.o \
 	compile/object_trap.o \
@@ -195,15 +194,11 @@ compile/object.o: src/objects/object.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object.o -c src/objects/object.cpp $(CFLAGS)	
 
-compile/object_collectable.o: src/objects/collectable.cpp Makefile include/objects.h
-	- @mkdir -p compile 
-	$(CXX) -o compile/object_collectable.o -c src/objects/collectable.cpp $(CFLAGS)	
-
-compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h include/animation.h
+compile/object_gem.o: src/objects/gem.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_gem.o -c src/objects/gem.cpp $(CFLAGS)	
 
-compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h
+compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)	
 
@@ -231,11 +226,11 @@ compile/object_hangingspider.o: src/objects/hangingspider.cpp Makefile include/o
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_hangingspider.o -c src/objects/hangingspider.cpp $(CFLAGS)	
 
-compile/object_key.o: src/objects/key.cpp Makefile include/objects.h
+compile/object_key.o: src/objects/key.cpp Makefile include/objects.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_key.o -c src/objects/key.cpp $(CFLAGS)	
 
-compile/object_door.o: src/objects/door.cpp Makefile include/objects.h
+compile/object_door.o: src/objects/door.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_door.o -c src/objects/door.cpp $(CFLAGS)	
 
@@ -243,15 +238,16 @@ compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h inc
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)	
 
-compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h 
+compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_medikit.o -c src/objects/medikit.cpp $(CFLAGS)	
 
-compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h include/animation.h
+compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_savepoint.o -c src/objects/savepoint.cpp $(CFLAGS)	
 
-compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include/animation.h
+compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include/animation.h \
+	include/player.h include/audiopool.h include/widgets.h include/decker.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)	
 
@@ -271,7 +267,8 @@ compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_breakingground.o -c src/objects/breakingground.cpp $(CFLAGS)	
 
-compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h
+compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h include/audiopool.h \
+	include/player.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_fire.o -c src/objects/fire.cpp $(CFLAGS)	
 
@@ -279,11 +276,13 @@ compile/object_windemitter.o: src/objects/windemitter.cpp Makefile include/objec
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_windemitter.o -c src/objects/windemitter.cpp $(CFLAGS)	
 
-compile/object_vent.o: src/objects/vent.cpp Makefile include/objects.h
+compile/object_vent.o: src/objects/vent.cpp Makefile include/objects.h \
+	include/audiopool.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_vent.o -c src/objects/vent.cpp $(CFLAGS)	
 
-compile/object_speaker.o: src/objects/speaker.cpp Makefile include/objects.h
+compile/object_speaker.o: src/objects/speaker.cpp Makefile include/objects.h \
+	include/audiopool.h include/widgets.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_speaker.o -c src/objects/speaker.cpp $(CFLAGS)	
 

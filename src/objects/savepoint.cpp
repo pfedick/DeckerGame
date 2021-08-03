@@ -17,7 +17,7 @@ Representation SavePoint::representation()
 
 
 SavePoint::SavePoint()
-: Collectable(Type::ObjectType::Savepoint)
+: Object(Type::ObjectType::Savepoint)
 {
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(savepoint_animation,sizeof(savepoint_animation)/sizeof(int),true,0);

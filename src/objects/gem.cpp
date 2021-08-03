@@ -2,6 +2,7 @@
 #include <ppl7-grafix.h>
 #include "objects.h"
 #include "audiopool.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -17,15 +18,13 @@ Representation GemReward::representation()
 }
 
 GemReward::GemReward()
-: Collectable(Type::ObjectType::Diamond)
+: Object(Type::ObjectType::Diamond)
 {
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(diamond_rotate,sizeof(diamond_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=4;
-	points=50;
-	sample_id=AudioClip::coin2;
 }
 
 void GemReward::update(double time, TileTypePlane &, Player &)
@@ -41,20 +40,29 @@ void GemReward::update(double time, TileTypePlane &, Player &)
 	}
 }
 
+void GemReward::handleCollision(Player *player, const Collision &)
+{
+	enabled=false;
+	if (spawned) deleteDefered=true;
+	player->addPoints(50);
+	AudioPool &audio=getAudioPool();
+	audio.playOnce(AudioClip::coin2, 0.5f);
+}
+
+
+
 Representation CrystalReward::representation()
 {
 	return Representation(Spriteset::GenericObjects, 0);
 }
 
 CrystalReward::CrystalReward()
-: Collectable(Type::ObjectType::Crystal)
+: Object(Type::ObjectType::Crystal)
 {
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(crystal_rotate,sizeof(crystal_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
 	collisionDetection=true;
-	points=100;
-	sample_id=AudioClip::crystal;
 }
 
 void CrystalReward::update(double time, TileTypePlane &, Player &)
@@ -69,5 +77,16 @@ void CrystalReward::update(double time, TileTypePlane &, Player &)
 		}
 	}
 }
+
+void CrystalReward::handleCollision(Player *player, const Collision &)
+{
+	enabled=false;
+	if (spawned) deleteDefered=true;
+	player->addPoints(100);
+	AudioPool &audio=getAudioPool();
+	audio.playOnce(AudioClip::crystal, 1.0f);
+}
+
+
 
 }	// EOF namespace Decker::Objects

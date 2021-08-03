@@ -2,6 +2,7 @@
 #include <ppl7-grafix.h>
 #include "objects.h"
 #include "audiopool.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -15,15 +16,13 @@ Representation CoinReward::representation()
 }
 
 CoinReward::CoinReward()
-: Collectable(Type::ObjectType::Coin)
+: Object(Type::ObjectType::Coin)
 {
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(coin_rotate,sizeof(coin_rotate)/sizeof(int),true,0);
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=84;
-	points=10;
-	sample_id=AudioClip::coin1;
 }
 
 void CoinReward::update(double time, TileTypePlane &, Player &)
@@ -38,5 +37,15 @@ void CoinReward::update(double time, TileTypePlane &, Player &)
 		}
 	}
 }
+
+void CoinReward::handleCollision(Player *player, const Collision &)
+{
+	enabled=false;
+	if (spawned) deleteDefered=true;
+	player->addPoints(10);
+	AudioPool &audio=getAudioPool();
+	audio.playOnce(AudioClip::coin1, 0.3f);
+}
+
 
 }	// EOF namespace Decker::Objects

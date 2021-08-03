@@ -2,7 +2,7 @@
 #include <ppl7-grafix.h>
 #include "objects.h"
 #include "player.h"
-#include "decker.h"
+//#include "decker.h"
 
 namespace Decker::Objects {
 

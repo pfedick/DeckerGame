@@ -94,9 +94,8 @@ void Skeleton::update(double time, TileTypePlane &ttplane, Player &player)
 
 void Skeleton::handleCollision(Player *player, const Collision &collision)
 {
-	//Player::PlayerMovement movement=player->getMovement();
-	//if (collision.onFoot()==true && (movement==Player::Jump || movement==Player::Falling)) {
-	if (collision.onFoot()) {
+	Player::PlayerMovement movement=player->getMovement();
+	if (collision.onFoot()==true && (movement==Player::Jump || movement==Player::Falling)) {
 		animation.start(death_animation,sizeof(death_animation)/sizeof(int),false,100);
 		state=6;
 		collisionDetection=false;
