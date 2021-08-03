@@ -160,8 +160,8 @@ void ObjectSystem::drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect
 		const Object *object=it->second;
 		if (object->texture) {
 			object->texture->draw(renderer,
-					object->initial_p.x+coords.x,
-					object->initial_p.y+coords.y,
+					object->p.x+coords.x,
+					object->p.y+coords.y,
 					object->sprite_no);
 		}
 	}
@@ -444,7 +444,7 @@ bool Collision::onFoot() const
 	bool foot=false;
 	bool upper=false;
 	for (it=collision_points.begin();it!=collision_points.end();++it) {
-		if ((*it).y<-40) upper=true;
+		if ((*it).y<-80) upper=true;
 		else foot=true;
 		//printf("    %d:%d\n",(*it).x, (*it).y);
 	}
