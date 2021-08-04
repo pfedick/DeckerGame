@@ -86,6 +86,7 @@ WindParticle::WindParticle()
 	sprite_no_representation=216;
 	sprite_no=216;
 	next_animation=0.0f;
+	spawned=true;
 	animation.startRandom(particle_cycle,sizeof(particle_cycle)/sizeof(int),true,0);
 }
 
