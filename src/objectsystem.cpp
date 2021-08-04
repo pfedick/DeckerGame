@@ -39,6 +39,7 @@ void ObjectSystem::clear()
 		delete object;
 	}
 	nextid=1;
+	next_spawn_id=1000000;
 }
 
 void ObjectSystem::loadSpritesets(SDL &sdl)
@@ -381,6 +382,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 		}
 		p+=save_size;
 	}
+	printf ("nextid=%d\n",nextid);
 }
 
 
