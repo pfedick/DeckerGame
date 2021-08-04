@@ -12,7 +12,7 @@ static int walk_cycle_right[]={10,11,12,13,14,15,16,17};
 static int turn_from_left_to_right[]={22,23,24,25,26};
 static int turn_from_right_to_left[]={18,19,20,21,22};
 static int turn_from_mid_to_left[]={27,20,21,22};
-static int death_animation[]={79,80,81,82,83,84};
+static int death_animation[]={79,80,81,82,83,84,85,86,87,88};
 
 
 Representation Mushroom::representation()
