@@ -15,6 +15,8 @@ LIBS		= $(LIBS_PPL7)  \
 TEXMAKER_LIBS		= pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a  \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
 	@PNG_LIBS@ @ICONV_LIBS@ -lstdc++
+TEXMAKER_CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) @CXXFLAGS@ @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ 	@ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@
+	
 
 
 PROGRAM	= decker
@@ -396,13 +398,13 @@ compile/audio_audiopool.o: src/audio/audiopool.cpp Makefile include/audio.h incl
 # texmaker
 compile/texm_main.o: tools/texmaker/main.cpp Makefile tools/texmaker/texmaker.h
 	- @mkdir -p compile 
-	$(CXX) -o compile/texm_main.o -c tools/texmaker/main.cpp $(CFLAGS)
+	$(CXX) -o compile/texm_main.o -c tools/texmaker/main.cpp $(TEXMAKER_CFLAGS)
 	
 compile/texm_texture.o: tools/texmaker/texture.cpp Makefile tools/texmaker/texmaker.h
 	- @mkdir -p compile 
-	$(CXX) -o compile/texm_texture.o -c tools/texmaker/texture.cpp $(CFLAGS)
+	$(CXX) -o compile/texm_texture.o -c tools/texmaker/texture.cpp $(TEXMAKER_CFLAGS)
 	
 compile/texm_texturefile.o: tools/texmaker/texturefile.cpp Makefile tools/texmaker/texmaker.h
 	- @mkdir -p compile 
-	$(CXX) -o compile/texm_texturefile.o -c tools/texmaker/texturefile.cpp $(CFLAGS)
+	$(CXX) -o compile/texm_texturefile.o -c tools/texmaker/texturefile.cpp $(TEXMAKER_CFLAGS)
 	
