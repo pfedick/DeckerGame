@@ -75,6 +75,7 @@ OBJECTS=compile/main.o \
 	compile/object_vent.o \
 	compile/object_speaker.o \
 	compile/object_touchemitter.o \
+	compile/object_mushroom.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -265,6 +266,10 @@ compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
 compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_skeleton.o -c src/objects/skeleton.cpp $(CFLAGS)	
+
+compile/object_mushroom.o: src/objects/mushroom.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_mushroom.o -c src/objects/mushroom.cpp $(CFLAGS)	
 
 compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
 	- @mkdir -p compile 

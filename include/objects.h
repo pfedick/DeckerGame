@@ -47,7 +47,8 @@ public:
 		Skeleton=104,
 		Mummy=105,
 		LaserBeamHorizontal=106,
-		LaserBeamVertical=107
+		LaserBeamVertical=107,
+		Mushroom=108
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -61,7 +62,8 @@ public:
 		Skeleton=2,
 		Mummy=3,
 		Vent=4,
-		MaxSpritesets=5
+		Mushroom=5,
+		MaxSpritesets
 	};
 };
 
@@ -393,6 +395,20 @@ public:
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 
+};
+
+class Mushroom : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	int velocity=1;
+	int state;
+public:
+	Mushroom();
+	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
 
 

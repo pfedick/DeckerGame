@@ -50,6 +50,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Speaker,"Speaker",29);
 	addObject(Decker::Objects::Type::WindEmitter,"Wind emiter",28);
 	addObject(Decker::Objects::Type::TouchEmitter,"Object emiter",30);
+	addObject(Decker::Objects::Type::Mushroom,"Mushroom",32);
 
 
 	scrollbar->setSize(object_map.size()/2);

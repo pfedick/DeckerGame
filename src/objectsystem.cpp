@@ -63,6 +63,11 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Vent]->enableOutlines(true);
 	spriteset[Spriteset::Vent]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Vent]->load(sdl,"res/vent.tex");
+
+	spriteset[Spriteset::Mushroom]->enableOutlines(true);
+	spriteset[Spriteset::Mushroom]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Mushroom]->load(sdl,"res/mushroom.tex");
+
 }
 
 void ObjectSystem::addObject(Object *object)
@@ -260,6 +265,7 @@ Representation getRepresentation(int object_type)
 	case Type::WindEmitter: return WindEmitter::representation();
 	case Type::Speaker: return Speaker::representation();
 	case Type::TouchEmitter: return TouchEmitter::representation();
+	case Type::Mushroom: return Mushroom::representation();
 
 	default: return Object::representation();
 	}
@@ -315,6 +321,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Vent: return new Vent();
 	case Type::Speaker: return new Speaker();
 	case Type::TouchEmitter: return new TouchEmitter();
+	case Type::Mushroom: return new Mushroom();
 	}
 	return NULL;
 }
