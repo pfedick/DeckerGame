@@ -440,15 +440,12 @@ Object *Collision::getObject() const
 
 bool Collision::onFoot() const
 {
-	std::list<ppl7::grafix::Point>::const_iterator it;
-	bool foot=false;
-	bool upper=false;
-	for (it=collision_points.begin();it!=collision_points.end();++it) {
-		if ((*it).y<-80) upper=true;
-		else foot=true;
-		//printf("    %d:%d\n",(*it).x, (*it).y);
+	int height=bounding_box_object.height();
+	if (height>2*TILE_HEIGHT) height=height*2/3;
+	else height=height/2;
+	if (bounding_box_intersection.y2<=bounding_box_object.y2-height) {
+		return true;
 	}
-	if (foot==true && upper==false) return true;
 	return false;
 }
 

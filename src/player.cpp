@@ -186,6 +186,7 @@ void Player::dropHealth(int points, HealthDropReason reason)
 	if (health<=0 && movement!=Dead) {
 		health=0;
 		movement=Dead;
+		fallstart=0.0f;
 		// we can play different animations for different reasons
 		if (reason==FallingDeep)
 			animation.start(death_by_falling,sizeof(death_by_falling)/sizeof(int),false,106);
@@ -772,10 +773,24 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 	if (!object) return;
 	Decker::Objects::Collision col;
 	col.detect(object,checkpoints, *this);
+	col.bounding_box_player=getBoundingBox();
+	col.bounding_box_object=object->boundary;
+	col.bounding_box_intersection=col.bounding_box_player.intersected(col.bounding_box_object);
+
 	object->handleCollision(this, col);
-	/*
-	printf ("Detected Collision with Object: %s, ID: %d\n",
-			(const char*)object->typeName(), object->id);
-			*/
+
+	//printf ("Detected Collision with Object: %s, ID: %d\n",
+	//		(const char*)object->typeName(), object->id);
+	//const ppl7::grafix::Rect &bbi=col.bounding_box_intersection;
+	//printf ("BoundingBox Player: %d:%d - %d:%d\n", bbp.x1, bbp.y1, bbp.x2, bbp.y2);
+	//printf ("BoundingBox Object: %d:%d - %d:%d\n", bbo.x1, bbo.y1, bbo.x2, bbo.y2);
+	//printf ("Intersection:       %d:%d - %d:%d\n", bbi.x1, bbi.y1, bbi.x2, bbi.y2);
+
+
+}
+
+ppl7::grafix::Rect Player::getBoundingBox() const
+{
+	return sprite_resource->spriteBoundary(animation.getFrame(),1.0f,x,y);
 
 }

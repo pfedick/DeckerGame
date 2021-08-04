@@ -89,7 +89,8 @@ void Mummy::update(double time, TileTypePlane &ttplane, Player &player)
 
 void Mummy::handleCollision(Player *player, const Collision &collision)
 {
-	if (collision.onFoot()) {
+	Player::PlayerMovement movement=player->getMovement();
+	if (collision.onFoot()==true && movement==Player::Falling) {
 		state=6;
 		velocity=1;
 		collisionDetection=false;

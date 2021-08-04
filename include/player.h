@@ -128,6 +128,7 @@ public:
 	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void move(int x, int y);
+	ppl7::grafix::Rect getBoundingBox() const;
 	PlayerMovement getMovement() const;
 	ppl7::String getState() const;
 	void setStandingOnObject(Decker::Objects::Object *object);

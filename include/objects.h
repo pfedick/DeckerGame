@@ -82,6 +82,9 @@ private:
 	Object *object;
 	std::list<ppl7::grafix::Point> collision_points;
 public:
+	ppl7::grafix::Rect bounding_box_object;
+	ppl7::grafix::Rect bounding_box_player;
+	ppl7::grafix::Rect bounding_box_intersection;
 	Collision();
 	Collision(const Collision &other);
 	void detect(Object *object, const std::list<ppl7::grafix::Point> &checkpoints, const Player &player);

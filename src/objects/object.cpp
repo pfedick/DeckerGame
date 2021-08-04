@@ -22,6 +22,10 @@ ppl7::String Type::name(Type::ObjectType type)
 
 	case ObjectType::Rat: return ppl7::String("Rat");
 	case ObjectType::HangingSpider: return ppl7::String("HangingSpider");
+	case ObjectType::Skeleton: return ppl7::String("Skeleton");
+	case ObjectType::Mummy: return ppl7::String("Mummy");
+	case ObjectType::LaserBeamHorizontal: return ppl7::String("LaserBeamHorizontal");
+	case ObjectType::LaserBeamVertical: return ppl7::String("LaserBeamVertical");
 
 	case ObjectType::FloaterHorizontal: return ppl7::String("FloaterHorizontal");
 	case ObjectType::FloaterVertical: return ppl7::String("FloaterVertical");
@@ -31,6 +35,9 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
 	case ObjectType::Vent: return ppl7::String("Vent");
 	case ObjectType::Speaker: return ppl7::String("Speaker");
+	case ObjectType::TouchEmitter: return ppl7::String("TouchEmitter");
+	case ObjectType::Particle: return ppl7::String("Particle");
+	case ObjectType::BreakingGround: return ppl7::String("BreakingGround");
 
 	default: return ppl7::String("unknown object type");
 	}
