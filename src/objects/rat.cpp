@@ -25,7 +25,7 @@ Rat::Rat()
 void Rat::handleCollision(Player *player, const Collision &collision)
 {
 	Player::PlayerMovement movement=player->getMovement();
-	if (collision.onFoot()==true && (movement==Player::Jump || movement==Player::Falling)) {
+	if (collision.onFoot()==true && movement==Player::Falling) {
 		state=0;
 		collisionDetection=false;
 		enabled=false;
