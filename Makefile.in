@@ -139,7 +139,7 @@ sprites:
 	./texmaker -s "lightwave/Render/mummy/*.png" -t res/mummy.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/skeleton/*.png" -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/objects/vent/*.png" -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
-	./texmaker -s "lightwave/Render/enemies/mushroom/*.png" -t res/mushroom.tex -w 1024 -h 1024 -px 32 -py 49 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 512 -h 512 -px 32 -py 49
 	
 fonts:
 	- rm -rf res/*.fnt6
