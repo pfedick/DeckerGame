@@ -40,6 +40,8 @@ public:
 		Speaker=15,
 		Particle=16,
 		TouchEmitter=17,
+		TreasureChest=18,
+		WarpGate=19,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -63,6 +65,7 @@ public:
 		Mummy=3,
 		Vent=4,
 		Mushroom=5,
+		TreasureChest=6,
 		MaxSpritesets
 	};
 };
@@ -237,6 +240,19 @@ private:
 	AnimationCycle animation;
 public:
 	CrystalReward();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+};
+
+class TreasureChest : public Object
+{
+private:
+	double next_animation;
+	int state;
+	AnimationCycle animation;
+public:
+	TreasureChest();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
