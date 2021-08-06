@@ -8,6 +8,7 @@ private:
 	int index;
 	int size;
 	int endframe;
+	int seq_start, seq_end;
 	bool loop;
 	bool finished;
 
@@ -16,6 +17,7 @@ public:
 	void setStaticFrame(int nr);
 	void start(int *cycle_array, int size, bool loop, int endframe);
 	void startRandom(int *cycle_array, int size, bool loop, int endframe);
+	void startSequence(int start, int end, bool loop, int endframe);
 	void update();
 	int getFrame() const;
 	bool isFinished() const;

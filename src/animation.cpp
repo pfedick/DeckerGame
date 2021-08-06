@@ -10,6 +10,8 @@ AnimationCycle::AnimationCycle()
 	loop=false;
 	endframe=0;
 	finished=true;
+	seq_start=0;
+	seq_end=0;
 }
 
 void AnimationCycle::start(int *cycle_array, int size, bool loop, int endframe)
@@ -33,10 +35,24 @@ void AnimationCycle::startRandom(int *cycle_array, int size, bool loop, int endf
 void AnimationCycle::setStaticFrame(int nr)
 {
 	cycle=NULL;
+	seq_start=0;
+	seq_end=0;
 	index=0;
 	loop=false;
 	finished=true;
 	endframe=nr;
+}
+
+void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
+{
+	cycle=NULL;
+	seq_start=start;
+	seq_end=end;
+	index=0;
+	size=seq_end-seq_start+1;
+	this->loop=loop;
+	finished=false;
+	this->endframe=endframe;
 }
 
 void AnimationCycle::update()
@@ -55,7 +71,8 @@ void AnimationCycle::update()
 int AnimationCycle::getFrame() const
 {
 	if(finished) return endframe;
-	return cycle[index];
+	if (cycle) return cycle[index];
+	return seq_start+index;
 }
 
 int AnimationCycle::getIndex() const
