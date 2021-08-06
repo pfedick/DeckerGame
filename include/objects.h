@@ -502,6 +502,7 @@ class ObjectSystem
 private:
 	uint32_t nextid;
 	uint32_t next_spawn_id;
+	int player_start;
 	std::map<uint32_t,Object *> object_list;
 	std::map<uint32_t,Object *> visible_object_map;
 	SpriteTexture *spriteset[Spriteset::MaxSpritesets];
@@ -530,6 +531,7 @@ public:
 	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
 	void deleteObject(int id);
 	ppl7::grafix::Point findPlayerStart() const;
+	ppl7::grafix::Point nextPlayerStart();
 	size_t count() const;
 	size_t countVisible() const;
 

@@ -21,6 +21,7 @@ ObjectSystem::ObjectSystem()
 	for (int i=0;i<Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
 	}
+	player_start=0;
 }
 
 ObjectSystem::~ObjectSystem()
@@ -40,6 +41,7 @@ void ObjectSystem::clear()
 	}
 	nextid=1;
 	next_spawn_id=1000000;
+	player_start=0;
 }
 
 void ObjectSystem::loadSpritesets(SDL &sdl)
@@ -382,7 +384,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 		}
 		p+=save_size;
 	}
-	printf ("nextid=%d\n",nextid);
+	//printf ("nextid=%d\n",nextid);
 }
 
 
@@ -394,7 +396,25 @@ ppl7::grafix::Point ObjectSystem::findPlayerStart() const
 		if (object->type()==Decker::Objects::Type::PlayerStartpoint)
 			return object->p;
 	}
-	return ppl7::grafix::Point(0,0);
+	return ppl7::grafix::Point(640,480);
+}
+
+ppl7::grafix::Point ObjectSystem::nextPlayerStart()
+{
+	int c=0;
+	player_start++;
+	std::map<uint32_t, Object *>::const_iterator it;
+	for (it=object_list.begin();it!=object_list.end();++it) {
+		Object *object=it->second;
+		if (object->type()==Decker::Objects::Type::PlayerStartpoint) {
+			if (c==player_start) {
+				return object->p;
+			}
+			c++;
+		}
+	}
+	player_start=0;
+	return findPlayerStart();
 }
 
 size_t ObjectSystem::count() const

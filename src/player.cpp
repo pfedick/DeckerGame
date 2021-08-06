@@ -316,7 +316,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			velocity_move.x=2;
 			if (keys&KeyboardKeys::Shift) velocity_move.x=6;
 			animation.setStaticFrame(39);
-		} else if (keys==KeyboardKeys::Down) {
+		} else if (keys==KeyboardKeys::Down|| keys==(KeyboardKeys::Down|KeyboardKeys::Shift)) {
 			if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder
 					||collision_matrix[1][5]==TileType::Ladder || collision_matrix[2][5]==TileType::Ladder) {
 				if (collision_matrix[1][5]!=TileType::Blocking && collision_matrix[2][5]!=TileType::Blocking) {
@@ -373,16 +373,30 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
-	if ((keys&KeyboardKeys::Left) && velocity_move.x==0) {
-		velocity_move.x=-2;
-		if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
-		orientation=Left;
-		animation.setStaticFrame(38);
-	} else if ((keys&KeyboardKeys::Right) && velocity_move.x==0) {
-		velocity_move.x=2;
-		if (keys&KeyboardKeys::Shift) velocity_move.x=6;
-		orientation=Right;
-		animation.setStaticFrame(39);
+	if (movement==Jump) {
+		if ((keys&KeyboardKeys::Left) && velocity_move.x==0) {
+			velocity_move.x=-2;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
+			orientation=Left;
+			animation.setStaticFrame(38);
+		} else if ((keys&KeyboardKeys::Right) && velocity_move.x==0) {
+			velocity_move.x=2;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=6;
+			orientation=Right;
+			animation.setStaticFrame(39);
+		}
+	} else {
+		if (keys&KeyboardKeys::Left) {
+			velocity_move.x=-2;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
+			orientation=Left;
+			animation.setStaticFrame(38);
+		} else if (keys&KeyboardKeys::Right) {
+			velocity_move.x=2;
+			if (keys&KeyboardKeys::Shift) velocity_move.x=6;
+			orientation=Right;
+			animation.setStaticFrame(39);
+		}
 	}
 }
 
@@ -408,24 +422,28 @@ void Player::updateMovement()
 	} else if (movement==Jump) {
 		//printf ("we are jumping... ");
 		if (jump_climax>time) {
-			if (acceleration_jump<2.0f) acceleration_jump+=0.1f;
+			if (acceleration_jump<4.0f) acceleration_jump+=0.1f;
 			if (acceleration_jump>4.0f) acceleration_jump=4.0f;
 			//printf ("under climax, accelerating %0.3f ", acceleration_jump);
+			velocity_move.y-=acceleration_jump;
+			if (velocity_move.y<-12.0f) velocity_move.y=-12.0f;
 		} else {
-			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/5.0;
-			if (acceleration_jump<0.01f) {
-				acceleration_jump=0.0;
-				movement=Falling;
-				//printf ("done\n");
+			if (acceleration_jump>0) acceleration_jump-=acceleration_jump/1.5;
+			if (acceleration_jump<0.5f) {
+				acceleration_jump=0.5;
 			}
-			//printf ("over time, decelerating %0.3f", acceleration_jump);
+			velocity_move.y+=acceleration_jump;
+			if (velocity_move.y>-0.1f) {
+				velocity_move.y=0.0f;
+				acceleration_jump=0.0f;
+				movement=Falling;
+			}
 		}
-		velocity_move.y-=acceleration_jump;
-		if (velocity_move.y<-8.0f) velocity_move.y=-8.0f;
-		if (velocity_move.y>-0.1f) {
-			velocity_move.y=0.0f;
-		}
-		//printf ("\n");
+		/*
+		printf ("Jump, climax in %0.3f s, acceleration=%0.3f, velocity=%0.3f\n",
+				time<jump_climax?jump_climax-time:0.0f,
+						acceleration_jump, velocity_move.y);
+		*/
 	} else if (movement==Falling) {
 		if (velocity_move.y<-0.1f) velocity_move.y-=velocity_move.y/3.0f;
 		if (velocity_move.y>-0.1f) velocity_move.y=0;

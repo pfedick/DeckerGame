@@ -177,6 +177,7 @@ void Game::initUi()
 	world_widget->setEventHandler(this);
 	world_widget->setViewport(viewport);
 	this->addChild(world_widget);
+	wm->setKeyboardFocus(world_widget);
 
 }
 
@@ -735,6 +736,7 @@ void Game::clearLevel()
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
+	if (event->widget()==world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection!=NULL && event->widget()==world_widget) {
 		mouseDownEventOnSprite(event);
 	} else if (object_selection!=NULL && event->widget()==world_widget) {
@@ -743,32 +745,6 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		handleMouseDrawInWorld(*event);
 	}
 }
-
-/*
-void Game::mouseClickEvent(ppl7::tk::MouseEvent *event)
-{
-	printf("click 1\n");
-	if (object_selection!=NULL && event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
-		printf("click 2\n");
-		if (sprite_mode==SpriteModeSelect || sprite_mode==SpriteModeEdit) {
-			printf("click 3\n");
-			sprite_mode=SpriteModeSelect;
-			Decker::Objects::Object *object=level.objects->findMatchingObject(event->p+WorldCoords);
-			if (object) {
-				printf ("found Object with id %d\n", object->id);
-				wm->setKeyboardFocus(world_widget);
-				sprite_mode=SpriteModeEdit;
-				selected_object=object;
-				sprite_move_start=event->p;
-				printf ("click 4\n");
-				object->openUi();
-			}
-			return;
-		}
-	}
-}
-*/
-
 
 
 void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
@@ -891,7 +867,15 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 				selected_object=NULL;
 			}
 		}
-
+	}
+	//printf ("keyDownEvent: %d\n", event->key);
+	if (event->key==ppl7::tk::KeyEvent::KEY_F4) {
+		// TODO: for developing only
+		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
+		player->move(pos.x, pos.y);
+		player->setSavePoint(pos);
+	} else if (event->key==ppl7::tk::KeyEvent::KEY_F3) {
+		level.load("level/test.lvl");
 	}
 }
 
