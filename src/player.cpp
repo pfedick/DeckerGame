@@ -74,6 +74,11 @@ static const char* orientation_string[4]={"Left",
 		"Right", "Front", "Back"};
 
 
+ppl7::grafix::Point Player::position() const
+{
+	return ppl7::grafix::Point((int)x,(int)y);
+}
+
 ppl7::String Player::getState() const
 {
 	ppl7::String s;

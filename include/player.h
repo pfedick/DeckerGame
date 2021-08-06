@@ -119,6 +119,7 @@ public:
 
 	Player();
 	~Player();
+	ppl7::grafix::Point position() const;
 	void addPoints(int points);
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation &repr);
