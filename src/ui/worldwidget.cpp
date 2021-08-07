@@ -58,7 +58,9 @@ WorldWidget::WorldWidget()
 	this->addChild(stats_health);
 	this->addChild(stats_lifes);
 	this->addChild(stats_points);
-
+	value_health=0;
+	value_lifes=0;
+	value_points=0;
 }
 
 
@@ -80,9 +82,16 @@ ppl7::String WorldWidget::widgetType() const
 
 void WorldWidget::updatePlayerStats(const Player *player)
 {
-	stats_health->setValue(ppl7::ToString("%d %%",player->health));
-	stats_lifes->setValue(ppl7::ToString("%d",player->lifes));
-	stats_points->setValue(ppl7::ToString("%d",player->points));
+	if (value_health>player->health) value_health--;
+	else if (value_health<player->health) value_health++;
+	if (value_lifes>player->lifes) value_lifes--;
+	else if (value_lifes<player->lifes) value_lifes++;
+	if (value_points>player->points) value_points--;
+	else if (value_points<player->points) value_points++;
+
+	stats_health->setValue(ppl7::ToString("%d %%",value_health));
+	stats_lifes->setValue(ppl7::ToString("%d",value_lifes));
+	stats_points->setValue(ppl7::ToString("%d",value_points));
 
 }
 

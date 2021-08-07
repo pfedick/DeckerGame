@@ -286,6 +286,7 @@ class WorldWidget : public ppl7::tk::Widget
 {
 private:
 	StatsFrame *stats_health, *stats_lifes, *stats_points;
+	int value_health, value_lifes, value_points;
 public:
 	WorldWidget();
 	void setViewport(const ppl7::grafix::Rect &viewport);
