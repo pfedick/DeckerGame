@@ -779,7 +779,17 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 {
-	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+	if (event->widget()==world_widget && (event->buttonMask==ppl7::tk::MouseState::Middle
+			|| (event->buttonMask==ppl7::tk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))){
+		Decker::Objects::Object *object=level.objects->findMatchingObject(event->p+WorldCoords);
+		if (object) {
+			wm->setKeyboardFocus(world_widget);
+			sprite_mode=SpriteModeEdit;
+			selected_object=object;
+			sprite_move_start=event->p;
+			object->openUi();
+		}
+	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
 		int object_type=object_selection->selectedObjectType();
 		if (object_type<0 || sprite_mode==SpriteModeSelect || sprite_mode==SpriteModeEdit) {
 			sprite_mode=SpriteModeSelect;
@@ -788,7 +798,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 				//printf ("found Object with id %d\n", object->id);
 				wm->setKeyboardFocus(world_widget);
 				sprite_mode=SpriteModeEdit;
-				if (selected_object==object) object->openUi();
+				//if (selected_object==object) object->openUi();
 				selected_object=object;
 				sprite_move_start=event->p;
 
