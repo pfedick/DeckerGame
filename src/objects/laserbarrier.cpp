@@ -95,7 +95,7 @@ void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 			if (type()==Type::LaserBeamHorizontal) {
 				// find left end
 				start.y=p.y;
-				start.x=(p.x/TILE_WIDTH)*TILE_WIDTH;
+				start.x=((int)p.x/TILE_WIDTH)*TILE_WIDTH;
 				end=start;
 				while (start.x>0 && ttplane.getType(start)!=TileType::Blocking)
 					start.x-=TILE_WIDTH;
@@ -112,7 +112,7 @@ void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 			} else {
 				// find upper end
 				start.x=p.x;
-				start.y=(p.y/TILE_HEIGHT)*TILE_HEIGHT;
+				start.y=((int)p.y/TILE_HEIGHT)*TILE_HEIGHT;
 				end=start;
 				while (start.y>0 && ttplane.getType(start)!=TileType::Blocking)
 					start.y-=TILE_HEIGHT;
