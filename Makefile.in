@@ -106,6 +106,12 @@ ppl7:
 texmaker: $(TEXMAKER_OBJECTS) ppl7
 	$(CXX) -o texmaker $(TEXMAKER_OBJECTS) $(TEXMAKER_LIBS)
 	-chmod 755 texmaker
+	
+fixbricks: compile/fixbricks_main.o
+	$(CXX) -o fixbricks compile/fixbricks_main.o $(TEXMAKER_LIBS)
+	-chmod 755 fixbricks
+	./fixbricks
+
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) texmaker *.core
@@ -425,4 +431,9 @@ compile/texm_texture.o: tools/texmaker/texture.cpp Makefile tools/texmaker/texma
 compile/texm_texturefile.o: tools/texmaker/texturefile.cpp Makefile tools/texmaker/texmaker.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/texm_texturefile.o -c tools/texmaker/texturefile.cpp $(TEXMAKER_CFLAGS)
+
+# fixbricks
+compile/fixbricks_main.o: tools/fixbricks/main.cpp Makefile
+	- @mkdir -p compile 
+	$(CXX) -o compile/fixbricks_main.o -c tools/fixbricks/main.cpp $(TEXMAKER_CFLAGS)
 	
