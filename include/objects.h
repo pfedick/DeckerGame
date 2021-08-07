@@ -42,6 +42,7 @@ public:
 		TouchEmitter=17,
 		TreasureChest=18,
 		WarpGate=19,
+		ExtraLife=20,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -132,6 +133,7 @@ public:
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void openUi();
+	virtual void reset();
 	static Representation representation();
 };
 
@@ -171,20 +173,24 @@ class TouchEmitter : public Object
 {
 private:
 	unsigned char toogle_count;
-	unsigned char max_toggles;
-	unsigned char direction;
-	unsigned char touchtype;
-	Type::ObjectType emitted_object;
 	double next_touch_time;
 
 public:
+	unsigned char max_toggles;
+	unsigned char direction;	// 0=up, 1=right, 2=down, 3=left
+	unsigned char touchtype;	// Bit 0-3: Type, Bit 4-7: actication
+								// Bit 4: top, Bit 5: right, Bit 6: bottom, Bit 7: left
+	Type::ObjectType emitted_object;
+
 	TouchEmitter();
 	~TouchEmitter();
 	static Representation representation();
+	void init();
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
+	virtual void reset();
 };
 
 class Speaker : public Object

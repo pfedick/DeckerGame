@@ -18,7 +18,7 @@ Dialog::Dialog(int width, int height)
 	close_button->setEventHandler(this);
 	this->setModal(true);
 	this->addChild(close_button);
-	this->setClientOffset(2, 40, 2, 2);
+	this->setClientOffset(8, 40, 8, 8);
 }
 
 Dialog::~Dialog()

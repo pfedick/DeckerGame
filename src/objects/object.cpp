@@ -139,4 +139,9 @@ void Object::openUi()
 
 }
 
+void Object::reset()
+{
+	if (!spawned) enabled=true;
+}
+
 }	// EOF namespace Decker::Objects
