@@ -452,7 +452,7 @@ void Player::updateMovement()
 	} else if (movement==Falling) {
 		if (velocity_move.y<-0.1f) velocity_move.y-=velocity_move.y/3.0f;
 		if (velocity_move.y>-0.1f) velocity_move.y=0;
-
+		//printf ("Player::updateMovement, velocity_move.y=%0.3f\n",velocity_move.y);
 
 	} else {
 		velocity_move.y=0;
@@ -617,7 +617,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	}
 	if (collision_matrix[1][5]==TileType::Blocking || collision_matrix[2][5]==TileType::Blocking
 			|| collision_matrix[1][5]==TileType::Ladder || collision_matrix[2][5]==TileType::Ladder ) {
-		if (gravity>0.0f) {
+		if (gravity>0.0f || movement==Falling) {
 			//printf ("col 2\n");
 			acceleration_gravity=0.0f;
 			gravity=0.0f;
@@ -759,8 +759,8 @@ void Player::updatePhysics(const TileTypePlane &world)
 	}
 
 	/*
-	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f\n",
-			gravity, acceleration_gravity, acceleration_airstream);
+	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f, velocity_move.y=%0.3f\n",
+			gravity, acceleration_gravity, acceleration_airstream, velocity_move.y);
 	*/
 }
 
