@@ -298,7 +298,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 				if (movement!=Jump) {
 					movement=Jump;
 					jump_climax=time+0.4f;
-					acceleration_jump=0.5f;
+					acceleration_jump=1.0f;
 					if (orientation==Front) animation.setStaticFrame(42);
 					else if (orientation==Left) animation.setStaticFrame(40);
 					else if (orientation==Right) animation.setStaticFrame(41);
@@ -309,7 +309,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			movement=Jump;
 			orientation=Left;
 			jump_climax=time+0.4f;
-			acceleration_jump=0.5f;
+			acceleration_jump=1.0f;
 			velocity_move.x=-2;
 			if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
 			animation.setStaticFrame(38);
@@ -317,7 +317,7 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 			movement=Jump;
 			orientation=Right;
 			jump_climax=time+0.4f;
-			acceleration_jump=0.5f;
+			acceleration_jump=1.0f;
 			velocity_move.x=2;
 			if (keys&KeyboardKeys::Shift) velocity_move.x=6;
 			animation.setStaticFrame(39);
@@ -379,6 +379,10 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
 	if (movement==Jump) {
+		if (!(keys&KeyboardKeys::Up)) {
+			movement=Falling;
+			return;
+		}
 		if ((keys&KeyboardKeys::Left) && velocity_move.x==0) {
 			velocity_move.x=-2;
 			if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
