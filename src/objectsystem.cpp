@@ -484,6 +484,46 @@ bool Collision::onFoot() const
 	return false;
 }
 
+bool Collision::objectBottom() const
+{
+	if (bounding_box_player.y2>bounding_box_object.y2 &&
+			bounding_box_player.y1<bounding_box_object.y2 &&
+			bounding_box_player.y2>bounding_box_object.y2) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::objectTop() const
+{
+	if (bounding_box_player.y2<bounding_box_object.y2 &&
+			bounding_box_player.y2>bounding_box_object.y1 &&
+			bounding_box_player.y1<bounding_box_object.y1) {
+		return true;
+	}
+	return false;
+
+}
+
+bool Collision::objectLeft() const
+{
+	if (bounding_box_player.x2<bounding_box_object.x2 &&
+			bounding_box_player.x2>bounding_box_object.x1 &&
+			bounding_box_player.x1<bounding_box_object.x1) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::objectRight() const
+{
+	if (bounding_box_player.x1>bounding_box_object.x1 &&
+			bounding_box_player.x1<bounding_box_object.x2 &&
+			bounding_box_player.x2>bounding_box_object.x2) {
+		return true;
+	}
+	return false;
+}
 
 
 }	// EOF namespace Decker::Objects

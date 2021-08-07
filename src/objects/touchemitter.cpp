@@ -12,10 +12,13 @@ class TouchParticle : public Object
 {
 	friend class TouchEmitter;
 private:
-	ppl7::grafix::Point velocity;
+	ppl7::grafix::PointF velocity;
+	double max_distance;
 	Type::ObjectType emitted_object;
+	Object *child;
 public:
 	TouchParticle(Type::ObjectType type);
+	~TouchParticle();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
@@ -106,20 +109,28 @@ void TouchEmitter::handleCollision(Player *player, const Collision &collision)
 	if (toogle_count<max_toggles && next_touch_time<now) {
 		bool touched=false;
 		if ((touchtype&0xf0)==0xf0) touched=true;
-
+		if ((touchtype&0x10) && collision.objectTop()==true) touched=true;
+		if ((touchtype&0x20) && collision.objectRight()==true) touched=true;
+		if ((touchtype&0x40) && collision.objectBottom()==true) touched=true;
+		if ((touchtype&0x80) && collision.objectLeft()==true) touched=true;
 		if (touched) {
 			next_touch_time=now+1.0f;
 			toogle_count++;
 			TouchParticle *particle=new TouchParticle(emitted_object);
-			particle->p=p;
+			particle->p.x=ppl7::randf(p.x-16.0f, p.x+16.0f);
+			particle->p.y=ppl7::randf(p.y-16.0f, p.y+16.0f);
 			particle->initial_p=p;
 			particle->spawned=true;
+			particle->max_distance=ppl7::randf(90.0f,120.0f);
+			float v0=ppl7::randf(-0.4,0.4);
+			float v1=ppl7::randf(3.5,6.5);
+			//printf ("v0=%0.3f, v1=%0.3f\n",v0,v1);
 			switch (direction) {
-			case 0: particle->velocity.setPoint(0, -4); break;
-			case 1: particle->velocity.setPoint(4, 0); break;
-			case 2: particle->velocity.setPoint(0, 4); break;
-			case 3: particle->velocity.setPoint(-4, 0); break;
-			default: particle->velocity.setPoint(0, -4); break;
+			case 0: particle->velocity.setPoint(v0, -v1); break;
+			case 1: particle->velocity.setPoint(v1, v0); break;
+			case 2: particle->velocity.setPoint(v0, v1); break;
+			case 3: particle->velocity.setPoint(-v1, v0); break;
+			default: particle->velocity.setPoint(v0, -v1); break;
 			}
 			GetObjectSystem()->addObject(particle);
 		}
@@ -163,12 +174,17 @@ TouchParticle::TouchParticle(Type::ObjectType type)
 : Object(Type::Particle)
 {
 	emitted_object=type;
-	//ObjectSystem *objs=GetObjectSystem();
-	//objs-
+	max_distance=100.0f;
 	Representation repr=getRepresentation(type);
 	sprite_no=repr.sprite_no;
 	sprite_set=repr.sprite_set;
 	sprite_no_representation=sprite_no;
+	child=GetObjectSystem()->getInstance(type);
+}
+
+TouchParticle::~TouchParticle()
+{
+	delete child;
 }
 
 Representation TouchParticle::representation()
@@ -179,7 +195,7 @@ Representation TouchParticle::representation()
 void TouchParticle::update(double time, TileTypePlane &ttplane, Player &player)
 {
 	p+=velocity;
-	if (ppl7::grafix::Distance(p, initial_p)>100) {
+	if (ppl7::grafix::Distance(p, initial_p)>max_distance) {
 		deleteDefered=true;
 		ObjectSystem *objs=GetObjectSystem();
 		Object *object=objs->getInstance(emitted_object);
@@ -187,6 +203,9 @@ void TouchParticle::update(double time, TileTypePlane &ttplane, Player &player)
 		object->initial_p=p;
 		object->spawned=true;
 		objs->addObject(object);
+	} else {
+		child->update(time,ttplane,player);
+		sprite_no=child->sprite_no;
 	}
 }
 

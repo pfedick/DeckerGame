@@ -97,6 +97,10 @@ public:
 	const std::list<ppl7::grafix::Point> &getCollisionPoints() const;
 	Object *getObject() const;
 	bool onFoot() const;
+	bool objectTop() const;
+	bool objectBottom() const;
+	bool objectLeft() const;
+	bool objectRight() const;
 };
 
 class Object
