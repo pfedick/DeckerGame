@@ -38,7 +38,7 @@ void TreasureChest::update(double time, TileTypePlane &ttplane, Player &player)
 			animation.startSequence(0,32,false,32);
 		}
 	}
-	if (state==1 && time>next_animation) {
+	if (state>0 && time>next_animation) {
 		next_animation=time+0.07f;
 		animation.update();
 		int new_sprite=animation.getFrame();
@@ -46,9 +46,11 @@ void TreasureChest::update(double time, TileTypePlane &ttplane, Player &player)
 			sprite_no=new_sprite;
 			updateBoundary();
 		}
-		if (animation.isFinished()) state=2;
+		if (state==1 && animation.isFinished()) {
+			state=2;
+			animation.startSequence(33,62,true,33);
+		}
 	}
-
 }
 
 void TreasureChest::handleCollision(Player *player, const Collision &collision)
