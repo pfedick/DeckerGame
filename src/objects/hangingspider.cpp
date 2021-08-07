@@ -26,7 +26,7 @@ HangingSpider::HangingSpider()
 void HangingSpider::update(double time, TileTypePlane &ttplane, Player &player)
 {
 	if (state==0) {
-		double dist=ppl7::grafix::Distance(p, ppl7::grafix::Point(player.x, player.y));
+		double dist=ppl7::grafix::Distance(p, player.position());
 		if (dist<400 || next_state<time) {
 			state=1;
 			velocity=0.5f;

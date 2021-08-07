@@ -104,8 +104,8 @@ class Object
 private:
 	Type::ObjectType myType;
 public:
-	ppl7::grafix::Point p;
-	ppl7::grafix::Point initial_p;
+	ppl7::grafix::PointF p;
+	ppl7::grafix::PointF initial_p;
 	SpriteTexture	*texture;
 	//ppl7::tk::Widget *widget;
 	ppl7::grafix::Rect boundary;

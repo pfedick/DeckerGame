@@ -130,7 +130,7 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoord
 				if (x>0 && y>0 && x<width && y<height) isVisible=true;
 			}
 			if (isVisible) {
-				uint32_t id=(uint32_t)((object->p.y&0xffff)<<16)|(uint32_t)(object->p.x&0xffff);
+				uint32_t id=(uint32_t)(((uint32_t)object->p.y&0xffff)<<16)|(uint32_t)((uint32_t)object->p.x&0xffff);
 				visible_object_map.insert(std::pair<uint32_t,Object *>(id,object));
 			}
 		}

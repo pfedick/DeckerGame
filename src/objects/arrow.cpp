@@ -112,7 +112,7 @@ void Arrow::changeDirection(int new_direction)
 void Arrow::update(double time, TileTypePlane &ttplane, Player &player)
 {
 	if (state==0) {
-		double dist=ppl7::grafix::Distance(p, ppl7::grafix::Point(player.x, player.y));
+		double dist=ppl7::grafix::Distance(p, player.position());
 		if (next_state<time || (dist<player_activation_distance && min_cooldown_state<time)) {
 			state++;
 			if (state==1) {
