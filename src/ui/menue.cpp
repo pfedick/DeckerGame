@@ -80,10 +80,6 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 	this->addChild(active_plane_combobox);
 
-	/*
-
-	*/
-
 	soundtrack_checkbox=new CheckBox(width-420,0,140,s.height,"play soundtrack", true);
 	this->addChild(soundtrack_checkbox);
 
@@ -91,9 +87,6 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	this->addChild(world_follows_player_checkbox);
 
 
-	test_line_edit=new ppl7::tk::LineInput(width-600,0,170,s.height,"test");
-	test_line_edit->setEventHandler(this);
-	this->addChild(test_line_edit);
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
