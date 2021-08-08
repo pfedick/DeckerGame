@@ -27,10 +27,7 @@ github to track my progress.
 
 ### Things I have to do or figure out
 - create interactive objects / enemies:
-    - locked door
-    - key (used to unlock a locked door)
     - scorpion
-    - mushroom (white minifig with big red hat and white dots)
     - huge vent
     - stamper
     - Wallenstein + Helena? (from the movie) 
@@ -73,6 +70,9 @@ There is probably more, which I'm not aware of, yet ;-)
     - floater
     - lasers
     - arrows from wall
+    - locked door
+    - key (used to unlock a locked door)
+    - mushroom (white minifig with big red hat and white dots)
 - how does sound work with SDL?
 - write the audio engine
 - how to integrate sound track and sound effects into the game    
@@ -107,9 +107,19 @@ The game will be open source and uses the [Simple DirectMedia Layer](https://www
 library, which is available on many platforms. So in theory it should be possible to
 compile it on any platform with a c++ compiler and the SDL library.
 
+## In which language is the game written?
+
+It is written in my favorite language: C++
+
+
 ## When will it come out?
 I don't know. This is one of my hobbies, but I have others, too :-)
 Maybe I will never finish it or decide to do something else. We will see...
+
+But hey, you can already play the game! See below, how to compile it your
+own, or download a preview version on [GitHub](https://github.com/pfedick/DeckerGame/releases).
+
+
 
 ## How to compile
 ### Requirements
