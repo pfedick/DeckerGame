@@ -12,7 +12,7 @@ Representation KeyReward::representation()
 }
 
 KeyReward::KeyReward()
-: Object(Type::ObjectType::Savepoint)
+: Object(Type::ObjectType::Key)
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=50;

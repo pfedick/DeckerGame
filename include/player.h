@@ -37,6 +37,7 @@ public:
 		Up=4,
 		Down=8,
 		Shift=16,
+		Action=32,
 		JumpLeft=5,
 		JumpRight=6,
 	};
@@ -104,7 +105,6 @@ private:
 	void checkCollisionWithWorld(const TileTypePlane &world);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects);
 	void updatePhysics(const TileTypePlane &world);
-	int getKeyboardMatrix(const unsigned char *state);
 
 	bool isCollisionLeft() const;
 	bool isCollisionRight() const;
@@ -120,9 +120,11 @@ public:
 	Player();
 	~Player();
 	ppl7::grafix::PointF position() const;
+	int getKeyboardMatrix(const unsigned char *state=NULL);
 	void addPoints(int points);
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation &repr);
+	bool isInInventory(int object_id) const;
 	void setSavePoint(const ppl7::grafix::Point &p);
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);

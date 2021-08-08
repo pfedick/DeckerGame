@@ -67,6 +67,7 @@ public:
 		Vent=4,
 		Mushroom=5,
 		TreasureChest=6,
+		Doors=7,
 		MaxSpritesets
 	};
 };
@@ -510,15 +511,28 @@ public:
 class Door : public Object
 {
 private:
-	bool open;
-	uint32_t key_id;
+	AnimationCycle animation;
+	double next_animation;
+	int door_sprite_no;
 
 public:
+	uint32_t key_id;
+	unsigned char frame_type;
+	unsigned char door_type;
+	int state;
+	bool initial_open;
+	bool left_sided;
+
 	Door();
 	static Representation representation();
+	void init();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void reset();
+	virtual void openUi();
 
 };
 

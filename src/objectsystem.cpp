@@ -75,6 +75,9 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::TreasureChest]->enableMemoryBuffer(true);
 	spriteset[Spriteset::TreasureChest]->load(sdl,"res/treasure_chest.tex");
 
+	spriteset[Spriteset::Doors]->enableOutlines(true);
+	spriteset[Spriteset::Doors]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Doors]->load(sdl,"res/doors.tex");
 }
 
 void ObjectSystem::addObject(Object *object)
@@ -274,6 +277,7 @@ Representation getRepresentation(int object_type)
 	case Type::TouchEmitter: return TouchEmitter::representation();
 	case Type::Mushroom: return Mushroom::representation();
 	case Type::TreasureChest: return TreasureChest::representation();
+	case Type::Door: return Door::representation();
 
 	default: return Object::representation();
 	}
@@ -331,6 +335,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::TouchEmitter: return new TouchEmitter();
 	case Type::Mushroom: return new Mushroom();
 	case Type::TreasureChest: return new TreasureChest();
+	case Type::Door: return new Door();
 	}
 	return NULL;
 }

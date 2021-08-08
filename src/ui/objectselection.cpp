@@ -34,6 +34,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Diamond,"Diamond",1);
 	addObject(Decker::Objects::Type::Coin,"Coin",12);
 	addObject(Decker::Objects::Type::Key,"Key",8);
+	addObject(Decker::Objects::Type::Door,"Door",23);
 	addObject(Decker::Objects::Type::Arrow,"Arrow",2);
 	addObject(Decker::Objects::Type::ThreeSpeers,"3 Speers",18);
 	addObject(Decker::Objects::Type::Rat,"Rat",5);

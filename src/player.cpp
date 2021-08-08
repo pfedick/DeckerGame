@@ -155,6 +155,7 @@ void Player::turn(PlayerOrientation target)
 
 int Player::getKeyboardMatrix(const Uint8 *state)
 {
+	if (state==NULL) state=SDL_GetKeyboardState(NULL);
 	int matrix=0;
 	if (state[SDL_SCANCODE_LEFT]) matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) matrix|=KeyboardKeys::Left;
@@ -165,6 +166,7 @@ int Player::getKeyboardMatrix(const Uint8 *state)
 	if (state[SDL_SCANCODE_DOWN]) matrix|=KeyboardKeys::Down;
 	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) matrix|=KeyboardKeys::Down;
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) matrix|=KeyboardKeys::Shift;
+	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) matrix|=KeyboardKeys::Action;
 	return matrix;
 }
 
@@ -204,6 +206,16 @@ void Player::addInventory(int object_id, const Decker::Objects::Representation &
 {
 	Inventory.insert(std::pair<int,Decker::Objects::Representation>(object_id,repr));
 
+}
+
+bool Player::isInInventory(int object_id) const
+{
+	if (object_id>0) {
+		std::map<int,Decker::Objects::Representation>::const_iterator it;
+		it=Inventory.find(object_id);
+		if (it!=Inventory.end()) return true;
+	}
+	return false;
 }
 
 void Player::setSavePoint(const ppl7::grafix::Point &p)
