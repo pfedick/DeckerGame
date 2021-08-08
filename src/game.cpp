@@ -93,6 +93,10 @@ void Game::loadGrafix()
 	resources.Sprites_Rocks.enableMemoryBuffer(true);
 	resources.Sprites_Rocks.load(sdl, "res/sprites_rocks.tex");
 
+	resources.Sprites_Flowers.enableOutlines(true);
+	resources.Sprites_Flowers.enableMemoryBuffer(true);
+	resources.Sprites_Flowers.load(sdl, "res/sprites_flowers.tex");
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	brick_occupation_solid.push_back(BrickOccupation::Item(0,0,Tile::TileOccupation::OccupationBrick));
@@ -119,6 +123,10 @@ void Game::loadGrafix()
 	resources.uiSpritesRocks.enableSDLBuffer(false);
 	resources.uiSpritesRocks.enableMemoryBuffer(true);
 	resources.uiSpritesRocks.load(sdl, "res/sprites_rocks_ui.tex");
+
+	resources.uiSpritesFlowers.enableSDLBuffer(false);
+	resources.uiSpritesFlowers.enableMemoryBuffer(true);
+	resources.uiSpritesFlowers.load(sdl, "res/sprites_flowers_ui.tex");
 
 
 	resources.uiObjects.enableSDLBuffer(false);
@@ -240,6 +248,7 @@ void Game::init()
 	level.setSpriteset(3, &resources.Sprites_Objects);
 	level.setSpriteset(4, &resources.Sprites_Nature_Blury);
 	level.setSpriteset(5, &resources.Sprites_Rocks);
+	level.setSpriteset(6, &resources.Sprites_Flowers);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -558,6 +567,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(3,"Objects", &resources.uiSpritesObjects);
 		sprite_selection->setSpriteSet(4,"Nature Blury", &resources.uiSpritesNature);
 		sprite_selection->setSpriteSet(5,"Rocks", &resources.uiSpritesRocks);
+		sprite_selection->setSpriteSet(6,"Flowers", &resources.uiSpritesFlowers);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
