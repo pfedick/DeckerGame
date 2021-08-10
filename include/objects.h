@@ -444,6 +444,7 @@ class Scarabeus : public Enemy
 {
 private:
 	AnimationCycle animation;
+	AudioInstance *audio;
 	double next_state, next_animation;
 	ppl7::grafix::PointF velocity;
 	int state;

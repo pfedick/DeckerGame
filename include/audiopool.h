@@ -38,6 +38,20 @@ public:
 		fall,
 		break1,
 		thruster,
+		scarabeus1,
+		scarabeus2,
+		scarabeus3,
+		scarabeus4,
+		scarabeus5,
+		scarabeus6,
+		scarabeus7,
+		scarabeus8,
+		scarabeus9,
+		scarabeus_death1,
+		scarabeus_death2,
+		scarabeus_death3,
+		scarabeus_death4,
+		scarabeus_death5,
 
 		// this must always be the last entry!
 		maxClips

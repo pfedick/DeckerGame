@@ -90,5 +90,20 @@ void AudioPool::load()
 	sample[AudioClip::fall].load("res/audio/fall.wav");
 	sample[AudioClip::break1].load("res/audio/break1.wav");
 	sample[AudioClip::thruster].load("res/audio/thruster.wav");
+	sample[AudioClip::scarabeus1].load("res/audio/scarabeus1.wav");
+	sample[AudioClip::scarabeus2].load("res/audio/scarabeus2.wav");
+	sample[AudioClip::scarabeus3].load("res/audio/scarabeus3.wav");
+	sample[AudioClip::scarabeus4].load("res/audio/scarabeus4.wav");
+	sample[AudioClip::scarabeus5].load("res/audio/scarabeus5.wav");
+	sample[AudioClip::scarabeus6].load("res/audio/scarabeus6.wav");
+	sample[AudioClip::scarabeus7].load("res/audio/scarabeus7.wav");
+	sample[AudioClip::scarabeus8].load("res/audio/scarabeus8.wav");
+	sample[AudioClip::scarabeus9].load("res/audio/scarabeus9.wav");
+	sample[AudioClip::scarabeus_death1].load("res/audio/scarab_death1.wav");
+	sample[AudioClip::scarabeus_death2].load("res/audio/scarab_death2.wav");
+	sample[AudioClip::scarabeus_death3].load("res/audio/scarab_death3.wav");
+	sample[AudioClip::scarabeus_death4].load("res/audio/scarab_death4.wav");
+	sample[AudioClip::scarabeus_death5].load("res/audio/scarab_death5.wav");
+
 
 }
