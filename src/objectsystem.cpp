@@ -71,6 +71,10 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Mushroom]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Mushroom]->load(sdl,"res/mushroom.tex");
 
+	spriteset[Spriteset::Scarabeus]->enableOutlines(true);
+	spriteset[Spriteset::Scarabeus]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Scarabeus]->load(sdl,"res/scarabeus.tex");
+
 	spriteset[Spriteset::TreasureChest]->enableOutlines(true);
 	spriteset[Spriteset::TreasureChest]->enableMemoryBuffer(true);
 	spriteset[Spriteset::TreasureChest]->load(sdl,"res/treasure_chest.tex");
@@ -278,6 +282,7 @@ Representation getRepresentation(int object_type)
 	case Type::Mushroom: return Mushroom::representation();
 	case Type::TreasureChest: return TreasureChest::representation();
 	case Type::Door: return Door::representation();
+	case Type::Scarabeus: return Scarabeus::representation();
 
 	default: return Object::representation();
 	}
@@ -336,6 +341,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Mushroom: return new Mushroom();
 	case Type::TreasureChest: return new TreasureChest();
 	case Type::Door: return new Door();
+	case Type::Scarabeus: return new Scarabeus();
 	}
 	return NULL;
 }

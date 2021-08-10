@@ -78,6 +78,7 @@ OBJECTS=compile/main.o \
 	compile/object_mushroom.o \
 	compile/object_treasurechest.o \
 	compile/object_warpgate.o \
+	compile/object_scarabeus.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -151,8 +152,10 @@ sprites:
 	./texmaker -s "lightwave/Render/skeleton/*.png" -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/objects/vent/*.png" -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
 	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 512 -h 512 -px 32 -py 49
+	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
 	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
 	./texmaker -s "lightwave/Render/objects/doors/*.png" -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
+	
 	
 fonts:
 	- rm -rf res/*.fnt6
@@ -292,6 +295,11 @@ compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
 compile/object_mushroom.o: src/objects/mushroom.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_mushroom.o -c src/objects/mushroom.cpp $(CFLAGS)	
+
+compile/object_scarabeus.o: src/objects/scarabeus.cpp Makefile include/objects.h \
+	include/player.h include/audiopool.h include/widgets.h include/animation.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_scarabeus.o -c src/objects/scarabeus.cpp $(CFLAGS)	
 
 compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
 	- @mkdir -p compile 

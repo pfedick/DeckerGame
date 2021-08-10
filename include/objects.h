@@ -51,7 +51,8 @@ public:
 		Mummy=105,
 		LaserBeamHorizontal=106,
 		LaserBeamVertical=107,
-		Mushroom=108
+		Mushroom=108,
+		Scarabeus=109
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -68,6 +69,7 @@ public:
 		Mushroom=5,
 		TreasureChest=6,
 		Doors=7,
+		Scarabeus=8,
 		MaxSpritesets
 	};
 };
@@ -436,6 +438,22 @@ public:
 	static Representation representation();
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+};
+
+class Scarabeus : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	ppl7::grafix::PointF velocity;
+	int state;
+public:
+	Scarabeus();
+	static Representation representation();
+	void update_animation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
 };
 
 
