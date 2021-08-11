@@ -89,8 +89,8 @@ void Door::handleCollision(Player *player, const Collision &collision)
 		if (collision.objectRight() && player->x<p.x+48) player->x=p.x+48;
 		if (collision.objectLeft() && player->x>p.x-16) player->x=p.x-16;
 		if (state==0) {
-			int keyboard=player->getKeyboardMatrix();
-			if (keyboard&KeyboardKeys::Action && player->isInInventory(key_id)) {
+			//int keyboard=player->getKeyboardMatrix();
+			if (player->isInInventory(key_id)) {
 				state=1;
 				animation.startSequence(door_sprite_no, door_sprite_no+14, false, door_sprite_no+14);
 			}
