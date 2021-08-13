@@ -69,6 +69,9 @@ void Game::loadGrafix()
 	resources.Sprite_George.enableMemoryBuffer(true);
 	resources.Sprite_George.load(sdl, "res/george.tex");
 
+	resources.Sprite_George_Adventure.enableMemoryBuffer(true);
+	resources.Sprite_George_Adventure.load(sdl, "res/george_adventure.tex");
+
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
@@ -235,7 +238,7 @@ void Game::init()
 	player->setSavePoint(ppl7::grafix::Point(3300,1800));
 	updateWorldCoords();
 
-	player->setSpriteResource(resources.Sprite_George);
+	player->setSpriteResource(resources.Sprite_George_Adventure);
 	player->setTileTypeResource(resources.TileTypes);
 
 	//level.create(255,255);
