@@ -43,6 +43,7 @@ public:
 		TreasureChest=18,
 		WarpGate=19,
 		ExtraLife=20,
+		Switch=21,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -52,7 +53,8 @@ public:
 		LaserBeamHorizontal=106,
 		LaserBeamVertical=107,
 		Mushroom=108,
-		Scarabeus=109
+		Scarabeus=109,
+		StamperVertical=110
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -70,6 +72,8 @@ public:
 		TreasureChest=6,
 		Doors=7,
 		Scarabeus=8,
+		Laser=9,
+		StamperVertical=10,
 		MaxSpritesets
 	};
 };
@@ -141,6 +145,7 @@ public:
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void openUi();
 	virtual void reset();
+	virtual void toggle(bool enable, Object *source=NULL);
 	static Representation representation();
 };
 
@@ -218,6 +223,42 @@ public:
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
 };
+
+class Switch : public Object
+{
+private:
+	double cooldown;
+	int state;
+	bool current_state;
+
+	void notify_targets();
+
+public:
+	class TargetObject
+	{
+	public:
+		TargetObject();
+		int object_id;
+		bool enable;
+	};
+	bool initial_state;
+	bool one_time_switch;
+	bool auto_toggle_on_collision;
+	unsigned char color_scheme;
+
+	TargetObject targets[10];
+
+	Switch();
+	static Representation representation();
+	void init();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+	virtual void reset();
+};
+
 
 
 class CoinReward : public Object
@@ -333,13 +374,51 @@ private:
 	int flicker;
 	AudioInstance *audio;
 public:
+	float time_on_min, time_off_min;
+	float time_on_max, time_off_max;
+	unsigned char color_scheme;
+	bool initial_state;
+	bool always_on;
+	bool block_player;
+	bool start_state;
+
+
 	LaserBarrier(Type::ObjectType type);
 	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
+	void init();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void toggle(bool enable, Object *source=NULL);
+
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+
+
 };
+
+class StamperVertical : public Trap
+{
+private:
+	double next_state;
+	int state;
+public:
+	float time_active, time_inactive;
+	bool auto_intervall;
+
+	StamperVertical();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+	virtual void toggle(bool enable, Object *source=NULL);
+
+};
+
 
 class Fire : public Trap
 {
@@ -498,15 +577,26 @@ private:
 	double next_state, next_animation;
 	int state;
 	int flame_sprite1, flame_sprite2;
+	bool current_state;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
 	AudioInstance *audio;
 public:
+	bool initial_state;
+	unsigned char floater_type;
+
 	Floater(Type::ObjectType type);
 	~Floater();
+	void init();
+	virtual void reset();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void toggle(bool enable, Object *source=NULL);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+
 };
 
 
@@ -584,6 +674,7 @@ public:
 	void load(const ppl7::ByteArrayPtr &ba);
 	void saveState(ppl7::FileObject &file, unsigned char id) const;
 	void loadState(const ppl7::ByteArrayPtr &ba) const;
+	Object *getObject(uint32_t object_id);
 	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
 	Object *detectCollision(const std::list<ppl7::grafix::Point> &player);
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);

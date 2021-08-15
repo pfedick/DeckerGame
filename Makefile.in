@@ -79,6 +79,8 @@ OBJECTS=compile/main.o \
 	compile/object_treasurechest.o \
 	compile/object_warpgate.o \
 	compile/object_scarabeus.o \
+	compile/object_switch.o \
+	compile/object_stamper.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -154,6 +156,8 @@ sprites:
 	./texmaker -s "lightwave/Render/objects/vent/*.png" -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
 	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 512 -h 512 -px 32 -py 49
 	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
+	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 --pivot_detection lower_middle
+	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
 	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
 	./texmaker -s "lightwave/Render/objects/doors/*.png" -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	
@@ -328,6 +332,14 @@ compile/object_speaker.o: src/objects/speaker.cpp Makefile include/objects.h \
 compile/object_touchemitter.o: src/objects/touchemitter.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_touchemitter.o -c src/objects/touchemitter.cpp $(CFLAGS)	
+
+compile/object_switch.o: src/objects/switch.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_switch.o -c src/objects/switch.cpp $(CFLAGS)	
+
+compile/object_stamper.o: src/objects/stamper.cpp Makefile include/objects.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_stamper.o -c src/objects/stamper.cpp $(CFLAGS)	
 
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h

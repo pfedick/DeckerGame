@@ -82,6 +82,15 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Doors]->enableOutlines(true);
 	spriteset[Spriteset::Doors]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Doors]->load(sdl,"res/doors.tex");
+
+	spriteset[Spriteset::Laser]->enableOutlines(true);
+	spriteset[Spriteset::Laser]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Laser]->load(sdl,"res/laser.tex");
+
+	spriteset[Spriteset::StamperVertical]->enableOutlines(true);
+	spriteset[Spriteset::StamperVertical]->enableMemoryBuffer(true);
+	spriteset[Spriteset::StamperVertical]->load(sdl,"res/stamper_vertical.tex");
+
 }
 
 void ObjectSystem::addObject(Object *object)
@@ -237,6 +246,14 @@ Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &play
 	return NULL;
 }
 
+Object *ObjectSystem::getObject(uint32_t object_id)
+{
+	std::map<uint32_t,Object *>::iterator it;
+	it=object_list.find(object_id);
+	if (it!=object_list.end()) return it->second;
+	return NULL;
+}
+
 
 void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
 {
@@ -283,6 +300,8 @@ Representation getRepresentation(int object_type)
 	case Type::TreasureChest: return TreasureChest::representation();
 	case Type::Door: return Door::representation();
 	case Type::Scarabeus: return Scarabeus::representation();
+	case Type::Switch: return Switch::representation();
+	case Type::StamperVertical: return StamperVertical::representation();
 
 	default: return Object::representation();
 	}
@@ -342,6 +361,8 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::TreasureChest: return new TreasureChest();
 	case Type::Door: return new Door();
 	case Type::Scarabeus: return new Scarabeus();
+	case Type::Switch: return new Switch();
+	case Type::StamperVertical: return new StamperVertical();
 	}
 	return NULL;
 }
