@@ -57,6 +57,7 @@ public:
 		Jump,
 		Falling,
 		Slide,
+		Floating,
 		Dead
 	};
 	enum PlayerOrientation {

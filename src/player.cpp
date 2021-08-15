@@ -66,9 +66,9 @@ Player::~Player()
 {
 
 }
-static const char* movement_string[11]={"Stand",
+static const char* movement_string[12]={"Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide", "Dead"};
+		"Jump","Falling", "Slide", "Floating", "Dead"};
 
 static const char* orientation_string[4]={"Left",
 		"Right", "Front", "Back"};
@@ -744,6 +744,7 @@ void Player::updatePhysics(const TileTypePlane &world)
 		if (acceleration_airstream<8.0f) acceleration_airstream+=0.02f;
 		if (acceleration_airstream>8.0f) acceleration_airstream=8.0f;
 		match=true;
+		movement=Floating;
 	}
 	if (acceleration_airstream>0.0f) {
 		if (!match) {
