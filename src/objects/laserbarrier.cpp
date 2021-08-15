@@ -56,23 +56,13 @@ void LaserBarrier::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coord
 					start.x+coords.x,
 					i+coords.y+7+TILE_HEIGHT,
 					212);
-		/*
-		SDL_SetRenderDrawColor(renderer,255,0,0,255);
-		SDL_RenderDrawLine(renderer,start.x+coords.x, start.y+coords.y,
-				end.x+coords.x, end.y+coords.y);
-		SDL_Rect r;
-		r.x=boundary.x1+coords.x;
-		r.y=boundary.y1+coords.y;
-		r.w=boundary.width();
-		r.h=boundary.height();
-		SDL_RenderDrawRect(renderer,&r);
-		*/
 	}
 
 }
 
 void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 {
+	if (!enabled) return;
 	flicker++;
 	if (next_state<time) {
 		if (state==0) {
@@ -145,6 +135,17 @@ void LaserBarrier::update(double time, TileTypePlane &ttplane, Player &player)
 void LaserBarrier::handleCollision(Player *player, const Collision &collision)
 {
 	player->dropHealth(10);
+}
+
+void LaserBarrier::toggle(bool enable, Object *source)
+{
+	//printf ("LaserBarrier::toggle %d: %d\n", id, (int)enable);
+	this->enabled=enable;
+	if (!enable) {
+		if (audio) {
+			getAudioPool().stopInstace(audio);
+		}
+	}
 }
 
 }	// EOF namespace Decker::Objects

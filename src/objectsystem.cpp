@@ -246,6 +246,14 @@ Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &play
 	return NULL;
 }
 
+Object *ObjectSystem::getObject(uint32_t object_id)
+{
+	std::map<uint32_t,Object *>::iterator it;
+	it=object_list.find(object_id);
+	if (it!=object_list.end()) return it->second;
+	return NULL;
+}
+
 
 void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
 {

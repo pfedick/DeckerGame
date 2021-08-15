@@ -18,6 +18,8 @@ Floater::Floater(Type::ObjectType type)
 	flame_sprite1=152;
 	flame_sprite2=152;
 	audio=NULL;
+	initial_state=enabled;
+	current_state=enabled;
 }
 
 Floater::~Floater()
@@ -32,6 +34,7 @@ Floater::~Floater()
 
 void Floater::update(double time, TileTypePlane &ttplane, Player &player)
 {
+	if (current_state==false && state==0) return;
 	AudioPool &pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::thruster);
@@ -152,6 +155,13 @@ void Floater::handleCollision(Player *player, const Collision &collision)
 		player->y+=velocity.y;
 	}
 }
+
+void Floater::toggle(bool enable, Object *source)
+{
+	current_state=enable;
+	//printf ("Floater::toggle %d: %d\n", id, (int)enable);
+}
+
 
 Representation FloaterHorizontal::representation()
 {

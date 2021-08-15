@@ -227,19 +227,36 @@ public:
 class Switch : public Object
 {
 private:
-	//AudioInstance *audio;
+	double cooldown;
+	int state;
+	bool current_state;
+
+	void notify_targets();
+
 public:
-	//int sample_id;
-	//int max_distance;
-	//float volume;
+	class TargetObject
+	{
+	public:
+		TargetObject();
+		int object_id;
+		bool enable;
+	};
+	bool initial_state;
+	bool one_time_switch;
+	bool auto_toggle_on_collision;
+	unsigned char color_scheme;
+
+	TargetObject targets[10];
 
 	Switch();
 	static Representation representation();
+	void init();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
+	virtual void reset();
 };
 
 
@@ -363,6 +380,7 @@ public:
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void toggle(bool enable, Object *source=NULL);
 };
 
 class StamperVertical : public Trap
@@ -543,15 +561,19 @@ private:
 	double next_state, next_animation;
 	int state;
 	int flame_sprite1, flame_sprite2;
+	bool current_state;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
 	AudioInstance *audio;
 public:
+	bool initial_state;
+
 	Floater(Type::ObjectType type);
 	~Floater();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void toggle(bool enable, Object *source=NULL);
 };
 
 
@@ -629,6 +651,7 @@ public:
 	void load(const ppl7::ByteArrayPtr &ba);
 	void saveState(ppl7::FileObject &file, unsigned char id) const;
 	void loadState(const ppl7::ByteArrayPtr &ba) const;
+	Object *getObject(uint32_t object_id);
 	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
 	Object *detectCollision(const std::list<ppl7::grafix::Point> &player);
 	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
