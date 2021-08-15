@@ -144,4 +144,9 @@ void Object::reset()
 	if (!spawned) enabled=true;
 }
 
+void Object::toggle(bool , Object *)
+{
+
+}
+
 }	// EOF namespace Decker::Objects

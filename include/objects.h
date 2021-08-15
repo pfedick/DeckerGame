@@ -43,6 +43,7 @@ public:
 		TreasureChest=18,
 		WarpGate=19,
 		ExtraLife=20,
+		Switch=21,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -52,7 +53,8 @@ public:
 		LaserBeamHorizontal=106,
 		LaserBeamVertical=107,
 		Mushroom=108,
-		Scarabeus=109
+		Scarabeus=109,
+		StamperVertical=110
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -70,6 +72,8 @@ public:
 		TreasureChest=6,
 		Doors=7,
 		Scarabeus=8,
+		Laser=9,
+		StamperVertical=10,
 		MaxSpritesets
 	};
 };
@@ -141,6 +145,7 @@ public:
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void openUi();
 	virtual void reset();
+	virtual void toggle(bool enable, Object *source=NULL);
 	static Representation representation();
 };
 
@@ -218,6 +223,25 @@ public:
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
 };
+
+class Switch : public Object
+{
+private:
+	//AudioInstance *audio;
+public:
+	//int sample_id;
+	//int max_distance;
+	//float volume;
+
+	Switch();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+};
+
 
 
 class CoinReward : public Object
@@ -340,6 +364,27 @@ public:
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
 };
+
+class StamperVertical : public Trap
+{
+private:
+	double next_state;
+	int state;
+public:
+	float time_active, time_inactive;
+	bool auto_intervall;
+
+	StamperVertical();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+	virtual void toggle(bool enable, Object *source=NULL);
+
+};
+
 
 class Fire : public Trap
 {
