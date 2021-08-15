@@ -567,13 +567,20 @@ private:
 	AudioInstance *audio;
 public:
 	bool initial_state;
+	unsigned char floater_type;
 
 	Floater(Type::ObjectType type);
 	~Floater();
+	void init();
+	virtual void reset();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void toggle(bool enable, Object *source=NULL);
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+
 };
 
 
