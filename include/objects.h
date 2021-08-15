@@ -374,13 +374,29 @@ private:
 	int flicker;
 	AudioInstance *audio;
 public:
+	float time_on_min, time_off_min;
+	float time_on_max, time_off_max;
+	unsigned char color_scheme;
+	bool initial_state;
+	bool always_on;
+	bool block_player;
+	bool start_state;
+
+
 	LaserBarrier(Type::ObjectType type);
 	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
+	void init();
 	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void toggle(bool enable, Object *source=NULL);
+
+	virtual size_t save(unsigned char *buffer, size_t size);
+	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void openUi();
+
+
 };
 
 class StamperVertical : public Trap
