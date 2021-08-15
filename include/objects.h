@@ -119,7 +119,7 @@ public:
 	ppl7::grafix::PointF initial_p;
 	SpriteTexture	*texture;
 	//ppl7::tk::Widget *widget;
-	ppl7::grafix::Rect boundary;
+	ppl7::grafix::Rect boundary, initial_boundary;
 	uint32_t id;
 	int sprite_set;
 	int sprite_no;

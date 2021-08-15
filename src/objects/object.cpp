@@ -86,8 +86,10 @@ ppl7::String Object::typeName() const
 
 void Object::updateBoundary()
 {
-	if (texture)
+	if (texture) {
 		boundary=texture->spriteBoundary(sprite_no,1.0f,p.x,p.y);
+		initial_boundary=texture->spriteBoundary(sprite_no_representation,1.0f,initial_p.x,initial_p.y);
+	}
 }
 
 
