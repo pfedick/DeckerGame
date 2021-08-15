@@ -113,11 +113,11 @@ void LaserBarrier::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coord
 	if (type()==Type::LaserBeamHorizontal) {
 		for (int i=start.x;i<end.x;i+=32)
 			texture->draw(renderer,
-					i+coords.x+32/2,
+					i+coords.x+16,
 					start.y+coords.y,
 					sprite_no);
 	} else {
-		for (int i=start.y;i<end.y;i+=32)
+		for (int i=start.y;i<end.y;i+=TILE_HEIGHT)
 			texture->draw(renderer,
 					start.x+coords.x,
 					i+coords.y+16,
