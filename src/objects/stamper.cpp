@@ -46,6 +46,9 @@ void StamperVertical::init()
 	state=initial_state;
 	sprite_no=stamper_type*20;
 	if (state==2) sprite_no+=5;
+	animation.setStaticFrame(sprite_no);
+	printf ("sprite_no=%d, state=%d\n",sprite_no, state);
+	updateBoundary();
 }
 
 
@@ -78,18 +81,22 @@ void StamperVertical::update(double time, TileTypePlane &ttplane, Player &player
 		}
 	}
 	int start_sprite_no=stamper_type*20;
-	if (state==0 && time>next_state) {
-		state=1;
-		animation.startSequence(start_sprite_no, start_sprite_no+5, false, start_sprite_no+5);
-	} else if (state==1 && animation.isFinished()==true) {
-		state=2;
-		next_state=time+time_active;
-	} else if (state==2 && time>next_state) {
-		state=3;
-		animation.startSequence(start_sprite_no+6, start_sprite_no+19, false, start_sprite_no+19);
-	} else if (state==3 && animation.isFinished()==true) {
-		state=0;
-		next_state=time+time_inactive;
+	if (auto_intervall) {
+		if (state==0 && time>next_state) {
+			state=1;
+			animation.startSequence(start_sprite_no, start_sprite_no+5, false, start_sprite_no+5);
+		} else if (state==1 && animation.isFinished()==true) {
+			state=2;
+			next_state=time+time_active;
+		} else if (state==2 && time>next_state) {
+			state=3;
+			animation.startSequence(start_sprite_no+6, start_sprite_no+19, false, start_sprite_no+19);
+		} else if (state==3 && animation.isFinished()==true) {
+			state=0;
+			next_state=time+time_inactive;
+		}
+	} else {
+
 	}
 }
 
@@ -106,7 +113,14 @@ void StamperVertical::handleCollision(Player *player, const Collision &collision
 
 void StamperVertical::toggle(bool enabled, Object *source)
 {
-
+	int start_sprite_no=stamper_type*20;
+	if (enabled) {
+		animation.startSequence(start_sprite_no, start_sprite_no+5, false, start_sprite_no+5);
+		state=2;
+	} else {
+		animation.startSequence(start_sprite_no+6, start_sprite_no+19, false, start_sprite_no+19);
+		state=0;
+	}
 }
 
 size_t StamperVertical::save(unsigned char *buffer, size_t size)
@@ -216,8 +230,10 @@ void StamperDialog::textChangedEvent(ppl7::tk::Event *event, const ppl7::String 
 
 void StamperDialog::toggledEvent(ppl7::tk::Event *event, bool checked)
 {
-	if (event->widget()==initial_state) object->initial_state=checked;
+	if (event->widget()==initial_state) object->initial_state=(int)checked*2;
 	else if (event->widget()==auto_intervall) object->auto_intervall=checked;
+	printf ("object->initial_state=%d\n", object->initial_state);
+	object->init();
 
 }
 
