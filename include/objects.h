@@ -402,7 +402,9 @@ public:
 class StamperVertical : public Trap
 {
 private:
+	AnimationCycle animation;
 	double next_state;
+	double next_animation;
 	int state;
 public:
 	float time_active, time_inactive;

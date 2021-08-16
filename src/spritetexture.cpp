@@ -376,6 +376,16 @@ void SpriteTexture::draw(SDL_Renderer *renderer, int x, int y, int id) const
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
+void SpriteTexture::draw(SDL_Renderer *renderer, int id, const SDL_Rect &source, const SDL_Rect &target) const
+{
+	if (!bSDLBufferd) return;
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it==SpriteList.end()) return;
+	const SpriteIndexItem &item=it->second;
+	SDL_RenderCopy(renderer, item.tex, &source, &target);
+}
+
 void SpriteTexture::drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const
 {
 	if (!bSDLBufferd) return;

@@ -88,6 +88,12 @@ ppl7::String Player::getState() const
 	return s;
 }
 
+void Player::setZeroVelocity()
+{
+	velocity_move.x=0;
+	velocity_move.y=0;
+}
+
 void Player::setSpriteResource(const SpriteTexture &resource)
 {
 	sprite_resource=&resource;

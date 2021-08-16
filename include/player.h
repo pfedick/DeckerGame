@@ -69,7 +69,8 @@ public:
 
 	enum HealthDropReason {
 		Unknown,
-		FallingDeep
+		FallingDeep,
+		Smashed,
 	};
 private:
 	Velocity velocity_move, acceleration;
@@ -122,6 +123,7 @@ public:
 	~Player();
 	ppl7::grafix::PointF position() const;
 	int getKeyboardMatrix(const unsigned char *state=NULL);
+	void setZeroVelocity();
 	void addPoints(int points);
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation &repr);
