@@ -409,15 +409,19 @@ private:
 public:
 	float time_active, time_inactive;
 	bool auto_intervall;
+	unsigned char initial_state;
+	unsigned char stamper_type;
 
 	StamperVertical();
 	static Representation representation();
+	void init();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
 	virtual void toggle(bool enable, Object *source=NULL);
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 
 };
 

@@ -116,6 +116,10 @@ void Player::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, co
 	ppl7::grafix::Point p(x+viewport.x1-worldcoords.x,y+viewport.y1-worldcoords.y);
 	if (movement==Slide) p.y+=35;
 	sprite_resource->draw(renderer,p.x,p.y+1,animation.getFrame());
+	/*
+	SDL_SetRenderDrawColor(renderer,255,0,0,255);
+	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
+	*/
 }
 
 void Player::drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
@@ -550,7 +554,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	} else if (collision_at_pivoty[0]==TileType::Plate2h) {
 		int th=TILE_HEIGHT/3;
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
-		printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
+		//printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
 		//y=ty;
 		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
@@ -803,7 +807,7 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 	if (draw.width()) {
 		//printf ("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
 		int stepx=boundary.width()/6;
-		int stepy=boundary.height()/6;
+		int stepy=boundary.height()/12;
 		for (int py=boundary.y1;py<boundary.y2;py+=stepx) {
 			for (int px=boundary.x1;px<boundary.x2;px+=stepy) {
 				ppl7::grafix::Color c=draw.getPixel(px-boundary.x1, py-boundary.y1);

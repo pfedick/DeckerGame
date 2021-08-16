@@ -376,6 +376,22 @@ void SpriteTexture::draw(SDL_Renderer *renderer, int x, int y, int id) const
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
+void SpriteTexture::drawBoundingBox(SDL_Renderer *renderer, int x, int y, int id) const
+{
+	if (!bSDLBufferd) return;
+	std::map<int,SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it==SpriteList.end()) return;
+	const SpriteIndexItem &item=it->second;
+	SDL_Rect tr;
+	tr.x=x+item.Offset.x-item.Pivot.x;
+	tr.y=y+item.Offset.y-item.Pivot.y;
+	tr.w=item.r.w;
+	tr.h=item.r.h;
+	SDL_RenderDrawRect(renderer,&tr);
+
+}
+
 void SpriteTexture::draw(SDL_Renderer *renderer, int id, const SDL_Rect &source, const SDL_Rect &target) const
 {
 	if (!bSDLBufferd) return;
