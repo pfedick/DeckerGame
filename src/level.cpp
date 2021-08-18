@@ -304,13 +304,14 @@ void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords,
 		if (showSprites) PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
 		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
 		if (showSprites) PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
+		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
 		if (showObjects) {
 			if (editMode)
 				objects->drawEditMode(renderer, viewport, worldcoords*planeFactor[0]);
 			else
 				objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
 		}
-		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
+
 	}
 	if (FrontPlane.isVisible()) {
 		if (showSprites) FrontSprites[0].draw(renderer, viewport,worldcoords*planeFactor[1]);
