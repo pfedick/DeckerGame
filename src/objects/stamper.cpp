@@ -47,7 +47,7 @@ void StamperVertical::init()
 	sprite_no=stamper_type*20;
 	if (state==2) sprite_no+=5;
 	animation.setStaticFrame(sprite_no);
-	printf ("sprite_no=%d, state=%d\n",sprite_no, state);
+	//printf ("sprite_no=%d, state=%d\n",sprite_no, state);
 	updateBoundary();
 }
 

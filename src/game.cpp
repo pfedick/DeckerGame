@@ -149,6 +149,7 @@ void Game::loadGrafix()
 void Game::createWindow()
 {
 	setFlags(ppl7::tk::Window::DefaultWindow);
+	//setFlags(ppl7::tk::Window::DefaultFullscreen);
 	setWindowTitle("DeckerGame");
 	setRGBFormat(ppl7::grafix::RGBFormat::A8R8G8B8);
 	setBackgroundColor(ppl7::grafix::Color(0,0,0,0));
