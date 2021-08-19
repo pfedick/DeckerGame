@@ -66,9 +66,9 @@ Player::~Player()
 {
 
 }
-static const char* movement_string[11]={"Stand",
+static const char* movement_string[12]={"Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide", "Dead"};
+		"Jump","Falling", "Slide", "Floating", "Dead"};
 
 static const char* orientation_string[4]={"Left",
 		"Right", "Front", "Back"};
@@ -86,6 +86,12 @@ ppl7::String Player::getState() const
 			orientation_string[orientation],
 			velocity_move.x, velocity_move.y);
 	return s;
+}
+
+void Player::setZeroVelocity()
+{
+	velocity_move.x=0;
+	velocity_move.y=0;
 }
 
 void Player::setSpriteResource(const SpriteTexture &resource)
@@ -110,6 +116,10 @@ void Player::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, co
 	ppl7::grafix::Point p(x+viewport.x1-worldcoords.x,y+viewport.y1-worldcoords.y);
 	if (movement==Slide) p.y+=35;
 	sprite_resource->draw(renderer,p.x,p.y+1,animation.getFrame());
+	/*
+	SDL_SetRenderDrawColor(renderer,255,0,0,255);
+	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
+	*/
 }
 
 void Player::drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
@@ -544,7 +554,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane &world)
 	} else if (collision_at_pivoty[0]==TileType::Plate2h) {
 		int th=TILE_HEIGHT/3;
 		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
-		printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
+		//printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
 		//y=ty;
 		if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 		return;
@@ -744,6 +754,7 @@ void Player::updatePhysics(const TileTypePlane &world)
 		if (acceleration_airstream<8.0f) acceleration_airstream+=0.02f;
 		if (acceleration_airstream>8.0f) acceleration_airstream=8.0f;
 		match=true;
+		movement=Floating;
 	}
 	if (acceleration_airstream>0.0f) {
 		if (!match) {
@@ -796,7 +807,7 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects)
 	if (draw.width()) {
 		//printf ("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
 		int stepx=boundary.width()/6;
-		int stepy=boundary.height()/6;
+		int stepy=boundary.height()/12;
 		for (int py=boundary.y1;py<boundary.y2;py+=stepx) {
 			for (int px=boundary.x1;px<boundary.x2;px+=stepy) {
 				ppl7::grafix::Color c=draw.getPixel(px-boundary.x1, py-boundary.y1);

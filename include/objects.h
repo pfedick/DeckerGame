@@ -119,7 +119,7 @@ public:
 	ppl7::grafix::PointF initial_p;
 	SpriteTexture	*texture;
 	//ppl7::tk::Widget *widget;
-	ppl7::grafix::Rect boundary;
+	ppl7::grafix::Rect boundary, initial_boundary;
 	uint32_t id;
 	int sprite_set;
 	int sprite_no;
@@ -402,20 +402,26 @@ public:
 class StamperVertical : public Trap
 {
 private:
+	AnimationCycle animation;
 	double next_state;
+	double next_animation;
 	int state;
 public:
 	float time_active, time_inactive;
 	bool auto_intervall;
+	unsigned char initial_state;
+	unsigned char stamper_type;
 
 	StamperVertical();
 	static Representation representation();
+	void init();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual size_t save(unsigned char *buffer, size_t size);
 	virtual bool load(const unsigned char *buffer, size_t size);
 	virtual void openUi();
 	virtual void toggle(bool enable, Object *source=NULL);
+	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
 
 };
 
