@@ -3,6 +3,7 @@
 #include "objects.h"
 #include "decker.h"
 #include "player.h"
+#include "wallenstein.h"
 
 namespace Decker::Objects {
 
@@ -90,6 +91,10 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::StamperVertical]->enableOutlines(true);
 	spriteset[Spriteset::StamperVertical]->enableMemoryBuffer(true);
 	spriteset[Spriteset::StamperVertical]->load(sdl,"res/stamper_vertical.tex");
+
+	spriteset[Spriteset::Wallenstein]->enableOutlines(true);
+	spriteset[Spriteset::Wallenstein]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Wallenstein]->load(sdl,"res/wallenstein.tex");
 
 }
 
@@ -302,6 +307,7 @@ Representation getRepresentation(int object_type)
 	case Type::Scarabeus: return Scarabeus::representation();
 	case Type::Switch: return Switch::representation();
 	case Type::StamperVertical: return StamperVertical::representation();
+	case Type::Wallenstein: return Wallenstein::representation();
 
 	default: return Object::representation();
 	}
@@ -363,6 +369,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Scarabeus: return new Scarabeus();
 	case Type::Switch: return new Switch();
 	case Type::StamperVertical: return new StamperVertical();
+	case Type::Wallenstein: return new Wallenstein();
 	}
 	return NULL;
 }

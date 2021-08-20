@@ -56,6 +56,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Scarabeus,"Scarabeus",34);
 	addObject(Decker::Objects::Type::Switch,"Switch",35);
 	addObject(Decker::Objects::Type::StamperVertical,"Stamper vertical",36);
+	addObject(Decker::Objects::Type::Wallenstein,"Wallenstein",0);
 
 
 	scrollbar->setSize(object_map.size()/2);

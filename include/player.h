@@ -6,6 +6,7 @@ class SDL_Renderer;
 class SpriteTexture;
 
 #include "animation.h"
+#include "physic.h"
 
 class TileTypePlane;
 namespace Decker::Objects {
@@ -14,20 +15,7 @@ namespace Decker::Objects {
 	class Representation;
 } // EOF namespace Decker::Objects
 
-class Velocity
-{
-public:
-	Velocity(float x=0.0f, float y=0.0f) {
-		this->x=x;
-		this->y=y;
-	}
-	float x;
-	float y;
-	void stop() {
-		x=0.0f;
-		y=0.0f;
-	}
-};
+
 class KeyboardKeys
 {
 public:

@@ -1,3 +1,6 @@
+#ifndef INCLUDE_OBJECTS_H_
+#define INCLUDE_OBJECTS_H_
+
 #include <map>
 #include <list>
 #include <ppl7.h>
@@ -54,7 +57,8 @@ public:
 		LaserBeamVertical=107,
 		Mushroom=108,
 		Scarabeus=109,
-		StamperVertical=110
+		StamperVertical=110,
+		Wallenstein=111
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -74,6 +78,7 @@ public:
 		Scarabeus=8,
 		Laser=9,
 		StamperVertical=10,
+		Wallenstein=11,
 		MaxSpritesets
 	};
 };
@@ -696,3 +701,6 @@ public:
 ObjectSystem *GetObjectSystem();
 
 } // EOF namespace Decker::Objects
+
+#endif // INCLUDE_OBJECTS_H_
+
