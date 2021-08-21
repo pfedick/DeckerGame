@@ -143,6 +143,9 @@ sprites:
 	./texmaker -s "lightwave/Render/sprites_flowers/*.png" -t res/sprites_flowers.tex -w 1024 -h 1024 -px 32 -py 32
 	./texmaker -s "lightwave/Render/sprites_flowers/*.png" -t res/sprites_flowers_ui.tex -w 1024 -h 1024 -px 0 -py 0
 
+	./texmaker -s "lightwave/Render/objects/treasure/*.png" -t res/sprites_treasure.tex -w 1024 -h 1024 -px 64 -py 110
+	./texmaker -s "lightwave/Render/objects/treasure_ui/*.png" -t res/sprites_treasure_ui.tex -w 512 -h 512 -px 0 -py 0
+
 	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid.tex -w 512 -h 512 -px 0 -py 76
 	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid_ui.tex -w 512 -h 512 -px 0 -py 0
 	

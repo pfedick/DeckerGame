@@ -13,9 +13,17 @@ namespace Decker::Objects {
 class Wallenstein : public Enemy, public Physic
 {
 private:
+	enum State {
+		StateStand,
+		StatePatrol,
+		StateGoToOrigin,
+		StateFollowPlayer
+	};
 	AnimationCycle animation;
 	double next_state, next_animation;
 	int state;
+
+
 public:
 	Wallenstein();
 	static Representation representation();

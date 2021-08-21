@@ -38,6 +38,10 @@ Wallenstein::Wallenstein()
 {
 	sprite_set=Spriteset::Wallenstein;
 	sprite_no=27;
+	next_state=0.0f;
+	next_animation=0.0f;
+	state=StateStand;
+	animation.setStaticFrame(27);
 }
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)

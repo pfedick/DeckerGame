@@ -351,6 +351,8 @@ public:
 	SpriteTexture uiSpritesRocks;
 	SpriteTexture Sprites_Flowers;
 	SpriteTexture uiSpritesFlowers;
+	SpriteTexture Sprites_Treasure;
+	SpriteTexture uiSpritesTreasure;
 
 	class BrickResource
 	{

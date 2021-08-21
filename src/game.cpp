@@ -100,6 +100,10 @@ void Game::loadGrafix()
 	resources.Sprites_Flowers.enableMemoryBuffer(true);
 	resources.Sprites_Flowers.load(sdl, "res/sprites_flowers.tex");
 
+	resources.Sprites_Treasure.enableOutlines(true);
+	resources.Sprites_Treasure.enableMemoryBuffer(true);
+	resources.Sprites_Treasure.load(sdl, "res/sprites_treasure.tex");
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	brick_occupation_solid.push_back(BrickOccupation::Item(0,0,Tile::TileOccupation::OccupationBrick));
@@ -131,6 +135,9 @@ void Game::loadGrafix()
 	resources.uiSpritesFlowers.enableMemoryBuffer(true);
 	resources.uiSpritesFlowers.load(sdl, "res/sprites_flowers_ui.tex");
 
+	resources.uiSpritesTreasure.enableSDLBuffer(false);
+	resources.uiSpritesTreasure.enableMemoryBuffer(true);
+	resources.uiSpritesTreasure.load(sdl, "res/sprites_treasure_ui.tex");
 
 	resources.uiObjects.enableSDLBuffer(false);
 	resources.uiObjects.enableMemoryBuffer(true);
@@ -253,6 +260,7 @@ void Game::init()
 	level.setSpriteset(4, &resources.Sprites_Nature_Blury);
 	level.setSpriteset(5, &resources.Sprites_Rocks);
 	level.setSpriteset(6, &resources.Sprites_Flowers);
+	level.setSpriteset(7, &resources.Sprites_Treasure);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -572,6 +580,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(4,"Nature Blury", &resources.uiSpritesNature);
 		sprite_selection->setSpriteSet(5,"Rocks", &resources.uiSpritesRocks);
 		sprite_selection->setSpriteSet(6,"Flowers", &resources.uiSpritesFlowers);
+		sprite_selection->setSpriteSet(7,"Treasure", &resources.uiSpritesTreasure);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
@@ -680,6 +689,10 @@ void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point 
 		if (nr<0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
 		if (spriteset==1 || spriteset==5) nr=nr*4;
+		else if (spriteset==7) {
+			if (nr==0) nr=ppl7::rand(0, 47);
+			else nr=(nr-1)*6;
+		}
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
@@ -772,6 +785,10 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
 		if (sprite_mode!=spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
 		if (spriteset==1 || spriteset==5) nr=nr*4+ppl7::rand(0, 3);
+		if (spriteset==7) {
+			if (nr==0) nr=ppl7::rand(0, 47);
+			else nr=(nr-1)*6+ppl7::rand(0, 5);
+		}
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
 		if (layer<0 || layer>1 || spriteset>MAX_SPRITESETS) return;
