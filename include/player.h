@@ -31,76 +31,31 @@ public:
 	};
 };
 
-class Player
+class Player : public Physic
 {
-public:
-	enum PlayerMovement {
-		Stand,
-		Turn,
-		Walk,
-		Run,
-		Pickup,
-		ClimbUp,
-		ClimbDown,
-		Jump,
-		Falling,
-		Slide,
-		Floating,
-		Dead
-	};
-	enum PlayerOrientation {
-		Left,
-		Right,
-		Front,
-		Back
-	};
-
-	enum HealthDropReason {
-		Unknown,
-		FallingDeep,
-		Smashed,
-	};
 private:
-	Velocity velocity_move, acceleration;
-	float gravity, acceleration_gravity;
-	float acceleration_airstream;
-	float acceleration_jump;
 	const SpriteTexture *sprite_resource;
 	const SpriteTexture *tiletype_resource;
 
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
-	double jump_climax;
-	double time;
-	double fallstart;
+
 	AnimationCycle animation;
 
 
-	PlayerMovement movement=Stand;
-	PlayerOrientation orientation=Front;
-	PlayerOrientation turnTarget;
 
 	ppl7::grafix::Point lastSavePoint;
-	int collision_matrix[4][6];
-	int collision_at_pivoty[3];
-	Decker::Objects::Object *player_stands_on_object;
 
 	std::map<int,Decker::Objects::Representation> Inventory;
 
 
 	void turn(PlayerOrientation target);
 	void stand();
-	void updateMovement();
-	void checkCollisionWithWorld(const TileTypePlane &world);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem *objects);
-	void updatePhysics(const TileTypePlane &world);
-
-	bool isCollisionLeft() const;
-	bool isCollisionRight() const;
+	void checkCollisionWithWorld(const TileTypePlane &world);
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);
-	void detectFallingDamage(double time);
 
 public:
 	float x,y;
@@ -123,8 +78,6 @@ public:
 	void drawCollision(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
 	void move(int x, int y);
 	ppl7::grafix::Rect getBoundingBox() const;
-	PlayerMovement getMovement() const;
-	ppl7::String getState() const;
 	void setStandingOnObject(Decker::Objects::Object *object);
 
 	void update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects);

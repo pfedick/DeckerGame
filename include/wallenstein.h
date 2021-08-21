@@ -10,7 +10,7 @@ class SpriteTexture;
 class TileTypePlane;
 
 namespace Decker::Objects {
-class Wallenstein : public Enemy
+class Wallenstein : public Enemy, public Physic
 {
 private:
 	AnimationCycle animation;
