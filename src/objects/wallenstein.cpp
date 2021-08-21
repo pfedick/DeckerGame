@@ -2,6 +2,7 @@
 #include <ppl7-grafix.h>
 #include "wallenstein.h"
 #include "audiopool.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -38,10 +39,13 @@ Wallenstein::Wallenstein()
 {
 	sprite_set=Spriteset::Wallenstein;
 	sprite_no=27;
-	next_state=0.0f;
+	next_state=ppl7::GetMicrotime()+5.0f;
 	next_animation=0.0f;
-	state=StateStand;
+	idle_timeout=0.0f;
+	state=StateWaitForEnable;
 	animation.setStaticFrame(27);
+	keys=0;
+	substate=0;
 }
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)
@@ -49,9 +53,233 @@ void Wallenstein::handleCollision(Player *player, const Collision &collision)
 
 }
 
+
+void Wallenstein::toggle(bool enable, Object *source)
+{
+	if (enable && state==StateWaitForEnable) state=StatePatrol;
+}
+
+void Wallenstein::turn(PlayerOrientation target)
+{
+	movement=Turn;
+	turnTarget=target;
+	if (orientation==Front) {
+		if (target==Left) {
+			animation.start(turn_from_mid_to_left,sizeof(turn_from_mid_to_left)/sizeof(int),false,0);
+		} else {
+			animation.start(turn_from_mid_to_right,sizeof(turn_from_mid_to_right)/sizeof(int),false,9);
+		}
+	} else if (orientation==Left) {
+		if (target==Right) {
+			animation.start(turn_from_left_to_right,sizeof(turn_from_left_to_right)/sizeof(int),false,9);
+		} else if (target==Front) {
+			animation.start(turn_from_left_to_mid,sizeof(turn_from_left_to_mid)/sizeof(int),false,27);
+		}
+	} else if (orientation==Right) {
+		if (target==Left) {
+			animation.start(turn_from_right_to_left,sizeof(turn_from_right_to_left)/sizeof(int),false,0);
+		} else if (target==Front) {
+			animation.start(turn_from_right_to_mid,sizeof(turn_from_right_to_mid)/sizeof(int),false,27);
+		}
+	}
+}
+
+void Wallenstein::stand()
+{
+	movement=Stand;
+	keys=0;
+	if (orientation==Left) animation.setStaticFrame(0);
+	else if (orientation==Right) animation.setStaticFrame(9);
+	else if (orientation==Front) animation.setStaticFrame(27);
+	else if (orientation==Back) animation.setStaticFrame(28);
+	idle_timeout=time+8.0;
+	next_state=time+(double)ppl7::rand(1,5);
+}
+
 void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 {
+	//printf ("s=%d, state=%s, keys=%d\n", state, (const char*)getState(), keys);
+	this->time=time;
+	if (!enabled) return;
+	if (time>next_animation) {
+		next_animation=time+0.07f;
+		animation.update();
+		int new_sprite=animation.getFrame();
+		if (new_sprite!=sprite_no) {
+			sprite_no=new_sprite;
+			updateBoundary();
+		}
+	}
+	if (movement==Dead) {
+		if (animation.isFinished()) {
+			enabled=false;
+		}
+		return;
+	}
+	double dist=ppl7::grafix::Distance(p, player.position());
+	if (state==StateWaitForEnable && dist<800) state=StatePatrol;
 
+
+	if (time<next_state && state==StateStand) {
+		state=StatePatrol;
+		if (ppl7::rand(0,1)==0) turn(Left);
+		else turn(Right);
+	}
+
+	if (movement==Turn) {
+		if (!animation.isFinished()) return;
+		//printf ("debug 2\n");
+		movement=Stand;
+		//if (state==StatePatrol) movement=Walk;
+		orientation=turnTarget;
+		velocity_move.stop();
+		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
+	}
+
+	updateMovement();
+	if (movement==Dead) return;
+	Physic::PlayerMovement new_movement=Physic::checkCollisionWithWorld(ttplane, p.x,p.y);
+	if (new_movement==Stand && movement!=Stand) {
+		//printf ("checkCollisionWithWorld sagt: stand\n");
+		stand();
+	}
+
+	if (updatePhysics(ttplane)) {
+		if (movement==Slide && orientation==Left) {
+			animation.start(slide_left,sizeof(slide_left)/sizeof(int),false,86);
+		} else if (movement==Slide && orientation==Right) {
+			animation.start(slide_right,sizeof(slide_right)/sizeof(int),false,82);
+		}
+	}
+	p.x+=velocity_move.x;
+	p.y+=velocity_move.y+gravity;
+	updateBoundary();
+
+
+	if (movement==Slide || movement==Dead) {
+		return;
+	}
+	if (movement==Jump || movement==Falling) {
+		//handleKeyboardWhileJumpOrFalling(time, world, objects);
+		return;
+	}
+	keys=0;
+	if (state==StatePatrol) updateStatePatrol(time, ttplane);
+	executeKeys();
+
+}
+
+void Wallenstein::updateStatePatrol(double time, TileTypePlane &ttplane)
+{
+	//printf ("movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
+	//		keys, (int)time, (int)next_state);
+	if (movement==Turn) return;
+	if (movement==Stand && next_state<time && substate==0) {
+		//printf ("next_state is turn\n");
+		if (orientation==Left) turn(Right);
+		else turn(Left);
+		substate=1;
+		return;
+	} else if (movement==Stand && substate==0) {
+		return;
+	}
+	substate=0;
+	if (orientation==Left) {
+		keys=KeyboardKeys::Left;
+	} else {
+		keys=KeyboardKeys::Right;
+	}
+}
+
+void Wallenstein::executeKeys()
+{
+	//printf ("Wallenstein::executeKeys: %d\n",keys);
+	if (keys==KeyboardKeys::Left) {
+		if (orientation!=Left) { turn(Left); return;}
+		if (movement!=Walk) {
+			movement=Walk;
+			animation.start(walk_cycle_left,sizeof(walk_cycle_left)/sizeof(int),true,0);
+		}
+	} else if (keys==(KeyboardKeys::Left|KeyboardKeys::Shift)) {
+		if (movement!=Run || orientation!=Left ) {
+			movement=Run;
+			orientation=Left;
+			animation.start(run_cycle_left,sizeof(run_cycle_left)/sizeof(int),true,0);
+		}
+	} else if (keys==KeyboardKeys::Right) {
+		if (orientation!=Right) { turn(Right); return;}
+		if (movement!=Walk) {
+			movement=Walk;
+			animation.start(walk_cycle_right,sizeof(walk_cycle_right)/sizeof(int),true,0);
+		}
+	} else if (keys==(KeyboardKeys::Right|KeyboardKeys::Shift)) {
+		if (movement!=Run  || orientation!=Right) {
+			movement=Run;
+			orientation=Right;
+			animation.start(run_cycle_right,sizeof(run_cycle_right)/sizeof(int),true,0);
+		}
+	} else if ((keys==KeyboardKeys::Up || keys==(KeyboardKeys::Up|KeyboardKeys::Shift)) && movement!=Falling && movement!=Jump) {
+		if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder) {
+			if (movement!=ClimbUp) {
+				movement=ClimbUp;
+				orientation=Back;
+				animation.start(climb_up_cycle,sizeof(climb_up_cycle)/sizeof(int),true,0);
+			}
+		} else {
+			if (movement!=Jump) {
+				movement=Jump;
+				jump_climax=time+0.4f;
+				acceleration_jump=1.0f;
+				if (orientation==Front) animation.setStaticFrame(42);
+				else if (orientation==Left) animation.setStaticFrame(40);
+				else if (orientation==Right) animation.setStaticFrame(41);
+				else animation.setStaticFrame(28);
+			}
+		}
+	} else if ((keys&KeyboardKeys::JumpLeft)==KeyboardKeys::JumpLeft) {
+		movement=Jump;
+		orientation=Left;
+		jump_climax=time+0.4f;
+		acceleration_jump=1.0f;
+		velocity_move.x=-2;
+		if (keys&KeyboardKeys::Shift) velocity_move.x=-6;
+		animation.setStaticFrame(38);
+	} else if ((keys&KeyboardKeys::JumpRight)==KeyboardKeys::JumpRight) {
+		movement=Jump;
+		orientation=Right;
+		jump_climax=time+0.4f;
+		acceleration_jump=1.0f;
+		velocity_move.x=2;
+		if (keys&KeyboardKeys::Shift) velocity_move.x=6;
+		animation.setStaticFrame(39);
+	} else if (keys==KeyboardKeys::Down|| keys==(KeyboardKeys::Down|KeyboardKeys::Shift)) {
+		if (collision_matrix[1][4]==TileType::Ladder || collision_matrix[2][4]==TileType::Ladder
+				||collision_matrix[1][5]==TileType::Ladder || collision_matrix[2][5]==TileType::Ladder) {
+			if (collision_matrix[1][5]!=TileType::Blocking && collision_matrix[2][5]!=TileType::Blocking) {
+				if (movement!=ClimbDown) {
+					//printf ("climb down\n");
+					movement=ClimbDown;
+					orientation=Back;
+					animation.start(climb_down_cycle,sizeof(climb_down_cycle)/sizeof(int),true,0);
+				}
+			}
+		}
+
+	} else if (keys==(KeyboardKeys::Left) && movement==Jump) {
+		if (!isCollisionLeft()) velocity_move.x=-2;
+	} else if (keys==(KeyboardKeys::Right) && movement==Jump) {
+		if (!isCollisionLeft()) velocity_move.x=2;
+	} else if (keys==(KeyboardKeys::Left|KeyboardKeys::Shift) && movement==Jump) {
+		if (!isCollisionLeft()) velocity_move.x=-6;
+	} else if (keys==(KeyboardKeys::Right|KeyboardKeys::Shift) && movement==Jump) {
+		if (!isCollisionLeft()) velocity_move.x=6;
+
+	} else {
+		if (movement!=Stand && movement!=Jump && movement!=Falling && movement!=Turn) {
+			//printf ("debug 1\n");
+			stand();
+		}
+	}
 }
 
 

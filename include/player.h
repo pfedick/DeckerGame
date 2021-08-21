@@ -16,20 +16,6 @@ namespace Decker::Objects {
 } // EOF namespace Decker::Objects
 
 
-class KeyboardKeys
-{
-public:
-	enum {
-		Left=1,
-		Right=2,
-		Up=4,
-		Down=8,
-		Shift=16,
-		Action=32,
-		JumpLeft=5,
-		JumpRight=6,
-	};
-};
 
 class Player : public Physic
 {
