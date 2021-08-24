@@ -40,6 +40,7 @@ Game::Game()
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
 	object_selection=NULL;
+	waynet_edit=NULL;
 	world_widget=NULL;
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
@@ -460,6 +461,7 @@ void Game::run()
 		if (mainmenue->visibility_plane_player) {
 			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
 			if (mainmenue->visibility_collision) player->drawCollision(renderer, viewport, WorldCoords);
+			if (waynet_edit) level.waynet.draw(renderer, viewport, WorldCoords);
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
@@ -527,6 +529,18 @@ void Game::closeObjectSelection()
 	}
 }
 
+void Game::closeWayNet()
+{
+	if (waynet_edit) {
+		this->removeChild(waynet_edit);
+		delete(waynet_edit);
+		waynet_edit=NULL;
+		viewport.x1=0;
+		world_widget->setViewport(viewport);
+		mainmenue->setShowTileTypes(false);
+	}
+}
+
 
 
 void Game::showTilesSelection()
@@ -534,6 +548,7 @@ void Game::showTilesSelection()
 	closeTileTypeSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
+	closeWayNet();
 	if (tiles_selection) {
 		closeTileSelection();
 	} else {
@@ -552,6 +567,7 @@ void Game::showTileTypeSelection()
 	closeSpriteSelection();
 	closeTileSelection();
 	closeObjectSelection();
+	closeWayNet();
 	if (tiletype_selection) {
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
@@ -570,6 +586,7 @@ void Game::showSpriteSelection()
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeObjectSelection();
+	closeWayNet();
 	if (sprite_selection) {
 		closeSpriteSelection();
 	} else {
@@ -595,6 +612,7 @@ void Game::showObjectsSelection()
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
+	closeWayNet();
 	if (object_selection) {
 		closeObjectSelection();
 	} else {
@@ -607,6 +625,26 @@ void Game::showObjectsSelection()
 		selected_object=NULL;
 	}
 }
+
+void Game::showWayNetEdit()
+{
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	closeObjectSelection();
+	if (waynet_edit) {
+		closeWayNet();
+		mainmenue->setShowTileTypes(false);
+	} else {
+		waynet_edit=new Decker::ui::WayNetEdit(0,33,300,statusbar->y()-2-33,this);
+		//waynet_edit->setSpriteSet(&resources.uiObjects);
+		this->addChild(waynet_edit);
+		viewport.x1=300;
+		world_widget->setViewport(viewport);
+		mainmenue->setShowTileTypes(true);
+	}
+}
+
 
 
 
@@ -770,6 +808,8 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		mouseDownEventOnObject(event);
 	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
 		handleMouseDrawInWorld(*event);
+	} else if (waynet_edit!=NULL && event->widget()==world_widget) {
+		mouseDownEventOnWayNet(event);
 	}
 }
 
@@ -848,6 +888,32 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
 		sprite_mode=SpriteModeSelect;
 		selected_object=NULL;
+	}
+}
+
+void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event)
+{
+	ppl7::grafix::Point coords=WorldCoords;
+	int x=(event->p.x+coords.x)/TILE_WIDTH;
+	int y=(event->p.y+coords.y)/TILE_HEIGHT;
+	WayPoint wp(x,y);
+	if (event->buttonMask==ppl7::tk::MouseState::Left) {
+		if (level.waynet.hasPoint(wp)) {
+			//printf ("Point selected\n");
+			if (level.waynet.hasSelection()) {
+				level.waynet.addConnection(level.waynet.getSelection(),
+						Connection(Connection::Walk,wp.id,1));
+				level.waynet.setSelection(wp);
+			} else {
+				level.waynet.setSelection(wp);
+			}
+		} else {
+			level.waynet.addPoint(wp);
+			level.waynet.clearSelection();
+		}
+	} else if (event->buttonMask==ppl7::tk::MouseState::Right) {
+		level.waynet.deletePoint(wp);
+		level.waynet.clearSelection();
 	}
 }
 

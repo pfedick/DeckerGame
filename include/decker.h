@@ -9,6 +9,7 @@
 #include "ui.h"
 #include "audio.h"
 #include "audiopool.h"
+#include "waynet.h"
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -388,6 +389,7 @@ private:
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
 	Decker::Objects::ObjectSystem *objects;
+	Waynet waynet;
 
 
 	ppl7::grafix::Rect viewport;
@@ -420,7 +422,8 @@ private:
 		chunkTileTypes=20,
 		chunkHorizonSpritesLayer0=21,
 		chunkHorizonSpritesLayer1=22,
-		chunkObjects=30
+		chunkObjects=30,
+		chunkWayNet=31
 	};
 
 public:
@@ -473,6 +476,7 @@ private:
 	Decker::ui::SpriteSelection *sprite_selection;
 	Decker::ui::ObjectSelection *object_selection;
 	Decker::ui::WorldWidget *world_widget;
+	Decker::ui::WayNetEdit *waynet_edit;
 	BrickOccupation brick_occupation;
 	BrickOccupation::Matrix brick_occupation_solid;
 	FPS fps;
@@ -499,11 +503,13 @@ private:
 	void closeTileSelection();
 	void closeSpriteSelection();
 	void closeObjectSelection();
+	void closeWayNet();
 	void selectSprite(const ppl7::grafix::Point &mouse);
 	void updateWorldCoords();
 
 	void mouseDownEventOnSprite(ppl7::tk::MouseEvent *event);
 	void mouseDownEventOnObject(ppl7::tk::MouseEvent *event);
+	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event);
 
 	Player *player;
 
@@ -539,6 +545,7 @@ public:
 	void showTileTypeSelection();
 	void showSpriteSelection();
 	void showObjectsSelection();
+	void showWayNetEdit();
 	void setSpriteModeToDraw();
 
 	SDL_Renderer *getSDLRenderer();

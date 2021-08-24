@@ -92,6 +92,7 @@ private:
 	ppl7::tk::Button *edit_tiletypes_button;
 	ppl7::tk::Button *edit_sprites_button;
 	ppl7::tk::Button *edit_objects_button;
+	ppl7::tk::Button *edit_waynet_button;
 	ppl7::tk::Button *show_visibility_submenu_button;
 
 	ComboBox *active_plane_combobox;
@@ -262,6 +263,15 @@ public:
 	void mouseDownEvent(ppl7::tk::MouseEvent *event);
 	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
 
+};
+
+class WayNetEdit : public ppl7::tk::Frame
+{
+private:
+	Game *game;
+
+public:
+	WayNetEdit(int x, int y, int width, int height, Game *game);
 };
 
 

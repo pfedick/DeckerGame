@@ -7,6 +7,8 @@
 #include "player.h"
 #include "objects.h"
 
+
+
 static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
 
 Level::Level()
@@ -51,6 +53,7 @@ void Level::clear()
 	HorizonSprites[1].clear();
 
 	objects->clear();
+	waynet.clear();
 }
 
 void Level::setEditmode(bool enabled)
@@ -198,6 +201,8 @@ void Level::load(const ppl7::String &Filename)
 				TileTypeMatrix.load(ba);
 			} else if (id==LevelChunkId::chunkObjects) {
 				objects->load(ba);
+			} else if (id==LevelChunkId::chunkWayNet) {
+				waynet.load(ba);
 			}
 		} catch (const ppl7::EndOfFileException &) {
 			break;
@@ -244,6 +249,7 @@ void Level::save(const ppl7::String &Filename)
 	HorizonSprites[0].save(ff, LevelChunkId::chunkHorizonSpritesLayer0);
 	HorizonSprites[1].save(ff, LevelChunkId::chunkHorizonSpritesLayer1);
 	objects->save(ff,LevelChunkId::chunkObjects);
+	waynet.save(ff,LevelChunkId::chunkWayNet);
 	ff.close();
 
 }

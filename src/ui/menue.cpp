@@ -62,7 +62,12 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 	edit_objects_button->setEventHandler(this);
 	this->addChild(edit_objects_button);
 
-	show_visibility_submenu_button=new ppl7::tk::Button(500,0,80,s.height,"Visibility");
+	edit_waynet_button=new ppl7::tk::Button(488,0,70,s.height,"WayNet");
+	edit_waynet_button->setEventHandler(this);
+	this->addChild(edit_waynet_button);
+
+
+	show_visibility_submenu_button=new ppl7::tk::Button(600,0,80,s.height,"Visibility");
 	show_visibility_submenu_button->setEventHandler(this);
 	this->addChild(show_visibility_submenu_button);
 
@@ -101,6 +106,8 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent *event)
 		game->showSpriteSelection();
 	} else if (event->widget()==edit_objects_button) {
 		game->showObjectsSelection();
+	} else if (event->widget()==edit_waynet_button) {
+		game->showWayNetEdit();
 	} else if (event->widget()==save_button) {
 		game->save();
 	} else if (event->widget()==new_button) {

@@ -35,6 +35,7 @@ OBJECTS=compile/main.o \
 	compile/ui_tilesframe.o \
 	compile/ui_worldwidget.o \
 	compile/ui_objectselection.o \
+	compile/ui_waynetedit.o \
 	compile/widgets_scrollbar.o \
 	compile/widgets_checkbox.o \
 	compile/widgets_radiobutton.o \
@@ -51,6 +52,7 @@ OBJECTS=compile/main.o \
 	compile/physic.o \
 	compile/animation.o \
 	compile/resources.o \
+	compile/waynet.o \
 	compile/objectsystem.o \
 	compile/object.o \
 	compile/object_gem.o \
@@ -196,7 +198,8 @@ compile/resources.o: src/resources.cpp Makefile include/decker.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/resources.o -c src/resources.cpp $(CFLAGS)
 	
-compile/level.o: src/level.cpp Makefile include/decker.h include/objects.h
+compile/level.o: src/level.cpp Makefile include/decker.h include/objects.h \
+	include/waynet.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/level.o -c src/level.cpp $(CFLAGS)
 
@@ -219,6 +222,10 @@ compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
 compile/objectsystem.o: src/objectsystem.cpp Makefile include/objects.h include/decker.h include/wallenstein.h include/player.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/objectsystem.o -c src/objectsystem.cpp $(CFLAGS)
+
+compile/waynet.o: src/waynet.cpp Makefile include/waynet.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/waynet.o -c src/waynet.cpp $(CFLAGS)
 	
 compile/object.o: src/objects/object.cpp Makefile include/objects.h
 	- @mkdir -p compile 
@@ -404,6 +411,10 @@ compile/ui_tilesframe.o: src/ui/tilesframe.cpp Makefile include/ui.h
 compile/ui_worldwidget.o: src/ui/worldwidget.cpp Makefile include/ui.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/ui_worldwidget.o -c src/ui/worldwidget.cpp $(CFLAGS)
+
+compile/ui_waynetedit.o: src/ui/waynetedit.cpp Makefile include/ui.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/ui_waynetedit.o -c src/ui/waynetedit.cpp $(CFLAGS)
 
 
 compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
