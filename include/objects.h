@@ -12,6 +12,7 @@ class SpriteTexture;
 
 class Player;
 class TileTypePlane;
+class Waynet;
 
 namespace ppl7::tk {
 	class Widget;
@@ -667,11 +668,11 @@ private:
 	std::map<uint32_t,Object *> visible_object_map;
 	SpriteTexture *spriteset[Spriteset::MaxSpritesets];
 
-
+	Waynet *waynet;
 	SpriteTexture *getTexture(int sprite_set) const;
 
 public:
-	ObjectSystem();
+	ObjectSystem(Waynet *waynet);
 	~ObjectSystem();
 	void clear();
 	void loadSpritesets(SDL &sdl);
@@ -695,6 +696,7 @@ public:
 	ppl7::grafix::Point nextPlayerStart();
 	size_t count() const;
 	size_t countVisible() const;
+	Waynet &getWaynet();
 
 };
 

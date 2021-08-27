@@ -7,6 +7,22 @@
 #include <map>
 
 
+class Position
+{
+public:
+	union {
+		struct {
+			uint16_t x,y;
+		};
+		uint32_t id;
+	};
+	Position();
+	Position(const Position &other);
+	Position(uint32_t id);
+	Position(uint16_t x, uint16_t y);
+	operator uint32_t() const;
+};
+
 class Connection
 {
 public:
@@ -19,27 +35,26 @@ public:
 		ClimbDown
 	};
 	ConnectionType type;
-	uint32_t target;
+	Position source;
+	Position target;
 	uint8_t cost;
-	Connection(ConnectionType type, uint32_t target, uint8_t cost=1);
+	Connection(const Position &source, const Position &target, ConnectionType type, uint8_t cost=1);
 };
 
-class WayPoint
+class WayPoint : public Position
 {
 public:
-	union {
-		struct {
-			uint16_t x,y;
-		};
-		uint32_t id;
-	};
 	std::map<uint32_t,Connection> connection_map;
 
 	WayPoint(uint16_t x, uint16_t y);
 	WayPoint(uint32_t id);
+	WayPoint();
 	void addConnection(const Connection &conn);
 	void deleteConnection(uint32_t target);
 };
+
+double Distance(const Position &p1, const Position &p2);
+
 
 class Waynet
 {
@@ -47,6 +62,9 @@ private:
 	std::map<uint32_t,WayPoint> waypoints;
 
 	uint32_t selection;
+	WayPoint invalid_waypoint;
+
+	bool findBestWay(std::list<Connection>&way_list, const WayPoint &start, const WayPoint &target, int maxNodes);
 
 public:
 	Waynet();
@@ -62,7 +80,8 @@ public:
 	void addConnection(const WayPoint &source, const Connection &conn);
 	void deleteConnection(const WayPoint &source, const WayPoint &target);
 
-	void findWay();
+	const WayPoint& findNearestWaypoint(const Position &p);
+	bool findWay(std::list<Connection>&waypoints, const Position &source, const Position &target);
 
 
 	void clearSelection();

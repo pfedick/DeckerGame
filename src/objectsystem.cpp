@@ -14,7 +14,7 @@ ObjectSystem *GetObjectSystem()
 	return object_system;
 }
 
-ObjectSystem::ObjectSystem()
+ObjectSystem::ObjectSystem(Waynet *waynet)
 {
 	if (!object_system) object_system=this;
 	nextid=1;
@@ -23,6 +23,7 @@ ObjectSystem::ObjectSystem()
 		spriteset[i]=new SpriteTexture();
 	}
 	player_start=0;
+	this->waynet=waynet;
 }
 
 ObjectSystem::~ObjectSystem()
@@ -470,6 +471,11 @@ size_t ObjectSystem::count() const
 size_t ObjectSystem::countVisible() const
 {
 	return visible_object_map.size();
+}
+
+Waynet &ObjectSystem::getWaynet()
+{
+	return *waynet;
 }
 
 Collision::Collision()

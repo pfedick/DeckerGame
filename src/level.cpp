@@ -19,7 +19,7 @@ Level::Level()
 	for (int i=0;i<=MAX_SPRITESETS;i++) {
 		spriteset[i]=NULL;
 	}
-	objects=new Decker::Objects::ObjectSystem();
+	objects=new Decker::Objects::ObjectSystem(&waynet);
 	editMode=false;
 	showSprites=true;
 	showObjects=true;

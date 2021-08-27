@@ -3,6 +3,8 @@
 #include "wallenstein.h"
 #include "audiopool.h"
 #include "player.h"
+#include "waynet.h"
+#include "objects.h"
 
 namespace Decker::Objects {
 
@@ -46,6 +48,7 @@ Wallenstein::Wallenstein()
 	animation.setStaticFrame(27);
 	keys=0;
 	substate=0;
+	next_wayfind=0.0f;
 }
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)
@@ -118,6 +121,7 @@ void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 	}
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state==StateWaitForEnable && dist<800) state=StatePatrol;
+	if (state!=StateFollowPlayer && dist<600) state=StateFollowPlayer;
 
 
 	if (time<next_state && state==StateStand) {
@@ -165,6 +169,7 @@ void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 	}
 	keys=0;
 	if (state==StatePatrol) updateStatePatrol(time, ttplane);
+	if (state==StateFollowPlayer) updateStateFollowPlayer(time, ttplane, player);
 	executeKeys();
 
 }
@@ -189,6 +194,63 @@ void Wallenstein::updateStatePatrol(double time, TileTypePlane &ttplane)
 	} else {
 		keys=KeyboardKeys::Right;
 	}
+}
+
+void Wallenstein::updateWay(Player &player)
+{
+	Waynet &waynet=GetObjectSystem()->getWaynet();
+	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x/TILE_WIDTH, (uint16_t)player.y/TILE_HEIGHT));
+	//printf ("pwp=%d:%d, last_pwp=%d:%d\n", pwp.x,pwp.y,last_pwp.x,last_pwp.y);
+	if (pwp.id==last_pwp.id) return;
+	last_pwp=pwp;
+
+
+	waypoints.clear();
+	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
+		printf ("found a way ==========================\n");
+		/*
+		std::list<Connection>::const_iterator it;
+		for (it=waypoints.begin();it!=waypoints.end();++it) {
+			printf ("source: (%d:%d), target: (%d:%d), type: %d, cost: %d\n",
+					(*it).source.x, (*it).source.y,
+					(*it).target.x, (*it).target.y,
+					(*it).type, (*it).cost);
+		}
+		*/
+	} else {
+		printf ("found no way\n");
+		waypoints.clear();
+	}
+
+}
+
+void Wallenstein::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Player &player)
+{
+	updateWay(player);
+	/*
+	if (next_wayfind<time) {
+
+		next_wayfind=time+1.0f;
+	}
+	*/
+	if (waypoints.size()==0) {
+		/*
+		printf ("Back to patrol\n");
+		p=initial_p;
+		state=StatePatrol;
+		movement=Stand;
+		*/
+		return;
+	}
+	const Connection &first=waypoints.front();
+	printf ("p=%d:%d\n", (int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
+	if ((uint16_t)(p.x/TILE_WIDTH)>first.source.x) keys=KeyboardKeys::Left|KeyboardKeys::Shift;
+	else if ((uint16_t)(p.x/TILE_WIDTH)<first.source.x) keys=KeyboardKeys::Right|KeyboardKeys::Shift;
+	else {
+		printf ("arrived at first point\n");
+		waypoints.pop_front();
+	}
+
 }
 
 void Wallenstein::executeKeys()

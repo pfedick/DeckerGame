@@ -901,8 +901,9 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event)
 		if (level.waynet.hasPoint(wp)) {
 			//printf ("Point selected\n");
 			if (level.waynet.hasSelection()) {
-				level.waynet.addConnection(level.waynet.getSelection(),
-						Connection(Connection::Walk,wp.id,1));
+				const WayPoint p1=level.waynet.getSelection();
+				level.waynet.addConnection(p1,
+						Connection(p1,wp,Connection::Walk,1));
 				level.waynet.setSelection(wp);
 			} else {
 				level.waynet.setSelection(wp);
