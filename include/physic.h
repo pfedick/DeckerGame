@@ -74,6 +74,8 @@ public:
 	float gravity, acceleration_gravity;
 	float acceleration_airstream;
 	float acceleration_jump;
+	float speed_walk;
+	float speed_run;
 
 	double jump_climax;
 	double time;

@@ -29,6 +29,7 @@ private:
 	int keys;
 	std::list<Connection> waypoints;
 	WayPoint last_pwp;
+	Connection current_way;
 
 	void turn(PlayerOrientation target);
 	void stand();

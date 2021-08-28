@@ -27,6 +27,7 @@ class Connection
 {
 public:
 	enum ConnectionType {
+		Invalid=0,
 		Walk=1,
 		JumpUp,
 		JumpLeft,
@@ -38,7 +39,9 @@ public:
 	Position source;
 	Position target;
 	uint8_t cost;
+	Connection();
 	Connection(const Position &source, const Position &target, ConnectionType type, uint8_t cost=1);
+	void clear();
 };
 
 class WayPoint : public Position

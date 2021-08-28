@@ -31,6 +31,8 @@ Physic::Physic()
 	collision_at_pivoty[2]=0;
 	for (int i=0;i<TileType::Type::MaxType;i++) collision_type_count[i]=0;
 	player_stands_on_object=NULL;
+	speed_walk=2.0f;
+	speed_run=6.0f;
 }
 
 ppl7::String Physic::getState() const
@@ -369,15 +371,15 @@ void Physic::updateMovement()
 	if (movement==Slide || movement==Dead) return;
 	if (movement==Walk) {
 		if (orientation==Left) {
-			velocity_move.x=-2;
+			velocity_move.x=-speed_walk;
 		} else if (orientation==Right) {
-			velocity_move.x=2;
+			velocity_move.x=speed_walk;
 		}
 	} else if (movement==Run) {
 		if (orientation==Left) {
-			velocity_move.x=-6;
+			velocity_move.x=-speed_run;
 		} else if (orientation==Right) {
-			velocity_move.x=6;
+			velocity_move.x=speed_run;
 		}
 	} else if (movement==ClimbUp) {
 		velocity_move.y=-4;

@@ -57,12 +57,28 @@ void WayPoint::deleteConnection(uint32_t target)
 	connection_map.erase(target);
 }
 
+Connection::Connection()
+{
+	source.id=0;
+	target.id=0;
+	type=Connection::Invalid;
+	cost=0;
+}
+
 Connection::Connection(const Position &source, const Position &target, ConnectionType type, uint8_t cost)
 {
 	this->source=source;
 	this->target=target;
 	this->type=type;
 	this->cost=cost;
+}
+
+void Connection::clear()
+{
+	source.id=0;
+	target.id=0;
+	type=Connection::Invalid;
+	cost=0;
 }
 
 Waynet::Waynet()

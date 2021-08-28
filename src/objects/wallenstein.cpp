@@ -49,6 +49,8 @@ Wallenstein::Wallenstein()
 	keys=0;
 	substate=0;
 	next_wayfind=0.0f;
+	speed_walk=2.0f;
+	speed_run=5.5f;
 }
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)
@@ -121,7 +123,10 @@ void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 	}
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state==StateWaitForEnable && dist<800) state=StatePatrol;
-	if (state!=StateFollowPlayer && dist<600) state=StateFollowPlayer;
+	if (state!=StateFollowPlayer && dist<600) {
+		state=StateFollowPlayer;
+		current_way.clear();
+	}
 
 
 	if (time<next_state && state==StateStand) {
@@ -164,7 +169,16 @@ void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 		return;
 	}
 	if (movement==Jump || movement==Falling) {
+		// TODO
 		//handleKeyboardWhileJumpOrFalling(time, world, objects);
+		double dist=ppl7::grafix::Distance(p, player.position());
+		if (dist>2048 && (movement==Falling||movement==Dead)) {
+			printf ("something's wrong, back to patrol\n");
+			p=initial_p;
+			current_way.clear();
+			state=StatePatrol;
+			movement=Stand;
+		}
 		return;
 	}
 	keys=0;
@@ -207,7 +221,11 @@ void Wallenstein::updateWay(Player &player)
 
 	waypoints.clear();
 	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
-		printf ("found a way ==========================\n");
+		const Connection &first=waypoints.front();
+		printf ("found a way, starting at: %d:%d ==========================\n", first.source.x, first.source.y);
+		current_way.type=Connection::Walk;
+		current_way.source=0;
+		current_way.target=first.source;
 		/*
 		std::list<Connection>::const_iterator it;
 		for (it=waypoints.begin();it!=waypoints.end();++it) {
@@ -220,20 +238,31 @@ void Wallenstein::updateWay(Player &player)
 	} else {
 		printf ("found no way\n");
 		waypoints.clear();
+		current_way.clear();
 	}
 
 }
 
 void Wallenstein::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Player &player)
 {
-	updateWay(player);
+	double dist=ppl7::grafix::Distance(p, player.position());
+	if (dist>2048 && (movement==Falling||movement==Dead)) {
+		printf ("something's wrong, back to patrol\n");
+		p=initial_p;
+		current_way.clear();
+		state=StatePatrol;
+		movement=Stand;
+	}
+	if (current_way.type==Connection::Invalid) {
+		updateWay(player);
+	}
 	/*
 	if (next_wayfind<time) {
 
 		next_wayfind=time+1.0f;
 	}
 	*/
-	if (waypoints.size()==0) {
+	if (current_way.type==Connection::Invalid) {
 		/*
 		printf ("Back to patrol\n");
 		p=initial_p;
@@ -242,13 +271,26 @@ void Wallenstein::updateStateFollowPlayer(double time, TileTypePlane &ttplane, P
 		*/
 		return;
 	}
-	const Connection &first=waypoints.front();
-	printf ("p=%d:%d\n", (int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
-	if ((uint16_t)(p.x/TILE_WIDTH)>first.source.x) keys=KeyboardKeys::Left|KeyboardKeys::Shift;
-	else if ((uint16_t)(p.x/TILE_WIDTH)<first.source.x) keys=KeyboardKeys::Right|KeyboardKeys::Shift;
-	else {
-		printf ("arrived at first point\n");
-		waypoints.pop_front();
+
+	//const Connection &first=waypoints.front();
+	bool arrived=false;
+	if (current_way.type==Connection::Walk) {
+		if ((uint16_t)(p.x/TILE_WIDTH)>current_way.target.x) keys=KeyboardKeys::Left|KeyboardKeys::Shift;
+		else if ((uint16_t)(p.x/TILE_WIDTH)<current_way.target.x) keys=KeyboardKeys::Right|KeyboardKeys::Shift;
+		else {
+			arrived=true;
+		}
+	}
+	if (arrived) {
+		printf ("arrived at point: %d:%d, real: %d:%d\n",current_way.target.x, current_way.target.y,
+				(int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
+		current_way.clear();
+		updateWay(player);
+		if (waypoints.size()>0) {
+			current_way=waypoints.front();
+			printf ("move to next point: %d:%d\n",current_way.target.x, current_way.target.y);
+			waypoints.pop_front();
+		}
 	}
 
 }
