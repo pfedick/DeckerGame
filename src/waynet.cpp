@@ -100,11 +100,34 @@ void Waynet::clear()
 
 void drawConnections(SDL_Renderer *renderer, ppl7::grafix::Point coords, const std::list<Connection> &connection_list)
 {
-	SDL_SetRenderDrawColor(renderer,255,255,0,255);	// yellow
 	std::list<Connection>::const_iterator it;
 	for (it=connection_list.begin();it!=connection_list.end();++it) {
 		const Position &p1=(*it).source;
 		const Position &p2=(*it).target;
+		switch ((*it).type) {
+		case Connection::Walk:
+			SDL_SetRenderDrawColor(renderer,0,255,0,255);
+			break;
+		case Connection::JumpUp:
+			SDL_SetRenderDrawColor(renderer,0,255,255,255);
+			break;
+		case Connection::JumpLeft:
+			SDL_SetRenderDrawColor(renderer,255,255,0,255);
+			break;
+		case Connection::JumpRight:
+			SDL_SetRenderDrawColor(renderer,255,0,255,255);
+			break;
+		case Connection::Climb:
+			SDL_SetRenderDrawColor(renderer,0,0,255,255);
+			break;
+
+		default:
+			SDL_SetRenderDrawColor(renderer,255,0,0,255);
+			break;
+
+		}
+
+
 		SDL_RenderDrawLine(renderer, coords.x+p1.x*TILE_WIDTH,
 								coords.y+p1.y*TILE_HEIGHT,
 								coords.x+p2.x*TILE_WIDTH+TILE_WIDTH-1,
@@ -317,14 +340,15 @@ static int calcCosts(const std::list<Connection> &conns)
 	return c;
 }
 
-bool Waynet::findBestWay(std::list<Connection>&way_list, const WayPoint &start, const WayPoint &target, int maxNodes)
+bool Waynet::findBestWay(std::list<Connection>&way_list, const WayPoint &previous, const WayPoint &start, const WayPoint &target, int maxNodes)
 {
 	//printf ("Waynet::findBestWay %d, we have %d choices\n", maxNodes, (int)start.connection_map.size());
-	if (maxNodes==0) return false;
+	if (maxNodes<=0) return false;
 	std::list<Connection>best;
 	int best_cost=9999999;
 	std::map<uint32_t,Connection>::const_iterator it;
 	for (it=start.connection_map.begin();it!=start.connection_map.end();++it) {
+		if (it->second.target.id==previous.id) continue;
 		std::list<Connection>current;
 		current.push_back(it->second);
 		if (it->second.target.id==target.id) {
@@ -335,7 +359,7 @@ bool Waynet::findBestWay(std::list<Connection>&way_list, const WayPoint &start, 
 				best=current;
 			}
 		} else {
-			if (findBestWay(current,waypoints[it->second.target.id], target, maxNodes-1)) {
+			if (findBestWay(current, start, waypoints[it->second.target.id], target, maxNodes-1)) {
 				int cost=calcCosts(current);
 				if (cost<best_cost) {
 					best_cost=cost;
@@ -365,6 +389,6 @@ bool Waynet::findWay(std::list<Connection>&way_list, const Position &source, con
 	const WayPoint &wp_source=findNearestWaypoint(pt_source);
 	const WayPoint &wp_target=findNearestWaypoint(pt_target);
 	if (wp_source==invalid_waypoint || wp_target==invalid_waypoint) return false;
-	return findBestWay(way_list, wp_source, wp_target, 10);
+	return findBestWay(way_list, WayPoint(), wp_source, wp_target, 15);
 
 }

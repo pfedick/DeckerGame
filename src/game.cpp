@@ -347,6 +347,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 			//printf("Start\n");
 			worldIsMoving=true;
 			WorldMoveStart=mouse.p;
+			mainmenue->setWorldFollowsPlayer(false);
 		} else {
 			worldIsMoving=false;;
 		}
@@ -377,7 +378,7 @@ void Game::updateWorldCoords()
 {
 	if (!player) return;
 	int mx=viewport.width()/2;
-	int my=viewport.height()/2+256;
+	int my=viewport.height()/2+192;	//256
 	WorldCoords.x=player->x-mx;
 	WorldCoords.y=player->y-my;
 	if (WorldCoords.x<0) WorldCoords.x=0;
@@ -902,8 +903,13 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event)
 			//printf ("Point selected\n");
 			if (level.waynet.hasSelection()) {
 				const WayPoint p1=level.waynet.getSelection();
-				level.waynet.addConnection(p1,
-						Connection(p1,wp,Connection::Walk,1));
+				level.waynet.deleteConnection(p1,wp);
+				Connection::ConnectionType type=(Connection::ConnectionType)waynet_edit->getSelectedWayType();
+				if (type!=Connection::Invalid) {
+					level.waynet.addConnection(p1,
+							Connection(p1,wp,type,
+									waynet_edit->getCost()));
+				}
 				level.waynet.setSelection(wp);
 			} else {
 				level.waynet.setSelection(wp);

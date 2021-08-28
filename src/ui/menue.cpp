@@ -139,6 +139,13 @@ void MainMenue::setCurrentPlane(int index)
 }
 
 
+void MainMenue::setWorldFollowsPlayer(bool enable)
+{
+	if (world_follows_player_checkbox) world_follows_player_checkbox->setChecked(enable);
+}
+
+
+
 int MainMenue::currentPlane() const
 {
 	if (active_plane_combobox) return active_plane_combobox->currentIndex();

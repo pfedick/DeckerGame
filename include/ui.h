@@ -109,6 +109,7 @@ public:
 	int currentPlane() const;
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);
+	void setWorldFollowsPlayer(bool enable);
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;
@@ -269,9 +270,20 @@ class WayNetEdit : public ppl7::tk::Frame
 {
 private:
 	Game *game;
+	RadioButton *type_clear;
+	RadioButton *type_walk;
+	RadioButton *type_jump_up;
+	RadioButton *type_jump_left;
+	RadioButton *type_jump_right;
+	RadioButton *type_climb;
+	ppl7::tk::LineInput *cost;
+
 
 public:
 	WayNetEdit(int x, int y, int width, int height, Game *game);
+
+	int getSelectedWayType() const;
+	int getCost() const;
 };
 
 

@@ -168,17 +168,7 @@ void Wallenstein::update(double time, TileTypePlane &ttplane, Player &player)
 	if (movement==Slide || movement==Dead) {
 		return;
 	}
-	if (movement==Jump || movement==Falling) {
-		// TODO
-		//handleKeyboardWhileJumpOrFalling(time, world, objects);
-		double dist=ppl7::grafix::Distance(p, player.position());
-		if (dist>2048 && (movement==Falling||movement==Dead)) {
-			printf ("something's wrong, back to patrol\n");
-			p=initial_p;
-			current_way.clear();
-			state=StatePatrol;
-			movement=Stand;
-		}
+	if (movement==Jump) {
 		return;
 	}
 	keys=0;
@@ -280,8 +270,25 @@ void Wallenstein::updateStateFollowPlayer(double time, TileTypePlane &ttplane, P
 		else {
 			arrived=true;
 		}
+	} else if (current_way.type==Connection::JumpLeft) {
+		if (movement==Falling) arrived=true;
+		else keys=KeyboardKeys::Left|KeyboardKeys::Shift|KeyboardKeys::Up;
+	} else if (current_way.type==Connection::JumpRight) {
+		if (movement==Falling) arrived=true;
+		else keys=KeyboardKeys::Right|KeyboardKeys::Shift|KeyboardKeys::Up;
+	} else if (current_way.type==Connection::JumpUp) {
+		if (movement==Falling) arrived=true;
+		else keys=KeyboardKeys::Shift|KeyboardKeys::Up;
+	} else if (current_way.type==Connection::Climb) {
+		if ((uint16_t)(p.y/TILE_HEIGHT)>current_way.target.y) keys=KeyboardKeys::Up;
+		else if ((uint16_t)(p.y/TILE_HEIGHT)<current_way.target.y) keys=KeyboardKeys::Down;
+		else arrived=true;
 	}
 	if (arrived) {
+		if (movement==Falling) {
+			last_pwp.id=0;
+		}
+		keys=0;
 		printf ("arrived at point: %d:%d, real: %d:%d\n",current_way.target.x, current_way.target.y,
 				(int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
 		current_way.clear();

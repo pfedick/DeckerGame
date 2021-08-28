@@ -32,8 +32,7 @@ public:
 		JumpUp,
 		JumpLeft,
 		JumpRight,
-		ClimbUp,
-		ClimbDown
+		Climb,
 	};
 	ConnectionType type;
 	Position source;
@@ -67,7 +66,7 @@ private:
 	uint32_t selection;
 	WayPoint invalid_waypoint;
 
-	bool findBestWay(std::list<Connection>&way_list, const WayPoint &start, const WayPoint &target, int maxNodes);
+	bool findBestWay(std::list<Connection>&way_list, const WayPoint &previous, const WayPoint &start, const WayPoint &target, int maxNodes);
 
 public:
 	Waynet();
