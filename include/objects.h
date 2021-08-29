@@ -59,7 +59,8 @@ public:
 		Mushroom=108,
 		Scarabeus=109,
 		StamperVertical=110,
-		Wallenstein=111
+		Wallenstein=111,
+		Helena=112
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -80,6 +81,7 @@ public:
 		Laser=9,
 		StamperVertical=10,
 		Wallenstein=11,
+		Helena=12,
 		MaxSpritesets
 	};
 };

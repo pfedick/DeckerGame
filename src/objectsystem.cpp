@@ -97,6 +97,10 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Wallenstein]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Wallenstein]->load(sdl,"res/wallenstein.tex");
 
+	spriteset[Spriteset::Helena]->enableOutlines(true);
+	spriteset[Spriteset::Helena]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Helena]->load(sdl,"res/helena.tex");
+
 }
 
 void ObjectSystem::addObject(Object *object)

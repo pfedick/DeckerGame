@@ -84,7 +84,9 @@ OBJECTS=compile/main.o \
 	compile/object_scarabeus.o \
 	compile/object_switch.o \
 	compile/object_stamper.o \
+	compile/object_ai_figure.o \
 	compile/object_wallenstein.o \
+	compile/object_helena.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -164,6 +166,8 @@ sprites:
 	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 512 -h 512 -px 32 -py 49
 	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
 	./texmaker -s "lightwave/Render/enemies/wallenstein/*.png" -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s "lightwave/Render/enemies/helena/*.png" -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
+
 	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
 	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
 	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
@@ -354,10 +358,20 @@ compile/object_stamper.o: src/objects/stamper.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_stamper.o -c src/objects/stamper.cpp $(CFLAGS)	
 
-compile/object_wallenstein.o: src/objects/wallenstein.cpp Makefile include/objects.h include/physic.h include/wallenstein.h include/animation.h
+compile/object_ai_figure.o: src/objects/ai_figure.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/animation.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_ai_figure.o -c src/objects/ai_figure.cpp $(CFLAGS)	
+
+compile/object_wallenstein.o: src/objects/wallenstein.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/wallenstein.h include/animation.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_wallenstein.o -c src/objects/wallenstein.cpp $(CFLAGS)	
 
+compile/object_helena.o: src/objects/helena.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/helena.h include/animation.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_helena.o -c src/objects/helena.cpp $(CFLAGS)	
 
 compile/tile.o: src/tile.cpp Makefile include/decker.h
 	- @mkdir -p compile 
