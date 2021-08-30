@@ -4,6 +4,7 @@
 #include "decker.h"
 #include "player.h"
 #include "wallenstein.h"
+#include "helena.h"
 
 namespace Decker::Objects {
 
@@ -313,6 +314,7 @@ Representation getRepresentation(int object_type)
 	case Type::Switch: return Switch::representation();
 	case Type::StamperVertical: return StamperVertical::representation();
 	case Type::Wallenstein: return Wallenstein::representation();
+	case Type::Helena: return Helena::representation();
 
 	default: return Object::representation();
 	}
@@ -375,6 +377,7 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::Switch: return new Switch();
 	case Type::StamperVertical: return new StamperVertical();
 	case Type::Wallenstein: return new Wallenstein();
+	case Type::Helena: return new Helena();
 	}
 	return NULL;
 }

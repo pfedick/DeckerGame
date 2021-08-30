@@ -50,7 +50,7 @@ Wallenstein::Wallenstein()
 	substate=0;
 	next_wayfind=0.0f;
 	speed_walk=2.0f;
-	speed_run=5.5f;
+	speed_run=4.5f;
 }
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)

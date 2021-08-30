@@ -25,6 +25,18 @@ void AnimationCycle::start(int *cycle_array, int size, bool loop, int endframe)
 	index=0;
 }
 
+void AnimationCycle::start(const AnimationCycle &other)
+{
+	cycle=other.cycle;
+	index=other.index;
+	size=other.size;
+	endframe=other.endframe;
+	seq_start=other.seq_start;
+	seq_end=other.seq_end;
+	loop=other.loop;
+	finished=other.finished;
+}
+
 void AnimationCycle::startRandom(int *cycle_array, int size, bool loop, int endframe)
 {
 	start(cycle_array,size,loop,endframe);

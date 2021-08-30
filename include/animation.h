@@ -16,6 +16,7 @@ public:
 	AnimationCycle();
 	void setStaticFrame(int nr);
 	void start(int *cycle_array, int size, bool loop, int endframe);
+	void start(const AnimationCycle &other);
 	void startRandom(int *cycle_array, int size, bool loop, int endframe);
 	void startSequence(int start, int end, bool loop, int endframe);
 	void update();
