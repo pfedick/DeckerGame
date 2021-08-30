@@ -26,7 +26,7 @@ private:
 	Connection current_way;
 
 
-	void updateWay(Player &player);
+	void updateWay(double time, Player &player);
 
 
 public:

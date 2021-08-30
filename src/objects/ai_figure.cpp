@@ -35,6 +35,7 @@ AiEnemy::AiEnemy(Type::ObjectType type)
 	next_animation=0.0f;
 	keys=0;
 	next_wayfind=0.0f;
+	collisionDetection=true;
 	animation.setStaticFrame(27);
 	anicycleWalkLeft.start(walk_cycle_left,sizeof(walk_cycle_left)/sizeof(int),true,0);
 	anicycleWalkRight.start(walk_cycle_right,sizeof(walk_cycle_right)/sizeof(int),true,0);
@@ -139,15 +140,14 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane &ttplane)
 	updateBoundary();
 }
 
-void AiEnemy::updateWay(Player &player)
+void AiEnemy::updateWay(double time, Player &player)
 {
 	Waynet &waynet=GetObjectSystem()->getWaynet();
 	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x/TILE_WIDTH, (uint16_t)player.y/TILE_HEIGHT));
 	//printf ("pwp=%d:%d, last_pwp=%d:%d\n", pwp.x,pwp.y,last_pwp.x,last_pwp.y);
+	next_wayfind=time+3.0f;
 	if (pwp.id==last_pwp.id) return;
 	last_pwp=pwp;
-
-
 	waypoints.clear();
 	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
 		const Connection &first=waypoints.front();
@@ -181,8 +181,9 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Playe
 		current_way.clear();
 		movement=Stand;
 	}
-	if (current_way.type==Connection::Invalid) {
-		updateWay(player);
+	if (current_way.type==Connection::Invalid || next_wayfind<time) {
+		if (movement==Walk || movement==Run || movement==Stand || movement==Falling)
+			updateWay(time, player);
 	}
 	/*
 	if (next_wayfind<time) {
@@ -230,7 +231,9 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Playe
 		printf ("arrived at point: %d:%d, real: %d:%d\n",current_way.target.x, current_way.target.y,
 				(int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
 		current_way.clear();
-		updateWay(player);
+		if (player.x<p.x && orientation!=Left) turn(Left);
+		if (player.x>p.x && orientation!=Right) turn(Right);
+		updateWay(time, player);
 		if (waypoints.size()>0) {
 			current_way=waypoints.front();
 			printf ("move to next point: %d:%d\n",current_way.target.x, current_way.target.y);

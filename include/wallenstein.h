@@ -3,7 +3,6 @@
 #include <ppl7-grafix.h>
 #include "ai_figure.h"
 
-
 class SDL_Renderer;
 class SpriteTexture;
 class TileTypePlane;
@@ -22,8 +21,9 @@ private:
 	double next_state;
 	int state;
 	int substate;
+	bool attack;
 	void updateStatePatrol(double time, TileTypePlane &ttplane);
-
+	void switchAttackMode(bool enable);
 public:
 	Wallenstein();
 	static Representation representation();
