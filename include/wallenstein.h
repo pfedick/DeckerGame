@@ -1,17 +1,15 @@
 #ifndef INCLUDE_WALLENSTEIN_H_
 #define INCLUDE_WALLENSTEIN_H_
 #include <ppl7-grafix.h>
-#include "animation.h"
-#include "objects.h"
-#include "physic.h"
-#include "waynet.h"
+#include "ai_figure.h"
+
 
 class SDL_Renderer;
 class SpriteTexture;
 class TileTypePlane;
 
 namespace Decker::Objects {
-class Wallenstein : public Enemy, public Physic
+class Wallenstein : public AiEnemy
 {
 private:
 	enum State {
@@ -21,22 +19,10 @@ private:
 		StateGoToOrigin,
 		StateFollowPlayer
 	};
-	AnimationCycle animation;
-	double next_state, next_animation, next_wayfind;
-	double idle_timeout;
+	double next_state;
 	int state;
 	int substate;
-	int keys;
-	std::list<Connection> waypoints;
-	WayPoint last_pwp;
-	Connection current_way;
-
-	void turn(PlayerOrientation target);
-	void stand();
 	void updateStatePatrol(double time, TileTypePlane &ttplane);
-	void updateStateFollowPlayer(double time, TileTypePlane &ttplane, Player &player);
-	void executeKeys();
-	void updateWay(Player &player);
 
 public:
 	Wallenstein();
