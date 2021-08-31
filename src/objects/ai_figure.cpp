@@ -146,7 +146,7 @@ void AiEnemy::updateWay(double time, Player &player)
 	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x/TILE_WIDTH, (uint16_t)player.y/TILE_HEIGHT));
 	//printf ("pwp=%d:%d, last_pwp=%d:%d\n", pwp.x,pwp.y,last_pwp.x,last_pwp.y);
 	next_wayfind=time+3.0f;
-	if (pwp.id==last_pwp.id) return;
+	if (pwp.id==last_pwp.id && waypoints.size()>0) return;
 	last_pwp=pwp;
 	waypoints.clear();
 	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
@@ -181,6 +181,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Playe
 		current_way.clear();
 		movement=Stand;
 	}
+	int y_dist=abs((int)p.y-player.y);
 	if (current_way.type==Connection::Invalid || next_wayfind<time) {
 		if (movement==Walk || movement==Run || movement==Stand || movement==Falling)
 			updateWay(time, player);
@@ -228,15 +229,21 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane &ttplane, Playe
 			last_pwp.id=0;
 		}
 		keys=0;
-		printf ("arrived at point: %d:%d, real: %d:%d\n",current_way.target.x, current_way.target.y,
-				(int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT);
+		printf ("arrived at point: %d:%d, real: %d:%d, movement was: %d\n",current_way.target.x, current_way.target.y,
+				(int)p.x/TILE_WIDTH,(int)p.y/TILE_HEIGHT, movement);
 		current_way.clear();
-		if (player.x<p.x && orientation!=Left) turn(Left);
-		if (player.x>p.x && orientation!=Right) turn(Right);
+		if (movement==Walk || movement==Run) {
+			if (player.x<p.x && orientation!=Left && y_dist<TILE_HEIGHT) turn(Left);
+			if (player.x>p.x && orientation!=Right && y_dist<TILE_HEIGHT) turn(Right);
+		}
 		updateWay(time, player);
 		if (waypoints.size()>0) {
 			current_way=waypoints.front();
-			printf ("move to next point: %d:%d\n",current_way.target.x, current_way.target.y);
+			if (movement==ClimbUp || movement==ClimbDown) {
+				printf("movement was climb\n");
+			}
+			//stand();
+			printf ("move to next point: %d:%d, type: %d\n",current_way.target.x, current_way.target.y, current_way.type);
 			waypoints.pop_front();
 		}
 	}

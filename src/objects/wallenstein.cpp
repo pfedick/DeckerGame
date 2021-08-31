@@ -40,7 +40,7 @@ Wallenstein::Wallenstein()
 
 void Wallenstein::handleCollision(Player *player, const Collision &collision)
 {
-	player->dropHealth(1);
+	if (attack)	player->dropHealth(1);
 }
 
 
