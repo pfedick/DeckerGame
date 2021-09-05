@@ -46,6 +46,8 @@ Game::Game()
 	selected_sprite_system=NULL;
 	selected_sprite.id=-1;
 	selected_object=NULL;
+	fade_to_black=0;
+	death_state=0;
 }
 
 Game::~Game()
@@ -242,8 +244,7 @@ void Game::init()
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
 	if (player) delete player;
-	player=new Player();
-	player->move(3300,1800);
+	player=new Player(this);
 	player->setSavePoint(ppl7::grafix::Point(3300,1800));
 	updateWorldCoords();
 
@@ -416,11 +417,14 @@ void Game::run()
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection!=NULL);
 		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
+		player->setGodMode(mainmenue->godModeEnabled());
 		player->update(now, level.TileTypeMatrix, level.objects);
 		level.objects->update(now, level.TileTypeMatrix, *player);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
 			updateWorldCoords();
+
+
 		updateUi(mouse);
 
 
@@ -466,6 +470,12 @@ void Game::run()
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
+
+		if (player->isDead()==true && death_state==0) {
+			death_state=1;
+			fade_to_black=0;
+		}
+		if (death_state) handleDeath(renderer);
 
 		// Widgets
 		drawWidgets();
@@ -1020,6 +1030,37 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
 		handleMouseDrawInWorld(*event);
 	}
+
+}
+
+void Game::handleDeath(SDL_Renderer *renderer)
+{
+	if (death_state==1) {
+		if (fade_to_black<255) {
+			fade_to_black+=5;
+			if (fade_to_black>255) fade_to_black=255;
+		}
+		else death_state=2;
+	} else if (death_state==2) {
+		player->dropLifeAndResetToLastSavePoint();
+		death_state=3;
+	} else if (death_state==3) {
+		if (fade_to_black>0) {
+			fade_to_black-=5;
+			if (fade_to_black<0) fade_to_black=0;
+		}
+		else death_state=0;
+	}
+	if (fade_to_black>0) {
+		SDL_BlendMode currentBlendMode;
+		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer,0,0,0,fade_to_black);
+		SDL_RenderFillRect(renderer,NULL);
+		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+	}
+
 
 }
 

@@ -9,6 +9,7 @@ class SpriteTexture;
 #include "physic.h"
 
 class TileTypePlane;
+class Game;
 namespace Decker::Objects {
 	class Object;
 	class ObjectSystem;
@@ -26,6 +27,7 @@ private:
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
+	Game *game;
 
 	AnimationCycle animation;
 
@@ -34,6 +36,8 @@ private:
 	ppl7::grafix::Point lastSavePoint;
 
 	std::map<int,Decker::Objects::Representation> Inventory;
+	bool godmode;
+	bool dead;
 
 
 	void turn(PlayerOrientation target);
@@ -48,7 +52,7 @@ public:
 	int points, health, lifes;
 
 
-	Player();
+	Player(Game *game);
 	~Player();
 	ppl7::grafix::PointF position() const;
 	int getKeyboardMatrix(const unsigned char *state=NULL);
@@ -57,6 +61,9 @@ public:
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation &repr);
 	bool isInInventory(int object_id) const;
+	bool isDead() const;
+	void dropLifeAndResetToLastSavePoint();
+	void setGodMode(bool enabled);
 	void setSavePoint(const ppl7::grafix::Point &p);
 	void setSpriteResource(const SpriteTexture &resource);
 	void setTileTypeResource(const SpriteTexture &resource);

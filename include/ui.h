@@ -99,6 +99,7 @@ private:
 
 	CheckBox *world_follows_player_checkbox;
 	CheckBox *soundtrack_checkbox;
+	CheckBox *godmode_checkbox;
 	VisibilitySubMenu *visibility;
 	Game *game;
 
@@ -113,6 +114,7 @@ public:
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;
+	bool godModeEnabled() const;
 	bool visibility_plane_player;
 	bool visibility_plane_front;
 	bool visibility_plane_back;

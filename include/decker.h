@@ -506,12 +506,15 @@ private:
 	void closeWayNet();
 	void selectSprite(const ppl7::grafix::Point &mouse);
 	void updateWorldCoords();
+	void handleDeath(SDL_Renderer *renderer);
 
 	void mouseDownEventOnSprite(ppl7::tk::MouseEvent *event);
 	void mouseDownEventOnObject(ppl7::tk::MouseEvent *event);
 	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event);
 
 	Player *player;
+	int fade_to_black;
+	int death_state;
 
 	enum spriteMode {
 		spriteModeDraw,
@@ -554,6 +557,7 @@ public:
 	void save();
 	void load();
 	void clearLevel();
+	void playerDied();
 
 
 

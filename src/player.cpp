@@ -29,7 +29,7 @@ static int death_by_falling[]={89,89,106,106,89,89,106,106,89,106,89,106,89,89,
 
 
 
-Player::Player()
+Player::Player(Game *game)
 {
 	x=y=0;
 	sprite_resource=NULL;
@@ -41,6 +41,9 @@ Player::Player()
 	points=0;
 	health=100;
 	lifes=3;
+	godmode=false;
+	this->game=game;
+	dead=false;
 }
 
 Player::~Player()
@@ -70,6 +73,11 @@ void Player::setSpriteResource(const SpriteTexture &resource)
 void Player::setTileTypeResource(const SpriteTexture &resource)
 {
 	tiletype_resource=&resource;
+}
+
+void Player::setGodMode(bool enabled)
+{
+	godmode=enabled;
 }
 
 void Player::move(int x, int y)
@@ -166,6 +174,7 @@ void Player::addPoints(int points)
 
 void Player::dropHealth(int points, HealthDropReason reason)
 {
+	if (godmode) return;
 	if (movement==Dead) return;
 	health-=points;
 	if (health<=0 && movement!=Dead) {
@@ -196,6 +205,11 @@ bool Player::isInInventory(int object_id) const
 	return false;
 }
 
+bool Player::isDead() const
+{
+	return dead;
+}
+
 void Player::setSavePoint(const ppl7::grafix::Point &p)
 {
 	lastSavePoint=p;
@@ -204,6 +218,16 @@ void Player::setSavePoint(const ppl7::grafix::Point &p)
 void Player::setStandingOnObject(Decker::Objects::Object *object)
 {
 	player_stands_on_object=object;
+}
+
+void Player::dropLifeAndResetToLastSavePoint()
+{
+	dead=false;
+	lifes--;
+	health=100;
+	x=lastSavePoint.x;
+	y=lastSavePoint.y;
+	stand();
 }
 
 void Player::update(double time, const TileTypePlane &world, Decker::Objects::ObjectSystem *objects)
@@ -215,14 +239,11 @@ void Player::update(double time, const TileTypePlane &world, Decker::Objects::Ob
 	}
 	if (movement==Dead) {
 		if (animation.isFinished()) {
-			lifes--;
-			health=100;
-			x=lastSavePoint.x;
-			y=lastSavePoint.y;
-			stand();
+			dead=true;
 		}
 		return;
 	}
+	if (dead) return;
     dropHealth(detectFallingDamage(time), HealthDropReason::FallingDeep);
 	updateMovement();
 	player_stands_on_object=NULL;

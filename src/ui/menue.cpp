@@ -85,6 +85,9 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game *game)
 
 	this->addChild(active_plane_combobox);
 
+	godmode_checkbox=new CheckBox(width-520,0,100,s.height,"god mode", false);
+	this->addChild(godmode_checkbox);
+
 	soundtrack_checkbox=new CheckBox(width-420,0,140,s.height,"play soundtrack", true);
 	this->addChild(soundtrack_checkbox);
 
@@ -156,6 +159,12 @@ bool MainMenue::worldFollowsPlayer() const
 {
 	if (world_follows_player_checkbox) return world_follows_player_checkbox->checked();
 	return true;
+}
+
+bool MainMenue::godModeEnabled() const
+{
+	if (godmode_checkbox) return godmode_checkbox->checked();
+	return false;
 }
 
 
