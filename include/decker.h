@@ -483,8 +483,9 @@ private:
 
 	ppl7::grafix::Point WorldCoords;
 	ppl7::grafix::Point WorldMoveStart;
+	ppl7::String LevelFile;
 	bool worldIsMoving;
-
+	bool showui;
 	bool quitGame;
 
 	void createWindow();
@@ -550,10 +551,12 @@ public:
 	void showObjectsSelection();
 	void showWayNetEdit();
 	void setSpriteModeToDraw();
+	void showUi(bool enable);
 
 	SDL_Renderer *getSDLRenderer();
 	ppl7::grafix::Point getViewPos() const;
 
+	void startLevel(const ppl7::String &filename);
 	void save();
 	void load();
 	void clearLevel();

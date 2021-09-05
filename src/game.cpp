@@ -177,6 +177,32 @@ SDL_Renderer *Game::getSDLRenderer()
 	return sdl.getRenderer();
 }
 
+void Game::showUi(bool enable)
+{
+	const ppl7::grafix::Size &desktop=clientSize();
+	showui=enable;
+	if (showui) {
+		viewport.y1=33;
+		viewport.y2=desktop.height-33;
+		world_widget->setViewport(viewport);
+		mainmenue->setVisible(true);
+		statusbar->setVisible(true);
+	} else {
+		closeTileTypeSelection();
+		closeTileSelection();
+		closeSpriteSelection();
+		closeObjectSelection();
+		closeWayNet();
+		mainmenue->setShowTileTypes(false);
+		mainmenue->setWorldFollowsPlayer(true);
+		mainmenue->setVisible(false);
+		statusbar->setVisible(false);
+		viewport.y1=0;
+		viewport.x1=0;
+		viewport.y2=desktop.height;
+		world_widget->setViewport(viewport);
+	}
+}
 
 void Game::initUi()
 {
@@ -266,19 +292,6 @@ void Game::init()
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
-
-	//level.setRenderer
-	level.load("level/test.lvl");
-
-	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
-	if (startpoint.x>0) {
-		player->move(startpoint.x, startpoint.y);
-		player->setSavePoint(startpoint);
-	}
-
-	//showTilesSelection();
-
-
 }
 
 void Game::initAudio()
@@ -346,9 +359,11 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 		//printf("mouse.buttonMask=%d\n", mouse.button);
 		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Start\n");
-			worldIsMoving=true;
-			WorldMoveStart=mouse.p;
-			mainmenue->setWorldFollowsPlayer(false);
+			if (showui) {
+				worldIsMoving=true;
+				WorldMoveStart=mouse.p;
+				mainmenue->setWorldFollowsPlayer(false);
+			}
 		} else {
 			worldIsMoving=false;;
 		}
@@ -423,7 +438,6 @@ void Game::run()
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (mainmenue->worldFollowsPlayer())
 			updateWorldCoords();
-
 
 		updateUi(mouse);
 
@@ -791,14 +805,30 @@ void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point 
 }
 
 
+void Game::startLevel(const ppl7::String &filename)
+{
+	if (!ppl7::File::exists(filename)) {
+		clearLevel();
+		LevelFile=filename;
+		return;
+	}
+	level.load(filename);
+	LevelFile=filename;
+	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
+	if (startpoint.x>0) {
+		player->move(startpoint.x, startpoint.y);
+		player->setSavePoint(startpoint);
+	}
+}
+
 void Game::save()
 {
-	level.save("level/test.lvl");
+	level.save(LevelFile);
 }
 
 void Game::load()
 {
-	level.load("level/test.lvl");
+	level.load(LevelFile);
 }
 
 void Game::clearLevel()
@@ -1000,6 +1030,8 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
 		player->setSavePoint(pos);
 	} else if (event->key==ppl7::tk::KeyEvent::KEY_F3) {
 		level.load("level/test.lvl");
+	} else if (event->key==ppl7::tk::KeyEvent::KEY_F9) {
+		showUi(!showui);
 	}
 }
 
