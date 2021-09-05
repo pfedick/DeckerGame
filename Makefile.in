@@ -62,6 +62,8 @@ OBJECTS=compile/main.o \
 	compile/object_laserbarrier.o \
 	compile/object_enemy.o \
 	compile/object_rat.o \
+	compile/object_bat.o \
+	compile/object_scorpion.o \
 	compile/object_hangingspider.o \
 	compile/object_savepoint.o \
 	compile/object_medikit.o \
@@ -167,6 +169,7 @@ sprites:
 	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
 	./texmaker -s "lightwave/Render/enemies/wallenstein/*.png" -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/enemies/helena/*.png" -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s "lightwave/Render/enemies/bat/*.png" -t res/bat.tex -w 512 -h 512 -px 64 -py 120
 
 	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
 	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
@@ -309,6 +312,14 @@ compile/object_playerstartpoint.o: src/objects/playerstartpoint.cpp Makefile inc
 compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/object_mummy.o -c src/objects/mummy.cpp $(CFLAGS)	
+
+compile/object_bat.o: src/objects/bat.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_bat.o -c src/objects/bat.cpp $(CFLAGS)	
+
+compile/object_scorpion.o: src/objects/scorpion.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/object_scorpion.o -c src/objects/scorpion.cpp $(CFLAGS)	
 
 compile/object_skeleton.o: src/objects/skeleton.cpp Makefile include/objects.h
 	- @mkdir -p compile 

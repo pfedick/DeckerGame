@@ -38,6 +38,8 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game *game
 	addObject(Decker::Objects::Type::Arrow,"Arrow",2);
 	addObject(Decker::Objects::Type::ThreeSpeers,"3 Speers",18);
 	addObject(Decker::Objects::Type::Rat,"Rat",5);
+	addObject(Decker::Objects::Type::Bat,"Bat",39);
+	addObject(Decker::Objects::Type::Scorpion,"Scorpion",39);
 	addObject(Decker::Objects::Type::HangingSpider,"hanging Spider",6);
 	addObject(Decker::Objects::Type::FloaterHorizontal,"Floater horizontal",13);
 	addObject(Decker::Objects::Type::FloaterVertical,"Floater vertical",14);

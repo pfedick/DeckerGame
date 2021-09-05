@@ -102,6 +102,13 @@ void ObjectSystem::loadSpritesets(SDL &sdl)
 	spriteset[Spriteset::Helena]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Helena]->load(sdl,"res/helena.tex");
 
+	spriteset[Spriteset::Bat]->enableOutlines(true);
+	spriteset[Spriteset::Bat]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Bat]->load(sdl,"res/bat.tex");
+
+	spriteset[Spriteset::Scorpion]->enableOutlines(true);
+	spriteset[Spriteset::Scorpion]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Scorpion]->load(sdl,"res/bat.tex");
 }
 
 void ObjectSystem::addObject(Object *object)
@@ -315,6 +322,8 @@ Representation getRepresentation(int object_type)
 	case Type::StamperVertical: return StamperVertical::representation();
 	case Type::Wallenstein: return Wallenstein::representation();
 	case Type::Helena: return Helena::representation();
+	case Type::Bat: return Bat::representation();
+	case Type::Scorpion: return Scorpion::representation();
 
 	default: return Object::representation();
 	}
@@ -378,6 +387,8 @@ Object * ObjectSystem::getInstance(int object_type) const
 	case Type::StamperVertical: return new StamperVertical();
 	case Type::Wallenstein: return new Wallenstein();
 	case Type::Helena: return new Helena();
+	case Type::Bat: return new Bat();
+	case Type::Scorpion: return new Scorpion();
 	}
 	return NULL;
 }

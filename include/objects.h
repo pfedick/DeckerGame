@@ -60,7 +60,9 @@ public:
 		Scarabeus=109,
 		StamperVertical=110,
 		Wallenstein=111,
-		Helena=112
+		Helena=112,
+		Scorpion=113,
+		Bat=114
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -82,6 +84,8 @@ public:
 		StamperVertical=10,
 		Wallenstein=11,
 		Helena=12,
+		Bat=13,
+		Scorpion=14,
 		MaxSpritesets
 	};
 };
@@ -484,6 +488,35 @@ private:
 	int state;
 public:
 	Rat();
+	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
+};
+
+class Scorpion : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+	int state;
+public:
+	Scorpion();
+	static Representation representation();
+	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+
+};
+
+class Bat : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+	float velocity;
+	int state;
+public:
+	Bat();
 	static Representation representation();
 	virtual void handleCollision(Player *player, const Collision &collision);
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
