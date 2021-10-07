@@ -48,6 +48,7 @@ Game::Game()
 	selected_object=NULL;
 	fade_to_black=0;
 	death_state=0;
+	showui=false;
 }
 
 Game::~Game()

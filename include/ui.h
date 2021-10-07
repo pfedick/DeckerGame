@@ -321,6 +321,25 @@ public:
 
 };
 
+class MenuButton : public ppl7::tk::Button
+{
+private:
+public:
+
+};
+
+class StartScreen : public ppl7::tk::Widget
+{
+private:
+	MenuButton *start_level;
+	MenuButton *show_options;
+	MenuButton *exit_game;
+
+
+public:
+	StartScreen();
+
+};
 
 
 }	// EOF namespace ui
