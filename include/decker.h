@@ -487,6 +487,7 @@ private:
 	bool worldIsMoving;
 	bool showui;
 	bool quitGame;
+	bool controlsEnabled;
 
 	void createWindow();
 	void presentStartupScreen();
@@ -552,6 +553,7 @@ public:
 	void showWayNetEdit();
 	void setSpriteModeToDraw();
 	void showUi(bool enable);
+	void enableControls(bool enable);
 
 	SDL_Renderer *getSDLRenderer();
 	ppl7::grafix::Point getViewPos() const;

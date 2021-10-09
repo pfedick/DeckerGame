@@ -23,9 +23,14 @@ void start()
 	*/
 	Game game;
 	game.init();
+	/*
 	game.startLevel("level/start.lvl");
 	game.showUi(false);
 	game.run();
+
+	game.enableControls(false);
+	*/
+
 
 	game.startLevel("level/test.lvl");
 	game.showUi(false);

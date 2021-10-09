@@ -49,6 +49,7 @@ Game::Game()
 	fade_to_black=0;
 	death_state=0;
 	showui=false;
+	controlsEnabled=true;
 }
 
 Game::~Game()
@@ -1095,5 +1096,10 @@ void Game::handleDeath(SDL_Renderer *renderer)
 	}
 
 
+}
+
+void Game::enableControls(bool enable)
+{
+	controlsEnabled=enable;
 }
 
