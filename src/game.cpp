@@ -6,13 +6,13 @@
 #include "player.h"
 #include "objects.h"
 
-static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
+static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f };
 
-static ppl7::tk::Window *GameWindow=NULL;
-static Game *GameInstance=NULL;
+static ppl7::tk::Window* GameWindow=NULL;
+static Game* GameInstance=NULL;
 
 
-ppl7::tk::Window *GetGameWindow()
+ppl7::tk::Window* GetGameWindow()
 {
 	return GameWindow;
 }
@@ -62,7 +62,7 @@ Game::~Game()
 
 void Game::loadGrafix()
 {
-	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	gfx->loadFont("res/notosans.fnt6", "NotoSans");
 	gfx->loadFont("res/notosans-black.fnt6", "NotoSansBlack");
 	Style.labelFont.setName("NotoSans");
@@ -80,7 +80,7 @@ void Game::loadGrafix()
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	resources.Sprites_Nature.enableOutlines(true);
 	resources.Sprites_Nature.enableMemoryBuffer(true);
 	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
@@ -111,10 +111,10 @@ void Game::loadGrafix()
 
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
-	brick_occupation_solid.push_back(BrickOccupation::Item(0,0,Tile::TileOccupation::OccupationBrick));
-	brick_occupation_solid.push_back(BrickOccupation::Item(0,1,Tile::TileOccupation::OccupationBrick));
-	brick_occupation_solid.push_back(BrickOccupation::Item(1,0,Tile::TileOccupation::OccupationBrick));
-	brick_occupation_solid.push_back(BrickOccupation::Item(1,1,Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(0, 0, Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(0, 1, Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(1, 0, Tile::TileOccupation::OccupationBrick));
+	brick_occupation_solid.push_back(BrickOccupation::Item(1, 1, Tile::TileOccupation::OccupationBrick));
 
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
@@ -164,28 +164,28 @@ void Game::createWindow()
 	//setFlags(ppl7::tk::Window::DefaultFullscreen);
 	setWindowTitle("DeckerGame");
 	setRGBFormat(ppl7::grafix::RGBFormat::A8R8G8B8);
-	setBackgroundColor(ppl7::grafix::Color(0,0,0,0));
+	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
 	ppl7::grafix::Size desktop=wm->desktopResolution();
 	desktop.height-=80;
 	setSize(desktop);
 	wm->createWindow(*this);
-	sdl.setRenderer((SDL_Renderer *)getRenderer());
+	sdl.setRenderer((SDL_Renderer*)getRenderer());
 	SDL_ShowCursor(SDL_DISABLE);
 
 }
 
-SDL_Renderer *Game::getSDLRenderer()
+SDL_Renderer* Game::getSDLRenderer()
 {
 	return sdl.getRenderer();
 }
 
 void Game::showUi(bool enable)
 {
-	const ppl7::grafix::Size &desktop=clientSize();
+	const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
 	if (showui) {
 		viewport.y1=33;
-		viewport.y2=desktop.height-33;
+		viewport.y2=desktop.height - 33;
 		world_widget->setViewport(viewport);
 		mainmenue->setVisible(true);
 		statusbar->setVisible(true);
@@ -209,21 +209,21 @@ void Game::showUi(bool enable)
 void Game::initUi()
 {
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	const ppl7::grafix::Size &desktop=clientSize();
+	const ppl7::grafix::Size& desktop=clientSize();
 	//ppl7::tk::Label *label;
 
-	mainmenue=new Decker::ui::MainMenue(0,0,desktop.width,32, this);
+	mainmenue=new Decker::ui::MainMenue(0, 0, desktop.width, 32, this);
 	this->addChild(mainmenue);
 
 
 	// Bottom Frame
-	statusbar=new Decker::ui::StatusBar(0,desktop.height-32,desktop.width,32);
+	statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
 	this->addChild(statusbar);
 	viewport.y1=33;
-	viewport.y2=desktop.height-33;
+	viewport.y2=desktop.height - 33;
 
 	world_widget=new Decker::ui::WorldWidget();
-	world_widget->create(0,32,desktop.width, desktop.height-64);
+	world_widget->create(0, 32, desktop.width, desktop.height - 64);
 	world_widget->setEventHandler(this);
 	world_widget->setViewport(viewport);
 	this->addChild(world_widget);
@@ -235,7 +235,7 @@ void Game::presentStartupScreen()
 {
 	ppl7::grafix::Image img;
 	img.load("res/loading.png");
-	SDL_Texture *tex=sdl.createStreamingTexture(img.width(), img.height());
+	SDL_Texture* tex=sdl.createStreamingTexture(img.width(), img.height());
 	ppl7::grafix::Drawable draw=sdl.lockTexture(tex);
 	draw.blt(img);
 	sdl.unlockTexture(tex);
@@ -243,8 +243,8 @@ void Game::presentStartupScreen()
 	sdl.startFrame(Style.windowBackgroundColor);
 	viewport=sdl.getClientWindow();
 	SDL_Rect target;
-	target.x=(viewport.width()-img.width())/2;
-	target.y=(viewport.height()-img.height())/2;
+	target.x=(viewport.width() - img.width()) / 2;
+	target.y=(viewport.height() - img.height()) / 2;
 	target.w=img.width();
 	target.h=img.height();
 	SDL_RenderCopy(sdl.getRenderer(), tex, NULL, &target);
@@ -259,28 +259,46 @@ void Game::init()
 	presentStartupScreen();
 	loadGrafix();
 	initAudio();
-
+	/*
 	desktopSize=sdl.getWindowSize();
 	viewport=sdl.getClientWindow();
+	{
+		printf("DEBUG\n");
+		ppl7::grafix::Size s=wm->desktopResolution();
+		printf("wm->desktopResolution: width=%d, height=%d\n", s.width, s.height);
+		s=this->clientSize();
+		printf("this->clientSize: width=%d, height=%d\n", s.width, s.height);
+		ppl7::grafix::Rect r=this->clientRect();
+		printf("this->clientRect: p1=%d/%d, p2=%d/%d\n", r.x1, r.y1, r.x2, r.y2);
+
+		printf("sdl.getWindowSize: width=%d, height=%d\n", desktopSize.width, desktopSize.height);
+		printf("sdl.getClientWindow (viewport): p1=%d/%d, p2=%d/%d\n", viewport.x1, viewport.y1,
+			viewport.x2, viewport.y2);
+
+	}
+	*/
+	desktopSize=clientSize();
+	viewport=clientRect();
+
 	initUi();
 	gui_font.setName("Default");
 	gui_font.setSize(12);
 	gui_font.setBold(true);
-	gui_font.setColor(ppl7::grafix::Color(255,255,255,255));
-	gui_font.setBorderColor(ppl7::grafix::Color(0,0,0,0));
-	gui_font.setShadowColor(ppl7::grafix::Color(0,0,0,0));
+	gui_font.setColor(ppl7::grafix::Color(255, 255, 255, 255));
+	gui_font.setBorderColor(ppl7::grafix::Color(0, 0, 0, 0));
+	gui_font.setShadowColor(ppl7::grafix::Color(0, 0, 0, 0));
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
 	if (player) delete player;
 	player=new Player(this);
-	player->setSavePoint(ppl7::grafix::Point(3300,1800));
+	player->setSavePoint(ppl7::grafix::Point(3300, 1800));
 	updateWorldCoords();
 
 	player->setSpriteResource(resources.Sprite_George_Adventure);
 	player->setTileTypeResource(resources.TileTypes);
 
 	//level.create(255,255);
-	for (int i=1;i<=resources.getMaxTilesetId();i++) {
+	for (int i=1;i <= resources.getMaxTilesetId();i++) {
 		//printf("setTileset %d\n",i);
 		level.setTileset(i, &resources.bricks[i].world);
 	}
@@ -308,27 +326,27 @@ void Game::drawGrid()
 	if (!tex_level_grid) {
 		tex_level_grid=sdl.createStreamingTexture(desktopSize.width, desktopSize.height);
 		ppl7::grafix::Drawable draw=sdl.lockTexture(tex_level_grid);
-		ppl7::grafix::Color white(255,255,255,128);
-		ppl7::grafix::Color black(0,0,0,128);
+		ppl7::grafix::Color white(255, 255, 255, 128);
+		ppl7::grafix::Color black(0, 0, 0, 128);
 
 		draw.cls(0);
-		for (int x=0;x<desktopSize.width;x+=TILE_WIDTH) {
-			draw.line(x,0,x,desktopSize.height,black);
-			draw.line(x+1,0,x+1,desktopSize.height,white);
+		for (int x=0;x < desktopSize.width;x+=TILE_WIDTH) {
+			draw.line(x, 0, x, desktopSize.height, black);
+			draw.line(x + 1, 0, x + 1, desktopSize.height, white);
 		}
-		for (int y=0;y<desktopSize.height;y+=TILE_HEIGHT) {
-			draw.line(0,y,desktopSize.width,y ,black);
-			draw.line(0,y+1,desktopSize.width,y+1 ,white);
+		for (int y=0;y < desktopSize.height;y+=TILE_HEIGHT) {
+			draw.line(0, y, desktopSize.width, y, black);
+			draw.line(0, y + 1, desktopSize.width, y + 1, white);
 		}
 		sdl.unlockTexture(tex_level_grid);
 	}
 	int currentPlane=mainmenue->currentPlane();
-	ppl7::grafix::Point c=WorldCoords*planeFactor[currentPlane];
+	ppl7::grafix::Point c=WorldCoords * planeFactor[currentPlane];
 
-	SDL_Renderer *renderer=sdl.getRenderer();
+	SDL_Renderer* renderer=sdl.getRenderer();
 	SDL_Rect target;
-	target.x=viewport.x1-(c.x%TILE_WIDTH);
-	target.y=viewport.y1-(c.y%TILE_HEIGHT);
+	target.x=viewport.x1 - (c.x % TILE_WIDTH);
+	target.y=viewport.y1 - (c.y % TILE_HEIGHT);
 	target.w=desktopSize.width;
 	target.h=desktopSize.height;
 	SDL_RenderCopy(renderer, tex_level_grid, NULL, &target);
@@ -336,22 +354,22 @@ void Game::drawGrid()
 
 void Game::moveWorld(int offset_x, int offset_y)
 {
-	if (offset_x==0 && offset_y==0) return;
+	if (offset_x == 0 && offset_y == 0) return;
 	WorldCoords.x+=offset_x;
 	WorldCoords.y+=offset_y;
-	if (WorldCoords.x<0) WorldCoords.x=0;
-	if (WorldCoords.x>62000) WorldCoords.x=62000;
-	if (WorldCoords.y<0) WorldCoords.y=0;
-	if (WorldCoords.y>62000) WorldCoords.y=62000;
+	if (WorldCoords.x < 0) WorldCoords.x=0;
+	if (WorldCoords.x > 62000) WorldCoords.x=62000;
+	if (WorldCoords.y < 0) WorldCoords.y=0;
+	if (WorldCoords.y > 62000) WorldCoords.y=62000;
 }
 
-void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
+void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse)
 {
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (worldIsMoving) {
 		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Move\n");
-			moveWorld(WorldMoveStart.x-mouse.p.x, WorldMoveStart.y-mouse.p.y);
+			moveWorld(WorldMoveStart.x - mouse.p.x, WorldMoveStart.y - mouse.p.y);
 			WorldMoveStart=mouse.p;
 		} else {
 			worldIsMoving=false;
@@ -373,7 +391,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse)
 	}
 }
 
-void Game::updateUi(const ppl7::tk::MouseState &mouse)
+void Game::updateUi(const ppl7::tk::MouseState& mouse)
 {
 	fps.update();
 	statusbar->setFps(fps.getFPS());
@@ -395,32 +413,32 @@ void Game::updateUi(const ppl7::tk::MouseState &mouse)
 void Game::updateWorldCoords()
 {
 	if (!player) return;
-	int mx=viewport.width()/2;
-	int my=viewport.height()/2+192;	//256
-	WorldCoords.x=player->x-mx;
-	WorldCoords.y=player->y-my;
-	if (WorldCoords.x<0) WorldCoords.x=0;
-	if (WorldCoords.y<0) WorldCoords.y=0;
+	int mx=viewport.width() / 2;
+	int my=viewport.height() / 2 + 192;	//256
+	WorldCoords.x=player->x - mx;
+	WorldCoords.y=player->y - my;
+	if (WorldCoords.x < 0) WorldCoords.x=0;
+	if (WorldCoords.y < 0) WorldCoords.y=0;
 }
 
 ppl7::grafix::Point Game::getViewPos() const
 {
 	ppl7::grafix::Point p=WorldCoords;
-	p.x+=viewport.width()/2;
-	p.y+=viewport.height()/2;
+	p.x+=viewport.width() / 2;
+	p.y+=viewport.height() / 2;
 	return p;
 }
 
 void Game::run()
 {
-	SDL_Renderer *renderer=sdl.getRenderer();
+	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
-	AudioStream *playing_song=&audiopool.song[1];
+	AudioStream* playing_song=&audiopool.song[1];
 	playing_song->setVolume(0.1f);
 	audiosystem.play(playing_song);
 	while (!quitGame) {
 		if (!audiosystem.isPlaying(playing_song)) {
-			playing_song=&audiopool.song[ppl7::rand(0,2)];
+			playing_song=&audiopool.song[ppl7::rand(0, 2)];
 			playing_song->rewind();
 			//playing_song->setVolume(0.5f);
 			audiosystem.play(playing_song);
@@ -432,8 +450,8 @@ void Game::run()
 		}
 		wm->handleEvents();
 		double now=ppl7::GetMicrotime();
-		level.setEditmode(object_selection!=NULL);
-		level.updateVisibleSpriteLists(WorldCoords,viewport);	// => TODO: own Thread
+		level.setEditmode(object_selection != NULL);
+		level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
 		player->setGodMode(mainmenue->godModeEnabled());
 		player->update(now, level.TileTypeMatrix, level.objects);
 		level.objects->update(now, level.TileTypeMatrix, *player);
@@ -457,7 +475,7 @@ void Game::run()
 		target.w=desktopSize.width;
 		target.h=desktopSize.height;
 		SDL_Rect source;
-		ppl7::grafix::Point c=WorldCoords*0.1f;
+		ppl7::grafix::Point c=WorldCoords * 0.1f;
 		source.x=c.x;
 		source.y=c.y;
 		source.w=desktopSize.width;
@@ -473,7 +491,7 @@ void Game::run()
 		level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
 		level.setShowSprites(mainmenue->visibility_sprites);
 		level.setShowObjects(mainmenue->visibility_objects);
-		level.draw(renderer, WorldCoords,player);
+		level.draw(renderer, WorldCoords, player);
 
 
 		drawSelectedSprite(renderer, mouse.p);
@@ -487,7 +505,7 @@ void Game::run()
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
 
-		if (player->isDead()==true && death_state==0) {
+		if (player->isDead() == true && death_state == 0) {
 			death_state=1;
 			fade_to_black=0;
 		}
@@ -496,17 +514,17 @@ void Game::run()
 		// Widgets
 		drawWidgets();
 		// Mouse
-		resources.Cursor.draw(renderer,mouse.p.x,mouse.p.y,1);
+		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		presentScreen();
 	}
 }
 
-void Game::quitEvent(ppl7::tk::Event *e)
+void Game::quitEvent(ppl7::tk::Event* e)
 {
 	quitGame=true;
 }
 
-void Game::closeEvent(ppl7::tk::Event *e)
+void Game::closeEvent(ppl7::tk::Event* e)
 {
 	quitGame=true;
 }
@@ -579,8 +597,8 @@ void Game::showTilesSelection()
 	if (tiles_selection) {
 		closeTileSelection();
 	} else {
-		tiles_selection=new Decker::ui::TilesSelection(0,33,300,statusbar->y()-2-33,this);
-		for (int i=1;i<=resources.getMaxTilesetId();i++) {
+		tiles_selection=new Decker::ui::TilesSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
+		for (int i=1;i <= resources.getMaxTilesetId();i++) {
 			tiles_selection->setTileSet(i, resources.bricks[i].name, &resources.bricks[i].ui);
 		}
 		this->addChild(tiles_selection);
@@ -599,7 +617,7 @@ void Game::showTileTypeSelection()
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
 	} else {
-		tiletype_selection=new Decker::ui::TileTypeSelection(0,33,300,statusbar->y()-2-33,this, &resources.TileTypes);
+		tiletype_selection=new Decker::ui::TileTypeSelection(0, 33, 300, statusbar->y() - 2 - 33, this, &resources.TileTypes);
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -617,14 +635,14 @@ void Game::showSpriteSelection()
 	if (sprite_selection) {
 		closeSpriteSelection();
 	} else {
-		sprite_selection=new Decker::ui::SpriteSelection(0,33,300,statusbar->y()-2-33,this);
-		sprite_selection->setSpriteSet(1,"Nature", &resources.uiSpritesNature);
-		sprite_selection->setSpriteSet(2,"Plants", &resources.uiSpritesPlants);
-		sprite_selection->setSpriteSet(3,"Objects", &resources.uiSpritesObjects);
-		sprite_selection->setSpriteSet(4,"Nature Blury", &resources.uiSpritesNature);
-		sprite_selection->setSpriteSet(5,"Rocks", &resources.uiSpritesRocks);
-		sprite_selection->setSpriteSet(6,"Flowers", &resources.uiSpritesFlowers);
-		sprite_selection->setSpriteSet(7,"Treasure", &resources.uiSpritesTreasure);
+		sprite_selection=new Decker::ui::SpriteSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
+		sprite_selection->setSpriteSet(1, "Nature", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(2, "Plants", &resources.uiSpritesPlants);
+		sprite_selection->setSpriteSet(3, "Objects", &resources.uiSpritesObjects);
+		sprite_selection->setSpriteSet(4, "Nature Blury", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(5, "Rocks", &resources.uiSpritesRocks);
+		sprite_selection->setSpriteSet(6, "Flowers", &resources.uiSpritesFlowers);
+		sprite_selection->setSpriteSet(7, "Treasure", &resources.uiSpritesTreasure);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
@@ -643,7 +661,7 @@ void Game::showObjectsSelection()
 	if (object_selection) {
 		closeObjectSelection();
 	} else {
-		object_selection=new Decker::ui::ObjectSelection(0,33,300,statusbar->y()-2-33,this);
+		object_selection=new Decker::ui::ObjectSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
 		object_selection->setSpriteSet(&resources.uiObjects);
 		this->addChild(object_selection);
 		viewport.x1=300;
@@ -663,7 +681,7 @@ void Game::showWayNetEdit()
 		closeWayNet();
 		mainmenue->setShowTileTypes(false);
 	} else {
-		waynet_edit=new Decker::ui::WayNetEdit(0,33,300,statusbar->y()-2-33,this);
+		waynet_edit=new Decker::ui::WayNetEdit(0, 33, 300, statusbar->y() - 2 - 33, this);
 		//waynet_edit->setSpriteSet(&resources.uiObjects);
 		this->addChild(waynet_edit);
 		viewport.x1=300;
@@ -676,56 +694,56 @@ void Game::showWayNetEdit()
 
 
 
-void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse)
+void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 {
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_LSHIFT]) return;
 
 	if (tiletype_selection) {
-		ppl7::grafix::Point coords=WorldCoords*planeFactor[0];
-		int x=(mouse.p.x+coords.x)/TILE_WIDTH;
-		int y=(mouse.p.y+coords.y)/TILE_HEIGHT;
+		ppl7::grafix::Point coords=WorldCoords * planeFactor[0];
+		int x=(mouse.p.x + coords.x) / TILE_WIDTH;
+		int y=(mouse.p.y + coords.y) / TILE_HEIGHT;
 		TileType::Type type=(TileType::Type)tiletype_selection->tileType();
-		if (mouse.buttonMask==ppl7::tk::MouseState::Left) {
-			level.TileTypeMatrix.setType(x,y,type);
-		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-			level.TileTypeMatrix.setType(x,y,TileType::Type::NonBlocking);
+		if (mouse.buttonMask == ppl7::tk::MouseState::Left) {
+			level.TileTypeMatrix.setType(x, y, type);
+		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {
+			level.TileTypeMatrix.setType(x, y, TileType::Type::NonBlocking);
 		}
 	} else if (tiles_selection) {
 		int currentPlane=mainmenue->currentPlane();
 
-		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
-		int x=(mouse.p.x+coords.x)/TILE_WIDTH;
-		int y=(mouse.p.y+coords.y)/TILE_HEIGHT;
+		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
+		int x=(mouse.p.x + coords.x) / TILE_WIDTH;
+		int y=(mouse.p.y + coords.y) / TILE_HEIGHT;
 
 		int selectedTile=tiles_selection->selectedTile();
 		int selectedTileSet=tiles_selection->currentTileSet();
 		int currentLayer=tiles_selection->currentLayer();
-		Plane &plane=level.plane(currentPlane);
+		Plane& plane=level.plane(currentPlane);
 
-		if (mouse.buttonMask==ppl7::tk::MouseState::Left && selectedTile>=0) {
+		if (mouse.buttonMask == ppl7::tk::MouseState::Left && selectedTile >= 0) {
 			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
-			if (selectedTileSet==1) occupation=brick_occupation_solid;
+			if (selectedTileSet == 1) occupation=brick_occupation_solid;
 			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
-				plane.setTile(x,y,
-						currentLayer,
-						selectedTileSet,
-						selectedTile);
+				plane.setTile(x, y,
+					currentLayer,
+					selectedTileSet,
+					selectedTile);
 				plane.setOccupation(x, y, currentLayer, occupation);
 			}
-		} else if (mouse.buttonMask==ppl7::tk::MouseState::Right) {
-			ppl7::grafix::Point origin=plane.getOccupationOrigin(x,y,currentLayer);
-			if (origin.x>=0 && origin.y>=0) {
-				int origin_tile=plane.getTileNo(origin.x,origin.y,currentLayer);
-				int origin_tileset=plane.getTileSet(origin.x,origin.y,currentLayer);
-				if (origin_tile>=0) {
+		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {
+			ppl7::grafix::Point origin=plane.getOccupationOrigin(x, y, currentLayer);
+			if (origin.x >= 0 && origin.y >= 0) {
+				int origin_tile=plane.getTileNo(origin.x, origin.y, currentLayer);
+				int origin_tileset=plane.getTileSet(origin.x, origin.y, currentLayer);
+				if (origin_tile >= 0) {
 					BrickOccupation::Matrix occupation=brick_occupation.get(origin_tile);
-					if (origin_tileset==1) occupation=brick_occupation_solid;
+					if (origin_tileset == 1) occupation=brick_occupation_solid;
 					plane.clearOccupation(origin.x, origin.y, currentLayer, occupation);
 				}
-				plane.clearTile(origin.x, origin.y,currentLayer);
+				plane.clearTile(origin.x, origin.y, currentLayer);
 			} else {
-				plane.clearTile(x,y,currentLayer);
+				plane.clearTile(x, y, currentLayer);
 			}
 		}
 	}
@@ -737,37 +755,37 @@ void Game::setSpriteModeToDraw()
 	selected_object=NULL;
 }
 
-void Game::drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
 	if (!sprite_selection) return;
-	if (sprite_selection->selectedSprite()>=0 && sprite_mode!=spriteModeDraw) {
+	if (sprite_selection->selectedSprite() >= 0 && sprite_mode != spriteModeDraw) {
 		selected_sprite_system=NULL;
 		sprite_mode=spriteModeDraw;
 	}
-	if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
+	if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
 		int currentPlane=mainmenue->currentPlane();
 		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
-				WorldCoords*planeFactor[currentPlane],selected_sprite.id);
-	} else if (sprite_mode==spriteModeDraw) {
+			WorldCoords * planeFactor[currentPlane], selected_sprite.id);
+	} else if (sprite_mode == spriteModeDraw) {
 		if (!mouse.inside(viewport)) return;
 		int nr=sprite_selection->selectedSprite();
-		if (nr<0) return;
+		if (nr < 0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset==1 || spriteset==5) nr=nr*4;
-		else if (spriteset==7) {
-			if (nr==0) nr=ppl7::rand(0, 47);
-			else nr=(nr-1)*6;
+		if (spriteset == 1 || spriteset == 5) nr=nr * 4;
+		else if (spriteset == 7) {
+			if (nr == 0) nr=ppl7::rand(0, 47);
+			else nr=(nr - 1) * 6;
 		}
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
-				mouse.x, mouse.y, nr, scale);
+			mouse.x, mouse.y, nr, scale);
 		level.spriteset[spriteset]->drawOutlines(renderer,
-					mouse.x, mouse.y, nr, scale);
+			mouse.x, mouse.y, nr, scale);
 	}
 }
 
-void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
 	if (!tiles_selection) return;
 	if (!mouse.inside(viewport)) return;
@@ -775,39 +793,39 @@ void Game::drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &m
 	int currentLayer=tiles_selection->currentLayer();
 	int nr=tiles_selection->selectedTile();
 	int tileset=tiles_selection->currentTileSet();
-	if (nr<0 || tileset<0 || tileset>MAX_TILESETS) return;
+	if (nr < 0 || tileset<0 || tileset>MAX_TILESETS) return;
 	if (!level.tileset[tileset]) return;
-	ppl7::grafix::Point wp=mouse-viewport.topLeft()+WorldCoords*planeFactor[currentPlane];
-	int tx=wp.x/TILE_WIDTH;
-	int ty=wp.y/TILE_HEIGHT;
+	ppl7::grafix::Point wp=mouse - viewport.topLeft() + WorldCoords * planeFactor[currentPlane];
+	int tx=wp.x / TILE_WIDTH;
+	int ty=wp.y / TILE_HEIGHT;
 	BrickOccupation::Matrix occupation=brick_occupation.get(nr);
-	if (tileset==1) occupation=brick_occupation_solid;
+	if (tileset == 1) occupation=brick_occupation_solid;
 	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
 		//printf ("tx=%d, ty=%d\n",tx,ty);
-		int x=tx*TILE_WIDTH+viewport.x1-WorldCoords.x*planeFactor[currentPlane];;
-		int y=ty*TILE_HEIGHT+viewport.y1-WorldCoords.y*planeFactor[currentPlane];;
+		int x=tx * TILE_WIDTH + viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
+		int y=ty * TILE_HEIGHT + viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
 		level.tileset[tileset]->draw(renderer,
-						x, y+TILE_HEIGHT, nr);
+			x, y + TILE_HEIGHT, nr);
 	}
 
 }
 
-void Game::drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse)
+void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
 	if (!object_selection) return;
-	if (sprite_mode==SpriteModeEdit && selected_object!=NULL) {
+	if (sprite_mode == SpriteModeEdit && selected_object != NULL) {
 		level.objects->drawSelectedSpriteOutline(renderer, viewport,
-				WorldCoords,selected_object->id);
-	} else if (sprite_mode==spriteModeDraw) {
+			WorldCoords, selected_object->id);
+	} else if (sprite_mode == spriteModeDraw) {
 		if (!mouse.inside(viewport)) return;
 		int object_type=object_selection->selectedObjectType();
-		if (object_type<0) return;
+		if (object_type < 0) return;
 		level.objects->drawPlaceSelection(renderer, mouse, object_type);
 	}
 }
 
 
-void Game::startLevel(const ppl7::String &filename)
+void Game::startLevel(const ppl7::String& filename)
 {
 	if (!ppl7::File::exists(filename)) {
 		clearLevel();
@@ -817,7 +835,7 @@ void Game::startLevel(const ppl7::String &filename)
 	level.load(filename);
 	LevelFile=filename;
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
-	if (startpoint.x>0) {
+	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
 	}
@@ -838,52 +856,52 @@ void Game::clearLevel()
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
-	WorldCoords.setPoint(0,0);
-	level.create(512,256);
+	WorldCoords.setPoint(0, 0);
+	level.create(512, 256);
 }
 
-void Game::mouseDownEvent(ppl7::tk::MouseEvent *event)
+void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget()==world_widget) wm->setKeyboardFocus(world_widget);
-	if (sprite_selection!=NULL && event->widget()==world_widget) {
+	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
+	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
-	} else if (object_selection!=NULL && event->widget()==world_widget) {
+	} else if (object_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnObject(event);
-	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
+	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
 		handleMouseDrawInWorld(*event);
-	} else if (waynet_edit!=NULL && event->widget()==world_widget) {
+	} else if (waynet_edit != NULL && event->widget() == world_widget) {
 		mouseDownEventOnWayNet(event);
 	}
 }
 
 
-void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
+void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+	if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
 		int nr=sprite_selection->selectedSprite();
-		if (nr<0) {
+		if (nr < 0) {
 			selectSprite(event->p);
 			return;
 		}
-		if (sprite_mode!=spriteModeDraw) return;
+		if (sprite_mode != spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset==1 || spriteset==5) nr=nr*4+ppl7::rand(0, 3);
-		if (spriteset==7) {
-			if (nr==0) nr=ppl7::rand(0, 47);
-			else nr=(nr-1)*6+ppl7::rand(0, 5);
+		if (spriteset == 1 || spriteset == 5) nr=nr * 4 + ppl7::rand(0, 3);
+		if (spriteset == 7) {
+			if (nr == 0) nr=ppl7::rand(0, 47);
+			else nr=(nr - 1) * 6 + ppl7::rand(0, 5);
 		}
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
-		if (layer<0 || layer>1 || spriteset>MAX_SPRITESETS) return;
+		if (layer < 0 || layer>1 || spriteset > MAX_SPRITESETS) return;
 		if (!level.spriteset[spriteset]) return;
 		int currentPlane=mainmenue->currentPlane();
-		SpriteSystem &ss=level.spritesystem(currentPlane, layer);
-		ppl7::grafix::Point coords=WorldCoords*planeFactor[currentPlane];
-		ss.addSprite(event->p.x+coords.x,
-				event->p.y+coords.y,
-				0,
-				spriteset, nr, scale);
-	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
+		SpriteSystem& ss=level.spritesystem(currentPlane, layer);
+		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
+		ss.addSprite(event->p.x + coords.x,
+			event->p.y + coords.y,
+			0,
+			spriteset, nr, scale);
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;
 		selected_sprite.id=-1;
@@ -891,11 +909,11 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent *event)
 	}
 }
 
-void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
+void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget()==world_widget && (event->buttonMask==ppl7::tk::MouseState::Middle
-			|| (event->buttonMask==ppl7::tk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))){
-		Decker::Objects::Object *object=level.objects->findMatchingObject(event->p+WorldCoords);
+	if (event->widget() == world_widget && (event->buttonMask == ppl7::tk::MouseState::Middle
+		|| (event->buttonMask == ppl7::tk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))) {
+		Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
 			sprite_mode=SpriteModeEdit;
@@ -903,11 +921,11 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 			sprite_move_start=event->p;
 			object->openUi();
 		}
-	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
 		int object_type=object_selection->selectedObjectType();
-		if (object_type<0 || sprite_mode==SpriteModeSelect || sprite_mode==SpriteModeEdit) {
+		if (object_type < 0 || sprite_mode == SpriteModeSelect || sprite_mode == SpriteModeEdit) {
 			sprite_mode=SpriteModeSelect;
-			Decker::Objects::Object *object=level.objects->findMatchingObject(event->p+WorldCoords);
+			Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
 			if (object) {
 				//printf ("found Object with id %d\n", object->id);
 				wm->setKeyboardFocus(world_widget);
@@ -919,38 +937,38 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent *event)
 			}
 			return;
 		}
-		if (sprite_mode!=spriteModeDraw) return;
+		if (sprite_mode != spriteModeDraw) return;
 		selected_object=level.objects->getInstance(object_type);
 		if (selected_object) {
 			ppl7::grafix::Point coords=WorldCoords;
-			selected_object->initial_p.setPoint(event->p.x+coords.x,event->p.y+coords.y);
+			selected_object->initial_p.setPoint(event->p.x + coords.x, event->p.y + coords.y);
 			selected_object->p=selected_object->initial_p;
 			level.objects->addObject(selected_object);
 			sprite_mode=spriteModeDraw;
 		}
-	} else if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Right) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		sprite_mode=SpriteModeSelect;
 		selected_object=NULL;
 	}
 }
 
-void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event)
+void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 {
 	ppl7::grafix::Point coords=WorldCoords;
-	int x=(event->p.x+coords.x)/TILE_WIDTH;
-	int y=(event->p.y+coords.y)/TILE_HEIGHT;
-	WayPoint wp(x,y);
-	if (event->buttonMask==ppl7::tk::MouseState::Left) {
+	int x=(event->p.x + coords.x) / TILE_WIDTH;
+	int y=(event->p.y + coords.y) / TILE_HEIGHT;
+	WayPoint wp(x, y);
+	if (event->buttonMask == ppl7::tk::MouseState::Left) {
 		if (level.waynet.hasPoint(wp)) {
 			//printf ("Point selected\n");
 			if (level.waynet.hasSelection()) {
 				const WayPoint p1=level.waynet.getSelection();
-				level.waynet.deleteConnection(p1,wp);
+				level.waynet.deleteConnection(p1, wp);
 				Connection::ConnectionType type=(Connection::ConnectionType)waynet_edit->getSelectedWayType();
-				if (type!=Connection::Invalid) {
+				if (type != Connection::Invalid) {
 					level.waynet.addConnection(p1,
-							Connection(p1,wp,type,
-									waynet_edit->getCost()));
+						Connection(p1, wp, type,
+							waynet_edit->getCost()));
 				}
 				level.waynet.setSelection(wp);
 			} else {
@@ -960,34 +978,34 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event)
 			level.waynet.addPoint(wp);
 			level.waynet.clearSelection();
 		}
-	} else if (event->buttonMask==ppl7::tk::MouseState::Right) {
+	} else if (event->buttonMask == ppl7::tk::MouseState::Right) {
 		level.waynet.deletePoint(wp);
 		level.waynet.clearSelection();
 	}
 }
 
-void Game::mouseWheelEvent(ppl7::tk::MouseEvent *event)
+void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 {
-	if (sprite_selection!=NULL && event->widget()==world_widget) {
-		if (sprite_mode==spriteModeDraw) {
+	if (sprite_selection != NULL && event->widget() == world_widget) {
+		if (sprite_mode == spriteModeDraw) {
 			float scale=sprite_selection->spriteScale();
-			if (event->wheel.y<0 && scale>0.1) scale-=0.1;
-			else if (event->wheel.y>0 && scale<1.0) scale+=0.1;
+			if (event->wheel.y < 0 && scale>0.1) scale-=0.1;
+			else if (event->wheel.y > 0 && scale < 1.0) scale+=0.1;
 			sprite_selection->setSpriteScale(scale);
-		} else if (sprite_mode==SpriteModeEdit && selected_sprite.id>=0 && selected_sprite_system!=NULL) {
+		} else if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
 			//printf ("wheel\n");
-			if (event->wheel.y<0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.1;
-			else if (event->wheel.y>0 && selected_sprite.scale<1.0) selected_sprite.scale+=0.1;
+			if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.1;
+			else if (event->wheel.y > 0 && selected_sprite.scale < 1.0) selected_sprite.scale+=0.1;
 			selected_sprite_system->modifySprite(selected_sprite);
 		}
 	}
 }
 
-void Game::selectSprite(const ppl7::grafix::Point &mouse)
+void Game::selectSprite(const ppl7::grafix::Point& mouse)
 {
 	int plane=0;
 	int layer=0;
-	if (level.findSprite(mouse,WorldCoords, selected_sprite, plane, layer)) {
+	if (level.findSprite(mouse, WorldCoords, selected_sprite, plane, layer)) {
 		//printf ("found Sprite on plane %d, layer %d\n",plane,layer);
 		mainmenue->setCurrentPlane(plane);
 		sprite_selection->setCurrentLayer(layer);
@@ -1003,47 +1021,47 @@ void Game::selectSprite(const ppl7::grafix::Point &mouse)
 }
 
 
-void Game::keyDownEvent(ppl7::tk::KeyEvent *event)
+void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
-	if (event->widget()==world_widget) {
-		if (sprite_mode==SpriteModeEdit && sprite_selection!=NULL&& selected_sprite.id>=0
-				&& selected_sprite_system!=NULL) {
-			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
-					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
-				//printf ("KeyEvent\n");
+	if (event->widget() == world_widget) {
+		if (sprite_mode == SpriteModeEdit && sprite_selection != NULL && selected_sprite.id >= 0
+			&& selected_sprite_system != NULL) {
+			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			//printf ("KeyEvent\n");
 				selected_sprite_system->deleteSprite(selected_sprite.id);
 				selected_sprite.id=-1;
 				selected_sprite_system=NULL;
 			}
-		} else if (sprite_mode==SpriteModeEdit && object_selection!=NULL && selected_object!=NULL) {
-			if (event->key==ppl7::tk::KeyEvent::KEY_DELETE
-					&& (event->modifier&ppl7::tk::KeyEvent::KEYMOD_MODIFIER)==0) {
-				//printf ("KeyEvent\n");
+		} else if (sprite_mode == SpriteModeEdit && object_selection != NULL && selected_object != NULL) {
+			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			//printf ("KeyEvent\n");
 				level.objects->deleteObject(selected_object->id);
 				selected_object=NULL;
 			}
 		}
 	}
 	//printf ("keyDownEvent: %d\n", event->key);
-	if (event->key==ppl7::tk::KeyEvent::KEY_F4) {
+	if (event->key == ppl7::tk::KeyEvent::KEY_F4) {
 		// TODO: for developing only
 		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
 		player->move(pos.x, pos.y);
 		player->setSavePoint(pos);
-	} else if (event->key==ppl7::tk::KeyEvent::KEY_F3) {
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3) {
 		level.load("level/test.lvl");
-	} else if (event->key==ppl7::tk::KeyEvent::KEY_F9) {
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
 		showUi(!showui);
 	}
 }
 
-void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
+void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 {
-	if (sprite_selection!=NULL) {
-		if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
-				&& sprite_mode==SpriteModeEdit && selected_sprite.id>=0
-				&& selected_sprite_system!=NULL) {
-			ppl7::grafix::Point diff=event->p-sprite_move_start;
+	if (sprite_selection != NULL) {
+		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+			&& sprite_mode == SpriteModeEdit && selected_sprite.id >= 0
+			&& selected_sprite_system != NULL) {
+			ppl7::grafix::Point diff=event->p - sprite_move_start;
 			selected_sprite.x+=diff.x;
 			selected_sprite.y+=diff.y;
 			selected_sprite_system->modifySprite(selected_sprite);
@@ -1051,47 +1069,45 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 			sprite_move_start=event->p;
 
 		}
-	} else if (object_selection!=NULL) {
-		if (event->widget()==world_widget && event->buttonMask==ppl7::tk::MouseState::Left
-				&& sprite_mode==SpriteModeEdit && selected_object!=NULL) {
-			ppl7::grafix::Point diff=event->p-sprite_move_start;
+	} else if (object_selection != NULL) {
+		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+			&& sprite_mode == SpriteModeEdit && selected_object != NULL) {
+			ppl7::grafix::Point diff=event->p - sprite_move_start;
 			selected_object->initial_p.x+=diff.x;
 			selected_object->initial_p.y+=diff.y;
 			selected_object->p=selected_object->initial_p;
 			selected_object->updateBoundary();
 			sprite_move_start=event->p;
 		}
-	} else if ((tiles_selection!=NULL || tiletype_selection!=NULL) && event->widget()==world_widget) {
+	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
 		handleMouseDrawInWorld(*event);
 	}
 
 }
 
-void Game::handleDeath(SDL_Renderer *renderer)
+void Game::handleDeath(SDL_Renderer* renderer)
 {
-	if (death_state==1) {
-		if (fade_to_black<255) {
+	if (death_state == 1) {
+		if (fade_to_black < 255) {
 			fade_to_black+=5;
-			if (fade_to_black>255) fade_to_black=255;
-		}
-		else death_state=2;
-	} else if (death_state==2) {
+			if (fade_to_black > 255) fade_to_black=255;
+		} else death_state=2;
+	} else if (death_state == 2) {
 		player->dropLifeAndResetToLastSavePoint();
 		death_state=3;
-	} else if (death_state==3) {
-		if (fade_to_black>0) {
+	} else if (death_state == 3) {
+		if (fade_to_black > 0) {
 			fade_to_black-=5;
-			if (fade_to_black<0) fade_to_black=0;
-		}
-		else death_state=0;
+			if (fade_to_black < 0) fade_to_black=0;
+		} else death_state=0;
 	}
-	if (fade_to_black>0) {
+	if (fade_to_black > 0) {
 		SDL_BlendMode currentBlendMode;
 		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
 		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer,0,0,0,fade_to_black);
-		SDL_RenderFillRect(renderer,NULL);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
+		SDL_RenderFillRect(renderer, NULL);
 		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
 	}
 
@@ -1102,4 +1118,3 @@ void Game::enableControls(bool enable)
 {
 	controlsEnabled=enable;
 }
-
