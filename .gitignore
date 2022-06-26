@@ -10,7 +10,7 @@
 /Makefile
 /decker.exe
 /texmaker.exe
-/.settings/
+/.settings
 /distfiles/
 /decker-cppcheck-build-dir/
 /.vscode/
