@@ -4,10 +4,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{471ED94B-BCB3-4348-9B3F-8BC88C4A2DDA}}
 AppName=DeckerGame
-AppVerName=DeckerGame 0.4.0
+AppVerName=DeckerGame 0.5.0
 AppCopyright=Copyright (C) 2021 Patrick Fedick
-AppVersion=0.4.0.0
-VersionInfoVersion=0.4.0
+AppVersion=0.5.0.0
+VersionInfoVersion=0.5.0
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -16,7 +16,7 @@ DefaultDirName={pf}\Patrick F.-Productions\DeckerGame
 DefaultGroupName=Patrick F.-Productions\DeckerGame
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=DeckerGame-0.4.0-Setup
+OutputBaseFilename=DeckerGame-0.5.0-Setup
 ;SetupIconFile=gui\resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
