@@ -5,11 +5,13 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "audio.h"
+#include "intro.h"
 
 void help()
 {
 
 }
+
 
 void start()
 {
@@ -31,6 +33,10 @@ void start()
 	game.enableControls(false);
 	*/
 
+	
+	IntroVideo intro(game.getSDL());
+	intro.run();
+	
 
 	game.startLevel("level/test.lvl");
 	game.showUi(false);

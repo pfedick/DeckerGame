@@ -6,6 +6,7 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include <map>
+#include "decker_sdl.h"
 #include "ui.h"
 #include "audio.h"
 #include "audiopool.h"
@@ -60,31 +61,7 @@ public:
 	void update();
 };
 
-class SDL
-{
-private:
-	SDL_Renderer *renderer;
-	bool screensaver_enabled;
 
-
-
-public:
-	SDL();
-	~SDL();
-	void setRenderer(SDL_Renderer *r);
-	ppl7::grafix::Drawable lockTexture(SDL_Texture *texture);
-	void unlockTexture(SDL_Texture *texture);
-	SDL_Texture *createTexture(const ppl7::grafix::Drawable &d);
-	SDL_Texture *createStreamingTexture(int width, int height);
-	SDL_Texture *createRenderTargetTexture(int width, int height);
-	void destroyTexture(SDL_Texture *texture);
-	void startFrame(const ppl7::grafix::Color &background);
-	SDL_Renderer *getRenderer();
-	void present();
-
-	ppl7::grafix::Size getWindowSize() const;
-	ppl7::grafix::Rect getClientWindow() const;
-};
 
 
 class SpriteTexture
@@ -556,6 +533,7 @@ public:
 	void enableControls(bool enable);
 
 	SDL_Renderer *getSDLRenderer();
+	SDL& getSDL();
 	ppl7::grafix::Point getViewPos() const;
 
 	void startLevel(const ppl7::String &filename);
@@ -563,8 +541,6 @@ public:
 	void load();
 	void clearLevel();
 	void playerDied();
-
-
 
 };
 

@@ -93,7 +93,8 @@ OBJECTS=compile/main.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
 	compile/audio_audioinstance.o \
-	compile/audio_audiopool.o
+	compile/audio_audiopool.o \
+	compile/intro.o
 	
 	
 	
@@ -192,6 +193,10 @@ compile/main.o: src/main.cpp Makefile include/decker.h
 compile/sdl.o: src/sdl.cpp Makefile include/decker.h
 	- @mkdir -p compile 
 	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
+
+compile/intro.o: src/intro.cpp Makefile include/decker_sdl.h include/intro.h
+	- @mkdir -p compile 
+	$(CXX) -o compile/intro.o -c src/intro.cpp $(CFLAGS)
 
 compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h
 	- @mkdir -p compile 

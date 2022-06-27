@@ -179,6 +179,11 @@ SDL_Renderer* Game::getSDLRenderer()
 	return sdl.getRenderer();
 }
 
+SDL& Game::getSDL()
+{
+	return sdl;
+}
+
 void Game::showUi(bool enable)
 {
 	const ppl7::grafix::Size& desktop=clientSize();
@@ -1118,3 +1123,5 @@ void Game::enableControls(bool enable)
 {
 	controlsEnabled=enable;
 }
+
+
