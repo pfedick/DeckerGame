@@ -224,7 +224,8 @@ void IntroVideo::nextFrame(SDL_Renderer* renderer)
 		printf("padding: %d\n", AV_INPUT_BUFFER_PADDING_SIZE);
 		// Is this a packet from the video stream?
 		if (av_packet->stream_index == videoStream) {
-			printf("mussen decoden\n");
+			printf("must decode\n");
+			//av_grow_packet(av_packet, AV_INPUT_BUFFER_PADDING_SIZE);
 			response = avcodec_send_packet(av_codec_ctx, av_packet);
 			if (response < 0) {
 				printf("avcodec_send_packet failed\n");
