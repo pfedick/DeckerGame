@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "intro.h"
 
+
 void help()
 {
 
@@ -33,10 +34,9 @@ void start()
 	game.enableControls(false);
 	*/
 
-	
-	IntroVideo intro(game.getSDL());
-	intro.run();
-	
+	game.playIntroVideo();
+	return;
+	game.init_grafix();
 
 	game.startLevel("level/test.lvl");
 	game.showUi(false);
@@ -52,7 +52,8 @@ int WinMain()
 	try {
 		start();
 		return 0;
-	} catch (const ppl7::Exception &ex) {
+	}
+	catch (const ppl7::Exception& ex) {
 		ex.print();
 		throw;
 		return 1;

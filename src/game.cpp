@@ -233,7 +233,25 @@ void Game::initUi()
 	world_widget->setViewport(viewport);
 	this->addChild(world_widget);
 	wm->setKeyboardFocus(world_widget);
+}
 
+void Game::deleteUi()
+{
+	if (world_widget) {
+		this->removeChild(world_widget);
+		delete world_widget;
+		world_widget=NULL;
+	}
+	if (statusbar) {
+		this->removeChild(statusbar);
+		delete statusbar;
+		statusbar=NULL;
+	}
+	if (mainmenue) {
+		this->removeChild(mainmenue);
+		delete mainmenue;
+		mainmenue=NULL;
+	}
 }
 
 void Game::presentStartupScreen()
@@ -262,30 +280,11 @@ void Game::init()
 {
 	createWindow();
 	presentStartupScreen();
-	loadGrafix();
 	initAudio();
-	/*
-	desktopSize=sdl.getWindowSize();
-	viewport=sdl.getClientWindow();
-	{
-		printf("DEBUG\n");
-		ppl7::grafix::Size s=wm->desktopResolution();
-		printf("wm->desktopResolution: width=%d, height=%d\n", s.width, s.height);
-		s=this->clientSize();
-		printf("this->clientSize: width=%d, height=%d\n", s.width, s.height);
-		ppl7::grafix::Rect r=this->clientRect();
-		printf("this->clientRect: p1=%d/%d, p2=%d/%d\n", r.x1, r.y1, r.x2, r.y2);
-
-		printf("sdl.getWindowSize: width=%d, height=%d\n", desktopSize.width, desktopSize.height);
-		printf("sdl.getClientWindow (viewport): p1=%d/%d, p2=%d/%d\n", viewport.x1, viewport.y1,
-			viewport.x2, viewport.y2);
-
-	}
-	*/
 	desktopSize=clientSize();
 	viewport=clientRect();
 
-	initUi();
+
 	gui_font.setName("Default");
 	gui_font.setSize(12);
 	gui_font.setBold(true);
@@ -294,6 +293,16 @@ void Game::init()
 	gui_font.setShadowColor(ppl7::grafix::Color(0, 0, 0, 0));
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
+	initUi();
+}
+
+void Game::init_grafix()
+{
+	loadGrafix();
+	initAudio();
+	desktopSize=clientSize();
+	viewport=clientRect();
+
 	if (player) delete player;
 	player=new Player(this);
 	player->setSavePoint(ppl7::grafix::Point(3300, 1800));
@@ -436,6 +445,8 @@ ppl7::grafix::Point Game::getViewPos() const
 
 void Game::run()
 {
+	world_widget->setVisible(true);
+	world_widget->setEnabled(true);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
 	AudioStream* playing_song=&audiopool.song[1];
@@ -1123,5 +1134,3 @@ void Game::enableControls(bool enable)
 {
 	controlsEnabled=enable;
 }
-
-

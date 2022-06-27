@@ -71,9 +71,9 @@ private:
 	{
 	public:
 		int id;
-		SDL_Texture *tex;
-		SDL_Texture *outlines;
-		const ppl7::grafix::Drawable *drawable;
+		SDL_Texture* tex;
+		SDL_Texture* outlines;
+		const ppl7::grafix::Drawable* drawable;
 		SDL_Rect r;
 		ppl7::grafix::Point Pivot;
 		ppl7::grafix::Point Offset;
@@ -84,8 +84,8 @@ private:
 			tex=outlines=NULL;
 			drawable=NULL;
 		}
-		SpriteIndexItem(const SpriteIndexItem &other)
-		:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
+		SpriteIndexItem(const SpriteIndexItem& other)
+			:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
 		{
 			id=other.id;
 			tex=other.tex;
@@ -93,35 +93,35 @@ private:
 			drawable=other.drawable;
 		}
 	};
-	std::map<int,SDL_Texture*> TextureMap;
-	std::map<int,SDL_Texture*> OutlinesTextureMap;
-	std::map<int,ppl7::grafix::Image> InMemoryTextureMap;
-	std::map<int,SpriteIndexItem> SpriteList;
+	std::map<int, SDL_Texture*> TextureMap;
+	std::map<int, SDL_Texture*> OutlinesTextureMap;
+	std::map<int, ppl7::grafix::Image> InMemoryTextureMap;
+	std::map<int, SpriteIndexItem> SpriteList;
 
 	bool bSDLBufferd;
 	bool bMemoryBufferd;
 	bool bOutlinesEnabled;
 	bool bCollisionDetectionEnabled;
 
-	void loadTexture(SDL &sdl, ppl7::PFPChunk *chunk, const ppl7::grafix::Color &tint);
-	void loadIndex(ppl7::PFPChunk *chunk);
-	void generateOutlines(SDL &sdl, int id, const ppl7::grafix::Image &src);
-	SDL_Texture *findTexture(int id) const;
-	SDL_Texture *findOutlines(int id) const;
-	const ppl7::grafix::Drawable *findInMemoryTexture(int id) const;
+	void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
+	void loadIndex(ppl7::PFPChunk* chunk);
+	void generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image& src);
+	SDL_Texture* findTexture(int id) const;
+	SDL_Texture* findOutlines(int id) const;
+	const ppl7::grafix::Drawable* findInMemoryTexture(int id) const;
 
 public:
 	SpriteTexture();
 	~SpriteTexture();
-	void load(SDL &sdl, const ppl7::String &filename, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
-	void load(SDL &sdl, ppl7::FileObject &ff, const ppl7::grafix::Color &tint=ppl7::grafix::Color());
+	void load(SDL& sdl, const ppl7::String& filename, const ppl7::grafix::Color& tint=ppl7::grafix::Color());
+	void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint=ppl7::grafix::Color());
 	void clear();
-	void draw(ppl7::grafix::Drawable &target, int x, int y, int id) const;
-	void draw(SDL_Renderer *renderer, int x, int y, int id) const;
-	void drawBoundingBox(SDL_Renderer *renderer, int x, int y, int id) const;
-	void draw(SDL_Renderer *renderer, int id, const SDL_Rect &source, const SDL_Rect &target) const;
-	void drawScaled(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
-	void drawOutlines(SDL_Renderer *renderer, int x, int y, int id, float scale_factor) const;
+	void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
+	void draw(SDL_Renderer* renderer, int x, int y, int id) const;
+	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
+	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
+	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
+	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
 	const ppl7::grafix::Drawable getDrawable(int id) const;
@@ -140,8 +140,8 @@ public:
 	{
 	public:
 		Item();
-		SpriteSystem	*spritesystem;
-		SpriteTexture	*texture;
+		SpriteSystem* spritesystem;
+		SpriteTexture* texture;
 		int id;
 		int x;			// 4 Byte
 		int y;			// 4 Byte
@@ -154,8 +154,8 @@ public:
 private:
 	ppl7::Mutex mutex;
 	std::map<int, SpriteSystem::Item> sprite_list;
-	std::map<uint64_t,SpriteSystem::Item> visible_sprite_map;
-	SpriteTexture *spriteset[MAX_SPRITESETS+1];
+	std::map<uint64_t, SpriteSystem::Item> visible_sprite_map;
+	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
 	bool bSpritesVisible;
 
 public:
@@ -164,17 +164,17 @@ public:
 	void clear();
 	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale);
 	void deleteSprite(int id);
-	void modifySprite(const SpriteSystem::Item &item);
+	void modifySprite(const SpriteSystem::Item& item);
 	void setVisible(bool visible);
 	bool isVisible() const;
-	void setSpriteset(int no, SpriteTexture *spriteset);
-	void updateVisibleSpriteList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
-	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
-	void save(ppl7::FileObject &file, unsigned char id) const;
-	void load(const ppl7::ByteArrayPtr &ba);
-	bool findMatchingSprite(const ppl7::grafix::Point &p, SpriteSystem::Item &sprite) const;
+	void setSpriteset(int no, SpriteTexture* spriteset);
+	void updateVisibleSpriteList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void save(ppl7::FileObject& file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
+	bool findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem::Item& sprite) const;
 
-	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
+	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 
 	size_t count() const;
 	size_t countVisible() const;
@@ -214,25 +214,25 @@ public:
 	{
 	public:
 		Item(int x, int y, Tile::TileOccupation o);
-		int x,y;
+		int x, y;
 		Tile::TileOccupation o;
 	};
 	typedef std::list<BrickOccupation::Item> Matrix;
 private:
-	std::map<int,BrickOccupation::Matrix> tiles;
+	std::map<int, BrickOccupation::Matrix> tiles;
 	BrickOccupation::Matrix empty;
 public:
-	void createFromSpriteTexture(const SpriteTexture &tex, int brick_width, int brick_height);
-	void createFromImage(int id, const ppl7::grafix::Drawable &img, int brick_width, int brick_height);
-	void set(int id, const BrickOccupation::Matrix &matrix);
-	const BrickOccupation::Matrix &get(int id);
+	void createFromSpriteTexture(const SpriteTexture& tex, int brick_width, int brick_height);
+	void createFromImage(int id, const ppl7::grafix::Drawable& img, int brick_width, int brick_height);
+	void set(int id, const BrickOccupation::Matrix& matrix);
+	const BrickOccupation::Matrix& get(int id);
 };
 
 class Plane
 {
 	//friend class Level;
 private:
-	Tile **tilematrix;
+	Tile** tilematrix;
 	int width, height;
 	//SpriteSystem spritessystem[2];
 	bool bTilesVisible;
@@ -244,16 +244,16 @@ public:
 	void create(int width, int height);
 	void setTile(int x, int y, int z, int tileset, int tileno, bool showStuds=true);
 	void setBlockBackground(int x, int y, bool block);
-	void setOccupation(int x, int y,  int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
+	void setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
 	Tile::TileOccupation getOccupation(int x, int y, int z);
 	ppl7::grafix::Point getOccupationOrigin(int x, int y, int z);
-	void setOccupation(int x, int y, int z, const BrickOccupation::Matrix &matrix);
-	void clearOccupation(int x, int y, int z, const BrickOccupation::Matrix &matrix);
-	bool isOccupied(int x, int y, int z, const BrickOccupation::Matrix &matrix);
+	void setOccupation(int x, int y, int z, const BrickOccupation::Matrix& matrix);
+	void clearOccupation(int x, int y, int z, const BrickOccupation::Matrix& matrix);
+	bool isOccupied(int x, int y, int z, const BrickOccupation::Matrix& matrix);
 	void clearTile(int x, int y, int z);
-	const Tile *get(int x, int y) const;
-	void save(ppl7::FileObject &file, unsigned char id) const;
-	void load(const ppl7::ByteArrayPtr &ba);
+	const Tile* get(int x, int y) const;
+	void save(ppl7::FileObject& file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
 	void setVisible(bool visible);
 	bool isVisible() const;
 	int getTileNo(int x, int y, int z);
@@ -287,8 +287,8 @@ public:
 class TileTypePlane
 {
 private:
-	SpriteTexture *tiletypes;
-	TileType::Type *tilematrix;
+	SpriteTexture* tiletypes;
+	TileType::Type* tilematrix;
 	int width, height;
 
 public:
@@ -296,20 +296,20 @@ public:
 	~TileTypePlane();
 	void clear();
 	void create(int width, int height);
-	void setType(int x, int y,  TileType::Type type);
+	void setType(int x, int y, TileType::Type type);
 	TileType::Type getType(int x, int y) const;
-	TileType::Type getType(const ppl7::grafix::Point &player) const;
-	int getPlayerGround(const ppl7::grafix::Point &player) const;
-	void setTileTypesSprites(SpriteTexture *sprites);
-	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
-	void save(ppl7::FileObject &file, unsigned char id) const;
-	void load(const ppl7::ByteArrayPtr &ba);
+	TileType::Type getType(const ppl7::grafix::Point& player) const;
+	int getPlayerGround(const ppl7::grafix::Point& player) const;
+	void setTileTypesSprites(SpriteTexture* sprites);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void save(ppl7::FileObject& file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
 };
 
 class Resources
 {
 private:
-	void loadBricks(SDL &sdl, int tileset, const ppl7::String &name, int ldraw_material, const ppl7::grafix::Color &tint);
+	void loadBricks(SDL& sdl, int tileset, const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& tint);
 	int max_tileset_id;
 public:
 	SpriteTexture Sprite_George;
@@ -343,7 +343,7 @@ public:
 	};
 	Resources();
 	BrickResource bricks[MAX_TILESETS];
-	void loadBricks(SDL &sdl);
+	void loadBricks(SDL& sdl);
 	int getMaxTilesetId() const;
 };
 class Player;
@@ -365,13 +365,13 @@ private:
 	SpriteSystem BackSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
-	Decker::Objects::ObjectSystem *objects;
+	Decker::Objects::ObjectSystem* objects;
 	Waynet waynet;
 
 
 	ppl7::grafix::Rect viewport;
-	SpriteTexture *tileset[MAX_TILESETS+1];
-	SpriteTexture *spriteset[MAX_SPRITESETS+1];
+	SpriteTexture* tileset[MAX_TILESETS + 1];
+	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
 	bool editMode;
 	bool showSprites;
 	bool showObjects;
@@ -409,18 +409,18 @@ public:
 	void setEditmode(bool enabled);
 	void setShowSprites(bool enabled);
 	void setShowObjects(bool enabled);
-	void setTileset(int no, SpriteTexture *tileset);
-	void setSpriteset(int no, SpriteTexture *spriteset);
+	void setTileset(int no, SpriteTexture* tileset);
+	void setSpriteset(int no, SpriteTexture* spriteset);
 	void create(int width, int height);
-	void load(const ppl7::String &Filename);
-	void save(const ppl7::String &Filename);
-	void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player);
-	void drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const;
-	void setViewport(const ppl7::grafix::Rect &r);
-	Plane &plane(int id);
-	SpriteSystem &spritesystem(int plane, int layer);
-	void updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
-	bool findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &worldcoords, SpriteSystem::Item &item, int &plane, int &layer) const;
+	void load(const ppl7::String& Filename);
+	void save(const ppl7::String& Filename);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player);
+	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
+	void setViewport(const ppl7::grafix::Rect& r);
+	Plane& plane(int id);
+	SpriteSystem& spritesystem(int plane, int layer);
+	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
 
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
@@ -433,7 +433,7 @@ class Game : private ppl7::tk::Window
 {
 private:
 	SDL sdl;
-	ppl7::tk::WindowManager *wm;
+	ppl7::tk::WindowManager* wm;
 	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
 	void loadGrafix();
@@ -446,14 +446,14 @@ private:
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
-	Decker::ui::MainMenue *mainmenue;
-	Decker::ui::StatusBar *statusbar;
-	Decker::ui::TilesSelection *tiles_selection;
-	Decker::ui::TileTypeSelection *tiletype_selection;
-	Decker::ui::SpriteSelection *sprite_selection;
-	Decker::ui::ObjectSelection *object_selection;
-	Decker::ui::WorldWidget *world_widget;
-	Decker::ui::WayNetEdit *waynet_edit;
+	Decker::ui::MainMenue* mainmenue;
+	Decker::ui::StatusBar* statusbar;
+	Decker::ui::TilesSelection* tiles_selection;
+	Decker::ui::TileTypeSelection* tiletype_selection;
+	Decker::ui::SpriteSelection* sprite_selection;
+	Decker::ui::ObjectSelection* object_selection;
+	Decker::ui::WorldWidget* world_widget;
+	Decker::ui::WayNetEdit* waynet_edit;
 	BrickOccupation brick_occupation;
 	BrickOccupation::Matrix brick_occupation_solid;
 	FPS fps;
@@ -469,29 +469,30 @@ private:
 	void createWindow();
 	void presentStartupScreen();
 	void initUi();
+	void deleteUi();
 	void initAudio();
-	void updateUi(const ppl7::tk::MouseState &mouse);
+	void updateUi(const ppl7::tk::MouseState& mouse);
 	void drawGrid();
-	void drawSelectedSprite(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
-	void drawSelectedTile(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
-	void drawSelectedObject(SDL_Renderer *renderer, const ppl7::grafix::Point &mouse);
+	void drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
+	void drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
+	void drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void moveWorld(int offset_x, int offset_y);
-	void moveWorldOnMouseClick(const ppl7::tk::MouseState &mouse);
-	void handleMouseDrawInWorld(const ppl7::tk::MouseState &mouse);
+	void moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse);
+	void handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse);
 	void closeTileTypeSelection();
 	void closeTileSelection();
 	void closeSpriteSelection();
 	void closeObjectSelection();
 	void closeWayNet();
-	void selectSprite(const ppl7::grafix::Point &mouse);
+	void selectSprite(const ppl7::grafix::Point& mouse);
 	void updateWorldCoords();
-	void handleDeath(SDL_Renderer *renderer);
+	void handleDeath(SDL_Renderer* renderer);
 
-	void mouseDownEventOnSprite(ppl7::tk::MouseEvent *event);
-	void mouseDownEventOnObject(ppl7::tk::MouseEvent *event);
-	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent *event);
+	void mouseDownEventOnSprite(ppl7::tk::MouseEvent* event);
+	void mouseDownEventOnObject(ppl7::tk::MouseEvent* event);
+	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event);
 
-	Player *player;
+	Player* player;
 	int fade_to_black;
 	int death_state;
 
@@ -502,9 +503,9 @@ private:
 	};
 	spriteMode sprite_mode;
 	SpriteSystem::Item selected_sprite;
-	SpriteSystem *selected_sprite_system;
+	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
-	Decker::Objects::Object *selected_object;
+	Decker::Objects::Object* selected_object;
 
 
 
@@ -512,16 +513,17 @@ public:
 	Game();
 	~Game();
 	void init();
+	void init_grafix();
 	void run();
 
 	// EventHandler
-	void quitEvent(ppl7::tk::Event *event);
-	void closeEvent(ppl7::tk::Event *event);
+	void quitEvent(ppl7::tk::Event* event);
+	void closeEvent(ppl7::tk::Event* event);
 	//void mouseClickEvent(ppl7::tk::MouseEvent *event);
-	void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
-	void keyDownEvent(ppl7::tk::KeyEvent *event);
-	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
+	void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+	void keyDownEvent(ppl7::tk::KeyEvent* event);
+	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
 
 	void showTilesSelection();
 	void showTileTypeSelection();
@@ -532,19 +534,21 @@ public:
 	void showUi(bool enable);
 	void enableControls(bool enable);
 
-	SDL_Renderer *getSDLRenderer();
+	SDL_Renderer* getSDLRenderer();
 	SDL& getSDL();
 	ppl7::grafix::Point getViewPos() const;
 
-	void startLevel(const ppl7::String &filename);
+	void startLevel(const ppl7::String& filename);
 	void save();
 	void load();
 	void clearLevel();
 	void playerDied();
 
+	void playIntroVideo();
+
 };
 
-ppl7::tk::Window *GetGameWindow();
+ppl7::tk::Window* GetGameWindow();
 
 
 
