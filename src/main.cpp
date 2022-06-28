@@ -34,8 +34,8 @@ void start()
 	game.enableControls(false);
 	*/
 
-	game.playIntroVideo();
-	return;
+	//game.playIntroVideo();
+	//return;
 	game.init_grafix();
 
 	game.startLevel("level/test.lvl");
