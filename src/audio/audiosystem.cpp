@@ -41,12 +41,12 @@ AudioSystem::~AudioSystem()
 
 void AudioSystem::shutdown()
 {
-	mutex.lock();
-	tracks.clear();
-	mutex.unlock();
 	if (device_id>0) {
 		SDL_CloseAudioDevice(device_id);
 	}
+	mutex.lock();
+	tracks.clear();
+	mutex.unlock();
 	device_id=0;
 	free(mixbuffer);
 	mixbuffer=NULL;
