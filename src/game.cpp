@@ -59,7 +59,6 @@ Game::~Game()
 	wm->destroyWindow(*this);
 }
 
-
 void Game::loadGrafix()
 {
 	resources.Sprite_George.enableMemoryBuffer(true);
@@ -262,13 +261,18 @@ void Game::presentStartupScreen()
 	draw.blt(img);
 	sdl.unlockTexture(tex);
 	wm->handleEvents();
+	//ppl7::grafix::Color white(255, 255, 255, 255);
+	//sdl.startFrame(white);
 	sdl.startFrame(Style.windowBackgroundColor);
+
 	viewport=sdl.getClientWindow();
 	SDL_Rect target;
 	target.x=(viewport.width() - img.width()) / 2;
 	target.y=(viewport.height() - img.height()) / 2;
 	target.w=img.width();
 	target.h=img.height();
+	//SDL_SetRenderDrawColor(sdl.getRenderer(), 0, 0, 0, 0);
+	//SDL_RenderFillRect(sdl.getRenderer(), &target);
 	SDL_RenderCopy(sdl.getRenderer(), tex, NULL, &target);
 	sdl.present();
 
@@ -279,7 +283,6 @@ void Game::init()
 {
 	createWindow();
 	initUi();
-	presentStartupScreen();
 	initAudio();
 	desktopSize=clientSize();
 	viewport=clientRect();
@@ -297,10 +300,8 @@ void Game::init()
 
 void Game::init_grafix()
 {
+	presentStartupScreen();
 	loadGrafix();
-	initAudio();
-	desktopSize=clientSize();
-	viewport=clientRect();
 
 	if (player) delete player;
 	player=new Player(this);

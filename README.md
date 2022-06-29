@@ -33,7 +33,7 @@ github to track my progress.
     - scorpion
     - huge vent
     - stamper
-    - Wallenstein + Helena? (from the movie) 
+    - Wallenstein + Helena? (from the movie)
     - some kind of angry bird?
     - side wind
 - compose sound track
@@ -78,14 +78,14 @@ There is probably more, which I'm not aware of, yet ;-)
     - mushroom (white minifig with big red hat and white dots)
 - how does sound work with SDL?
 - write the audio engine
-- how to integrate sound track and sound effects into the game    
+- how to integrate sound track and sound effects into the game
 - game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
 - world editor
 - death animation for objects (player, skeleton)
 - positional sound: objects in the world shot be able to emit sound effects.
   The loudness and direction (left/right) should depend on the distance to
   the player.
-- ui for special objects  
+- ui for special objects
 - refine physics for jumping & falling
 
 ## How to control the player
@@ -136,15 +136,16 @@ The following Tools/Libraries are required:
 - bz2
 - png
 - mpg123
+- ffmpeg-libs
 
 #### Fedora
     sudo dnf install -y git gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
-        bzip2-devel libpng-devel mpg123-devel
-        
+        bzip2-devel libpng-devel mpg123-devel ffmpeg-devel
+
 #### Ubuntu
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
-        libpng-dev libmpg123-dev
-        
+        libpng-dev libmpg123-dev ffmpeg-dev
+
 #### Windows 10 with mingw64/msys
 
 For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
@@ -160,22 +161,13 @@ For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://w
     cd DeckerGame
     ./configure
     make -j
-    
+
     # run the game:
     ./decker
-    
+
 If you already cloned the project and want to update to the newest version:
 
     git pull
     git submodule update --init --recursive
     ./configure
     make -j
-    
-    
-    
-
-
-
-
-
-

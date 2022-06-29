@@ -427,8 +427,6 @@ public:
 
 };
 
-
-
 class Game : private ppl7::tk::Window
 {
 private:
@@ -436,7 +434,6 @@ private:
 	ppl7::tk::WindowManager* wm;
 	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
-	void loadGrafix();
 	AudioSystem audiosystem;
 	AudioPool audiopool;
 	Resources resources;
@@ -468,6 +465,7 @@ private:
 
 	void createWindow();
 	void presentStartupScreen();
+	void loadGrafix();
 	void initUi();
 	void deleteUi();
 	void initAudio();
@@ -545,6 +543,7 @@ public:
 	void playerDied();
 
 	void playIntroVideo();
+
 
 };
 

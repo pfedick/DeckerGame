@@ -14,11 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install packages
-      run: sudo apt-get update && sudo apt-get install -y libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev libpng-dev libmpg123-dev
+      run: sudo apt-get update && sudo apt-get install -y libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev libpng-dev libmpg123-dev ffmpeg-dev
     - name: checkout submodules
       run: git submodule update --init --recursive
     - name: configure
       run: ./configure
     - name: make
       run: make
-

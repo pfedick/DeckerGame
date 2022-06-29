@@ -2,17 +2,22 @@
 #define INCLUDE_INTRO_H_
 
 #include <SDL.h>
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
-}
+
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "decker_sdl.h"
 
 #include "audio.h"
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
+}
+
+
+
 
 class IntroVideo : public ppl7::tk::Widget
 {
@@ -29,12 +34,10 @@ private:
     AVCodecParameters* av_codec_params;
     struct SwsContext* sws_ctx;
     AVFrame* av_frame;
-
-    uint8_t* yPlane, * uPlane, * vPlane;
-    size_t yPlaneSz, uvPlaneSz;
     AVPacket* av_packet;
     int videoStream;
-    int uvPitch;
+
+    void updateOverlay(AVFrame* frame);
 
 public:
     IntroVideo(SDL& s);
@@ -42,7 +45,8 @@ public:
 
     void clear();
     bool load(const ppl7::String& filename);
-    void nextFrame(SDL_Renderer* renderer);
+    bool nextFrame();
+    void renderFrame(SDL_Renderer* renderer);
 
     bool stopSignal() const;
 

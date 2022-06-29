@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include "decker.h"
 #include "intro.h"
+
 
 static AVPixelFormat correct_for_deprecated_pixel_format(AVPixelFormat pix_fmt) {
 	// Fix swscaler deprecated pixel format warning
@@ -34,15 +34,20 @@ void Game::playIntroVideo()
 		this->addChild(intro_widget);
 		wm->setKeyboardFocus(intro_widget);
 		showUi(false);
+		int frame=0;
 
 		while (!intro_widget->stopSignal()) {
 			wm->handleEvents();
 			sdl.startFrame(black);
 			ppl7::tk::MouseState mouse=wm->getMouseState();
 			//drawWidgets();
-			intro_widget->nextFrame(renderer);
+			if (frame % 2 == 0)
+				if (!intro_widget->nextFrame()) break;
+
+			intro_widget->renderFrame(renderer);
 			resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 			presentScreen();
+			frame++;
 		}
 		this->removeChild(intro_widget);
 	}
@@ -62,11 +67,7 @@ IntroVideo::IntroVideo(SDL& s)
 	overlay=NULL;
 	sws_ctx = NULL;
 	av_frame=NULL;
-	yPlane=uPlane=vPlane=NULL;
 	av_packet=NULL;
-	yPlaneSz=0;
-	uvPlaneSz=0;
-	uvPitch=0;
 	videoStream=-1;
 }
 
@@ -85,10 +86,6 @@ void IntroVideo::clear()
 		av_frame_free(&av_frame);
 		av_frame=NULL;
 	}
-	free(yPlane);
-	free(uPlane);
-	free(vPlane);
-	yPlane=uPlane=vPlane=NULL;
 	if (sws_ctx) {
 		sws_freeContext(sws_ctx);
 		sws_ctx=NULL;
@@ -122,7 +119,7 @@ bool IntroVideo::load(const ppl7::String& filename)
 	if (avformat_find_stream_info(av_format_ctx, NULL) < 0)
 		return false; // Couldn't find stream information
 	// Dump information about file onto standard error
-	av_dump_format(av_format_ctx, 0, (const char*)filename, 0);
+	//av_dump_format(av_format_ctx, 0, (const char*)filename, 0);
 
 	av_codec_params=NULL;
 	av_codec=NULL;
@@ -184,12 +181,8 @@ bool IntroVideo::load(const ppl7::String& filename)
 		av_codec_ctx->height
 	);
 	if (!overlay) return false;
-	printf("video width=%d, height=%d\n", av_codec_ctx->width,
-		av_codec_ctx->height);
 	// initialize SWS context for software scaling
-	/*
 	auto source_pix_fmt = correct_for_deprecated_pixel_format(av_codec_ctx->pix_fmt);
-	printf("debug 1\n");
 	sws_ctx = sws_getContext(av_codec_ctx->width,
 		av_codec_ctx->height,
 		source_pix_fmt,
@@ -202,37 +195,22 @@ bool IntroVideo::load(const ppl7::String& filename)
 		NULL
 	);
 	if (!sws_ctx) return false;
-	*/
-	printf("debug 2\n");
-
-
-	// set up YV12 pixel array (12 bits per pixel)
-	yPlaneSz = av_codec_ctx->width * av_codec_ctx->height;
-	uvPlaneSz = av_codec_ctx->width * av_codec_ctx->height / 4;
-	yPlane = (Uint8*)malloc(yPlaneSz);
-	uPlane = (Uint8*)malloc(uvPlaneSz);
-	vPlane = (Uint8*)malloc(uvPlaneSz);
-	if (!yPlane || !uPlane || !vPlane) {
-		return false;
-	}
-	uvPitch = av_codec_ctx->width / 2;
-	printf("init complete\n");
 	return true;
 }
 
-void IntroVideo::nextFrame(SDL_Renderer* renderer)
+bool IntroVideo::nextFrame()
 {
 	int response;
 	while (av_read_frame(av_format_ctx, av_packet) >= 0) {
-		printf("read frame of size %d, pos: %lu, dts: %lu\n", av_packet->size, av_packet->pos,
-		av_packet->dts);
+		//printf("read frame of size %d, pos: %lu, dts: %lu\n", av_packet->size, av_packet->pos,
+		//	av_packet->dts);
 		// Is this a packet from the video stream?
 		if (av_packet->stream_index == videoStream) {
 			response = avcodec_send_packet(av_codec_ctx, av_packet);
 			if (response < 0) {
 				printf("avcodec_send_packet failed\n");
 				av_packet_unref(av_packet);
-				return;
+				return false;
 			}
 			response = avcodec_receive_frame(av_codec_ctx, av_frame);
 			if (response == AVERROR(EAGAIN) || response == AVERROR_EOF) {
@@ -242,55 +220,49 @@ void IntroVideo::nextFrame(SDL_Renderer* renderer)
 			if (response < 0) {
 				printf("avcodec_receive_frame failed\n");
 				av_packet_unref(av_packet);
-				return;
+				return false;
 			}
 			av_packet_unref(av_packet);
-			printf ("we have a frame: %d x %d\n", av_frame->width, av_frame->height);
-			break;
+			//printf("we have a frame: %d x %d\n", av_frame->width, av_frame->height);
+			updateOverlay(av_frame);
+			return true;
 		}
 		av_packet_unref(av_packet);
 	}
-	return;
-	/*
+	return false;
+}
 
-		printf("avcodec_send_packet\n");
-		response = avcodec_send_packet(av_codec_ctx, av_packet);
-		if (response < 0) {
-			av_packet_unref(av_packet);
-			return;
-		}
-		printf("debug 3\n");
-		response = avcodec_receive_frame(av_codec_ctx, av_frame);
-		if (response == AVERROR(EAGAIN) || response == AVERROR_EOF) {
-			av_packet_unref(av_packet);
-			continue;
-		} else if (response < 0) {
-			//printf("Failed to decode packet: %s\n", av_make_error(response));
-			return;
-		}
-		av_packet_unref(av_packet);
-		break;
+void IntroVideo::updateOverlay(AVFrame* frame)
+{
 
-	}
-	*/
-	printf("soweit so gut...\n");
-	if (!sws_ctx) {
-		auto source_pix_fmt = correct_for_deprecated_pixel_format(av_codec_ctx->pix_fmt);
-		printf("sws_getContext 1\n");
-		sws_ctx = sws_getContext(av_codec_ctx->width,
-			av_codec_ctx->height,
-			source_pix_fmt,
-			av_codec_ctx->width,
-			av_codec_ctx->height,
-			AV_PIX_FMT_YUV420P,
-			SWS_BILINEAR,
-			NULL,
-			NULL,
-			NULL
-		);
-		if (!sws_ctx) return;
-	}
+	AVFrame* frame2 = av_frame_alloc();
+	int num_bytes = av_image_get_buffer_size(AV_PIX_FMT_YUV420P, frame->width, frame->height, 32);
+	uint8_t* frame2_buffer = (uint8_t*)av_malloc(num_bytes * sizeof(uint8_t));
+	av_image_fill_arrays(frame2->data, frame2->linesize, frame2_buffer, AV_PIX_FMT_YUV420P, av_codec_ctx->width,
+		av_codec_ctx->height, 32);
+	sws_scale(sws_ctx, frame->data, frame->linesize, 0, av_codec_ctx->height, frame2->data, frame2->linesize);
 
+	//int w, h;
+	//SDL_QueryTexture(vs->Texture, NULL, NULL, &w, &h);
+
+	//sws_scale(sws_ctx,frame->data, frame->linesize,);
+
+	SDL_UpdateYUVTexture(overlay,
+		NULL,
+		frame2->data[0],
+		frame2->linesize[0],
+		frame2->data[1],
+		frame2->linesize[1],
+		frame2->data[2],
+		frame2->linesize[2]);
+	av_freep(&frame2_buffer);
+	av_freep(&frame2);
+
+}
+
+void IntroVideo::renderFrame(SDL_Renderer* renderer)
+{
+	SDL_RenderCopy(renderer, overlay, NULL, NULL);
 }
 
 
