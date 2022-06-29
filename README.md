@@ -144,7 +144,7 @@ The following Tools/Libraries are required:
 
 #### Ubuntu
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
-        libpng-dev libmpg123-dev ffmpeg
+        libpng-dev libmpg123-dev libavcodec-dev libavformat-dev libswscale-dev libavutil-dev
 
 #### Windows 10 with mingw64/msys
 
