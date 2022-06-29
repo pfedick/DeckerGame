@@ -27,6 +27,7 @@ void Game::playIntroVideo()
 	IntroVideo* intro_widget=new IntroVideo(sdl);
 	intro_widget->create(0, 0, this->width(), this->height());
 	//ppl7::String filename="/home/patrickf/Videos/Denic/Sprint 10/anchorman2-raw.avi";
+	//ppl7::String filename="res/video/decker2_intro-vp9-4000k.webm";
 	ppl7::String filename="res/video/decker2_intro.mp4";
 
 	if (intro_widget->load(filename)) {
@@ -121,7 +122,7 @@ bool IntroVideo::load(const ppl7::String& filename)
 	if (avformat_find_stream_info(av_format_ctx, NULL) < 0)
 		return false; // Couldn't find stream information
 	// Dump information about file onto standard error
-	//av_dump_format(av_format_ctx, 0, (const char*)filename, 0);
+	av_dump_format(av_format_ctx, 0, (const char*)filename, 0);
 
 	av_codec_params=NULL;
 	av_codec=NULL;
@@ -141,14 +142,18 @@ bool IntroVideo::load(const ppl7::String& filename)
 				av_codec_params=local_av_codec_params;
 			}
 		}
-		printf("Codec %s ID %d bit_rate %ld\n", local_av_codec->name, local_av_codec->id, local_av_codec_params->bit_rate);
+		/*
+		printf("Codec %s ID %d bit_rate %ld, resolution: %d x %d\n",
+			local_av_codec->name, local_av_codec->id, local_av_codec_params->bit_rate,
+			local_av_codec_params->width, local_av_codec_params->height);
+			*/
 	}
 	if (videoStream == -1)
 		return false; // Didn't find a video stream
 
 
 	// Get a pointer to the codec context for the video stream
-	AVCodecContext* av_codec_ctx=avcodec_alloc_context3(av_codec);
+	av_codec_ctx=avcodec_alloc_context3(av_codec);
 	if (!av_codec_ctx) {
 		return false;
 	}
@@ -219,20 +224,16 @@ void IntroVideo::nextFrame(SDL_Renderer* renderer)
 {
 	int response;
 	while (av_read_frame(av_format_ctx, av_packet) >= 0) {
-		printf("read frame of size %d\n", av_packet->size);
-		printf("buffer: %td\n", (ptrdiff_t)av_packet->data);
-		printf("padding: %d\n", AV_INPUT_BUFFER_PADDING_SIZE);
+		printf("read frame of size %d, pos: %lu, dts: %lu\n", av_packet->size, av_packet->pos,
+		av_packet->dts);
 		// Is this a packet from the video stream?
 		if (av_packet->stream_index == videoStream) {
-			printf("must decode\n");
-			//av_grow_packet(av_packet, AV_INPUT_BUFFER_PADDING_SIZE);
 			response = avcodec_send_packet(av_codec_ctx, av_packet);
 			if (response < 0) {
 				printf("avcodec_send_packet failed\n");
 				av_packet_unref(av_packet);
 				return;
 			}
-			printf("debug 3\n");
 			response = avcodec_receive_frame(av_codec_ctx, av_frame);
 			if (response == AVERROR(EAGAIN) || response == AVERROR_EOF) {
 				av_packet_unref(av_packet);
@@ -244,10 +245,12 @@ void IntroVideo::nextFrame(SDL_Renderer* renderer)
 				return;
 			}
 			av_packet_unref(av_packet);
+			printf ("we have a frame: %d x %d\n", av_frame->width, av_frame->height);
 			break;
 		}
 		av_packet_unref(av_packet);
 	}
+	return;
 	/*
 
 		printf("avcodec_send_packet\n");
