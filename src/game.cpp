@@ -62,15 +62,6 @@ Game::~Game()
 
 void Game::loadGrafix()
 {
-	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
-	gfx->loadFont("res/notosans.fnt6", "NotoSans");
-	gfx->loadFont("res/notosans-black.fnt6", "NotoSansBlack");
-	Style.labelFont.setName("NotoSans");
-	Style.buttonFont.setName("NotoSans");
-	Style.buttonFont.setBold(true);
-	Style.inputFont.setName("NotoSans");
-	wm->setWidgetStyle(Style);
-
 	resources.Sprite_George.enableMemoryBuffer(true);
 	resources.Sprite_George.load(sdl, "res/george.tex");
 
@@ -213,7 +204,15 @@ void Game::showUi(bool enable)
 
 void Game::initUi()
 {
-	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+	gfx->loadFont("res/notosans.fnt6", "NotoSans");
+	gfx->loadFont("res/notosans-black.fnt6", "NotoSansBlack");
+	Style.labelFont.setName("NotoSans");
+	Style.buttonFont.setName("NotoSans");
+	Style.buttonFont.setBold(true);
+	Style.inputFont.setName("NotoSans");
+	wm->setWidgetStyle(Style);
+
 	const ppl7::grafix::Size& desktop=clientSize();
 	//ppl7::tk::Label *label;
 
@@ -279,6 +278,7 @@ void Game::presentStartupScreen()
 void Game::init()
 {
 	createWindow();
+	initUi();
 	presentStartupScreen();
 	initAudio();
 	desktopSize=clientSize();
@@ -293,7 +293,6 @@ void Game::init()
 	gui_font.setShadowColor(ppl7::grafix::Color(0, 0, 0, 0));
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
-	initUi();
 }
 
 void Game::init_grafix()
