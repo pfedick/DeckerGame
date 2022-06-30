@@ -26,10 +26,7 @@ void Game::playIntroVideo()
 	SDL_Renderer* renderer=sdl.getRenderer();
 	IntroVideo* intro_widget=new IntroVideo(sdl);
 	intro_widget->create(0, 0, this->width(), this->height());
-	//ppl7::String filename="/home/patrickf/Videos/Denic/Sprint 10/anchorman2-raw.avi";
-	//ppl7::String filename="res/video/decker2_intro-vp9-4000k.webm";
-	ppl7::String filename="res/video/decker2_intro.mp4";
-
+	ppl7::String filename="res/video/george_decker_game-vp9.webm";
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3");
 
 	if (intro_widget->load(filename)) {
