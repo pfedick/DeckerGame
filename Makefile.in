@@ -125,12 +125,16 @@ fixbricks: compile/fixbricks_main.o
 	-chmod 755 fixbricks
 	./fixbricks
 
+mergeintro: compile/mergeintro_main.o
+	$(CXX) -o mergeintro compile/mergeintro_main.o $(TEXMAKER_LIBS)
+	-chmod 755 mergeintro
+
 
 clean:
-	-rm -f compile/*.o $(PROGRAM) texmaker *.core
+	-rm -f compile/*.o $(PROGRAM) *.core
 
 cleanall:
-	-rm -f compile/*.o $(PROGRAM) texmaker *.core
+	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core
 	cd pplib && $(MAKE) clean
 
 sprites:
@@ -516,3 +520,9 @@ compile/texm_texturefile.o: tools/texmaker/texturefile.cpp Makefile tools/texmak
 compile/fixbricks_main.o: tools/fixbricks/main.cpp Makefile
 	- @mkdir -p compile
 	$(CXX) -o compile/fixbricks_main.o -c tools/fixbricks/main.cpp $(TEXMAKER_CFLAGS)
+
+
+# mergeintro
+compile/mergeintro_main.o: tools/mergeintro/main.cpp Makefile
+	- @mkdir -p compile
+	$(CXX) -o compile/mergeintro_main.o -c tools/mergeintro/main.cpp $(TEXMAKER_CFLAGS)
