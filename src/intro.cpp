@@ -17,6 +17,19 @@ static AVPixelFormat correct_for_deprecated_pixel_format(AVPixelFormat pix_fmt) 
 	}
 }
 
+static void FadeToBlack(SDL_Renderer *renderer, int fade_to_black)
+{
+	if (fade_to_black > 0) {
+				SDL_BlendMode currentBlendMode;
+				SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+				//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
+				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
+				SDL_RenderFillRect(renderer, NULL);
+				SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+	}
+}
+
 void Game::playIntroVideo()
 {
 	controlsEnabled=false;
@@ -35,17 +48,28 @@ void Game::playIntroVideo()
 		showUi(false);
 		audiosystem.play(&IntroSequence);
 		int frame=0;
+		int fade_to_black=255;
+		int fade_state=0;
 
 		while (!intro_widget->stopSignal()) {
 			wm->handleEvents();
 			sdl.startFrame(black);
 			ppl7::tk::MouseState mouse=wm->getMouseState();
 			//drawWidgets();
-			if (frame % 2 == 0)
+			if (frame % 2 == 0) {
 				if (!intro_widget->nextFrame()) break;
+				if (fade_state==0) {
+					fade_to_black-=5;
+					if (fade_to_black==0) fade_state=1;
+				} else if (fade_state==1 && frame>1573*2 && fade_to_black<255) {
+					fade_to_black+=5;
+				}
+
+			}
 
 			intro_widget->renderFrame(renderer);
 			resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+			FadeToBlack(renderer, fade_to_black);
 			presentScreen();
 			frame++;
 		}
