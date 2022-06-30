@@ -30,10 +30,13 @@ void Game::playIntroVideo()
 	//ppl7::String filename="res/video/decker2_intro-vp9-4000k.webm";
 	ppl7::String filename="res/video/decker2_intro.mp4";
 
+	AudioStream IntroSequence("res/audio/IntroSequence.mp3");
+
 	if (intro_widget->load(filename)) {
 		this->addChild(intro_widget);
 		wm->setKeyboardFocus(intro_widget);
 		showUi(false);
+		audiosystem.play(&IntroSequence);
 		int frame=0;
 
 		while (!intro_widget->stopSignal()) {
@@ -50,6 +53,7 @@ void Game::playIntroVideo()
 			frame++;
 		}
 		this->removeChild(intro_widget);
+		audiosystem.stop(&IntroSequence);
 	}
 	delete intro_widget;
 }
