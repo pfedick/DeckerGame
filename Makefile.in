@@ -1,3 +1,6 @@
+VERSION ?= 0.6.0
+BUILD_NUMBER := $(shell git rev-list --all --count)
+
 CXX			= @CXX@
 EXTRA_CFLAGS = -ggdb -Wall
 INCLUDE	= -Iinclude -Ipplib/include -I/mingw64/include/SDL2
@@ -108,13 +111,29 @@ $(PROGRAM): ppl7 $(OBJECTS)
 
 all: $(PROGRAM) texmaker
 
+mingw:
+	rm -rf release/deploy
+	mkdir -p release/deploy
+	mingw32-make -j ppl7
+	mingw32-make -j $(PROGRAM)
+	ldd decker.exe  | grep -v WINDOWS | grep mingw64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
+
+	cat setup.tpl.iss | sed "s/^AppVersion=.*/AppVersion=${VERSION}.${BUILD_NUMBER}/"  \
+		| sed "s/^AppVerName=.*/AppVerName=DeckerGame ${VERSION}/"  \
+		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
+		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=DeckerGame-${VERSION}-Setup/"  \
+		> setup.iss
+
+setup: mingw
+	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
+
 
 ppl7:
 	-mkdir -p pplib/release
-	cd pplib && $(MAKE) release/libppl7-core.a
-	cd pplib && $(MAKE) release/libppl7-gfx.a
-	cd pplib && $(MAKE) release/libppl7-tk.a
-	cd pplib && $(MAKE) release/libppl7-audio.a
+	cd pplib && $(MAKE) -j release/libppl7-core.a
+	cd pplib && $(MAKE) -j release/libppl7-gfx.a
+	cd pplib && $(MAKE) -j release/libppl7-tk.a
+	cd pplib && $(MAKE) -j release/libppl7-audio.a
 
 texmaker: $(TEXMAKER_OBJECTS) ppl7
 	$(CXX) -o texmaker $(TEXMAKER_OBJECTS) $(TEXMAKER_LIBS)

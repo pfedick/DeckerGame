@@ -15,4 +15,7 @@
 /decker-cppcheck-build-dir/
 /.vscode/
 /fixbricks
+/release
 mergeintro.exe
+setup.iss
+
