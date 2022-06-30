@@ -157,11 +157,12 @@ void Game::createWindow()
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
 	ppl7::grafix::Size desktop=wm->desktopResolution();
 	desktop.height-=80;
+	if (desktop.height>1080 && desktop.height<1200) desktop.height=1080;
 	setSize(desktop);
 	wm->createWindow(*this);
+	//setPos(0,0);
 	sdl.setRenderer((SDL_Renderer*)getRenderer());
 	SDL_ShowCursor(SDL_DISABLE);
-
 }
 
 SDL_Renderer* Game::getSDLRenderer()
