@@ -47,6 +47,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_combobox.o \
 	compile/widgets_listwidget.o \
 	compile/widgets_dialog.o \
+	compile/widgets_filedialog.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -98,7 +99,11 @@ OBJECTS=compile/main.o \
 	compile/audio_audiosample.o \
 	compile/audio_audioinstance.o \
 	compile/audio_audiopool.o \
-	compile/intro.o
+	compile/video_videoplayer.o \
+	compile/intro_screen.o \
+	compile/start_screen.o \
+	compile/settings_screen.o \
+	compile/level_screen.o
 
 
 
@@ -217,10 +222,6 @@ compile/main.o: src/main.cpp Makefile include/decker.h
 compile/sdl.o: src/sdl.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
-
-compile/intro.o: src/intro.cpp Makefile include/decker_sdl.h include/intro.h
-	- @mkdir -p compile
-	$(CXX) -o compile/intro.o -c src/intro.cpp $(CFLAGS)
 
 compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h
 	- @mkdir -p compile
@@ -433,7 +434,7 @@ compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/brickoccupation.o -c src/brickoccupation.cpp $(CFLAGS)
 
-
+# Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_statusbar.o -c src/ui/statusbar.cpp $(CFLAGS)
@@ -470,7 +471,7 @@ compile/ui_waynetedit.o: src/ui/waynetedit.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_waynetedit.o -c src/ui/waynetedit.cpp $(CFLAGS)
 
-
+# Widgets
 compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_scrollbar.o -c src/widgets/scrollbar.cpp $(CFLAGS)
@@ -498,6 +499,32 @@ compile/widgets_listwidget.o: src/widgets/listwidget.cpp Makefile include/widget
 compile/widgets_dialog.o: src/widgets/dialog.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_dialog.o -c src/widgets/dialog.cpp $(CFLAGS)
+
+compile/widgets_filedialog.o: src/widgets/filedialog.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_filedialog.o -c src/widgets/filedialog.cpp $(CFLAGS)
+
+# Screens
+compile/intro_screen.o: src/ui/intro_screen.cpp Makefile include/decker_sdl.h include/screens.h include/videoplayer.h
+	- @mkdir -p compile
+	$(CXX) -o compile/intro_screen.o -c src/ui/intro_screen.cpp $(CFLAGS)
+
+compile/start_screen.o: src/ui/start_screen.cpp Makefile include/screens.h
+	- @mkdir -p compile
+	$(CXX) -o compile/start_screen.o -c src/ui/start_screen.cpp $(CFLAGS)
+
+compile/settings_screen.o: src/ui/settings_screen.cpp Makefile include/screens.h
+	- @mkdir -p compile
+	$(CXX) -o compile/settings_screen.o -c src/ui/settings_screen.cpp $(CFLAGS)
+
+compile/level_screen.o: src/ui/level_screen.cpp Makefile include/screens.h
+	- @mkdir -p compile
+	$(CXX) -o compile/level_screen.o -c src/ui/level_screen.cpp $(CFLAGS)
+
+# Video
+compile/video_videoplayer.o: src/video/videoplayer.cpp Makefile include/videoplayer.h include/decker_sdl.h
+	- @mkdir -p compile
+	$(CXX) -o compile/video_videoplayer.o -c src/video/videoplayer.cpp $(CFLAGS)
 
 # Audio
 compile/audio_audiosystem.o: src/audio/audiosystem.cpp Makefile include/audio.h

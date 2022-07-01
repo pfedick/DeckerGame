@@ -5,7 +5,6 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "audio.h"
-#include "intro.h"
 
 
 void help()
