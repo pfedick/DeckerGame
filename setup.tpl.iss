@@ -3,8 +3,8 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{471ED94B-BCB3-4348-9B3F-8BC88C4A2DDA}}
-AppName=DeckerGame
-AppVerName=DeckerGame 0.6.0
+AppName=GeorgeDecker
+AppVerName=GeorgeDecker 0.6.0
 AppCopyright=Copyright (C) 2022 Patrick Fedick
 AppVersion=0.6.0.0
 VersionInfoVersion=0.6.0
@@ -12,16 +12,17 @@ AppPublisher=Patrick F.-Productions
 AppPublisherURL=https://www.pfp.de/
 AppSupportURL=https://www.pfp.de/
 AppUpdatesURL=https://www.pfp.de/
-DefaultDirName={pf}\Patrick F.-Productions\DeckerGame
-DefaultGroupName=Patrick F.-Productions\DeckerGame
+DefaultDirName={pf}\Patrick F.-Productions\GeorgeDecker
+DefaultGroupName=Patrick F.-Productions\GeorgeDecker
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=DeckerGame-0.6.0-Setup
-;SetupIconFile=gui\resources\WinMusik3.ico
+OutputBaseFilename=GeorgeDecker-0.6.0-Setup
+SetupIconFile=res\setup\setup.ico
 Compression=lzma/ultra64
 SolidCompression=yes
 ;WizardImageFile=gui\resources\setup.bmp
-;WizardSmallImageFile=gui\resources\setup-icon.bmp
+WizardSmallImageFile=res\setup-icon.bmp
+WizardImageAlphaFormat=premultiplied
 LicenseFile=LICENSE.TXT
 PrivilegesRequired=none
 ArchitecturesAllowed=x64
@@ -38,6 +39,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "decker.exe"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "res/decker.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 ;Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
@@ -74,13 +76,13 @@ Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 [Icons]
-Name: "{group}\DeckerGame"; WorkingDir: "{app}"; Filename: "{app}\decker.exe"
+Name: "{group}\GeorgeDecker"; WorkingDir: "{app}"; Filename: "{app}\decker.exe"; IconFilename: "{app}\decker.ico"
 Name: "{group}\{cm:UninstallProgram,DeckerGame}"; IconFilename: "{app}\uninstall.ico"; Filename: "{uninstallexe}"
 Name: "{group}\License.txt"; WorkingDir: "{app}"; Filename: "{app}\LICENSE.TXT";
-Name: "{commondesktop}\DeckerGame"; Filename: "{app}\decker.exe"; Tasks: desktopicon;
+Name: "{commondesktop}\GeorgeDecker"; Filename: "{app}\decker.exe"; Tasks: desktopicon; IconFilename: "{app}\decker.ico"
 
 
 [Run]
-Filename: "{app}\decker.exe"; Description: "{cm:LaunchProgram,DeckerGame}"; Flags: 64bit nowait postinstall skipifsilent;
+Filename: "{app}\decker.exe"; Description: "{cm:LaunchProgram,GeorgeDecker}"; Flags: 64bit nowait postinstall skipifsilent;
 
 

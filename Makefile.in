@@ -124,9 +124,9 @@ mingw:
 	ldd decker.exe  | grep -v WINDOWS | grep mingw64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
 
 	cat setup.tpl.iss | sed "s/^AppVersion=.*/AppVersion=${VERSION}.${BUILD_NUMBER}/"  \
-		| sed "s/^AppVerName=.*/AppVerName=DeckerGame ${VERSION}/"  \
+		| sed "s/^AppVerName=.*/AppVerName=GeorgeDecker ${VERSION}/"  \
 		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
-		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=DeckerGame-${VERSION}-Setup/"  \
+		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=GeorgeDecker-${VERSION}-Setup/"  \
 		> setup.iss
 
 setup: mingw
