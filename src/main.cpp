@@ -17,12 +17,6 @@ void start()
 {
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
-
-	/*
-	AudioSystem audio;
-	audio.test();
-	return;
-	*/
 	Game game;
 	game.init();
 	/*
@@ -34,14 +28,14 @@ void start()
 	*/
 
 	game.init_grafix();
-	game.playIntroVideo();
+	//game.playIntroVideo();
+	game.showStartScreen();
 
-
-
+	return;
+	game.showUi(true);
 	game.startLevel("level/test.lvl");
-	game.showUi(false);
-
 	game.run();
+	
 
 }
 

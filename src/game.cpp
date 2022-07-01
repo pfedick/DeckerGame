@@ -447,6 +447,59 @@ ppl7::grafix::Point Game::getViewPos() const
 	return p;
 }
 
+void Game::drawWorld(SDL_Renderer* renderer)
+{
+	double now=ppl7::GetMicrotime();
+	level.setEditmode(object_selection != NULL);
+	level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
+	player->setGodMode(mainmenue->godModeEnabled());
+	player->update(now, level.TileTypeMatrix, level.objects);
+	level.objects->update(now, level.TileTypeMatrix, *player);
+	ppl7::tk::MouseState mouse=wm->getMouseState();
+	if (mainmenue->worldFollowsPlayer())
+		updateWorldCoords();
+
+	updateUi(mouse);
+
+
+
+	// TODO: Refactor into Events: Handle Mouse events inside World
+	if (mouse.p.inside(viewport)) {
+		moveWorldOnMouseClick(mouse);
+	}
+	sdl.startFrame(Style.windowBackgroundColor);
+	level.setViewport(viewport);
+	SDL_Rect target;
+	target.x=viewport.x1;
+	target.y=viewport.y1;
+	target.w=desktopSize.width;
+	target.h=desktopSize.height;
+	SDL_Rect source;
+	ppl7::grafix::Point c=WorldCoords * 0.1f;
+	source.x=c.x;
+	source.y=c.y;
+	source.w=desktopSize.width;
+	source.h=desktopSize.height;
+	SDL_RenderCopy(renderer, tex_sky, &source, &target);
+
+	// Draw Planes and Sprites
+	level.FarPlane.setVisible(mainmenue->visibility_plane_far);
+	level.PlayerPlane.setVisible(mainmenue->visibility_plane_player);
+	level.FrontPlane.setVisible(mainmenue->visibility_plane_front);
+	level.BackPlane.setVisible(mainmenue->visibility_plane_back);
+	level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
+	level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
+	level.setShowSprites(mainmenue->visibility_sprites);
+	level.setShowObjects(mainmenue->visibility_objects);
+	level.draw(renderer, WorldCoords, player);
+
+	if (player->isDead() == true && death_state == 0) {
+		death_state=1;
+		fade_to_black=0;
+	}
+	if (death_state) handleDeath(renderer);
+}
+
 void Game::run()
 {
 	world_widget->setVisible(true);
@@ -469,6 +522,7 @@ void Game::run()
 			playing_song->setVolume(0.0f);
 		}
 		wm->handleEvents();
+
 		double now=ppl7::GetMicrotime();
 		level.setEditmode(object_selection != NULL);
 		level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread

@@ -470,6 +470,7 @@ private:
 	void deleteUi();
 	void initAudio();
 	void updateUi(const ppl7::tk::MouseState& mouse);
+	void drawWorld(SDL_Renderer* renderer);
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
@@ -543,6 +544,7 @@ public:
 	void playerDied();
 
 	void playIntroVideo();
+	void showStartScreen();
 
 
 };
