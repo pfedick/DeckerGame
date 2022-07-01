@@ -21,6 +21,7 @@ SetupIconFile=res\setup\setup.ico
 Compression=lzma/ultra64
 SolidCompression=yes
 WizardSmallImageFile=res\setup-icon.bmp
+WizardImageFile=res\setup\setup_scene.bmp
 WizardImageAlphaFormat=defined
 LicenseFile=LICENSE.TXT
 PrivilegesRequired=none
