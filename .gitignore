@@ -18,4 +18,5 @@
 /release
 mergeintro.exe
 setup.iss
-
+tmp
+include/version.h

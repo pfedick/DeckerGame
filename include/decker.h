@@ -11,6 +11,7 @@
 #include "audio.h"
 #include "audiopool.h"
 #include "waynet.h"
+#include "translate.h"
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -454,6 +455,7 @@ private:
 	BrickOccupation brick_occupation;
 	BrickOccupation::Matrix brick_occupation_solid;
 	FPS fps;
+	Translator translator;
 
 	ppl7::grafix::Point WorldCoords;
 	ppl7::grafix::Point WorldMoveStart;

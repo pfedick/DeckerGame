@@ -29,12 +29,12 @@ void start()
 
 	game.init_grafix();
 	//game.playIntroVideo();
-	//game.showStartScreen();
+	game.showStartScreen();
 
 	//return;
 	game.showUi(true);
-	//game.startLevel("level/test.lvl");
-	game.startLevel("level/start.lvl");
+	game.startLevel("level/test.lvl");
+	//game.startLevel("level/start.lvl");
 	game.run();
 
 
