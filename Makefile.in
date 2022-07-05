@@ -111,13 +111,13 @@ OBJECTS=compile/main.o \
 
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
 
-$(PROGRAM): ppl7 $(OBJECTS)
+$(PROGRAM): update_version ppl7 $(OBJECTS)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(LIBS)
 	-chmod 755 $(PROGRAM)
 
-all: $(PROGRAM) texmaker
+all: update_version $(PROGRAM) texmaker
 
-mingw:
+mingw: update_version
 	rm -rf release/deploy
 	mkdir -p release/deploy
 	mingw32-make -j ppl7
@@ -214,7 +214,8 @@ fonts:
 	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Regular.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6
 	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Bold.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6 --isbold
 
-include/version.h: Makefile
+
+update_version:
 	@mkdir -p tmp
 	@echo "#ifndef VERSION_H_" > tmp/version.h
 	@echo "#define VERSION_H_" >> tmp/version.h
