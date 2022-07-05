@@ -26,32 +26,32 @@ namespace ui {
 class StatusBar : public ppl7::tk::Frame
 {
 private:
-	ppl7::tk::Label *fps_label;
-	ppl7::tk::Label *mouse_coords;
-	ppl7::tk::Label *world_coords;
-	ppl7::tk::Label *player_coords;
-	ppl7::tk::Label *mouse_buttons;
-	ppl7::tk::Label *time_label;
-	ppl7::tk::Label *sprite_count;
-	ppl7::tk::Label *object_count;
-	ppl7::tk::Label *player_state;
-	ppl7::tk::Label *object_id;
+	ppl7::tk::Label* fps_label;
+	ppl7::tk::Label* mouse_coords;
+	ppl7::tk::Label* world_coords;
+	ppl7::tk::Label* player_coords;
+	ppl7::tk::Label* mouse_buttons;
+	ppl7::tk::Label* time_label;
+	ppl7::tk::Label* sprite_count;
+	ppl7::tk::Label* object_count;
+	ppl7::tk::Label* player_state;
+	ppl7::tk::Label* object_id;
 
 
 public:
 	StatusBar(int x, int y, int width, int height);
 
 	void setFps(int fps);
-	void setMouse(const ppl7::tk::MouseState &mouse);
-	void setWorldCoords(const ppl7::grafix::Point &p);
-	void setPlayerCoords(const ppl7::grafix::Point &p);
+	void setMouse(const ppl7::tk::MouseState& mouse);
+	void setWorldCoords(const ppl7::grafix::Point& p);
+	void setPlayerCoords(const ppl7::grafix::Point& p);
 	void setSpriteCount(size_t total, size_t visible);
 	void setObjectCount(size_t total, size_t visible);
-	void setPlayerState(const ppl7::String &state);
+	void setPlayerState(const ppl7::String& state);
 	void setSelectedObject(int id);
 
 	// Events
-	void timerEvent(ppl7::tk::Event *event);
+	void timerEvent(ppl7::tk::Event* event);
 
 };
 
@@ -60,53 +60,53 @@ class MainMenue;
 class VisibilitySubMenu : public ppl7::tk::Frame
 {
 private:
-	MainMenue *menue;
-	CheckBox *show_grid_checkbox;
-	CheckBox *show_tiletypes_checkbox;
-	CheckBox *show_collision_checkbox;
-	CheckBox *show_sprites_checkbox;
-	CheckBox *show_objects_checkbox;
-	CheckBox *visible_plane_player_checkbox;
-	CheckBox *visible_plane_front_checkbox;
-	CheckBox *visible_plane_far_checkbox;
-	CheckBox *visible_plane_back_checkbox;
-	CheckBox *visible_plane_middle_checkbox;
-	CheckBox *visible_plane_horizon_checkbox;
+	MainMenue* menue;
+	CheckBox* show_grid_checkbox;
+	CheckBox* show_tiletypes_checkbox;
+	CheckBox* show_collision_checkbox;
+	CheckBox* show_sprites_checkbox;
+	CheckBox* show_objects_checkbox;
+	CheckBox* visible_plane_player_checkbox;
+	CheckBox* visible_plane_front_checkbox;
+	CheckBox* visible_plane_far_checkbox;
+	CheckBox* visible_plane_back_checkbox;
+	CheckBox* visible_plane_middle_checkbox;
+	CheckBox* visible_plane_horizon_checkbox;
 
 public:
-	VisibilitySubMenu(int x, int y, MainMenue *menue);
+	VisibilitySubMenu(int x, int y, MainMenue* menue);
 	void setShowTileTypes(bool show);
-	virtual void toggledEvent(ppl7::tk::Event *event, bool checked);
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
 };
 
 class MainMenue : public ppl7::tk::Frame
 {
 private:
-	ppl7::tk::Button *exit_button;
-	ppl7::tk::Button *edit_tiles_button;
+	ppl7::tk::Button* exit_button;
+	ppl7::tk::Button* edit_tiles_button;
 
-	ppl7::tk::Button *save_button;
-	ppl7::tk::Button *load_button;
-	ppl7::tk::Button *new_button;
+	ppl7::tk::Button* save_button;
+	ppl7::tk::Button* load_button;
+	ppl7::tk::Button* new_button;
 
-	ppl7::tk::Button *edit_tiletypes_button;
-	ppl7::tk::Button *edit_sprites_button;
-	ppl7::tk::Button *edit_objects_button;
-	ppl7::tk::Button *edit_waynet_button;
-	ppl7::tk::Button *show_visibility_submenu_button;
+	ppl7::tk::Button* edit_tiletypes_button;
+	ppl7::tk::Button* edit_sprites_button;
+	ppl7::tk::Button* edit_objects_button;
+	ppl7::tk::Button* edit_waynet_button;
+	ppl7::tk::Button* show_visibility_submenu_button;
 
-	ComboBox *active_plane_combobox;
+	ComboBox* active_plane_combobox;
 
-	CheckBox *world_follows_player_checkbox;
-	CheckBox *soundtrack_checkbox;
-	CheckBox *godmode_checkbox;
-	VisibilitySubMenu *visibility;
-	Game *game;
+	CheckBox* world_follows_player_checkbox;
+	CheckBox* soundtrack_checkbox;
+	CheckBox* godmode_checkbox;
+	VisibilitySubMenu* visibility;
+	Game* game;
 
 public:
-	MainMenue(int x, int y, int width, int height, Game *game);
+	MainMenue(int x, int y, int width, int height, Game* game);
 
-	void mouseClickEvent(ppl7::tk::MouseEvent *event);
+	void mouseClickEvent(ppl7::tk::MouseEvent* event);
 	int currentPlane() const;
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);
@@ -128,51 +128,51 @@ public:
 	bool visibility_collision;
 
 
-	virtual void textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text);
+	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
 };
 
 
 class TilesFrame : public ppl7::tk::Frame
 {
 private:
-	Game *game;
-	SpriteTexture *tiles;
-	Scrollbar *scrollbar;
+	Game* game;
+	SpriteTexture* tiles;
+	Scrollbar* scrollbar;
 	int selected_tile;
 public:
-	TilesFrame(int x, int y, int width, int height, Game *game);
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	void mouseMoveEvent(ppl7::tk::MouseEvent *event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
-	void valueChangedEvent(ppl7::tk::Event *event, int value);
+	TilesFrame(int x, int y, int width, int height, Game* game);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+	void valueChangedEvent(ppl7::tk::Event* event, int value);
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
-	void setSprites(SpriteTexture *tiles);
+	void setSprites(SpriteTexture* tiles);
 
 };
 
 class TilesSelection : public ppl7::tk::Frame
 {
 private:
-	Game *game;
-	TilesFrame *tilesframe;
-	RadioButton *layer0;
-	RadioButton *layer1;
-	RadioButton *layer2;
-	RadioButton *layer3;
-	ComboBox *tileset_combobox;
+	Game* game;
+	TilesFrame* tilesframe;
+	RadioButton* layer0;
+	RadioButton* layer1;
+	RadioButton* layer2;
+	RadioButton* layer3;
+	ComboBox* tileset_combobox;
 
-	ppl7::String tilesetName[MAX_TILESETS+1];
-	SpriteTexture *tilesets[MAX_TILESETS+1];
+	ppl7::String tilesetName[MAX_TILESETS + 1];
+	SpriteTexture* tilesets[MAX_TILESETS + 1];
 
 	int tileset;
 
 
 
 public:
-	TilesSelection(int x, int y, int width, int height, Game *game);
+	TilesSelection(int x, int y, int width, int height, Game* game);
 
 	//virtual void paint(Drawable &draw);
 
@@ -180,11 +180,11 @@ public:
 	int selectedTile() const;
 	void setCurrentTileSet(int id);
 	int currentTileSet() const;
-	void setTileSet(int id, const ppl7::String &name, SpriteTexture *tiles);
+	void setTileSet(int id, const ppl7::String& name, SpriteTexture* tiles);
 	int currentLayer() const;
 
 
-	void valueChangedEvent(ppl7::tk::Event *event, int value);
+	void valueChangedEvent(ppl7::tk::Event* event, int value);
 
 
 };
@@ -192,11 +192,11 @@ public:
 class TileTypeSelection : public ppl7::tk::Frame
 {
 private:
-	Game *game;
-	TilesFrame *tiletypesframe;
+	Game* game;
+	TilesFrame* tiletypesframe;
 
 public:
-	TileTypeSelection(int x, int y, int width, int height, Game *game, SpriteTexture *tiletypes);
+	TileTypeSelection(int x, int y, int width, int height, Game* game, SpriteTexture* tiletypes);
 
 	void setTileType(int nr);
 	int tileType() const;
@@ -205,14 +205,14 @@ public:
 class SpriteSelection : public ppl7::tk::Frame
 {
 private:
-	Game *game;
-	TilesFrame *tilesframe;
-	RadioButton *layer0;
-	RadioButton *layer1;
-	ComboBox *tileset_combobox;
+	Game* game;
+	TilesFrame* tilesframe;
+	RadioButton* layer0;
+	RadioButton* layer1;
+	ComboBox* tileset_combobox;
 
-	ppl7::String tilesetName[MAX_SPRITESETS+1];
-	SpriteTexture *tilesets[MAX_SPRITESETS+1];
+	ppl7::String tilesetName[MAX_SPRITESETS + 1];
+	SpriteTexture* tilesets[MAX_SPRITESETS + 1];
 
 	int tileset;
 	float scale;
@@ -220,7 +220,7 @@ private:
 
 
 public:
-	SpriteSelection(int x, int y, int width, int height, Game *game);
+	SpriteSelection(int x, int y, int width, int height, Game* game);
 
 	//virtual void paint(Drawable &draw);
 
@@ -230,19 +230,19 @@ public:
 	int currentSpriteSet() const;
 	void setSpriteScale(float factor);
 	float spriteScale() const;
-	void setSpriteSet(int id, const ppl7::String &name, SpriteTexture *sprites);
+	void setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites);
 	int currentLayer() const;
 	void setCurrentLayer(int layer);
-	void valueChangedEvent(ppl7::tk::Event *event, int value);
+	void valueChangedEvent(ppl7::tk::Event* event, int value);
 };
 
 class ObjectSelection : public ppl7::tk::Frame
 {
 private:
-	Game *game;
+	Game* game;
 	//TilesFrame *tilesframe;
-	SpriteTexture *spriteset;
-	Scrollbar *scrollbar;
+	SpriteTexture* spriteset;
+	Scrollbar* scrollbar;
 	int selected_object;
 
 	class Item
@@ -251,38 +251,38 @@ private:
 		int id;
 		ppl7::String name;
 		int sprite_no;
-		Item(int id, const ppl7::String &name, int sprite_no);
+		Item(int id, const ppl7::String& name, int sprite_no);
 	};
-	std::map<size_t,Item> object_map;
-	void addObject(int id, const ppl7::String &name, int sprite_no);
+	std::map<size_t, Item> object_map;
+	void addObject(int id, const ppl7::String& name, int sprite_no);
 
 public:
-	ObjectSelection(int x, int y, int width, int height, Game *game);
-	void setSpriteSet(SpriteTexture *texture);
+	ObjectSelection(int x, int y, int width, int height, Game* game);
+	void setSpriteSet(SpriteTexture* texture);
 	int selectedObjectType() const;
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	void valueChangedEvent(ppl7::tk::Event *event, int value);
-	void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent *event);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	void valueChangedEvent(ppl7::tk::Event* event, int value);
+	void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
 
 };
 
 class WayNetEdit : public ppl7::tk::Frame
 {
 private:
-	Game *game;
-	RadioButton *type_clear;
-	RadioButton *type_walk;
-	RadioButton *type_jump_up;
-	RadioButton *type_jump_left;
-	RadioButton *type_jump_right;
-	RadioButton *type_climb;
-	ppl7::tk::LineInput *cost;
+	Game* game;
+	RadioButton* type_clear;
+	RadioButton* type_walk;
+	RadioButton* type_jump_up;
+	RadioButton* type_jump_left;
+	RadioButton* type_jump_right;
+	RadioButton* type_climb;
+	ppl7::tk::LineInput* cost;
 
 
 public:
-	WayNetEdit(int x, int y, int width, int height, Game *game);
+	WayNetEdit(int x, int y, int width, int height, Game* game);
 
 	int getSelectedWayType() const;
 	int getCost() const;
@@ -297,10 +297,10 @@ private:
 	ppl7::grafix::Font font;
 
 public:
-	StatsFrame(int x, int y, int width, int height, const ppl7::String &label);
-	void setValue(const ppl7::String &value);
+	StatsFrame(int x, int y, int width, int height, const ppl7::String& label);
+	void setValue(const ppl7::String& value);
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void paint(ppl7::grafix::Drawable& draw);
 
 
 };
@@ -308,15 +308,16 @@ public:
 class WorldWidget : public ppl7::tk::Widget
 {
 private:
-	StatsFrame *stats_health, *stats_lifes, *stats_points;
+	StatsFrame* stats_health, * stats_lifes, * stats_points;
 	int value_health, value_lifes, value_points;
 public:
 	WorldWidget();
-	void setViewport(const ppl7::grafix::Rect &viewport);
+	void setViewport(const ppl7::grafix::Rect& viewport);
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void paint(ppl7::grafix::Drawable& draw);
 
-	void updatePlayerStats(const Player *player);
+	void updatePlayerStats(const Player* player);
+	void resetPlayerStats(const Player* player);
 
 
 };
@@ -331,9 +332,9 @@ public:
 class StartScreen : public ppl7::tk::Widget
 {
 private:
-	MenuButton *start_level;
-	MenuButton *show_options;
-	MenuButton *exit_game;
+	MenuButton* start_level;
+	MenuButton* show_options;
+	MenuButton* exit_game;
 
 
 public:

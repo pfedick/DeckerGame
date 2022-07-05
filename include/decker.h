@@ -428,6 +428,15 @@ public:
 
 };
 
+enum class GameState {
+	None=0,
+	QuitGame,
+	StartGame,
+	ShowSettings,
+	StartEditor
+};
+
+
 class Game : private ppl7::tk::Window
 {
 private:
@@ -544,9 +553,10 @@ public:
 	void load();
 	void clearLevel();
 	void playerDied();
+	void resetPlayer();
 
 	void playIntroVideo();
-	void showStartScreen();
+	GameState showStartScreen();
 
 
 };

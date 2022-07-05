@@ -160,7 +160,7 @@ void Game::createWindow()
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
 	ppl7::grafix::Size desktop=wm->desktopResolution();
 	desktop.height-=80;
-	if (desktop.height>1080 && desktop.height<1200) desktop.height=1080;
+	if (desktop.height > 1080 && desktop.height < 1200) desktop.height=1080;
 	setSize(desktop);
 	wm->createWindow(*this);
 	//setPos(0,0);
@@ -453,7 +453,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setEditmode(object_selection != NULL);
 	level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
 	player->setGodMode(mainmenue->godModeEnabled());
-	player->update(now, level.TileTypeMatrix, level.objects);
+	if (this->controlsEnabled)
+		player->update(now, level.TileTypeMatrix, level.objects);
 	level.objects->update(now, level.TileTypeMatrix, *player);
 	ppl7::tk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
@@ -498,12 +499,28 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		fade_to_black=0;
 	}
 	if (death_state) handleDeath(renderer);
+	else if (fade_to_black > 0) {
+		fade_to_black-=5;
+		if (fade_to_black < 0) fade_to_black=0;
+	}
+	if (fade_to_black > 0) {
+		SDL_BlendMode currentBlendMode;
+		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
+		SDL_RenderFillRect(renderer, NULL);
+		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+	}
 }
 
 void Game::run()
 {
+	death_state=0;
+	fade_to_black=255;
 	world_widget->setVisible(true);
 	world_widget->setEnabled(true);
+	wm->setKeyboardFocus(world_widget);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
 	AudioStream* playing_song=&audiopool.song[1];
@@ -522,52 +539,9 @@ void Game::run()
 			playing_song->setVolume(0.0f);
 		}
 		wm->handleEvents();
+		drawWorld(renderer);
 
-		double now=ppl7::GetMicrotime();
-		level.setEditmode(object_selection != NULL);
-		level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
-		player->setGodMode(mainmenue->godModeEnabled());
-		player->update(now, level.TileTypeMatrix, level.objects);
-		level.objects->update(now, level.TileTypeMatrix, *player);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
-		if (mainmenue->worldFollowsPlayer())
-			updateWorldCoords();
-
-		updateUi(mouse);
-
-
-
-		// TODO: Refactor into Events: Handle Mouse events inside World
-		if (mouse.p.inside(viewport)) {
-			moveWorldOnMouseClick(mouse);
-		}
-		sdl.startFrame(Style.windowBackgroundColor);
-		level.setViewport(viewport);
-		SDL_Rect target;
-		target.x=viewport.x1;
-		target.y=viewport.y1;
-		target.w=desktopSize.width;
-		target.h=desktopSize.height;
-		SDL_Rect source;
-		ppl7::grafix::Point c=WorldCoords * 0.1f;
-		source.x=c.x;
-		source.y=c.y;
-		source.w=desktopSize.width;
-		source.h=desktopSize.height;
-		SDL_RenderCopy(renderer, tex_sky, &source, &target);
-
-		// Draw Planes and Sprites
-		level.FarPlane.setVisible(mainmenue->visibility_plane_far);
-		level.PlayerPlane.setVisible(mainmenue->visibility_plane_player);
-		level.FrontPlane.setVisible(mainmenue->visibility_plane_front);
-		level.BackPlane.setVisible(mainmenue->visibility_plane_back);
-		level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
-		level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
-		level.setShowSprites(mainmenue->visibility_sprites);
-		level.setShowObjects(mainmenue->visibility_objects);
-		level.draw(renderer, WorldCoords, player);
-
-
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
@@ -578,12 +552,6 @@ void Game::run()
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
-
-		if (player->isDead() == true && death_state == 0) {
-			death_state=1;
-			fade_to_black=0;
-		}
-		if (death_state) handleDeath(renderer);
 
 		// Widgets
 		drawWidgets();
@@ -932,6 +900,8 @@ void Game::clearLevel()
 	closeSpriteSelection();
 	WorldCoords.setPoint(0, 0);
 	level.create(512, 256);
+	if (player) player->move(500, 500);
+	LevelFile.clear();
 }
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
@@ -1175,20 +1145,17 @@ void Game::handleDeath(SDL_Renderer* renderer)
 			if (fade_to_black < 0) fade_to_black=0;
 		} else death_state=0;
 	}
-	if (fade_to_black > 0) {
-		SDL_BlendMode currentBlendMode;
-		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
-		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
-		SDL_RenderFillRect(renderer, NULL);
-		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
-	}
-
-
 }
 
 void Game::enableControls(bool enable)
 {
 	controlsEnabled=enable;
+}
+
+void Game::resetPlayer()
+{
+	if (player) {
+		player->resetState();
+		if (world_widget) world_widget->resetPlayerStats(player);
+	}
 }

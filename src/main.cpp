@@ -28,16 +28,25 @@ void start()
 	*/
 
 	game.init_grafix();
-	//game.playIntroVideo();
-	game.showStartScreen();
+	while (1) {
+		GameState state=game.showStartScreen();
+		if (state == GameState::QuitGame) return;
+		else if (state == GameState::StartGame) {
+			game.showUi(false);
+			game.resetPlayer();
+			game.startLevel("level/test.lvl");
+			game.enableControls(true);
+			game.run();
+		} else if (state == GameState::StartEditor) {
+			game.showUi(true);
+			game.clearLevel();
 
-	//return;
-	game.showUi(true);
-	game.startLevel("level/test.lvl");
-	//game.startLevel("level/start.lvl");
-	game.run();
+			game.resetPlayer();
+			game.run();
+		} else if (state == GameState::ShowSettings) {
+		}
 
-
+	}
 }
 
 int WinMain()
