@@ -19,15 +19,17 @@ void start()
 	ppl7::tk::WindowManager_SDL2 wm;
 	Game game;
 	game.init();
+	game.init_grafix();
+
 	/*
 	game.startLevel("level/start.lvl");
-	game.showUi(false);
+	game.showUi(true);
 	game.run();
-
-	game.enableControls(false);
+	return;
 	*/
 
-	game.init_grafix();
+
+	game.playIntroVideo();
 	while (1) {
 		GameState state=game.showStartScreen();
 		if (state == GameState::QuitGame) return;
