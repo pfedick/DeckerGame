@@ -65,6 +65,7 @@ void AudioPool::load()
 	song[0].open("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
 	song[1].open("res/audio/PatrickF-ID.mp3");
 	song[2].open("res/audio/PatrickF-Sonic_Waves.mp3");
+	song[3].open("res/audio/PatrickF-George_Decker_Theme.mp3");
 
 	sample[AudioClip::coin1].load("res/audio/341695__projectsu012__coins-1.mp3");
 	sample[AudioClip::coin2].load("res/audio/402766__matrixxx__retro-coin-04.wav");

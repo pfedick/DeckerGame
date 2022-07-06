@@ -20,7 +20,7 @@ static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 	}
 }
 
-GameState Game::showStartScreen()
+GameState Game::showStartScreen(AudioStream &GeorgeDeckerTheme)
 {
 	world_widget->setVisible(false);
 	world_widget->setEnabled(false);
@@ -65,8 +65,14 @@ GameState Game::showStartScreen()
 		if (widget->getState() != StartScreen::State::None && fade_state == 1) {
 			fade_state = 2;
 			fade_to_black=0;
+			if (widget->getState()!=StartScreen::State::ShowSettings) 
+				GeorgeDeckerTheme.fadeout(4.0f);
 		} else if (widget->getState() != StartScreen::State::None && fade_state == 3) {
 			break;
+		}
+		if (!audiosystem.isPlaying(&GeorgeDeckerTheme)) {
+			GeorgeDeckerTheme.rewind();
+			audiosystem.play(&GeorgeDeckerTheme);
 		}
 
 	}

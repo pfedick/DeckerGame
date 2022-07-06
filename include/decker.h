@@ -556,7 +556,7 @@ public:
 	void resetPlayer();
 
 	void playIntroVideo();
-	GameState showStartScreen();
+	GameState showStartScreen(AudioStream &GeorgeDeckerTheme);
 
 
 };

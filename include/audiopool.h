@@ -63,7 +63,7 @@ class AudioPool
 private:
 	AudioSystem *audio;
 public:
-	AudioStream song[3];
+	AudioStream song[4];
 	AudioSample sample[AudioClip::maxClips+1];
 
 	AudioPool();

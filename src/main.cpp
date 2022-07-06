@@ -30,8 +30,11 @@ void start()
 
 
 	game.playIntroVideo();
+	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3");
+	GeorgeDeckerTheme.setVolume(0.5f);
+
 	while (1) {
-		GameState state=game.showStartScreen();
+		GameState state=game.showStartScreen(GeorgeDeckerTheme);
 		if (state == GameState::QuitGame) return;
 		else if (state == GameState::StartGame) {
 			game.showUi(false);

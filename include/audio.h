@@ -46,6 +46,9 @@ private:
 	float volume;
 	ppl7::STEREOSAMPLE16 *prebuffer;
 	size_t buffersize;
+	float fade_start_volume;
+	float fade_time;
+	double fade_start;
 public:
 	AudioStream();
 	AudioStream(const ppl7::String &filename);
@@ -53,6 +56,7 @@ public:
 	void open(const ppl7::String &filename);
 	void rewind();
 	void setVolume(float volume);
+	void fadeout(float seconds=4.0f);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
 };
 

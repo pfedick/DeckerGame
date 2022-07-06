@@ -524,6 +524,7 @@ void Game::run()
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
 	AudioStream* playing_song=&audiopool.song[1];
+	playing_song->rewind();
 	playing_song->setVolume(0.1f);
 	audiosystem.play(playing_song);
 	while (!quitGame) {
@@ -559,6 +560,7 @@ void Game::run()
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		presentScreen();
 	}
+	playing_song->fadeout(4);
 }
 
 void Game::quitEvent(ppl7::tk::Event* e)

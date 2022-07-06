@@ -7,6 +7,9 @@ AudioStream::AudioStream()
 	volume=1.0f;
 	buffersize=0;
 	prebuffer=NULL;
+	fade_start=0.0f;
+	fade_start_volume=1.0f;
+	fade_time=4.0f;
 }
 
 AudioStream::AudioStream(const ppl7::String &filename)
@@ -46,13 +49,25 @@ void AudioStream::open(const ppl7::String &filename)
 void AudioStream::rewind()
 {
 	if (decoder) decoder->seekSample(0);
+	fade_start=0;
+	volume=fade_start_volume;
 }
 
 void AudioStream::setVolume(float volume)
 {
 	this->volume=volume;
+	this->fade_start_volume=volume;
+	fade_start=0;
 	if (this->volume<0) this->volume=0.0f;
 	if (this->volume>1.0) this->volume=1.0f;
+}
+
+void AudioStream::fadeout(float seconds)
+{
+	fade_start_volume=volume;
+	fade_time=seconds;
+	fade_start=ppl7::GetMicrotime();
+
 }
 
 size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)
@@ -68,6 +83,16 @@ size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)
 	size_t read=decoder->getSamples(num, prebuffer);
 	if (read<num) {
 		memset(prebuffer+read,0,(num-read)*sizeof(ppl7::STEREOSAMPLE16));
+	}
+	if (fade_start>0.0f) {
+		float in_fade=(ppl7::GetMicrotime()-fade_start)/fade_time;
+		volume=fade_start_volume-in_fade*fade_start_volume;
+		if (volume<=0) {
+			fade_start=0;
+			volume=fade_start_volume;
+			decoder->seekSample(0);
+			return 0;
+		}
 	}
 	if (volume==1.0f) {
 		for (size_t i=0;i<num;i++) {
