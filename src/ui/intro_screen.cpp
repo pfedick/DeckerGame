@@ -31,6 +31,7 @@ void Game::playIntroVideo()
 	
 	ppl7::String filename="res/video/george_decker_game-vp9.webm";
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3");
+	IntroSequence.setVolume(1.0f);
 
 	if (video.load(filename)) {
 		this->addChild(intro_widget);

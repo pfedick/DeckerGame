@@ -56,10 +56,10 @@ void AudioStream::rewind()
 void AudioStream::setVolume(float volume)
 {
 	this->volume=volume;
-	this->fade_start_volume=volume;
 	fade_start=0;
 	if (this->volume<0) this->volume=0.0f;
 	if (this->volume>1.0) this->volume=1.0f;
+	this->fade_start_volume=this->volume;
 }
 
 void AudioStream::fadeout(float seconds)
