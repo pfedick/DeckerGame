@@ -15,6 +15,24 @@ private:
 
 
 public:
+	class VideoDisplay {
+		public:
+			VideoDisplay();
+
+			int id;
+			ppl7::String name;
+	};
+
+	class DisplayMode {
+		public:
+			DisplayMode();
+			ppl7::grafix::RGBFormat	format;
+			int			width;
+			int			height;
+			int			refresh_rate;
+	};
+
+
 	SDL();
 	~SDL();
 	void setRenderer(SDL_Renderer *r);
@@ -30,6 +48,12 @@ public:
 
 	ppl7::grafix::Size getWindowSize() const;
 	ppl7::grafix::Rect getClientWindow() const;
+
+	static ppl7::grafix::Size desktopResolution();
+	static ppl7::grafix::RGBFormat desktopRGBFormat();
+	static void getVideoDisplays(std::list<VideoDisplay> &display_list);
+	static void getDisplayModes(std::list<DisplayMode> &mode_list, int display_id);
+
 };
 
 #endif
