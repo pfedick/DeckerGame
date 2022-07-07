@@ -160,15 +160,20 @@ public:
 
 class Dialog : public ppl7::tk::Widget
 {
+public:
+	enum Buttons {
+		None=0,
+		OK=1,
+	};
 private:
 	ppl7::String WindowTitle;
 	ppl7::grafix::Image WindowIcon;
 	ppl7::grafix::Color	myBackground;
-	ppl7::tk::Button *close_button;
+	ppl7::tk::Button *ok_button;
 	ppl7::grafix::Point move_start;
 
 public:
-	Dialog(int width, int height);
+	Dialog(int width, int height, int buttons=Buttons::OK);
 	~Dialog();
 
 	const ppl7::String &windowTitle() const;
@@ -181,6 +186,54 @@ public:
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
+
+class FileDialog : public Dialog
+{
+	public:
+	enum class FileMode {
+		AnyFile=0,
+		ExistingFile,
+		Directory
+	};
+
+	enum class DialogState {
+		Open=0,
+		OK,
+		Aborted
+	};
+
+	private:
+		ppl7::tk::Button *ok_button;
+		ppl7::tk::Button *cancel_button;
+		ppl7::tk::LineInput *path_lineinput;
+		ppl7::tk::LineInput *filename_lineinput;
+		Decker::ui::ListWidget *dir_list;
+		Decker::ui::ListWidget *file_list;
+		Decker::ui::ComboBox *drives_combobox;
+
+
+		DialogState my_state;
+
+
+
+	public:
+		FileDialog(int width, int height, FileMode mode=FileMode::AnyFile);
+		~FileDialog();
+
+		ppl7::String directory() const;
+		ppl7::String filename() const;
+		DialogState state() const;
+
+		void setFilename(const ppl7::String &filename);
+		void setDirectory(const ppl7::String &path);
+		void setFilter(const ppl7::String &filter);
+
+		virtual void mouseDblClickEvent(ppl7::tk::MouseEvent* event);
+		virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+		virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
+		virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+
+};
 
 
 }	// EOF namespace ui

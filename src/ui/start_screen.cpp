@@ -196,12 +196,20 @@ StartScreen::StartScreen(SDL& s, int x, int y, int width, int height)
 	version->setText(Version);
 	menue->addChild(version);
 
+	/*
+	filedialog=new Decker::ui::FileDialog(800,600);
+	filedialog->setPos(800,300);
+	filedialog->setEventHandler(this);
+	filedialog->setFilename("C:\\git\\DeckerGame\\level\\test.lvl");
+	this->addChild(filedialog);
+	*/
 
 	start_game->setSelected(true);
 }
 
 StartScreen::~StartScreen()
 {
+	//if (filedialog) delete filedialog;
 	delete version;
 	delete start_game;
 	delete settings;
@@ -223,10 +231,10 @@ void StartScreen::setState(State state)
 
 void StartScreen::paint(ppl7::grafix::Drawable& draw)
 {
+	draw.cls();
 	ppl7::grafix::Color bg(40, 20, 0, 96);
 	draw.fillRect(0, 0, draw.width(), TitleImage.height() + 8, bg);
 	draw.bltAlpha(TitleImage, 0, 0);
-
 }
 
 
@@ -300,5 +308,21 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 		else if (editor->isSelected()) state=State::StartEditor;
 		else if (end->isSelected()) state=State::QuitGame;
 	}
+}
 
+
+void StartScreen::closeEvent(ppl7::tk::Event* event)
+{
+	/*
+	if (event->widget()==filedialog) {
+		if (filedialog->state()==Decker::ui::FileDialog::DialogState::OK) {
+			printf ("we have a file: %s\n",(const char*)filedialog->filename());
+			fflush(stdout);
+		}
+		filedialog->deleteLater();
+		filedialog->setVisible(false);
+		filedialog=NULL;
+		redrawRequired();
+	}
+	*/
 }

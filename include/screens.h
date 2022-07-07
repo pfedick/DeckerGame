@@ -5,6 +5,7 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "decker_sdl.h"
+#include "widgets.h"
 
 class IntroScreen : public ppl7::tk::Widget
 {
@@ -63,6 +64,8 @@ private:
     ppl7::tk::Frame* menue;
     ppl7::tk::Label* version;
 
+    //Decker::ui::FileDialog *filedialog;
+
     State state;
 
 public:
@@ -80,6 +83,8 @@ public:
     virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
     virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
+
+    virtual void closeEvent(ppl7::tk::Event* event);
 
 
     // Event handler
