@@ -13,6 +13,9 @@
 #include "waynet.h"
 #include "translate.h"
 
+#define APP_COMPANY "Patrick F.-Productions"
+#define APP_NAME "George Decker"
+
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
 #endif
@@ -49,6 +52,23 @@ namespace Decker::Objects {
 class ObjectSystem;
 class Object;
 } // EOF namespace Decker::Objects
+
+class Config
+{
+	private:
+	public:
+		ppl7::String		CustomLevelPath;
+		ppl7::String		LastEditorLevel;
+		ppl7::grafix::Size	ScreenResolution;
+		bool				bFullScreen;
+
+
+		Config();
+		~Config();
+		void load();
+		void save();
+};
+
 
 class FPS
 {
