@@ -31,8 +31,20 @@ ppl7::String ListWidget::currentIdentifier() const
 void ListWidget::setCurrentText(const ppl7::String &text)
 {
 	if (text!=myCurrentText) {
-		myCurrentText=text;
-		needsRedraw();
+		std::list<ListWidgetItem>::iterator it;
+		for (it=items.begin();it!=items.end();++it) {
+			if ((*it).text==text) {
+				myCurrentText=(*it).text;
+				myCurrentIdentifier=(*it).identifier;
+				myCurrentIndex=(*it).index;
+				size_t start=scrollbar->position();
+				if (start+visibleItems<=myCurrentIndex) {
+					scrollbar->setPosition(myCurrentIndex);
+				}
+				needsRedraw();
+				return;
+			}
+		}
 	}
 }
 
@@ -50,6 +62,7 @@ void ListWidget::setCurrentIndex(size_t index)
 			myCurrentText=(*it).text;
 			myCurrentIdentifier=(*it).identifier;
 			needsRedraw();
+			return;
 		}
 	}
 }
@@ -76,6 +89,9 @@ void ListWidget::clear()
 {
 	myCurrentText.clear();
 	myCurrentIdentifier.clear();
+	items.clear();
+	scrollbar->setPosition(0);
+	scrollbar->setSize(0);
 	needsRedraw();
 }
 
@@ -134,6 +150,7 @@ void ListWidget::mouseDownEvent(ppl7::tk::MouseEvent *event)
 		valueChangedEvent(&ev, myCurrentIndex);
 		needsRedraw();
 	}
+	EventHandler::mouseDownEvent(event);
 }
 
 void ListWidget::mouseWheelEvent(ppl7::tk::MouseEvent *event)
@@ -159,7 +176,7 @@ void ListWidget::mouseMoveEvent(ppl7::tk::MouseEvent *event)
 
 void ListWidget::lostFocusEvent(ppl7::tk::FocusEvent *event)
 {
-	printf ("ListWidget::lostFocusEvent\n");
+	//printf ("ListWidget::lostFocusEvent\n");
 }
 
 } //EOF namespace Decker::ui
