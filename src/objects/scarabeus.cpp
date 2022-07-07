@@ -61,6 +61,15 @@ Scarabeus::Scarabeus()
 	update_animation();
 }
 
+Scarabeus::~Scarabeus()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+}
+
 
 void Scarabeus::update_animation()
 {

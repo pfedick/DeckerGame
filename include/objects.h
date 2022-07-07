@@ -178,6 +178,7 @@ private:
 	AudioInstance *audio;
 public:
 	Vent();
+	~Vent();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane &ttplane, Player &player);
 };
@@ -576,6 +577,7 @@ private:
 	int state;
 public:
 	Scarabeus();
+	~Scarabeus();
 	static Representation representation();
 	void update_animation();
 	virtual void handleCollision(Player *player, const Collision &collision);

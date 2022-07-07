@@ -25,6 +25,15 @@ Vent::Vent()
 	audio=NULL;
 }
 
+Vent::~Vent()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+}
+
 void Vent::update(double time, TileTypePlane &, Player &)
 {
 	if (time>next_animation) {
