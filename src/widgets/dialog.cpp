@@ -3,7 +3,7 @@
 
 namespace Decker::ui {
 
-Dialog::Dialog(int width, int height)
+Dialog::Dialog(int width, int height, int buttons)
 : ppl7::tk::Widget()
 {
 	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
@@ -13,11 +13,14 @@ Dialog::Dialog(int width, int height)
 	ppl7::tk::Window *gamewin=GetGameWindow();
 	create((gamewin->width()-640)/2, (gamewin->height()-480)/2,width,height);
 	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	close_button=new ppl7::tk::Button((width-80)/2,height-80,80,30,"OK");
-	close_button->setIcon(gfx->Toolbar.getDrawable(24));
-	close_button->setEventHandler(this);
+	ok_button=NULL;
+	if (buttons&Buttons::OK) {
+		ok_button=new ppl7::tk::Button((width-80)/2,height-80,80,30,"OK");
+		ok_button->setIcon(gfx->Toolbar.getDrawable(24));
+		ok_button->setEventHandler(this);
+		this->addChild(ok_button);
+	}
 	this->setModal(true);
-	this->addChild(close_button);
 	this->setClientOffset(8, 40, 8, 8);
 }
 
@@ -78,13 +81,20 @@ void Dialog::paint(ppl7::grafix::Drawable &draw)
 	ppl7::grafix::Font myFont=style.buttonFont;
 	myFont.setColor(style.labelFontColor);
 	myFont.setOrientation(ppl7::grafix::Font::TOP);
+
+	int x=8;
+	if (!WindowIcon.isEmpty()) {
+		draw.bltAlpha(WindowIcon,8,3+((30-WindowIcon.height())>>1));
+		x+=WindowIcon.width()+4;
+	}
+
 	ppl7::grafix::Size s=myFont.measure(WindowTitle);
-	draw.print(myFont,8,3+((30-s.height)>>1),WindowTitle);
+	draw.print(myFont,x,3+((30-s.height)>>1),WindowTitle);
 }
 
 void Dialog::mouseDownEvent(ppl7::tk::MouseEvent *event)
 {
-	if (event->widget()==close_button) {
+	if (event->widget()==ok_button) {
 		this->deleteLater();
 	}
 }
