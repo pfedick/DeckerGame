@@ -13,6 +13,7 @@ Config::Config()
     volumeEffects=1.0f;
     videoDevice=0;
     audioDevice=0;
+    Language="en";
     try {
         load();
     }
@@ -47,6 +48,7 @@ void Config::load()
     conf.setSection("misc");
     CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
     LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
+    Language=conf.get("Language", Language);
 }
 
 void Config::save()
@@ -76,6 +78,7 @@ void Config::save()
     conf.setSection("misc");
     conf.add("CustomLevelPath", CustomLevelPath);
     conf.add("LastEditorLevel", LastEditorLevel);
+    conf.add("Language", Language);
 
     conf.save(ConfigFile);
 }

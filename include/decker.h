@@ -71,6 +71,7 @@ public:
 	// Misc
 	ppl7::String		CustomLevelPath;
 	ppl7::String		LastEditorLevel;
+	ppl7::String		Language;
 
 
 
