@@ -82,6 +82,8 @@ private:
     void initPageVideo();
     void initPageMisc();
 
+    void updateVideoModes();
+
 
 public:
     SettingsScreen(Game& game, SDL& s, int x, int y, int width, int height);
@@ -91,6 +93,8 @@ public:
     virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
     virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
+
+    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 
 };
 

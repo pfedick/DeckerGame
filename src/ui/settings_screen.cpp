@@ -118,8 +118,15 @@ void SettingsScreen::initPageVideo()
     label->setFont(labelFont);
     page_video->addChild(label);
 
-
     video_device_combobox=new Decker::ui::ComboBox(260, 0, 400, 40);
+    video_device_combobox->setEventHandler(this);
+    std::list<SDL::VideoDisplay> display_list;
+    SDL::getVideoDisplays(display_list);
+    std::list<SDL::VideoDisplay>::const_iterator dit;
+    for (dit=display_list.begin();dit != display_list.end();++dit) {
+        video_device_combobox->add((*dit).name, ppl7::ToString("%d", (*dit).id));
+    }
+    video_device_combobox->setCurrentIdentifier(ppl7::ToString("%d", game.config.videoDevice));
     page_video->addChild(video_device_combobox);
 
     label=new ppl7::tk::Label(0, 50, 250, 40, translate("Screen resolution:"));
@@ -127,11 +134,14 @@ void SettingsScreen::initPageVideo()
     page_video->addChild(label);
 
     screen_resolution_combobox=new Decker::ui::ComboBox(260, 50, 400, 40);
+    screen_resolution_combobox->setEventHandler(this);
+    updateVideoModes();
     page_video->addChild(screen_resolution_combobox);
 
 
     fullscreen_checkbox=new Decker::ui::CheckBox(260, 100, 300, 40, translate("Fullscreen"));
     fullscreen_checkbox->setFont(labelFont);
+    fullscreen_checkbox->setEventHandler(this);
 
     page_video->addChild(fullscreen_checkbox);
 
@@ -153,6 +163,7 @@ void SettingsScreen::initPageMisc()
     language_combobox->add(translate("english"), "en");
     language_combobox->add(translate("german"), "de");
     language_combobox->setCurrentIdentifier(game.config.Language);
+    language_combobox->setEventHandler(this);
     page_misc->addChild(language_combobox);
 
 
@@ -192,6 +203,27 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
         break;
     }
     currentMenueSelection=page;
+}
+
+void SettingsScreen::updateVideoModes()
+{
+    int display_id=video_device_combobox->currentIdentifier().toInt();
+    screen_resolution_combobox->clear();
+    std::list<SDL::DisplayMode> mode_list;
+    SDL::getDisplayModes(display_id, mode_list);
+    std::list<SDL::DisplayMode>::const_iterator mit;
+    for (mit=mode_list.begin();mit != mode_list.end();++mit) {
+        if ((*mit).format == ppl7::grafix::RGBFormat::X8R8G8B8 && (*mit).width >= 1024 && (*mit).height >= 768) {
+            screen_resolution_combobox->add(
+                ppl7::ToString("%d x %d, %d Hz", (*mit).width, (*mit).height, (*mit).refresh_rate),
+                ppl7::ToString("%d,%d,%d", (*mit).width, (*mit).height, (*mit).refresh_rate));
+        }
+    }
+    ppl7::String id;
+    id.setf("%d,%d,%d", game.config.ScreenResolution.width,
+        game.config.ScreenResolution.height,
+        game.config.ScreenRefreshRate);
+    screen_resolution_combobox->setCurrentIdentifier(id);
 }
 
 void SettingsScreen::paint(ppl7::grafix::Drawable& draw)
@@ -242,4 +274,10 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
         event.setWidget(this);
         this->getParent()->closeEvent(&event);
     }
+}
+
+
+void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
+{
+    if (event->widget() == video_device_combobox) updateVideoModes();
 }

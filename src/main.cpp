@@ -27,6 +27,19 @@ void start()
 		printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
 		throw std::exception();
 	}
+	SDL_Init(SDL_INIT_VIDEO);
+
+	/*
+	std::list<SDL::DisplayMode> mode_list;
+	SDL::getDisplayModes(1, mode_list);
+	std::list<SDL::DisplayMode>::const_iterator it;
+	for (it=mode_list.begin();it != mode_list.end();++it) {
+		printf("%d x %d, Bits: %d, Color: %s, Refresh: %d\n",
+			(*it).width, (*it).height, (*it).format.bitsPerPixel(),
+			(const char*)(*it).format.name(), (*it).refresh_rate);
+	}
+	return;
+	*/
 
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;

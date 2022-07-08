@@ -9,6 +9,7 @@ Config::Config()
     bFullScreen=false;
     CustomLevelPath=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
     ScreenResolution.setSize(1920, 1080);
+    ScreenRefreshRate=60;
     volumeTotal=1.0f;
     volumeMusic=0.5f;
     volumeEffects=1.0f;
@@ -36,6 +37,7 @@ void Config::load()
     conf.setSection("video");
     ScreenResolution.width=conf.getInt("ScreenResolution.width", ScreenResolution.width);
     ScreenResolution.height=conf.getInt("ScreenResolution.height", ScreenResolution.height);
+    ScreenRefreshRate=conf.getInt("ScreenRefreshRate", ScreenRefreshRate);
     videoDevice=conf.getInt("videoDevice", videoDevice);
     bFullScreen=conf.getBool("bFullScreen", bFullScreen);
 
@@ -67,6 +69,7 @@ void Config::save()
     conf.setSection("video");
     conf.add("ScreenResolution.width", ScreenResolution.width);
     conf.add("ScreenResolution.height", ScreenResolution.height);
+    conf.add("ScreenRefreshRate", ScreenRefreshRate);
     conf.add("videoDevice", videoDevice);
     conf.add("bFullScreen", bFullScreen);
 

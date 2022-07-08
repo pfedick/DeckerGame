@@ -62,6 +62,7 @@ public:
 	int					videoDevice;
 	bool				bFullScreen;
 	ppl7::grafix::Size	ScreenResolution;
+	int 				ScreenRefreshRate;
 
 	// Audio
 	ppl7::String		audioDevice;
