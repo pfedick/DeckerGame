@@ -296,11 +296,13 @@ private:
 	ppl7::String value;
 	ppl7::grafix::Font font;
 
+
 public:
 	StatsFrame(int x, int y, int width, int height, const ppl7::String& label);
 	void setValue(const ppl7::String& value);
 	virtual ppl7::String widgetType() const;
 	virtual void paint(ppl7::grafix::Drawable& draw);
+	void setFontSize(int size);
 
 
 };

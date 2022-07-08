@@ -40,6 +40,11 @@ void StatsFrame::paint(ppl7::grafix::Drawable& draw)
 	draw.print(font, 20 + s.width, 0, value);
 }
 
+void StatsFrame::setFontSize(int size)
+{
+	font.setSize(size);
+}
+
 void StatsFrame::setValue(const ppl7::String& value)
 {
 	if (value != this->value) {
@@ -66,11 +71,33 @@ WorldWidget::WorldWidget()
 
 void WorldWidget::setViewport(const ppl7::grafix::Rect& viewport)
 {
+	//printf("WorldWidget::setViewport: %d x %d\n", viewport.width(), viewport.height());
 	this->setPos(viewport.x1, viewport.y1);
 	this->setSize(viewport.width(), viewport.height());
-	stats_health->setPos(20, viewport.height() - 80);
-	stats_lifes->setPos((viewport.width() - 400) / 2, viewport.height() - 80);
-	stats_points->setPos(viewport.width() - 420, viewport.height() - 80);
+
+	int fs=50;
+	int y=viewport.height() - 80;
+	if (viewport.width() < 1280) {
+		fs=30;
+		stats_health->setSize(300, 40);
+		stats_points->setSize(300, 40);
+		stats_lifes->setSize(300, 40);
+		y=viewport.height() - 50;
+
+	} else {
+		stats_health->setSize(400, 70);
+		stats_points->setSize(400, 70);
+		stats_lifes->setSize(300, 70);
+	}
+	stats_health->setPos(20, y);
+	stats_lifes->setPos((viewport.width() - stats_lifes->width()) / 2, y);
+	stats_points->setPos(viewport.width() - stats_points->width() - 20, y);
+
+	stats_health->setFontSize(fs);
+	stats_lifes->setFontSize(fs);
+	stats_points->setFontSize(fs);
+
+
 	this->needsRedraw();
 }
 
@@ -114,6 +141,7 @@ static void drawFrame(ppl7::grafix::Drawable& draw, const ppl7::grafix::Point& p
 
 void WorldWidget::paint(ppl7::grafix::Drawable& draw)
 {
+	//printf("WorldWidget::paint %d x %d\n", draw.width(), draw.height());
 	ppl7::grafix::Point p0(1, 1);
 	ppl7::grafix::Point p1(0, 0);
 	ppl7::grafix::Point p2(draw.width() - 1, draw.height() - 1);

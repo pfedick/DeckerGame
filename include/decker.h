@@ -58,11 +58,12 @@ class Config
 private:
 	ppl7::String		ConfigFile;
 public:
-	// Video
+	typedef ppl7::tk::Window::WindowMode WindowMode;
+		// Video
 	int					videoDevice;
-	bool				bFullScreen;
 	ppl7::grafix::Size	ScreenResolution;
 	int 				ScreenRefreshRate;
+	ppl7::tk::Window::WindowMode windowMode;
 
 	// Audio
 	ppl7::String		audioDevice;
@@ -515,6 +516,7 @@ private:
 	void loadGrafix();
 	void initUi();
 	void deleteUi();
+	void resizeMenueAndStatusbar();
 	void initAudio();
 	void updateUi(const ppl7::tk::MouseState& mouse);
 	void drawWorld(SDL_Renderer* renderer);
@@ -572,6 +574,7 @@ public:
 	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
 	void keyDownEvent(ppl7::tk::KeyEvent* event);
 	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
+	void resizeEvent(ppl7::tk::ResizeEvent* event);
 
 	void showTilesSelection();
 	void showTileTypeSelection();
@@ -585,6 +588,8 @@ public:
 	SDL_Renderer* getSDLRenderer();
 	SDL& getSDL();
 	ppl7::grafix::Point getViewPos() const;
+
+	ppl7::tk::Window& window();
 
 	void startLevel(const ppl7::String& filename);
 	void save();

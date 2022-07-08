@@ -76,21 +76,6 @@ SDL::VideoDisplay::VideoDisplay(int id, const ppl7::String& name)
 }
 
 
-SDL::DisplayMode::DisplayMode()
-{
-	width=0;
-	height=0;
-	refresh_rate=0;
-}
-
-SDL::DisplayMode::DisplayMode(const ppl7::grafix::RGBFormat& format, int width, int height, int refresh_rate)
-{
-	this->format=format;
-	this->width=width;
-	this->height=height;
-	this->refresh_rate=refresh_rate;
-}
-
 
 SDL::SDL()
 {
@@ -286,24 +271,16 @@ void SDL::unlockTexture(SDL_Texture* texture)
 }
 
 
-ppl7::grafix::Size SDL::desktopResolution(int display_id)
+SDL::DisplayMode SDL::desktopDisplayMode(int display_id)
 {
 	SDL_DisplayMode mode;
 	mode.driverdata=NULL;
 	if (SDL_GetDesktopDisplayMode(display_id, &mode) == 0) {
-		return ppl7::grafix::Size(mode.w, mode.h);
+		return SDL::DisplayMode(SDL2RGBFormat(mode.format),
+			mode.w, mode.h, mode.refresh_rate);
 	}
-	return ppl7::grafix::Size();
-}
-
-ppl7::grafix::RGBFormat SDL::desktopRGBFormat(int display_id)
-{
-	SDL_DisplayMode mode;
-	mode.driverdata=NULL;
-	if (SDL_GetDesktopDisplayMode(display_id, &mode) == 0) {
-		return SDL2RGBFormat(mode.format);
-	}
-	return ppl7::grafix::RGBFormat();
+	ppl7::String err(SDL_GetError());
+	throw SDLException("Couldn't detrmine display mode for display %d: %s", display_id, (const char*)err);
 }
 
 void SDL::getVideoDisplays(std::list<VideoDisplay>& display_list)

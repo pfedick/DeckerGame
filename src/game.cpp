@@ -150,7 +150,13 @@ void Game::loadGrafix()
 
 void Game::createWindow()
 {
-	setFlags(ppl7::tk::Window::DefaultWindow);
+	if (config.windowMode == Config::WindowMode::Window) {
+		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::Resizeable);
+	} else if (config.windowMode == Config::WindowMode::Fullscreen) {
+		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::Fullscreen | ppl7::tk::Window::Resizeable);
+	} else {
+		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::FullscreenDesktop | ppl7::tk::Window::Resizeable);
+	}
 	//setFlags(ppl7::tk::Window::DefaultFullscreen);
 	setWindowTitle("George Decker");
 	ppl7::grafix::Image icon;
@@ -158,14 +164,19 @@ void Game::createWindow()
 	setWindowIcon(icon);
 	setRGBFormat(ppl7::grafix::RGBFormat::A8R8G8B8);
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
-	ppl7::grafix::Size desktop=wm->desktopResolution();
-	desktop.height-=80;
-	if (desktop.height > 1080 && desktop.height < 1200) desktop.height=1080;
-	setSize(desktop);
+	setSize(config.ScreenResolution);
 	wm->createWindow(*this);
 	//setPos(0,0);
-	sdl.setRenderer((SDL_Renderer*)getRenderer());
+	SDL_Renderer* renderer=(SDL_Renderer*)getRenderer();
+	sdl.setRenderer(renderer);
+	//SDL_RenderSetLogicalSize(renderer, 1920, 1080);
+
 	SDL_ShowCursor(SDL_DISABLE);
+}
+
+ppl7::tk::Window& Game::window()
+{
+	return *this;
 }
 
 SDL_Renderer* Game::getSDLRenderer()
@@ -219,13 +230,7 @@ void Game::initUi()
 	const ppl7::grafix::Size& desktop=clientSize();
 	//ppl7::tk::Label *label;
 
-	mainmenue=new Decker::ui::MainMenue(0, 0, desktop.width, 32, this);
-	this->addChild(mainmenue);
-
-
-	// Bottom Frame
-	statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
-	this->addChild(statusbar);
+	resizeMenueAndStatusbar();
 	viewport.y1=33;
 	viewport.y2=desktop.height - 33;
 
@@ -235,6 +240,18 @@ void Game::initUi()
 	world_widget->setViewport(viewport);
 	this->addChild(world_widget);
 	wm->setKeyboardFocus(world_widget);
+}
+
+void Game::resizeMenueAndStatusbar()
+{
+	const ppl7::grafix::Size& desktop=clientSize();
+	if (statusbar) delete statusbar;
+	statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
+	this->addChild(statusbar);
+
+	if (mainmenue) delete mainmenue;
+	mainmenue=new Decker::ui::MainMenue(0, 0, desktop.width, 32, this);
+	this->addChild(mainmenue);
 }
 
 void Game::deleteUi()
@@ -516,6 +533,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 void Game::run()
 {
+	resizeEvent(NULL);
+
 	death_state=0;
 	fade_to_black=255;
 	world_widget->setVisible(true);
@@ -1129,6 +1148,19 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 		handleMouseDrawInWorld(*event);
 	}
 
+}
+
+void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
+{
+	if (tex_level_grid) {
+		if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
+		tex_level_grid=NULL;
+	}
+	desktopSize=clientSize();
+	viewport=clientRect();
+	resizeMenueAndStatusbar();
+	showUi(showui);
+	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
 }
 
 void Game::handleDeath(SDL_Renderer* renderer)

@@ -108,6 +108,7 @@ void SettingsScreen::initPageAudio()
 
 void SettingsScreen::initPageVideo()
 {
+    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
     ppl7::grafix::Color background(20, 10, 0, 192);
     page_video=new ppl7::tk::Frame(340, 100, this->width() - 350, this->height() - 110, ppl7::tk::Frame::BorderStyle::NoBorder);
     page_video->setName("SettingsPageVideo");
@@ -138,12 +139,24 @@ void SettingsScreen::initPageVideo()
     updateVideoModes();
     page_video->addChild(screen_resolution_combobox);
 
+    label=new ppl7::tk::Label(0, 100, 250, 40, translate("Window mode:"));
+    label->setFont(labelFont);
+    page_video->addChild(label);
 
-    fullscreen_checkbox=new Decker::ui::CheckBox(260, 100, 300, 40, translate("Fullscreen"));
-    fullscreen_checkbox->setFont(labelFont);
-    fullscreen_checkbox->setEventHandler(this);
+    windowmode_combobox=new Decker::ui::ComboBox(260, 100, 400, 40);
+    windowmode_combobox->setEventHandler(this);
+    windowmode_combobox->add(translate("Window"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Window)));
+    windowmode_combobox->add(translate("Fullscreen"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Fullscreen)));
+    windowmode_combobox->add(translate("Fullscreen Desktop"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::FullscreenDesktop)));
+    windowmode_combobox->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(game.config.windowMode)));
+    page_video->addChild(windowmode_combobox);
 
-    page_video->addChild(fullscreen_checkbox);
+    save_video_settings_button=new ppl7::tk::Button(260, 200, 250, 50,
+        translate("use video settings"),
+        gfx->Toolbar.getDrawable(24));
+    save_video_settings_button->setFont(labelFont);
+    save_video_settings_button->setEventHandler(this);
+    page_video->addChild(save_video_settings_button);
 
 }
 
@@ -273,6 +286,28 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
         ppl7::tk::Event event(ppl7::tk::Event::Close);
         event.setWidget(this);
         this->getParent()->closeEvent(&event);
+    } else if (event->widget() == save_video_settings_button) {
+        Config::WindowMode mode=static_cast<Config::WindowMode>(windowmode_combobox->currentIdentifier().toInt());
+
+        ppl7::tk::WindowManager_SDL2* wm=(ppl7::tk::WindowManager_SDL2*)ppl7::tk::GetWindowManager();
+        wm->changeWindowMode(game.window(), mode);
+        ppl7::tk::Window::DisplayMode dmode;
+        dmode.format=game.window().rgbFormat();
+        ppl7::String id=screen_resolution_combobox->currentIdentifier();
+        ppl7::Array Tok(id, ",");
+        dmode.width=Tok[0].toInt();
+        dmode.height=Tok[1].toInt();
+        dmode.refresh_rate=Tok[2].toInt();
+        try {
+            game.window().setWindowDisplayMode(dmode);
+            game.config.ScreenResolution.setSize(dmode.width, dmode.height);
+            game.config.ScreenRefreshRate=dmode.refresh_rate;
+            game.config.windowMode=mode;
+            game.config.save();
+        }
+        catch (const ppl7::Exception& exp) {
+            exp.print();
+        }
     }
 }
 

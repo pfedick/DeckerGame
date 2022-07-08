@@ -72,7 +72,8 @@ private:
     // Video
     Decker::ui::ComboBox* video_device_combobox;
     Decker::ui::ComboBox* screen_resolution_combobox;
-    Decker::ui::CheckBox* fullscreen_checkbox;
+    Decker::ui::ComboBox* windowmode_combobox;
+    ppl7::tk::Button* save_video_settings_button;
 
     // Misc
     Decker::ui::ComboBox* language_combobox;

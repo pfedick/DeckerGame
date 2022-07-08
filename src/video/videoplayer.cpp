@@ -14,9 +14,9 @@ static AVPixelFormat correct_for_deprecated_pixel_format(AVPixelFormat pix_fmt) 
 
 
 
-VideoPlayer::VideoPlayer(SDL_Renderer *renderer)
+VideoPlayer::VideoPlayer(SDL_Renderer* renderer)
 {
-    this->renderer=renderer;
+	this->renderer=renderer;
 	av_format_ctx=NULL;
 	av_codec=NULL;
 	av_codec_ctx=NULL;
@@ -64,7 +64,7 @@ void VideoPlayer::clear()
 bool VideoPlayer::load(const ppl7::String& filename)
 {
 	clear();
-    if (!renderer) return false;
+	if (!renderer) return false;
 	av_format_ctx = avformat_alloc_context();
 	if (!av_format_ctx) {
 		return false;
@@ -218,13 +218,25 @@ void VideoPlayer::updateOverlay(AVFrame* frame)
 
 }
 
-void VideoPlayer::renderFrame(const SDL_Rect *dstrect)
+int VideoPlayer::width() const
 {
-    if (!renderer || !overlay) return;
+	if (av_codec_ctx) return av_codec_ctx->width;
+	return 0;
+}
+
+int VideoPlayer::height() const
+{
+	if (av_codec_ctx) return av_codec_ctx->height;
+	return 0;
+}
+
+void VideoPlayer::renderFrame(const SDL_Rect* dstrect)
+{
+	if (!renderer || !overlay) return;
 	SDL_RenderCopy(renderer, overlay, NULL, dstrect);
 }
 
-SDL_Texture *VideoPlayer::getVideoTexture()
+SDL_Texture* VideoPlayer::getVideoTexture()
 {
-    return overlay;
+	return overlay;
 }

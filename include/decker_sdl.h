@@ -23,16 +23,7 @@ public:
 		ppl7::String name;
 	};
 
-	class DisplayMode {
-	public:
-		DisplayMode();
-		DisplayMode(const ppl7::grafix::RGBFormat& format, int width, int height, int refresh_rate);
-		ppl7::grafix::RGBFormat	format;
-		int			width;
-		int			height;
-		int			refresh_rate;
-	};
-
+	typedef ppl7::tk::Window::DisplayMode DisplayMode;
 
 	SDL();
 	~SDL();
@@ -50,8 +41,7 @@ public:
 	ppl7::grafix::Size getWindowSize() const;
 	ppl7::grafix::Rect getClientWindow() const;
 
-	static ppl7::grafix::Size desktopResolution(int display_id=0);
-	static ppl7::grafix::RGBFormat desktopRGBFormat(int display_id=0);
+	static DisplayMode desktopDisplayMode(int display_id=0);
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);
 	static void getDisplayModes(int display_id, std::list<DisplayMode>& mode_list);
 

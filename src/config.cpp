@@ -1,4 +1,5 @@
 #include "decker.h"
+#include "decker_sdl.h"
 
 
 Config::Config()
@@ -6,10 +7,11 @@ Config::Config()
     ppl7::String config_path=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
     ConfigFile=config_path + "/decker.conf";
 
-    bFullScreen=false;
+    windowMode=WindowMode::FullscreenDesktop;
     CustomLevelPath=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
-    ScreenResolution.setSize(1920, 1080);
-    ScreenRefreshRate=60;
+    SDL::DisplayMode mode=SDL::desktopDisplayMode();
+    ScreenResolution.setSize(mode.width, mode.height);
+    ScreenRefreshRate=mode.refresh_rate;
     volumeTotal=1.0f;
     volumeMusic=0.5f;
     volumeEffects=1.0f;
@@ -39,7 +41,7 @@ void Config::load()
     ScreenResolution.height=conf.getInt("ScreenResolution.height", ScreenResolution.height);
     ScreenRefreshRate=conf.getInt("ScreenRefreshRate", ScreenRefreshRate);
     videoDevice=conf.getInt("videoDevice", videoDevice);
-    bFullScreen=conf.getBool("bFullScreen", bFullScreen);
+    windowMode=static_cast<WindowMode>(conf.getInt("windowMode", static_cast<int>(windowMode)));
 
     // Audio
     conf.setSection("audio");
@@ -71,7 +73,7 @@ void Config::save()
     conf.add("ScreenResolution.height", ScreenResolution.height);
     conf.add("ScreenRefreshRate", ScreenRefreshRate);
     conf.add("videoDevice", videoDevice);
-    conf.add("bFullScreen", bFullScreen);
+    conf.add("windowMode", static_cast<int>(windowMode));
 
     // Audio
     conf.setSection("audio");
