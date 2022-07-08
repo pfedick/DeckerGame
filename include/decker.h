@@ -55,18 +55,29 @@ class Object;
 
 class Config
 {
-	private:
-	public:
-		ppl7::String		CustomLevelPath;
-		ppl7::String		LastEditorLevel;
-		ppl7::grafix::Size	ScreenResolution;
-		bool				bFullScreen;
+private:
+	ppl7::String		ConfigFile;
+public:
+	// Video
+	int					videoDevice;
+	bool				bFullScreen;
+	ppl7::grafix::Size	ScreenResolution;
+
+	// Audio
+	int					audioDevice;
+	float				volumeMusic;
+	float				volumeEffects;
+
+	// Misc
+	ppl7::String		CustomLevelPath;
+	ppl7::String		LastEditorLevel;
 
 
-		Config();
-		~Config();
-		void load();
-		void save();
+
+	Config();
+	~Config();
+	void load();
+	void save();
 };
 
 
@@ -540,6 +551,8 @@ private:
 
 
 public:
+	Config config;
+
 	Game();
 	~Game();
 	void init();
@@ -576,7 +589,7 @@ public:
 	void resetPlayer();
 
 	void playIntroVideo();
-	GameState showStartScreen(AudioStream &GeorgeDeckerTheme);
+	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
 
 
 };

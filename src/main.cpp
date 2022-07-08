@@ -15,15 +15,18 @@ void help()
 
 void start()
 {
+#ifdef WIN32
 	ppl7::String::setGlobalEncoding("UTF-8");
+#endif
+
 	if (setlocale(LC_CTYPE, "") == NULL) {
-        printf("setlocale fehlgeschlagen\n");
-        throw std::exception();
-    }
-    if (setlocale(LC_NUMERIC, "C") == NULL) {
-        printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
-        throw std::exception();
-    }
+		printf("setlocale fehlgeschlagen\n");
+		throw std::exception();
+	}
+	if (setlocale(LC_NUMERIC, "C") == NULL) {
+		printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
+		throw std::exception();
+	}
 
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
@@ -41,7 +44,7 @@ void start()
 
 	game.playIntroVideo();
 	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3");
-	GeorgeDeckerTheme.setVolume(0.5f);
+	GeorgeDeckerTheme.setVolume(game.config.volumeMusic);
 
 	while (1) {
 		GameState state=game.showStartScreen(GeorgeDeckerTheme);
@@ -55,7 +58,6 @@ void start()
 		} else if (state == GameState::StartEditor) {
 			game.showUi(true);
 			game.clearLevel();
-
 			game.resetPlayer();
 			game.run();
 		} else if (state == GameState::ShowSettings) {

@@ -3,9 +3,20 @@
 
 Config::Config()
 {
+    ppl7::String config_path=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
+    ConfigFile=config_path + "/decker.conf";
+
     bFullScreen=false;
     CustomLevelPath=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
-    ScreenResolution.setSize(1920,1080);
+    ScreenResolution.setSize(1920, 1080);
+    volumeMusic=0.5f;
+    volumeEffects=1.0f;
+    videoDevice=0;
+    audioDevice=0;
+    try {
+        load();
+    }
+    catch (...) {}
 }
 
 Config::~Config()
@@ -15,10 +26,56 @@ Config::~Config()
 
 void Config::load()
 {
+    if (!ppl7::File::exists(ConfigFile)) return;
+    ppl7::ConfigParser conf;
+    conf.load(ConfigFile);
 
+    // Video
+    conf.setSection("video");
+    ScreenResolution.width=conf.getInt("ScreenResolution.width", ScreenResolution.width);
+    ScreenResolution.height=conf.getInt("ScreenResolution.height", ScreenResolution.height);
+    videoDevice=conf.getInt("videoDevice", videoDevice);
+    bFullScreen=conf.getBool("bFullScreen", bFullScreen);
+
+    // Audio
+    conf.setSection("audio");
+    audioDevice=conf.getInt("audioDevice", audioDevice);
+    volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
+    volumeMusic=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
+
+    // Misc
+    conf.setSection("misc");
+    CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
+    LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
 }
 
 void Config::save()
 {
+    if (!ppl7::File::exists(ConfigFile)) {
+        ppl7::String config_path=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
+        if (!ppl7::Dir::exists(config_path)) {
+            ppl7::Dir::mkDir(config_path, true);
+        }
+    }
+    ppl7::ConfigParser conf;
 
+    // Video
+    conf.setSection("video");
+    conf.add("ScreenResolution.width", ScreenResolution.width);
+    conf.add("ScreenResolution.height", ScreenResolution.height);
+    conf.add("videoDevice", videoDevice);
+    conf.add("bFullScreen", bFullScreen);
+
+    // Audio
+    conf.setSection("audio");
+    conf.add("audioDevice", audioDevice);
+    conf.add("volumeMusic", ppl7::ToString("%0.3f", volumeMusic));
+    conf.add("volumeEffects", ppl7::ToString("%0.3f", volumeEffects));
+
+    // Misc
+    conf.setSection("misc");
+    conf.add("CustomLevelPath", CustomLevelPath);
+    conf.add("LastEditorLevel", LastEditorLevel);
+
+    conf.save(ConfigFile);
 }
