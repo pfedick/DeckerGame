@@ -4,13 +4,13 @@
 namespace Decker::ui {
 
 CheckBox::CheckBox()
-: ppl7::tk::Label()
+	: ppl7::tk::Label()
 {
 	ischecked=false;
 }
 
-CheckBox::CheckBox(int x, int y, int width, int height, const ppl7::String &text, bool checked) // @suppress("Class members should be properly initialized")
-: ppl7::tk::Label(x,y,width,height,text)
+CheckBox::CheckBox(int x, int y, int width, int height, const ppl7::String& text, bool checked) // @suppress("Class members should be properly initialized")
+	: ppl7::tk::Label(x, y, width, height, text)
 {
 	ischecked=checked;
 }
@@ -37,19 +37,22 @@ void CheckBox::setChecked(bool checked)
 }
 
 
-void CheckBox::paint(ppl7::grafix::Drawable &draw)
+void CheckBox::paint(ppl7::grafix::Drawable& draw)
 {
-	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
-	ppl7::grafix::Drawable d=draw.getDrawable(16,0, draw.width()-16, draw.height());
+	int s=draw.height() * 3 / 5;
+	int sh=s / 2;
+
+	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	ppl7::grafix::Drawable d=draw.getDrawable(s + (s / 3), 0, draw.width() - (s + s / 3), draw.height());
 	Label::paint(d);
-	int y1=draw.height()/2-7;
-	int y2=draw.height()/2+7;
-	draw.drawRect(2,y1,16,y2,style.frameBorderColorLight);
-	draw.drawRect(3,y1+1,15,y2-1,style.frameBorderColorLight);
-	if (ischecked) draw.fillRect(5,y1+3,13,y2-3,this->color());
+	int y1=draw.height() / 2 - sh;
+	int y2=draw.height() / 2 + sh;
+	draw.drawRect(2, y1, 2 + s, y2, style.frameBorderColorLight);
+	draw.drawRect(3, y1 + 1, 1 + s, y2 - 1, style.frameBorderColorLight);
+	if (ischecked) draw.fillRect(5, y1 + 3, 2 + s - 3, y2 - 3, this->color());
 }
 
-void CheckBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
+void CheckBox::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
 	ischecked=!ischecked;
 	needsRedraw();
@@ -60,4 +63,3 @@ void CheckBox::mouseDownEvent(ppl7::tk::MouseEvent *event)
 
 
 } //EOF namespace Decker::ui
-
