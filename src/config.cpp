@@ -9,10 +9,11 @@ Config::Config()
     bFullScreen=false;
     CustomLevelPath=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
     ScreenResolution.setSize(1920, 1080);
+    volumeTotal=1.0f;
     volumeMusic=0.5f;
     volumeEffects=1.0f;
     videoDevice=0;
-    audioDevice=0;
+    audioDevice="";
     Language="en";
     try {
         load();
@@ -40,7 +41,8 @@ void Config::load()
 
     // Audio
     conf.setSection("audio");
-    audioDevice=conf.getInt("audioDevice", audioDevice);
+    audioDevice=conf.get("audioDevice", audioDevice);
+    volumeTotal=conf.get("volumeTotal", ppl7::ToString("%0.3f", volumeTotal)).toFloat();
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeMusic=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
 
@@ -71,6 +73,7 @@ void Config::save()
     // Audio
     conf.setSection("audio");
     conf.add("audioDevice", audioDevice);
+    conf.add("volumeTotal", ppl7::ToString("%0.3f", volumeTotal));
     conf.add("volumeMusic", ppl7::ToString("%0.3f", volumeMusic));
     conf.add("volumeEffects", ppl7::ToString("%0.3f", volumeEffects));
 

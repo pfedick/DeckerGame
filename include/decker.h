@@ -64,7 +64,8 @@ public:
 	ppl7::grafix::Size	ScreenResolution;
 
 	// Audio
-	int					audioDevice;
+	ppl7::String		audioDevice;
+	float				volumeTotal;
 	float				volumeMusic;
 	float				volumeEffects;
 
@@ -476,7 +477,9 @@ private:
 	ppl7::tk::WindowManager* wm;
 	ppl7::tk::WidgetStyle Style;
 	//ppl7::tk::Window window;
+public:
 	AudioSystem audiosystem;
+private:
 	AudioPool audiopool;
 	Resources resources;
 	Level level;

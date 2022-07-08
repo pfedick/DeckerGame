@@ -20,13 +20,13 @@ static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 	}
 }
 
-GameState Game::showStartScreen(AudioStream &GeorgeDeckerTheme)
+GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 {
 	world_widget->setVisible(false);
 	world_widget->setEnabled(false);
 	ppl7::grafix::Color black(128, 0, 0, 255);
 	SDL_Renderer* renderer=sdl.getRenderer();
-	StartScreen* widget=new StartScreen(sdl, 0, 0, this->width(), this->height());
+	StartScreen* widget=new StartScreen(*this, sdl, 0, 0, this->width(), this->height());
 	this->addChild(widget);
 	wm->setKeyboardFocus(widget);
 	showUi(false);
@@ -65,7 +65,7 @@ GameState Game::showStartScreen(AudioStream &GeorgeDeckerTheme)
 		if (widget->getState() != StartScreen::State::None && fade_state == 1) {
 			fade_state = 2;
 			fade_to_black=0;
-			if (widget->getState()!=StartScreen::State::ShowSettings) 
+			if (widget->getState() != StartScreen::State::ShowSettings)
 				GeorgeDeckerTheme.fadeout(4.0f);
 		} else if (widget->getState() != StartScreen::State::None && fade_state == 3) {
 			break;
@@ -143,9 +143,10 @@ bool GameMenuArea::isSelected() const
 
 
 
-StartScreen::StartScreen(SDL& s, int x, int y, int width, int height)
-	: sdl(s)
+StartScreen::StartScreen(Game& g, SDL& s, int x, int y, int width, int height)
+	: game(g), sdl(s)
 {
+	settings_screen=NULL;
 	create(x, y, width, height);
 	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
 	ppl7::grafix::Font font=style.buttonFont;
@@ -210,6 +211,7 @@ StartScreen::StartScreen(SDL& s, int x, int y, int width, int height)
 StartScreen::~StartScreen()
 {
 	//if (filedialog) delete filedialog;
+	if (settings_screen) delete settings_screen;
 	delete version;
 	delete start_game;
 	delete settings;
@@ -229,6 +231,18 @@ void StartScreen::setState(State state)
 	this->state=state;
 }
 
+void StartScreen::showSettings()
+{
+	menue->setEnabled(false);
+	menue->setVisible(false);
+	if (!settings_screen) {
+		settings_screen=new SettingsScreen(game, sdl,
+			50, TitleImage.height() + 50, this->width() - 100, this->height() - 100 - TitleImage.height());
+	}
+	this->addChild(settings_screen);
+	this->needsRedraw();
+}
+
 void StartScreen::paint(ppl7::grafix::Drawable& draw)
 {
 	draw.cls();
@@ -240,6 +254,8 @@ void StartScreen::paint(ppl7::grafix::Drawable& draw)
 
 void StartScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 {
+	//printf("StartScreen::mouseEnterEvent\n");
+
 	if (event->widget() == start_game) {
 		start_game->setSelected(true);
 		settings->setSelected(false);
@@ -271,7 +287,8 @@ void StartScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 	} else if (event->widget() == start_game) {
 		state=State::StartGame;
 	} else if (event->widget() == settings) {
-		state=State::ShowSettings;
+		showSettings();
+		//state=State::ShowSettings;
 	} else if (event->widget() == editor) {
 		state=State::StartEditor;
 	}
@@ -304,7 +321,7 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 		}
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
 		if (start_game->isSelected()) state=State::StartGame;
-		else if (settings->isSelected()) state=State::ShowSettings;
+		else if (settings->isSelected()) showSettings();
 		else if (editor->isSelected()) state=State::StartEditor;
 		else if (end->isSelected()) state=State::QuitGame;
 	}
@@ -313,6 +330,16 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 
 void StartScreen::closeEvent(ppl7::tk::Event* event)
 {
+	if (event->widget() == settings_screen) {
+		this->removeChild(settings_screen);
+		delete settings_screen;
+		settings_screen=NULL;
+		menue->setEnabled(true);
+		menue->setVisible(true);
+		ppl7::tk::GetWindowManager()->setKeyboardFocus(this);
+		needsRedraw();
+
+	}
 	/*
 	if (event->widget()==filedialog) {
 		if (filedialog->state()==Decker::ui::FileDialog::DialogState::OK) {
