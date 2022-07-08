@@ -6,16 +6,16 @@
 #include "videoplayer.h"
 
 
-static void FadeToBlack(SDL_Renderer *renderer, int fade_to_black)
+static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 {
 	if (fade_to_black > 0) {
-				SDL_BlendMode currentBlendMode;
-				SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
-				//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
-				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
-				SDL_RenderFillRect(renderer, NULL);
-				SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+		SDL_BlendMode currentBlendMode;
+		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
+		SDL_RenderFillRect(renderer, NULL);
+		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
 	}
 }
 
@@ -28,7 +28,7 @@ void Game::playIntroVideo()
 	SDL_Renderer* renderer=sdl.getRenderer();
 	IntroScreen* intro_widget=new IntroScreen(0, 0, this->width(), this->height());
 	VideoPlayer video(renderer);
-	
+
 	ppl7::String filename="res/video/george_decker_game-vp9.webm";
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3");
 	IntroSequence.setVolume(1.0f);
@@ -42,6 +42,18 @@ void Game::playIntroVideo()
 		int fade_to_black=255;
 		int fade_state=0;
 
+		SDL_Rect dest;
+		dest.x=0;
+		dest.y=0;
+		float aspect=(float)video.width() / (float)video.height();
+		dest.w=video.width();
+		dest.h=video.height();
+		if (dest.w > this->width()) dest.w=this->width();
+		dest.h=dest.w / aspect;
+		dest.y=(this->height() - dest.h) / 2;
+
+
+
 		while (!intro_widget->stopSignal()) {
 			wm->handleEvents();
 			sdl.startFrame(black);
@@ -49,16 +61,16 @@ void Game::playIntroVideo()
 			//drawWidgets();
 			if (frame % 2 == 0) {
 				if (!video.nextFrame()) break;
-				if (fade_state==0) {
+				if (fade_state == 0) {
 					fade_to_black-=5;
-					if (fade_to_black==0) fade_state=1;
-				} else if (fade_state==1 && frame>1573*2 && fade_to_black<255) {
+					if (fade_to_black == 0) fade_state=1;
+				} else if (fade_state == 1 && frame > 1573 * 2 && fade_to_black < 255) {
 					fade_to_black+=5;
 				}
 
 			}
 
-			video.renderFrame();
+			video.renderFrame(&dest);
 			resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 			FadeToBlack(renderer, fade_to_black);
 			presentScreen();
