@@ -48,7 +48,7 @@ void Config::load()
     audioDevice=conf.get("audioDevice", audioDevice);
     volumeTotal=conf.get("volumeTotal", ppl7::ToString("%0.3f", volumeTotal)).toFloat();
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
-    volumeMusic=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
+    volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
 
     // Misc
     conf.setSection("misc");

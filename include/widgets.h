@@ -239,14 +239,45 @@ class Slider : public ppl7::tk::Widget
 {
 	friend class HorizontalSlider;
 private:
+	int min;
+	int max;
+	int current_value;
+	int my_steps;
 public:
+	Slider(int x, int y, int width, int height);
+
+	void setMinimum(int value);
+	void setMaximum(int value);
+	void setDimension(int min, int max);
+	void setValue(int value);
+	void setSteps(int value);
+
+	int value() const;
+	int minimum() const;
+	int maximum() const;
+	int stepSize() const;
+	int steps() const;
 
 };
 
 class HorizontalSlider : public Slider
 {
 private:
+	ppl7::grafix::Rect slider_pos;
+	bool drag_started;
+	int drag_offset;
+	ppl7::grafix::Point drag_start_pos;
 public:
+	HorizontalSlider(int x, int y, int width, int height);
+	~HorizontalSlider();
+
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseUpEvent(ppl7::tk::MouseEvent* event);
+	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
+	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+
 
 };
 

@@ -163,6 +163,7 @@ void SettingsScreen::initPageAudio()
     std::list<ppl7::String>::const_iterator it;
     for (it=device_names.begin();it != device_names.end();++it)
         audio_device_combobox->add((*it));
+    audio_device_combobox->setEventHandler(this);
     page_audio->addChild(audio_device_combobox);
 
     label=new ppl7::tk::Label(0, 50, 200, 40, translate("Volume:"));
@@ -174,12 +175,33 @@ void SettingsScreen::initPageAudio()
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
+    audio_total_slider=new Decker::ui::HorizontalSlider(input_widget_x, 100, input_widget.width, input_widget.height);
+    audio_total_slider->setEventHandler(this);
+    audio_total_slider->setDimension(0, 255);
+    audio_total_slider->setValue(game.config.volumeTotal * 255.0f);
+    page_audio->addChild(audio_total_slider);
+
+
+
     label=new ppl7::tk::Label(100, 150, 200, 40, translate("music:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
+
+    audio_music_slider=new Decker::ui::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
+    audio_music_slider->setEventHandler(this);
+    audio_music_slider->setDimension(0, 255);
+    audio_music_slider->setValue(game.config.volumeMusic * 255.0f);
+    page_audio->addChild(audio_music_slider);
+
     label=new ppl7::tk::Label(100, 200, 200, 40, translate("effects:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
+
+    audio_effects_slider=new Decker::ui::HorizontalSlider(input_widget_x, 200, input_widget.width, input_widget.height);
+    audio_effects_slider->setEventHandler(this);
+    audio_effects_slider->setDimension(0, 255);
+    audio_effects_slider->setValue(game.config.volumeEffects * 255.0f);
+    page_audio->addChild(audio_effects_slider);
 
 }
 
@@ -377,6 +399,7 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
         dmode.refresh_rate=Tok[2].toInt();
         try {
             game.window().setWindowDisplayMode(dmode);
+            game.resizeEvent(NULL);
             game.config.ScreenResolution.setSize(dmode.width, dmode.height);
             game.config.ScreenRefreshRate=dmode.refresh_rate;
             game.config.windowMode=mode;
@@ -392,6 +415,18 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
     if (event->widget() == video_device_combobox) updateVideoModes();
+    else if (event->widget() == audio_total_slider) {
+        game.config.volumeTotal=(float)audio_total_slider->value() / 255.0f;
+        game.config.save();
+    } else if (event->widget() == audio_music_slider) {
+        game.config.volumeMusic=(float)audio_music_slider->value() / 255.0f;
+        game.config.save();
+    } else if (event->widget() == audio_effects_slider) {
+        game.config.volumeEffects=(float)audio_effects_slider->value() / 255.0f;
+        game.config.save();
+
+    }
+
 }
 
 void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)

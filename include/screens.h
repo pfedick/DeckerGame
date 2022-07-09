@@ -84,6 +84,9 @@ private:
 
     // Audio
     Decker::ui::ComboBox* audio_device_combobox;
+    Decker::ui::HorizontalSlider* audio_total_slider;
+    Decker::ui::HorizontalSlider* audio_music_slider;
+    Decker::ui::HorizontalSlider* audio_effects_slider;
 
     // Video
     Decker::ui::ComboBox* video_device_combobox;
