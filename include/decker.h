@@ -517,6 +517,8 @@ private:
 	bool quitGame;
 	bool controlsEnabled;
 
+	ppl7::grafix::Size windowedSize;
+
 	void createWindow();
 	void presentStartupScreen();
 	void loadGrafix();
@@ -606,7 +608,6 @@ public:
 
 	void playIntroVideo();
 	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
-
 
 };
 

@@ -4,6 +4,7 @@
 Audio::Audio()
 {
 	autoDeleteFlag=false;
+	a_class=AudioClass::Unknown;
 }
 
 Audio::~Audio()
@@ -21,17 +22,31 @@ bool Audio::autoDelete() const
 	return autoDeleteFlag;
 }
 
+void Audio::setAudioClass(AudioClass a)
+{
+	a_class=a;
+}
+
+AudioClass Audio::audioclass() const
+{
+	return a_class;
+}
+
 
 AudioSystem::AudioSystem()
 {
 	device_id=0;
 	mixbuffer=NULL;
-	if(SDL_WasInit(SDL_INIT_AUDIO) == 0) {
+	if (SDL_WasInit(SDL_INIT_AUDIO) == 0) {
 		//printf ("SDL_InitSubSystem(SDL_INIT_AUDIO)\n");
-		if (0!=SDL_InitSubSystem(SDL_INIT_AUDIO)) {
+		if (0 != SDL_InitSubSystem(SDL_INIT_AUDIO)) {
 			throw AudioSystemFailed("could not init audio subsystem!");
 		}
 	}
+	globalVolume=1.0f;
+	a_class_volume[static_cast<int>(AudioClass::Effect)]=1.0;
+	a_class_volume[static_cast<int>(AudioClass::Music)]=1.0;
+	a_class_volume[static_cast<int>(AudioClass::Speech)]=1.0;
 }
 
 AudioSystem::~AudioSystem()
@@ -41,7 +56,7 @@ AudioSystem::~AudioSystem()
 
 void AudioSystem::shutdown()
 {
-	if (device_id>0) {
+	if (device_id > 0) {
 		SDL_CloseAudioDevice(device_id);
 	}
 	mutex.lock();
@@ -52,25 +67,25 @@ void AudioSystem::shutdown()
 	mixbuffer=NULL;
 }
 
-void AudioSystem::enumerateDrivers(std::list<ppl7::String> &driver_names) const
+void AudioSystem::enumerateDrivers(std::list<ppl7::String>& driver_names) const
 {
 	driver_names.clear();
-	for(int i=0; i<SDL_GetNumAudioDrivers(); ++i) {
+	for (int i=0; i < SDL_GetNumAudioDrivers(); ++i) {
 		const char* driver_name = SDL_GetAudioDriver(i);
 		driver_names.push_back(ppl7::String(driver_name));
 	}
 }
 
-void AudioSystem::enumerateDevices(std::list<ppl7::String> &device_names) const
+void AudioSystem::enumerateDevices(std::list<ppl7::String>& device_names) const
 {
 	device_names.clear();
-	for(int i=0; i<SDL_GetNumAudioDevices(0); ++i) {
-		const char* device_name = SDL_GetAudioDeviceName(i,0);
+	for (int i=0; i < SDL_GetNumAudioDevices(0); ++i) {
+		const char* device_name = SDL_GetAudioDeviceName(i, 0);
 		device_names.push_back(ppl7::String(device_name));
 	}
 }
 
-void AudioSystem::initDriver(const ppl7::String &driver_name)
+void AudioSystem::initDriver(const ppl7::String& driver_name)
 /*!Initialize a specific audio driver
  *
  * @param[in] driver_name String with the name of a specific driver
@@ -79,20 +94,20 @@ void AudioSystem::initDriver(const ppl7::String &driver_name)
  * If not calling this method, a default driver is used
  */
 {
-	if (0!=SDL_AudioInit((const char*) driver_name)) {
-		throw AudioSystemFailed("failed to initialize audio driver %s\n",(const char*) driver_name);
+	if (0 != SDL_AudioInit((const char*)driver_name)) {
+		throw AudioSystemFailed("failed to initialize audio driver %s\n", (const char*)driver_name);
 	}
 }
 
-static void AudioSystem_AudioCallback(void *userdata, Uint8* stream, int len)
+static void AudioSystem_AudioCallback(void* userdata, Uint8* stream, int len)
 {
 	((AudioSystem*)userdata)->callback(stream, len);
 }
 
-void AudioSystem::init(const ppl7::String &device)
+void AudioSystem::init(const ppl7::String& device)
 {
 	shutdown();
-	const char *device_name=NULL;
+	const char* device_name=NULL;
 	if (device.notEmpty()) device_name=(const char*)device;
 	SDL_AudioSpec desired;
 	SDL_AudioSpec obtained;
@@ -104,11 +119,11 @@ void AudioSystem::init(const ppl7::String &device)
 	desired.samples=1024;
 	desired.callback=AudioSystem_AudioCallback;
 	desired.userdata=this;
-	mixbuffer=(ppl7::STEREOSAMPLE32*)malloc(desired.samples*desired.channels*sizeof(ppl7::STEREOSAMPLE32));
+	mixbuffer=(ppl7::STEREOSAMPLE32*)malloc(desired.samples * desired.channels * sizeof(ppl7::STEREOSAMPLE32));
 
 	device_id=SDL_OpenAudioDevice(
-			device_name, 0, &desired, &obtained, 0);
-	if (device_id==0) {
+		device_name, 0, &desired, &obtained, 0);
+	if (device_id == 0) {
 		throw AudioSystemFailed("could not open audio device: %s", SDL_GetError());
 	}
 	SDL_PauseAudioDevice(device_id, 0); /* start audio playing. */
@@ -116,38 +131,39 @@ void AudioSystem::init(const ppl7::String &device)
 
 static inline int clamp(int value)
 {
-	if (value>32767) return 32767;
-	if (value<-32767) return -32767;
+	if (value > 32767) return 32767;
+	if (value < -32767) return -32767;
 	return value;
 }
 
 
 void AudioSystem::callback(Uint8* stream, int len)
 {
-	size_t samples=len/sizeof(ppl7::STEREOSAMPLE16);
-	memset(mixbuffer,0,samples*sizeof(ppl7::STEREOSAMPLE32));
+	size_t samples=len / sizeof(ppl7::STEREOSAMPLE16);
+	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE32));
 	//printf ("callback called, len=%d\n",len);
-	std::set<Audio *>::iterator it;
-	std::set<Audio *> to_remove;
+	std::set<Audio*>::iterator it;
+	std::set<Audio*> to_remove;
 	mutex.lock();
 	size_t num_tracks=tracks.size();
 	if (num_tracks) {
-		for (it=tracks.begin();it!=tracks.end();++it) {
-			Audio *audio=(*it);
-			if (audio->addSamples(samples, mixbuffer)!=samples) {
+		for (it=tracks.begin();it != tracks.end();++it) {
+			Audio* audio=(*it);
+			float volume=globalVolume * a_class_volume[static_cast<int>(audio->audioclass())];
+			if (audio->addSamples(samples, mixbuffer, volume) != samples) {
 				to_remove.insert(audio);
 			}
 		}
-		ppl7::STEREOSAMPLE16 *mergebuffer=(ppl7::STEREOSAMPLE16*) stream;
-		for (size_t i=0;i<samples;i++) {
+		ppl7::STEREOSAMPLE16* mergebuffer=(ppl7::STEREOSAMPLE16*)stream;
+		for (size_t i=0;i < samples;i++) {
 			mergebuffer[i].left=clamp(mixbuffer[i].left);
 			mergebuffer[i].right=clamp(mixbuffer[i].right);
 		}
-		if (to_remove.size()>0) {
-			for (it=to_remove.begin();it!=to_remove.end();++it) {
-				Audio *audio=(*it);
-				std::set<Audio *>::iterator del=tracks.find(audio);
-				if (del!=tracks.end()) {
+		if (to_remove.size() > 0) {
+			for (it=to_remove.begin();it != to_remove.end();++it) {
+				Audio* audio=(*it);
+				std::set<Audio*>::iterator del=tracks.find(audio);
+				if (del != tracks.end()) {
 					tracks.erase(del);
 					if (audio->autoDelete()) {
 						delete audio;
@@ -156,34 +172,44 @@ void AudioSystem::callback(Uint8* stream, int len)
 			}
 		}
 	} else {
-		memset(stream,0,len);
+		memset(stream, 0, len);
 	}
 	mutex.unlock();
 }
 
-void AudioSystem::play(Audio *audio)
+void AudioSystem::play(Audio* audio)
 {
 	mutex.lock();
 	tracks.insert(audio);
 	mutex.unlock();
 }
 
-void AudioSystem::stop(Audio *audio)
+void AudioSystem::stop(Audio* audio)
 {
 	mutex.lock();
-	std::set<Audio *>::iterator it=tracks.find(audio);
-	if (it!=tracks.end()) tracks.erase(it);
+	std::set<Audio*>::iterator it=tracks.find(audio);
+	if (it != tracks.end()) tracks.erase(it);
 	mutex.unlock();
 }
 
-bool AudioSystem::isPlaying(Audio *audio)
+bool AudioSystem::isPlaying(Audio* audio)
 {
 	bool result=false;
 	mutex.lock();
-	std::set<Audio *>::const_iterator it=tracks.find(audio);
-	if (it!=tracks.end()) result=true;
+	std::set<Audio*>::const_iterator it=tracks.find(audio);
+	if (it != tracks.end()) result=true;
 	mutex.unlock();
 	return result;
+}
+
+void AudioSystem::setGlobalVolume(float volume)
+{
+	globalVolume=volume;
+}
+
+void AudioSystem::setVolume(AudioClass a_class, float volume)
+{
+	a_class_volume[static_cast<int>(a_class)]=volume;
 }
 
 void AudioSystem::test()

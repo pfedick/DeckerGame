@@ -45,8 +45,8 @@ void start()
 
 	//game.playIntroVideo();
 
-	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3");
-	GeorgeDeckerTheme.setVolume(game.config.volumeMusic);
+	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
+
 	while (1) {
 		GameState state=game.showStartScreen(GeorgeDeckerTheme);
 		if (state == GameState::QuitGame) return;

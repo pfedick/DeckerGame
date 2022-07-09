@@ -1,8 +1,8 @@
 #include "audiopool.h"
 
-static AudioPool *audiopool=NULL;
+static AudioPool* audiopool=NULL;
 
-AudioPool &getAudioPool()
+AudioPool& getAudioPool()
 {
 	if (!audiopool) throw AudioPoolNotInitialized();
 	return *audiopool;
@@ -17,26 +17,26 @@ AudioPool::AudioPool()
 
 AudioPool::~AudioPool()
 {
-	if (audiopool==this) audiopool=NULL;
+	if (audiopool == this) audiopool=NULL;
 }
 
-void AudioPool::setAudioSystem(AudioSystem *audio)
+void AudioPool::setAudioSystem(AudioSystem* audio)
 {
 	this->audio=audio;
 }
 
-void AudioPool::playOnce(AudioClip::Id id, float volume)
+void AudioPool::playOnce(AudioClip::Id id, float volume, AudioClass a)
 {
-	AudioInstance *instance=new AudioInstance(sample[id]);
+	AudioInstance* instance=new AudioInstance(sample[id], a);
 	instance->setVolume(volume);
 	instance->setAutoDelete(true);
 	audio->play(instance);
 }
 
-void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance, float volume)
+void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point& p, int max_distance, float volume, AudioClass a)
 {
-	if (id<AudioClip::maxClips) {
-		AudioInstance *instance=new AudioInstance(sample[id]);
+	if (id < AudioClip::maxClips) {
+		AudioInstance* instance=new AudioInstance(sample[id], a);
 		instance->setVolume(volume);
 		instance->setAutoDelete(true);
 		instance->setPositional(p, max_distance);
@@ -44,18 +44,18 @@ void AudioPool::playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max
 	}
 }
 
-AudioInstance *AudioPool::getInstance(AudioClip::Id id)
+AudioInstance* AudioPool::getInstance(AudioClip::Id id, AudioClass a)
 {
-	if (id<AudioClip::maxClips) return new AudioInstance(sample[id]);
+	if (id < AudioClip::maxClips) return new AudioInstance(sample[id], a);
 	return NULL;
 }
 
-void AudioPool::playInstance(AudioInstance *instance)
+void AudioPool::playInstance(AudioInstance* instance)
 {
 	audio->play(instance);
 }
 
-void AudioPool::stopInstace(AudioInstance *instance)
+void AudioPool::stopInstace(AudioInstance* instance)
 {
 	audio->stop(instance);
 }
@@ -66,6 +66,7 @@ void AudioPool::load()
 	song[1].open("res/audio/PatrickF-ID.mp3");
 	song[2].open("res/audio/PatrickF-Sonic_Waves.mp3");
 	song[3].open("res/audio/PatrickF-George_Decker_Theme.mp3");
+	for (int i=0;i <= 3;i++) song[i].setAudioClass(AudioClass::Music);
 
 	sample[AudioClip::coin1].load("res/audio/341695__projectsu012__coins-1.mp3");
 	sample[AudioClip::coin2].load("res/audio/402766__matrixxx__retro-coin-04.wav");

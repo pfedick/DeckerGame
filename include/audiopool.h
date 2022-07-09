@@ -61,22 +61,22 @@ public:
 class AudioPool
 {
 private:
-	AudioSystem *audio;
+	AudioSystem* audio;
 public:
 	AudioStream song[4];
-	AudioSample sample[AudioClip::maxClips+1];
+	AudioSample sample[AudioClip::maxClips + 1];
 
 	AudioPool();
 	~AudioPool();
 	void load();
-	void setAudioSystem(AudioSystem *audio);
-	AudioInstance *getInstance(AudioClip::Id id);
-	void playOnce(AudioClip::Id id, float volume=1.0f);
-	void playOnce(AudioClip::Id id, const ppl7::grafix::Point &p, int max_distance=1600, float volume=1.0f);
-	void playInstance(AudioInstance *instance);
-	void stopInstace(AudioInstance *instance);
+	void setAudioSystem(AudioSystem* audio);
+	AudioInstance* getInstance(AudioClip::Id id, AudioClass a=AudioClass::Effect);
+	void playOnce(AudioClip::Id id, float volume=1.0f, AudioClass a=AudioClass::Effect);
+	void playOnce(AudioClip::Id id, const ppl7::grafix::Point& p, int max_distance=1600, float volume=1.0f, AudioClass a=AudioClass::Effect);
+	void playInstance(AudioInstance* instance);
+	void stopInstace(AudioInstance* instance);
 };
 
-AudioPool &getAudioPool();
+AudioPool& getAudioPool();
 
 #endif // INCLUDE_AUDIOPOOL_H_

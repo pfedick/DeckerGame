@@ -417,12 +417,15 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
     if (event->widget() == video_device_combobox) updateVideoModes();
     else if (event->widget() == audio_total_slider) {
         game.config.volumeTotal=(float)audio_total_slider->value() / 255.0f;
+        game.audiosystem.setGlobalVolume(game.config.volumeTotal);
         game.config.save();
     } else if (event->widget() == audio_music_slider) {
         game.config.volumeMusic=(float)audio_music_slider->value() / 255.0f;
+        game.audiosystem.setVolume(AudioClass::Music, game.config.volumeMusic);
         game.config.save();
     } else if (event->widget() == audio_effects_slider) {
         game.config.volumeEffects=(float)audio_effects_slider->value() / 255.0f;
+        game.audiosystem.setVolume(AudioClass::Effect, game.config.volumeEffects);
         game.config.save();
 
     }

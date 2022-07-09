@@ -351,6 +351,9 @@ void Game::init_grafix()
 void Game::initAudio()
 {
 	audiosystem.init();
+	audiosystem.setGlobalVolume(config.volumeTotal);
+	audiosystem.setVolume(AudioClass::Effect, config.volumeEffects);
+	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 	audiopool.load();
 	audiopool.setAudioSystem(&audiosystem);
 }
@@ -543,19 +546,17 @@ void Game::run()
 	quitGame=false;
 	AudioStream* playing_song=&audiopool.song[1];
 	playing_song->rewind();
-	playing_song->setVolume(0.1f);
 	audiosystem.play(playing_song);
 	while (!quitGame) {
 		if (!audiosystem.isPlaying(playing_song)) {
-			playing_song=&audiopool.song[ppl7::rand(0, 2)];
+			playing_song=&audiopool.song[ppl7::rand(0, 3)];
 			playing_song->rewind();
-			//playing_song->setVolume(0.5f);
 			audiosystem.play(playing_song);
 		}
 		if (mainmenue->soundTrackEnabled()) {
-			playing_song->setVolume(0.1f);
+			audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 		} else {
-			playing_song->setVolume(0.0f);
+			audiosystem.setVolume(AudioClass::Music, 0.0f);
 		}
 		wm->handleEvents();
 		drawWorld(renderer);
@@ -1106,7 +1107,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			}
 		}
 	}
-	//printf ("keyDownEvent: %d\n", event->key);
+	//printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
 	if (event->key == ppl7::tk::KeyEvent::KEY_F4) {
 		// TODO: for developing only
 		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
@@ -1116,6 +1117,40 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		level.load("level/test.lvl");
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
 		showUi(!showui);
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+		// TODO
+
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_ALT) > 0) {
+		printf("toggle fullscreen or back\n");
+		ppl7::tk::WindowManager_SDL2* sdl2wm=(ppl7::tk::WindowManager_SDL2*)wm;
+		Window::WindowMode mode=sdl2wm->getWindowMode(*this);
+		if (mode == Window::WindowMode::Window) {
+			windowedSize.setSize(width(), height());
+			printf("Aktueller mode ist Window mit %d x %d\n", windowedSize.width, windowedSize.height);
+			ppl7::grafix::Size s=sdl.getDisplaySize(config.videoDevice);
+			printf("switche zu FullscreenDesktop %d x %d\n", s.width, s.height);
+			sdl2wm->changeWindowMode(*this, Window::WindowMode::FullscreenDesktop);
+			ppl7::tk::Window::DisplayMode dmode;
+			dmode.format=rgbFormat();
+			dmode.width=s.width;
+			dmode.height=s.height;
+			dmode.refresh_rate=config.ScreenRefreshRate;
+			setWindowDisplayMode(dmode);
+			resizeEvent(NULL);
+		} else if (mode == Window::WindowMode::FullscreenDesktop) {
+			if (windowedSize.width == 0 || windowedSize.height == 0) windowedSize=config.ScreenResolution;
+			printf("Aktueller mode ist FullscreenDesktop, switche zu Fenster %d x %d\n", windowedSize.width, windowedSize.height);
+			sdl2wm->changeWindowMode(*this, Window::WindowMode::Window);
+			ppl7::tk::Window::DisplayMode dmode;
+			dmode.format=rgbFormat();
+			dmode.width=windowedSize.width;
+			dmode.height=windowedSize.height;
+			dmode.refresh_rate=config.ScreenRefreshRate;
+			setWindowDisplayMode(dmode);
+			resizeEvent(NULL);
+		} else {
+			printf("Aktueller mode ist Fullscreen\n");
+		}
 	}
 }
 

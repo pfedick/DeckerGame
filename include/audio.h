@@ -25,39 +25,51 @@
 EXCEPTION(AudioSystemFailed, ppl7::Exception);
 EXCEPTION(UnknownAudioFormat, ppl7::Exception);
 
+enum class AudioClass
+{
+	Unknown=0,
+	Effect,
+	Music,
+	Speech
+};
+
 
 class Audio
 {
 private:
+	AudioClass a_class;
 	bool autoDeleteFlag;
 public:
 	Audio();
 	virtual ~Audio();
 	void setAutoDelete(bool flag);
+	void setAudioClass(AudioClass a);
+	AudioClass audioclass() const;
 	bool autoDelete() const;
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer)=0;
+	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume)=0;
 };
 
 class AudioStream : public Audio
 {
 private:
 	ppl7::File ff;
-	ppl7::AudioDecoder *decoder;
+	ppl7::AudioDecoder* decoder;
 	float volume;
-	ppl7::STEREOSAMPLE16 *prebuffer;
+	ppl7::STEREOSAMPLE16* prebuffer;
 	size_t buffersize;
 	float fade_start_volume;
 	float fade_time;
 	double fade_start;
 public:
 	AudioStream();
-	AudioStream(const ppl7::String &filename);
+	AudioStream(AudioClass a);
+	AudioStream(const ppl7::String& filename, AudioClass a=AudioClass::Music);
 	virtual ~AudioStream();
-	void open(const ppl7::String &filename);
+	void open(const ppl7::String& filename);
 	void rewind();
 	void setVolume(float volume);
 	void fadeout(float seconds=4.0f);
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
+	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
 };
 
 class AudioSample
@@ -66,18 +78,18 @@ private:
 	ppl7::ByteArray buffer;
 public:
 	AudioSample();
-	AudioSample(const ppl7::String &filename);
+	AudioSample(const ppl7::String& filename);
 	~AudioSample();
-	void load(const ppl7::String &filename);
+	void load(const ppl7::String& filename);
 	size_t size() const;
-	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32 *buffer, int vol_left=32768, int vol_right=32768) const;
+	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32* buffer, int vol_left=32768, int vol_right=32768) const;
 
 };
 
 class AudioInstance : public Audio
 {
 private:
-	const AudioSample *sample;
+	const AudioSample* sample;
 	size_t position;
 	float volume;
 	int max_distance;
@@ -87,13 +99,14 @@ private:
 
 public:
 	AudioInstance();
-	AudioInstance(const AudioSample &sample);
-	void load(const AudioSample &sample);
+	AudioInstance(AudioClass a);
+	AudioInstance(const AudioSample& sample, AudioClass a=AudioClass::Effect);
+	void load(const AudioSample& sample);
 	void rewind();
 	void setVolume(float volume);
 	void setLoop(bool loop);
-	void setPositional(const ppl7::grafix::Point &p, int max_distance=1600);
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32 *buffer);
+	void setPositional(const ppl7::grafix::Point& p, int max_distance=1600);
+	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
 };
 
 class AudioSystem
@@ -101,23 +114,28 @@ class AudioSystem
 private:
 	int device_id;
 	ppl7::Mutex mutex;
-	std::set<Audio *> tracks;
-	ppl7::STEREOSAMPLE32 *mixbuffer;
+	std::set<Audio*> tracks;
+	ppl7::STEREOSAMPLE32* mixbuffer;
+	float globalVolume;
+	float a_class_volume[4];
 
 
 public:
 	AudioSystem();
 	~AudioSystem();
 
-	void enumerateDrivers(std::list<ppl7::String> &driver_names) const;
-	void enumerateDevices(std::list<ppl7::String> &device_names) const;
-	void initDriver(const ppl7::String &driver_name);	// optional
-	void init(const ppl7::String &device=ppl7::String());
-	void play(Audio *audio);
-	void stop(Audio *audio);
-	bool isPlaying(Audio *audio);
+	void enumerateDrivers(std::list<ppl7::String>& driver_names) const;
+	void enumerateDevices(std::list<ppl7::String>& device_names) const;
+	void initDriver(const ppl7::String& driver_name);	// optional
+	void init(const ppl7::String& device=ppl7::String());
+	void play(Audio* audio);
+	void stop(Audio* audio);
+	bool isPlaying(Audio* audio);
 	void shutdown();
 	void test();
+
+	void setGlobalVolume(float volume);
+	void setVolume(AudioClass a_class, float volume);
 
 	void callback(Uint8* stream, int len);
 
