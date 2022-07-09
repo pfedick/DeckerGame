@@ -32,14 +32,16 @@ public:
 	void unlockTexture(SDL_Texture* texture);
 	SDL_Texture* createTexture(const ppl7::grafix::Drawable& d);
 	SDL_Texture* createStreamingTexture(int width, int height);
+	SDL_Texture* createStreamingTexture(const ppl7::String& filename);
 	SDL_Texture* createRenderTargetTexture(int width, int height);
 	void destroyTexture(SDL_Texture* texture);
+	ppl7::grafix::Size getTextureSize(SDL_Texture* texture);
 	void startFrame(const ppl7::grafix::Color& background);
 	SDL_Renderer* getRenderer();
 	void present();
 
-	ppl7::grafix::Size getWindowSize() const;
-	ppl7::grafix::Rect getClientWindow() const;
+	ppl7::grafix::Size getDisplaySize(int display_no=0) const;
+	ppl7::grafix::Rect getDisplayWindow(int display_no=0) const;
 
 	static DisplayMode desktopDisplayMode(int display_id=0);
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);

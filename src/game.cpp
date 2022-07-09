@@ -51,13 +51,11 @@ Game::Game()
 	death_state=0;
 	showui=false;
 	controlsEnabled=true;
-	start_screen=NULL;
 	settings_screen=NULL;
 }
 
 Game::~Game()
 {
-	if (start_screen) delete start_screen;
 	if (settings_screen) delete  settings_screen;
 	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
@@ -280,23 +278,19 @@ void Game::deleteUi()
 
 void Game::presentStartupScreen()
 {
-	ppl7::grafix::Image img;
-	img.load("res/loading.png");
-	SDL_Texture* tex=sdl.createStreamingTexture(img.width(), img.height());
-	ppl7::grafix::Drawable draw=sdl.lockTexture(tex);
-	draw.blt(img);
-	sdl.unlockTexture(tex);
+	SDL_Texture* tex=sdl.createStreamingTexture("res/loading.png");
+	ppl7::grafix::Size imgsize=sdl.getTextureSize(tex);
 	wm->handleEvents();
 	//ppl7::grafix::Color white(255, 255, 255, 255);
 	//sdl.startFrame(white);
 	sdl.startFrame(Style.windowBackgroundColor);
 
-	viewport=sdl.getClientWindow();
+	viewport=clientRect();
 	SDL_Rect target;
-	target.x=(viewport.width() - img.width()) / 2;
-	target.y=(viewport.height() - img.height()) / 2;
-	target.w=img.width();
-	target.h=img.height();
+	target.x=(viewport.width() - imgsize.width) / 2;
+	target.y=(viewport.height() - imgsize.height) / 2;
+	target.w=imgsize.width;
+	target.h=imgsize.height;
 	//SDL_SetRenderDrawColor(sdl.getRenderer(), 0, 0, 0, 0);
 	//SDL_RenderFillRect(sdl.getRenderer(), &target);
 	SDL_RenderCopy(sdl.getRenderer(), tex, NULL, &target);
@@ -1165,9 +1159,10 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 	viewport=clientRect();
 	resizeMenueAndStatusbar();
 	showUi(showui);
-	if (start_screen) start_screen->resizeEvent(event);
-	if (start_screen) settings_screen->resizeEvent(event);
 	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
+	//if (start_screen) start_screen->resizeEvent(event);
+	if (settings_screen) settings_screen->resizeEvent(event);
+
 }
 
 void Game::handleDeath(SDL_Renderer* renderer)

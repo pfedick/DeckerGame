@@ -319,6 +319,7 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
 
 void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
-    printf("SettingsScreen::resizeEvent\n");
-    fflush(stdout);
+    //printf("SettingsScreen: we got a resize event: %d x %d\n", width(), height());
+    needsRedraw();
+
 }

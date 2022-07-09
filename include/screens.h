@@ -35,6 +35,7 @@ public:
     void setText(const ppl7::String& text);
     void setSelected(bool selected);
     bool isSelected() const;
+    void setFontSize(int size);
     virtual void paint(ppl7::grafix::Drawable& draw);
     //virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
 
@@ -118,7 +119,6 @@ private:
     Game& game;
     SDL& sdl;
 
-    ppl7::grafix::Image TitleImage;
     GameMenuArea* start_game;
     GameMenuArea* settings;
     GameMenuArea* editor;

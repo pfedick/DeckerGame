@@ -501,7 +501,7 @@ private:
 	Decker::ui::ObjectSelection* object_selection;
 	Decker::ui::WorldWidget* world_widget;
 	Decker::ui::WayNetEdit* waynet_edit;
-	StartScreen* start_screen;
+	//StartScreen* start_screen;
 	SettingsScreen* settings_screen;
 
 	BrickOccupation brick_occupation;

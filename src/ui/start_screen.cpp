@@ -20,14 +20,38 @@ static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 	}
 }
 
+static void getDestinationRect(ppl7::grafix::Size img_size, ppl7::tk::Window& window, SDL_Rect& dest)
+{
+	float aspect=(float)img_size.width / (float)img_size.height;
+	dest.x=0;
+	dest.y=0;
+	dest.w=img_size.width;
+	dest.h=img_size.height;
+	if (dest.w > window.width()) dest.w=window.width();
+	dest.h=dest.w / aspect;
+	if (dest.h > window.height()) {
+		dest.h=window.height();
+		dest.w=dest.h * aspect;
+	}
+	dest.y=(window.height() - dest.h) / 2;
+	dest.x=(window.width() - dest.w) / 2;
+}
+
 GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 {
 	world_widget->setVisible(false);
 	world_widget->setEnabled(false);
 	ppl7::grafix::Color black(128, 0, 0, 255);
 	SDL_Renderer* renderer=sdl.getRenderer();
-	if (start_screen) delete start_screen;
-	StartScreen* start_screen=new StartScreen(*this, sdl, 0, 0, this->width(), this->height());
+
+	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
+	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
+	SDL_Rect title_rect;
+	getDestinationRect(title_size, *this, title_rect);
+	title_rect.y=0;
+
+
+	StartScreen* start_screen=new StartScreen(*this, sdl, 0, title_rect.h, this->width(), this->height() - title_rect.h);
 	this->addChild(start_screen);
 	wm->setKeyboardFocus(start_screen);
 	showUi(false);
@@ -37,11 +61,24 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	player->setVisible(false);
 	enableControls(false);
 	startLevel("level/start.lvl");
+	ppl7::grafix::Rect last_viewport=viewport;
 	while (1) {
 		wm->handleEvents();
+
 		sdl.startFrame(black);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		drawWorld(renderer);
+		getDestinationRect(title_size, *this, title_rect);
+		title_rect.y=0;
+		SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
+
+		if (last_viewport != viewport) {
+			last_viewport=viewport;
+			start_screen->setPos(0, title_rect.h);
+			start_screen->setSize(this->width(), this->height() - title_rect.h);
+			start_screen->resizeEvent(NULL);
+		}
+
 		drawWidgets();
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		if (fade_state == 0) {
@@ -112,6 +149,11 @@ void GameMenuArea::setText(const ppl7::String& text)
 	redrawRequired();
 }
 
+void GameMenuArea::setFontSize(int size)
+{
+	font.setSize(size);
+}
+
 void GameMenuArea::paint(ppl7::grafix::Drawable& draw)
 {
 	ppl7::grafix::Color bg(20, 10, 0, 192);
@@ -145,6 +187,8 @@ bool GameMenuArea::isSelected() const
 
 
 
+
+
 StartScreen::StartScreen(Game& g, SDL& s, int x, int y, int width, int height)
 	: game(g), sdl(s)
 {
@@ -161,10 +205,11 @@ StartScreen::StartScreen(Game& g, SDL& s, int x, int y, int width, int height)
 	state=State::None;
 
 	ppl7::grafix::Color background(20, 10, 0, 192);
-	TitleImage.load("res/game_title.png");
-	menue=new ppl7::tk::Frame(50, TitleImage.height() + 50, 550, height - TitleImage.height() - 100, ppl7::tk::Frame::BorderStyle::NoBorder);
+
+	menue=new ppl7::tk::Frame(50, 50, 550, height - 100, ppl7::tk::Frame::BorderStyle::NoBorder);
 	menue->setBackgroundColor(background);
 	this->addChild(menue);
+
 
 	start_game=new GameMenuArea(10, 10, 520, 90, translate("Start Game"));
 	start_game->setEventHandler(this);
@@ -208,6 +253,7 @@ StartScreen::StartScreen(Game& g, SDL& s, int x, int y, int width, int height)
 	*/
 
 	start_game->setSelected(true);
+	resizeEvent(NULL);
 }
 
 StartScreen::~StartScreen()
@@ -239,7 +285,7 @@ void StartScreen::showSettings()
 	menue->setVisible(false);
 	if (!settings_screen) {
 		settings_screen=new SettingsScreen(game, sdl,
-			50, TitleImage.height() + 50, this->width() - 100, this->height() - 100 - TitleImage.height());
+			50, 50, this->width() - 100, this->height() - 100);
 	}
 	this->addChild(settings_screen);
 	this->needsRedraw();
@@ -248,9 +294,6 @@ void StartScreen::showSettings()
 void StartScreen::paint(ppl7::grafix::Drawable& draw)
 {
 	draw.cls();
-	ppl7::grafix::Color bg(40, 20, 0, 96);
-	draw.fillRect(0, 0, draw.width(), TitleImage.height() + 8, bg);
-	draw.bltAlpha(TitleImage, 0, 0);
 }
 
 
@@ -358,6 +401,38 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 
 void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
-	printf("StartScreen: we got a resize event\n");
-	if (settings_screen) settings_screen->resizeEvent(event);
+	//printf("StartScreen: we got a resize event: %d x %d\n", width(), height());
+	int menue_h=height() - 100;
+	int menue_w=550;
+	int element_h=90;
+	int element_w=520;
+	int font_size=30;
+
+	if (height() < 600) {
+		menue_h=height() - 100;
+		menue_w=480;
+		element_h=70;
+		element_w=460;
+		font_size=20;
+	}
+	menue->setSize(menue_w, menue_h);
+	start_game->setPos(10, 10);				start_game->setSize(element_w, element_h);
+	settings->setPos(10, 20 + element_h);	settings->setSize(element_w, element_h);
+	editor->setPos(10, 30 + 2 * element_h);	editor->setSize(element_w, element_h);
+	end->setPos(10, 40 + 3 * element_h);	end->setSize(element_w, element_h);
+
+	start_game->setFontSize(font_size);
+	settings->setFontSize(font_size);
+	editor->setFontSize(font_size);
+	end->setFontSize(font_size);
+
+	version->setPos(10, menue->height() - 50);
+
+
+
+	if (settings_screen) {
+		settings_screen->setSize(this->width() - 100, this->height() - 100);
+		settings_screen->resizeEvent(event);
+	}
+	needsRedraw();
 }

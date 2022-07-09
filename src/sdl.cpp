@@ -147,6 +147,17 @@ SDL_Texture* SDL::createStreamingTexture(int width, int height)
 	return texture;
 }
 
+SDL_Texture* SDL::createStreamingTexture(const ppl7::String& filename)
+{
+	ppl7::grafix::Image img;
+	img.load(filename);
+	SDL_Texture* tex=createStreamingTexture(img.width(), img.height());
+	ppl7::grafix::Drawable draw=lockTexture(tex);
+	draw.blt(img);
+	unlockTexture(tex);
+	return tex;
+}
+
 SDL_Texture* SDL::createRenderTargetTexture(int width, int height)
 {
 	SDL_Texture* texture;
@@ -196,17 +207,17 @@ void SDL::destroyTexture(SDL_Texture* texture)
 	if (texture) SDL_DestroyTexture(texture);
 }
 
-ppl7::grafix::Size SDL::getWindowSize() const
+ppl7::grafix::Size SDL::getDisplaySize(int display_no) const
 {
 	SDL_Rect desktop;
-	SDL_GetDisplayBounds(0, &desktop);
+	SDL_GetDisplayBounds(display_no, &desktop);
 	return ppl7::grafix::Size(desktop.w, desktop.h);
 }
 
-ppl7::grafix::Rect SDL::getClientWindow() const
+ppl7::grafix::Rect SDL::getDisplayWindow(int display_no) const
 {
 	SDL_Rect desktop;
-	SDL_GetDisplayBounds(0, &desktop);
+	SDL_GetDisplayBounds(display_no, &desktop);
 	return ppl7::grafix::Rect(desktop.x, desktop.y, desktop.w, desktop.h);
 }
 
@@ -268,6 +279,15 @@ ppl7::grafix::Drawable SDL::lockTexture(SDL_Texture* texture)
 void SDL::unlockTexture(SDL_Texture* texture)
 {
 	SDL_UnlockTexture(texture);
+}
+
+ppl7::grafix::Size SDL::getTextureSize(SDL_Texture* texture)
+{
+	int width, height;
+	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height)) {
+		throw SDLException("Couldn't query GUI texture: %s", SDL_GetError());
+	}
+	return ppl7::grafix::Size(width, height);
 }
 
 
