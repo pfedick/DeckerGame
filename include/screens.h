@@ -178,5 +178,36 @@ public:
 
 };
 
+class IngameMenuScreen : public ppl7::tk::Widget
+{
+public:
+    enum class State {
+        None=0,
+        EndGame,
+        ToDesktop,
+        ShowSettings,
+        Continue
+    };
+private:
+    GameMenuArea* end_game;
+    GameMenuArea* back_to_desktop;
+    GameMenuArea* show_settings;
+    GameMenuArea* continue_game;
+
+    State state;
+    void setupUi();
+
+public:
+    IngameMenuScreen(int x, int y, int width, int height);
+    ~IngameMenuScreen();
+
+    State getState() const;
+    void setState(State state);
+
+    virtual void paint(ppl7::grafix::Drawable& draw);
+    virtual void closeEvent(ppl7::tk::Event* event);
+    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
+};
+
 
 #endif // INCLUDE_SCREENS_H_
