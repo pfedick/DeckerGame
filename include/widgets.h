@@ -23,8 +23,8 @@ using namespace ppl7::tk;
 class Scrollbar : public ppl7::tk::Widget
 {
 private:
-	ppl7::tk::Button *up_button;
-	ppl7::tk::Button *down_button;
+	ppl7::tk::Button* up_button;
+	ppl7::tk::Button* down_button;
 	int size;
 	int pos;
 	int visibleItems;
@@ -37,10 +37,10 @@ public:
 	void setVisibleItems(int items);
 	int position() const;
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
+	virtual void paint(ppl7::grafix::Drawable& draw);
 
 
-	void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
 
 class CheckBox : public ppl7::tk::Label
@@ -50,14 +50,14 @@ private:
 
 public:
 	CheckBox();
-	CheckBox(int x, int y, int width, int height, const ppl7::String &text=ppl7::String(), bool checked=false);
+	CheckBox(int x, int y, int width, int height, const ppl7::String& text=ppl7::String(), bool checked=false);
 	~CheckBox();
 	bool checked() const;
 	void setChecked(bool checked);
 
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
 
 class RadioButton : public ppl7::tk::Label
@@ -67,20 +67,20 @@ private:
 
 public:
 	RadioButton();
-	RadioButton(int x, int y, int width, int height, const ppl7::String &text=ppl7::String(), bool checked=false);
+	RadioButton(int x, int y, int width, int height, const ppl7::String& text=ppl7::String(), bool checked=false);
 	~RadioButton();
 	bool checked() const;
 	void setChecked(bool checked);
 
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
 
 class ListWidget : public ppl7::tk::Frame
 {
 private:
-	Scrollbar *scrollbar;
+	Scrollbar* scrollbar;
 	ppl7::String myCurrentText;
 	ppl7::String myCurrentIdentifier;
 	size_t myCurrentIndex;
@@ -96,7 +96,7 @@ private:
 	std::list<ListWidgetItem> items;
 public:
 	ListWidget(int x, int y, int width, int height);
-	void setCurrentText(const ppl7::String &text);
+	void setCurrentText(const ppl7::String& text);
 	ppl7::String currentText() const;
 	ppl7::String currentIdentifier() const;
 
@@ -105,21 +105,21 @@ public:
 
 	void clear();
 
-	void add(const ppl7::String &text, const ppl7::String &identifier=ppl7::String());
+	void add(const ppl7::String& text, const ppl7::String& identifier=ppl7::String());
 
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	virtual void mouseWheelEvent(ppl7::tk::MouseEvent *event);
-	virtual void lostFocusEvent(ppl7::tk::FocusEvent *event);
-	virtual void mouseMoveEvent(ppl7::tk::MouseEvent *event);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
+	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
 };
 
 class ComboBox : public ppl7::tk::Widget
 {
 private:
-	ppl7::tk::Label *dropdown_button;
+	ppl7::tk::Label* dropdown_button;
 	ppl7::String myCurrentText;
 	ppl7::String myCurrentIdentifier;
 	size_t myCurrentIndex;
@@ -133,14 +133,14 @@ private:
 	};
 	std::list<ComboBoxItem> items;
 
-	ListWidget *selection;
+	ListWidget* selection;
 
 public:
 	ComboBox(int x, int y, int width, int height);
 	~ComboBox();
 
-	void setCurrentText(const ppl7::String &text);
-	void setCurrentIdentifier(const ppl7::String &identifier);
+	void setCurrentText(const ppl7::String& text);
+	void setCurrentIdentifier(const ppl7::String& identifier);
 	ppl7::String currentText() const;
 	ppl7::String currentIdentifier() const;
 
@@ -149,13 +149,13 @@ public:
 
 	void clear();
 
-	void add(const ppl7::String &text, const ppl7::String &identifier=ppl7::String());
+	void add(const ppl7::String& text, const ppl7::String& identifier=ppl7::String());
 
 	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
-	virtual void mouseWheelEvent(ppl7::tk::MouseEvent *event);
-	virtual void valueChangedEvent(ppl7::tk::Event *event, int value);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 };
 
 class Dialog : public ppl7::tk::Widget
@@ -169,27 +169,27 @@ private:
 	ppl7::String WindowTitle;
 	ppl7::grafix::Image WindowIcon;
 	ppl7::grafix::Color	myBackground;
-	ppl7::tk::Button *ok_button;
+	ppl7::tk::Button* ok_button;
 	ppl7::grafix::Point move_start;
 
 public:
 	Dialog(int width, int height, int buttons=Buttons::OK);
 	~Dialog();
 
-	const ppl7::String &windowTitle() const;
-	void setWindowTitle(const ppl7::String &title);
-	const ppl7::grafix::Drawable &windowIcon() const;
-	void setWindowIcon(const ppl7::grafix::Drawable &icon);
-	const ppl7::grafix::Color &backgroundColor() const;
-	void setBackgroundColor(const ppl7::grafix::Color &c);
-	virtual void paint(ppl7::grafix::Drawable &draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	const ppl7::String& windowTitle() const;
+	void setWindowTitle(const ppl7::String& title);
+	const ppl7::grafix::Drawable& windowIcon() const;
+	void setWindowIcon(const ppl7::grafix::Drawable& icon);
+	const ppl7::grafix::Color& backgroundColor() const;
+	void setBackgroundColor(const ppl7::grafix::Color& c);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
 
 
 class FileDialog : public Dialog
 {
-	public:
+public:
 	enum class FileMode {
 		AnyFile=0,
 		ExistingFile,
@@ -202,36 +202,51 @@ class FileDialog : public Dialog
 		Aborted
 	};
 
-	private:
-		ppl7::tk::Button *ok_button;
-		ppl7::tk::Button *cancel_button;
-		ppl7::tk::LineInput *path_lineinput;
-		ppl7::tk::LineInput *filename_lineinput;
-		Decker::ui::ListWidget *dir_list;
-		Decker::ui::ListWidget *file_list;
-		Decker::ui::ComboBox *drives_combobox;
+private:
+	ppl7::tk::Button* ok_button;
+	ppl7::tk::Button* cancel_button;
+	ppl7::tk::LineInput* path_lineinput;
+	ppl7::tk::LineInput* filename_lineinput;
+	Decker::ui::ListWidget* dir_list;
+	Decker::ui::ListWidget* file_list;
+	Decker::ui::ComboBox* drives_combobox;
 
 
-		DialogState my_state;
+	DialogState my_state;
 
 
 
-	public:
-		FileDialog(int width, int height, FileMode mode=FileMode::AnyFile);
-		~FileDialog();
+public:
+	FileDialog(int width, int height, FileMode mode=FileMode::AnyFile);
+	~FileDialog();
 
-		ppl7::String directory() const;
-		ppl7::String filename() const;
-		DialogState state() const;
+	ppl7::String directory() const;
+	ppl7::String filename() const;
+	DialogState state() const;
 
-		void setFilename(const ppl7::String &filename);
-		void setDirectory(const ppl7::String &path);
-		void setFilter(const ppl7::String &filter);
+	void setFilename(const ppl7::String& filename);
+	void setDirectory(const ppl7::String& path);
+	void setFilter(const ppl7::String& filter);
 
-		virtual void mouseDblClickEvent(ppl7::tk::MouseEvent* event);
-		virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-		virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
-		virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void mouseDblClickEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+
+};
+
+class Slider : public ppl7::tk::Widget
+{
+	friend class HorizontalSlider;
+private:
+public:
+
+};
+
+class HorizontalSlider : public Slider
+{
+private:
+public:
 
 };
 

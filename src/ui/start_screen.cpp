@@ -64,7 +64,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	ppl7::grafix::Rect last_viewport=viewport;
 	while (1) {
 		wm->handleEvents();
-
 		sdl.startFrame(black);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		drawWorld(renderer);
@@ -147,6 +146,11 @@ void GameMenuArea::setText(const ppl7::String& text)
 {
 	this->text=text;
 	redrawRequired();
+}
+
+void GameMenuArea::setBorderWidth(int width)
+{
+	border_width=width;
 }
 
 void GameMenuArea::setFontSize(int size)
@@ -286,6 +290,7 @@ void StartScreen::showSettings()
 	if (!settings_screen) {
 		settings_screen=new SettingsScreen(game, sdl,
 			50, 50, this->width() - 100, this->height() - 100);
+		resizeSettingsScreen();
 	}
 	this->addChild(settings_screen);
 	this->needsRedraw();
@@ -407,13 +412,26 @@ void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 	int element_h=90;
 	int element_w=520;
 	int font_size=30;
+	int border_width=10;
+	int font_size_version=20;
 
 	if (height() < 600) {
-		menue_h=height() - 100;
+		menue_h=height() - 80;
 		menue_w=480;
 		element_h=70;
 		element_w=460;
 		font_size=20;
+		border_width=7;
+		font_size_version=16;
+	}
+	if (height() < 500) {
+		menue_h=height() - 50;
+		menue_w=350;
+		element_h=50;
+		element_w=330;
+		font_size=16;
+		border_width=5;
+		font_size_version=12;
 	}
 	menue->setSize(menue_w, menue_h);
 	start_game->setPos(10, 10);				start_game->setSize(element_w, element_h);
@@ -426,13 +444,35 @@ void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 	editor->setFontSize(font_size);
 	end->setFontSize(font_size);
 
+	start_game->setBorderWidth(border_width);
+	settings->setBorderWidth(border_width);
+	editor->setBorderWidth(border_width);
+	end->setBorderWidth(border_width);
+
 	version->setPos(10, menue->height() - 50);
+	ppl7::grafix::Font font=version->font();
+	font.setSize(font_size_version);
+	version->setFont(font);
+	resizeSettingsScreen();
+}
 
-
-
+void StartScreen::resizeSettingsScreen()
+{
 	if (settings_screen) {
-		settings_screen->setSize(this->width() - 100, this->height() - 100);
-		settings_screen->resizeEvent(event);
+		ppl7::grafix::Point p1(50, 50);
+		ppl7::grafix::Size s1(this->width() - 100, this->height() - 100);
+		if (height() < 600 || width() < 1280) {
+			p1.setPoint(30, 30);
+			s1.setSize(this->width() - 60, this->height() - 60);
+
+		}
+		if (height() < 500 || width() < 1024) {
+			p1.setPoint(30, 30);
+			s1.setSize(this->width() - 60, this->height() - 60);
+		}
+		settings_screen->setSize(s1);
+		settings_screen->setPos(p1);
+		settings_screen->resizeEvent(NULL);
 	}
 	needsRedraw();
 }

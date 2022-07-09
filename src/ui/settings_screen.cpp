@@ -10,49 +10,126 @@ SettingsScreen::SettingsScreen(Game& g, SDL& s, int x, int y, int width, int hei
 {
     create(x, y, width, height);
     this->setName("SettingsScreen");
+    setupUi();
+    selectSettingsPage(SettingsMenue::Audio);
+}
+
+void SettingsScreen::updateStyles()
+{
     const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
     ppl7::grafix::Font font=style.buttonFont;
     font.setName("NotoSansBlack");
     font.setBold(false);
-    font.setSize(50);
+    font.setSize(12);
     font.setOrientation(ppl7::grafix::Font::TOP);
     font.setColor(ppl7::grafix::Color(255, 255, 255, 255));
-    labelFont=font;
-    labelFont.setSize(20);
 
+    style_heading.font=font;
+    style_heading.font.setSize(50);
+    style_heading.size.setSize(300, 90);
+    style_heading.total.setSize(300, 100);
+
+
+    style_label.font=font;
+    style_label.font.setSize(20);
+
+    style_menue.font=font;
+    style_menue.font.setSize(30);
+    style_menue.total.setSize(300, 100);
+    style_menue.size.setSize(300, 90);
+    style_menue.border_width=10;
+
+    settings_page.setPoint(340, 100);
+
+    input_widget_x=260;
+    input_widget.setSize(400, 40);
+
+    if (height() < 600 || width() < 1280) {
+        style_heading.font.setSize(40);
+        style_heading.size.setSize(300, 70);
+        style_heading.total.setSize(300, 80);
+
+        style_label.font.setSize(16);
+
+        style_menue.font.setSize(20);
+        style_menue.total.setSize(240, 80);
+        style_menue.size.setSize(240, 70);
+        style_menue.border_width=7;
+
+        settings_page.setPoint(260, 80);
+
+        input_widget_x=200;
+        input_widget.setSize(320, 32);
+    }
+    if (height() < 500 || width() < 1024) {
+        style_heading.font.setSize(30);
+        style_heading.size.setSize(300, 40);
+        style_heading.total.setSize(300, 50);
+
+        style_label.font.setName("NotoSans");
+        style_label.font.setSize(12);
+        style_label.font.setBold(true);
+
+        style_menue.font.setSize(16);
+        style_menue.total.setSize(200, 60);
+        style_menue.size.setSize(200, 50);
+        style_menue.border_width=5;
+
+        settings_page.setPoint(210, 50);
+
+        input_widget_x=150;
+        input_widget.setSize(260, 26);
+
+
+    }
+}
+
+void SettingsScreen::setupUi()
+{
+    //printf("size: %d x %d\n", width(), height());
+    this->destroyChilds();
+    updateStyles();
     ppl7::tk::Label* label;
     ppl7::String text=translate("Settings");
-    label=new ppl7::tk::Label(10, 10, 300, 90, text);
-    label->setFont(font);
-    ppl7::grafix::Size size=font.measure(text);
-    label->setPos((width - size.width) / 2, 10);
+    label=new ppl7::tk::Label(10, 10, style_heading.size.width, style_heading.size.height, text);
+    label->setFont(style_heading.font);
+    ppl7::grafix::Size size=style_heading.font.measure(text);
+    label->setPos((width() - size.width) / 2, 10);
     this->addChild(label);
 
     ppl7::grafix::Color background(20, 10, 0, 192);
-    menue=new ppl7::tk::Frame(0, 100, 320, height - 100, ppl7::tk::Frame::BorderStyle::NoBorder);
+    menue=new ppl7::tk::Frame(0, style_heading.total.height, style_menue.size.width + 20, height() - style_heading.total.height, ppl7::tk::Frame::BorderStyle::NoBorder);
     menue->setBackgroundColor(background);
     menue->setName("Settings Menue");
     menue->setEventHandler(this);
     this->addChild(menue);
 
 
-    select_audio=new GameMenuArea(10, 0, 300, 90, translate("Audio"));
+    select_audio=new GameMenuArea(10, 0, style_menue.size.width, style_menue.size.height, translate("Audio"));
     select_audio->setName("Settings Selection Audio");
+    select_audio->setFontSize(style_menue.font.size());
+    select_audio->setBorderWidth(style_menue.border_width);
     select_audio->setEventHandler(this);
     menue->addChild(select_audio);
 
-    select_video=new GameMenuArea(10, 100, 300, 90, translate("Video"));
+    select_video=new GameMenuArea(10, style_menue.total.height * 1, style_menue.size.width, style_menue.size.height, translate("Video"));
     select_video->setName("Settings Selection Video");
+    select_video->setFontSize(style_menue.font.size());
+    select_video->setBorderWidth(style_menue.border_width);
     select_video->setEventHandler(this);
     menue->addChild(select_video);
 
-    select_misc=new GameMenuArea(10, 200, 300, 90, translate("Misc"));
+    select_misc=new GameMenuArea(10, style_menue.total.height * 2, style_menue.size.width, style_menue.size.height, translate("Misc"));
     select_misc->setName("Settings Selection Misc");
+    select_misc->setFontSize(style_menue.font.size());
+    select_misc->setBorderWidth(style_menue.border_width);
     select_misc->setEventHandler(this);
     menue->addChild(select_misc);
 
-    select_back=new GameMenuArea(10, menue->height() - 100, 300, 90, translate("back (ESC)"));
+    select_back=new GameMenuArea(10, menue->height() - style_menue.total.height, style_menue.size.width, style_menue.size.height, translate("back (ESC)"));
     select_back->setName("Settings Selection Back");
+    select_back->setFontSize(style_menue.font.size());
+    select_back->setBorderWidth(style_menue.border_width);
     select_back->setEventHandler(this);
     menue->addChild(select_back);
 
@@ -65,22 +142,22 @@ SettingsScreen::SettingsScreen(Game& g, SDL& s, int x, int y, int width, int hei
     initPageVideo();
     initPageMisc();
 
-    selectSettingsPage(SettingsMenue::Audio);
+
 }
 
 void SettingsScreen::initPageAudio()
 {
     ppl7::grafix::Color background(20, 10, 0, 192);
-    page_audio=new ppl7::tk::Frame(340, 100, this->width() - 350, this->height() - 110, ppl7::tk::Frame::BorderStyle::NoBorder);
+    page_audio=new ppl7::tk::Frame(settings_page.x, settings_page.y, this->width() - settings_page.x - 10, this->height() - settings_page.y - 10, ppl7::tk::Frame::BorderStyle::NoBorder);
     page_audio->setName("SettingsPageAudio");
     page_audio->setBackgroundColor(background);
 
     ppl7::tk::Label* label;
-    label=new ppl7::tk::Label(0, 0, 200, 40, translate("Audio device:"));
-    label->setFont(labelFont);
+    label=new ppl7::tk::Label(0, 0, input_widget_x, 40, translate("Audio device:"));
+    label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_device_combobox=new Decker::ui::ComboBox(210, 0, 400, 40);
+    audio_device_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     std::list<ppl7::String> device_names;
     game.audiosystem.enumerateDevices(device_names);
     std::list<ppl7::String>::const_iterator it;
@@ -89,19 +166,19 @@ void SettingsScreen::initPageAudio()
     page_audio->addChild(audio_device_combobox);
 
     label=new ppl7::tk::Label(0, 50, 200, 40, translate("Volume:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_audio->addChild(label);
 
 
     label=new ppl7::tk::Label(100, 100, 200, 40, translate("all:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_audio->addChild(label);
 
     label=new ppl7::tk::Label(100, 150, 200, 40, translate("music:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_audio->addChild(label);
     label=new ppl7::tk::Label(100, 200, 200, 40, translate("effects:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_audio->addChild(label);
 
 }
@@ -110,16 +187,16 @@ void SettingsScreen::initPageVideo()
 {
     ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
     ppl7::grafix::Color background(20, 10, 0, 192);
-    page_video=new ppl7::tk::Frame(340, 100, this->width() - 350, this->height() - 110, ppl7::tk::Frame::BorderStyle::NoBorder);
+    page_video=new ppl7::tk::Frame(settings_page.x, settings_page.y, this->width() - settings_page.x - 10, this->height() - settings_page.y - 10, ppl7::tk::Frame::BorderStyle::NoBorder);
     page_video->setName("SettingsPageVideo");
     page_video->setBackgroundColor(background);
 
     ppl7::tk::Label* label;
     label=new ppl7::tk::Label(0, 0, 250, 40, translate("Video device:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_video->addChild(label);
 
-    video_device_combobox=new Decker::ui::ComboBox(260, 0, 400, 40);
+    video_device_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     video_device_combobox->setEventHandler(this);
     std::list<SDL::VideoDisplay> display_list;
     SDL::getVideoDisplays(display_list);
@@ -131,19 +208,19 @@ void SettingsScreen::initPageVideo()
     page_video->addChild(video_device_combobox);
 
     label=new ppl7::tk::Label(0, 50, 250, 40, translate("Screen resolution:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_video->addChild(label);
 
-    screen_resolution_combobox=new Decker::ui::ComboBox(260, 50, 400, 40);
+    screen_resolution_combobox=new Decker::ui::ComboBox(input_widget_x, 50, input_widget.width, input_widget.height);
     screen_resolution_combobox->setEventHandler(this);
     updateVideoModes();
     page_video->addChild(screen_resolution_combobox);
 
     label=new ppl7::tk::Label(0, 100, 250, 40, translate("Window mode:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_video->addChild(label);
 
-    windowmode_combobox=new Decker::ui::ComboBox(260, 100, 400, 40);
+    windowmode_combobox=new Decker::ui::ComboBox(input_widget_x, 100, input_widget.width, input_widget.height);
     windowmode_combobox->setEventHandler(this);
     windowmode_combobox->add(translate("Window"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Window)));
     windowmode_combobox->add(translate("Fullscreen"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Fullscreen)));
@@ -151,10 +228,10 @@ void SettingsScreen::initPageVideo()
     windowmode_combobox->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(game.config.windowMode)));
     page_video->addChild(windowmode_combobox);
 
-    save_video_settings_button=new ppl7::tk::Button(260, 200, 250, 50,
+    save_video_settings_button=new ppl7::tk::Button(input_widget_x, 200, 250, 50,
         translate("use video settings"),
         gfx->Toolbar.getDrawable(24));
-    save_video_settings_button->setFont(labelFont);
+    save_video_settings_button->setFont(style_label.font);
     save_video_settings_button->setEventHandler(this);
     page_video->addChild(save_video_settings_button);
 
@@ -163,16 +240,16 @@ void SettingsScreen::initPageVideo()
 void SettingsScreen::initPageMisc()
 {
     ppl7::grafix::Color background(20, 10, 0, 192);
-    page_misc=new ppl7::tk::Frame(340, 100, this->width() - 350, this->height() - 110, ppl7::tk::Frame::BorderStyle::NoBorder);
+    page_misc=new ppl7::tk::Frame(settings_page.x, settings_page.y, this->width() - settings_page.x - 10, this->height() - settings_page.y - 10, ppl7::tk::Frame::BorderStyle::NoBorder);
     page_misc->setName("SettingsPageMisc");
     page_misc->setBackgroundColor(background);
 
     ppl7::tk::Label* label;
     label=new ppl7::tk::Label(0, 0, 200, 40, translate("Text language:"));
-    label->setFont(labelFont);
+    label->setFont(style_label.font);
     page_misc->addChild(label);
 
-    language_combobox=new Decker::ui::ComboBox(210, 0, 300, 40);
+    language_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     language_combobox->add(translate("english"), "en");
     language_combobox->add(translate("german"), "de");
     language_combobox->setCurrentIdentifier(game.config.Language);
@@ -226,7 +303,7 @@ void SettingsScreen::updateVideoModes()
     SDL::getDisplayModes(display_id, mode_list);
     std::list<SDL::DisplayMode>::const_iterator mit;
     for (mit=mode_list.begin();mit != mode_list.end();++mit) {
-        if ((*mit).format == ppl7::grafix::RGBFormat::X8R8G8B8 && (*mit).width >= 1024 && (*mit).height >= 768) {
+        if ((*mit).format == ppl7::grafix::RGBFormat::X8R8G8B8 && (*mit).width >= 640 && (*mit).height >= 480) {
             screen_resolution_combobox->add(
                 ppl7::ToString("%d x %d, %d Hz", (*mit).width, (*mit).height, (*mit).refresh_rate),
                 ppl7::ToString("%d,%d,%d", (*mit).width, (*mit).height, (*mit).refresh_rate));
@@ -320,6 +397,9 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
 void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
     //printf("SettingsScreen: we got a resize event: %d x %d\n", width(), height());
+    setupUi();
+    selectSettingsPage(currentMenueSelection);
+
     needsRedraw();
 
 }

@@ -36,11 +36,23 @@ public:
     void setSelected(bool selected);
     bool isSelected() const;
     void setFontSize(int size);
+    void setBorderWidth(int width);
     virtual void paint(ppl7::grafix::Drawable& draw);
     //virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
 
 
 };
+
+class StyleElement
+{
+public:
+    ppl7::grafix::Font font;
+    ppl7::grafix::Size size;
+    ppl7::grafix::Size total;
+    int border_width;
+
+};
+
 
 class SettingsScreen : public ppl7::tk::Widget
 {
@@ -54,8 +66,11 @@ private:
     Game& game;
     SDL& sdl;
     SettingsMenue currentMenueSelection;
+    StyleElement style_heading, style_label, style_menue;
+    ppl7::grafix::Point settings_page;
+    int input_widget_x;
+    ppl7::grafix::Size input_widget;
 
-    ppl7::grafix::Font labelFont;
 
     ppl7::tk::Frame* menue;
     ppl7::tk::Frame* page_audio;
@@ -80,6 +95,8 @@ private:
     Decker::ui::ComboBox* language_combobox;
 
     void selectSettingsPage(SettingsMenue page);
+    void setupUi();
+    void updateStyles();
     void initPageAudio();
     void initPageVideo();
     void initPageMisc();
@@ -131,6 +148,8 @@ private:
     //Decker::ui::FileDialog *filedialog;
 
     State state;
+
+    void resizeSettingsScreen();
 
 public:
 

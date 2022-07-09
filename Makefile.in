@@ -51,6 +51,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_listwidget.o \
 	compile/widgets_dialog.o \
 	compile/widgets_filedialog.o \
+	compile/widgets_slider.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -524,6 +525,10 @@ compile/widgets_dialog.o: src/widgets/dialog.cpp Makefile include/widgets.h
 compile/widgets_filedialog.o: src/widgets/filedialog.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_filedialog.o -c src/widgets/filedialog.cpp $(CFLAGS)
+
+compile/widgets_slider.o: src/widgets/slider.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_slider.o -c src/widgets/slider.cpp $(CFLAGS)
 
 # Screens
 compile/intro_screen.o: src/ui/intro_screen.cpp Makefile include/decker_sdl.h include/screens.h include/videoplayer.h
