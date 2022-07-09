@@ -96,6 +96,7 @@ public:
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
 
     virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
 
 };
 
@@ -148,6 +149,7 @@ public:
     virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
 
     virtual void closeEvent(ppl7::tk::Event* event);
+    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
 
 
     // Event handler

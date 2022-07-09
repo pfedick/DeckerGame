@@ -316,3 +316,9 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
     if (event->widget() == video_device_combobox) updateVideoModes();
 }
+
+void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
+{
+    printf("SettingsScreen::resizeEvent\n");
+    fflush(stdout);
+}

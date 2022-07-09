@@ -26,9 +26,10 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	world_widget->setEnabled(false);
 	ppl7::grafix::Color black(128, 0, 0, 255);
 	SDL_Renderer* renderer=sdl.getRenderer();
-	StartScreen* widget=new StartScreen(*this, sdl, 0, 0, this->width(), this->height());
-	this->addChild(widget);
-	wm->setKeyboardFocus(widget);
+	if (start_screen) delete start_screen;
+	StartScreen* start_screen=new StartScreen(*this, sdl, 0, 0, this->width(), this->height());
+	this->addChild(start_screen);
+	wm->setKeyboardFocus(start_screen);
 	showUi(false);
 	int fade_to_black=255;
 	int fade_state=0;
@@ -60,14 +61,14 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		presentScreen();
 
 		if (quitGame == true && fade_state == 1) {
-			widget->setState(StartScreen::State::QuitGame);
+			start_screen->setState(StartScreen::State::QuitGame);
 		}
-		if (widget->getState() != StartScreen::State::None && fade_state == 1) {
+		if (start_screen->getState() != StartScreen::State::None && fade_state == 1) {
 			fade_state = 2;
 			fade_to_black=0;
-			if (widget->getState() != StartScreen::State::ShowSettings)
+			if (start_screen->getState() != StartScreen::State::ShowSettings)
 				GeorgeDeckerTheme.fadeout(4.0f);
-		} else if (widget->getState() != StartScreen::State::None && fade_state == 3) {
+		} else if (start_screen->getState() != StartScreen::State::None && fade_state == 3) {
 			break;
 		}
 		if (!audiosystem.isPlaying(&GeorgeDeckerTheme)) {
@@ -76,9 +77,10 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		}
 
 	}
-	StartScreen::State state=widget->getState();
-	this->removeChild(widget);
-	delete widget;
+	StartScreen::State state=start_screen->getState();
+	this->removeChild(start_screen);
+	delete start_screen;
+	start_screen=NULL;
 	switch (state) {
 	case StartScreen::State::QuitGame: return GameState::QuitGame;
 	case StartScreen::State::StartGame: return GameState::StartGame;
@@ -352,4 +354,10 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 		redrawRequired();
 	}
 	*/
+}
+
+void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
+{
+	printf("StartScreen: we got a resize event\n");
+	if (settings_screen) settings_screen->resizeEvent(event);
 }

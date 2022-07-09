@@ -471,6 +471,9 @@ enum class GameState {
 	StartEditor
 };
 
+class StartScreen;
+class SettingsScreen;
+
 
 class Game : private ppl7::tk::Window
 {
@@ -498,6 +501,9 @@ private:
 	Decker::ui::ObjectSelection* object_selection;
 	Decker::ui::WorldWidget* world_widget;
 	Decker::ui::WayNetEdit* waynet_edit;
+	StartScreen* start_screen;
+	SettingsScreen* settings_screen;
+
 	BrickOccupation brick_occupation;
 	BrickOccupation::Matrix brick_occupation_solid;
 	FPS fps;

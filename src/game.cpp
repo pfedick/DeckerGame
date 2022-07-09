@@ -5,6 +5,7 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 #include "objects.h"
+#include "screens.h"
 
 static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f };
 
@@ -50,10 +51,14 @@ Game::Game()
 	death_state=0;
 	showui=false;
 	controlsEnabled=true;
+	start_screen=NULL;
+	settings_screen=NULL;
 }
 
 Game::~Game()
 {
+	if (start_screen) delete start_screen;
+	if (settings_screen) delete  settings_screen;
 	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
 	wm->destroyWindow(*this);
@@ -1160,6 +1165,8 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 	viewport=clientRect();
 	resizeMenueAndStatusbar();
 	showUi(showui);
+	if (start_screen) start_screen->resizeEvent(event);
+	if (start_screen) settings_screen->resizeEvent(event);
 	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
 }
 
