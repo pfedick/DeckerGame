@@ -37,9 +37,15 @@ private:
 	ppl7::tk::Label* player_state;
 	ppl7::tk::Label* object_id;
 
+	int timer_id;
+
+	void setupUi();
 
 public:
 	StatusBar(int x, int y, int width, int height);
+	~StatusBar();
+
+	void resize(int x, int y, int width, int height);
 
 	void setFps(int fps);
 	void setMouse(const ppl7::tk::MouseState& mouse);
@@ -103,8 +109,12 @@ private:
 	VisibilitySubMenu* visibility;
 	Game* game;
 
+	void setupUi();
+
 public:
 	MainMenue(int x, int y, int width, int height, Game* game);
+
+	void resize(int x, int y, int width, int height);
 
 	void mouseClickEvent(ppl7::tk::MouseEvent* event);
 	int currentPlane() const;

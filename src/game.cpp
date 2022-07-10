@@ -248,13 +248,19 @@ void Game::initUi()
 void Game::resizeMenueAndStatusbar()
 {
 	const ppl7::grafix::Size& desktop=clientSize();
-	if (statusbar) delete statusbar;
-	statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
-	this->addChild(statusbar);
+	if (!statusbar) {
+		statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
+		this->addChild(statusbar);
+	} else {
+		statusbar->resize(0, desktop.height - 32, desktop.width, 32);
+	}
 
-	if (mainmenue) delete mainmenue;
-	mainmenue=new Decker::ui::MainMenue(0, 0, desktop.width, 32, this);
-	this->addChild(mainmenue);
+	if (!mainmenue) {
+		mainmenue=new Decker::ui::MainMenue(0, 0, desktop.width, 32, this);
+		this->addChild(mainmenue);
+	} else {
+		mainmenue->resize(0, 0, desktop.width, 32);
+	}
 }
 
 void Game::deleteUi()
@@ -1186,8 +1192,10 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 
 void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
+	printf("Game::resizeEvent\n");
+	fflush(stdout);
 	if (tex_level_grid) {
-		if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
+		sdl.destroyTexture(tex_level_grid);
 		tex_level_grid=NULL;
 	}
 	desktopSize=clientSize();
