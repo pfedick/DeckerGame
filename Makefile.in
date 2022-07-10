@@ -98,6 +98,7 @@ OBJECTS=compile/main.o \
 	compile/object_ai_figure.o \
 	compile/object_wallenstein.o \
 	compile/object_helena.o \
+	compile/object_extralife.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -107,8 +108,8 @@ OBJECTS=compile/main.o \
 	compile/intro_screen.o \
 	compile/start_screen.o \
 	compile/settings_screen.o \
-	compile/level_screen.o
-
+	compile/level_screen.o \
+	compile/ingame_menue_screen.o
 
 
 
@@ -436,6 +437,10 @@ compile/object_helena.o: src/objects/helena.cpp Makefile include/objects.h inclu
 	- @mkdir -p compile
 	$(CXX) -o compile/object_helena.o -c src/objects/helena.cpp $(CFLAGS)
 
+compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_extralife.o -c src/objects/extralife.cpp $(CFLAGS)
+
 compile/tile.o: src/tile.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
@@ -546,6 +551,10 @@ compile/settings_screen.o: src/ui/settings_screen.cpp Makefile include/screens.h
 compile/level_screen.o: src/ui/level_screen.cpp Makefile include/screens.h
 	- @mkdir -p compile
 	$(CXX) -o compile/level_screen.o -c src/ui/level_screen.cpp $(CFLAGS)
+
+compile/ingame_menue_screen.o: src/ui/ingame_menue_screen.cpp Makefile include/screens.h
+	- @mkdir -p compile
+	$(CXX) -o compile/ingame_menue_screen.o -c src/ui/ingame_menue_screen.cpp $(CFLAGS)
 
 # Video
 compile/video_videoplayer.o: src/video/videoplayer.cpp Makefile include/videoplayer.h include/decker_sdl.h

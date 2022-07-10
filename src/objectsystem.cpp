@@ -8,19 +8,19 @@
 
 namespace Decker::Objects {
 
-static ObjectSystem *object_system=NULL;
+static ObjectSystem* object_system=NULL;
 
-ObjectSystem *GetObjectSystem()
+ObjectSystem* GetObjectSystem()
 {
 	return object_system;
 }
 
-ObjectSystem::ObjectSystem(Waynet *waynet)
+ObjectSystem::ObjectSystem(Waynet* waynet)
 {
 	if (!object_system) object_system=this;
 	nextid=1;
 	next_spawn_id=1000000;
-	for (int i=0;i<Spriteset::MaxSpritesets;i++) {
+	for (int i=0;i < Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
 	}
 	player_start=0;
@@ -30,15 +30,15 @@ ObjectSystem::ObjectSystem(Waynet *waynet)
 ObjectSystem::~ObjectSystem()
 {
 	clear();
-	if (object_system==this) object_system=NULL;
+	if (object_system == this) object_system=NULL;
 }
 
 void ObjectSystem::clear()
 {
 	visible_object_map.clear();
-	std::map<uint32_t, Object *>::iterator it;
-	while ((it=object_list.begin())!=object_list.end()) {
-		Object *object=(it->second);
+	std::map<uint32_t, Object*>::iterator it;
+	while ((it=object_list.begin()) != object_list.end()) {
+		Object* object=(it->second);
 		object_list.erase(it);
 		delete object;
 	}
@@ -47,71 +47,71 @@ void ObjectSystem::clear()
 	player_start=0;
 }
 
-void ObjectSystem::loadSpritesets(SDL &sdl)
+void ObjectSystem::loadSpritesets(SDL& sdl)
 {
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,"linear");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	spriteset[Spriteset::GenericObjects]->enableOutlines(true);
 	spriteset[Spriteset::GenericObjects]->enableMemoryBuffer(true);
-	spriteset[Spriteset::GenericObjects]->load(sdl,"res/objects.tex");
+	spriteset[Spriteset::GenericObjects]->load(sdl, "res/objects.tex");
 
 	spriteset[Spriteset::ThreeSpeers]->enableOutlines(true);
 	spriteset[Spriteset::ThreeSpeers]->enableMemoryBuffer(true);
-	spriteset[Spriteset::ThreeSpeers]->load(sdl,"res/enemy_3speers.tex");
+	spriteset[Spriteset::ThreeSpeers]->load(sdl, "res/enemy_3speers.tex");
 
 	spriteset[Spriteset::Mummy]->enableOutlines(true);
 	spriteset[Spriteset::Mummy]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Mummy]->load(sdl,"res/mummy.tex");
+	spriteset[Spriteset::Mummy]->load(sdl, "res/mummy.tex");
 
 	spriteset[Spriteset::Skeleton]->enableOutlines(true);
 	spriteset[Spriteset::Skeleton]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Skeleton]->load(sdl,"res/skeleton.tex");
+	spriteset[Spriteset::Skeleton]->load(sdl, "res/skeleton.tex");
 
 	spriteset[Spriteset::Vent]->enableOutlines(true);
 	spriteset[Spriteset::Vent]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Vent]->load(sdl,"res/vent.tex");
+	spriteset[Spriteset::Vent]->load(sdl, "res/vent.tex");
 
 	spriteset[Spriteset::Mushroom]->enableOutlines(true);
 	spriteset[Spriteset::Mushroom]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Mushroom]->load(sdl,"res/mushroom.tex");
+	spriteset[Spriteset::Mushroom]->load(sdl, "res/mushroom.tex");
 
 	spriteset[Spriteset::Scarabeus]->enableOutlines(true);
 	spriteset[Spriteset::Scarabeus]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Scarabeus]->load(sdl,"res/scarabeus.tex");
+	spriteset[Spriteset::Scarabeus]->load(sdl, "res/scarabeus.tex");
 
 	spriteset[Spriteset::TreasureChest]->enableOutlines(true);
 	spriteset[Spriteset::TreasureChest]->enableMemoryBuffer(true);
-	spriteset[Spriteset::TreasureChest]->load(sdl,"res/treasure_chest.tex");
+	spriteset[Spriteset::TreasureChest]->load(sdl, "res/treasure_chest.tex");
 
 	spriteset[Spriteset::Doors]->enableOutlines(true);
 	spriteset[Spriteset::Doors]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Doors]->load(sdl,"res/doors.tex");
+	spriteset[Spriteset::Doors]->load(sdl, "res/doors.tex");
 
 	spriteset[Spriteset::Laser]->enableOutlines(true);
 	spriteset[Spriteset::Laser]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Laser]->load(sdl,"res/laser.tex");
+	spriteset[Spriteset::Laser]->load(sdl, "res/laser.tex");
 
 	spriteset[Spriteset::StamperVertical]->enableOutlines(true);
 	spriteset[Spriteset::StamperVertical]->enableMemoryBuffer(true);
-	spriteset[Spriteset::StamperVertical]->load(sdl,"res/stamper_vertical.tex");
+	spriteset[Spriteset::StamperVertical]->load(sdl, "res/stamper_vertical.tex");
 
 	spriteset[Spriteset::Wallenstein]->enableOutlines(true);
 	spriteset[Spriteset::Wallenstein]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Wallenstein]->load(sdl,"res/wallenstein.tex");
+	spriteset[Spriteset::Wallenstein]->load(sdl, "res/wallenstein.tex");
 
 	spriteset[Spriteset::Helena]->enableOutlines(true);
 	spriteset[Spriteset::Helena]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Helena]->load(sdl,"res/helena.tex");
+	spriteset[Spriteset::Helena]->load(sdl, "res/helena.tex");
 
 	spriteset[Spriteset::Bat]->enableOutlines(true);
 	spriteset[Spriteset::Bat]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Bat]->load(sdl,"res/bat.tex");
+	spriteset[Spriteset::Bat]->load(sdl, "res/bat.tex");
 
 	spriteset[Spriteset::Scorpion]->enableOutlines(true);
 	spriteset[Spriteset::Scorpion]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Scorpion]->load(sdl,"res/bat.tex");
+	spriteset[Spriteset::Scorpion]->load(sdl, "res/bat.tex");
 }
 
-void ObjectSystem::addObject(Object *object)
+void ObjectSystem::addObject(Object* object)
 {
 	if (!object) return;
 	if (object->spawned) {
@@ -121,113 +121,113 @@ void ObjectSystem::addObject(Object *object)
 		object->id=nextid;
 		nextid++;
 	}
-	if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
+	if (object->sprite_set < Spriteset::MaxSpritesets && this->spriteset[object->sprite_set] != NULL) {
 		object->texture=this->spriteset[object->sprite_set];
 		object->updateBoundary();
 	}
 
-	object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
+	object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
 }
 
 void ObjectSystem::deleteObject(int id)
 {
-	std::map<uint32_t,Object *>::const_iterator it;
+	std::map<uint32_t, Object*>::const_iterator it;
 	it=object_list.find(id);
-	if (it!=object_list.end()) {
-		Object *object=it->second;
+	if (it != object_list.end()) {
+		Object* object=it->second;
 		object_list.erase(it);
 		delete object;
 	}
 }
 
-void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)
+void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
 	visible_object_map.clear();
-	std::map<uint32_t, Object *>::iterator it;
+	std::map<uint32_t, Object*>::iterator it;
 	std::list<uint32_t> deleteme;
 	int width=viewport.width();
 	int height=viewport.height();
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
 		if (object->deleteDefered) {
 			deleteme.push_back(it->first);
 		} else if (object->texture) {
-			int x=object->p.x-worldcoords.x;
-			int y=object->p.y-worldcoords.y;
+			int x=object->p.x - worldcoords.x;
+			int y=object->p.y - worldcoords.y;
 			bool isVisible=false;
-			if (x+object->boundary.width()>0 && y+object->boundary.height()>0
-					&& x-object->boundary.width()<width && y-object->boundary.height()<height )
+			if (x + object->boundary.width() > 0 && y + object->boundary.height() > 0
+				&& x - object->boundary.width() < width && y - object->boundary.height() < height)
 				isVisible=true;
-			if (object->p!=object->initial_p) {
-				x=object->initial_p.x-worldcoords.x;
-				y=object->initial_p.y-worldcoords.y;
-				if (x>0 && y>0 && x<width && y<height) isVisible=true;
+			if (object->p != object->initial_p) {
+				x=object->initial_p.x - worldcoords.x;
+				y=object->initial_p.y - worldcoords.y;
+				if (x > 0 && y > 0 && x < width && y < height) isVisible=true;
 			}
 			if (isVisible) {
-				uint32_t id=(uint32_t)(((uint32_t)object->p.y&0xffff)<<16)|(uint32_t)((uint32_t)object->p.x&0xffff);
-				visible_object_map.insert(std::pair<uint32_t,Object *>(id,object));
+				uint32_t id=(uint32_t)(((uint32_t)object->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)object->p.x & 0xffff);
+				visible_object_map.insert(std::pair<uint32_t, Object*>(id, object));
 			}
 		}
 	}
-	if (deleteme.size()>0) {
+	if (deleteme.size() > 0) {
 		std::list<uint32_t>::iterator it;
-		for (it=deleteme.begin();it!=deleteme.end();++it) {
+		for (it=deleteme.begin();it != deleteme.end();++it) {
 			deleteObject(*it);
 		}
 	}
 }
 
-void ObjectSystem::update(double time, TileTypePlane &ttplane, Player &player)
+void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player)
 {
-	std::map<uint32_t, Object *>::iterator it;
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
+	std::map<uint32_t, Object*>::iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
 		object->update(time, ttplane, player);
 	}
 }
 
-void ObjectSystem::draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
+void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
-	std::map<uint32_t,Object *>::const_iterator it;
-	ppl7::grafix::Point coords(viewport.x1-worldcoords.x, viewport.y1-worldcoords.y);
-	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
-		const Object *object=it->second;
-		if (object->texture!=NULL && object->enabled==true && object->visibleAtPlaytime==true) {
-			object->draw(renderer,coords);
+	std::map<uint32_t, Object*>::const_iterator it;
+	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
+	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+		const Object* object=it->second;
+		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true) {
+			object->draw(renderer, coords);
 		}
 	}
 }
 
-void ObjectSystem::drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const
+void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
-	std::map<uint32_t,Object *>::const_iterator it;
-	ppl7::grafix::Point coords(viewport.x1-worldcoords.x, viewport.y1-worldcoords.y);
-	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
-		const Object *object=it->second;
+	std::map<uint32_t, Object*>::const_iterator it;
+	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
+	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+		const Object* object=it->second;
 		if (object->texture) {
 			object->texture->draw(renderer,
-					object->initial_p.x+coords.x,
-					object->initial_p.y+coords.y,
-					object->sprite_no);
+				object->initial_p.x + coords.x,
+				object->initial_p.y + coords.y,
+				object->sprite_no);
 		}
 	}
 }
 
 
-Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
+Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
 {
-	Object *found_object=NULL;
-	std::map<uint32_t,Object *>::const_iterator it;
-	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
-		Object *item=it->second;
-		if (p.inside(item->initial_boundary)==true && item->spawned==false) {
+	Object* found_object=NULL;
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+		Object* item=it->second;
+		if (p.inside(item->initial_boundary) == true && item->spawned == false) {
 			if (item->texture) {
 				const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
 				if (draw.width()) {
-					int x=p.x-item->initial_boundary.x1;
-					int y=p.y-item->initial_boundary.y1;
+					int x=p.x - item->initial_boundary.x1;
+					int y=p.y - item->initial_boundary.y1;
 					ppl7::grafix::Color c=draw.getPixel(x, y);
-					if (c.alpha()>92) {
+					if (c.alpha() > 92) {
 						found_object=item;
 					}
 				}
@@ -237,23 +237,23 @@ Object *ObjectSystem::findMatchingObject(const ppl7::grafix::Point &p) const
 	return found_object;
 }
 
-Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &player)
+Object* ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& player)
 {
-	std::map<uint32_t,Object *>::const_iterator it;
+	std::map<uint32_t, Object*>::const_iterator it;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
-	for (it=visible_object_map.begin();it!=visible_object_map.end();++it) {
-		Object *item=it->second;
-		if (item->texture!=NULL && item->collisionDetection==true && item->enabled==true) {
-			for (p_it=player.begin();p_it!=player.end();++p_it) {
+	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+		Object* item=it->second;
+		if (item->texture != NULL && item->collisionDetection == true && item->enabled == true) {
+			for (p_it=player.begin();p_it != player.end();++p_it) {
 				if ((*p_it).inside(item->boundary)) {
 					//printf ("inside boundary\n");
-					if (item->pixelExactCollision==false) return item;
+					if (item->pixelExactCollision == false) return item;
 					const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
 					if (draw.width()) {
-						int x=(*p_it).x-item->boundary.x1;
-						int y=(*p_it).y-item->boundary.y1;
+						int x=(*p_it).x - item->boundary.x1;
+						int y=(*p_it).y - item->boundary.y1;
 						ppl7::grafix::Color c=draw.getPixel(x, y);
-						if (c.alpha()>92) {
+						if (c.alpha() > 92) {
 							return item;
 						}
 					}
@@ -264,26 +264,26 @@ Object *ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point> &play
 	return NULL;
 }
 
-Object *ObjectSystem::getObject(uint32_t object_id)
+Object* ObjectSystem::getObject(uint32_t object_id)
 {
-	std::map<uint32_t,Object *>::iterator it;
+	std::map<uint32_t, Object*>::iterator it;
 	it=object_list.find(object_id);
-	if (it!=object_list.end()) return it->second;
+	if (it != object_list.end()) return it->second;
 	return NULL;
 }
 
 
-void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id)
+void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
-	std::map<uint32_t,Object *>::const_iterator it;
+	std::map<uint32_t, Object*>::const_iterator it;
 	it=object_list.find(id);
-	if (it!=object_list.end()) {
-		const Object *item=it->second;
+	if (it != object_list.end()) {
+		const Object* item=it->second;
 		if (item->texture) {
 			item->texture->drawOutlines(renderer,
-					item->initial_p.x+viewport.x1-worldcoords.x,
-					item->initial_p.y+viewport.y1-worldcoords.y,
-					item->sprite_no, 1.0f);
+				item->initial_p.x + viewport.x1 - worldcoords.x,
+				item->initial_p.y + viewport.y1 - worldcoords.y,
+				item->sprite_no, 1.0f);
 		}
 	}
 }
@@ -297,6 +297,7 @@ Representation getRepresentation(int object_type)
 	case Type::Diamond: return GemReward::representation();
 	case Type::Crystal: return CrystalReward::representation();
 	case Type::Coin: return CoinReward::representation();
+	case Type::ExtraLife: return ExtraLife::representation();
 	case Type::Key: return KeyReward::representation();
 	case Type::Arrow: return Arrow::representation();
 	case Type::ThreeSpeers: return ThreeSpeers::representation();
@@ -330,34 +331,35 @@ Representation getRepresentation(int object_type)
 }
 
 
-SpriteTexture *ObjectSystem::getTexture(int sprite_set) const
+SpriteTexture* ObjectSystem::getTexture(int sprite_set) const
 {
-	if (sprite_set>=0 && sprite_set<Spriteset::MaxSpritesets)
+	if (sprite_set >= 0 && sprite_set < Spriteset::MaxSpritesets)
 		return spriteset[sprite_set];
 	return NULL;
 }
 
-void ObjectSystem::drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type)
+void ObjectSystem::drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type)
 {
 	Representation repr=getRepresentation(object_type);
-	if (repr.sprite_set>=0) {
-		SpriteTexture *texture=getTexture(repr.sprite_set);
+	if (repr.sprite_set >= 0) {
+		SpriteTexture* texture=getTexture(repr.sprite_set);
 		if (texture) {
 			texture->draw(renderer,
-					p.x,
-					p.y,
-					repr.sprite_no);
-			texture->drawOutlines(renderer,p.x,p.y,
-					repr.sprite_no, 1.0f);
+				p.x,
+				p.y,
+				repr.sprite_no);
+			texture->drawOutlines(renderer, p.x, p.y,
+				repr.sprite_no, 1.0f);
 		}
 	}
 }
 
-Object * ObjectSystem::getInstance(int object_type) const
+Object* ObjectSystem::getInstance(int object_type) const
 {
 	switch (object_type) {
 	case Type::ThreeSpeers: return new ThreeSpeers();
 	case Type::Coin: return new CoinReward();
+	case Type::ExtraLife: return new ExtraLife();
 	case Type::Crystal: return new CrystalReward();
 	case Type::Diamond: return new GemReward();
 	case Type::Medikit: return new Medikit();
@@ -393,56 +395,56 @@ Object * ObjectSystem::getInstance(int object_type) const
 	return NULL;
 }
 
-void ObjectSystem::save(ppl7::FileObject &file, unsigned char id) const
+void ObjectSystem::save(ppl7::FileObject& file, unsigned char id) const
 {
-	if (object_list.size()==0) return;
-	std::map<uint32_t,Object *>::const_iterator it;
+	if (object_list.size() == 0) return;
+	std::map<uint32_t, Object*>::const_iterator it;
 	size_t buffersize=0;
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
 		if (!object->spawned)
-			buffersize+=object->save_size+1;
+			buffersize+=object->save_size + 1;
 	}
-	unsigned char *buffer=(unsigned char*)malloc(buffersize+5);
-	ppl7::Poke32(buffer+0,0);
-	ppl7::Poke8(buffer+4,id);
+	unsigned char* buffer=(unsigned char*)malloc(buffersize + 5);
+	ppl7::Poke32(buffer + 0, 0);
+	ppl7::Poke8(buffer + 4, id);
 	size_t p=5;
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
 		if (!object->spawned) {
-			ppl7::Poke8(buffer+p,object->save_size+1);
-			size_t bytes_saved=object->save(buffer+p+1,object->save_size);
-			if (bytes_saved==object->save_size && bytes_saved>0) {
-				p+=object->save_size+1;
+			ppl7::Poke8(buffer + p, object->save_size + 1);
+			size_t bytes_saved=object->save(buffer + p + 1, object->save_size);
+			if (bytes_saved == object->save_size && bytes_saved > 0) {
+				p+=object->save_size + 1;
 				//printf ("saved object %d of type %d with size %d\n",
 				//		object->id, object->type(), object->save_size+1);
 			}
 		}
 	}
-	ppl7::Poke32(buffer+0,p);
-	file.write(buffer,p);
+	ppl7::Poke32(buffer + 0, p);
+	file.write(buffer, p);
 	free(buffer);
 }
 
-void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
+void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 {
 	clear();
 	size_t p=0;
-	const unsigned char *buffer=(const unsigned char*)ba.toCharPtr();
+	const unsigned char* buffer=(const unsigned char*)ba.toCharPtr();
 	//printf("chunk size=%zd\n",ba.size());
-	while (p<ba.size()) {
-		int save_size=ppl7::Peek8(buffer+p);
-		int type=ppl7::Peek8(buffer+p+1);
+	while (p < ba.size()) {
+		int save_size=ppl7::Peek8(buffer + p);
+		int type=ppl7::Peek8(buffer + p + 1);
 		//printf ("try to load object of type %d, size: %d\n",type, save_size);
-		Object *object=getInstance(type);
+		Object* object=getInstance(type);
 		if (object) {
-			if (object->load(buffer+p+1,save_size-1)) {
-				if (object->id>=nextid) nextid=object->id+1;
-				if (object->sprite_set<Spriteset::MaxSpritesets && this->spriteset[object->sprite_set]!=NULL) {
+			if (object->load(buffer + p + 1, save_size - 1)) {
+				if (object->id >= nextid) nextid=object->id + 1;
+				if (object->sprite_set < Spriteset::MaxSpritesets && this->spriteset[object->sprite_set] != NULL) {
 					object->texture=this->spriteset[object->sprite_set];
 					object->updateBoundary();
 				}
-				object_list.insert(std::pair<uint32_t,Object*>(object->id,object));
+				object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
 				//printf ("found object %d of type %d with size %d\n",object->id, type,save_size);
 			}
 		}
@@ -454,24 +456,24 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr &ba)
 
 ppl7::grafix::Point ObjectSystem::findPlayerStart() const
 {
-	std::map<uint32_t, Object *>::const_iterator it;
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
-		if (object->type()==Decker::Objects::Type::PlayerStartpoint)
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
+		if (object->type() == Decker::Objects::Type::PlayerStartpoint)
 			return object->p;
 	}
-	return ppl7::grafix::Point(640,480);
+	return ppl7::grafix::Point(640, 480);
 }
 
 ppl7::grafix::Point ObjectSystem::nextPlayerStart()
 {
 	int c=0;
 	player_start++;
-	std::map<uint32_t, Object *>::const_iterator it;
-	for (it=object_list.begin();it!=object_list.end();++it) {
-		Object *object=it->second;
-		if (object->type()==Decker::Objects::Type::PlayerStartpoint) {
-			if (c==player_start) {
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Object* object=it->second;
+		if (object->type() == Decker::Objects::Type::PlayerStartpoint) {
+			if (c == player_start) {
 				return object->p;
 			}
 			c++;
@@ -491,7 +493,7 @@ size_t ObjectSystem::countVisible() const
 	return visible_object_map.size();
 }
 
-Waynet &ObjectSystem::getWaynet()
+Waynet& ObjectSystem::getWaynet()
 {
 	return *waynet;
 }
@@ -501,37 +503,37 @@ Collision::Collision()
 	object=NULL;
 }
 
-Collision::Collision(const Collision &other)
+Collision::Collision(const Collision& other)
 {
 	object=other.object;
 	collision_points=other.collision_points;
 }
 
 
-void Collision::detect(Object *object, const std::list<ppl7::grafix::Point> &checkpoints, const Player &player)
+void Collision::detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player)
 {
 	collision_points.clear();
 	this->object=object;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
 	const ppl7::grafix::Drawable draw=object->texture->getDrawable(object->sprite_no);
-	for (p_it=checkpoints.begin();p_it!=checkpoints.end();++p_it) {
+	for (p_it=checkpoints.begin();p_it != checkpoints.end();++p_it) {
 		if (draw.width()) {
-			int x=(*p_it).x-object->boundary.x1;
-			int y=(*p_it).y-object->boundary.y1;
+			int x=(*p_it).x - object->boundary.x1;
+			int y=(*p_it).y - object->boundary.y1;
 			ppl7::grafix::Color c=draw.getPixel(x, y);
-			if (c.alpha()>92) {
-				collision_points.push_back(ppl7::grafix::Point((*p_it).x-player.x,(*p_it).y-player.y));
+			if (c.alpha() > 92) {
+				collision_points.push_back(ppl7::grafix::Point((*p_it).x - player.x, (*p_it).y - player.y));
 			}
 		}
 	}
 }
 
-const std::list<ppl7::grafix::Point> &Collision::getCollisionPoints() const
+const std::list<ppl7::grafix::Point>& Collision::getCollisionPoints() const
 {
 	return collision_points;
 }
 
-Object *Collision::getObject() const
+Object* Collision::getObject() const
 {
 	return object;
 }
@@ -539,9 +541,9 @@ Object *Collision::getObject() const
 bool Collision::onFoot() const
 {
 	int height=bounding_box_object.height();
-	if (height>2*TILE_HEIGHT) height=height*2/3;
-	else height=height/2;
-	if (bounding_box_intersection.y2<=bounding_box_object.y2-height) {
+	if (height > 2 * TILE_HEIGHT) height=height * 2 / 3;
+	else height=height / 2;
+	if (bounding_box_intersection.y2 <= bounding_box_object.y2 - height) {
 		return true;
 	}
 	return false;
@@ -549,9 +551,9 @@ bool Collision::onFoot() const
 
 bool Collision::objectBottom() const
 {
-	if (bounding_box_player.y2>bounding_box_object.y2 &&
-			bounding_box_player.y1<bounding_box_object.y2 &&
-			bounding_box_player.y2>bounding_box_object.y2) {
+	if (bounding_box_player.y2 > bounding_box_object.y2 &&
+		bounding_box_player.y1<bounding_box_object.y2 &&
+		bounding_box_player.y2>bounding_box_object.y2) {
 		return true;
 	}
 	return false;
@@ -560,8 +562,8 @@ bool Collision::objectBottom() const
 bool Collision::objectTop() const
 {
 	if (bounding_box_player.y2<bounding_box_object.y2 &&
-			bounding_box_player.y2>bounding_box_object.y1 &&
-			bounding_box_player.y1<bounding_box_object.y1) {
+		bounding_box_player.y2>bounding_box_object.y1 &&
+		bounding_box_player.y1 < bounding_box_object.y1) {
 		return true;
 	}
 	return false;
@@ -571,8 +573,8 @@ bool Collision::objectTop() const
 bool Collision::objectLeft() const
 {
 	if (bounding_box_player.x2<bounding_box_object.x2 &&
-			bounding_box_player.x2>bounding_box_object.x1 &&
-			bounding_box_player.x1<bounding_box_object.x1) {
+		bounding_box_player.x2>bounding_box_object.x1 &&
+		bounding_box_player.x1 < bounding_box_object.x1) {
 		return true;
 	}
 	return false;
@@ -580,9 +582,9 @@ bool Collision::objectLeft() const
 
 bool Collision::objectRight() const
 {
-	if (bounding_box_player.x1>bounding_box_object.x1 &&
-			bounding_box_player.x1<bounding_box_object.x2 &&
-			bounding_box_player.x2>bounding_box_object.x2) {
+	if (bounding_box_player.x1 > bounding_box_object.x1 &&
+		bounding_box_player.x1<bounding_box_object.x2 &&
+		bounding_box_player.x2>bounding_box_object.x2) {
 		return true;
 	}
 	return false;

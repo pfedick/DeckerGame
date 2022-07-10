@@ -15,7 +15,7 @@ class TileTypePlane;
 class Waynet;
 
 namespace ppl7::tk {
-	class Widget;
+class Widget;
 }
 
 class AudioInstance;
@@ -104,17 +104,17 @@ class Object;
 class Collision
 {
 private:
-	Object *object;
+	Object* object;
 	std::list<ppl7::grafix::Point> collision_points;
 public:
 	ppl7::grafix::Rect bounding_box_object;
 	ppl7::grafix::Rect bounding_box_player;
 	ppl7::grafix::Rect bounding_box_intersection;
 	Collision();
-	Collision(const Collision &other);
-	void detect(Object *object, const std::list<ppl7::grafix::Point> &checkpoints, const Player &player);
-	const std::list<ppl7::grafix::Point> &getCollisionPoints() const;
-	Object *getObject() const;
+	Collision(const Collision& other);
+	void detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player);
+	const std::list<ppl7::grafix::Point>& getCollisionPoints() const;
+	Object* getObject() const;
 	bool onFoot() const;
 	bool objectTop() const;
 	bool objectBottom() const;
@@ -129,7 +129,7 @@ private:
 public:
 	ppl7::grafix::PointF p;
 	ppl7::grafix::PointF initial_p;
-	SpriteTexture	*texture;
+	SpriteTexture* texture;
 	//ppl7::tk::Widget *widget;
 	ppl7::grafix::Rect boundary, initial_boundary;
 	uint32_t id;
@@ -150,14 +150,14 @@ public:
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
 	void updateBoundary();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
 	virtual void openUi();
 	virtual void reset();
-	virtual void toggle(bool enable, Object *source=NULL);
+	virtual void toggle(bool enable, Object* source=NULL);
 	static Representation representation();
 };
 
@@ -175,12 +175,12 @@ class Vent : public Object
 private:
 	double next_animation;
 	AnimationCycle animation;
-	AudioInstance *audio;
+	AudioInstance* audio;
 public:
 	Vent();
 	~Vent();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 };
 
 class WindEmitter : public Object
@@ -190,7 +190,7 @@ private:
 public:
 	WindEmitter();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -211,9 +211,9 @@ public:
 	~TouchEmitter();
 	static Representation representation();
 	void init();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 	virtual void reset();
 };
@@ -221,7 +221,7 @@ public:
 class Speaker : public Object
 {
 private:
-	AudioInstance *audio;
+	AudioInstance* audio;
 public:
 	int sample_id;
 	int max_distance;
@@ -231,9 +231,9 @@ public:
 	~Speaker();
 	static Representation representation();
 	void setSample(int id, float volume, int max_distance=1600);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 };
 
@@ -264,10 +264,10 @@ public:
 	Switch();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 	virtual void reset();
 };
@@ -284,9 +284,24 @@ public:
 	CoinReward();
 	static Representation representation();
 
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
+
+class ExtraLife : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+
+public:
+	ExtraLife();
+	static Representation representation();
+
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+};
+
 
 class GemReward : public Object
 {
@@ -296,8 +311,8 @@ private:
 public:
 	GemReward();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class CrystalReward : public Object
@@ -308,8 +323,8 @@ private:
 public:
 	CrystalReward();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class TreasureChest : public Object
@@ -321,8 +336,8 @@ private:
 public:
 	TreasureChest();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class KeyReward : public Object
@@ -331,7 +346,7 @@ private:
 public:
 	KeyReward();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class Medikit : public Object
@@ -340,7 +355,7 @@ private:
 public:
 	Medikit();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class SavePoint : public Object
@@ -352,8 +367,8 @@ private:
 public:
 	SavePoint();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 
@@ -374,18 +389,18 @@ private:
 public:
 	ThreeSpeers();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class LaserBarrier : public Trap
 {
 private:
-	ppl7::grafix::Point start,end;
+	ppl7::grafix::Point start, end;
 	double next_state;
 	int state;
 	int flicker;
-	AudioInstance *audio;
+	AudioInstance* audio;
 public:
 	float time_on_min, time_off_min;
 	float time_on_max, time_off_max;
@@ -400,13 +415,13 @@ public:
 	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
 	void init();
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void toggle(bool enable, Object *source=NULL);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void toggle(bool enable, Object* source=NULL);
 
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 
 
@@ -428,13 +443,13 @@ public:
 	StamperVertical();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
-	virtual void toggle(bool enable, Object *source=NULL);
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
+	virtual void toggle(bool enable, Object* source=NULL);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
 
 };
 
@@ -446,8 +461,8 @@ private:
 public:
 	Fire();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void handleCollision(Player *player, const Collision &collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
 class Arrow : public Trap
@@ -468,9 +483,9 @@ public:
 	Arrow();
 	static Representation representation();
 	void changeDirection(int new_direction);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 
 };
@@ -490,8 +505,8 @@ private:
 public:
 	Rat();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -504,8 +519,8 @@ private:
 public:
 	Scorpion();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -519,8 +534,8 @@ private:
 public:
 	Bat();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -534,8 +549,8 @@ private:
 public:
 	Skeleton();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 };
 
 class Mummy : public Enemy
@@ -548,8 +563,8 @@ private:
 public:
 	Mummy();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -563,15 +578,15 @@ private:
 public:
 	Mushroom();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 };
 
 class Scarabeus : public Enemy
 {
 private:
 	AnimationCycle animation;
-	AudioInstance *audio;
+	AudioInstance* audio;
 	double next_state, next_animation;
 	ppl7::grafix::PointF velocity;
 	int state;
@@ -580,8 +595,8 @@ public:
 	~Scarabeus();
 	static Representation representation();
 	void update_animation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -595,9 +610,9 @@ private:
 public:
 	HangingSpider();
 	static Representation representation();
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 
 };
 
@@ -612,9 +627,9 @@ private:
 public:
 	BreakingGround();
 	static Representation representation();
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
 };
 
 class Floater : public Object
@@ -629,7 +644,7 @@ private:
 	bool current_state;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
-	AudioInstance *audio;
+	AudioInstance* audio;
 public:
 	bool initial_state;
 	unsigned char floater_type;
@@ -638,12 +653,12 @@ public:
 	~Floater();
 	void init();
 	virtual void reset();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void toggle(bool enable, Object *source=NULL);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual void toggle(bool enable, Object* source=NULL);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void openUi();
 
 };
@@ -655,7 +670,7 @@ private:
 public:
 	FloaterHorizontal();
 	static Representation representation();
-	};
+};
 
 class FloaterVertical : public Floater
 {
@@ -684,11 +699,11 @@ public:
 	Door();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void draw(SDL_Renderer *renderer, const ppl7::grafix::Point &coords) const;
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual size_t save(unsigned char *buffer, size_t size);
-	virtual bool load(const unsigned char *buffer, size_t size);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void handleCollision(Player* player, const Collision& collision);
+	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual bool load(const unsigned char* buffer, size_t size);
 	virtual void reset();
 	virtual void openUi();
 
@@ -701,45 +716,44 @@ private:
 	uint32_t nextid;
 	uint32_t next_spawn_id;
 	int player_start;
-	std::map<uint32_t,Object *> object_list;
-	std::map<uint32_t,Object *> visible_object_map;
-	SpriteTexture *spriteset[Spriteset::MaxSpritesets];
+	std::map<uint32_t, Object*> object_list;
+	std::map<uint32_t, Object*> visible_object_map;
+	SpriteTexture* spriteset[Spriteset::MaxSpritesets];
 
-	Waynet *waynet;
-	SpriteTexture *getTexture(int sprite_set) const;
+	Waynet* waynet;
+	SpriteTexture* getTexture(int sprite_set) const;
 
 public:
-	ObjectSystem(Waynet *waynet);
+	ObjectSystem(Waynet* waynet);
 	~ObjectSystem();
 	void clear();
-	void loadSpritesets(SDL &sdl);
-	void addObject(Object *object);
-	Object *getInstance(int object_type) const;
-	void update(double time, TileTypePlane &ttplane, Player &player);
-	void updateVisibleObjectList(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport);
-	void draw(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
-	void drawEditMode(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords) const;
-	void save(ppl7::FileObject &file, unsigned char id) const;
-	void load(const ppl7::ByteArrayPtr &ba);
-	void saveState(ppl7::FileObject &file, unsigned char id) const;
-	void loadState(const ppl7::ByteArrayPtr &ba) const;
-	Object *getObject(uint32_t object_id);
-	Object *findMatchingObject(const ppl7::grafix::Point &p) const;
-	Object *detectCollision(const std::list<ppl7::grafix::Point> &player);
-	void drawSelectedSpriteOutline(SDL_Renderer *renderer, const ppl7::grafix::Rect &viewport, const ppl7::grafix::Point &worldcoords, int id);
-	void drawPlaceSelection(SDL_Renderer *renderer, const ppl7::grafix::Point &p, int object_type);
+	void loadSpritesets(SDL& sdl);
+	void addObject(Object* object);
+	Object* getInstance(int object_type) const;
+	void update(double time, TileTypePlane& ttplane, Player& player);
+	void updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void save(ppl7::FileObject& file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
+	void saveState(ppl7::FileObject& file, unsigned char id) const;
+	void loadState(const ppl7::ByteArrayPtr& ba) const;
+	Object* getObject(uint32_t object_id);
+	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
+	Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
+	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
+	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);
 	ppl7::grafix::Point findPlayerStart() const;
 	ppl7::grafix::Point nextPlayerStart();
 	size_t count() const;
 	size_t countVisible() const;
-	Waynet &getWaynet();
+	Waynet& getWaynet();
 
 };
 
-ObjectSystem *GetObjectSystem();
+ObjectSystem* GetObjectSystem();
 
 } // EOF namespace Decker::Objects
 
 #endif // INCLUDE_OBJECTS_H_
-

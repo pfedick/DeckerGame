@@ -189,6 +189,12 @@ void Player::addPoints(int points)
 	this->points+=points;
 }
 
+void Player::addLife(int lifes)
+{
+	if (movement == Dead) return;
+	this->lifes+=lifes;
+}
+
 void Player::dropHealth(int points, HealthDropReason reason)
 {
 	if (godmode) return;
