@@ -93,7 +93,11 @@ size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float v
 	}
 	if (buffersize < num * sizeof(ppl7::STEREOSAMPLE16)) {
 		if (!prebuffer) prebuffer=(ppl7::STEREOSAMPLE16*)malloc(num * sizeof(ppl7::STEREOSAMPLE16));
-		else prebuffer=(ppl7::STEREOSAMPLE16*)realloc(prebuffer, num * sizeof(ppl7::STEREOSAMPLE16));
+		else {
+			ppl7::STEREOSAMPLE16* newbuffer=(ppl7::STEREOSAMPLE16*)realloc(prebuffer, num * sizeof(ppl7::STEREOSAMPLE16));
+			if (!newbuffer) return 0;
+			prebuffer=newbuffer;
+		}
 		if (!prebuffer) return 0;
 	}
 	size_t read=decoder->getSamples(num, prebuffer);
