@@ -125,8 +125,6 @@ public:
 
 class Object
 {
-private:
-	Type::ObjectType myType;
 public:
 	enum class Layer {
 		BehindBricks=0,
@@ -134,6 +132,11 @@ public:
 		BeforePlayer=2,
 		BehindPlayer=1
 	};
+private:
+	Type::ObjectType myType;
+
+public:
+	Layer myLayer;
 
 	ppl7::grafix::PointF p;
 	ppl7::grafix::PointF initial_p;
@@ -768,8 +771,8 @@ public:
 	Object* getInstance(int object_type) const;
 	void update(double time, TileTypePlane& ttplane, Player& player);
 	void updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	void saveState(ppl7::FileObject& file, unsigned char id) const;

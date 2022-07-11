@@ -9,14 +9,14 @@
 
 
 
-static double planeFactor[]={1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f};
+static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f };
 
 Level::Level()
 {
-	for (int i=0;i<=MAX_TILESETS;i++) {
+	for (int i=0;i <= MAX_TILESETS;i++) {
 		tileset[i]=NULL;
 	}
-	for (int i=0;i<=MAX_SPRITESETS;i++) {
+	for (int i=0;i <= MAX_SPRITESETS;i++) {
 		spriteset[i]=NULL;
 	}
 	objects=new Decker::Objects::ObjectSystem(&waynet);
@@ -71,14 +71,14 @@ void Level::setShowObjects(bool enabled)
 	showObjects=enabled;
 }
 
-void Level::setTileset(int no, SpriteTexture *tileset)
+void Level::setTileset(int no, SpriteTexture* tileset)
 {
 	//printf ("Level::setTileset no=%d\n",no);
 	if (no<0 || no>MAX_TILESETS) return;
 	this->tileset[no]=tileset;
 }
 
-void Level::setSpriteset(int no, SpriteTexture *spriteset)
+void Level::setSpriteset(int no, SpriteTexture* spriteset)
 {
 	if (no<0 || no>MAX_SPRITESETS) return;
 	this->spriteset[no]=spriteset;
@@ -108,103 +108,104 @@ void Level::create(int width, int height)
 	MiddlePlane.create(width, height);
 }
 
-void Level::setViewport(const ppl7::grafix::Rect &r)
+void Level::setViewport(const ppl7::grafix::Rect& r)
 {
 	viewport=r;
 }
 
-Plane &Level::plane(int id)
+Plane& Level::plane(int id)
 {
-	if (id==0) return PlayerPlane;
-	if (id==1) return FrontPlane;
-	if (id==2) return FarPlane;
-	if (id==3) return BackPlane;
-	if (id==4) return MiddlePlane;
-	if (id==5) return HorizonPlane;
+	if (id == 0) return PlayerPlane;
+	if (id == 1) return FrontPlane;
+	if (id == 2) return FarPlane;
+	if (id == 3) return BackPlane;
+	if (id == 4) return MiddlePlane;
+	if (id == 5) return HorizonPlane;
 	return PlayerPlane;
 
 }
 
-SpriteSystem &Level::spritesystem(int plane, int layer)
+SpriteSystem& Level::spritesystem(int plane, int layer)
 {
-	if (plane==0) return PlayerSprites[layer];
-	if (plane==1) return FrontSprites[layer];
-	if (plane==2) return FarSprites[layer];
-	if (plane==3) return BackSprites[layer];
-	if (plane==4) return MiddleSprites[layer];
-	if (plane==5) return HorizonSprites[layer];
+	if (plane == 0) return PlayerSprites[layer];
+	if (plane == 1) return FrontSprites[layer];
+	if (plane == 2) return FarSprites[layer];
+	if (plane == 3) return BackSprites[layer];
+	if (plane == 4) return MiddleSprites[layer];
+	if (plane == 5) return HorizonSprites[layer];
 
 	return PlayerSprites[layer];
 }
 
 
-void Level::load(const ppl7::String &Filename)
+void Level::load(const ppl7::String& Filename)
 {
 	clear();
 	ppl7::File ff;
 	ff.open(Filename, ppl7::File::READ);
 	ppl7::ByteArray ba;
-	ff.read(ba,7);
-	const char *buffer=ba.toCharPtr();
-	if (memcmp(buffer,"Decker",7)!=0) {
+	ff.read(ba, 7);
+	const char* buffer=ba.toCharPtr();
+	if (memcmp(buffer, "Decker", 7) != 0) {
 		printf("Invalid Fileformat\n");
 		return;
 	}
-	while(!ff.eof()) {
+	while (!ff.eof()) {
 		try {
-			size_t bytes_read=ff.read(ba,5);
-			if (bytes_read!=5) break;
+			size_t bytes_read=ff.read(ba, 5);
+			if (bytes_read != 5) break;
 			buffer=ba.toCharPtr();
 			size_t size=ppl7::Peek32(buffer);
-			int id=ppl7::Peek8(buffer+4);
+			int id=ppl7::Peek8(buffer + 4);
 			//printf ("load id=%d, size=%zd\n",id,size);
-			if (size<=5) continue;
-			bytes_read=ff.read(ba,size-5);
-			if (bytes_read!=size-5) break;
-			if (id==LevelChunkId::chunkPlayerPlane) {
+			if (size <= 5) continue;
+			bytes_read=ff.read(ba, size - 5);
+			if (bytes_read != size - 5) break;
+			if (id == LevelChunkId::chunkPlayerPlane) {
 				PlayerPlane.load(ba);
-			} else if (id==LevelChunkId::chunkFrontPlane) {
+			} else if (id == LevelChunkId::chunkFrontPlane) {
 				FrontPlane.load(ba);
-			} else if (id==LevelChunkId::chunkFarPlane) {
+			} else if (id == LevelChunkId::chunkFarPlane) {
 				FarPlane.load(ba);
-			} else if (id==LevelChunkId::chunkBackPlane) {
+			} else if (id == LevelChunkId::chunkBackPlane) {
 				BackPlane.load(ba);
-			} else if (id==LevelChunkId::chunkMiddlePlane) {
+			} else if (id == LevelChunkId::chunkMiddlePlane) {
 				MiddlePlane.load(ba);
-			} else if (id==LevelChunkId::chunkHorizonPlane) {
+			} else if (id == LevelChunkId::chunkHorizonPlane) {
 				HorizonPlane.load(ba);
-			} else if (id==LevelChunkId::chunkPlayerSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkPlayerSpritesLayer0) {
 				PlayerSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkPlayerSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkPlayerSpritesLayer1) {
 				PlayerSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkFrontSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkFrontSpritesLayer0) {
 				FrontSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkFrontSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkFrontSpritesLayer1) {
 				FrontSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkFarSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkFarSpritesLayer0) {
 				FarSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkFarSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkFarSpritesLayer1) {
 				FarSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkBackSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkBackSpritesLayer0) {
 				BackSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkBackSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkBackSpritesLayer1) {
 				BackSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkMiddleSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkMiddleSpritesLayer0) {
 				MiddleSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkMiddleSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkMiddleSpritesLayer1) {
 				MiddleSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkHorizonSpritesLayer0) {
+			} else if (id == LevelChunkId::chunkHorizonSpritesLayer0) {
 				HorizonSprites[0].load(ba);
-			} else if (id==LevelChunkId::chunkHorizonSpritesLayer1) {
+			} else if (id == LevelChunkId::chunkHorizonSpritesLayer1) {
 				HorizonSprites[1].load(ba);
-			} else if (id==LevelChunkId::chunkTileTypes) {
+			} else if (id == LevelChunkId::chunkTileTypes) {
 				TileTypeMatrix.load(ba);
-			} else if (id==LevelChunkId::chunkObjects) {
+			} else if (id == LevelChunkId::chunkObjects) {
 				objects->load(ba);
-			} else if (id==LevelChunkId::chunkWayNet) {
+			} else if (id == LevelChunkId::chunkWayNet) {
 				waynet.load(ba);
 			}
-		} catch (const ppl7::EndOfFileException &) {
+		}
+		catch (const ppl7::EndOfFileException&) {
 			break;
 		}
 	}
@@ -220,20 +221,20 @@ void Level::load(const ppl7::String &Filename)
 	*/
 }
 
-void Level::save(const ppl7::String &Filename)
+void Level::save(const ppl7::String& Filename)
 {
 	ppl7::File ff;
 	ff.open(Filename, ppl7::File::WRITE);
-	char *buffer[20];
-	memcpy(buffer,"Decker",7);
-	ff.write(buffer,7);
-	PlayerPlane.save(ff,LevelChunkId::chunkPlayerPlane);
-	FrontPlane.save(ff,LevelChunkId::chunkFrontPlane);
-	FarPlane.save(ff,LevelChunkId::chunkFarPlane);
-	BackPlane.save(ff,LevelChunkId::chunkBackPlane);
-	MiddlePlane.save(ff,LevelChunkId::chunkMiddlePlane);
-	HorizonPlane.save(ff,LevelChunkId::chunkHorizonPlane);
-	TileTypeMatrix.save(ff,LevelChunkId::chunkTileTypes);
+	char* buffer[20];
+	memcpy(buffer, "Decker", 7);
+	ff.write(buffer, 7);
+	PlayerPlane.save(ff, LevelChunkId::chunkPlayerPlane);
+	FrontPlane.save(ff, LevelChunkId::chunkFrontPlane);
+	FarPlane.save(ff, LevelChunkId::chunkFarPlane);
+	BackPlane.save(ff, LevelChunkId::chunkBackPlane);
+	MiddlePlane.save(ff, LevelChunkId::chunkMiddlePlane);
+	HorizonPlane.save(ff, LevelChunkId::chunkHorizonPlane);
+	TileTypeMatrix.save(ff, LevelChunkId::chunkTileTypes);
 	PlayerSprites[0].save(ff, LevelChunkId::chunkPlayerSpritesLayer0);
 	PlayerSprites[1].save(ff, LevelChunkId::chunkPlayerSpritesLayer1);
 	FrontSprites[0].save(ff, LevelChunkId::chunkFrontSpritesLayer0);
@@ -248,34 +249,34 @@ void Level::save(const ppl7::String &Filename)
 	MiddleSprites[1].save(ff, LevelChunkId::chunkMiddleSpritesLayer1);
 	HorizonSprites[0].save(ff, LevelChunkId::chunkHorizonSpritesLayer0);
 	HorizonSprites[1].save(ff, LevelChunkId::chunkHorizonSpritesLayer1);
-	objects->save(ff,LevelChunkId::chunkObjects);
-	waynet.save(ff,LevelChunkId::chunkWayNet);
+	objects->save(ff, LevelChunkId::chunkObjects);
+	waynet.save(ff, LevelChunkId::chunkWayNet);
 	ff.close();
 
 }
 
-void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::grafix::Point &worldcoords) const
+void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	if (!plane.isVisible()) return;
-	int tiles_width=viewport.width()/TILE_WIDTH+9;
-	int tiles_height=viewport.height()/TILE_HEIGHT+2;
-	int offset_x=worldcoords.x%TILE_WIDTH;
-	int offset_y=worldcoords.y%TILE_HEIGHT;
-	int start_x=worldcoords.x/TILE_WIDTH-7;
-	int start_y=worldcoords.y/TILE_HEIGHT;
-	int x1=viewport.x1-offset_x-TILE_WIDTH*7;
-	int y1=viewport.y1-offset_y+TILE_HEIGHT;
+	int tiles_width=viewport.width() / TILE_WIDTH + 9;
+	int tiles_height=viewport.height() / TILE_HEIGHT + 2;
+	int offset_x=worldcoords.x % TILE_WIDTH;
+	int offset_y=worldcoords.y % TILE_HEIGHT;
+	int start_x=worldcoords.x / TILE_WIDTH - 7;
+	int start_y=worldcoords.y / TILE_HEIGHT;
+	int x1=viewport.x1 - offset_x - TILE_WIDTH * 7;
+	int y1=viewport.y1 - offset_y + TILE_HEIGHT;
 
-	for (int z=0;z<MAX_TILE_LAYER;z++) {
-		for (int y=tiles_height;y>=0;y--) {
-			for (int x=0;x<tiles_width;x++) {
-				const Tile *tile=plane.get(x+start_x,y+start_y);
+	for (int z=0;z < MAX_TILE_LAYER;z++) {
+		for (int y=tiles_height;y >= 0;y--) {
+			for (int x=0;x < tiles_width;x++) {
+				const Tile* tile=plane.get(x + start_x, y + start_y);
 				if (tile) {
 					//if (tile->layer[z].tileset>8) printf ("draw %d, %d\n",tile->layer[z].tileset, tile->layer[z].tileno);
-					if (tile->layer[z].tileset<=MAX_TILESETS && tileset[tile->layer[z].tileset]) {
+					if (tile->layer[z].tileset <= MAX_TILESETS && tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->layer[z].tileset]->draw(renderer,x1+x*TILE_WIDTH,y1+y*TILE_HEIGHT,tile->layer[z].tileno);
+						tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno);
 					}
 				}
 			}
@@ -283,64 +284,76 @@ void Level::drawPlane(SDL_Renderer *renderer, const Plane &plane, const ppl7::gr
 	}
 }
 
-void Level::draw(SDL_Renderer *renderer, const ppl7::grafix::Point &worldcoords, Player *player)
+void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player)
 {
 	if (HorizonPlane.isVisible()) {
-		if (showSprites) HorizonSprites[0].draw(renderer, viewport,worldcoords*planeFactor[5]);
-		drawPlane(renderer,HorizonPlane, worldcoords*planeFactor[5]);
-		if (showSprites) HorizonSprites[1].draw(renderer, viewport,worldcoords*planeFactor[5]);
+		if (showSprites) HorizonSprites[0].draw(renderer, viewport, worldcoords * planeFactor[5]);
+		drawPlane(renderer, HorizonPlane, worldcoords * planeFactor[5]);
+		if (showSprites) HorizonSprites[1].draw(renderer, viewport, worldcoords * planeFactor[5]);
 	}
 
 	if (FarPlane.isVisible()) {
-		if (showSprites) FarSprites[0].draw(renderer, viewport,worldcoords*planeFactor[2]);
-		drawPlane(renderer,FarPlane, worldcoords*planeFactor[2]);
-		if (showSprites) FarSprites[1].draw(renderer, viewport,worldcoords*planeFactor[2]);
+		if (showSprites) FarSprites[0].draw(renderer, viewport, worldcoords * planeFactor[2]);
+		drawPlane(renderer, FarPlane, worldcoords * planeFactor[2]);
+		if (showSprites) FarSprites[1].draw(renderer, viewport, worldcoords * planeFactor[2]);
 	}
 	if (MiddlePlane.isVisible()) {
-		if (showSprites) MiddleSprites[0].draw(renderer, viewport,worldcoords*planeFactor[4]);
-		drawPlane(renderer,MiddlePlane, worldcoords*planeFactor[4]);
-		if (showSprites) MiddleSprites[1].draw(renderer, viewport,worldcoords*planeFactor[4]);
+		if (showSprites) MiddleSprites[0].draw(renderer, viewport, worldcoords * planeFactor[4]);
+		drawPlane(renderer, MiddlePlane, worldcoords * planeFactor[4]);
+		if (showSprites) MiddleSprites[1].draw(renderer, viewport, worldcoords * planeFactor[4]);
 	}
 	if (BackPlane.isVisible()) {
-		if (showSprites) BackSprites[0].draw(renderer, viewport,worldcoords*planeFactor[3]);
-		drawPlane(renderer,BackPlane, worldcoords*planeFactor[3]);
-		if (showSprites) BackSprites[1].draw(renderer, viewport,worldcoords*planeFactor[3]);
+		if (showSprites) BackSprites[0].draw(renderer, viewport, worldcoords * planeFactor[3]);
+		drawPlane(renderer, BackPlane, worldcoords * planeFactor[3]);
+		if (showSprites) BackSprites[1].draw(renderer, viewport, worldcoords * planeFactor[3]);
 	}
 	if (PlayerPlane.isVisible()) {
-		if (showSprites) PlayerSprites[0].draw(renderer, viewport,worldcoords*planeFactor[0]);
-		drawPlane(renderer,PlayerPlane, worldcoords*planeFactor[0]);
-		if (showSprites) PlayerSprites[1].draw(renderer, viewport,worldcoords*planeFactor[0]);
-		if (showObjects) {
+		if (showSprites) PlayerSprites[0].draw(renderer, viewport, worldcoords * planeFactor[0]);
+		if (showObjects) {	// Objects behind Bricks
 			if (editMode)
-				objects->drawEditMode(renderer, viewport, worldcoords*planeFactor[0]);
+				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 			else
-				objects->draw(renderer, viewport, worldcoords*planeFactor[0]);
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 		}
-		player->draw(renderer, viewport, worldcoords*planeFactor[0]);
+		drawPlane(renderer, PlayerPlane, worldcoords * planeFactor[0]);
+		if (showSprites) PlayerSprites[1].draw(renderer, viewport, worldcoords * planeFactor[0]);
+		if (showObjects) {	// Objects behind Player
+			if (editMode)
+				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
+			else
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
+		}
+		player->draw(renderer, viewport, worldcoords * planeFactor[0]);
+		if (showObjects) {	// Objects before Player
+			if (editMode)
+				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+			else
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+		}
 
 	}
 	if (FrontPlane.isVisible()) {
-		if (showSprites) FrontSprites[0].draw(renderer, viewport,worldcoords*planeFactor[1]);
-		drawPlane(renderer,FrontPlane, worldcoords*planeFactor[1]);
-		if (showSprites) FrontSprites[1].draw(renderer, viewport,worldcoords*planeFactor[1]);
+		if (showSprites) FrontSprites[0].draw(renderer, viewport, worldcoords * planeFactor[1]);
+		drawPlane(renderer, FrontPlane, worldcoords * planeFactor[1]);
+		if (showSprites) FrontSprites[1].draw(renderer, viewport, worldcoords * planeFactor[1]);
 	}
 }
 
-void Level::updateVisibleSpriteLists(const ppl7::grafix::Point &worldcoords, const ppl7::grafix::Rect &viewport)
+void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
-	FarSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
-	FarSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[2], viewport);
-	MiddleSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[4], viewport);
-	MiddleSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[4], viewport);
-	BackSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[3], viewport);
-	BackSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[3], viewport);
-	PlayerSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
-	PlayerSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[0], viewport);
-	FrontSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
-	FrontSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[1], viewport);
-	HorizonSprites[0].updateVisibleSpriteList(worldcoords*planeFactor[5], viewport);
-	HorizonSprites[1].updateVisibleSpriteList(worldcoords*planeFactor[5], viewport);
-	objects->updateVisibleObjectList(worldcoords*planeFactor[0], viewport);
+	FarSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[2], viewport);
+	FarSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[2], viewport);
+	MiddleSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[4], viewport);
+	MiddleSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[4], viewport);
+	BackSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[3], viewport);
+	BackSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[3], viewport);
+	PlayerSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[0], viewport);
+	PlayerSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[0], viewport);
+	FrontSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[1], viewport);
+	FrontSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[1], viewport);
+	HorizonSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[5], viewport);
+	HorizonSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[5], viewport);
+	objects->updateVisibleObjectList(worldcoords * planeFactor[0], viewport);
 }
 
 size_t Level::countSprites() const
@@ -391,10 +404,10 @@ size_t Level::countVisibleSprites() const
 	return total;
 }
 
-bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &worldcoords, SpriteSystem::Item &item, int &plane, int &layer) const
+bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const
 {
 	if (FrontPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[1];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[1];
 		if (FrontSprites[1].findMatchingSprite(coords, item)) {
 			plane=1;
 			layer=1;
@@ -407,7 +420,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (PlayerPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[0];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[0];
 		if (PlayerSprites[1].findMatchingSprite(coords, item)) {
 			plane=0;
 			layer=1;
@@ -420,7 +433,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (BackPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[3];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[3];
 		if (BackSprites[1].findMatchingSprite(coords, item)) {
 			plane=3;
 			layer=1;
@@ -433,7 +446,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (MiddlePlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[4];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[4];
 		if (MiddleSprites[1].findMatchingSprite(coords, item)) {
 			plane=4;
 			layer=1;
@@ -446,7 +459,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (FarPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[2];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[2];
 		if (FarSprites[1].findMatchingSprite(coords, item)) {
 			plane=2;
 			layer=1;
@@ -459,7 +472,7 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 		}
 	}
 	if (HorizonPlane.isVisible()) {
-		ppl7::grafix::Point coords=p+worldcoords*planeFactor[5];
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[5];
 		if (HorizonSprites[1].findMatchingSprite(coords, item)) {
 			plane=5;
 			layer=1;
@@ -473,6 +486,3 @@ bool Level::findSprite(const ppl7::grafix::Point &p, const ppl7::grafix::Point &
 	}
 	return false;
 }
-
-
-

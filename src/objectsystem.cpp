@@ -186,25 +186,25 @@ void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player)
 	}
 }
 
-void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
+void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
 {
 	std::map<uint32_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		const Object* object=it->second;
-		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true) {
+		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true && object->myLayer == layer) {
 			object->draw(renderer, coords);
 		}
 	}
 }
 
-void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
+void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
 {
 	std::map<uint32_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		const Object* object=it->second;
-		if (object->texture) {
+		if (object->texture != NULL && object->myLayer == layer) {
 			object->texture->draw(renderer,
 				object->initial_p.x + coords.x,
 				object->initial_p.y + coords.y,

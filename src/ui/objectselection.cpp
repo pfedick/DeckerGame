@@ -187,6 +187,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
+	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	this->addChild(layer_selection);
 
 	this->addChild(new ppl7::tk::Label(0, 30, width, 60, "Object selection:"));
