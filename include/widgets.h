@@ -220,6 +220,8 @@ public:
 	FileDialog(int width, int height, FileMode mode=FileMode::AnyFile);
 	~FileDialog();
 
+	int custom_id;
+
 	ppl7::String directory() const;
 	ppl7::String filename() const;
 	DialogState state() const;

@@ -380,6 +380,8 @@ public:
 	};
 	Resources();
 	BrickResource bricks[MAX_TILESETS];
+	SpriteTexture whitebricks_world;
+	SpriteTexture whitebricks_ui;
 	void loadBricks(SDL& sdl);
 	int getMaxTilesetId() const;
 };
@@ -507,6 +509,7 @@ private:
 	Decker::ui::WayNetEdit* waynet_edit;
 	//StartScreen* start_screen;
 	SettingsScreen* settings_screen;
+	Decker::ui::FileDialog* filedialog;
 
 	BrickOccupation brick_occupation;
 	BrickOccupation::Matrix brick_occupation_solid;
@@ -551,6 +554,8 @@ private:
 	void mouseDownEventOnSprite(ppl7::tk::MouseEvent* event);
 	void mouseDownEventOnObject(ppl7::tk::MouseEvent* event);
 	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event);
+
+	void checkFileDialog();
 
 	Player* player;
 	int fade_to_black;
@@ -604,14 +609,19 @@ public:
 	ppl7::tk::Window& window();
 
 	void startLevel(const ppl7::String& filename);
-	void save();
+	void save(const ppl7::String& filename);
 	void load();
 	void clearLevel();
 	void playerDied();
 	void resetPlayer();
 
+	const ppl7::String& getLevelFilename() const;
+
 	void playIntroVideo();
 	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
+
+	void openSaveAsDialog();
+	void openLoadDialog();
 
 };
 

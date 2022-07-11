@@ -49,7 +49,7 @@ void Config::load()
     volumeTotal=conf.get("volumeTotal", ppl7::ToString("%0.3f", volumeTotal)).toFloat();
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
-
+    if (volumeMusic > 0.5f) volumeMusic=0.5f;
     // Misc
     conf.setSection("misc");
     CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);

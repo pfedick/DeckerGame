@@ -93,6 +93,7 @@ private:
 	ppl7::tk::Button* edit_tiles_button;
 
 	ppl7::tk::Button* save_button;
+	ppl7::tk::Button* save_as_button;
 	ppl7::tk::Button* load_button;
 	ppl7::tk::Button* new_button;
 
@@ -112,8 +113,11 @@ private:
 
 	void setupUi();
 
+
 public:
 	MainMenue(int x, int y, int width, int height, Game* game);
+
+	void update();
 
 	void resize(int x, int y, int width, int height);
 

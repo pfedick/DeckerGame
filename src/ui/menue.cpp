@@ -48,47 +48,52 @@ void MainMenue::setupUi()
 	save_button->setEventHandler(this);
 	this->addChild(save_button);
 
-	load_button=new ppl7::tk::Button(66, 0, 64, s.height, "Load");
+	save_as_button=new ppl7::tk::Button(65, 0, 100, s.height, "Save as...");
+	save_as_button->setIcon(gfx->Toolbar.getDrawable(33));
+	save_as_button->setEventHandler(this);
+	this->addChild(save_as_button);
+
+	load_button=new ppl7::tk::Button(166, 0, 64, s.height, "Load");
 	load_button->setIcon(gfx->Toolbar.getDrawable(32));
 	load_button->setEventHandler(this);
 	this->addChild(load_button);
 
-	new_button=new ppl7::tk::Button(130, 0, 64, s.height, "New");
+	new_button=new ppl7::tk::Button(231, 0, 64, s.height, "New");
 	new_button->setIcon(gfx->Toolbar.getDrawable(31));
 	new_button->setEventHandler(this);
 	this->addChild(new_button);
 
 
-	edit_tiles_button=new ppl7::tk::Button(140 + 60, 0, 60, s.height, "Tiles");
+	edit_tiles_button=new ppl7::tk::Button(320, 0, 60, s.height, "Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	edit_tiletypes_button=new ppl7::tk::Button(202 + 60, 0, 80, s.height, "TileTypes");
+	edit_tiletypes_button=new ppl7::tk::Button(381, 0, 80, s.height, "TileTypes");
 	edit_tiletypes_button->setEventHandler(this);
 	this->addChild(edit_tiletypes_button);
 
-	edit_sprites_button=new ppl7::tk::Button(284 + 60, 0, 70, s.height, "Sprites");
+	edit_sprites_button=new ppl7::tk::Button(462, 0, 70, s.height, "Sprites");
 	edit_sprites_button->setEventHandler(this);
 	this->addChild(edit_sprites_button);
 
-	edit_objects_button=new ppl7::tk::Button(416, 0, 70, s.height, "Objects");
+	edit_objects_button=new ppl7::tk::Button(533, 0, 70, s.height, "Objects");
 	edit_objects_button->setEventHandler(this);
 	this->addChild(edit_objects_button);
 
-	edit_waynet_button=new ppl7::tk::Button(488, 0, 70, s.height, "WayNet");
+	edit_waynet_button=new ppl7::tk::Button(604, 0, 70, s.height, "WayNet");
 	edit_waynet_button->setEventHandler(this);
 	this->addChild(edit_waynet_button);
 
 
-	show_visibility_submenu_button=new ppl7::tk::Button(600, 0, 80, s.height, "Visibility");
+	show_visibility_submenu_button=new ppl7::tk::Button(695, 0, 80, s.height, "Visibility");
 	show_visibility_submenu_button->setEventHandler(this);
 	this->addChild(show_visibility_submenu_button);
 
 
-	ppl7::tk::Label* label=new ppl7::tk::Label(740, 0, 100, s.height, "active Plane: ");
+	ppl7::tk::Label* label=new ppl7::tk::Label(776, 0, 100, s.height, "active Plane: ");
 	this->addChild(label);
 
-	active_plane_combobox=new ComboBox(840, 0, 150, s.height);
+	active_plane_combobox=new ComboBox(877, 0, 150, s.height);
 	active_plane_combobox->add("PlayerPlane", "0");
 	active_plane_combobox->add("FrontPlane", "1");
 	active_plane_combobox->add("FarPlane", "2");
@@ -108,7 +113,13 @@ void MainMenue::setupUi()
 	world_follows_player_checkbox=new CheckBox(width() - 280, 0, 180, s.height, "World follows player", true);
 	this->addChild(world_follows_player_checkbox);
 
+	update();
+}
 
+void MainMenue::update()
+{
+	if (game->getLevelFilename().isEmpty()) save_button->setEnabled(false);
+	else save_button->setEnabled(true);
 }
 
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
@@ -126,11 +137,13 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 	} else if (event->widget() == edit_waynet_button) {
 		game->showWayNetEdit();
 	} else if (event->widget() == save_button) {
-		game->save();
+		game->save(game->getLevelFilename());
+	} else if (event->widget() == save_as_button) {
+		game->openSaveAsDialog();
 	} else if (event->widget() == new_button) {
 		game->clearLevel();
 	} else if (event->widget() == load_button) {
-		game->load();
+		game->openLoadDialog();
 	} else if (event->widget() == show_visibility_submenu_button) {
 		if (visibility) {
 			delete visibility;

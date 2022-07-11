@@ -52,6 +52,7 @@ Game::Game()
 	showui=false;
 	controlsEnabled=true;
 	settings_screen=NULL;
+	filedialog=NULL;
 }
 
 Game::~Game()
@@ -566,6 +567,7 @@ void Game::run()
 			audiosystem.setVolume(AudioClass::Music, 0.0f);
 		}
 		wm->handleEvents();
+		if (filedialog) checkFileDialog();
 		drawWorld(renderer);
 
 		ppl7::tk::MouseState mouse=wm->getMouseState();
@@ -897,8 +899,6 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 void Game::startLevel(const ppl7::String& filename)
 {
 	if (!ppl7::File::exists(filename)) {
-		clearLevel();
-		LevelFile=filename;
 		return;
 	}
 	level.load(filename);
@@ -907,17 +907,32 @@ void Game::startLevel(const ppl7::String& filename)
 	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
+		player->setVisible(true);
+	} else {
+		player->setVisible(false);
 	}
 }
 
-void Game::save()
+const ppl7::String& Game::getLevelFilename() const
 {
-	level.save(LevelFile);
+	return LevelFile;
+}
+
+void Game::save(const ppl7::String& filename)
+{
+	level.save(filename);
+	LevelFile=filename;
+	if (mainmenue) mainmenue->update();
 }
 
 void Game::load()
 {
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	closeObjectSelection();
 	level.load(LevelFile);
+	if (mainmenue) mainmenue->update();
 }
 
 void Game::clearLevel()
@@ -925,10 +940,13 @@ void Game::clearLevel()
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
+	closeObjectSelection();
 	WorldCoords.setPoint(0, 0);
 	level.create(512, 256);
 	if (player) player->move(500, 500);
 	LevelFile.clear();
+	if (mainmenue) mainmenue->update();
+	player->setVisible(false);
 }
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
@@ -1238,4 +1256,63 @@ void Game::resetPlayer()
 		player->resetState();
 		if (world_widget) world_widget->resetPlayerStats(player);
 	}
+}
+
+
+void Game::openSaveAsDialog()
+{
+	if (filedialog) delete filedialog;
+	filedialog=NULL;
+	int w=800;
+	int h=600;
+	if (w >= width() - 100) w=width() - 100;
+	if (h >= height() - 100) h=height() - 100;
+
+	filedialog=new Decker::ui::FileDialog(w, h);
+	filedialog->setFilename(LevelFile);
+	filedialog->setWindowTitle("save level");
+	filedialog->custom_id=1;
+	this->addChild(filedialog);
+}
+
+void Game::openLoadDialog()
+{
+	if (filedialog) delete filedialog;
+	filedialog=NULL;
+
+	int w=800;
+	int h=600;
+	if (w >= width() - 100) w=width() - 100;
+	if (h >= height() - 100) h=height() - 100;
+	filedialog=new Decker::ui::FileDialog(w, h, Decker::ui::FileDialog::FileMode::ExistingFile);
+	filedialog->setFilename(LevelFile);
+	filedialog->setWindowTitle("load existing level");
+	filedialog->custom_id=2;
+	this->addChild(filedialog);
+}
+
+void Game::checkFileDialog()
+{
+	if (!filedialog) return;
+	if (filedialog->state() == Decker::ui::FileDialog::DialogState::Open) return;
+	if (filedialog->state() == Decker::ui::FileDialog::DialogState::Aborted) {
+		delete filedialog;
+		filedialog=NULL;
+		return;
+	}
+	if (filedialog->custom_id == 1) {	// save level
+		ppl7::String filename=filedialog->filename();
+		save(filename);
+		config.LastEditorLevel=filename;
+		config.save();
+
+	} else if (filedialog->custom_id == 2) {	// load level
+		ppl7::String filename=filedialog->filename();
+		startLevel(filename);
+		config.LastEditorLevel=filename;
+		config.save();
+	}
+
+	delete filedialog;
+	filedialog=NULL;
 }

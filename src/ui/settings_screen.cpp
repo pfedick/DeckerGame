@@ -190,7 +190,7 @@ void SettingsScreen::initPageAudio()
     audio_music_slider=new Decker::ui::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
     audio_music_slider->setEventHandler(this);
     audio_music_slider->setDimension(0, 255);
-    audio_music_slider->setValue(game.config.volumeMusic * 255.0f);
+    audio_music_slider->setValue(game.config.volumeMusic * 255.0f * 2.0f);
     page_audio->addChild(audio_music_slider);
 
     label=new ppl7::tk::Label(100, 200, 200, 40, translate("effects:"));
@@ -420,7 +420,7 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
         game.audiosystem.setGlobalVolume(game.config.volumeTotal);
         game.config.save();
     } else if (event->widget() == audio_music_slider) {
-        game.config.volumeMusic=(float)audio_music_slider->value() / 255.0f;
+        game.config.volumeMusic=(float)audio_music_slider->value() / 512.0f;
         game.audiosystem.setVolume(AudioClass::Music, game.config.volumeMusic);
         game.config.save();
     } else if (event->widget() == audio_effects_slider) {

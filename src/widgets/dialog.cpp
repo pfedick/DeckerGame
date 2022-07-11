@@ -4,18 +4,18 @@
 namespace Decker::ui {
 
 Dialog::Dialog(int width, int height, int buttons)
-: ppl7::tk::Widget()
+	: ppl7::tk::Widget()
 {
-	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
 	//ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
-	myBackground=style.windowBackgroundColor*1.4f;
+	myBackground=style.windowBackgroundColor * 1.4f;
 	myBackground.setAlpha(240);
-	ppl7::tk::Window *gamewin=GetGameWindow();
-	create((gamewin->width()-640)/2, (gamewin->height()-480)/2,width,height);
-	ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
+	ppl7::tk::Window* gamewin=GetGameWindow();
+	create((gamewin->width() - width) / 2, (gamewin->height() - height) / 2, width, height);
+	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	ok_button=NULL;
-	if (buttons&Buttons::OK) {
-		ok_button=new ppl7::tk::Button((width-80)/2,height-80,80,30,"OK");
+	if (buttons & Buttons::OK) {
+		ok_button=new ppl7::tk::Button((width - 80) / 2, height - 80, 80, 30, "OK");
 		ok_button->setIcon(gfx->Toolbar.getDrawable(24));
 		ok_button->setEventHandler(this);
 		this->addChild(ok_button);
@@ -28,73 +28,73 @@ Dialog::~Dialog()
 {
 }
 
-const ppl7::String &Dialog::windowTitle() const
+const ppl7::String& Dialog::windowTitle() const
 {
 	return WindowTitle;
 }
 
-void Dialog::setWindowTitle(const ppl7::String &title)
+void Dialog::setWindowTitle(const ppl7::String& title)
 {
 	WindowTitle=title;
 	needsRedraw();
 }
-const ppl7::grafix::Drawable &Dialog::windowIcon() const
+const ppl7::grafix::Drawable& Dialog::windowIcon() const
 {
 	return WindowIcon;
 }
 
-void Dialog::setWindowIcon(const ppl7::grafix::Drawable &icon)
+void Dialog::setWindowIcon(const ppl7::grafix::Drawable& icon)
 {
 	WindowIcon=icon;
 	needsRedraw();
 }
 
-const ppl7::grafix::Color &Dialog::backgroundColor() const
+const ppl7::grafix::Color& Dialog::backgroundColor() const
 {
 	return myBackground;
 }
 
-void Dialog::setBackgroundColor(const ppl7::grafix::Color &c)
+void Dialog::setBackgroundColor(const ppl7::grafix::Color& c)
 {
 	myBackground=c;
 	needsRedraw();
 }
 
-void Dialog::paint(ppl7::grafix::Drawable &draw)
+void Dialog::paint(ppl7::grafix::Drawable& draw)
 {
-	const ppl7::tk::WidgetStyle &style=ppl7::tk::GetWidgetStyle();
+	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
 	//ppl7::grafix::Color light=style.buttonBackgroundColor*1.8f;
-	ppl7::grafix::Color white(255,255,255,255);
-	ppl7::grafix::Color shadow=style.buttonBackgroundColor*0.4f;
-	ppl7::grafix::Color black=ppl7::grafix::Color(0,0,0,255);
-	ppl7::grafix::Color titlebg=style.buttonBackgroundColor*1.2f;
+	ppl7::grafix::Color white(255, 255, 255, 255);
+	ppl7::grafix::Color shadow=style.buttonBackgroundColor * 0.4f;
+	ppl7::grafix::Color black=ppl7::grafix::Color(0, 0, 0, 255);
+	ppl7::grafix::Color titlebg=style.buttonBackgroundColor * 1.2f;
 	titlebg.setAlpha(240);
 	draw.cls(myBackground);
-	draw.drawRect(0,0,draw.width(),draw.height(),black);
-	draw.line(1,1,draw.width()-1,1,white);
+	draw.drawRect(0, 0, draw.width(), draw.height(), black);
+	draw.line(1, 1, draw.width() - 1, 1, white);
 	//draw.line(2,2,draw.width()-2,2,white);
-	draw.line(1,1,1,draw.height()-1,white);
+	draw.line(1, 1, 1, draw.height() - 1, white);
 	//draw.line(2,2,2,draw.height()-2,white);
-	draw.line(2,draw.height()-1,draw.width()-1,draw.height()-1,shadow);
-	draw.line(draw.width()-1,2,draw.width()-1,draw.height()-1,shadow);
-	draw.fillRect(2,2,draw.width()-2,33,titlebg);
+	draw.line(2, draw.height() - 1, draw.width() - 1, draw.height() - 1, shadow);
+	draw.line(draw.width() - 1, 2, draw.width() - 1, draw.height() - 1, shadow);
+	draw.fillRect(2, 2, draw.width() - 2, 33, titlebg);
 	ppl7::grafix::Font myFont=style.buttonFont;
 	myFont.setColor(style.labelFontColor);
 	myFont.setOrientation(ppl7::grafix::Font::TOP);
 
 	int x=8;
 	if (!WindowIcon.isEmpty()) {
-		draw.bltAlpha(WindowIcon,8,3+((30-WindowIcon.height())>>1));
-		x+=WindowIcon.width()+4;
+		draw.bltAlpha(WindowIcon, 8, 3 + ((30 - WindowIcon.height()) >> 1));
+		x+=WindowIcon.width() + 4;
 	}
 
 	ppl7::grafix::Size s=myFont.measure(WindowTitle);
-	draw.print(myFont,x,3+((30-s.height)>>1),WindowTitle);
+	draw.print(myFont, x, 3 + ((30 - s.height) >> 1), WindowTitle);
 }
 
-void Dialog::mouseDownEvent(ppl7::tk::MouseEvent *event)
+void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget()==ok_button) {
+	if (event->widget() == ok_button) {
 		this->deleteLater();
 	}
 }
@@ -102,4 +102,3 @@ void Dialog::mouseDownEvent(ppl7::tk::MouseEvent *event)
 
 
 } //EOF namespace Decker::ui
-
