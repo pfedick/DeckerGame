@@ -43,7 +43,8 @@ void ExtraLife::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->addPoints(100);
 	player->addLife(1);
-	AudioPool& audio=getAudioPool();
+	//TODO
+	//AudioPool& audio=getAudioPool();
 	//audio.playOnce(AudioClip::coin1, 0.3f);
 }
 

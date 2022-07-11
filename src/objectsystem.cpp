@@ -435,8 +435,9 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 	while (p < ba.size()) {
 		int save_size=ppl7::Peek8(buffer + p);
 		int type=ppl7::Peek8(buffer + p + 1);
-		//printf ("try to load object of type %d, size: %d\n",type, save_size);
 		Object* object=getInstance(type);
+		//printf("try to load object of type %d (%s), size: %d\n", type, (const char*)object->typeName(), save_size);
+		//ppl7::HexDump(buffer + p + 1, save_size - 1);
 		if (object) {
 			if (object->load(buffer + p + 1, save_size - 1)) {
 				if (object->id >= nextid) nextid=object->id + 1;
@@ -444,6 +445,8 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 					object->texture=this->spriteset[object->sprite_set];
 					object->updateBoundary();
 				}
+				//printf("Erhoehe save_size von %d auf %d\n", object->save_size, object->save_size + 1);
+				//object->save_size+=1;
 				object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
 				//printf ("found object %d of type %d with size %d\n",object->id, type,save_size);
 			}

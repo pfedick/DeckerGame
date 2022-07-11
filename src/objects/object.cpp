@@ -126,15 +126,25 @@ size_t Object::save(unsigned char* buffer, size_t size)
 	return 10;
 }
 
-bool Object::load(const unsigned char* buffer, size_t size)
+size_t Object::load(const unsigned char* buffer, size_t size)
 {
-	if (size < 10) return false;
+
+	if (size < 10) return 0;
 	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));
 	id=ppl7::Peek32(buffer + 2);
 	initial_p.x=ppl7::Peek16(buffer + 6);
 	initial_p.y=ppl7::Peek16(buffer + 8);
 	p=initial_p;
-	return true;
+	return 10;
+	/*
+	if (size < 9) return 0;
+	//myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));
+	id=ppl7::Peek32(buffer + 1);
+	initial_p.x=ppl7::Peek16(buffer + 5);
+	initial_p.y=ppl7::Peek16(buffer + 7);
+	p=initial_p;
+	return 9;
+	*/
 }
 
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
