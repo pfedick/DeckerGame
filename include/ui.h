@@ -138,7 +138,7 @@ public:
 	bool visibility_collision;
 
 
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 };
 
 
@@ -151,11 +151,11 @@ private:
 	int selected_tile;
 public:
 	TilesFrame(int x, int y, int width, int height, Game* game);
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
-	void valueChangedEvent(ppl7::tk::Event* event, int value);
+	void paint(ppl7::grafix::Drawable& draw)  override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseMoveEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
@@ -194,7 +194,7 @@ public:
 	int currentLayer() const;
 
 
-	void valueChangedEvent(ppl7::tk::Event* event, int value);
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 
 
 };
@@ -243,7 +243,40 @@ public:
 	void setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites);
 	int currentLayer() const;
 	void setCurrentLayer(int layer);
-	void valueChangedEvent(ppl7::tk::Event* event, int value);
+	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
+};
+
+class ObjectsFrame : public ppl7::tk::Frame
+{
+private:
+	SpriteTexture* spriteset;
+	Scrollbar* scrollbar;
+	int selected_object;
+	class Item
+	{
+	public:
+		int id;
+		ppl7::String name;
+		int sprite_no;
+		Item(int id, const ppl7::String& name, int sprite_no);
+	};
+	std::map<size_t, Item> object_map;
+	void addObject(int id, const ppl7::String& name, int sprite_no);
+
+public:
+	ObjectsFrame(int x, int y, int width, int height);
+
+
+
+	void setSpriteSet(SpriteTexture* texture);
+	int selectedObjectType() const;
+
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event) override;
+
 };
 
 class ObjectSelection : public ppl7::tk::Frame
@@ -253,6 +286,8 @@ private:
 	//TilesFrame *tilesframe;
 	SpriteTexture* spriteset;
 	Scrollbar* scrollbar;
+	ComboBox* layer_selection;
+	ObjectsFrame* objects_frame;
 	int selected_object;
 
 	class Item
@@ -270,11 +305,12 @@ public:
 	ObjectSelection(int x, int y, int width, int height, Game* game);
 	void setSpriteSet(SpriteTexture* texture);
 	int selectedObjectType() const;
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	void valueChangedEvent(ppl7::tk::Event* event, int value);
-	void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
+	int currentLayer() const;
+	void setLayer(int layer);
+	ppl7::String widgetType() const override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+
 
 };
 
@@ -310,8 +346,8 @@ private:
 public:
 	StatsFrame(int x, int y, int width, int height, const ppl7::String& label);
 	void setValue(const ppl7::String& value);
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
 	void setFontSize(int size);
 
 
@@ -325,8 +361,8 @@ private:
 public:
 	WorldWidget();
 	void setViewport(const ppl7::grafix::Rect& viewport);
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
 
 	void updatePlayerStats(const Player* player);
 	void resetPlayerStats(const Player* player);

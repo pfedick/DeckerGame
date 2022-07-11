@@ -9,7 +9,7 @@
 	name(const char *msg, ...) throw() {  \
 		va_list args; va_start(args, msg); copyText(msg,args); \
 		va_end(args); } \
-		virtual const char* what() const throw() { return (STR_VALUE(name)); } \
+		const char* what() const overrides throw() { return (STR_VALUE(name)); } \
 	};
 #endif
 

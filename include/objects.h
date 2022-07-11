@@ -34,9 +34,9 @@ public:
 		Diamond=5,
 		Coin=6,
 		Key=7,
-		FloaterVertical=10,
 		Door=8,
 		FloaterHorizontal=9,
+		FloaterVertical=10,
 		BreakingGround=11,
 		Fire=12,
 		WindEmitter=13,
@@ -48,6 +48,7 @@ public:
 		WarpGate=19,
 		ExtraLife=20,
 		Switch=21,
+		LevelEnd=22,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -127,6 +128,13 @@ class Object
 private:
 	Type::ObjectType myType;
 public:
+	enum class Layer {
+		BehindBricks=0,
+		BeforeBricks=1,
+		BeforePlayer=2,
+		BehindPlayer=1
+	};
+
 	ppl7::grafix::PointF p;
 	ppl7::grafix::PointF initial_p;
 	SpriteTexture* texture;
@@ -145,7 +153,7 @@ public:
 	bool spawned;	// not saved, deleted on collection
 	bool deleteDefered;
 
-	Object(Type::ObjectType type);
+	explicit Object(Type::ObjectType type);
 	virtual ~Object();
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
@@ -180,7 +188,7 @@ public:
 	Vent();
 	~Vent();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 };
 
 class WindEmitter : public Object
@@ -190,7 +198,7 @@ private:
 public:
 	WindEmitter();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -211,11 +219,11 @@ public:
 	~TouchEmitter();
 	static Representation representation();
 	void init();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
-	virtual void reset();
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	void reset() override;
 };
 
 class Speaker : public Object
@@ -231,10 +239,10 @@ public:
 	~Speaker();
 	static Representation representation();
 	void setSample(int id, float volume, int max_distance=1600);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 };
 
 class Switch : public Object
@@ -264,12 +272,12 @@ public:
 	Switch();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
-	virtual void reset();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	void reset() override;
 };
 
 
@@ -284,8 +292,8 @@ public:
 	CoinReward();
 	static Representation representation();
 
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class ExtraLife : public Object
@@ -298,8 +306,8 @@ public:
 	ExtraLife();
 	static Representation representation();
 
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 
@@ -311,8 +319,8 @@ private:
 public:
 	GemReward();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class CrystalReward : public Object
@@ -323,8 +331,8 @@ private:
 public:
 	CrystalReward();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class TreasureChest : public Object
@@ -336,8 +344,8 @@ private:
 public:
 	TreasureChest();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class KeyReward : public Object
@@ -346,7 +354,7 @@ private:
 public:
 	KeyReward();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class Medikit : public Object
@@ -355,7 +363,7 @@ private:
 public:
 	Medikit();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class SavePoint : public Object
@@ -367,8 +375,8 @@ private:
 public:
 	SavePoint();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 
@@ -376,7 +384,7 @@ class Trap : public Object
 {
 private:
 public:
-	Trap(Type::ObjectType type);
+	explicit Trap(Type::ObjectType type);
 };
 
 class ThreeSpeers : public Trap
@@ -389,8 +397,8 @@ private:
 public:
 	ThreeSpeers();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class LaserBarrier : public Trap
@@ -411,18 +419,17 @@ public:
 	bool start_state;
 
 
-	LaserBarrier(Type::ObjectType type);
+	explicit LaserBarrier(Type::ObjectType type);
 	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
 	void init();
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void toggle(bool enable, Object* source=NULL);
-
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 
 
 };
@@ -443,13 +450,13 @@ public:
 	StamperVertical();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
-	virtual void toggle(bool enable, Object* source=NULL);
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 
 };
 
@@ -461,8 +468,8 @@ private:
 public:
 	Fire();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void handleCollision(Player* player, const Collision& collision);
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 };
 
 class Arrow : public Trap
@@ -483,10 +490,10 @@ public:
 	Arrow();
 	static Representation representation();
 	void changeDirection(int new_direction);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 
 };
 
@@ -495,7 +502,7 @@ class Enemy : public Object
 {
 private:
 public:
-	Enemy(Type::ObjectType type);
+	explicit Enemy(Type::ObjectType type);
 };
 
 class Rat : public Enemy
@@ -505,8 +512,8 @@ private:
 public:
 	Rat();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -519,8 +526,8 @@ private:
 public:
 	Scorpion();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -534,8 +541,8 @@ private:
 public:
 	Bat();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -549,8 +556,8 @@ private:
 public:
 	Skeleton();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 };
 
 class Mummy : public Enemy
@@ -563,8 +570,8 @@ private:
 public:
 	Mummy();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -578,8 +585,8 @@ private:
 public:
 	Mushroom();
 	static Representation representation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 };
 
 class Scarabeus : public Enemy
@@ -595,8 +602,8 @@ public:
 	~Scarabeus();
 	static Representation representation();
 	void update_animation();
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -610,9 +617,9 @@ private:
 public:
 	HangingSpider();
 	static Representation representation();
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
 
@@ -627,9 +634,9 @@ private:
 public:
 	BreakingGround();
 	static Representation representation();
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
 };
 
 class Floater : public Object
@@ -649,17 +656,17 @@ public:
 	bool initial_state;
 	unsigned char floater_type;
 
-	Floater(Type::ObjectType type);
+	explicit Floater(Type::ObjectType type);
 	~Floater();
 	void init();
-	virtual void reset();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void toggle(bool enable, Object* source=NULL);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void openUi();
+	void reset() override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const  override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 
 };
 
@@ -699,15 +706,44 @@ public:
 	Door();
 	static Representation representation();
 	void init();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual size_t save(unsigned char* buffer, size_t size);
-	virtual bool load(const unsigned char* buffer, size_t size);
-	virtual void reset();
-	virtual void openUi();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void reset() override;
+	void openUi() override;
 
 };
+
+class LevelEnd : public Object
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+
+public:
+	uint32_t key_id;
+	unsigned char frame_type;
+	unsigned char door_type;
+	int state;
+	bool initial_open;
+	bool left_sided;
+
+	LevelEnd();
+	static Representation representation();
+	void init();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	bool load(const unsigned char* buffer, size_t size) override;
+	void reset() override;
+	void openUi() override;
+
+};
+
+
 
 
 class ObjectSystem
