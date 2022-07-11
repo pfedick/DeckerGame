@@ -43,6 +43,7 @@ OBJECTS=compile/main.o \
 	compile/ui_worldwidget.o \
 	compile/ui_objectselection.o \
 	compile/ui_waynetedit.o \
+	compile/ui_leveldialog.o \
 	compile/widgets_scrollbar.o \
 	compile/widgets_checkbox.o \
 	compile/widgets_radiobutton.o \
@@ -503,6 +504,11 @@ compile/ui_worldwidget.o: src/ui/worldwidget.cpp Makefile include/ui.h
 compile/ui_waynetedit.o: src/ui/waynetedit.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_waynetedit.o -c src/ui/waynetedit.cpp $(CFLAGS)
+
+compile/ui_leveldialog.o: src/ui/leveldialog.cpp Makefile include/ui.h
+	- @mkdir -p compile
+	$(CXX) -o compile/ui_leveldialog.o -c src/ui/leveldialog.cpp $(CFLAGS)
+
 
 # Widgets
 compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h

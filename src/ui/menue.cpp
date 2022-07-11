@@ -63,37 +63,40 @@ void MainMenue::setupUi()
 	new_button->setEventHandler(this);
 	this->addChild(new_button);
 
+	edit_level_button=new ppl7::tk::Button(320, 0, 60, s.height, "Level");
+	edit_level_button->setEventHandler(this);
+	this->addChild(edit_level_button);
 
-	edit_tiles_button=new ppl7::tk::Button(320, 0, 60, s.height, "Tiles");
+	edit_tiles_button=new ppl7::tk::Button(381, 0, 60, s.height, "Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
-	edit_tiletypes_button=new ppl7::tk::Button(381, 0, 80, s.height, "TileTypes");
+	edit_tiletypes_button=new ppl7::tk::Button(442, 0, 80, s.height, "TileTypes");
 	edit_tiletypes_button->setEventHandler(this);
 	this->addChild(edit_tiletypes_button);
 
-	edit_sprites_button=new ppl7::tk::Button(462, 0, 70, s.height, "Sprites");
+	edit_sprites_button=new ppl7::tk::Button(523, 0, 70, s.height, "Sprites");
 	edit_sprites_button->setEventHandler(this);
 	this->addChild(edit_sprites_button);
 
-	edit_objects_button=new ppl7::tk::Button(533, 0, 70, s.height, "Objects");
+	edit_objects_button=new ppl7::tk::Button(594, 0, 70, s.height, "Objects");
 	edit_objects_button->setEventHandler(this);
 	this->addChild(edit_objects_button);
 
-	edit_waynet_button=new ppl7::tk::Button(604, 0, 70, s.height, "WayNet");
+	edit_waynet_button=new ppl7::tk::Button(665, 0, 70, s.height, "WayNet");
 	edit_waynet_button->setEventHandler(this);
 	this->addChild(edit_waynet_button);
 
 
-	show_visibility_submenu_button=new ppl7::tk::Button(695, 0, 80, s.height, "Visibility");
+	show_visibility_submenu_button=new ppl7::tk::Button(756, 0, 80, s.height, "Visibility");
 	show_visibility_submenu_button->setEventHandler(this);
 	this->addChild(show_visibility_submenu_button);
 
 
-	ppl7::tk::Label* label=new ppl7::tk::Label(776, 0, 100, s.height, "active Plane: ");
+	ppl7::tk::Label* label=new ppl7::tk::Label(837, 0, 100, s.height, "active Plane: ");
 	this->addChild(label);
 
-	active_plane_combobox=new ComboBox(877, 0, 150, s.height);
+	active_plane_combobox=new ComboBox(938, 0, 150, s.height);
 	active_plane_combobox->add("PlayerPlane", "0");
 	active_plane_combobox->add("FrontPlane", "1");
 	active_plane_combobox->add("FarPlane", "2");

@@ -101,6 +101,7 @@ private:
 	ppl7::tk::Button* edit_sprites_button;
 	ppl7::tk::Button* edit_objects_button;
 	ppl7::tk::Button* edit_waynet_button;
+	ppl7::tk::Button* edit_level_button;
 	ppl7::tk::Button* show_visibility_submenu_button;
 
 	ComboBox* active_plane_combobox;
@@ -376,6 +377,65 @@ public:
 
 };
 
+
+class LevelDialog : public Dialog
+{
+public:
+	enum class DialogState {
+		Open=0,
+		OK,
+		Aborted
+	};
+private:
+	ppl7::tk::LineInput* level_name;
+	ppl7::tk::Frame* level_size_frame;
+
+	Decker::ui::RadioButton* predefined_size;
+	Decker::ui::RadioButton* custom_size;
+	Decker::ui::ComboBox* predefined_sizes;
+	ppl7::tk::LineInput* custom_width;
+	ppl7::tk::LineInput* custom_height;
+
+	ppl7::tk::Frame* level_background_frame;
+
+	Decker::ui::RadioButton* radio_image;
+	Decker::ui::RadioButton* radio_color;
+	ppl7::tk::Button* image_fileselect;
+
+	ppl7::tk::LineInput* color_red;
+	ppl7::tk::LineInput* color_green;
+	ppl7::tk::LineInput* color_blue;
+	ppl7::tk::Button* color_picker;
+
+	ppl7::tk::Frame* level_soundtrack_frame;
+	Decker::ui::ComboBox* base_soundtrack;
+
+	Decker::ui::ComboBox* additional_soundtrack;
+	ppl7::tk::Button* add_soundtrack_button;
+	ppl7::tk::Button* delete_soundtrack_button;
+	Decker::ui::ListWidget* soundtrack_list;
+
+
+	ppl7::tk::Button* ok_button;
+	ppl7::tk::Button* cancel_button;
+
+	bool newlevel;
+	DialogState my_state;
+
+	void setupUi();
+
+public:
+	int custom_id;
+	LevelDialog(int width, int height);
+
+	void setNewLevelFlag(bool newlevel);
+	bool isNewLevel() const;
+	DialogState state() const;
+
+	ppl7::String widgetType() const override;
+	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+};
 
 
 }	// EOF namespace ui
