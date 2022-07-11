@@ -78,6 +78,7 @@ private:
 	CheckBox* visible_plane_back_checkbox;
 	CheckBox* visible_plane_middle_checkbox;
 	CheckBox* visible_plane_horizon_checkbox;
+	CheckBox* visible_plane_near_checkbox;
 
 public:
 	VisibilitySubMenu(int x, int y, MainMenue* menue);
@@ -131,6 +132,7 @@ public:
 	bool visibility_plane_middle;
 	bool visibility_plane_far;
 	bool visibility_plane_horizon;
+	bool visibility_plane_near;
 	bool visibility_sprites;
 	bool visibility_objects;
 	bool visibility_grid;

@@ -278,6 +278,7 @@ public:
 	~Plane();
 	void clear();
 	void create(int width, int height);
+	ppl7::grafix::Size getSize() const;
 	void setTile(int x, int y, int z, int tileset, int tileno, bool showStuds=true);
 	void setBlockBackground(int x, int y, bool block);
 	void setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
@@ -394,6 +395,7 @@ private:
 	Plane BackPlane;
 	Plane MiddlePlane;
 	Plane HorizonPlane;
+	Plane NearPlane;
 	TileTypePlane TileTypeMatrix;
 	SpriteSystem HorizonSprites[2];
 	SpriteSystem FarSprites[2];
@@ -401,6 +403,7 @@ private:
 	SpriteSystem BackSprites[2];
 	SpriteSystem PlayerSprites[2];
 	SpriteSystem FrontSprites[2];
+	SpriteSystem NearSprites[2];
 	Decker::Objects::ObjectSystem* objects;
 	Waynet waynet;
 
@@ -435,6 +438,8 @@ private:
 		chunkTileTypes=20,
 		chunkHorizonSpritesLayer0=21,
 		chunkHorizonSpritesLayer1=22,
+		chunkNearSpritesLayer0=23,
+		chunkNearSpritesLayer1=24,
 		chunkObjects=30,
 		chunkWayNet=31
 	};
@@ -457,7 +462,6 @@ public:
 	SpriteSystem& spritesystem(int plane, int layer);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
-
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
 

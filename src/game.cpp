@@ -7,7 +7,7 @@
 #include "objects.h"
 #include "screens.h"
 
-static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f };
+static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 
 static ppl7::tk::Window* GameWindow=NULL;
 static Game* GameInstance=NULL;
@@ -515,6 +515,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.BackPlane.setVisible(mainmenue->visibility_plane_back);
 	level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
 	level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
+	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
 	level.draw(renderer, WorldCoords, player);
@@ -870,7 +871,6 @@ void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& m
 	BrickOccupation::Matrix occupation=brick_occupation.get(nr);
 	if (tileset == 1) occupation=brick_occupation_solid;
 	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
-		//printf ("tx=%d, ty=%d\n",tx,ty);
 		int x=tx * TILE_WIDTH + viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
 		int y=ty * TILE_HEIGHT + viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
 		level.tileset[tileset]->draw(renderer,

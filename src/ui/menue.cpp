@@ -15,6 +15,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_plane_middle=true;
 	visibility_plane_far=true;
 	visibility_plane_horizon=true;
+	visibility_plane_near=true;
 	visibility_sprites=true;
 	visibility_objects=true;
 	visibility_grid=false;
@@ -88,12 +89,13 @@ void MainMenue::setupUi()
 	this->addChild(label);
 
 	active_plane_combobox=new ComboBox(840, 0, 150, s.height);
-	active_plane_combobox->add("PlayerPlane");
-	active_plane_combobox->add("FrontPlane");
-	active_plane_combobox->add("FarPlane");
-	active_plane_combobox->add("BackPlane");
-	active_plane_combobox->add("MiddlePlane");
-	active_plane_combobox->add("HorizonPlane");
+	active_plane_combobox->add("PlayerPlane", "0");
+	active_plane_combobox->add("FrontPlane", "1");
+	active_plane_combobox->add("FarPlane", "2");
+	active_plane_combobox->add("BackPlane", "3");
+	active_plane_combobox->add("MiddlePlane", "4");
+	active_plane_combobox->add("HorizonPlane", "5");
+	active_plane_combobox->add("NearPlane", "6");
 
 	this->addChild(active_plane_combobox);
 
@@ -150,7 +152,7 @@ void MainMenue::setShowTileTypes(bool show)
 
 void MainMenue::setCurrentPlane(int index)
 {
-	if (active_plane_combobox) active_plane_combobox->setCurrentIndex(index);
+	if (active_plane_combobox) active_plane_combobox->setCurrentIdentifier(ppl7::ToString("%d", index));
 }
 
 
@@ -163,7 +165,7 @@ void MainMenue::setWorldFollowsPlayer(bool enable)
 
 int MainMenue::currentPlane() const
 {
-	if (active_plane_combobox) return active_plane_combobox->currentIndex();
+	if (active_plane_combobox) return active_plane_combobox->currentIdentifier().toInt();
 	return 0;
 }
 
@@ -192,7 +194,7 @@ void MainMenue::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& tex
 }
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 140, 290)
+	: ppl7::tk::Frame(x, y, 140, 310)
 {
 	this->menue=menue;
 	this->addChild(new ppl7::tk::Label(0, 0, 100, 20, "Misc:"));
@@ -221,27 +223,31 @@ VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
 
 	this->addChild(new ppl7::tk::Label(0, 140, 100, 20, "visible Planes:"));
 
-	visible_plane_front_checkbox=new CheckBox(20, 160, 100, 20, "Front", menue->visibility_plane_front);
+	visible_plane_near_checkbox=new CheckBox(20, 160, 100, 20, "Near", menue->visibility_plane_near);
+	visible_plane_near_checkbox->setEventHandler(this);
+	this->addChild(visible_plane_near_checkbox);
+
+	visible_plane_front_checkbox=new CheckBox(20, 180, 100, 20, "Front", menue->visibility_plane_front);
 	visible_plane_front_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_front_checkbox);
 
-	visible_plane_player_checkbox=new CheckBox(20, 180, 100, 20, "Player", menue->visibility_plane_player);
+	visible_plane_player_checkbox=new CheckBox(20, 200, 100, 20, "Player", menue->visibility_plane_player);
 	visible_plane_player_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_player_checkbox);
 
-	visible_plane_back_checkbox=new CheckBox(20, 200, 100, 20, "Back", menue->visibility_plane_back);
+	visible_plane_back_checkbox=new CheckBox(20, 220, 100, 20, "Back", menue->visibility_plane_back);
 	visible_plane_back_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_back_checkbox);
 
-	visible_plane_middle_checkbox=new CheckBox(20, 220, 100, 20, "Middle", menue->visibility_plane_middle);
+	visible_plane_middle_checkbox=new CheckBox(20, 240, 100, 20, "Middle", menue->visibility_plane_middle);
 	visible_plane_middle_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_middle_checkbox);
 
-	visible_plane_far_checkbox=new CheckBox(20, 240, 100, 20, "Far", menue->visibility_plane_far);
+	visible_plane_far_checkbox=new CheckBox(20, 260, 100, 20, "Far", menue->visibility_plane_far);
 	visible_plane_far_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_far_checkbox);
 
-	visible_plane_horizon_checkbox=new CheckBox(20, 260, 100, 20, "Horizon", menue->visibility_plane_horizon);
+	visible_plane_horizon_checkbox=new CheckBox(20, 280, 100, 20, "Horizon", menue->visibility_plane_horizon);
 	visible_plane_horizon_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_horizon_checkbox);
 
@@ -268,6 +274,8 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 		menue->visibility_plane_middle=checked;
 	} else if (widget == visible_plane_horizon_checkbox) {
 		menue->visibility_plane_horizon=checked;
+	} else if (widget == visible_plane_near_checkbox) {
+		menue->visibility_plane_near=checked;
 	} else if (widget == show_grid_checkbox) {
 		menue->visibility_grid=checked;
 	} else if (widget == show_tiletypes_checkbox) {
