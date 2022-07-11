@@ -908,8 +908,10 @@ void Game::startLevel(const ppl7::String& filename)
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
 		player->setVisible(true);
+		enableControls(true);
 	} else {
 		player->setVisible(false);
+		enableControls(false);
 	}
 }
 
@@ -932,6 +934,7 @@ void Game::load()
 	closeSpriteSelection();
 	closeObjectSelection();
 	level.load(LevelFile);
+	enableControls(true);
 	if (mainmenue) mainmenue->update();
 }
 
@@ -941,6 +944,7 @@ void Game::clearLevel()
 	closeTileSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
+	enableControls(false);
 	WorldCoords.setPoint(0, 0);
 	level.create(512, 256);
 	if (player) player->move(500, 500);
