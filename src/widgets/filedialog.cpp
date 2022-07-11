@@ -42,6 +42,7 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     this->addChild(label);
 
     path_lineinput=new ppl7::tk::LineInput(10 + text_size.width + 10, 0, clientarea.width - 30 - text_size.width, 30, path);
+    path_lineinput->setEventHandler(this);
     this->addChild(path_lineinput);
 
     int y=40;
@@ -80,6 +81,7 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     label=new ppl7::tk::Label(10, clientarea.height - 80, text_size.width + 10, 30, text);
     this->addChild(label);
     filename_lineinput=new ppl7::tk::LineInput(20 + text_size.width, clientarea.height - 80, clientarea.width - text_size.width - 30 - 300, 30);
+    filename_lineinput->setEventHandler(this);
     this->addChild(filename_lineinput);
     setDirectory(path);
 }
@@ -267,7 +269,27 @@ void FileDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
     }
 #endif
     Dialog::valueChangedEvent(event, value);
+}
+
+void FileDialog::keyDownEvent(ppl7::tk::KeyEvent* event)
+{
+    //printf("FileDialog::keyDownEvent(keycode=%i, repeat=%i, modifier: %i)\n", event->key, event->repeat, event->modifier);
+    if (event->widget() == path_lineinput) {
+        //printf("FileDialog::keyDownEvent(keycode=%i, repeat=%i, modifier: %i)\n", event->key, event->repeat, event->modifier);
+        if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
+            ppl7::String new_path=directory();
+            setDirectory(new_path);
+        }
+    } else if (event->widget() == filename_lineinput) {
+        if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
+            my_state=DialogState::OK;
+            ppl7::tk::Event event(ppl7::tk::Event::Close);
+            event.setWidget(this);
+            EventHandler::closeEvent(&event);
+            return;
+        }
     }
+}
 
 
 }	// EOF namespace ui

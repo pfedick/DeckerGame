@@ -230,10 +230,11 @@ public:
 	void setDirectory(const ppl7::String& path);
 	void setFilter(const ppl7::String& filter);
 
-	virtual void mouseDblClickEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	void mouseDblClickEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 
 };
 
