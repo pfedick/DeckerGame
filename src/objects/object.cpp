@@ -117,25 +117,25 @@ void Object::update(double, TileTypePlane&, Player&)
 
 size_t Object::save(unsigned char* buffer, size_t size)
 {
-	if (size < 10) return 0;
+	if (size < 14) return 0;
 	ppl7::Poke8(buffer + 0, myType);
 	ppl7::Poke8(buffer + 1, static_cast<int>(myLayer));
 	ppl7::Poke32(buffer + 2, id);
-	ppl7::Poke16(buffer + 6, initial_p.x);
-	ppl7::Poke16(buffer + 8, initial_p.y);
-	return 10;
+	ppl7::Poke32(buffer + 6, initial_p.x);
+	ppl7::Poke32(buffer + 10, initial_p.y);
+	return 14;
 }
 
 size_t Object::load(const unsigned char* buffer, size_t size)
 {
 
-	if (size < 10) return 0;
+	if (size < 14) return 0;
 	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));
 	id=ppl7::Peek32(buffer + 2);
-	initial_p.x=ppl7::Peek16(buffer + 6);
-	initial_p.y=ppl7::Peek16(buffer + 8);
+	initial_p.x=ppl7::Peek32(buffer + 6);
+	initial_p.y=ppl7::Peek32(buffer + 10);
 	p=initial_p;
-	return 10;
+	return 14;
 	/*
 	if (size < 9) return 0;
 	//myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));

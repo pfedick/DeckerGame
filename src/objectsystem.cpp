@@ -446,7 +446,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 					object->updateBoundary();
 				}
 				//printf("Erhoehe save_size von %d auf %d\n", object->save_size, object->save_size + 1);
-				//object->save_size+=1;
+				//object->save_size+=4;
 				object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
 				//printf ("found object %d of type %d with size %d\n",object->id, type,save_size);
 			}
