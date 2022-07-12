@@ -26,13 +26,13 @@ public:
 class TouchEmitterDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* touch_type;
-	Decker::ui::ComboBox* object_type;
-	Decker::ui::ComboBox* direction;
-	Decker::ui::CheckBox* activator_top;
-	Decker::ui::CheckBox* activator_right;
-	Decker::ui::CheckBox* activator_bottom;
-	Decker::ui::CheckBox* activator_left;
+	ppl7::tk::ComboBox* touch_type;
+	ppl7::tk::ComboBox* object_type;
+	ppl7::tk::ComboBox* direction;
+	ppl7::tk::CheckBox* activator_top;
+	ppl7::tk::CheckBox* activator_right;
+	ppl7::tk::CheckBox* activator_bottom;
+	ppl7::tk::CheckBox* activator_left;
 	ppl7::tk::LineInput* max_toggles;
 	ppl7::tk::Button* reset;
 
@@ -222,7 +222,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	addChild(new ppl7::tk::Label(0, 160, 120, 30, "direction: "));
 	addChild(new ppl7::tk::Label(0, 200, 120, 30, "max toggles: "));
 
-	touch_type=new Decker::ui::ComboBox(120, 0, 400, 30);
+	touch_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	touch_type->add("2 x 4", "0");
 	touch_type->add("2 x 2", "1");
 	touch_type->add("invisible", "2");
@@ -230,21 +230,21 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	touch_type->setEventHandler(this);
 	addChild(touch_type);
 
-	activator_top=new Decker::ui::CheckBox(180, 40, 60, 30, "top", object->touchtype & 16);
+	activator_top=new ppl7::tk::CheckBox(180, 40, 60, 30, "top", object->touchtype & 16);
 	activator_top->setEventHandler(this);
 	addChild(activator_top);
-	activator_right=new Decker::ui::CheckBox(240, 60, 65, 30, "right", object->touchtype & 32);
+	activator_right=new ppl7::tk::CheckBox(240, 60, 65, 30, "right", object->touchtype & 32);
 	activator_right->setEventHandler(this);
 	addChild(activator_right);
-	activator_bottom=new Decker::ui::CheckBox(180, 80, 84, 30, "bottom", object->touchtype & 64);
+	activator_bottom=new ppl7::tk::CheckBox(180, 80, 84, 30, "bottom", object->touchtype & 64);
 	activator_bottom->setEventHandler(this);
 	addChild(activator_bottom);
-	activator_left=new Decker::ui::CheckBox(120, 60, 60, 30, "left", object->touchtype & 128);
+	activator_left=new ppl7::tk::CheckBox(120, 60, 60, 30, "left", object->touchtype & 128);
 	activator_left->setEventHandler(this);
 	addChild(activator_left);
 
 
-	object_type=new Decker::ui::ComboBox(120, 120, 400, 30);
+	object_type=new ppl7::tk::ComboBox(120, 120, 400, 30);
 	object_type->setEventHandler(this);
 	object_type->add("Medikit", ppl7::ToString("%d", Type::Medikit));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
@@ -254,7 +254,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
-	direction=new Decker::ui::ComboBox(120, 160, 400, 30);
+	direction=new ppl7::tk::ComboBox(120, 160, 400, 30);
 	direction->setEventHandler(this);
 	direction->add("up", "0");
 	direction->add("right", "1");

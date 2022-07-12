@@ -157,7 +157,7 @@ void SettingsScreen::initPageAudio()
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_device_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
+    audio_device_combobox=new ppl7::tk::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     std::list<ppl7::String> device_names;
     game.audiosystem.enumerateDevices(device_names);
     std::list<ppl7::String>::const_iterator it;
@@ -175,7 +175,7 @@ void SettingsScreen::initPageAudio()
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_total_slider=new Decker::ui::HorizontalSlider(input_widget_x, 100, input_widget.width, input_widget.height);
+    audio_total_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 100, input_widget.width, input_widget.height);
     audio_total_slider->setEventHandler(this);
     audio_total_slider->setDimension(0, 255);
     audio_total_slider->setValue(game.config.volumeTotal * 255.0f);
@@ -187,7 +187,7 @@ void SettingsScreen::initPageAudio()
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_music_slider=new Decker::ui::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
+    audio_music_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
     audio_music_slider->setEventHandler(this);
     audio_music_slider->setDimension(0, 255);
     audio_music_slider->setValue(game.config.volumeMusic * 255.0f * 2.0f);
@@ -197,7 +197,7 @@ void SettingsScreen::initPageAudio()
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_effects_slider=new Decker::ui::HorizontalSlider(input_widget_x, 200, input_widget.width, input_widget.height);
+    audio_effects_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 200, input_widget.width, input_widget.height);
     audio_effects_slider->setEventHandler(this);
     audio_effects_slider->setDimension(0, 255);
     audio_effects_slider->setValue(game.config.volumeEffects * 255.0f);
@@ -218,7 +218,7 @@ void SettingsScreen::initPageVideo()
     label->setFont(style_label.font);
     page_video->addChild(label);
 
-    video_device_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
+    video_device_combobox=new ppl7::tk::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     video_device_combobox->setEventHandler(this);
     std::list<SDL::VideoDisplay> display_list;
     SDL::getVideoDisplays(display_list);
@@ -233,7 +233,7 @@ void SettingsScreen::initPageVideo()
     label->setFont(style_label.font);
     page_video->addChild(label);
 
-    screen_resolution_combobox=new Decker::ui::ComboBox(input_widget_x, 50, input_widget.width, input_widget.height);
+    screen_resolution_combobox=new ppl7::tk::ComboBox(input_widget_x, 50, input_widget.width, input_widget.height);
     screen_resolution_combobox->setEventHandler(this);
     updateVideoModes();
     page_video->addChild(screen_resolution_combobox);
@@ -242,7 +242,7 @@ void SettingsScreen::initPageVideo()
     label->setFont(style_label.font);
     page_video->addChild(label);
 
-    windowmode_combobox=new Decker::ui::ComboBox(input_widget_x, 100, input_widget.width, input_widget.height);
+    windowmode_combobox=new ppl7::tk::ComboBox(input_widget_x, 100, input_widget.width, input_widget.height);
     windowmode_combobox->setEventHandler(this);
     windowmode_combobox->add(translate("Window"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Window)));
     windowmode_combobox->add(translate("Fullscreen"), ppl7::ToString("%d", static_cast<int>(Config::WindowMode::Fullscreen)));
@@ -271,7 +271,7 @@ void SettingsScreen::initPageMisc()
     label->setFont(style_label.font);
     page_misc->addChild(label);
 
-    language_combobox=new Decker::ui::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
+    language_combobox=new ppl7::tk::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
     language_combobox->add(translate("english"), "en");
     language_combobox->add(translate("german"), "de");
     language_combobox->setCurrentIdentifier(game.config.Language);

@@ -44,15 +44,9 @@ OBJECTS=compile/main.o \
 	compile/ui_objectselection.o \
 	compile/ui_waynetedit.o \
 	compile/ui_leveldialog.o \
-	compile/widgets_scrollbar.o \
-	compile/widgets_checkbox.o \
-	compile/widgets_radiobutton.o \
 	compile/widgets_groupbox.o \
-	compile/widgets_combobox.o \
-	compile/widgets_listwidget.o \
 	compile/widgets_dialog.o \
 	compile/widgets_filedialog.o \
-	compile/widgets_slider.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -511,29 +505,9 @@ compile/ui_leveldialog.o: src/ui/leveldialog.cpp Makefile include/ui.h
 
 
 # Widgets
-compile/widgets_scrollbar.o: src/widgets/scrollbar.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_scrollbar.o -c src/widgets/scrollbar.cpp $(CFLAGS)
-
-compile/widgets_checkbox.o: src/widgets/checkbox.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_checkbox.o -c src/widgets/checkbox.cpp $(CFLAGS)
-
-compile/widgets_radiobutton.o: src/widgets/radiobutton.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_radiobutton.o -c src/widgets/radiobutton.cpp $(CFLAGS)
-
 compile/widgets_groupbox.o: src/widgets/groupbox.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_groupbox.o -c src/widgets/groupbox.cpp $(CFLAGS)
-
-compile/widgets_combobox.o: src/widgets/combobox.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_combobox.o -c src/widgets/combobox.cpp $(CFLAGS)
-
-compile/widgets_listwidget.o: src/widgets/listwidget.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_listwidget.o -c src/widgets/listwidget.cpp $(CFLAGS)
 
 compile/widgets_dialog.o: src/widgets/dialog.cpp Makefile include/widgets.h
 	- @mkdir -p compile
@@ -542,10 +516,6 @@ compile/widgets_dialog.o: src/widgets/dialog.cpp Makefile include/widgets.h
 compile/widgets_filedialog.o: src/widgets/filedialog.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_filedialog.o -c src/widgets/filedialog.cpp $(CFLAGS)
-
-compile/widgets_slider.o: src/widgets/slider.cpp Makefile include/widgets.h
-	- @mkdir -p compile
-	$(CXX) -o compile/widgets_slider.o -c src/widgets/slider.cpp $(CFLAGS)
 
 # Screens
 compile/intro_screen.o: src/ui/intro_screen.cpp Makefile include/decker_sdl.h include/screens.h include/videoplayer.h

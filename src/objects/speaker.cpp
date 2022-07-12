@@ -12,7 +12,7 @@ namespace Decker::Objects {
 class SpeakerDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* sample_name;
+	ppl7::tk::ComboBox* sample_name;
 	ppl7::tk::LineInput* max_distance;
 	ppl7::tk::LineInput* volume;
 	Speaker* speaker;
@@ -133,7 +133,7 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	addChild(new ppl7::tk::Label(0, 40, 120, 30, "volume: "));
 	addChild(new ppl7::tk::Label(0, 80, 120, 30, "max_distance: "));
 
-	sample_name=new Decker::ui::ComboBox(120, 0, 360, 30);
+	sample_name=new ppl7::tk::ComboBox(120, 0, 360, 30);
 	sample_name->add("no sound", ppl7::ToString("%d", AudioClip::none));
 	sample_name->add("Birds 1", ppl7::ToString("%d", AudioClip::birds1));
 	sample_name->add("Electric", ppl7::ToString("%d", AudioClip::electric));

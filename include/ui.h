@@ -67,18 +67,18 @@ class VisibilitySubMenu : public ppl7::tk::Frame
 {
 private:
 	MainMenue* menue;
-	CheckBox* show_grid_checkbox;
-	CheckBox* show_tiletypes_checkbox;
-	CheckBox* show_collision_checkbox;
-	CheckBox* show_sprites_checkbox;
-	CheckBox* show_objects_checkbox;
-	CheckBox* visible_plane_player_checkbox;
-	CheckBox* visible_plane_front_checkbox;
-	CheckBox* visible_plane_far_checkbox;
-	CheckBox* visible_plane_back_checkbox;
-	CheckBox* visible_plane_middle_checkbox;
-	CheckBox* visible_plane_horizon_checkbox;
-	CheckBox* visible_plane_near_checkbox;
+	ppl7::tk::CheckBox* show_grid_checkbox;
+	ppl7::tk::CheckBox* show_tiletypes_checkbox;
+	ppl7::tk::CheckBox* show_collision_checkbox;
+	ppl7::tk::CheckBox* show_sprites_checkbox;
+	ppl7::tk::CheckBox* show_objects_checkbox;
+	ppl7::tk::CheckBox* visible_plane_player_checkbox;
+	ppl7::tk::CheckBox* visible_plane_front_checkbox;
+	ppl7::tk::CheckBox* visible_plane_far_checkbox;
+	ppl7::tk::CheckBox* visible_plane_back_checkbox;
+	ppl7::tk::CheckBox* visible_plane_middle_checkbox;
+	ppl7::tk::CheckBox* visible_plane_horizon_checkbox;
+	ppl7::tk::CheckBox* visible_plane_near_checkbox;
 
 public:
 	VisibilitySubMenu(int x, int y, MainMenue* menue);
@@ -106,11 +106,11 @@ private:
 	ppl7::tk::Button* edit_level_button;
 	ppl7::tk::Button* show_visibility_submenu_button;
 
-	ComboBox* active_plane_combobox;
+	ppl7::tk::ComboBox* active_plane_combobox;
 
-	CheckBox* world_follows_player_checkbox;
-	CheckBox* soundtrack_checkbox;
-	CheckBox* godmode_checkbox;
+	ppl7::tk::CheckBox* world_follows_player_checkbox;
+	ppl7::tk::CheckBox* soundtrack_checkbox;
+	ppl7::tk::CheckBox* godmode_checkbox;
 	VisibilitySubMenu* visibility;
 
 	LevelDialog* level_dialog;
@@ -160,7 +160,7 @@ class TilesFrame : public ppl7::tk::Frame
 private:
 	Game* game;
 	SpriteTexture* tiles;
-	Scrollbar* scrollbar;
+	ppl7::tk::Scrollbar* scrollbar;
 	int selected_tile;
 public:
 	TilesFrame(int x, int y, int width, int height, Game* game);
@@ -181,11 +181,11 @@ class TilesSelection : public ppl7::tk::Frame
 private:
 	Game* game;
 	TilesFrame* tilesframe;
-	RadioButton* layer0;
-	RadioButton* layer1;
-	RadioButton* layer2;
-	RadioButton* layer3;
-	ComboBox* tileset_combobox;
+	ppl7::tk::RadioButton* layer0;
+	ppl7::tk::RadioButton* layer1;
+	ppl7::tk::RadioButton* layer2;
+	ppl7::tk::RadioButton* layer3;
+	ppl7::tk::ComboBox* tileset_combobox;
 
 	ppl7::String tilesetName[MAX_TILESETS + 1];
 	SpriteTexture* tilesets[MAX_TILESETS + 1];
@@ -230,9 +230,9 @@ class SpriteSelection : public ppl7::tk::Frame
 private:
 	Game* game;
 	TilesFrame* tilesframe;
-	RadioButton* layer0;
-	RadioButton* layer1;
-	ComboBox* tileset_combobox;
+	ppl7::tk::RadioButton* layer0;
+	ppl7::tk::RadioButton* layer1;
+	ppl7::tk::ComboBox* tileset_combobox;
 
 	ppl7::String tilesetName[MAX_SPRITESETS + 1];
 	SpriteTexture* tilesets[MAX_SPRITESETS + 1];
@@ -263,7 +263,7 @@ class ObjectsFrame : public ppl7::tk::Frame
 {
 private:
 	SpriteTexture* spriteset;
-	Scrollbar* scrollbar;
+	ppl7::tk::Scrollbar* scrollbar;
 	int selected_object;
 	class Item
 	{
@@ -298,8 +298,8 @@ private:
 	Game* game;
 	//TilesFrame *tilesframe;
 	SpriteTexture* spriteset;
-	Scrollbar* scrollbar;
-	ComboBox* layer_selection;
+	ppl7::tk::Scrollbar* scrollbar;
+	ppl7::tk::ComboBox* layer_selection;
 	ObjectsFrame* objects_frame;
 	int selected_object;
 
@@ -331,12 +331,12 @@ class WayNetEdit : public ppl7::tk::Frame
 {
 private:
 	Game* game;
-	RadioButton* type_clear;
-	RadioButton* type_walk;
-	RadioButton* type_jump_up;
-	RadioButton* type_jump_left;
-	RadioButton* type_jump_right;
-	RadioButton* type_climb;
+	ppl7::tk::RadioButton* type_clear;
+	ppl7::tk::RadioButton* type_walk;
+	ppl7::tk::RadioButton* type_jump_up;
+	ppl7::tk::RadioButton* type_jump_left;
+	ppl7::tk::RadioButton* type_jump_right;
+	ppl7::tk::RadioButton* type_climb;
 	ppl7::tk::LineInput* cost;
 
 
@@ -394,14 +394,14 @@ public:
 	};
 private:
 	ppl7::tk::LineInput* level_name;
-	ppl7::tk::LineInput* level_width;
-	ppl7::tk::LineInput* level_height;
+	ppl7::tk::SpinBox* level_width;
+	ppl7::tk::SpinBox* level_height;
 	ppl7::tk::Label* level_pixel_size;
 
 	ppl7::tk::Frame* level_background_frame;
 
-	Decker::ui::RadioButton* radio_image;
-	Decker::ui::RadioButton* radio_color;
+	ppl7::tk::RadioButton* radio_image;
+	ppl7::tk::RadioButton* radio_color;
 	ppl7::tk::Button* image_fileselect;
 
 	ppl7::tk::LineInput* color_red;
@@ -410,12 +410,12 @@ private:
 	ppl7::tk::Button* color_picker;
 
 	ppl7::tk::Frame* level_soundtrack_frame;
-	Decker::ui::ComboBox* base_soundtrack;
+	ppl7::tk::ComboBox* base_soundtrack;
 
-	Decker::ui::ComboBox* additional_soundtrack;
+	ppl7::tk::ComboBox* additional_soundtrack;
 	ppl7::tk::Button* add_soundtrack_button;
 	ppl7::tk::Button* delete_soundtrack_button;
-	Decker::ui::ListWidget* soundtrack_list;
+	ppl7::tk::ListWidget* soundtrack_list;
 
 
 	ppl7::tk::Button* ok_button;

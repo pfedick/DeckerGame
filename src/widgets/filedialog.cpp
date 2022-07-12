@@ -67,11 +67,11 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     this->addChild(drives_combobox);
     y+=35;
 #endif
-    dir_list=new Decker::ui::ListWidget(10, y, 260, clientarea.height - y - 90);
+    dir_list=new ppl7::tk::ListWidget(10, y, 260, clientarea.height - y - 90);
     dir_list->setEventHandler(this);
     this->addChild(dir_list);
 
-    file_list=new Decker::ui::ListWidget(280, y, clientarea.width - 290, clientarea.height - y - 90);
+    file_list=new ppl7::tk::ListWidget(280, y, clientarea.width - 290, clientarea.height - y - 90);
     file_list->setEventHandler(this);
     this->addChild(file_list);
 

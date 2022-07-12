@@ -131,12 +131,12 @@ size_t Door::load(const unsigned char* buffer, size_t size)
 class DoorDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* frame_type;
-	Decker::ui::ComboBox* door_type;
-	Decker::ui::ComboBox* initial_state;
+	ppl7::tk::ComboBox* frame_type;
+	ppl7::tk::ComboBox* door_type;
+	ppl7::tk::ComboBox* initial_state;
 	ppl7::tk::Button* reset;
-	Decker::ui::RadioButton* orientation_left;
-	Decker::ui::RadioButton* orientation_right;
+	ppl7::tk::RadioButton* orientation_left;
+	ppl7::tk::RadioButton* orientation_right;
 	ppl7::tk::LineInput* key_id;
 
 	Door* object;
@@ -171,7 +171,7 @@ DoorDialog::DoorDialog(Door* object)
 	addChild(new ppl7::tk::Label(0, 160, 120, 30, "Open with: "));
 	addChild(new ppl7::tk::Label(220, 160, 120, 30, " (Object-ID)"));
 
-	frame_type=new Decker::ui::ComboBox(120, 0, 400, 30);
+	frame_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	frame_type->add("black", "0");
 	frame_type->add("dark stone grey", "3");
 	frame_type->add("medium stone grey", "5");
@@ -187,25 +187,25 @@ DoorDialog::DoorDialog(Door* object)
 	frame_type->setEventHandler(this);
 	addChild(frame_type);
 
-	door_type=new Decker::ui::ComboBox(120, 40, 400, 30);
+	door_type=new ppl7::tk::ComboBox(120, 40, 400, 30);
 	door_type->add("metal lattice bar", "0");
 	door_type->add("white", "1");
 	door_type->setCurrentIdentifier(ppl7::ToString("%d", object->door_type));
 	door_type->setEventHandler(this);
 	addChild(door_type);
 
-	initial_state=new Decker::ui::ComboBox(120, 80, 400, 30);
+	initial_state=new ppl7::tk::ComboBox(120, 80, 400, 30);
 	initial_state->add("closed", "0");
 	initial_state->add("open", "1");
 	initial_state->setCurrentIdentifier(ppl7::ToString("%d", (int)object->initial_open));
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	orientation_left=new Decker::ui::RadioButton(120, 120, 80, 30, "left");
+	orientation_left=new ppl7::tk::RadioButton(120, 120, 80, 30, "left");
 	orientation_left->setEventHandler(this);
 	addChild(orientation_left);
 
-	orientation_right=new Decker::ui::RadioButton(200, 120, 80, 30, "right");
+	orientation_right=new ppl7::tk::RadioButton(200, 120, 80, 30, "right");
 	orientation_right->setEventHandler(this);
 	addChild(orientation_right);
 	if (object->left_sided) orientation_left->setChecked(true);

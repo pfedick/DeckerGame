@@ -97,7 +97,7 @@ void MainMenue::setupUi()
 	ppl7::tk::Label* label=new ppl7::tk::Label(837, 0, 100, s.height, "active Plane: ");
 	this->addChild(label);
 
-	active_plane_combobox=new ComboBox(938, 0, 150, s.height);
+	active_plane_combobox=new ppl7::tk::ComboBox(938, 0, 150, s.height);
 	active_plane_combobox->add("PlayerPlane", "0");
 	active_plane_combobox->add("FrontPlane", "1");
 	active_plane_combobox->add("FarPlane", "2");
@@ -108,13 +108,13 @@ void MainMenue::setupUi()
 
 	this->addChild(active_plane_combobox);
 
-	godmode_checkbox=new CheckBox(width() - 520, 0, 100, s.height, "god mode", false);
+	godmode_checkbox=new ppl7::tk::CheckBox(width() - 520, 0, 100, s.height, "god mode", false);
 	this->addChild(godmode_checkbox);
 
-	soundtrack_checkbox=new CheckBox(width() - 420, 0, 150, s.height, "play soundtrack", true);
+	soundtrack_checkbox=new ppl7::tk::CheckBox(width() - 420, 0, 150, s.height, "play soundtrack", true);
 	this->addChild(soundtrack_checkbox);
 
-	world_follows_player_checkbox=new CheckBox(width() - 280, 0, 180, s.height, "World follows player", true);
+	world_follows_player_checkbox=new ppl7::tk::CheckBox(width() - 280, 0, 180, s.height, "World follows player", true);
 	this->addChild(world_follows_player_checkbox);
 
 	update();
@@ -240,54 +240,54 @@ VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
 	this->addChild(new ppl7::tk::Label(0, 0, 100, 20, "Misc:"));
 
 
-	show_grid_checkbox=new CheckBox(20, 20, 100, 20, "Grid", menue->visibility_grid);
+	show_grid_checkbox=new ppl7::tk::CheckBox(20, 20, 100, 20, "Grid", menue->visibility_grid);
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
 
-	show_tiletypes_checkbox=new CheckBox(20, 40, 100, 20, "Tiletypes", menue->visibility_tiletypes);
+	show_tiletypes_checkbox=new ppl7::tk::CheckBox(20, 40, 100, 20, "Tiletypes", menue->visibility_tiletypes);
 	show_tiletypes_checkbox->setEventHandler(this);
 	this->addChild(show_tiletypes_checkbox);
 
-	show_collision_checkbox=new CheckBox(20, 60, 100, 20, "Collision", menue->visibility_collision);
+	show_collision_checkbox=new ppl7::tk::CheckBox(20, 60, 100, 20, "Collision", menue->visibility_collision);
 	show_collision_checkbox->setEventHandler(this);
 	this->addChild(show_collision_checkbox);
 
-	show_sprites_checkbox=new CheckBox(20, 80, 100, 20, "Sprites", menue->visibility_sprites);
+	show_sprites_checkbox=new ppl7::tk::CheckBox(20, 80, 100, 20, "Sprites", menue->visibility_sprites);
 	show_sprites_checkbox->setEventHandler(this);
 	this->addChild(show_sprites_checkbox);
 
-	show_objects_checkbox=new CheckBox(20, 100, 100, 20, "Objects", menue->visibility_objects);
+	show_objects_checkbox=new ppl7::tk::CheckBox(20, 100, 100, 20, "Objects", menue->visibility_objects);
 	show_objects_checkbox->setEventHandler(this);
 	this->addChild(show_objects_checkbox);
 
 
 	this->addChild(new ppl7::tk::Label(0, 140, 100, 20, "visible Planes:"));
 
-	visible_plane_near_checkbox=new CheckBox(20, 160, 100, 20, "Near", menue->visibility_plane_near);
+	visible_plane_near_checkbox=new ppl7::tk::CheckBox(20, 160, 100, 20, "Near", menue->visibility_plane_near);
 	visible_plane_near_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_near_checkbox);
 
-	visible_plane_front_checkbox=new CheckBox(20, 180, 100, 20, "Front", menue->visibility_plane_front);
+	visible_plane_front_checkbox=new ppl7::tk::CheckBox(20, 180, 100, 20, "Front", menue->visibility_plane_front);
 	visible_plane_front_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_front_checkbox);
 
-	visible_plane_player_checkbox=new CheckBox(20, 200, 100, 20, "Player", menue->visibility_plane_player);
+	visible_plane_player_checkbox=new ppl7::tk::CheckBox(20, 200, 100, 20, "Player", menue->visibility_plane_player);
 	visible_plane_player_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_player_checkbox);
 
-	visible_plane_back_checkbox=new CheckBox(20, 220, 100, 20, "Back", menue->visibility_plane_back);
+	visible_plane_back_checkbox=new ppl7::tk::CheckBox(20, 220, 100, 20, "Back", menue->visibility_plane_back);
 	visible_plane_back_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_back_checkbox);
 
-	visible_plane_middle_checkbox=new CheckBox(20, 240, 100, 20, "Middle", menue->visibility_plane_middle);
+	visible_plane_middle_checkbox=new ppl7::tk::CheckBox(20, 240, 100, 20, "Middle", menue->visibility_plane_middle);
 	visible_plane_middle_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_middle_checkbox);
 
-	visible_plane_far_checkbox=new CheckBox(20, 260, 100, 20, "Far", menue->visibility_plane_far);
+	visible_plane_far_checkbox=new ppl7::tk::CheckBox(20, 260, 100, 20, "Far", menue->visibility_plane_far);
 	visible_plane_far_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_far_checkbox);
 
-	visible_plane_horizon_checkbox=new CheckBox(20, 280, 100, 20, "Horizon", menue->visibility_plane_horizon);
+	visible_plane_horizon_checkbox=new ppl7::tk::CheckBox(20, 280, 100, 20, "Horizon", menue->visibility_plane_horizon);
 	visible_plane_horizon_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_horizon_checkbox);
 

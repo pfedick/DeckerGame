@@ -216,8 +216,8 @@ size_t Floater::load(const unsigned char* buffer, size_t size)
 class FloaterDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* floater_type;
-	Decker::ui::CheckBox* initial_state;
+	ppl7::tk::ComboBox* floater_type;
+	ppl7::tk::CheckBox* initial_state;
 	Floater* object;
 
 public:
@@ -242,14 +242,14 @@ FloaterDialog::FloaterDialog(Floater* object)
 	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Floater-Type: "));
 	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Initial state: "));
 
-	floater_type=new Decker::ui::ComboBox(120, 0, 400, 30);
+	floater_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	floater_type->add("studded", "0");
 	floater_type->add("flat", "1");
 	floater_type->setCurrentIdentifier(ppl7::ToString("%d", object->floater_type));
 	floater_type->setEventHandler(this);
 	addChild(floater_type);
 
-	initial_state=new Decker::ui::CheckBox(120, 40, 400, 30, "enabled", object->initial_state);
+	initial_state=new ppl7::tk::CheckBox(120, 40, 400, 30, "enabled", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 

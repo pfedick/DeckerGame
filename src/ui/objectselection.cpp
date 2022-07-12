@@ -16,7 +16,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 {
 	ppl7::grafix::Rect client=this->clientRect();
 
-	scrollbar=new Scrollbar(client.width() - 28, client.y1, 28, client.height());
+	scrollbar=new ppl7::tk::Scrollbar(client.width() - 28, client.y1, 28, client.height());
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
@@ -183,7 +183,7 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	ppl7::grafix::Rect client=this->clientRect();
 
 	this->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
-	layer_selection=new ComboBox(60, 0, width - 70, 30);
+	layer_selection=new ppl7::tk::ComboBox(60, 0, width - 70, 30);
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));

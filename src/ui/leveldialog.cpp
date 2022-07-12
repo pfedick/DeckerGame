@@ -41,11 +41,11 @@ void LevelDialog::setupUi()
     level_pixel_size=new ppl7::tk::Label(col1 + 60 + 80 + 60 + 80 + 60, y, 200, 30, "= ? x ? pixel");
     this->addChild(level_pixel_size);
     this->addChild(new ppl7::tk::Label(col1, y, 60, 30, "width:"));
-    level_width=new ppl7::tk::LineInput(col1 + 60, y, 80, 30, "512");
+    level_width=new ppl7::tk::SpinBox(col1 + 60, y, 80, 30, 512);
     level_width->setEventHandler(this);
     this->addChild(level_width);
     this->addChild(new ppl7::tk::Label(col1 + 60 + 80, y, 60, 30, ", height:"));
-    level_height=new ppl7::tk::LineInput(col1 + 60 + 80 + 60, y, 80, 30, "256");
+    level_height=new ppl7::tk::SpinBox(col1 + 60 + 80 + 60, y, 80, 30, 256);
     level_height->setEventHandler(this);
     this->addChild(level_height);
     this->addChild(new ppl7::tk::Label(col1 + 60 + 80 + 60 + 80, y, 60, 30, "Studs"));
@@ -104,8 +104,8 @@ void LevelDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& t
     ppl7::tk::Widget* widget=event->widget();
     if (widget == level_width || widget == level_height) {
         level_pixel_size->setText(ppl7::ToString("= %d x %d pixel",
-            level_width->text().toInt() * TILE_WIDTH,
-            level_height->text().toInt() * TILE_HEIGHT
+            level_width->value() * TILE_WIDTH,
+            level_height->value() * TILE_HEIGHT
         ));
     }
 }

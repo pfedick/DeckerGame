@@ -217,11 +217,11 @@ void LaserBarrier::toggle(bool enable, Object* source)
 class LaserBarrierDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* color_scheme;
-	Decker::ui::ComboBox* on_start_state;
-	Decker::ui::CheckBox* initial_state;
-	Decker::ui::CheckBox* always_on;
-	Decker::ui::CheckBox* block_player;
+	ppl7::tk::ComboBox* color_scheme;
+	ppl7::tk::ComboBox* on_start_state;
+	ppl7::tk::CheckBox* initial_state;
+	ppl7::tk::CheckBox* always_on;
+	ppl7::tk::CheckBox* block_player;
 	ppl7::tk::LineInput* time_on_min, * time_on_max;
 	ppl7::tk::LineInput* time_off_min, * time_off_max;
 
@@ -252,7 +252,7 @@ LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
 	addChild(new ppl7::tk::Label(0, 200, 120, 30, "Time on: "));
 	addChild(new ppl7::tk::Label(0, 240, 120, 30, "Time off: "));
 
-	color_scheme=new Decker::ui::ComboBox(120, 0, 300, 30);
+	color_scheme=new ppl7::tk::ComboBox(120, 0, 300, 30);
 	color_scheme->add("green", "0");
 	color_scheme->add("blue", "1");
 	color_scheme->add("red", "2");
@@ -262,21 +262,21 @@ LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
 	color_scheme->setEventHandler(this);
 	addChild(color_scheme);
 
-	on_start_state=new Decker::ui::ComboBox(120, 40, 80, 30);
+	on_start_state=new ppl7::tk::ComboBox(120, 40, 80, 30);
 	on_start_state->add("on", "1");
 	on_start_state->add("off", "0");
 	on_start_state->setEventHandler(this);
 	addChild(on_start_state);
 
-	initial_state=new Decker::ui::CheckBox(120, 80, 400, 30, "enabled", object->initial_state);
+	initial_state=new ppl7::tk::CheckBox(120, 80, 400, 30, "enabled", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	always_on=new Decker::ui::CheckBox(120, 120, 400, 30, "always on", object->always_on);
+	always_on=new ppl7::tk::CheckBox(120, 120, 400, 30, "always on", object->always_on);
 	always_on->setEventHandler(this);
 	addChild(always_on);
 
-	block_player=new Decker::ui::CheckBox(120, 160, 400, 30, "block player", object->block_player);
+	block_player=new ppl7::tk::CheckBox(120, 160, 400, 30, "block player", object->block_player);
 	block_player->setEventHandler(this);
 	addChild(block_player);
 

@@ -11,7 +11,7 @@ namespace Decker::Objects {
 class ArrowDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* direction;
+	ppl7::tk::ComboBox* direction;
 	ppl7::tk::LineInput* min_cooldown;
 	ppl7::tk::LineInput* max_cooldown;
 	ppl7::tk::LineInput* distance;
@@ -185,7 +185,7 @@ ArrowDialog::ArrowDialog(Arrow* object)
 	addChild(new ppl7::tk::Label(330, 40, 120, 30, "(min/max)"));
 	addChild(new ppl7::tk::Label(0, 80, 120, 30, "player distance: "));
 
-	direction=new Decker::ui::ComboBox(120, 0, 360, 30);
+	direction=new ppl7::tk::ComboBox(120, 0, 360, 30);
 	direction->add("up", "0");
 	direction->add("right", "1");
 	direction->add("down", "2");

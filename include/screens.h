@@ -83,19 +83,19 @@ private:
     GameMenuArea* select_back;
 
     // Audio
-    Decker::ui::ComboBox* audio_device_combobox;
-    Decker::ui::HorizontalSlider* audio_total_slider;
-    Decker::ui::HorizontalSlider* audio_music_slider;
-    Decker::ui::HorizontalSlider* audio_effects_slider;
+    ppl7::tk::ComboBox* audio_device_combobox;
+    ppl7::tk::HorizontalSlider* audio_total_slider;
+    ppl7::tk::HorizontalSlider* audio_music_slider;
+    ppl7::tk::HorizontalSlider* audio_effects_slider;
 
     // Video
-    Decker::ui::ComboBox* video_device_combobox;
-    Decker::ui::ComboBox* screen_resolution_combobox;
-    Decker::ui::ComboBox* windowmode_combobox;
+    ppl7::tk::ComboBox* video_device_combobox;
+    ppl7::tk::ComboBox* screen_resolution_combobox;
+    ppl7::tk::ComboBox* windowmode_combobox;
     ppl7::tk::Button* save_video_settings_button;
 
     // Misc
-    Decker::ui::ComboBox* language_combobox;
+    ppl7::tk::ComboBox* language_combobox;
 
     void selectSettingsPage(SettingsMenue page);
     void setupUi();

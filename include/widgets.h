@@ -13,151 +13,6 @@ class SpriteTexture;
 namespace Decker {
 namespace ui {
 
-/*
-using namespace ppl7;
-using namespace ppl7::grafix;
-using namespace ppl7::tk;
-*/
-
-
-class Scrollbar : public ppl7::tk::Widget
-{
-private:
-	ppl7::tk::Button* up_button;
-	ppl7::tk::Button* down_button;
-	int size;
-	int pos;
-	int visibleItems;
-
-public:
-	Scrollbar(int x, int y, int width, int height);
-
-	void setSize(int size);
-	void setPosition(int position);
-	void setVisibleItems(int items);
-	int position() const;
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-
-
-	void mouseDownEvent(ppl7::tk::MouseEvent* event);
-};
-
-class CheckBox : public ppl7::tk::Label
-{
-private:
-	bool	ischecked;
-
-public:
-	CheckBox();
-	CheckBox(int x, int y, int width, int height, const ppl7::String& text=ppl7::String(), bool checked=false);
-	~CheckBox();
-	bool checked() const;
-	void setChecked(bool checked);
-
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-};
-
-class RadioButton : public ppl7::tk::Label
-{
-private:
-	bool	ischecked;
-
-public:
-	RadioButton();
-	RadioButton(int x, int y, int width, int height, const ppl7::String& text=ppl7::String(), bool checked=false);
-	~RadioButton();
-	bool checked() const;
-	void setChecked(bool checked);
-
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-};
-
-class ListWidget : public ppl7::tk::Frame
-{
-private:
-	Scrollbar* scrollbar;
-	ppl7::String myCurrentText;
-	ppl7::String myCurrentIdentifier;
-	size_t myCurrentIndex;
-	size_t visibleItems;
-	int mouseOverIndex;
-	class ListWidgetItem
-	{
-	public:
-		ppl7::String text;
-		ppl7::String identifier;
-		size_t index;
-	};
-	std::list<ListWidgetItem> items;
-public:
-	ListWidget(int x, int y, int width, int height);
-	void setCurrentText(const ppl7::String& text);
-	ppl7::String currentText() const;
-	ppl7::String currentIdentifier() const;
-
-	void setCurrentIndex(size_t index);
-	size_t currentIndex() const;
-
-	void clear();
-
-	void add(const ppl7::String& text, const ppl7::String& identifier=ppl7::String());
-
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
-	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
-	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
-};
-
-class ComboBox : public ppl7::tk::Widget
-{
-private:
-	ppl7::tk::Label* dropdown_button;
-	ppl7::String myCurrentText;
-	ppl7::String myCurrentIdentifier;
-	size_t myCurrentIndex;
-
-	class ComboBoxItem
-	{
-	public:
-		ppl7::String text;
-		ppl7::String identifier;
-		size_t index;
-	};
-	std::list<ComboBoxItem> items;
-
-	ListWidget* selection;
-
-public:
-	ComboBox(int x, int y, int width, int height);
-	~ComboBox();
-
-	void setCurrentText(const ppl7::String& text);
-	void setCurrentIdentifier(const ppl7::String& identifier);
-	ppl7::String currentText() const;
-	ppl7::String currentIdentifier() const;
-
-	void setCurrentIndex(size_t index);
-	size_t currentIndex() const;
-
-	void clear();
-
-	void add(const ppl7::String& text, const ppl7::String& identifier=ppl7::String());
-
-	virtual ppl7::String widgetType() const;
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-};
-
 class Dialog : public ppl7::tk::Widget
 {
 public:
@@ -207,9 +62,9 @@ private:
 	ppl7::tk::Button* cancel_button;
 	ppl7::tk::LineInput* path_lineinput;
 	ppl7::tk::LineInput* filename_lineinput;
-	Decker::ui::ListWidget* dir_list;
-	Decker::ui::ListWidget* file_list;
-	Decker::ui::ComboBox* drives_combobox;
+	ppl7::tk::ListWidget* dir_list;
+	ppl7::tk::ListWidget* file_list;
+	ppl7::tk::ComboBox* drives_combobox;
 
 
 	DialogState my_state;
@@ -238,51 +93,6 @@ public:
 
 };
 
-class Slider : public ppl7::tk::Widget
-{
-	friend class HorizontalSlider;
-private:
-	int min;
-	int max;
-	int current_value;
-	int my_steps;
-public:
-	Slider(int x, int y, int width, int height);
-
-	void setMinimum(int value);
-	void setMaximum(int value);
-	void setDimension(int min, int max);
-	void setValue(int value);
-	void setSteps(int value);
-
-	int value() const;
-	int minimum() const;
-	int maximum() const;
-	int stepSize() const;
-	int steps() const;
-
-};
-
-class HorizontalSlider : public Slider
-{
-private:
-	ppl7::grafix::Rect slider_pos;
-	bool drag_started;
-	int drag_offset;
-	ppl7::grafix::Point drag_start_pos;
-public:
-	HorizontalSlider(int x, int y, int width, int height);
-	~HorizontalSlider();
-
-	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseUpEvent(ppl7::tk::MouseEvent* event);
-	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
-	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
-	virtual void mouseWheelEvent(ppl7::tk::MouseEvent* event);
-
-
-};
 
 
 }	// EOF namespace ui

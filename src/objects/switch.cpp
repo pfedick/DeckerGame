@@ -143,13 +143,13 @@ size_t Switch::load(const unsigned char* buffer, size_t size)
 class SwitchDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* color_scheme;
-	Decker::ui::CheckBox* visible_at_playtime;
-	Decker::ui::CheckBox* initial_state;
-	Decker::ui::CheckBox* one_time_switch;
-	Decker::ui::CheckBox* auto_toggle_on_collision;
+	ppl7::tk::ComboBox* color_scheme;
+	ppl7::tk::CheckBox* visible_at_playtime;
+	ppl7::tk::CheckBox* initial_state;
+	ppl7::tk::CheckBox* one_time_switch;
+	ppl7::tk::CheckBox* auto_toggle_on_collision;
 	ppl7::tk::LineInput* target_id[10];
-	Decker::ui::CheckBox* target_state[10];
+	ppl7::tk::CheckBox* target_state[10];
 	ppl7::tk::Button* reset;
 
 	Switch* object;
@@ -177,25 +177,25 @@ SwitchDialog::SwitchDialog(Switch* object)
 	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Flags: "));
 	addChild(new ppl7::tk::Label(0, 170, 120, 30, "Targets: "));
 
-	color_scheme=new Decker::ui::ComboBox(120, 0, 400, 30);
+	color_scheme=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	color_scheme->add("yellow", "0");
 	color_scheme->setCurrentIdentifier(ppl7::ToString("%d", object->color_scheme));
 	color_scheme->setEventHandler(this);
 	addChild(color_scheme);
 
-	visible_at_playtime=new Decker::ui::CheckBox(120, 40, 400, 30, "switch is visible", object->visibleAtPlaytime);
+	visible_at_playtime=new ppl7::tk::CheckBox(120, 40, 400, 30, "switch is visible", object->visibleAtPlaytime);
 	visible_at_playtime->setEventHandler(this);
 	addChild(visible_at_playtime);
 
-	initial_state=new Decker::ui::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
+	initial_state=new ppl7::tk::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	one_time_switch=new Decker::ui::CheckBox(120, 100, 400, 30, "one time switch", object->one_time_switch);
+	one_time_switch=new ppl7::tk::CheckBox(120, 100, 400, 30, "one time switch", object->one_time_switch);
 	one_time_switch->setEventHandler(this);
 	addChild(one_time_switch);
 
-	auto_toggle_on_collision=new Decker::ui::CheckBox(120, 130, 400, 30, "auto toggle on collision", object->auto_toggle_on_collision);
+	auto_toggle_on_collision=new ppl7::tk::CheckBox(120, 130, 400, 30, "auto toggle on collision", object->auto_toggle_on_collision);
 	auto_toggle_on_collision->setEventHandler(this);
 	addChild(auto_toggle_on_collision);
 
@@ -204,7 +204,7 @@ SwitchDialog::SwitchDialog(Switch* object)
 		target_id[i]=new ppl7::tk::LineInput(220, 200 + i * 35, 100, 30, ppl7::ToString("%d", object->targets[i].object_id));
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
-		target_state[i]=new Decker::ui::CheckBox(325, 200 + i * 35, 100, 30, "enable", object->targets[i].enable);
+		target_state[i]=new ppl7::tk::CheckBox(325, 200 + i * 35, 100, 30, "enable", object->targets[i].enable);
 		target_state[i]->setEventHandler(this);
 		addChild(target_state[i]);
 	}

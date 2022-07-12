@@ -437,7 +437,7 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 		int type=ppl7::Peek8(buffer + p + 1);
 		Object* object=getInstance(type);
 		//printf("try to load object of type %d (%s), size: %d\n", type, (const char*)object->typeName(), save_size);
-		ppl7::HexDump(buffer + p + 1, save_size - 1);
+		//ppl7::HexDump(buffer + p + 1, save_size - 1);
 		if (object) {
 			if (object->load(buffer + p + 1, save_size - 1)) {
 				if (object->id >= nextid) nextid=object->id + 1;

@@ -154,9 +154,9 @@ size_t StamperVertical::load(const unsigned char* buffer, size_t size)
 class StamperDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::ComboBox* stamper_type;
-	Decker::ui::CheckBox* initial_state;
-	Decker::ui::CheckBox* auto_intervall;
+	ppl7::tk::ComboBox* stamper_type;
+	ppl7::tk::CheckBox* initial_state;
+	ppl7::tk::CheckBox* auto_intervall;
 	ppl7::tk::LineInput* time_active;
 	ppl7::tk::LineInput* time_inactive;
 	StamperVertical* object;
@@ -186,7 +186,7 @@ StamperDialog::StamperDialog(StamperVertical* object)
 	addChild(new ppl7::tk::Label(0, 140, 120, 30, "Time active: "));
 	addChild(new ppl7::tk::Label(0, 180, 120, 30, "Time inactive: "));
 
-	stamper_type=new Decker::ui::ComboBox(120, 0, 400, 30);
+	stamper_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	stamper_type->add("4 Tiles yellow", "0");
 	stamper_type->add("2 Tiles yellow 1", "1");
 	stamper_type->add("2 Tiles yellow 2", "2");
@@ -194,11 +194,11 @@ StamperDialog::StamperDialog(StamperVertical* object)
 	stamper_type->setEventHandler(this);
 	addChild(stamper_type);
 
-	initial_state=new Decker::ui::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
+	initial_state=new ppl7::tk::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	auto_intervall=new Decker::ui::CheckBox(120, 100, 400, 30, "Auto Intervall", object->auto_intervall);
+	auto_intervall=new ppl7::tk::CheckBox(120, 100, 400, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
 
