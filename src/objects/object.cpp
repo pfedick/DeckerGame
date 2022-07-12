@@ -72,7 +72,7 @@ Object::Object(Type::ObjectType type)
 	collisionDetection=false;
 	visibleAtPlaytime=true;
 	enabled=true;
-	save_size=10;
+	save_size=14;
 	state_size=0;
 	pixelExactCollision=true;
 	spawned=false;

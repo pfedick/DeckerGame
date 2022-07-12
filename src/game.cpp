@@ -909,11 +909,13 @@ void Game::startLevel(const ppl7::String& filename)
 	level.load(filename);
 	LevelFile=filename;
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
+	mainmenue->setWorldFollowsPlayer(true);
 	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
 		player->setVisible(true);
 		enableControls(true);
+
 	} else {
 		player->setVisible(false);
 		enableControls(false);
