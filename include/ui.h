@@ -86,6 +86,8 @@ public:
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
 };
 
+class LevelDialog;
+
 class MainMenue : public ppl7::tk::Frame
 {
 private:
@@ -110,9 +112,13 @@ private:
 	CheckBox* soundtrack_checkbox;
 	CheckBox* godmode_checkbox;
 	VisibilitySubMenu* visibility;
+
+	LevelDialog* level_dialog;
 	Game* game;
 
 	void setupUi();
+
+	void openLevelDialog(bool new_flag);
 
 
 public:
@@ -122,7 +128,6 @@ public:
 
 	void resize(int x, int y, int width, int height);
 
-	void mouseClickEvent(ppl7::tk::MouseEvent* event);
 	int currentPlane() const;
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);
@@ -144,8 +149,9 @@ public:
 	bool visibility_tiletypes;
 	bool visibility_collision;
 
-
+	void mouseClickEvent(ppl7::tk::MouseEvent* event);
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
+	void closeEvent(ppl7::tk::Event* event) override;
 };
 
 
@@ -388,13 +394,9 @@ public:
 	};
 private:
 	ppl7::tk::LineInput* level_name;
-	ppl7::tk::Frame* level_size_frame;
-
-	Decker::ui::RadioButton* predefined_size;
-	Decker::ui::RadioButton* custom_size;
-	Decker::ui::ComboBox* predefined_sizes;
-	ppl7::tk::LineInput* custom_width;
-	ppl7::tk::LineInput* custom_height;
+	ppl7::tk::LineInput* level_width;
+	ppl7::tk::LineInput* level_height;
+	ppl7::tk::Label* level_pixel_size;
 
 	ppl7::tk::Frame* level_background_frame;
 
@@ -435,6 +437,8 @@ public:
 	ppl7::String widgetType() const override;
 	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 };
 
 

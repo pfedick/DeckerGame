@@ -607,11 +607,12 @@ public:
 	ppl7::grafix::Point getViewPos() const;
 
 	ppl7::tk::Window& window();
+	Level& getLevel();
 
 	void startLevel(const ppl7::String& filename);
 	void save(const ppl7::String& filename);
 	void load();
-	void clearLevel();
+	void clearLevel(int width, int height);
 	void playerDied();
 	void resetPlayer();
 

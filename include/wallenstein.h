@@ -22,14 +22,14 @@ private:
 	int state;
 	int substate;
 	bool attack;
-	void updateStatePatrol(double time, TileTypePlane &ttplane);
+	void updateStatePatrol(double time, TileTypePlane& ttplane);
 	void switchAttackMode(bool enable);
 public:
 	Wallenstein();
 	static Representation representation();
-	virtual void handleCollision(Player *player, const Collision &collision);
-	virtual void update(double time, TileTypePlane &ttplane, Player &player);
-	virtual void toggle(bool enable, Object *source=NULL);
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void toggle(bool enable, Object* source=NULL) override;
 };
 
 }	// EOF Decker::Objects

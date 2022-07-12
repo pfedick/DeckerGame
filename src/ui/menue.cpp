@@ -21,6 +21,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_grid=false;
 	visibility_tiletypes=false;
 	visibility_collision=false;
+	level_dialog=NULL;
 
 	setupUi();
 }
@@ -125,6 +126,19 @@ void MainMenue::update()
 	else save_button->setEnabled(true);
 }
 
+void MainMenue::openLevelDialog(bool new_flag)
+{
+	if (level_dialog) delete level_dialog;
+	game->enableControls(false);
+	int w=800, h=600;
+	if (w >= game->window().width()) w=game->window().width() - 100;
+	if (h >= game->window().height()) h=game->window().height() - 100;
+	level_dialog=new LevelDialog(w, h);
+	level_dialog->setNewLevelFlag(new_flag);
+	level_dialog->setEventHandler(this);
+	game->window().addChild(level_dialog);
+}
+
 void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 {
 	if (event->widget() == exit_button) {
@@ -139,12 +153,14 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 		game->showObjectsSelection();
 	} else if (event->widget() == edit_waynet_button) {
 		game->showWayNetEdit();
+	} else if (event->widget() == edit_level_button) {
+		openLevelDialog(false);
 	} else if (event->widget() == save_button) {
 		game->save(game->getLevelFilename());
 	} else if (event->widget() == save_as_button) {
 		game->openSaveAsDialog();
 	} else if (event->widget() == new_button) {
-		game->clearLevel();
+		openLevelDialog(true);
 	} else if (event->widget() == load_button) {
 		game->openLoadDialog();
 	} else if (event->widget() == show_visibility_submenu_button) {
@@ -157,6 +173,14 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 			visibility=new VisibilitySubMenu(p.x, height(), this);
 			top->addChild(visibility);
 		}
+	}
+}
+
+void MainMenue::closeEvent(ppl7::tk::Event* event)
+{
+	if (event->widget() == level_dialog) {
+		delete(level_dialog);
+		game->enableControls(true);
 	}
 }
 

@@ -183,6 +183,11 @@ ppl7::tk::Window& Game::window()
 	return *this;
 }
 
+Level& Game::getLevel()
+{
+	return level;
+}
+
 SDL_Renderer* Game::getSDLRenderer()
 {
 	return sdl.getRenderer();
@@ -445,7 +450,7 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse)
 		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
 	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
 	statusbar->setObjectCount(level.objects->count(), level.objects->countVisible());
-	statusbar->setPlayerState(player->getState());
+	if (player) statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
 	if (selected_object) {
 		statusbar->setSelectedObject(selected_object->id);
@@ -938,7 +943,7 @@ void Game::load()
 	if (mainmenue) mainmenue->update();
 }
 
-void Game::clearLevel()
+void Game::clearLevel(int width, int height)
 {
 	closeTileTypeSelection();
 	closeTileSelection();
@@ -946,7 +951,7 @@ void Game::clearLevel()
 	closeObjectSelection();
 	enableControls(false);
 	WorldCoords.setPoint(0, 0);
-	level.create(512, 256);
+	level.create(width, height);
 	if (player) player->move(500, 500);
 	LevelFile.clear();
 	if (mainmenue) mainmenue->update();

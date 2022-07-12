@@ -58,7 +58,7 @@ void start()
 			game.run();
 		} else if (state == GameState::StartEditor) {
 			game.showUi(true);
-			game.clearLevel();
+			game.clearLevel(512, 256);
 			game.resetPlayer();
 			game.run();
 		} else if (state == GameState::ShowSettings) {
