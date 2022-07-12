@@ -51,7 +51,7 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     text_size=label->font().measure(text);
     label=new ppl7::tk::Label(10, 40, text_size.width + 10, 30, text);
     text_size=label->font().measure(text);
-    drives_combobox=new Decker::ui::ComboBox(20 + text_size.width, 40, 100, 30);
+    drives_combobox=new ppl7::tk::ComboBox(20 + text_size.width, 40, 100, 30);
     drives_combobox->setEventHandler(this);
     wchar_t* drives=new wchar_t[MAX_PATH * sizeof(wchar_t)]();
     if (drives != NULL && GetLogicalDriveStringsW(MAX_PATH * sizeof(wchar_t), drives) > 0) {
