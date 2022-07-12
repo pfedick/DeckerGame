@@ -50,7 +50,7 @@ void MainMenue::setupUi()
 	this->addChild(save_button);
 
 	save_as_button=new ppl7::tk::Button(65, 0, 100, s.height, "Save as...");
-	save_as_button->setIcon(gfx->Toolbar.getDrawable(33));
+	save_as_button->setIcon(gfx->Toolbar.getDrawable(67));
 	save_as_button->setEventHandler(this);
 	this->addChild(save_as_button);
 
@@ -64,11 +64,12 @@ void MainMenue::setupUi()
 	new_button->setEventHandler(this);
 	this->addChild(new_button);
 
-	edit_level_button=new ppl7::tk::Button(320, 0, 60, s.height, "Level");
+	edit_level_button=new ppl7::tk::Button(320, 0, 70, s.height, "Level");
+	edit_level_button->setIcon(gfx->Toolbar.getDrawable(73));
 	edit_level_button->setEventHandler(this);
 	this->addChild(edit_level_button);
 
-	edit_tiles_button=new ppl7::tk::Button(381, 0, 60, s.height, "Tiles");
+	edit_tiles_button=new ppl7::tk::Button(391, 0, 50, s.height, "Tiles");
 	edit_tiles_button->setEventHandler(this);
 	this->addChild(edit_tiles_button);
 
@@ -130,12 +131,13 @@ void MainMenue::openLevelDialog(bool new_flag)
 {
 	if (level_dialog) delete level_dialog;
 	game->enableControls(false);
-	int w=800, h=600;
+	int w=800, h=640;
 	if (w >= game->window().width()) w=game->window().width() - 100;
 	if (h >= game->window().height()) h=game->window().height() - 100;
 	level_dialog=new LevelDialog(w, h);
 	level_dialog->setNewLevelFlag(new_flag);
 	level_dialog->setEventHandler(this);
+	if (!new_flag) level_dialog->loadValues(game->getLevel().params);
 	game->window().addChild(level_dialog);
 }
 
@@ -179,7 +181,20 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 void MainMenue::closeEvent(ppl7::tk::Event* event)
 {
 	if (event->widget() == level_dialog) {
-		delete(level_dialog);
+		if (level_dialog->state() == LevelDialog::DialogState::OK) {
+			if (level_dialog->isNewLevel()) {
+				LevelParameter new_params;
+				level_dialog->saveValues(new_params);
+				delete(level_dialog);
+				level_dialog=NULL;
+				game->createNewLevel(new_params);
+				return;
+			} else {
+				level_dialog->saveValues(game->getLevel().params);
+				delete(level_dialog);
+				level_dialog=NULL;
+			}
+		}
 		game->enableControls(true);
 	}
 }

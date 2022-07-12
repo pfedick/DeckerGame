@@ -58,6 +58,19 @@ public:
 	};
 };
 
+class MusicTrack
+{
+public:
+	ppl7::String Name;
+	ppl7::String Filename;
+
+	MusicTrack(const ppl7::String& Name, const ppl7::String& Filename) {
+		this->Name=Name;
+		this->Filename=Filename;
+	}
+
+};
+
 class AudioPool
 {
 private:
@@ -65,6 +78,8 @@ private:
 public:
 	AudioStream song[4];
 	AudioSample sample[AudioClip::maxClips + 1];
+
+	std::list<MusicTrack> musictracks;
 
 	AudioPool();
 	~AudioPool();

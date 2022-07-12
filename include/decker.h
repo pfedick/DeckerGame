@@ -387,6 +387,33 @@ public:
 };
 class Player;
 
+class LevelParameter
+{
+private:
+public:
+	int width;
+	int height;
+	ppl7::String Name;
+	ppl7::String InitialSong;
+	std::list<ppl7::String> SongPlaylist;
+	bool randomSong;
+	enum class BackgroundType {
+		Image,
+		Color,
+	};
+	BackgroundType backgroundType;
+	ppl7::String BackgroundImage;
+	ppl7::grafix::Color BackgroundColor;
+
+	LevelParameter();
+	void clear();
+	size_t size() const;
+	void save(ppl7::File& ff, int chunk_id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
+
+};
+
+
 class Level
 {
 	friend class Game;
@@ -443,10 +470,14 @@ private:
 		chunkNearSpritesLayer0=23,
 		chunkNearSpritesLayer1=24,
 		chunkObjects=30,
-		chunkWayNet=31
+		chunkWayNet=31,
+		chunkLevelParameter=32
 	};
 
 public:
+
+	LevelParameter params;
+
 	Level();
 	~Level();
 	void setEditmode(bool enabled);
@@ -612,7 +643,8 @@ public:
 	void startLevel(const ppl7::String& filename);
 	void save(const ppl7::String& filename);
 	void load();
-	void clearLevel(int width, int height);
+	void createNewLevel(const LevelParameter& params);
+	//void clearLevel(int width, int height);
 	void playerDied();
 	void resetPlayer();
 

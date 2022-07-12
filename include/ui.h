@@ -8,6 +8,8 @@
 
 class Game;
 class SpriteTexture;
+class LevelParameter;
+
 
 #ifndef MAX_TILESETS
 #define MAX_TILESETS 30
@@ -402,6 +404,8 @@ private:
 
 	ppl7::tk::RadioButton* radio_image;
 	ppl7::tk::RadioButton* radio_color;
+	ppl7::tk::LineInput* background_image;
+
 	ppl7::tk::Button* image_fileselect;
 
 	ppl7::tk::LineInput* color_red;
@@ -416,6 +420,7 @@ private:
 	ppl7::tk::Button* add_soundtrack_button;
 	ppl7::tk::Button* delete_soundtrack_button;
 	ppl7::tk::ListWidget* soundtrack_list;
+	ppl7::tk::CheckBox* soundtrack_random;
 
 
 	ppl7::tk::Button* ok_button;
@@ -423,6 +428,8 @@ private:
 
 	bool newlevel;
 	DialogState my_state;
+
+	std::map<ppl7::String, ppl7::String> song_map_identifier;
 
 	void setupUi();
 
@@ -434,8 +441,12 @@ public:
 	bool isNewLevel() const;
 	DialogState state() const;
 
+	void loadValues(const LevelParameter& params);
+	void saveValues(LevelParameter& params) const;
+
 	ppl7::String widgetType() const override;
 	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;

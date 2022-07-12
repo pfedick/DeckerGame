@@ -945,19 +945,24 @@ void Game::load()
 	if (mainmenue) mainmenue->update();
 }
 
-void Game::clearLevel(int width, int height)
+void Game::createNewLevel(const LevelParameter& params)
 {
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
 	enableControls(false);
+	if (mainmenue) mainmenue->setWorldFollowsPlayer(false);
 	WorldCoords.setPoint(0, 0);
-	level.create(width, height);
-	if (player) player->move(500, 500);
+	level.create(params.width, params.height);
+	level.params=params;
+	if (player) {
+		player->move(500, 500);
+		player->setVisible(false);
+	}
 	LevelFile.clear();
+	enableControls(false);
 	if (mainmenue) mainmenue->update();
-	player->setVisible(false);
 }
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)

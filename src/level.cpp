@@ -56,6 +56,7 @@ void Level::clear()
 	NearSprites[1].clear();
 	objects->clear();
 	waynet.clear();
+	params.clear();
 }
 
 void Level::setEditmode(bool enabled)
@@ -168,7 +169,9 @@ void Level::load(const ppl7::String& Filename)
 			if (size <= 5) continue;
 			bytes_read=ff.read(ba, size - 5);
 			if (bytes_read != size - 5) break;
-			if (id == LevelChunkId::chunkPlayerPlane) {
+			if (id == LevelChunkId::chunkLevelParameter) {
+				params.load(ba);
+			} else if (id == LevelChunkId::chunkPlayerPlane) {
 				PlayerPlane.load(ba);
 			} else if (id == LevelChunkId::chunkFrontPlane) {
 				FrontPlane.load(ba);
@@ -231,6 +234,9 @@ void Level::load(const ppl7::String& Filename)
 	if (BackPlane.getSize().isEmpty()) FrontPlane.create(PlayerPlane.getSize().width, PlayerPlane.getSize().height);
 	if (NearPlane.getSize().isEmpty()) NearPlane.create(PlayerPlane.getSize().width * 2, PlayerPlane.getSize().height * 2);
 	ff.close();
+
+	if (PlayerPlane.getSize().width != params.width) params.width=PlayerPlane.getSize().width;
+	if (PlayerPlane.getSize().height != params.height) params.height=PlayerPlane.getSize().height;
 	/*
 	// For performance-testing of sprite system
 	for (int i=0;i<1000000;i++) {
@@ -246,6 +252,7 @@ void Level::save(const ppl7::String& Filename)
 	char* buffer[20];
 	memcpy(buffer, "Decker", 7);
 	ff.write(buffer, 7);
+	params.save(ff, LevelChunkId::chunkLevelParameter);
 	PlayerPlane.save(ff, LevelChunkId::chunkPlayerPlane);
 	FrontPlane.save(ff, LevelChunkId::chunkFrontPlane);
 	FarPlane.save(ff, LevelChunkId::chunkFarPlane);
@@ -533,4 +540,109 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 		}
 	}
 	return false;
+}
+
+
+LevelParameter::LevelParameter()
+{
+	clear();
+}
+
+void LevelParameter::clear()
+{
+	width=0;
+	height=0;
+	randomSong=true;
+	backgroundType=BackgroundType::Color;
+	BackgroundColor.setColor(32, 32, 64, 255);
+	Name.clear();
+	InitialSong.clear();
+	SongPlaylist.clear();
+	BackgroundImage.clear();
+}
+
+
+static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
+{
+	a.clear();
+	a.setf("level_width", "%d", params.width);
+	a.setf("level_height", "%d", params.height);
+	a.set("level_name", params.Name);
+	a.set("initial_song", params.InitialSong);
+	if (params.randomSong) a.set("randomSong", "true");
+	else a.set("randomSong", "false");
+	std::list<ppl7::String>::const_iterator it;
+	for (it=params.SongPlaylist.begin();it != params.SongPlaylist.end();++it) {
+		a.set("additional_playlist/[]", (*it));
+	}
+	if (params.backgroundType == LevelParameter::BackgroundType::Image)
+		a.set("background_type", "image");
+	else if (params.backgroundType == LevelParameter::BackgroundType::Color)
+		a.set("background_type", "color");
+
+	a.set("BackgroundImage", params.BackgroundImage);
+	a.setf("BackgroundColor", "%d,%d,%d,%d", params.BackgroundColor.red(),
+		params.BackgroundColor.green(),
+		params.BackgroundColor.blue(),
+		params.BackgroundColor.alpha()
+	);
+	//a.list();
+
+}
+
+size_t LevelParameter::size() const
+{
+	ppl7::AssocArray a;
+	storeParameters(a, *this);
+	return a.size();
+}
+
+void LevelParameter::save(ppl7::File& ff, int chunk_id) const
+{
+	ppl7::AssocArray a;
+	storeParameters(a, *this);
+	ppl7::ByteArray ba;
+	a.exportBinary(ba);
+	unsigned char buffer[5];
+	ppl7::Poke32(buffer + 0, ba.size() + 5);
+	ppl7::Poke8(buffer + 4, chunk_id);
+	ff.write(buffer, 5);
+	ff.write(ba.ptr(), ba.size());
+}
+
+void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
+{
+	clear();
+	ppl7::AssocArray a;
+	ppl7::String Default, Tmp;
+	a.importBinary(ba);
+	Default="";
+	width=a.getInt("level_width", width);
+	height=a.getInt("level_height", height);
+	Name=a.getString("level_name", Default);
+	InitialSong=a.getString("initial_song", Default);
+	BackgroundImage=a.getString("BackgroundImage", Default);
+	Default="true";
+	randomSong=a.getString("randomSong", Default).toBool();
+	Default="color";
+	Tmp=a.getString("background_type", Default);
+	if (Tmp == "color") backgroundType=BackgroundType::Color;
+	else if (Tmp == "image") backgroundType=BackgroundType::Image;
+	if (a.exists("BackgroundColor")) {
+		Tmp=a.getString("BackgroundColor");
+		ppl7::Array Tok(Tmp, ",");
+		BackgroundColor.setRed(Tok[0].toInt());
+		BackgroundColor.setGreen(Tok[1].toInt());
+		BackgroundColor.setBlue(Tok[2].toInt());
+		BackgroundColor.setAlpha(Tok[3].toInt());
+	}
+	if (a.exists("additional_playlist")) {
+		ppl7::AssocArray& songlist=a.getAssocArray("additional_playlist");
+		ppl7::AssocArray::const_iterator it;
+		for (it=songlist.begin();it != songlist.end();++it) {
+			SongPlaylist.push_back((*it).second->toString());
+		}
+	}
+
+	//a.list("level::parameter::load");
 }
