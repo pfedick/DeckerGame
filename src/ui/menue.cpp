@@ -22,6 +22,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_tiletypes=false;
 	visibility_collision=false;
 	level_dialog=NULL;
+	controlsEnabled=game->getControlsEnabled();
 
 	setupUi();
 }
@@ -129,6 +130,7 @@ void MainMenue::update()
 
 void MainMenue::openLevelDialog(bool new_flag)
 {
+	controlsEnabled=game->getControlsEnabled();
 	if (level_dialog) delete level_dialog;
 	game->enableControls(false);
 	int w=800, h=640;
@@ -193,9 +195,14 @@ void MainMenue::closeEvent(ppl7::tk::Event* event)
 				level_dialog->saveValues(game->getLevel().params);
 				delete(level_dialog);
 				level_dialog=NULL;
+				game->enableControls(controlsEnabled);
 			}
+		} else if (level_dialog->state() == LevelDialog::DialogState::Aborted) {
+			delete(level_dialog);
+			level_dialog=NULL;
+			game->enableControls(controlsEnabled);
 		}
-		game->enableControls(true);
+
 	}
 }
 

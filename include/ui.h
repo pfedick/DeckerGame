@@ -117,6 +117,7 @@ private:
 
 	LevelDialog* level_dialog;
 	Game* game;
+	bool controlsEnabled;
 
 	void setupUi();
 

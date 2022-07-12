@@ -632,6 +632,7 @@ public:
 	void setSpriteModeToDraw();
 	void showUi(bool enable);
 	void enableControls(bool enable);
+	bool getControlsEnabled() const;
 
 	SDL_Renderer* getSDLRenderer();
 	SDL& getSDL();

@@ -1266,6 +1266,12 @@ void Game::enableControls(bool enable)
 	controlsEnabled=enable;
 }
 
+
+bool Game::getControlsEnabled() const
+{
+	return controlsEnabled;
+}
+
 void Game::resetPlayer()
 {
 	if (player) {
