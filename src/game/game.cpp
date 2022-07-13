@@ -37,7 +37,6 @@ Game::Game()
 	tiles_selection=NULL;
 	quitGame=false;
 	worldIsMoving=false;
-	tex_sky=NULL;
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
 	object_selection=NULL;
@@ -144,12 +143,6 @@ void Game::loadGrafix()
 
 	level.objects->loadSpritesets(sdl);
 
-	ppl7::grafix::Image img;
-	img.load("res/sky2.png");
-	tex_sky=sdl.createStreamingTexture(img.width(), img.height());
-	ppl7::grafix::Drawable draw=sdl.lockTexture(tex_sky);
-	draw.blt(img);
-	sdl.unlockTexture(tex_sky);
 }
 
 void Game::createWindow()
@@ -499,20 +492,11 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	if (mouse.p.inside(viewport)) {
 		moveWorldOnMouseClick(mouse);
 	}
-	sdl.startFrame(Style.windowBackgroundColor);
+
 	level.setViewport(viewport);
-	SDL_Rect target;
-	target.x=viewport.x1;
-	target.y=viewport.y1;
-	target.w=desktopSize.width;
-	target.h=desktopSize.height;
-	SDL_Rect source;
-	ppl7::grafix::Point c=WorldCoords * 0.1f;
-	source.x=c.x;
-	source.y=c.y;
-	source.w=desktopSize.width;
-	source.h=desktopSize.height;
-	SDL_RenderCopy(renderer, tex_sky, &source, &target);
+
+	// Draw background
+	background.draw(renderer, viewport, WorldCoords);
 
 	// Draw Planes and Sprites
 	level.FarPlane.setVisible(mainmenue->visibility_plane_far);
@@ -909,6 +893,10 @@ void Game::startLevel(const ppl7::String& filename)
 		enableControls(false);
 	}
 	soundtrack.playInitialSong();
+	background.setBackgroundType(level.params.backgroundType);
+	background.setColor(level.params.BackgroundColor);
+	background.setImage(level.params.BackgroundImage);
+
 }
 
 void Game::checkSoundtrack()

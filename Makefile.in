@@ -30,6 +30,7 @@ OBJECTS=compile/main.o \
 	compile/sdl.o \
 	compile/game.o \
 	compile/soundtrack.o \
+	compile/background.o \
 	compile/spritetexture.o \
 	compile/level.o \
 	compile/fps.o \
