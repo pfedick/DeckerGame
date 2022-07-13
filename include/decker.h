@@ -565,6 +565,7 @@ private:
 	size_t song_index;
 	AudioSystem& audiosystem;
 	const LevelParameter& params;
+	ppl7::String currentSong;
 
 public:
 	Soundtrack(AudioSystem& audio, const LevelParameter& level_params);

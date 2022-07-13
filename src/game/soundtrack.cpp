@@ -24,19 +24,20 @@ void Soundtrack::update()
         if (!audiosystem.isPlaying(playing_song)) {
             delete playing_song;
             playing_song=NULL;
+            currentSong.clear();
         }
     }
     if (!playing_song) {
+        currentSong.clear();
         if (params.SongPlaylist.empty() && params.InitialSong.notEmpty()) {
-            playing_song=new AudioStream(params.InitialSong, AudioClass::Music);
-            audiosystem.play(playing_song);
-        } else {
+            playSong(params.InitialSong);
+        } else if (!params.SongPlaylist.empty()) {
             if (params.randomSong) {
                 song_index=ppl7::rand(0, params.SongPlaylist.size());
-                playing_song=new AudioStream(params.SongPlaylist[song_index], AudioClass::Music);
-                audiosystem.play(playing_song);
+                playSong(params.SongPlaylist[song_index]);
             } else {
-                playing_song=new AudioStream(params.SongPlaylist[song_index], AudioClass::Music);
+                if (song_index >= params.SongPlaylist.size()) song_index=0;
+                playSong(params.SongPlaylist[song_index]);
                 song_index++;
                 if (song_index >= params.SongPlaylist.size())song_index=0;
                 audiosystem.play(playing_song);
@@ -53,6 +54,7 @@ void Soundtrack::playInitialSong()
 void Soundtrack::playSong(const ppl7::String& filename)
 {
     if (playing_song) {
+        if (currentSong == filename) return;
         playing_song->fadeout(4.0f);
         playing_song->setAutoDelete(true);
         playing_song=NULL;
