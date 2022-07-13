@@ -149,6 +149,7 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 void Level::load(const ppl7::String& Filename)
 {
 	clear();
+	TileColorPalette=getResources().getDefaultColorPalette();
 	ppl7::File ff;
 	ff.open(Filename, ppl7::File::READ);
 	ppl7::ByteArray ba;
@@ -296,6 +297,8 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 	int x1=viewport.x1 - offset_x - TILE_WIDTH * 7;
 	int y1=viewport.y1 - offset_y + TILE_HEIGHT;
 
+	std::map<int, ColorPaletteItem>::const_iterator cit;
+
 	for (int z=0;z < MAX_TILE_LAYER;z++) {
 		for (int y=tiles_height;y >= 0;y--) {
 			for (int x=0;x < tiles_width;x++) {
@@ -304,7 +307,13 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 					//if (tile->layer[z].tileset>8) printf ("draw %d, %d\n",tile->layer[z].tileset, tile->layer[z].tileno);
 					if (tile->layer[z].tileset <= MAX_TILESETS && tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno);
+						if (tile->layer[z].tileset > 1) {
+							cit=TileColorPalette.find(tile->layer[z].tileset);
+							if (cit != TileColorPalette.end())
+								tileset[2]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, cit->second.color);
+						} else {
+							tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno);
+						}
 					}
 				}
 			}

@@ -53,6 +53,18 @@
 	//
  */
 
+ColorPaletteItem::ColorPaletteItem()
+{
+	ldraw_material=0;
+}
+
+ColorPaletteItem::ColorPaletteItem(const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& color)
+{
+	this->Name=name;
+	this->ldraw_material=ldraw_material;
+	this->color=color;
+}
+
 Resources::BrickResource::BrickResource()
 {
 	ldraw_material=-1;
@@ -73,6 +85,33 @@ Resources::Resources()
 	background_images.push_back(ppl7::String("res/sky2.png"));
 	background_images.push_back(ppl7::String("res/Cloudy_sky1.jpg"));
 	background_images.push_back(ppl7::String("res/sunset-sky-1455125487HWs.jpg"));
+
+	default_color_palette[1]=ColorPaletteItem("Total Black", 0, ppl7::grafix::Color(1, 1, 1, 255));
+	default_color_palette[2]=ColorPaletteItem("Bright White", 0, ppl7::grafix::Color(255, 255, 255, 255));
+	default_color_palette[3]=ColorPaletteItem("Medium Stone Grey", 71, ppl7::grafix::Color(0xa0, 0xa5, 0xa9, 255));
+	default_color_palette[4]=ColorPaletteItem("Dark Stone Grey", 72, ppl7::grafix::Color(0x6c, 0x6e, 0x68, 255));
+	default_color_palette[5]=ColorPaletteItem("Green", 2, ppl7::grafix::Color(0x23, 0x78, 0x41, 255));
+	default_color_palette[6]=ColorPaletteItem("Red", 4, ppl7::grafix::Color(161, 21, 7, 255));
+	default_color_palette[7]=ColorPaletteItem("Yellow", 3, ppl7::grafix::Color(0xf2, 0xcd, 0x37, 0xff));
+	default_color_palette[8]=ColorPaletteItem("Blue", 1, ppl7::grafix::Color(0x00, 0x55, 0xbf, 0xff));
+	default_color_palette[9]=ColorPaletteItem("Black", 1, ppl7::grafix::Color(14, 25, 33, 0xff));
+	default_color_palette[10]=ColorPaletteItem("Dark Blue", 63, ppl7::grafix::Color(0x0a, 0x34, 0x63, 0xff));
+	default_color_palette[11]=ColorPaletteItem("Medium Blue", 43, ppl7::grafix::Color(0x5a, 0x93, 0xdb, 0xff));
+	default_color_palette[12]=ColorPaletteItem("Brown", 6, ppl7::grafix::Color(0x58, 0x39, 0x27, 0xff));
+	default_color_palette[13]=ColorPaletteItem("Reddish Brown", 70, ppl7::grafix::Color(0x58, 0x2a, 0x12, 0xff));
+	default_color_palette[14]=ColorPaletteItem("Orange", 25, ppl7::grafix::Color(0xfe, 0x8a, 0x18, 0xff));
+	default_color_palette[15]=ColorPaletteItem("light Orange", 125, ppl7::grafix::Color(0xfa, 0x9c, 0x1c, 0xff));
+	default_color_palette[16]=ColorPaletteItem("Dark Tan", 28, ppl7::grafix::Color(0x95, 0x8a, 0x73, 0xff));
+	default_color_palette[17]=ColorPaletteItem("Tan", 19, ppl7::grafix::Color(0xe4, 0xcd, 0x9e, 0xff));
+	default_color_palette[18]=ColorPaletteItem("Bright Green", 10, ppl7::grafix::Color(0x4b, 0x9f, 0x4a, 0xff));
+	default_color_palette[19]=ColorPaletteItem("Bright Yellow Green (Lime)", 27, ppl7::grafix::Color(0xbb, 0xe9, 0x0b, 0xff));
+	default_color_palette[20]=ColorPaletteItem("Rust", 216, ppl7::grafix::Color(0xb3, 0x10, 0x04, 0xff));
+	default_color_palette[21]=ColorPaletteItem("Dark Red", 320, ppl7::grafix::Color(0x72, 0x0e, 0x0f, 0xff));
+	default_color_palette[22]=ColorPaletteItem("Dark Green", 320, ppl7::grafix::Color(0x18, 0x46, 0x32, 0xff));
+	default_color_palette[23]=ColorPaletteItem("White", 15, ppl7::grafix::Color(204, 204, 204, 255));
+	default_color_palette[24]=ColorPaletteItem("Darker Grey", 0, ppl7::grafix::Color(0x4c, 0x4e, 0x48, 255));
+
+
 }
 
 int Resources::getMaxTilesetId() const
@@ -137,10 +176,15 @@ void Resources::loadBricks(SDL& sdl)
 	loadBricks(sdl, 20, "Rust", 216, ppl7::grafix::Color(0xb3, 0x10, 0x04, 0xff));
 	loadBricks(sdl, 21, "Dark Red", 320, ppl7::grafix::Color(0x72, 0x0e, 0x0f, 0xff));
 	loadBricks(sdl, 22, "Dark Green", 320, ppl7::grafix::Color(0x18, 0x46, 0x32, 0xff));
+	loadBricks(sdl, 23, "Brick White", 15, ppl7::grafix::Color(204, 204, 204, 255));
+	loadBricks(sdl, 24, "Darker Grey", 0, ppl7::grafix::Color(0x4c, 0x4e, 0x48, 255));
 
 
 
+}
 
 
-
+const std::map<int, ColorPaletteItem>& Resources::getDefaultColorPalette() const
+{
+	return default_color_palette;
 }

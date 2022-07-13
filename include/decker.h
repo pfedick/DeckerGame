@@ -100,6 +100,17 @@ public:
 };
 
 
+class ColorPaletteItem
+{
+public:
+	ppl7::String Name;
+	int ldraw_material;
+	ppl7::grafix::Color color;
+
+	ColorPaletteItem();
+	ColorPaletteItem(const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& color);
+};
+
 
 
 class SpriteTexture
@@ -156,6 +167,7 @@ public:
 	void clear();
 	void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id) const;
+	void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
@@ -359,6 +371,7 @@ class Resources
 private:
 	void loadBricks(SDL& sdl, int tileset, const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& tint);
 	int max_tileset_id;
+	std::map<int, ColorPaletteItem> default_color_palette;
 public:
 	SpriteTexture Sprite_George;
 	SpriteTexture Sprite_George_Adventure;
@@ -397,6 +410,7 @@ public:
 	SpriteTexture whitebricks_ui;
 	void loadBricks(SDL& sdl);
 	int getMaxTilesetId() const;
+	const std::map<int, ColorPaletteItem>& getDefaultColorPalette() const;
 };
 
 Resources& getResources();
@@ -476,6 +490,8 @@ private:
 	SpriteSystem NearSprites[2];
 	Decker::Objects::ObjectSystem* objects;
 	Waynet waynet;
+
+	std::map<int, ColorPaletteItem> TileColorPalette;
 
 
 	ppl7::grafix::Rect viewport;
