@@ -405,14 +405,18 @@ private:
 
 	ppl7::tk::RadioButton* radio_image;
 	ppl7::tk::RadioButton* radio_color;
-	ppl7::tk::LineInput* background_image;
+	ppl7::tk::ComboBox* background_image;
 
 	ppl7::tk::Button* image_fileselect;
 
-	ppl7::tk::LineInput* color_red;
-	ppl7::tk::LineInput* color_green;
-	ppl7::tk::LineInput* color_blue;
-	ppl7::tk::Button* color_picker;
+	ppl7::tk::SpinBox* color_red;
+	ppl7::tk::SpinBox* color_green;
+	ppl7::tk::SpinBox* color_blue;
+	ppl7::tk::HorizontalSlider* slider_red;
+	ppl7::tk::HorizontalSlider* slider_green;
+	ppl7::tk::HorizontalSlider* slider_blue;
+	ppl7::tk::Frame* color_preview;
+	//ppl7::tk::Button* color_picker;
 
 	ppl7::tk::Frame* level_soundtrack_frame;
 	ppl7::tk::ComboBox* base_soundtrack;
@@ -431,13 +435,17 @@ private:
 	DialogState my_state;
 
 	std::map<ppl7::String, ppl7::String> song_map_identifier;
+	Game* game;
+	ppl7::grafix::Color previous_background;
 
+	void updateColorPreview();
 	void setupUi();
 
 public:
 	int custom_id;
 	LevelDialog(int width, int height);
 
+	void setGame(Game* game);
 	void setNewLevelFlag(bool newlevel);
 	bool isNewLevel() const;
 	DialogState state() const;

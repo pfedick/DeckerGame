@@ -58,9 +58,19 @@ Resources::BrickResource::BrickResource()
 	ldraw_material=-1;
 }
 
+static Resources* resources=NULL;
+
+Resources& getResources()
+{
+	if (!resources) throw ResourcesInitialized();
+	return *resources;
+}
+
 Resources::Resources()
 {
+	if (!resources) resources=this;
 	max_tileset_id=0;
+	background_images.push_back(ppl7::String("res/sky2.png"));
 }
 
 int Resources::getMaxTilesetId() const

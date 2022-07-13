@@ -14,5 +14,6 @@
 #endif
 
 EXCEPTION(AudioPoolNotInitialized, ppl7::Exception);
+EXCEPTION(ResourcesInitialized, ppl7::Exception);
 
 #endif // INCLUDE_EXCEPTIONS_H_

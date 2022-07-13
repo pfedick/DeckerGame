@@ -21,6 +21,7 @@ Background::~Background()
 
 void Background::setImage(const ppl7::String& filename)
 {
+    if (filename == last_image) return;
     if (tex_sky) {
         sdl.destroyTexture(tex_sky);
         tex_sky=NULL;
@@ -28,7 +29,7 @@ void Background::setImage(const ppl7::String& filename)
     if (filename.notEmpty() && ppl7::File::exists(filename)) {
         tex_sky=sdl.createStreamingTexture(filename);
     }
-
+    last_image=filename;
 }
 
 void Background::setColor(const ppl7::grafix::Color& color)

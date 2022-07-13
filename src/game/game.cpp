@@ -496,6 +496,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setViewport(viewport);
 
 	// Draw background
+	background.setColor(level.params.BackgroundColor);
+	background.setImage(level.params.BackgroundImage);
+	background.setBackgroundType(level.params.backgroundType);
 	background.draw(renderer, viewport, WorldCoords);
 
 	// Draw Planes and Sprites

@@ -371,6 +371,8 @@ public:
 	SpriteTexture Sprites_Treasure;
 	SpriteTexture uiSpritesTreasure;
 
+	std::list<ppl7::String> background_images;
+
 	class BrickResource
 	{
 	public:
@@ -387,6 +389,9 @@ public:
 	void loadBricks(SDL& sdl);
 	int getMaxTilesetId() const;
 };
+
+Resources& getResources();
+
 class Player;
 
 class Background
@@ -401,6 +406,7 @@ private:
 	SDL_Texture* tex_sky;
 	ppl7::grafix::Color color;
 	Type t;
+	ppl7::String last_image;
 
 public:
 	Background(SDL& s);

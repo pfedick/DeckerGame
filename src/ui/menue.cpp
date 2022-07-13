@@ -138,6 +138,7 @@ void MainMenue::openLevelDialog(bool new_flag)
 	if (h >= game->window().height()) h=game->window().height() - 100;
 	level_dialog=new LevelDialog(w, h);
 	level_dialog->setNewLevelFlag(new_flag);
+	level_dialog->setGame(game);
 	level_dialog->setEventHandler(this);
 	if (!new_flag) level_dialog->loadValues(game->getLevel().params);
 	game->window().addChild(level_dialog);
