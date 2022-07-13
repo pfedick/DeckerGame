@@ -71,6 +71,8 @@ Resources::Resources()
 	if (!resources) resources=this;
 	max_tileset_id=0;
 	background_images.push_back(ppl7::String("res/sky2.png"));
+	background_images.push_back(ppl7::String("res/Cloudy_sky1.jpg"));
+	background_images.push_back(ppl7::String("res/sunset-sky-1455125487HWs.jpg"));
 }
 
 int Resources::getMaxTilesetId() const
