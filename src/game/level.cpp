@@ -553,7 +553,7 @@ void LevelParameter::clear()
 	width=0;
 	height=0;
 	randomSong=true;
-	backgroundType=BackgroundType::Color;
+	backgroundType=Background::Type::Color;
 	BackgroundColor.setColor(32, 32, 64, 255);
 	Name.clear();
 	InitialSong.clear();
@@ -575,9 +575,9 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 	for (it=params.SongPlaylist.begin();it != params.SongPlaylist.end();++it) {
 		a.set("additional_playlist/[]", (*it));
 	}
-	if (params.backgroundType == LevelParameter::BackgroundType::Image)
+	if (params.backgroundType == Background::Type::Image)
 		a.set("background_type", "image");
-	else if (params.backgroundType == LevelParameter::BackgroundType::Color)
+	else if (params.backgroundType == Background::Type::Color)
 		a.set("background_type", "color");
 
 	a.set("BackgroundImage", params.BackgroundImage);
@@ -626,8 +626,8 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 	randomSong=a.getString("randomSong", Default).toBool();
 	Default="color";
 	Tmp=a.getString("background_type", Default);
-	if (Tmp == "color") backgroundType=BackgroundType::Color;
-	else if (Tmp == "image") backgroundType=BackgroundType::Image;
+	if (Tmp == "color") backgroundType=Background::Type::Color;
+	else if (Tmp == "image") backgroundType=Background::Type::Image;
 	if (a.exists("BackgroundColor")) {
 		Tmp=a.getString("BackgroundColor");
 		ppl7::Array Tok(Tmp, ",");

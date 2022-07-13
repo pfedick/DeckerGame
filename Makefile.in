@@ -232,63 +232,89 @@ compile/main.o: src/main.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/main.o -c src/main.cpp $(CFLAGS)
 
-compile/sdl.o: src/sdl.cpp Makefile include/decker.h
+compile/sdl.o: src/game/sdl.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/sdl.o -c src/sdl.cpp $(CFLAGS)
+	$(CXX) -o compile/sdl.o -c src/game/sdl.cpp $(CFLAGS)
 
-compile/game.o: src/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h include/translate.h
+compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h include/translate.h
 	- @mkdir -p compile
-	$(CXX) -o compile/game.o -c src/game.cpp $(CFLAGS)
+	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
 
-compile/soundtrack.o: src/soundtrack.cpp Makefile include/decker.h
+compile/soundtrack.o: src/game/soundtrack.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/soundtrack.o -c src/soundtrack.cpp $(CFLAGS)
+	$(CXX) -o compile/soundtrack.o -c src/game/soundtrack.cpp $(CFLAGS)
 
-compile/spritetexture.o: src/spritetexture.cpp Makefile include/decker.h
+compile/background.o: src/game/background.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/spritetexture.o -c src/spritetexture.cpp $(CFLAGS)
+	$(CXX) -o compile/background.o -c src/game/background.cpp $(CFLAGS)
 
-compile/resources.o: src/resources.cpp Makefile include/decker.h
+compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/resources.o -c src/resources.cpp $(CFLAGS)
+	$(CXX) -o compile/spritetexture.o -c src/game/spritetexture.cpp $(CFLAGS)
 
-compile/level.o: src/level.cpp Makefile include/decker.h include/objects.h \
+compile/resources.o: src/game/resources.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/resources.o -c src/game/resources.cpp $(CFLAGS)
+
+compile/level.o: src/game/level.cpp Makefile include/decker.h include/objects.h \
 	include/waynet.h
 	- @mkdir -p compile
-	$(CXX) -o compile/level.o -c src/level.cpp $(CFLAGS)
+	$(CXX) -o compile/level.o -c src/game/level.cpp $(CFLAGS)
 
-compile/fps.o: src/fps.cpp Makefile include/decker.h
+compile/fps.o: src/game/fps.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/fps.o -c src/fps.cpp $(CFLAGS)
+	$(CXX) -o compile/fps.o -c src/game/fps.cpp $(CFLAGS)
 
-compile/config.o: src/config.cpp Makefile include/decker.h
+compile/config.o: src/game/config.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/config.o -c src/config.cpp $(CFLAGS)
+	$(CXX) -o compile/config.o -c src/game/config.cpp $(CFLAGS)
 
-compile/translate.o: src/translate.cpp Makefile include/translate.h
+compile/translate.o: src/game/translate.cpp Makefile include/translate.h
 	- @mkdir -p compile
-	$(CXX) -o compile/translate.o -c src/translate.cpp $(CFLAGS)
+	$(CXX) -o compile/translate.o -c src/game/translate.cpp $(CFLAGS)
 
-compile/plane.o: src/plane.cpp Makefile include/decker.h
+compile/plane.o: src/game/plane.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/plane.o -c src/plane.cpp $(CFLAGS)
+	$(CXX) -o compile/plane.o -c src/game/plane.cpp $(CFLAGS)
 
-compile/tiletype.o: src/tiletype.cpp Makefile include/decker.h
+compile/tiletype.o: src/game/tiletype.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/tiletype.o -c src/tiletype.cpp $(CFLAGS)
+	$(CXX) -o compile/tiletype.o -c src/game/tiletype.cpp $(CFLAGS)
 
-compile/spritesystem.o: src/spritesystem.cpp Makefile include/decker.h
+compile/spritesystem.o: src/game/spritesystem.cpp Makefile include/decker.h
 	- @mkdir -p compile
-	$(CXX) -o compile/spritesystem.o -c src/spritesystem.cpp $(CFLAGS)
+	$(CXX) -o compile/spritesystem.o -c src/game/spritesystem.cpp $(CFLAGS)
 
-compile/objectsystem.o: src/objectsystem.cpp Makefile include/objects.h include/decker.h include/wallenstein.h include/player.h
+compile/objectsystem.o: src/game/objectsystem.cpp Makefile include/objects.h include/decker.h include/wallenstein.h include/player.h
 	- @mkdir -p compile
-	$(CXX) -o compile/objectsystem.o -c src/objectsystem.cpp $(CFLAGS)
+	$(CXX) -o compile/objectsystem.o -c src/game/objectsystem.cpp $(CFLAGS)
 
-compile/waynet.o: src/waynet.cpp Makefile include/waynet.h
+compile/waynet.o: src/game/waynet.cpp Makefile include/waynet.h
 	- @mkdir -p compile
-	$(CXX) -o compile/waynet.o -c src/waynet.cpp $(CFLAGS)
+	$(CXX) -o compile/waynet.o -c src/game/waynet.cpp $(CFLAGS)
 
+compile/tile.o: src/game/tile.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/tile.o -c src/game/tile.cpp $(CFLAGS)
+
+compile/player.o: src/game/player.cpp Makefile include/player.h include/animation.h include/decker.h include/objects.h include/physic.h
+	- @mkdir -p compile
+	$(CXX) -o compile/player.o -c src/game/player.cpp $(CFLAGS)
+
+compile/physic.o: src/game/physic.cpp Makefile include/player.h include/decker.h include/physic.h
+	- @mkdir -p compile
+	$(CXX) -o compile/physic.o -c src/game/physic.cpp $(CFLAGS)
+
+compile/animation.o: src/game/animation.cpp Makefile include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/animation.o -c src/game/animation.cpp $(CFLAGS)
+
+compile/brickoccupation.o: src/game/brickoccupation.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/brickoccupation.o -c src/game/brickoccupation.cpp $(CFLAGS)
+
+
+# Objects
 compile/object.o: src/objects/object.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object.o -c src/objects/object.cpp $(CFLAGS)
@@ -446,26 +472,6 @@ compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h
 compile/object_levelend.o: src/objects/levelend.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_levelend.o -c src/objects/levelend.cpp $(CFLAGS)
-
-compile/tile.o: src/tile.cpp Makefile include/decker.h
-	- @mkdir -p compile
-	$(CXX) -o compile/tile.o -c src/tile.cpp $(CFLAGS)
-
-compile/player.o: src/player.cpp Makefile include/player.h include/animation.h include/decker.h include/objects.h include/physic.h
-	- @mkdir -p compile
-	$(CXX) -o compile/player.o -c src/player.cpp $(CFLAGS)
-
-compile/physic.o: src/physic.cpp Makefile include/player.h include/decker.h include/physic.h
-	- @mkdir -p compile
-	$(CXX) -o compile/physic.o -c src/physic.cpp $(CFLAGS)
-
-compile/animation.o: src/animation.cpp Makefile include/animation.h
-	- @mkdir -p compile
-	$(CXX) -o compile/animation.o -c src/animation.cpp $(CFLAGS)
-
-compile/brickoccupation.o: src/brickoccupation.cpp Makefile include/decker.h
-	- @mkdir -p compile
-	$(CXX) -o compile/brickoccupation.o -c src/brickoccupation.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
