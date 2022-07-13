@@ -389,6 +389,31 @@ public:
 };
 class Player;
 
+class Background
+{
+public:
+	enum class Type {
+		Image,
+		Color
+	};
+private:
+	SDL& sdl;
+	SDL_Texture* tex_sky;
+	ppl7::grafix::Color color;
+	Type t;
+
+public:
+	Background(SDL& s);
+	~Background();
+	void setImage(const ppl7::String& filename);
+	void setColor(const ppl7::grafix::Color& color);
+	void setBackgroundType(Type t);
+
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& WorldCoords);
+
+};
+
+
 class LevelParameter
 {
 private:
@@ -399,11 +424,7 @@ public:
 	ppl7::String InitialSong;
 	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
-	enum class BackgroundType {
-		Image,
-		Color,
-	};
-	BackgroundType backgroundType;
+	Background::Type backgroundType;
 	ppl7::String BackgroundImage;
 	ppl7::grafix::Color BackgroundColor;
 
@@ -513,11 +534,12 @@ enum class GameState {
 class StartScreen;
 class SettingsScreen;
 
+
+
 class Soundtrack
 {
 private:
 	AudioStream* playing_song;
-	AudioStream* next_song;
 	size_t song_index;
 	AudioSystem& audiosystem;
 	const LevelParameter& params;
@@ -544,8 +566,8 @@ private:
 	AudioPool audiopool;
 	Resources resources;
 	Level level;
+	Background background=Background(sdl);
 	SDL_Texture* tex_level_grid;
-	SDL_Texture* tex_sky;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
