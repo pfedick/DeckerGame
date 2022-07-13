@@ -227,7 +227,7 @@ void Plane::load(const ppl7::ByteArrayPtr& ba)
 		}
 		setBlockBackground(x, y, block_background);
 	}
-	printf("Plane hat %zd tiles\n", tileCount());
+	//printf("Plane hat %zd tiles\n", tileCount());
 }
 
 ppl7::grafix::Rect Plane::getOccupiedArea() const

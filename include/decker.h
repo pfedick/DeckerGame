@@ -413,6 +413,7 @@ public:
 private:
 	SDL& sdl;
 	SDL_Texture* tex_sky;
+	ppl7::grafix::Size tex_size;
 	ppl7::grafix::Color color;
 	Type t;
 	ppl7::String last_image;
