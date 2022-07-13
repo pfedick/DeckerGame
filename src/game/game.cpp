@@ -899,6 +899,7 @@ void Game::startLevel(const ppl7::String& filename)
 	background.setBackgroundType(level.params.backgroundType);
 	background.setColor(level.params.BackgroundColor);
 	background.setImage(level.params.BackgroundImage);
+	background.setLevelDimension(level.getOccupiedAreaFromTileTypePlane());
 
 }
 

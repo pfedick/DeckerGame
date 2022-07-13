@@ -542,6 +542,33 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	return false;
 }
 
+size_t Level::tileCount() const
+{
+	size_t count=FarPlane.tileCount();
+	count+=PlayerPlane.tileCount();
+	count+=FrontPlane.tileCount();
+	count+=BackPlane.tileCount();
+	count+=MiddlePlane.tileCount();
+	count+=HorizonPlane.tileCount();
+	count+=NearPlane.tileCount();
+	return count;
+}
+
+ppl7::grafix::Rect Level::getOccupiedArea() const
+{
+	ppl7::grafix::Rect r;
+
+	return r;
+
+}
+
+ppl7::grafix::Rect Level::getOccupiedAreaFromTileTypePlane() const
+{
+	return TileTypeMatrix.getOccupiedArea();
+}
+
+
+
 
 LevelParameter::LevelParameter()
 {

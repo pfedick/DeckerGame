@@ -10,6 +10,7 @@ Plane::Plane()
 	width=0;
 	height=0;
 	bTilesVisible=true;
+	tile_count=0;
 }
 
 Plane::~Plane()
@@ -23,6 +24,7 @@ void Plane::clear()
 	tilematrix=NULL;
 	width=0;
 	height=0;
+	tile_count=0;
 }
 
 void Plane::create(int width, int height)
@@ -47,9 +49,11 @@ void Plane::setTile(int x, int y, int z, int tileset, int tileno, bool showStuds
 {
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
 	if (z < 0 || z >= MAX_TILESETS) return;
+
 	if (tilematrix[y * width + x] == NULL) {
 		tilematrix[y * width + x]=new Tile();
 	}
+	if (!tilematrix[y * width + x]->hasSprite(z)) tile_count++;
 	tilematrix[y * width + x]->setSprite(z, tileset, tileno, showStuds);
 }
 
@@ -117,6 +121,7 @@ void Plane::clearTile(int x, int y, int z)
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
 	if (z < 0 || z >= MAX_TILE_LAYER) return;
 	if (tilematrix[y * width + x] != NULL) {
+		if (!tilematrix[y * width + x]->hasSprite(z) && tile_count > 0) tile_count--;
 		tilematrix[y * width + x]->setSprite(z, 0, 0, true);
 		tilematrix[y * width + x]->setOccupation(z, Tile::OccupationNone);
 	}
@@ -222,4 +227,31 @@ void Plane::load(const ppl7::ByteArrayPtr& ba)
 		}
 		setBlockBackground(x, y, block_background);
 	}
+	printf("Plane hat %zd tiles\n", tileCount());
+}
+
+ppl7::grafix::Rect Plane::getOccupiedArea() const
+{
+	ppl7::grafix::Rect r;
+	r.x1=width;
+	r.y1=height;
+	r.x2=0;
+	r.y2=0;
+	for (int y=0;y < height;y++) {
+		for (int x=0;x < width;x++) {
+			const Tile* t=tilematrix[y * width + x];
+			if (t && t->hasSprite()) {
+				if (x > r.x2) r.x2=x;
+				if (x < r.x1) r.x1=x;
+				if (y > r.y2) r.y2=y;
+				if (y < r.y1) r.y1=y;
+			}
+		}
+	}
+	return r;
+}
+
+size_t Plane::tileCount() const
+{
+	return tile_count;
 }

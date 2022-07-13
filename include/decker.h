@@ -242,6 +242,8 @@ public:
 	bool block_background;
 	Tile();
 	void setSprite(int z, int tileset, int tileno, bool showStuds);
+	bool hasSprite(int z) const;
+	bool hasSprite() const;
 	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);
 };
 
@@ -275,6 +277,9 @@ private:
 	//SpriteSystem spritessystem[2];
 	bool bTilesVisible;
 
+	ppl7::grafix::Rect plane_dimension;
+	size_t tile_count;
+
 public:
 	Plane();
 	~Plane();
@@ -297,6 +302,9 @@ public:
 	bool isVisible() const;
 	int getTileNo(int x, int y, int z);
 	int getTileSet(int x, int y, int z);
+
+	size_t tileCount() const;
+	ppl7::grafix::Rect getOccupiedArea() const;
 };
 
 class TileType
@@ -343,6 +351,7 @@ public:
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
+	ppl7::grafix::Rect getOccupiedArea() const;
 };
 
 class Resources
@@ -407,6 +416,7 @@ private:
 	ppl7::grafix::Color color;
 	Type t;
 	ppl7::String last_image;
+	ppl7::grafix::Rect level_dimension;
 
 public:
 	Background(SDL& s);
@@ -414,6 +424,7 @@ public:
 	void setImage(const ppl7::String& filename);
 	void setColor(const ppl7::grafix::Color& color);
 	void setBackgroundType(Type t);
+	void setLevelDimension(const ppl7::grafix::Rect& tiles);
 
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& WorldCoords);
 
@@ -526,6 +537,10 @@ public:
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
+
+	size_t tileCount() const;
+	ppl7::grafix::Rect getOccupiedArea() const;
+	ppl7::grafix::Rect getOccupiedAreaFromTileTypePlane() const;
 
 };
 
