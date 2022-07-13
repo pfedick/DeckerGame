@@ -140,7 +140,7 @@ void LevelDialog::loadValues(const LevelParameter& params)
     level_name->setText(params.Name);
     if (params.InitialSong.notEmpty())base_soundtrack->setCurrentIdentifier(params.InitialSong);
     soundtrack_random->setChecked(params.randomSong);
-    std::list<ppl7::String>::const_iterator it;
+    std::vector<ppl7::String>::const_iterator it;
     for (it=params.SongPlaylist.begin();it != params.SongPlaylist.end();++it) {
         std::map<ppl7::String, ppl7::String>::const_iterator sit;
         sit=song_map_identifier.find((*it));

@@ -36,7 +36,7 @@ void start()
 	game.init_grafix();
 
 
-	game.startLevel("level/test.lvl");
+	game.startLevel("level/heaven.lvl");
 	game.showUi(true);
 	game.run();
 	return;

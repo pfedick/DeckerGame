@@ -557,20 +557,8 @@ void Game::run()
 	wm->setKeyboardFocus(world_widget);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
-	AudioStream* playing_song=&audiopool.song[1];
-	playing_song->rewind();
-	audiosystem.play(playing_song);
 	while (!quitGame) {
-		if (!audiosystem.isPlaying(playing_song)) {
-			playing_song=&audiopool.song[ppl7::rand(0, 3)];
-			playing_song->rewind();
-			audiosystem.play(playing_song);
-		}
-		if (mainmenue->soundTrackEnabled()) {
-			audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
-		} else {
-			audiosystem.setVolume(AudioClass::Music, 0.0f);
-		}
+		checkSoundtrack();
 		wm->handleEvents();
 		if (filedialog) checkFileDialog();
 		drawWorld(renderer);
@@ -593,7 +581,7 @@ void Game::run()
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		presentScreen();
 	}
-	playing_song->fadeout(4);
+	soundtrack.fadeout(4.0f);
 }
 
 void Game::quitEvent(ppl7::tk::Event* e)
@@ -920,6 +908,18 @@ void Game::startLevel(const ppl7::String& filename)
 		player->setVisible(false);
 		enableControls(false);
 	}
+	soundtrack.playInitialSong();
+}
+
+void Game::checkSoundtrack()
+{
+	soundtrack.update();
+	if (mainmenue->soundTrackEnabled()) {
+		audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
+	} else {
+		audiosystem.setVolume(AudioClass::Music, 0.0f);
+	}
+
 }
 
 const ppl7::String& Game::getLevelFilename() const

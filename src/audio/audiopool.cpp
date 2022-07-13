@@ -68,12 +68,6 @@ void AudioPool::load()
 	musictracks.push_back(MusicTrack("Patrick F. - George Decker Theme", "res/audio/PatrickF-George_Decker_Theme.mp3"));
 	musictracks.push_back(MusicTrack("Patrick F. - Heaven", "res/audio/PatrickF-Heaven.mp3"));
 
-	song[0].open("res/audio/PatrickF-In_The_Hall_Of_The_Mountain_King.mp3");
-	song[1].open("res/audio/PatrickF-ID.mp3");
-	song[2].open("res/audio/PatrickF-Sonic_Waves.mp3");
-	song[3].open("res/audio/PatrickF-George_Decker_Theme.mp3");
-	for (int i=0;i <= 3;i++) song[i].setAudioClass(AudioClass::Music);
-
 	sample[AudioClip::coin1].load("res/audio/341695__projectsu012__coins-1.mp3");
 	sample[AudioClip::coin2].load("res/audio/402766__matrixxx__retro-coin-04.wav");
 	sample[AudioClip::impact].load("res/audio/221626__ansel__body-impact.mp3");

@@ -571,7 +571,7 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 	a.set("initial_song", params.InitialSong);
 	if (params.randomSong) a.set("randomSong", "true");
 	else a.set("randomSong", "false");
-	std::list<ppl7::String>::const_iterator it;
+	std::vector<ppl7::String>::const_iterator it;
 	for (it=params.SongPlaylist.begin();it != params.SongPlaylist.end();++it) {
 		a.set("additional_playlist/[]", (*it));
 	}

@@ -6,6 +6,8 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include <map>
+#include <list>
+#include <vector>
 #include "decker_sdl.h"
 #include "ui.h"
 #include "audio.h"
@@ -395,7 +397,7 @@ public:
 	int height;
 	ppl7::String Name;
 	ppl7::String InitialSong;
-	std::list<ppl7::String> SongPlaylist;
+	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
 	enum class BackgroundType {
 		Image,
@@ -511,6 +513,23 @@ enum class GameState {
 class StartScreen;
 class SettingsScreen;
 
+class Soundtrack
+{
+private:
+	AudioStream* playing_song;
+	AudioStream* next_song;
+	size_t song_index;
+	AudioSystem& audiosystem;
+	const LevelParameter& params;
+
+public:
+	Soundtrack(AudioSystem& audio, const LevelParameter& level_params);
+	void update();
+	void playInitialSong();
+	void playSong(const ppl7::String& filename);
+	void fadeout(float seconds);
+};
+
 
 class Game : private ppl7::tk::Window
 {
@@ -557,6 +576,9 @@ private:
 
 	ppl7::grafix::Size windowedSize;
 
+	// Soundtrack
+	Soundtrack soundtrack=Soundtrack(audiosystem, level.params);
+
 	void createWindow();
 	void presentStartupScreen();
 	void loadGrafix();
@@ -587,6 +609,7 @@ private:
 	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event);
 
 	void checkFileDialog();
+	void checkSoundtrack();
 
 	Player* player;
 	int fade_to_black;
