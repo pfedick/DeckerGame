@@ -524,12 +524,12 @@ private:
 
 public:
 	Soundtrack(AudioSystem& audio, const LevelParameter& level_params);
+	~Soundtrack();
 	void update();
 	void playInitialSong();
 	void playSong(const ppl7::String& filename);
 	void fadeout(float seconds);
 };
-
 
 class Game : private ppl7::tk::Window
 {

@@ -13,6 +13,14 @@ Soundtrack::Soundtrack(AudioSystem& audio, const LevelParameter& level_params)
     song_index=0;
 }
 
+Soundtrack::~Soundtrack()
+{
+    if (playing_song) audiosystem.stop(playing_song);
+    if (next_song) audiosystem.stop(next_song);
+    delete playing_song;
+    delete next_song;
+}
+
 void Soundtrack::update()
 {
     if (playing_song) {
