@@ -14,12 +14,12 @@ LIBS_PPL7 = pplib/release/libppl7-tk.a  pplib/release/libppl7-audio.a  pplib/rel
 LIBAV = -lavcodec -lavformat -lswresample -lswscale -lavutil
 LIBS		= $(LIBS_PPL7)  \
 	@LIBS@ $(LIBAV) @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
-	@PNG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ \
+	@PNG_LIBS@ @JPEG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ \
 	-lstdc++
 
 TEXMAKER_LIBS		= pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a  \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
-	@PNG_LIBS@ @ICONV_LIBS@ -lstdc++
+	@PNG_LIBS@ @JPEG_LIBS@ @ICONV_LIBS@ -lstdc++
 TEXMAKER_CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) @CXXFLAGS@ @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ 	@ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@
 
 

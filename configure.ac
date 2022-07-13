@@ -17,6 +17,8 @@ AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
 sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
 sinclude(pplib/autoconf/png.m4)
+sinclude(pplib/autoconf/jpeg.m4)
+sinclude(pplib/autoconf/libjpeg-turbo.m4)
 sinclude(pplib/autoconf/ax_pthread.m4)
 sinclude(pplib/autoconf/sdl2.m4)
 sinclude(pplib/autoconf/nasm.m4)
@@ -41,6 +43,7 @@ report_have_zlib="no"
 report_have_pcre="no"
 report_have_sdl2="no"
 report_have_png="no"
+report_have_jpeg="no"
 report_have_nasm="no"
 
 
@@ -55,7 +58,7 @@ CFLAGS=$OLD_CFLAGS
 AC_PROG_CXX
 
 AX_CXX_COMPILE_STDCXX_11
-dnl AX_CXX_COMPILE_STDCXX(11) 
+dnl AX_CXX_COMPILE_STDCXX(11)
 
 
 dnl AC_LANG(C++)
@@ -71,14 +74,14 @@ AX_CHECK_COMPILE_FLAG([-no-pie],
 AC_SUBST(NOPIE)
 
 
-  
+
 case "$host_os" in
 	freebsd* )
 		CFLAGS="-I/usr/local/include $CFLAGS"
 		LDFLAGS="-L/usr/local/lib $LDFLAGS"
   		;;
 esac
- 
+
 case "$host_os" in
 	*mingw32*|msys )
 		report_have_pthreads="yes, Windows Threads"
@@ -88,7 +91,7 @@ case "$host_os" in
   		;;
 	*)
 		AX_PTHREAD([report_have_pthreads="yes, pthreads"]
-			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])			
+			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])
 		)
 		;;
 esac
@@ -251,12 +254,33 @@ fi
 #CFLAGS="$CFLAGS -I/usr/local/include"
 
 
-##################################################################################### PNG   
+##################################################################################### PNG
 AC_CHECK_LIBPNG([1.2],
             AC_DEFINE(HAVE_PNG, 1, [ Define if you have libpng. ])
             report_have_png="yes"
            :)
-      
+
+##################################################################################### JPEG
+jpeg_note=""
+AC_CHECK_LIBJPEG([6.0],
+            AC_DEFINE(HAVE_JPEG, 1, [ Define if you have libjpeg. ])
+            report_have_jpeg="yes"
+           :)
+
+
+##################################################################################### JPEG-TURBO
+AC_CHECK_LIBJPEGTURBO([1.3.0],
+            AC_DEFINE(HAVE_LIBJPEGTURBO, 1, [ Define if you have libjpeg-turbo. ])
+            AC_DEFINE(HAVE_JPEG,1)
+            report_have_jpeg="yes"
+            jpeg_note="(using libjpeg-turbo)"
+			JPEG_LIBS="$JPEG_LIBS $TURBOJPEG_LIBS"
+			JPEG_CFLAGS="$JPEG_CFLAGS $TURBOJPEG_CFLAGS"
+
+           :)
+AC_SUBST(JPEG_CFLAGS)
+AC_SUBST(JPEG_LIBS)
+
 
 AC_CHECK_LIBMPG123([1.0.0],
             AC_DEFINE(HAVE_MPG123, 1, [ Define if you have mpg123 library. ])
@@ -268,7 +292,7 @@ AC_CHECK_LIBMPG123([1.0.0],
 
 
 AM_ICONV
-if test "$am_cv_func_iconv_works" = "yes" 
+if test "$am_cv_func_iconv_works" = "yes"
 then
 	report_have_iconv="yes"
 	ICONV_CFLAGS=$INCICONV
@@ -298,7 +322,7 @@ AX_PATH_LIB_PCRE(
             report_have_pcre="yes"
             ,
             )
-       
+
 dnl Check for SDL
 report_have_sdl2="no"
 AM_PATH_SDL2([2.0.0],
@@ -331,10 +355,10 @@ case $target in
 	x86_64*|amd64*)
 		AC_DEFINE(HAVE_AMD64,1,)
 		;;
-esac		
+esac
 
 
-	
+
 
 if test $report_have_nasm = "yes"
 then
@@ -357,8 +381,8 @@ SRCDIR=`pwd`
 AC_SUBST(SRCDIR)
 
 
- 
- 
+
+
 # If we support __thread, that can speed up tcmalloc a bit.
 # Note, however, that our code tickles a bug in gcc < 4.1.2
 # involving TLS and -fPIC (which our libraries will use) on x86:
@@ -374,7 +398,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([#if defined(__GNUC__) && (defined(__i386__) || 
 
 # We also need to check if the kernel supports __thread, which requires uname()
 AC_CHECK_DECLS(uname,,, [#include <sys/utsname.h>])
- 
+
 
 
 
@@ -387,7 +411,7 @@ case "$host_os" in
 		AC_DEFINE(MINGW64, 1, [Define if you compile on Windows MINGW64])
 		AC_DEFINE(HAVE_LOCALTIME_R,1,[on mingw-w64 we always have localtime_r])
 		AC_DEFINE(HAVE_GMTIME_R,1,[on mingw-w64 we always have gmtime_r])
-		
+
 		WINDOWS_WINSOCK_LIBS="-lws2_32"
   		;;
 	* )
@@ -401,6 +425,7 @@ AC_SUBST(WINDOWS_WINSOCK_LIBS)
 AC_SUBST(report_have_zlib)
 AC_SUBST(report_have_bzip2)
 AC_SUBST(report_have_png)
+AC_SUBST(report_have_jpeg)
 AC_SUBST(report_have_sdl2)
 AC_SUBST(report_have_pcre)
 AC_SUBST(report_have_iconv)
@@ -457,13 +482,13 @@ AC_MSG_RESULT([
 ******************************************************************************
 ** Configuration summary for $PACKAGE_NAME Version $PACKAGE_VERSION
 ** Target: $target_os        CPU: $target_cpu
-** 
+**
 ** Byteorder: $report_byteorder
 **   Size of char         $ac_cv_sizeof_char     Size of float        $ac_cv_sizeof_float
 **   Size of short        $ac_cv_sizeof_short     Size of double       $ac_cv_sizeof_double
 **   Size of int          $ac_cv_sizeof_int     Size of void*        $ac_cv_sizeof_voidp
 **   Size of long         $ac_cv_sizeof_long     Size of wchar_t      $ac_cv_sizeof_wchar_t
-**   Size of long long    $ac_cv_sizeof_long_long     
+**   Size of long long    $ac_cv_sizeof_long_long
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
 ** Assembler:
@@ -477,6 +502,7 @@ AC_MSG_RESULT([
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
+**   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
 **
@@ -517,6 +543,12 @@ then
 "
 fi
 
+if test "$report_have_jpeg" != "yes"
+then
+	missing="$missing  - libpng not found
+"
+fi
+
 
 if test "$report_have_iconv" != "yes"
 then
@@ -539,4 +571,3 @@ then
 	AC_MSG_ERROR(Cannot build because of missing dependencies:
 $missing)
 fi
-
