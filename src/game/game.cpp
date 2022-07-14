@@ -596,6 +596,10 @@ void Game::closeTileTypeSelection()
 void Game::closeTileSelection()
 {
 	if (tiles_selection) {
+		remember.lastTile=tiles_selection->selectedTile();
+		remember.lastTileColor=tiles_selection->colorIndex();
+		remember.lastTileset=tiles_selection->currentTileSet();
+		remember.lastTileLayer=tiles_selection->currentLayer();
 		this->removeChild(tiles_selection);
 		delete(tiles_selection);
 		tiles_selection=NULL;
@@ -653,6 +657,10 @@ void Game::showTilesSelection()
 		for (int i=1;i <= resources.getMaxTilesetId();i++) {
 			tiles_selection->setTileSet(i, resources.bricks[i].name, &resources.bricks[i].ui);
 		}
+		tiles_selection->setCurrentTileSet(remember.lastTileset);
+		tiles_selection->setSelectedTile(remember.lastTile);
+		tiles_selection->setColorIndex(remember.lastTileColor);
+		tiles_selection->setLayer(remember.lastTileLayer);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -749,7 +757,7 @@ void Game::showWayNetEdit()
 void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	if (state[SDL_SCANCODE_LSHIFT]) return;
+	//if (state[SDL_SCANCODE_LSHIFT]) return;
 
 	if (tiletype_selection) {
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[0];
@@ -774,7 +782,16 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 		int color_index=tiles_selection->colorIndex();
 		Plane& plane=level.plane(currentPlane);
 
-		if (mouse.buttonMask == ppl7::tk::MouseState::Left && selectedTile >= 0) {
+		if ((mouse.buttonMask == ppl7::tk::MouseState::Right || mouse.buttonMask == ppl7::tk::MouseState::Middle)
+			&& state[SDL_SCANCODE_LSHIFT]) {
+				// Pick Tile
+			ppl7::grafix::Point p=plane.getOccupationOrigin(x, y, currentLayer);
+			if (p.x >= 0 && p.y >= 0) {
+				tiles_selection->setCurrentTileSet(plane.getTileSet(p.x, p.y, currentLayer));
+				tiles_selection->setSelectedTile(plane.getTileNo(p.x, p.y, currentLayer));
+				tiles_selection->setColorIndex(plane.getColorIndex(p.x, p.y, currentLayer));
+			}
+		} else if (mouse.buttonMask == ppl7::tk::MouseState::Left && selectedTile >= 0 && state[SDL_SCANCODE_LSHIFT] == 0) {
 			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
 			if (selectedTileSet == 1) occupation=brick_occupation_solid;
 			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
@@ -784,7 +801,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 					selectedTile, color_index, true);
 				plane.setOccupation(x, y, currentLayer, occupation);
 			}
-		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {
+		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right && state[SDL_SCANCODE_LSHIFT] == 0) {
 			ppl7::grafix::Point origin=plane.getOccupationOrigin(x, y, currentLayer);
 			if (origin.x >= 0 && origin.y >= 0) {
 				int origin_tile=plane.getTileNo(origin.x, origin.y, currentLayer);
@@ -883,6 +900,12 @@ void Game::startLevel(const ppl7::String& filename)
 	if (!ppl7::File::exists(filename)) {
 		return;
 	}
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	closeObjectSelection();
+	closeWayNet();
+	remember.clear();
 	level.load(filename);
 	LevelFile=filename;
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
@@ -934,6 +957,8 @@ void Game::load()
 	closeTileSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
+	closeWayNet();
+	remember.clear();
 	level.load(LevelFile);
 	enableControls(true);
 	if (mainmenue) mainmenue->update();
@@ -945,6 +970,8 @@ void Game::createNewLevel(const LevelParameter& params)
 	closeTileSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
+	closeWayNet();
+	remember.clear();
 	enableControls(false);
 	if (mainmenue) mainmenue->setWorldFollowsPlayer(false);
 	WorldCoords.setPoint(0, 0);

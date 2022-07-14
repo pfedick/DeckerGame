@@ -182,12 +182,46 @@ public:
 
 };
 
-class ColorSelectionFrame : public ppl7::tk::Frame
+class ColorPaletteFrame : public ppl7::tk::Frame
 {
 private:
 	ColorPalette& palette;
 	int color_index;
-	ppl7::tk::SpinBox* spinbox;
+	ppl7::tk::Scrollbar* scrollbar;
+	int tsize;
+	int items_per_row;
+	int rows;
+
+public:
+	ColorPaletteFrame(int x, int y, int width, int height, ColorPalette& palette);
+	~ColorPaletteFrame();
+	int colorIndex() const;
+	void setColorIndex(int index);
+	ppl7::grafix::Color color() const;
+
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseWheelEvent(ppl7::tk::MouseEvent* event) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+
+
+};
+
+class ColorSelectionFrame : public ppl7::tk::Widget
+{
+private:
+	ColorPalette& palette;
+	ColorPaletteFrame* color_palette;
+	ppl7::tk::LineInput* color_name;
+	ppl7::tk::HorizontalSlider* slider_red;
+	ppl7::tk::HorizontalSlider* slider_green;
+	ppl7::tk::HorizontalSlider* slider_blue;
+
+	ppl7::tk::SpinBox* color_red;
+	ppl7::tk::SpinBox* color_green;
+	ppl7::tk::SpinBox* color_blue;
+
+	void sendEventValueChanged();
 
 
 public:
@@ -196,8 +230,10 @@ public:
 	void setColorIndex(int index);
 	ppl7::grafix::Color color() const;
 
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 };
 
 class TilesSelection : public ppl7::tk::Frame
@@ -231,6 +267,7 @@ public:
 	int currentTileSet() const;
 	void setTileSet(int id, const ppl7::String& name, SpriteTexture* tiles);
 	int currentLayer() const;
+	void setLayer(int layer);
 	int colorIndex() const;
 	void setColorIndex(int index);
 

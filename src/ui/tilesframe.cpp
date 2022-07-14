@@ -18,6 +18,7 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game* game)
 	//scrollbar->setSize(tiles->numSprites()/4+1);
 	scrollbar->setSize(0);
 	scrollbar->setEventHandler(this);
+	color.set(255, 255, 255, 255);
 
 	this->addChild(scrollbar);
 

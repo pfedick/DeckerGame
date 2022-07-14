@@ -77,6 +77,18 @@ void ColorPalette::set(uint32_t index, const ColorPaletteItem& item)
     if (index < 256) palette[index]=item;
 }
 
+void ColorPalette::setColor(uint32_t index, const ppl7::grafix::Color& color)
+{
+    if (index < 256) palette[index].color=color;
+}
+
+void ColorPalette::setName(uint32_t index, const ppl7::String& name)
+{
+    if (index < 256) palette[index].name=name;
+}
+
+
+
 const ColorPaletteItem& ColorPalette::get(uint32_t index) const
 {
     if (index < 256) return palette[index];
@@ -92,6 +104,12 @@ const ppl7::grafix::Color& ColorPalette::getColor(uint32_t index) const
 const std::array<ColorPaletteItem, 256>& ColorPalette::getPalette() const
 {
     return palette;
+}
+
+const ppl7::String& ColorPalette::getName(uint32_t index) const
+{
+    if (index < 256) return palette[index].name;
+    return undefined.name;
 }
 
 void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
