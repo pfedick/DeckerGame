@@ -10,6 +10,7 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game* game)
 	for (int i=0;i <= MAX_TILESETS;i++)
 		tilesets[i]=NULL;
 	tileset=1;
+
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
 
@@ -31,9 +32,14 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game* game)
 	layer3=new ppl7::tk::RadioButton(210, 35, 50, 20, "3");
 	this->addChild(layer3);
 
-	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 60, game);
+	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 60 - 300, game);
 	this->addChild(tilesframe);
 
+
+	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
+	colorframe->setEventHandler(this);
+	this->addChild(colorframe);
+	tilesframe->setColor(colorframe->color());
 }
 
 void TilesSelection::setSelectedTile(int nr)
@@ -80,11 +86,61 @@ void TilesSelection::setTileSet(int id, const ppl7::String& name, SpriteTexture*
 
 }
 
+int TilesSelection::colorIndex() const
+{
+	return colorframe->colorIndex();
+}
+
+void TilesSelection::setColorIndex(int index)
+{
+	colorframe->setColorIndex(index);
+}
+
 void TilesSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
 	if (event->widget() == tileset_combobox) {
 		//printf("value=%d\n",value);
 		setCurrentTileSet(value + 1);
+	} else if (event->widget() == colorframe) {
+		tilesframe->setColor(colorframe->color());
+	}
+}
+
+
+ColorSelectionFrame::ColorSelectionFrame(int x, int y, int width, int height, ColorPalette& palette)
+	: ppl7::tk::Frame(x, y, width, height, ppl7::tk::Frame::BorderStyle::Upset), palette(palette)
+{
+	color_index=2;
+	spinbox=new ppl7::tk::SpinBox(0, 0, 70, 30, color_index);
+	spinbox->setLimits(0, 255);
+	spinbox->setEventHandler(this);
+	this->addChild(spinbox);
+}
+
+
+int ColorSelectionFrame::colorIndex() const
+{
+	return color_index;
+}
+
+ppl7::grafix::Color ColorSelectionFrame::color() const
+{
+	return palette.getColor(color_index);
+}
+
+void ColorSelectionFrame::setColorIndex(int index)
+{
+	color_index=index;
+}
+
+void ColorSelectionFrame::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+{
+	ppl7::tk::Widget* w=event->widget();
+	if (w == spinbox) {
+		color_index=spinbox->value();
+		ppl7::tk::Event new_event(ppl7::tk::Event::ValueChanged);
+		new_event.setWidget(this);
+		EventHandler::valueChangedEvent(&new_event, color_index);
 	}
 }
 

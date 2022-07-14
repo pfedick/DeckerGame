@@ -45,7 +45,7 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 	try {
 		for (int i=scrollbar->position() * 4;i < tiles->numSprites();i++) {
 			try {
-				tiles->draw(draw, 2 + x, 2 + y, i);
+				tiles->draw(draw, 2 + x, 2 + y, i, color);
 			}
 			catch (...) {
 			}
@@ -123,6 +123,11 @@ void TilesFrame::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
+void TilesFrame::setColor(const ppl7::grafix::Color& color)
+{
+	this->color=color;
+	needsRedraw();
+}
 
 
 

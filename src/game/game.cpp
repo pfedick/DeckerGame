@@ -771,6 +771,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 		int selectedTile=tiles_selection->selectedTile();
 		int selectedTileSet=tiles_selection->currentTileSet();
 		int currentLayer=tiles_selection->currentLayer();
+		int color_index=tiles_selection->colorIndex();
 		Plane& plane=level.plane(currentPlane);
 
 		if (mouse.buttonMask == ppl7::tk::MouseState::Left && selectedTile >= 0) {
@@ -780,7 +781,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 				plane.setTile(x, y,
 					currentLayer,
 					selectedTileSet,
-					selectedTile, 2);
+					selectedTile, color_index, true);
 				plane.setOccupation(x, y, currentLayer, occupation);
 			}
 		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {
@@ -845,6 +846,7 @@ void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& m
 	int currentLayer=tiles_selection->currentLayer();
 	int nr=tiles_selection->selectedTile();
 	int tileset=tiles_selection->currentTileSet();
+	int color_index=tiles_selection->colorIndex();
 	if (nr < 0 || tileset<0 || tileset>MAX_TILESETS) return;
 	if (!level.tileset[tileset]) return;
 	ppl7::grafix::Point wp=mouse - viewport.topLeft() + WorldCoords * planeFactor[currentPlane];
@@ -856,7 +858,7 @@ void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& m
 		int x=tx * TILE_WIDTH + viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
 		int y=ty * TILE_HEIGHT + viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
 		level.tileset[tileset]->draw(renderer,
-			x, y + TILE_HEIGHT, nr);
+			x, y + TILE_HEIGHT, nr, level.palette.getColor(color_index));
 	}
 
 }

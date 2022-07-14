@@ -9,6 +9,7 @@
 class Game;
 class SpriteTexture;
 class LevelParameter;
+class ColorPalette;
 
 
 #ifndef MAX_TILESETS
@@ -164,6 +165,7 @@ private:
 	Game* game;
 	SpriteTexture* tiles;
 	ppl7::tk::Scrollbar* scrollbar;
+	ppl7::grafix::Color color;
 	int selected_tile;
 public:
 	TilesFrame(int x, int y, int width, int height, Game* game);
@@ -175,7 +177,26 @@ public:
 
 	void setSelectedTile(int nr);
 	int selectedTile() const;
+	void setColor(const ppl7::grafix::Color& color);
 	void setSprites(SpriteTexture* tiles);
+
+};
+
+class ColorSelectionFrame : public ppl7::tk::Frame
+{
+private:
+	ColorPalette& palette;
+	int color_index;
+	ppl7::tk::SpinBox* spinbox;
+
+
+public:
+	ColorSelectionFrame(int x, int y, int width, int height, ColorPalette& palette);
+	int colorIndex() const;
+	void setColorIndex(int index);
+	ppl7::grafix::Color color() const;
+
+	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
 
 };
 
@@ -184,11 +205,13 @@ class TilesSelection : public ppl7::tk::Frame
 private:
 	Game* game;
 	TilesFrame* tilesframe;
+	ColorSelectionFrame* colorframe;
 	ppl7::tk::RadioButton* layer0;
 	ppl7::tk::RadioButton* layer1;
 	ppl7::tk::RadioButton* layer2;
 	ppl7::tk::RadioButton* layer3;
 	ppl7::tk::ComboBox* tileset_combobox;
+
 
 	ppl7::String tilesetName[MAX_TILESETS + 1];
 	SpriteTexture* tilesets[MAX_TILESETS + 1];
@@ -208,6 +231,8 @@ public:
 	int currentTileSet() const;
 	void setTileSet(int id, const ppl7::String& name, SpriteTexture* tiles);
 	int currentLayer() const;
+	int colorIndex() const;
+	void setColorIndex(int index);
 
 
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;

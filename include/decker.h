@@ -187,6 +187,7 @@ public:
 	void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint=ppl7::grafix::Color());
 	void clear();
 	void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
+	void draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;

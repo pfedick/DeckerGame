@@ -347,6 +347,19 @@ void SpriteTexture::draw(ppl7::grafix::Drawable& target, int x, int y, int id) c
 	target.bltAlpha(*item.drawable, r, x + item.Offset.x - item.Pivot.x, y + item.Offset.y - item.Pivot.y);
 }
 
+void SpriteTexture::draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const
+{
+	if (!bMemoryBufferd) return;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	const SpriteIndexItem& item=it->second;
+	if (!item.drawable) return;
+	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
+	target.bltAlphaMod(*item.drawable, r, color_modulation, x + item.Offset.x - item.Pivot.x, y + item.Offset.y - item.Pivot.y);
+}
+
+
 const ppl7::grafix::Drawable SpriteTexture::getDrawable(int id) const
 {
 	ppl7::grafix::Drawable draw;
