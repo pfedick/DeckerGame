@@ -782,6 +782,7 @@ public:
 
 	void openSaveAsDialog();
 	void openLoadDialog();
+	void openNewLevelDialog();
 
 };
 

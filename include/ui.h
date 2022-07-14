@@ -122,7 +122,7 @@ private:
 
 	void setupUi();
 
-	void openLevelDialog(bool new_flag);
+
 
 
 public:
@@ -136,6 +136,7 @@ public:
 	void setShowTileTypes(bool show);
 	void setCurrentPlane(int index);
 	void setWorldFollowsPlayer(bool enable);
+	void openLevelDialog(bool new_flag);
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;

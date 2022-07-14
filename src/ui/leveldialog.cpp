@@ -208,6 +208,9 @@ void LevelDialog::setNewLevelFlag(bool newlevel)
     }
     if (newlevel) {
         setWindowTitle("create new level");
+        LevelParameter default_params;
+        loadValues(default_params);
+
     }
 }
 

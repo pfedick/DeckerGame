@@ -908,6 +908,7 @@ void Game::startLevel(const ppl7::String& filename)
 	remember.clear();
 	level.load(filename);
 	LevelFile=filename;
+	mainmenue->update();
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
 	mainmenue->setWorldFollowsPlayer(true);
 	if (startpoint.x > 0) {
@@ -1358,4 +1359,12 @@ void Game::checkFileDialog()
 
 	delete filedialog;
 	filedialog=NULL;
+}
+
+void Game::openNewLevelDialog()
+{
+	showUi(true);
+	mainmenue->openLevelDialog(true);
+	player->setVisible(false);
+
 }

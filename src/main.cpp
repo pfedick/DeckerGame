@@ -35,11 +35,12 @@ void start()
 	game.init();
 	game.init_grafix();
 
-
+	/*
 	game.startLevel("level/colortest.lvl");
 	game.showUi(true);
 	game.run();
 	return;
+	*/
 
 
 
@@ -61,6 +62,7 @@ void start()
 			LevelParameter default_params;
 			game.createNewLevel(default_params);
 			game.resetPlayer();
+			game.openNewLevelDialog();
 			game.run();
 		} else if (state == GameState::ShowSettings) {
 		}

@@ -129,7 +129,7 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
     for (int i=0;i < 256;i++) {
         size+=10 + palette[i].name.size() + 1;
     }
-    printf("Total size palette: %zd Byte\n", size);
+    //printf("Total size palette: %zd Byte\n", size);
     ppl7::ByteArray ba;
     unsigned char* buffer=(unsigned char*)ba.malloc(size);
     size_t p=5;
@@ -151,7 +151,7 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
     ppl7::Poke32(buffer + 0, p);
     ppl7::Poke8(buffer + 4, id);
     file.write(buffer, p);
-    printf("real size: %zd\n", p);
+    //printf("real size: %zd\n", p);
 }
 
 void ColorPalette::load(const ppl7::ByteArrayPtr& ba)
