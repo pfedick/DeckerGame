@@ -1,4 +1,5 @@
 VERSION ?= 0.6.0
+PREVIOUS_TAG = 0.5.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
@@ -136,6 +137,10 @@ mingw: update_version
 setup: mingw
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
 
+
+history:
+	@echo "Git history between Tag $(PREVIOUS_TAG) and head"
+	@git log --pretty=format:%s $(PREVIOUS_TAG)...main
 
 ppl7:
 	-mkdir -p pplib/release
