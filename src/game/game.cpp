@@ -780,7 +780,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 				plane.setTile(x, y,
 					currentLayer,
 					selectedTileSet,
-					selectedTile);
+					selectedTile, 2);
 				plane.setOccupation(x, y, currentLayer, occupation);
 			}
 		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {

@@ -17,11 +17,12 @@ Tile::Tile()
 	this->block_background=false;
 }
 
-void Tile::setSprite(int z, int tileset, int tileno, bool showStuds)
+void Tile::setSprite(int z, int tileset, int tileno, int color_index, bool showStuds)
 {
 	if (z < 0 || z >= MAX_TILE_LAYER) return;
 	this->layer[z].tileset=tileset;
 	this->layer[z].tileno=tileno;
+	this->layer[z].color_index=color_index;
 	this->layer[z].showStuds=showStuds;
 }
 

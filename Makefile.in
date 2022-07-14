@@ -36,6 +36,7 @@ OBJECTS=compile/main.o \
 	compile/fps.o \
 	compile/config.o \
 	compile/translate.o \
+	compile/color.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_tileselection.o \
@@ -256,6 +257,10 @@ compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/decker.h
 compile/resources.o: src/game/resources.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/resources.o -c src/game/resources.cpp $(CFLAGS)
+
+compile/color.o: src/game/color.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/color.o -c src/game/color.cpp $(CFLAGS)
 
 compile/level.o: src/game/level.cpp Makefile include/decker.h include/objects.h \
 	include/waynet.h

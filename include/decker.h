@@ -8,6 +8,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <array>
 #include "decker_sdl.h"
 #include "ui.h"
 #include "audio.h"
@@ -103,12 +104,32 @@ public:
 class ColorPaletteItem
 {
 public:
-	ppl7::String Name;
-	int ldraw_material;
 	ppl7::grafix::Color color;
+	ppl7::String name;
+	int ldraw_material;
 
 	ColorPaletteItem();
-	ColorPaletteItem(const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& color);
+	ColorPaletteItem(const ppl7::grafix::Color& color, const ppl7::String& name, int ldraw_material);
+
+	void set(const ppl7::grafix::Color& color, const ppl7::String& name, int ldraw_material);
+};
+
+class ColorPalette
+{
+private:
+	std::array<ColorPaletteItem, 256> palette;
+	ColorPaletteItem undefined;
+public:
+	ColorPalette();
+	void setDefaults();
+	void set(uint32_t index, const ppl7::grafix::Color& color, const ppl7::String& name=ppl7::String(), int ldraw_material=0);
+	void set(uint32_t index, const ColorPaletteItem& item);
+	const ColorPaletteItem& get(uint32_t index) const;
+	const ppl7::grafix::Color& getColor(uint32_t index) const;
+	const std::array<ColorPaletteItem, 256>& getPalette() const;
+
+	void save(ppl7::FileObject& file, unsigned char id) const;
+	void load(const ppl7::ByteArrayPtr& ba);
 };
 
 
@@ -247,13 +268,14 @@ public:
 		int tileno;
 		int origin_x;
 		int origin_y;
+		int color_index;
 		TileOccupation occupation;
 		bool showStuds;
 	};
 	Layer layer[MAX_TILE_LAYER];
 	bool block_background;
 	Tile();
-	void setSprite(int z, int tileset, int tileno, bool showStuds);
+	void setSprite(int z, int tileset, int tileno, int color_index, bool showStuds);
 	bool hasSprite(int z) const;
 	bool hasSprite() const;
 	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);
@@ -298,7 +320,7 @@ public:
 	void clear();
 	void create(int width, int height);
 	ppl7::grafix::Size getSize() const;
-	void setTile(int x, int y, int z, int tileset, int tileno, bool showStuds=true);
+	void setTile(int x, int y, int z, int tileset, int tileno, int color_index, bool showStuds=true);
 	void setBlockBackground(int x, int y, bool block);
 	void setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
 	Tile::TileOccupation getOccupation(int x, int y, int z);
@@ -314,6 +336,7 @@ public:
 	bool isVisible() const;
 	int getTileNo(int x, int y, int z);
 	int getTileSet(int x, int y, int z);
+	int getColorIndex(int x, int y, int z);
 
 	size_t tileCount() const;
 	ppl7::grafix::Rect getOccupiedArea() const;
@@ -371,7 +394,7 @@ class Resources
 private:
 	void loadBricks(SDL& sdl, int tileset, const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& tint);
 	int max_tileset_id;
-	std::map<int, ColorPaletteItem> default_color_palette;
+
 public:
 	SpriteTexture Sprite_George;
 	SpriteTexture Sprite_George_Adventure;
@@ -406,11 +429,8 @@ public:
 	};
 	Resources();
 	BrickResource bricks[MAX_TILESETS];
-	SpriteTexture whitebricks_world;
-	SpriteTexture whitebricks_ui;
 	void loadBricks(SDL& sdl);
 	int getMaxTilesetId() const;
-	const std::map<int, ColorPaletteItem>& getDefaultColorPalette() const;
 };
 
 Resources& getResources();
@@ -491,9 +511,6 @@ private:
 	Decker::Objects::ObjectSystem* objects;
 	Waynet waynet;
 
-	std::map<int, ColorPaletteItem> TileColorPalette;
-
-
 	ppl7::grafix::Rect viewport;
 	SpriteTexture* tileset[MAX_TILESETS + 1];
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
@@ -528,12 +545,14 @@ private:
 		chunkNearSpritesLayer1=24,
 		chunkObjects=30,
 		chunkWayNet=31,
-		chunkLevelParameter=32
+		chunkLevelParameter=32,
+		chunkColorPalette=33
 	};
 
 public:
 
 	LevelParameter params;
+	ColorPalette palette;
 
 	Level();
 	~Level();

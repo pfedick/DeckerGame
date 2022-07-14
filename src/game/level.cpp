@@ -112,6 +112,7 @@ void Level::create(int width, int height)
 	BackPlane.create(width, height);
 	MiddlePlane.create(width, height);
 	NearPlane.create(width * 2, height * 2);
+	palette.setDefaults();
 }
 
 void Level::setViewport(const ppl7::grafix::Rect& r)
@@ -149,7 +150,6 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 void Level::load(const ppl7::String& Filename)
 {
 	clear();
-	TileColorPalette=getResources().getDefaultColorPalette();
 	ppl7::File ff;
 	ff.open(Filename, ppl7::File::READ);
 	ppl7::ByteArray ba;
@@ -172,6 +172,8 @@ void Level::load(const ppl7::String& Filename)
 			if (bytes_read != size - 5) break;
 			if (id == LevelChunkId::chunkLevelParameter) {
 				params.load(ba);
+			} else if (id == LevelChunkId::chunkColorPalette) {
+				palette.load(ba);
 			} else if (id == LevelChunkId::chunkPlayerPlane) {
 				PlayerPlane.load(ba);
 			} else if (id == LevelChunkId::chunkFrontPlane) {
@@ -254,6 +256,7 @@ void Level::save(const ppl7::String& Filename)
 	memcpy(buffer, "Decker", 7);
 	ff.write(buffer, 7);
 	params.save(ff, LevelChunkId::chunkLevelParameter);
+	palette.save(ff, LevelChunkId::chunkColorPalette);
 	PlayerPlane.save(ff, LevelChunkId::chunkPlayerPlane);
 	FrontPlane.save(ff, LevelChunkId::chunkFrontPlane);
 	FarPlane.save(ff, LevelChunkId::chunkFarPlane);
@@ -308,9 +311,7 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 					if (tile->layer[z].tileset <= MAX_TILESETS && tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
 						if (tile->layer[z].tileset > 1) {
-							cit=TileColorPalette.find(tile->layer[z].tileset);
-							if (cit != TileColorPalette.end())
-								tileset[2]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, cit->second.color);
+							tileset[2]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, palette.getColor(tile->layer[z].color_index));
 						} else {
 							tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno);
 						}

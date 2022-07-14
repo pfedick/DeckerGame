@@ -45,7 +45,7 @@ ppl7::grafix::Size Plane::getSize() const
 	return ppl7::grafix::Size(width, height);
 }
 
-void Plane::setTile(int x, int y, int z, int tileset, int tileno, bool showStuds)
+void Plane::setTile(int x, int y, int z, int tileset, int tileno, int color_index, bool showStuds)
 {
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
 	if (z < 0 || z >= MAX_TILESETS) return;
@@ -54,7 +54,7 @@ void Plane::setTile(int x, int y, int z, int tileset, int tileno, bool showStuds
 		tilematrix[y * width + x]=new Tile();
 	}
 	if (!tilematrix[y * width + x]->hasSprite(z)) tile_count++;
-	tilematrix[y * width + x]->setSprite(z, tileset, tileno, showStuds);
+	tilematrix[y * width + x]->setSprite(z, tileset, tileno, color_index, showStuds);
 }
 
 void Plane::setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x, int origin_y)
@@ -122,7 +122,7 @@ void Plane::clearTile(int x, int y, int z)
 	if (z < 0 || z >= MAX_TILE_LAYER) return;
 	if (tilematrix[y * width + x] != NULL) {
 		if (!tilematrix[y * width + x]->hasSprite(z) && tile_count > 0) tile_count--;
-		tilematrix[y * width + x]->setSprite(z, 0, 0, true);
+		tilematrix[y * width + x]->setSprite(z, 0, 0, 0, true);
 		tilematrix[y * width + x]->setOccupation(z, Tile::OccupationNone);
 	}
 }
@@ -149,6 +149,15 @@ int Plane::getTileSet(int x, int y, int z)
 	return t->layer[z].tileset;
 }
 
+int Plane::getColorIndex(int x, int y, int z)
+{
+	if (z < 0 || z >= MAX_TILE_LAYER) return -1;
+	const Tile* t=get(x, y);
+	if (!t) return -1;
+	return t->layer[z].color_index;
+}
+
+
 ppl7::grafix::Point Plane::getOccupationOrigin(int x, int y, int z)
 {
 	const Tile* t=get(x, y);
@@ -169,7 +178,7 @@ bool Plane::isVisible() const
 void Plane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (tilematrix == NULL) return;
-	unsigned char* buffer=(unsigned char*)malloc(9 + width * height * (MAX_TILE_LAYER * 10));
+	unsigned char* buffer=(unsigned char*)malloc(9 + width * height * (MAX_TILE_LAYER * 11));
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
 	ppl7::Poke16(buffer + 5, width);
@@ -190,7 +199,8 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 					ppl7::Poke16(buffer + p + 6, t->layer[z].origin_y);
 					ppl7::Poke8(buffer + p + 8, t->layer[z].occupation);
 					ppl7::Poke8(buffer + p + 9, t->layer[z].showStuds);
-					p+=10;
+					ppl7::Poke8(buffer + p + 10, t->layer[z].color_index);
+					p+=11;
 				}
 			}
 		}
@@ -221,9 +231,11 @@ void Plane::load(const ppl7::ByteArrayPtr& ba)
 			int origin_y=ppl7::Peek16(buffer + p + 6);
 			int occupation=ppl7::Peek8(buffer + p + 8);
 			bool showStuds=ppl7::Peek8(buffer + p + 9);
-			setTile(x, y, z, tileset, tileno, showStuds);
+			int color_index=ppl7::Peek8(buffer + p + 10);
+			//if (tileset > 1) tileset=1;
+			setTile(x, y, z, tileset, tileno, color_index, showStuds);
 			setOccupation(x, y, z, (Tile::TileOccupation)occupation, origin_x, origin_y);
-			p+=10;
+			p+=11;
 		}
 		setBlockBackground(x, y, block_background);
 	}
