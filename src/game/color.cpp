@@ -138,6 +138,23 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
 
 void ColorPalette::load(const ppl7::ByteArrayPtr& ba)
 {
+    setDefaults();
     const unsigned char* buffer=(unsigned char*)ba.ptr();
-
+    size_t p=0;
+    ppl7::grafix::Color color;
+    ppl7::String name;
+    int c=0;
+    while (1) {
+        size_t size=ppl7::Peek16(buffer + p + 0);
+        if (!size) break;
+        uint32_t index=ppl7::Peek16(buffer + p + 2);
+        int ldraw_material=ppl7::Peek16(buffer + p + 4);
+        color.set(ppl7::Peek8(buffer + p + 6), ppl7::Peek8(buffer + p + 7), ppl7::Peek8(buffer + p + 8), ppl7::Peek8(buffer + p + 9));
+        name.set((const char*)(buffer + p + 10));
+        set(index, color, name, ldraw_material);
+        p+=size;
+        c++;
+    }
+    //printf("loaded %d colors\n", c);
+    //ba.hexDump();
 }
