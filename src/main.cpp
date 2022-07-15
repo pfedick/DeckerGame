@@ -35,12 +35,12 @@ void start()
 	game.init();
 	game.init_grafix();
 
-	/*
-	game.startLevel("level/colortest.lvl");
+
+	game.startLevel("level/heaven.lvl");
 	game.showUi(true);
 	game.run();
 	return;
-	*/
+
 
 
 

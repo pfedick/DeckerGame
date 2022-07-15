@@ -102,6 +102,11 @@ void Game::loadGrafix()
 	resources.Sprites_Treasure.enableMemoryBuffer(true);
 	resources.Sprites_Treasure.load(sdl, "res/sprites_treasure.tex");
 
+	resources.Sprites_White.enableOutlines(true);
+	resources.Sprites_White.enableMemoryBuffer(true);
+	resources.Sprites_White.load(sdl, "res/sprites_white_x8.tex");
+
+
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	brick_occupation_solid.push_back(BrickOccupation::Item(0, 0, Tile::TileOccupation::OccupationBrick));
@@ -140,6 +145,10 @@ void Game::loadGrafix()
 	resources.uiObjects.enableSDLBuffer(false);
 	resources.uiObjects.enableMemoryBuffer(true);
 	resources.uiObjects.load(sdl, "res/objects_ui.tex");
+
+	resources.uiSpritesWhite.enableSDLBuffer(false);
+	resources.uiSpritesWhite.enableMemoryBuffer(true);
+	resources.uiSpritesWhite.load(sdl, "res/sprites_white_ui.tex");
 
 	level.objects->loadSpritesets(sdl);
 
@@ -348,6 +357,7 @@ void Game::init_grafix()
 	level.setSpriteset(5, &resources.Sprites_Rocks);
 	level.setSpriteset(6, &resources.Sprites_Flowers);
 	level.setSpriteset(7, &resources.Sprites_Treasure);
+	level.setSpriteset(8, &resources.Sprites_White);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -696,13 +706,14 @@ void Game::showSpriteSelection()
 		closeSpriteSelection();
 	} else {
 		sprite_selection=new Decker::ui::SpriteSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
-		sprite_selection->setSpriteSet(1, "Nature", &resources.uiSpritesNature);
+		sprite_selection->setSpriteSet(1, "Nature", &resources.uiSpritesNature, 4);
 		sprite_selection->setSpriteSet(2, "Plants", &resources.uiSpritesPlants);
-		sprite_selection->setSpriteSet(3, "Objects", &resources.uiSpritesObjects);
-		sprite_selection->setSpriteSet(4, "Nature Blury", &resources.uiSpritesNature);
-		sprite_selection->setSpriteSet(5, "Rocks", &resources.uiSpritesRocks);
-		sprite_selection->setSpriteSet(6, "Flowers", &resources.uiSpritesFlowers);
-		sprite_selection->setSpriteSet(7, "Treasure", &resources.uiSpritesTreasure);
+		sprite_selection->setSpriteSet(3, "Objects", &resources.uiSpritesObjects, 1);
+		sprite_selection->setSpriteSet(4, "Nature Blury", &resources.uiSpritesNature, 1);
+		sprite_selection->setSpriteSet(5, "Rocks", &resources.uiSpritesRocks, 4);
+		sprite_selection->setSpriteSet(6, "Flowers", &resources.uiSpritesFlowers, 1);
+		sprite_selection->setSpriteSet(7, "Treasure", &resources.uiSpritesTreasure, 1);
+		sprite_selection->setSpriteSet(8, "Recolorable Sprites", &resources.uiSpritesWhite, 8);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;
@@ -841,15 +852,18 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 		int nr=sprite_selection->selectedSprite();
 		if (nr < 0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset == 1 || spriteset == 5) nr=nr * 4;
-		else if (spriteset == 7) {
+		int sprite_dimensions=sprite_selection->spriteSetDimensions();
+		if (spriteset == 7) {
 			if (nr == 0) nr=ppl7::rand(0, 47);
 			else nr=(nr - 1) * 6;
+		} else if (sprite_dimensions > 1) {
+			//nr=nr * sprite_dimensions + ppl7::rand(0, sprite_dimensions - 1);
+			nr=nr * sprite_dimensions;
 		}
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
-			mouse.x, mouse.y, nr, scale);
+			mouse.x, mouse.y, nr, scale, level.palette.getColor(sprite_selection->colorIndex()));
 		level.spriteset[spriteset]->drawOutlines(renderer,
 			mouse.x, mouse.y, nr, scale);
 	}
@@ -1012,10 +1026,12 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 		}
 		if (sprite_mode != spriteModeDraw) return;
 		int spriteset=sprite_selection->currentSpriteSet();
-		if (spriteset == 1 || spriteset == 5) nr=nr * 4 + ppl7::rand(0, 3);
+		int sprite_dimensions=sprite_selection->spriteSetDimensions();
 		if (spriteset == 7) {
 			if (nr == 0) nr=ppl7::rand(0, 47);
 			else nr=(nr - 1) * 6 + ppl7::rand(0, 5);
+		} else if (sprite_dimensions > 1) {
+			nr=nr * sprite_dimensions + ppl7::rand(0, sprite_dimensions - 1);
 		}
 		float scale=sprite_selection->spriteScale();
 		int layer=sprite_selection->currentLayer();
@@ -1027,7 +1043,7 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 		ss.addSprite(event->p.x + coords.x,
 			event->p.y + coords.y,
 			0,
-			spriteset, nr, scale);
+			spriteset, nr, scale, sprite_selection->colorIndex());
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;

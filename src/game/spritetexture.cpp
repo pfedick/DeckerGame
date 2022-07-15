@@ -457,6 +457,30 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
+void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, ppl7::grafix::Color color_modulation) const
+{
+	if (!bSDLBufferd) return;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	const SpriteIndexItem& item=it->second;
+	SDL_Rect tr;
+	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
+	if (scale_factor == 1.0) {
+		tr.x=x + item.Offset.x - item.Pivot.x;
+		tr.y=y + item.Offset.y - item.Pivot.y;
+		tr.w=item.r.w;
+		tr.h=item.r.h;
+	} else {
+		tr.x=x + (item.Offset.x - item.Pivot.x) * scale_factor;
+		tr.y=y + (item.Offset.y - item.Pivot.y) * scale_factor;
+		tr.w=(int)((float)item.r.w * scale_factor);
+		tr.h=(int)((float)item.r.h * scale_factor);
+	}
+	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
+	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
+}
+
 void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const
 {
 	if (!bOutlinesEnabled) return;

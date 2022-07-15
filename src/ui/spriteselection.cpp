@@ -25,10 +25,14 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	layer1=new ppl7::tk::RadioButton(170, 35, 110, 20, "behind Tiles");
 	this->addChild(layer1);
 
-	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 60, game);
+	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 360, game);
 	this->addChild(tilesframe);
 	scale=1.0f;
 
+	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
+	colorframe->setEventHandler(this);
+	this->addChild(colorframe);
+	tilesframe->setColor(colorframe->color());
 }
 
 void SpriteSelection::setSelectedSprite(int nr)
@@ -46,6 +50,11 @@ int SpriteSelection::currentLayer() const
 	if (layer0->checked()) return 1;
 	if (layer1->checked()) return 0;
 	return 1;
+}
+
+int SpriteSelection::spriteSetDimensions() const
+{
+	return SpriteDimensions[tileset];
 }
 
 void SpriteSelection::setCurrentLayer(int layer)
@@ -68,11 +77,12 @@ int SpriteSelection::currentSpriteSet() const
 	return tileset;
 }
 
-void SpriteSelection::setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites)
+void SpriteSelection::setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites, int dimensions)
 {
 	if (id<1 || id>MAX_SPRITESETS) return;
 	tilesets[id]=sprites;
 	tilesetName[id]=name;
+	SpriteDimensions[id]=dimensions;
 	tileset_combobox->add(name, ppl7::ToString("%d", id));
 	if (id == 1) setCurrentSpriteSet(1);
 
@@ -88,7 +98,15 @@ float SpriteSelection::spriteScale() const
 	return scale;
 }
 
+int SpriteSelection::colorIndex() const
+{
+	return colorframe->colorIndex();
+}
 
+void SpriteSelection::setColorIndex(int index)
+{
+	colorframe->setColorIndex(index);
+}
 
 
 void SpriteSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
@@ -96,6 +114,8 @@ void SpriteSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 	if (event->widget() == tileset_combobox) {
 		//printf("value=%d\n",value);
 		setCurrentSpriteSet(value + 1);
+	} else if (event->widget() == colorframe) {
+		tilesframe->setColor(colorframe->color());
 	}
 }
 

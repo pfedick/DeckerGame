@@ -197,6 +197,7 @@ public:
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
+	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, ppl7::grafix::Color color_modulation) const;
 	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
@@ -221,13 +222,15 @@ public:
 		int id;
 		int x;			// 4 Byte
 		int y;			// 4 Byte
-		int z;			// 2 Byte
+		int z;			// 1 Byte
+		uint32_t color_index; // 1 Byte
 		int sprite_set;	// 2 Byte
 		int sprite_no;	// 2 Byte
 		float scale;	// 4 Byte	==> 18 Byte
 		ppl7::grafix::Rect boundary;
 	};
 private:
+	const ColorPalette& palette;
 	ppl7::Mutex mutex;
 	std::map<int, SpriteSystem::Item> sprite_list;
 	std::map<uint64_t, SpriteSystem::Item> visible_sprite_map;
@@ -235,10 +238,10 @@ private:
 	bool bSpritesVisible;
 
 public:
-	SpriteSystem();
+	SpriteSystem(const ColorPalette& palette);
 	~SpriteSystem();
 	void clear();
-	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale);
+	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, uint32_t color_index);
 	void deleteSprite(int id);
 	void modifySprite(const SpriteSystem::Item& item);
 	void setVisible(bool visible);
@@ -420,6 +423,8 @@ public:
 	SpriteTexture uiSpritesFlowers;
 	SpriteTexture Sprites_Treasure;
 	SpriteTexture uiSpritesTreasure;
+	SpriteTexture Sprites_White;
+	SpriteTexture uiSpritesWhite;
 
 	std::list<ppl7::String> background_images;
 
@@ -497,6 +502,10 @@ public:
 class Level
 {
 	friend class Game;
+public:
+	LevelParameter params;
+	ColorPalette palette;
+
 private:
 	Plane FarPlane;
 	Plane PlayerPlane;
@@ -506,13 +515,13 @@ private:
 	Plane HorizonPlane;
 	Plane NearPlane;
 	TileTypePlane TileTypeMatrix;
-	SpriteSystem HorizonSprites[2];
-	SpriteSystem FarSprites[2];
-	SpriteSystem MiddleSprites[2];
-	SpriteSystem BackSprites[2];
-	SpriteSystem PlayerSprites[2];
-	SpriteSystem FrontSprites[2];
-	SpriteSystem NearSprites[2];
+	SpriteSystem HorizonSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem FarSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem MiddleSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem BackSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem PlayerSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	Decker::Objects::ObjectSystem* objects;
 	Waynet waynet;
 
@@ -556,8 +565,6 @@ private:
 
 public:
 
-	LevelParameter params;
-	ColorPalette palette;
 
 	Level();
 	~Level();

@@ -192,6 +192,7 @@ private:
 	int tsize;
 	int items_per_row;
 	int rows;
+	ppl7::grafix::Color color_clipboard;
 
 public:
 	ColorPaletteFrame(int x, int y, int width, int height, ColorPalette& palette);
@@ -221,6 +222,8 @@ private:
 	ppl7::tk::SpinBox* color_red;
 	ppl7::tk::SpinBox* color_green;
 	ppl7::tk::SpinBox* color_blue;
+
+	ppl7::grafix::Color color_clipboard;
 
 	void sendEventValueChanged();
 
@@ -296,12 +299,14 @@ class SpriteSelection : public ppl7::tk::Frame
 private:
 	Game* game;
 	TilesFrame* tilesframe;
+	ColorSelectionFrame* colorframe;
 	ppl7::tk::RadioButton* layer0;
 	ppl7::tk::RadioButton* layer1;
 	ppl7::tk::ComboBox* tileset_combobox;
 
 	ppl7::String tilesetName[MAX_SPRITESETS + 1];
 	SpriteTexture* tilesets[MAX_SPRITESETS + 1];
+	int SpriteDimensions[MAX_SPRITESETS + 1];
 
 	int tileset;
 	float scale;
@@ -317,11 +322,14 @@ public:
 	int selectedSprite() const;
 	void setCurrentSpriteSet(int id);
 	int currentSpriteSet() const;
+	int spriteSetDimensions() const;
 	void setSpriteScale(float factor);
 	float spriteScale() const;
-	void setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites);
+	void setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites, int dimensions=1);
 	int currentLayer() const;
 	void setCurrentLayer(int layer);
+	int colorIndex() const;
+	void setColorIndex(int index);
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
 };
 
