@@ -222,8 +222,8 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane &worl
 		if (movement==Falling || movement==Jump || movement==ClimbDown) new_movement=Stand;
 		return new_movement;
 	} else if (collision_at_pivoty[0]==TileType::Plate2h) {
-		int th=TILE_HEIGHT/3;
-		int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
+		//int th=TILE_HEIGHT/3;
+		//int ty=(((int)((y)/TILE_HEIGHT))*TILE_HEIGHT)+th-(2*th);
 		//printf ("Plate2h 2, y=%d, ty=%d\n", (int)y, ty);
 		//y=ty;
 		if (movement==Falling || movement==Jump || movement==ClimbDown) new_movement=Stand;

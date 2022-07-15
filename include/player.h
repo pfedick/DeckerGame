@@ -2,7 +2,7 @@
 #define INCLUDE_PLAYER_H_
 #include <ppl7-grafix.h>
 
-class SDL_Renderer;
+struct SDL_Renderer;
 class SpriteTexture;
 
 #include "animation.h"
@@ -10,11 +10,12 @@ class SpriteTexture;
 
 class TileTypePlane;
 class Game;
-namespace Decker::Objects {
+namespace Decker {
+namespace Objects {
 class Object;
 class ObjectSystem;
 class Representation;
-} // EOF namespace Decker::Objects
+}} // EOF namespace Decker::Objects
 
 
 

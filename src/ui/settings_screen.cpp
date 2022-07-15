@@ -5,8 +5,8 @@
 #include "screens.h"
 
 
-SettingsScreen::SettingsScreen(Game& g, SDL& s, int x, int y, int width, int height)
-    : game(g), sdl(s)
+SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height)
+    : game(g)
 {
     create(x, y, width, height);
     this->setName("SettingsScreen");

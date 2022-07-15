@@ -3,8 +3,6 @@
 #include <ppl7-grafix.h>
 #include "ai_figure.h"
 
-class SDL_Renderer;
-class SpriteTexture;
 class TileTypePlane;
 
 namespace Decker::Objects {

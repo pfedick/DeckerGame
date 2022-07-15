@@ -154,7 +154,7 @@ public:
 	bool visibility_tiletypes;
 	bool visibility_collision;
 
-	void mouseClickEvent(ppl7::tk::MouseEvent* event);
+	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 	void closeEvent(ppl7::tk::Event* event) override;
 };
@@ -232,7 +232,7 @@ public:
 	ppl7::grafix::Color color() const;
 
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 };
@@ -470,7 +470,7 @@ private:
 	ppl7::tk::RadioButton* radio_color;
 	ppl7::tk::ComboBox* background_image;
 
-	ppl7::tk::Button* image_fileselect;
+	//ppl7::tk::Button* image_fileselect;
 
 	ppl7::tk::SpinBox* color_red;
 	ppl7::tk::SpinBox* color_green;

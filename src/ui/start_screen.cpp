@@ -51,7 +51,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	title_rect.y=0;
 
 
-	StartScreen* start_screen=new StartScreen(*this, sdl, 0, title_rect.h, this->width(), this->height() - title_rect.h);
+	StartScreen* start_screen=new StartScreen(*this, 0, title_rect.h, this->width(), this->height() - title_rect.h);
 	this->addChild(start_screen);
 	wm->setKeyboardFocus(start_screen);
 	showUi(false);
@@ -193,8 +193,8 @@ bool GameMenuArea::isSelected() const
 
 
 
-StartScreen::StartScreen(Game& g, SDL& s, int x, int y, int width, int height)
-	: game(g), sdl(s)
+StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
+	: game(g)
 {
 	settings_screen=NULL;
 	create(x, y, width, height);
@@ -288,7 +288,7 @@ void StartScreen::showSettings()
 	menue->setEnabled(false);
 	menue->setVisible(false);
 	if (!settings_screen) {
-		settings_screen=new SettingsScreen(game, sdl,
+		settings_screen=new SettingsScreen(game,
 			50, 50, this->width() - 100, this->height() - 100);
 		resizeSettingsScreen();
 	}

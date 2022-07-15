@@ -7,7 +7,7 @@
 #include <ppl7-grafix.h>
 #include "animation.h"
 class SDL;
-class SDL_Renderer;
+struct SDL_Renderer;
 class SpriteTexture;
 
 class Player;
@@ -554,7 +554,7 @@ class Skeleton : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	int velocity=1;
+	//int velocity;
 	int state;
 public:
 	Skeleton();
@@ -583,7 +583,7 @@ class Mushroom : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	int velocity=1;
+	//int velocity;
 	int state;
 public:
 	Mushroom();

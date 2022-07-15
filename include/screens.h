@@ -64,7 +64,7 @@ private:
         Back=3
     };
     Game& game;
-    SDL& sdl;
+    //SDL& sdl;
     SettingsMenue currentMenueSelection;
     StyleElement style_heading, style_label, style_menue;
     ppl7::grafix::Point settings_page;
@@ -108,7 +108,7 @@ private:
 
 
 public:
-    SettingsScreen(Game& game, SDL& s, int x, int y, int width, int height);
+    SettingsScreen(Game& game, int x, int y, int width, int height);
     ~SettingsScreen();
     virtual void paint(ppl7::grafix::Drawable& draw);
 
@@ -137,7 +137,6 @@ public:
 
 private:
     Game& game;
-    SDL& sdl;
 
     GameMenuArea* start_game;
     GameMenuArea* settings;
@@ -157,7 +156,7 @@ private:
 public:
 
 
-    StartScreen(Game& g, SDL& s, int x, int y, int width, int height);
+    StartScreen(Game& g, int x, int y, int width, int height);
     ~StartScreen();
 
     State getState() const;

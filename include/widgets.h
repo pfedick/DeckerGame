@@ -64,7 +64,9 @@ private:
 	ppl7::tk::LineInput* filename_lineinput;
 	ppl7::tk::ListWidget* dir_list;
 	ppl7::tk::ListWidget* file_list;
+#ifdef WIN32
 	ppl7::tk::ComboBox* drives_combobox;
+#endif
 
 
 	DialogState my_state;

@@ -7,8 +7,6 @@
 #include "waynet.h"
 
 
-class SDL_Renderer;
-class SpriteTexture;
 class TileTypePlane;
 
 namespace Decker::Objects {
