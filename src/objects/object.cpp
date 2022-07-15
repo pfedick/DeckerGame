@@ -78,6 +78,8 @@ Object::Object(Type::ObjectType type)
 	spawned=false;
 	deleteDefered=false;
 	myLayer=Layer::BehindPlayer;
+	scale=1.0f;
+	color_mod.set(255, 255, 255, 255);
 }
 
 Object::~Object()
@@ -149,17 +151,24 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	texture->draw(renderer,
-		p.x + coords.x,
-		p.y + coords.y,
-		sprite_no);
-/*
-SDL_SetRenderDrawColor(renderer,0,255,0,255);
-texture->drawBoundingBox(renderer,
-		p.x+coords.x,
-		p.y+coords.y,
-		sprite_no);
-*/
+	if (scale == 1.0f)
+		texture->draw(renderer,
+			p.x + coords.x,
+			p.y + coords.y,
+			sprite_no, color_mod);
+	else
+		texture->drawScaled(renderer,
+			p.x + coords.x,
+			p.y + coords.y,
+			sprite_no, scale, color_mod);
+
+	/*
+	SDL_SetRenderDrawColor(renderer,0,255,0,255);
+	texture->drawBoundingBox(renderer,
+			p.x+coords.x,
+			p.y+coords.y,
+			sprite_no);
+	*/
 }
 
 void Object::handleCollision(Player* player, const Collision& collision)

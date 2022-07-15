@@ -17,6 +17,11 @@ TileTypePlane::~TileTypePlane()
 	clear();
 }
 
+ppl7::grafix::Size TileTypePlane::size() const
+{
+	return ppl7::grafix::Size(width, height);
+}
+
 void TileTypePlane::clear()
 {
 	free(tilematrix);

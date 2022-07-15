@@ -487,6 +487,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setEditmode(object_selection != NULL);
 	level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
 	player->setGodMode(mainmenue->godModeEnabled());
+	player->WorldCoords=WorldCoords;
+	player->Viewport=viewport;
+	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
 	if (this->controlsEnabled)
 		player->update(now, level.TileTypeMatrix, level.objects);
 	level.objects->update(now, level.TileTypeMatrix, *player);

@@ -49,6 +49,7 @@ public:
 		ExtraLife=20,
 		Switch=21,
 		LevelEnd=22,
+		RainEmitter=23,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -144,9 +145,11 @@ public:
 	//ppl7::tk::Widget *widget;
 	ppl7::grafix::Rect boundary, initial_boundary;
 	uint32_t id;
+	ppl7::grafix::Color color_mod;
 	int sprite_set;
 	int sprite_no;
 	int sprite_no_representation;
+	float scale;
 	unsigned char save_size;
 	unsigned char state_size;
 	bool collisionDetection;
@@ -204,6 +207,17 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
+
+class RainEmitter : public Object
+{
+private:
+	double next_birth;
+public:
+	RainEmitter();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+};
+
 
 class TouchEmitter : public Object
 {

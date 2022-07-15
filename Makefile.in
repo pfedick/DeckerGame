@@ -85,6 +85,7 @@ OBJECTS=compile/main.o \
 	compile/object_mummy.o \
 	compile/object_fire.o \
 	compile/object_windemitter.o \
+	compile/object_rainemitter.o \
 	compile/object_vent.o \
 	compile/object_speaker.o \
 	compile/object_touchemitter.o \
@@ -442,6 +443,10 @@ compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h include/a
 compile/object_windemitter.o: src/objects/windemitter.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_windemitter.o -c src/objects/windemitter.cpp $(CFLAGS)
+
+compile/object_rainemitter.o: src/objects/rainemitter.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_rainemitter.o -c src/objects/rainemitter.cpp $(CFLAGS)
 
 compile/object_vent.o: src/objects/vent.cpp Makefile include/objects.h \
 	include/audiopool.h

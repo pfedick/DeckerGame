@@ -395,6 +395,7 @@ public:
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	ppl7::grafix::Rect getOccupiedArea() const;
+	ppl7::grafix::Size size() const;
 };
 
 class Resources
@@ -794,8 +795,6 @@ public:
 };
 
 ppl7::tk::Window* GetGameWindow();
-
-
 
 
 #endif /* INCLUDE_DECKER_H_ */

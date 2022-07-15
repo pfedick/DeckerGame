@@ -204,11 +204,17 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		const Object* object=it->second;
-		if (object->texture != NULL && object->myLayer == layer) {
-			object->texture->draw(renderer,
-				object->initial_p.x + coords.x,
-				object->initial_p.y + coords.y,
-				object->sprite_no);
+		if (object->type() == Decker::Objects::Type::Particle) {
+			if (object->texture != NULL && object->myLayer == layer) {
+				object->draw(renderer, coords);
+			}
+		} else {
+			if (object->texture != NULL && object->myLayer == layer) {
+				object->texture->draw(renderer,
+					object->initial_p.x + coords.x,
+					object->initial_p.y + coords.y,
+					object->sprite_no);
+			}
 		}
 	}
 }
@@ -313,6 +319,7 @@ Representation getRepresentation(int object_type)
 	case Type::LaserBeamVertical: return LaserBarrier::representation(Type::LaserBeamVertical);
 	case Type::Vent: return Vent::representation();
 	case Type::WindEmitter: return WindEmitter::representation();
+	case Type::RainEmitter: return RainEmitter::representation();
 	case Type::Speaker: return Speaker::representation();
 	case Type::TouchEmitter: return TouchEmitter::representation();
 	case Type::Mushroom: return Mushroom::representation();
@@ -378,6 +385,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::LaserBeamHorizontal: return new LaserBarrier(Type::LaserBeamHorizontal);
 	case Type::LaserBeamVertical: return new LaserBarrier(Type::LaserBeamVertical);
 	case Type::WindEmitter: return new WindEmitter();
+	case Type::RainEmitter: return new RainEmitter();
 	case Type::Vent: return new Vent();
 	case Type::Speaker: return new Speaker();
 	case Type::TouchEmitter: return new TouchEmitter();

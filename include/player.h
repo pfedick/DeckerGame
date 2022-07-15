@@ -15,7 +15,8 @@ namespace Objects {
 class Object;
 class ObjectSystem;
 class Representation;
-}} // EOF namespace Decker::Objects
+}
+} // EOF namespace Decker::Objects
 
 
 
@@ -53,8 +54,12 @@ public:
 	float x, y;
 	int points, health, lifes;
 
+	// is updated every frame
+	ppl7::grafix::Point WorldCoords;
+	ppl7::grafix::Rect Viewport;
 
-	Player(Game* game);
+
+	explicit Player(Game* game);
 	~Player();
 	ppl7::grafix::PointF position() const;
 	int getKeyboardMatrix(const unsigned char* state=NULL);
