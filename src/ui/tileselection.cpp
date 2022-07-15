@@ -395,9 +395,18 @@ void ColorPaletteFrame::paint(ppl7::grafix::Drawable& draw)
 
 void ColorPaletteFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget() == this && event->buttonMask & ppl7::tk::MouseState::Left) {
+	if (event->widget() == this) {
 		int new_index=(event->p.y / tsize) * items_per_row + (event->p.x / tsize) + scrollbar->position() * items_per_row;
-		if (new_index != color_index && new_index < 256) {
+		if (new_index < 256) {
+			const Uint8* state = SDL_GetKeyboardState(NULL);
+			if (event->buttonMask & ppl7::tk::MouseState::Left && !state[SDL_SCANCODE_LSHIFT] && new_index != color_index) {
+				color_index=new_index;
+			} else if (event->buttonMask & ppl7::tk::MouseState::Right) {
+				color_clipboard=palette.getColor(new_index);
+
+			} else if (event->buttonMask & ppl7::tk::MouseState::Middle || (event->buttonMask & ppl7::tk::MouseState::Left && state[SDL_SCANCODE_LSHIFT])) {
+				palette.setColor(new_index, color_clipboard);
+			}
 			color_index=new_index;
 			needsRedraw();
 			ppl7::tk::Event event(ppl7::tk::Event::ValueChanged);
