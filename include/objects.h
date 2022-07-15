@@ -213,9 +213,29 @@ class RainEmitter : public Object
 private:
 	double next_birth;
 public:
+	enum class ParticleType {
+		Rain=0,
+		Snow=1
+	};
+	ParticleType type;
+	ppl7::grafix::Color ParticleColor;
+	int emitter_stud_width;
+	int max_particle_birth_per_cycle;
+	float birth_time_min, birth_time_max;
+	float max_velocity_x;
+	float min_velocity_y;
+	float max_velocity_y;
+	float scale_min, scale_max;
+
+
 	RainEmitter();
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
+
+	//size_t save(unsigned char* buffer, size_t size) override;
+	//size_t load(const unsigned char* buffer, size_t size) override;
+	//void openUi() override;
+
 };
 
 

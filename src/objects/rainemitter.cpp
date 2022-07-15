@@ -53,28 +53,48 @@ RainEmitter::RainEmitter()
 	visibleAtPlaytime=false;
 	sprite_no_representation=214;
 	next_birth=0.0f;
+
+	type=ParticleType::Rain;
+	ParticleColor.set(255, 255, 255, 255);
+	emitter_stud_width=16;
+	max_particle_birth_per_cycle = 4;
+	birth_time_min=0.020f;
+	birth_time_max=0.300f;
+	max_velocity_x=0.5f;
+	min_velocity_y=4.0f;
+	max_velocity_y=7.3f;
+	scale_min=0.3f;
+	scale_max=1.0f;
+}
+
+static float randf(float min, float max)
+{
+	double range=max - min;
+	double r=(((double)ppl7::rand(0, RAND_MAX)) / (double)RAND_MAX * range) + min;
+	return r;
 }
 
 void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 {
 	if (next_birth < time) {
-		next_birth=time + (float)ppl7::rand(20, 300) / 1000;
+		next_birth=time + randf(birth_time_min, birth_time_max);
 		double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
 			player.WorldCoords.y + player.Viewport.height() / 2), p);
-		if (d > 2000.0f) return;
-		for (int i=0;i < 4;i++) {
-
+		if (d > 2 * player.Viewport.width()) return;
+		int new_particles=ppl7::rand(1, max_particle_birth_per_cycle);
+		for (int i=0;i < new_particles;i++) {
 			RainParticle* particle=new RainParticle();
-			particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * 16);
+			particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * emitter_stud_width);
 			particle->p.y=p.y;
 			particle->initial_p.x=particle->p.x;
 			particle->initial_p.y=particle->p.y;
 			particle->pf.x=(float)particle->p.x;
 			particle->pf.y=(float)particle->p.y;
-			particle->velocity.x=(float)(ppl7::rand(0, 200) - 100.0f) / 1000;
-			particle->velocity.y=(float)ppl7::rand(4000, 7300) / 1000;
+			particle->velocity.x=randf(0, max_velocity_x) - (max_velocity_x / 2.0f);
+			particle->velocity.y=randf(min_velocity_y, max_velocity_y);
 			particle->end=particle->p;
-			particle->scale=(float)(ppl7::rand(300, 1000)) / 1000.0f;
+			particle->scale=randf(scale_min, scale_max);
+			particle->color_mod=ParticleColor;
 			//particle->color_mod.set(ppl7::rand(192, 255), ppl7::rand(192, 255), ppl7::rand(192, 255), 255);
 			color_mod.set(255, 255, 255, 255);
 			ppl7::grafix::Size levelsize=ttplane.size();
