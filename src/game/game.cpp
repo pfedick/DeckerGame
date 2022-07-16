@@ -1062,6 +1062,8 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 		Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
+			object_selection->setObjectType(object->type());
+			object_selection->setLayer(static_cast<int>(object->myLayer));
 			sprite_mode=SpriteModeEdit;
 			selected_object=object;
 			sprite_move_start=event->p;
@@ -1079,7 +1081,8 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 				//if (selected_object==object) object->openUi();
 				selected_object=object;
 				sprite_move_start=event->p;
-
+				object_selection->setObjectType(object->type());
+				object_selection->setLayer(static_cast<int>(object->myLayer));
 			}
 			return;
 		}

@@ -37,6 +37,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::ThreeSpeers, "3 Speers", 18);
 	addObject(Decker::Objects::Type::Rat, "Rat", 5);
 	addObject(Decker::Objects::Type::Bird, "Bird", 44);
+	addObject(Decker::Objects::Type::Bat, "Bat", 39);
 	addObject(Decker::Objects::Type::Scorpion, "Scorpion", 39);
 	addObject(Decker::Objects::Type::HangingSpider, "hanging Spider", 6);
 	addObject(Decker::Objects::Type::FloaterHorizontal, "Floater horizontal", 13);
@@ -68,6 +69,23 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 int ObjectsFrame::selectedObjectType() const
 {
 	return selected_object;
+}
+
+void ObjectsFrame::setObjectType(int type)
+{
+	if (type != selected_object) {
+		selected_object=type;
+		size_t pos=0;
+		std::map<size_t, Item>::const_iterator it;
+		for (it=object_map.begin();it != object_map.end();++it) {
+			if (it->second.id == type) {
+				pos=it->first;
+				break;
+			}
+		}
+		scrollbar->setPosition(pos / 2);
+		needsRedraw();
+	}
 }
 
 void ObjectsFrame::addObject(int id, const ppl7::String& name, int sprite_no)
@@ -205,6 +223,11 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 int ObjectSelection::selectedObjectType() const
 {
 	return objects_frame->selectedObjectType();
+}
+
+void ObjectSelection::setObjectType(int type)
+{
+	objects_frame->setObjectType(type);
 }
 
 int ObjectSelection::currentLayer() const
