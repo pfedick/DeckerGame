@@ -40,6 +40,7 @@ public:
 	};
 private:
 	double next_animation;
+	double death_time;
 	AnimationCycle animation;
 	Velocity velocity;
 	Velocity pf;
@@ -60,6 +61,7 @@ RainParticle::RainParticle()
 	sprite_no_representation=216;
 	sprite_no=216;
 	next_animation=0.0f;
+	death_time=1.0f;
 	spawned=true;
 	myLayer=Layer::BeforePlayer;
 }
@@ -77,7 +79,7 @@ void RainParticle::update(double time, TileTypePlane&, Player&)
 	p.x=(int)pf.x;
 	p.y=(int)pf.y;
 	updateBoundary();
-	if (p.y > end.y) deleteDefered=true;
+	if (p.y > end.y || time > death_time) deleteDefered=true;
 }
 
 /****************************************************************
@@ -113,8 +115,11 @@ RainEmitter::RainEmitter()
 	max_velocity_y=7.3f;
 	scale_min=0.3f;
 	scale_max=1.0f;
+	age_min=5.0f;
+	age_max=10.0f;
 
-	save_size+=35;
+
+	save_size+=43;
 }
 
 static float randf(float min, float max)
@@ -124,7 +129,7 @@ static float randf(float min, float max)
 	return r;
 }
 
-void RainEmitter::createParticle(const TileTypePlane& ttplane)
+void RainEmitter::createParticle(const TileTypePlane& ttplane, double time)
 {
 	RainParticle* particle=new RainParticle();
 	particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * emitter_stud_width) - ((TILE_WIDTH * emitter_stud_width) / 2);
@@ -139,6 +144,7 @@ void RainEmitter::createParticle(const TileTypePlane& ttplane)
 	particle->end=particle->p;
 	particle->scale=randf(scale_min, scale_max);
 	particle->color_mod=ParticleColor;
+	particle->death_time=randf(age_min, age_max) + time;
 	switch (particle_type) {
 	case ParticleType::Rain:
 		particle->animation.startRandom(particle_transparent, sizeof(particle_transparent) / sizeof(int), true, 0);
@@ -170,7 +176,7 @@ void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 		if (d > 2 * player.Viewport.width()) return;
 		int new_particles=ppl7::rand(1, max_particle_birth_per_cycle);
 		for (int i=0;i < new_particles;i++) {
-			createParticle(ttplane);
+			createParticle(ttplane, time);
 		}
 	}
 }
@@ -193,7 +199,9 @@ size_t RainEmitter::save(unsigned char* buffer, size_t size)
 	ppl7::PokeFloat(buffer + bytes + 23, max_velocity_y);
 	ppl7::PokeFloat(buffer + bytes + 27, scale_min);
 	ppl7::PokeFloat(buffer + bytes + 31, scale_max);
-	return bytes + 35;
+	ppl7::PokeFloat(buffer + bytes + 35, age_min);
+	ppl7::PokeFloat(buffer + bytes + 39, age_max);
+	return bytes + 43;
 }
 
 size_t RainEmitter::load(const unsigned char* buffer, size_t size)
@@ -214,6 +222,8 @@ size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 	max_velocity_y=ppl7::PeekFloat(buffer + bytes + 23);
 	scale_min=ppl7::PeekFloat(buffer + bytes + 27);
 	scale_max=ppl7::PeekFloat(buffer + bytes + 31);
+	age_min=ppl7::PeekFloat(buffer + bytes + 35);
+	age_max=ppl7::PeekFloat(buffer + bytes + 39);
 	return size;
 }
 
@@ -236,6 +246,7 @@ private:
 	ppl7::tk::HorizontalSlider* birth_time_min, * birth_time_max;
 	ppl7::tk::HorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
 	ppl7::tk::HorizontalSlider* scale_min, * scale_max;
+	ppl7::tk::HorizontalSlider* age_min, * age_max;
 	/*
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::ComboBox* on_start_state;
@@ -353,6 +364,21 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(scale_max);
 	y+=35;
 
+	// Age
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Age:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	sw=(client.width() - col1 - 40 - 40) / 2;
+	age_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	age_min->setEventHandler(this);
+	age_min->setDimension(10, 20000);
+	addChild(age_min);
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	age_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	age_max->setEventHandler(this);
+	age_max->setDimension(10, 20000);
+	addChild(age_max);
+	y+=35;
+
 	setValuesToUi(object);
 }
 
@@ -369,6 +395,9 @@ void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 	max_velocity_x->setValue(object->max_velocity_x * 1000);
 	scale_min->setValue(object->scale_min * 1000);
 	scale_max->setValue(object->scale_max * 1000);
+	age_min->setValue(object->age_min * 1000);
+	age_max->setValue(object->age_max * 1000);
+
 }
 
 
@@ -397,7 +426,10 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 		object->scale_min=(float)value / 1000.0f;
 	} else if (widget == scale_max) {
 		object->scale_max=(float)value / 1000.0f;
-
+	} else if (widget == age_min) {
+		object->age_min=(float)value / 1000.0f;
+	} else if (widget == age_max) {
+		object->age_max=(float)value / 1000.0f;
 	}
 }
 
@@ -422,6 +454,9 @@ void RainEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 		clipboard.max_velocity_y=object->max_velocity_y;
 		clipboard.scale_min=object->scale_min;
 		clipboard.scale_max=object->scale_max;
+		clipboard.age_min=object->age_min;
+		clipboard.age_max=object->age_max;
+
 	} else if (button == Dialog::Buttons::Paste) {
 		object->particle_type=clipboard.particle_type;
 		object->ParticleColor=clipboard.ParticleColor;
@@ -434,6 +469,9 @@ void RainEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 		object->max_velocity_y=clipboard.max_velocity_y;
 		object->scale_min=clipboard.scale_min;
 		object->scale_max=clipboard.scale_max;
+		object->age_min=clipboard.age_min;
+		object->age_max=clipboard.age_max;
+
 		setValuesToUi(object);
 	}
 }

@@ -218,7 +218,7 @@ class RainEmitter : public Object
 private:
 	double next_birth;
 
-	void createParticle(const TileTypePlane& ttplane);
+	void createParticle(const TileTypePlane& ttplane, double time);
 public:
 	enum class ParticleType {
 		Rain=0,
@@ -235,6 +235,7 @@ public:
 	float min_velocity_y;
 	float max_velocity_y;
 	float scale_min, scale_max;
+	float age_min, age_max;
 
 
 	RainEmitter();
