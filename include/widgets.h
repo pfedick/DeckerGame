@@ -19,12 +19,17 @@ public:
 	enum Buttons {
 		None=0,
 		OK=1,
+		Copy=2,
+		Paste=4,
+		CopyAndPaste=6
 	};
 private:
 	ppl7::String WindowTitle;
 	ppl7::grafix::Image WindowIcon;
 	ppl7::grafix::Color	myBackground;
 	ppl7::tk::Button* ok_button;
+	ppl7::tk::Button* copy_button;
+	ppl7::tk::Button* paste_button;
 	ppl7::grafix::Point move_start;
 
 public:
@@ -39,6 +44,7 @@ public:
 	void setBackgroundColor(const ppl7::grafix::Color& c);
 	virtual void paint(ppl7::grafix::Drawable& draw);
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void dialogButtonEvent(Dialog::Buttons button);
 };
 
 

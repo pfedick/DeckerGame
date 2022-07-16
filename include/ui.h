@@ -357,6 +357,7 @@ public:
 
 	void setSpriteSet(SpriteTexture* texture);
 	int selectedObjectType() const;
+	void setObjectType(int type);
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
@@ -394,6 +395,7 @@ public:
 	int selectedObjectType() const;
 	int currentLayer() const;
 	void setLayer(int layer);
+	void setObjectType(int type);
 	ppl7::String widgetType() const override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;

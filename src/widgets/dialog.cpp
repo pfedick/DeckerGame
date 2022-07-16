@@ -14,11 +14,30 @@ Dialog::Dialog(int width, int height, int buttons)
 	create((gamewin->width() - width) / 2, (gamewin->height() - height) / 2, width, height);
 	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	ok_button=NULL;
+	copy_button=NULL;
+	paste_button=NULL;
 	if (buttons & Buttons::OK) {
 		ok_button=new ppl7::tk::Button((width - 80) / 2, height - 80, 80, 30, "OK");
 		ok_button->setIcon(gfx->Toolbar.getDrawable(24));
 		ok_button->setEventHandler(this);
 		this->addChild(ok_button);
+	}
+	int x=width - 2 - 16;
+	int y=height - 80; // 2
+	if (buttons & Buttons::Paste) {
+		paste_button=new ppl7::tk::Button(x - 32, y, 32, 32, "");
+		paste_button->setIcon(gfx->Toolbar.getDrawable(38));
+		paste_button->setEventHandler(this);
+		this->addChild(paste_button);
+		x-=32;
+	}
+
+	if (buttons & Buttons::Copy) {
+		copy_button=new ppl7::tk::Button(x - 32, y, 32, 32, "");
+		copy_button->setIcon(gfx->Toolbar.getDrawable(37));
+		copy_button->setEventHandler(this);
+		this->addChild(copy_button);
+		x-=32;
 	}
 	this->setModal(true);
 	this->setClientOffset(8, 40, 8, 8);
@@ -94,11 +113,17 @@ void Dialog::paint(ppl7::grafix::Drawable& draw)
 
 void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	if (event->widget() == ok_button) {
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == ok_button) {
 		this->deleteLater();
-	}
+	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
+	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);
 }
 
+void Dialog::dialogButtonEvent(Dialog::Buttons button)
+{
+
+}
 
 
 } //EOF namespace Decker::ui
