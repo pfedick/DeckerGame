@@ -217,6 +217,7 @@ sprites:
 	./texmaker -s "lightwave/Render/enemies/wallenstein/*.png" -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/enemies/helena/*.png" -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/enemies/bat/*.png" -t res/bat.tex -w 512 -h 512 -px 64 -py 120
+	./texmaker -s "lightwave/Render/enemies/bird/*.png" -t res/bird.tex -w 512 -h 512 -px 64 -py 120
 
 	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
 	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
