@@ -114,6 +114,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Bird]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Bird]->load(sdl, "res/bird.tex");
 
+	spriteset[Spriteset::LevelEnd]->enableOutlines(true);
+	spriteset[Spriteset::LevelEnd]->enableMemoryBuffer(true);
+	spriteset[Spriteset::LevelEnd]->load(sdl, "res/levelend.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
