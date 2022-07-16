@@ -15,6 +15,8 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::Crystal: return ppl7::String("Crystal");
 	case ObjectType::Diamond: return ppl7::String("Diamond");
 	case ObjectType::Coin: return ppl7::String("Coin");
+	case ObjectType::Cherry: return ppl7::String("Cherry");
+	case ObjectType::Apple: return ppl7::String("Apple");
 	case ObjectType::Key: return ppl7::String("Key");
 	case ObjectType::Door: return ppl7::String("Door");
 	case ObjectType::FloaterHorizontal: return ppl7::String("FloaterHorizontal");
@@ -23,6 +25,7 @@ ppl7::String Type::name(Type::ObjectType type)
 
 	case ObjectType::Fire: return ppl7::String("Fire");
 	case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
+	case ObjectType::RainEmitter: return ppl7::String("RainEmitter");
 	case ObjectType::Vent: return ppl7::String("Vent");
 	case ObjectType::Speaker: return ppl7::String("Speaker");
 	case ObjectType::Particle: return ppl7::String("Particle");
@@ -49,6 +52,7 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::Helena: return ppl7::String("Helena");
 	case ObjectType::Scorpion: return ppl7::String("Scorpion");
 	case ObjectType::Bat: return ppl7::String("Bat");
+	case ObjectType::Bird: return ppl7::String("Bird");
 
 	default: return ppl7::String("unknown object type: %d", static_cast<int>(type));
 	}

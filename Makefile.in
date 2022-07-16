@@ -65,12 +65,15 @@ OBJECTS=compile/main.o \
 	compile/object.o \
 	compile/object_gem.o \
 	compile/object_coin.o \
+	compile/object_apple.o \
+	compile/object_cherry.o \
 	compile/object_trap.o \
 	compile/object_threespeers.o \
 	compile/object_laserbarrier.o \
 	compile/object_enemy.o \
 	compile/object_rat.o \
 	compile/object_bat.o \
+	compile/object_birds.o \
 	compile/object_scorpion.o \
 	compile/object_hangingspider.o \
 	compile/object_savepoint.o \
@@ -343,6 +346,18 @@ compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/a
 	- @mkdir -p compile
 	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)
 
+compile/object_apple.o: src/objects/apple.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_apple.o -c src/objects/apple.cpp $(CFLAGS)
+
+compile/object_cherry.o: src/objects/cherry.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_cherry.o -c src/objects/cherry.cpp $(CFLAGS)
+
+compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)
+
 compile/object_trap.o: src/objects/trap.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_trap.o -c src/objects/trap.cpp $(CFLAGS)
@@ -413,6 +428,10 @@ compile/object_mummy.o: src/objects/mummy.cpp Makefile include/objects.h
 compile/object_bat.o: src/objects/bat.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_bat.o -c src/objects/bat.cpp $(CFLAGS)
+
+compile/object_bird.o: src/objects/bird.cpp Makefile include/objects.h include/player.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_bird.o -c src/objects/bird.cpp $(CFLAGS)
 
 compile/object_scorpion.o: src/objects/scorpion.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile

@@ -67,6 +67,7 @@ public:
 	void setZeroVelocity();
 	void setVisible(bool flag);
 	void addPoints(int points);
+	void addHealth(int points);
 	void addLife(int lifes);
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation& repr);

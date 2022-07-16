@@ -50,6 +50,8 @@ public:
 		Switch=21,
 		LevelEnd=22,
 		RainEmitter=23,
+		Apple=24,
+		Cherry=25,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -64,7 +66,8 @@ public:
 		Wallenstein=111,
 		Helena=112,
 		Scorpion=113,
-		Bat=114
+		Bat=114,
+		Bird=115
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -88,6 +91,7 @@ public:
 		Helena=12,
 		Bat=13,
 		Scorpion=14,
+		Bird,
 		MaxSpritesets
 	};
 };
@@ -328,6 +332,34 @@ private:
 public:
 	CoinReward();
 	static Representation representation();
+
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+};
+
+class AppleReward : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+
+public:
+	AppleReward();
+	static AppleReward representation();
+
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+};
+
+class CherryReward : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+
+public:
+	CherryReward();
+	static CherryReward representation();
 
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
@@ -582,6 +614,22 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
 };
+
+class Bird : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+	float velocity;
+	int state;
+public:
+	Bird();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player) override;
+
+};
+
 
 class Skeleton : public Enemy
 {

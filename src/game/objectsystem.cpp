@@ -109,6 +109,11 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Scorpion]->enableOutlines(true);
 	spriteset[Spriteset::Scorpion]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Scorpion]->load(sdl, "res/bat.tex");
+
+	spriteset[Spriteset::Bird]->enableOutlines(true);
+	spriteset[Spriteset::Bird]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Bird]->load(sdl, "res/bird.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -303,6 +308,8 @@ Representation getRepresentation(int object_type)
 	case Type::Diamond: return GemReward::representation();
 	case Type::Crystal: return CrystalReward::representation();
 	case Type::Coin: return CoinReward::representation();
+	case Type::Apple: return AppleReward::representation();
+	case Type::Cherry: return CherryReward::representation();
 	case Type::ExtraLife: return ExtraLife::representation();
 	case Type::Key: return KeyReward::representation();
 	case Type::Arrow: return Arrow::representation();
@@ -331,8 +338,8 @@ Representation getRepresentation(int object_type)
 	case Type::Wallenstein: return Wallenstein::representation();
 	case Type::Helena: return Helena::representation();
 	case Type::Bat: return Bat::representation();
+	case Type::Bird: return Bird::representation();
 	case Type::Scorpion: return Scorpion::representation();
-
 	default: return Object::representation();
 	}
 }
@@ -366,6 +373,8 @@ Object* ObjectSystem::getInstance(int object_type) const
 	switch (object_type) {
 	case Type::ThreeSpeers: return new ThreeSpeers();
 	case Type::Coin: return new CoinReward();
+	case Type::Apple: return new AppleReward();
+	case Type::Cherry: return new CherryReward();
 	case Type::ExtraLife: return new ExtraLife();
 	case Type::Crystal: return new CrystalReward();
 	case Type::Diamond: return new GemReward();
@@ -398,6 +407,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Wallenstein: return new Wallenstein();
 	case Type::Helena: return new Helena();
 	case Type::Bat: return new Bat();
+	case Type::Bird: return new Bird();
 	case Type::Scorpion: return new Scorpion();
 	}
 	return NULL;
