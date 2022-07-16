@@ -192,7 +192,8 @@ void Player::addPoints(int points)
 void Player::addHealth(int points)
 {
 	if (movement == Dead) return;
-	if (health < 100) this->health+=health;
+	this->health+=points;
+	if (health > 100) health=100;
 }
 
 void Player::addLife(int lifes)

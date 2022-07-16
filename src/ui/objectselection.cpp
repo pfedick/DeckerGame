@@ -28,13 +28,15 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Diamond, "Diamond", 1);
 	addObject(Decker::Objects::Type::Coin, "Coin", 12);
 	addObject(Decker::Objects::Type::ExtraLife, "Extra Life", 40);
+	addObject(Decker::Objects::Type::Apple, "Apple", 42);
+	addObject(Decker::Objects::Type::Cherry, "Cherry", 45);
 	addObject(Decker::Objects::Type::Key, "Key", 8);
 	addObject(Decker::Objects::Type::Door, "Door", 23);
-	addObject(Decker::Objects::Type::LevelEnd, "Level End", 23);
+	addObject(Decker::Objects::Type::LevelEnd, "Level End", 43);
 	addObject(Decker::Objects::Type::Arrow, "Arrow", 2);
 	addObject(Decker::Objects::Type::ThreeSpeers, "3 Speers", 18);
 	addObject(Decker::Objects::Type::Rat, "Rat", 5);
-	addObject(Decker::Objects::Type::Bat, "Bat", 39);
+	addObject(Decker::Objects::Type::Bird, "Bird", 44);
 	addObject(Decker::Objects::Type::Scorpion, "Scorpion", 39);
 	addObject(Decker::Objects::Type::HangingSpider, "hanging Spider", 6);
 	addObject(Decker::Objects::Type::FloaterHorizontal, "Floater horizontal", 13);
@@ -48,7 +50,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Vent, "Vent", 31);
 	addObject(Decker::Objects::Type::Speaker, "Speaker", 29);
 	addObject(Decker::Objects::Type::WindEmitter, "Wind emiter", 28);
-	addObject(Decker::Objects::Type::RainEmitter, "Rain emiter", 28);
+	addObject(Decker::Objects::Type::RainEmitter, "Rain emiter", 41);
 	addObject(Decker::Objects::Type::TouchEmitter, "Object emiter", 30);
 	addObject(Decker::Objects::Type::Mushroom, "Mushroom", 32);
 	addObject(Decker::Objects::Type::TreasureChest, "Treasure Chest", 33);

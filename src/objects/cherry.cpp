@@ -9,7 +9,7 @@ namespace Decker::Objects {
 static int cherry_rotate[]={ 304, 305, 306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,
 321,322,323,324,325,326,327,328,329,330,331,332,333 };
 
-Representation CoinReward::representation()
+Representation CherryReward::representation()
 {
 	return Representation(Spriteset::GenericObjects, 304);
 }

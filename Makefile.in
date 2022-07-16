@@ -73,7 +73,7 @@ OBJECTS=compile/main.o \
 	compile/object_enemy.o \
 	compile/object_rat.o \
 	compile/object_bat.o \
-	compile/object_birds.o \
+	compile/object_bird.o \
 	compile/object_scorpion.o \
 	compile/object_hangingspider.o \
 	compile/object_savepoint.o \

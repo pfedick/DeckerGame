@@ -9,7 +9,7 @@ namespace Decker::Objects {
 static int apple_rotate[]={ 335, 336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,
 351,352,353,354,355,356,357,358,359,360,361,362,363,364 };
 
-Representation CoinReward::representation()
+Representation AppleReward::representation()
 {
 	return Representation(Spriteset::GenericObjects, 335);
 }

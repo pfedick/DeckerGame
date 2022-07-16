@@ -216,10 +216,14 @@ class RainEmitter : public Object
 {
 private:
 	double next_birth;
+
+	void createParticle(const TileTypePlane& ttplane);
 public:
 	enum class ParticleType {
 		Rain=0,
-		Snow=1
+		ParticleWhite,
+		SnowflakeWhite,
+		SnowflakeTransparent
 	};
 	ParticleType type;
 	ppl7::grafix::Color ParticleColor;
@@ -236,9 +240,9 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
-	//size_t save(unsigned char* buffer, size_t size) override;
-	//size_t load(const unsigned char* buffer, size_t size) override;
-	//void openUi() override;
+	size_t save(unsigned char* buffer, size_t size) override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 
 };
 
@@ -345,7 +349,7 @@ private:
 
 public:
 	AppleReward();
-	static AppleReward representation();
+	static Representation representation();
 
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
@@ -359,7 +363,7 @@ private:
 
 public:
 	CherryReward();
-	static CherryReward representation();
+	static Representation representation();
 
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
