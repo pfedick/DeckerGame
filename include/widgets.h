@@ -95,6 +95,34 @@ public:
 
 };
 
+class ColorSliderWidget : public ppl7::tk::Widget
+{
+private:
+	ppl7::tk::SpinBox* color_red;
+	ppl7::tk::SpinBox* color_green;
+	ppl7::tk::SpinBox* color_blue;
+	ppl7::tk::HorizontalSlider* slider_red;
+	ppl7::tk::HorizontalSlider* slider_green;
+	ppl7::tk::HorizontalSlider* slider_blue;
+	ppl7::tk::Frame* color_preview;
+
+
+	void setupUi();
+	void updateColorPreview();
+
+public:
+	ColorSliderWidget(int x, int y, int width, int height, const ppl7::grafix::Color& color=ppl7::grafix::Color());
+	void setColor(const ppl7::grafix::Color& color);
+	ppl7::grafix::Color color() const;
+
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
+	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+
+};
+
 
 
 }	// EOF namespace ui
