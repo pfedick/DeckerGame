@@ -222,10 +222,10 @@ public:
 	enum class ParticleType {
 		Rain=0,
 		ParticleWhite,
-		SnowflakeWhite,
-		SnowflakeTransparent
+		SnowflakeTransparent,
+		SnowflakeWhite
 	};
-	ParticleType type;
+	ParticleType particle_type;
 	ppl7::grafix::Color ParticleColor;
 	int emitter_stud_width;
 	int max_particle_birth_per_cycle;

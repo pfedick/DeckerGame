@@ -387,6 +387,7 @@ void SpriteTexture::draw(SDL_Renderer* renderer, int x, int y, int id) const
 	tr.w=item.r.w;
 	tr.h=item.r.h;
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
+	SDL_SetTextureAlphaMod(item.tex, 255);
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
@@ -402,6 +403,7 @@ void SpriteTexture::draw(SDL_Renderer* renderer, int x, int y, int id, const ppl
 	tr.y=y + item.Offset.y - item.Pivot.y;
 	tr.w=item.r.w;
 	tr.h=item.r.h;
+	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
@@ -430,6 +432,7 @@ void SpriteTexture::draw(SDL_Renderer* renderer, int id, const SDL_Rect& source,
 	if (it == SpriteList.end()) return;
 	const SpriteIndexItem& item=it->second;
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
+	SDL_SetTextureAlphaMod(item.tex, 255);
 	SDL_RenderCopy(renderer, item.tex, &source, &target);
 }
 
@@ -454,6 +457,7 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 		tr.h=(int)((float)item.r.h * scale_factor);
 	}
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
+	SDL_SetTextureAlphaMod(item.tex, 255);
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
@@ -477,6 +481,7 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 		tr.w=(int)((float)item.r.w * scale_factor);
 		tr.h=(int)((float)item.r.h * scale_factor);
 	}
+	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }

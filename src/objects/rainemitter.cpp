@@ -102,7 +102,7 @@ RainEmitter::RainEmitter()
 	sprite_no_representation=303;
 	next_birth=0.0f;
 
-	type=ParticleType::Rain;
+	particle_type=ParticleType::Rain;
 	ParticleColor.set(255, 255, 255, 255);
 	emitter_stud_width=16;
 	max_particle_birth_per_cycle = 4;
@@ -129,6 +129,7 @@ void RainEmitter::createParticle(const TileTypePlane& ttplane)
 	RainParticle* particle=new RainParticle();
 	particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * emitter_stud_width) - ((TILE_WIDTH * emitter_stud_width) / 2);
 	particle->p.y=p.y;
+	particle->myLayer=myLayer;
 	particle->initial_p.x=particle->p.x;
 	particle->initial_p.y=particle->p.y;
 	particle->pf.x=(float)particle->p.x;
@@ -138,7 +139,7 @@ void RainEmitter::createParticle(const TileTypePlane& ttplane)
 	particle->end=particle->p;
 	particle->scale=randf(scale_min, scale_max);
 	particle->color_mod=ParticleColor;
-	switch (type) {
+	switch (particle_type) {
 	case ParticleType::Rain:
 		particle->animation.startRandom(particle_transparent, sizeof(particle_transparent) / sizeof(int), true, 0);
 		break;
@@ -178,7 +179,7 @@ size_t RainEmitter::save(unsigned char* buffer, size_t size)
 {
 	if (size < save_size) return 0;
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke8(buffer + bytes, static_cast<int>(type));
+	ppl7::Poke8(buffer + bytes, static_cast<int>(particle_type));
 	ppl7::Poke8(buffer + bytes + 1, emitter_stud_width);
 	ppl7::Poke8(buffer + bytes + 2, max_particle_birth_per_cycle);
 	ppl7::Poke8(buffer + bytes + 3, ParticleColor.red());
@@ -199,7 +200,7 @@ size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < save_size) return 0;
-	type=static_cast<ParticleType>(ppl7::Peek8(buffer + bytes));
+	particle_type=static_cast<ParticleType>(ppl7::Peek8(buffer + bytes));
 	emitter_stud_width=ppl7::Peek8(buffer + bytes + 1);
 	max_particle_birth_per_cycle=ppl7::Peek8(buffer + bytes + 2);
 	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 3));
@@ -228,6 +229,14 @@ size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 class RainEmitterDialog : public Decker::ui::Dialog
 {
 private:
+	Decker::ui::ColorSliderWidget* color;
+	ppl7::tk::ComboBox* particle_type;
+	ppl7::tk::HorizontalSlider* emitter_width;
+	ppl7::tk::HorizontalSlider* max_birth;
+	ppl7::tk::HorizontalSlider* birth_time_min, * birth_time_max;
+	ppl7::tk::HorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
+	ppl7::tk::HorizontalSlider* scale_min, * scale_max;
+	/*
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::ComboBox* on_start_state;
 	ppl7::tk::CheckBox* initial_state;
@@ -235,6 +244,7 @@ private:
 	ppl7::tk::CheckBox* block_player;
 	ppl7::tk::LineInput* time_on_min, * time_on_max;
 	ppl7::tk::LineInput* time_off_min, * time_off_max;
+	*/
 
 	RainEmitter* object;
 
@@ -242,7 +252,6 @@ public:
 	RainEmitterDialog(RainEmitter* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
 	//virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
 
@@ -254,7 +263,138 @@ void RainEmitter::openUi()
 
 
 RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
-	: Decker::ui::Dialog(600, 400)
+	: Decker::ui::Dialog(600, 500)
+{
+	this->object=object;
+	this->setWindowTitle("Rain Emitter");
+	int col1=100;
+	int y=0;
+	ppl7::grafix::Rect client=clientRect();
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Type:"));
+	particle_type=new ppl7::tk::ComboBox(col1, y, client.width() - col1, 30);
+	particle_type->setEventHandler(this);
+	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(RainEmitter::ParticleType::Rain)));
+	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(RainEmitter::ParticleType::ParticleWhite)));
+	particle_type->add("Transparent Snowflake", ppl7::ToString("%d", static_cast<int>(RainEmitter::ParticleType::SnowflakeTransparent)));
+	particle_type->add("White Snowflake", ppl7::ToString("%d", static_cast<int>(RainEmitter::ParticleType::SnowflakeWhite)));
+	particle_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_type)));
+	addChild(particle_type);
+	y+=35;
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
+	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
+	color->setEventHandler(this);
+	color->setColor(object->ParticleColor);
+	addChild(color);
+	y+=4 * 35;
+
+	col1=150;
+
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size:"));
+	emitter_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
+	emitter_width->setEventHandler(this);
+	emitter_width->setDimension(1, 32);
+	emitter_width->setValue(object->emitter_stud_width);
+	addChild(emitter_width);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Max birth per cycle:"));
+	max_birth=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
+	max_birth->setEventHandler(this);
+	max_birth->setDimension(1, 32);
+	max_birth->setValue(object->max_particle_birth_per_cycle);
+	addChild(max_birth);
+	y+=35;
+
+	int sw=(client.width() - col1 - 40 - 40) / 2;
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	birth_time_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	birth_time_min->setEventHandler(this);
+	birth_time_min->setDimension(10, 2000);
+	birth_time_min->setValue(object->birth_time_min * 1000);
+	addChild(birth_time_min);
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	birth_time_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	birth_time_max->setEventHandler(this);
+	birth_time_max->setDimension(10, 2000);
+	birth_time_max->setValue(object->birth_time_max * 1000);
+	addChild(birth_time_max);
+	y+=35;
+
+
+
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	min_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	min_velocity_y->setEventHandler(this);
+	min_velocity_y->setDimension(10, 10000);
+	min_velocity_y->setValue(object->min_velocity_y * 1000);
+	addChild(min_velocity_y);
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	max_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	max_velocity_y->setEventHandler(this);
+	max_velocity_y->setDimension(10, 10000);
+	max_velocity_y->setValue(object->max_velocity_y * 1000);
+	addChild(max_velocity_y);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Horizontal Velocity:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "max:"));
+	max_velocity_x=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	max_velocity_x->setEventHandler(this);
+	max_velocity_x->setDimension(10, 5000);
+	max_velocity_x->setValue(object->max_velocity_x * 1000);
+	addChild(max_velocity_x);
+	y+=35;
+
+	// Scale
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	sw=(client.width() - col1 - 40 - 40) / 2;
+	scale_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	scale_min->setEventHandler(this);
+	scale_min->setDimension(10, 2000);
+	scale_min->setValue(object->scale_min * 1000);
+	addChild(scale_min);
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	scale_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	scale_max->setEventHandler(this);
+	scale_max->setDimension(10, 2000);
+	scale_max->setValue(object->scale_max * 1000);
+	addChild(scale_max);
+	y+=35;
+}
+
+void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+{
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == particle_type) {
+		object->particle_type=static_cast<RainEmitter::ParticleType>(particle_type->currentIdentifier().toInt());
+	} else if (widget == color) {
+		object->ParticleColor=color->color();
+	} else if (widget == emitter_width) {
+		object->emitter_stud_width=value;
+	} else if (widget == max_birth) {
+		object->max_particle_birth_per_cycle=value;
+	} else if (widget == birth_time_min) {
+		object->birth_time_min=(float)value / 1000.0f;
+	} else if (widget == birth_time_max) {
+		object->birth_time_max=(float)value / 1000.0f;
+	} else if (widget == min_velocity_y) {
+		object->min_velocity_y=(float)value / 1000.0f;
+	} else if (widget == max_velocity_y) {
+		object->max_velocity_y=(float)value / 1000.0f;
+	} else if (widget == max_velocity_x) {
+		object->max_velocity_x=(float)value / 1000.0f;
+	} else if (widget == scale_min) {
+		object->scale_min=(float)value / 1000.0f;
+	} else if (widget == scale_max) {
+		object->scale_max=(float)value / 1000.0f;
+
+	}
+}
+
+void RainEmitterDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
 {
 
 }

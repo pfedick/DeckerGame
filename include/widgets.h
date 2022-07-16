@@ -101,17 +101,20 @@ private:
 	ppl7::tk::SpinBox* color_red;
 	ppl7::tk::SpinBox* color_green;
 	ppl7::tk::SpinBox* color_blue;
+	ppl7::tk::SpinBox* color_alpha;
 	ppl7::tk::HorizontalSlider* slider_red;
 	ppl7::tk::HorizontalSlider* slider_green;
 	ppl7::tk::HorizontalSlider* slider_blue;
+	ppl7::tk::HorizontalSlider* slider_alpha;
 	ppl7::tk::Frame* color_preview;
+	bool with_alphachannel;
 
 
 	void setupUi();
 	void updateColorPreview();
 
 public:
-	ColorSliderWidget(int x, int y, int width, int height, const ppl7::grafix::Color& color=ppl7::grafix::Color());
+	ColorSliderWidget(int x, int y, int width, int height, bool withAlphaChannel=false);
 	void setColor(const ppl7::grafix::Color& color);
 	ppl7::grafix::Color color() const;
 
