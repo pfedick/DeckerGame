@@ -6,9 +6,9 @@
 
 namespace Decker::Objects {
 
-static int coin_rotate[]={84,85,86,87,88,89,90,91,92,
+static int coin_rotate[]={ 84,85,86,87,88,89,90,91,92,
 	93,94,95,96,97,98,99,100,101,102,103,104,105,106,
-	107,108,109,110,111,112,113};
+	107,108,109,110,111,112,113 };
 
 Representation CoinReward::representation()
 {
@@ -16,35 +16,35 @@ Representation CoinReward::representation()
 }
 
 CoinReward::CoinReward()
-: Object(Type::ObjectType::Coin)
+	: Object(Type::ObjectType::Coin)
 {
 	sprite_set=Spriteset::GenericObjects;
-	animation.startRandom(coin_rotate,sizeof(coin_rotate)/sizeof(int),true,0);
+	animation.startRandom(coin_rotate, sizeof(coin_rotate) / sizeof(int), true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=84;
 }
 
-void CoinReward::update(double time, TileTypePlane &, Player &)
+void CoinReward::update(double time, TileTypePlane&, Player&)
 {
-	if (time>next_animation) {
-		next_animation=time+0.056f;
+	if (time > next_animation) {
+		next_animation=time + 0.056f;
 		animation.update();
 		int new_sprite=animation.getFrame();
-		if (new_sprite!=sprite_no) {
+		if (new_sprite != sprite_no) {
 			sprite_no=new_sprite;
 			updateBoundary();
 		}
 	}
 }
 
-void CoinReward::handleCollision(Player *player, const Collision &)
+void CoinReward::handleCollision(Player* player, const Collision&)
 {
 	enabled=false;
 	if (spawned) deleteDefered=true;
 	player->addPoints(10);
-	AudioPool &audio=getAudioPool();
-	audio.playOnce(AudioClip::coin1, 0.3f);
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::coin1, 0.1f);
 }
 
 
