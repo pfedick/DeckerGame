@@ -153,7 +153,7 @@ void Dialog::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 	if (event->buttonMask & ppl7::tk::MouseEvent::MouseButton::Left) {
 		if (drag_started) {
 			ppl7::grafix::Point delta=event->p - drag_start_pos;
-			printf("delta: %d:%d\n", delta.x, delta.y);
+			//printf("delta: %d:%d\n", delta.x, delta.y);
 			//printf("windowpos old: %d:%d, ", pos().x, pos().y);
 			drag_start_pos=event->p - delta;
 			ppl7::grafix::Point newpos=this->pos() + delta;
