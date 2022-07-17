@@ -6,6 +6,7 @@ namespace Decker::ui {
 Dialog::Dialog(int width, int height, int buttons)
 	: ppl7::tk::Widget()
 {
+	setUseOwnDrawbuffer(true);
 	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
 	//ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	myBackground=style.windowBackgroundColor * 1.4f;
@@ -41,10 +42,16 @@ Dialog::Dialog(int width, int height, int buttons)
 	}
 	this->setModal(true);
 	this->setClientOffset(8, 40, 8, 8);
+	drag_started=true;
+	client_frame=NULL;
 }
 
 Dialog::~Dialog()
 {
+	if (drag_started) {
+		drag_started=false;
+		ppl7::tk::GetWindowManager()->releaseMouse(this);
+	}
 }
 
 const ppl7::String& Dialog::windowTitle() const
@@ -118,7 +125,45 @@ void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 		this->deleteLater();
 	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
 	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);
+	else if (widget == this && event->p.y < 33) {
+		drag_started=true;
+		drag_start_pos=event->p;
+		ppl7::tk::GetWindowManager()->grabMouse(this);
+	}
 }
+
+void Dialog::mouseUpEvent(ppl7::tk::MouseEvent* event)
+{
+	if (drag_started) {
+		drag_started=false;
+		ppl7::tk::GetWindowManager()->releaseMouse(this);
+	}
+}
+
+void Dialog::lostFocusEvent(ppl7::tk::FocusEvent* event)
+{
+	if (drag_started) {
+		drag_started=false;
+		ppl7::tk::GetWindowManager()->releaseMouse(this);
+	}
+}
+
+void Dialog::mouseMoveEvent(ppl7::tk::MouseEvent* event)
+{
+	if (event->buttonMask & ppl7::tk::MouseEvent::MouseButton::Left) {
+		if (drag_started) {
+			ppl7::grafix::Point delta=event->p - drag_start_pos;
+			printf("delta: %d:%d\n", delta.x, delta.y);
+			//printf("windowpos old: %d:%d, ", pos().x, pos().y);
+			drag_start_pos=event->p - delta;
+			ppl7::grafix::Point newpos=this->pos() + delta;
+			this->setPos(newpos);
+
+
+		}
+	}
+}
+
 
 void Dialog::dialogButtonEvent(Dialog::Buttons button)
 {

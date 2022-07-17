@@ -26,11 +26,17 @@ public:
 private:
 	ppl7::String WindowTitle;
 	ppl7::grafix::Image WindowIcon;
+	ppl7::grafix::Image widget_drawable;
 	ppl7::grafix::Color	myBackground;
 	ppl7::tk::Button* ok_button;
 	ppl7::tk::Button* copy_button;
 	ppl7::tk::Button* paste_button;
 	ppl7::grafix::Point move_start;
+	ppl7::tk::Frame* client_frame;
+
+	bool drag_started;
+	int drag_offset;
+	ppl7::grafix::Point drag_start_pos;
 
 public:
 	Dialog(int width, int height, int buttons=Buttons::OK);
@@ -45,6 +51,10 @@ public:
 	virtual void paint(ppl7::grafix::Drawable& draw);
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 	virtual void dialogButtonEvent(Dialog::Buttons button);
+
+	virtual void mouseUpEvent(ppl7::tk::MouseEvent* event);
+	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
+	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
 };
 
 

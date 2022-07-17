@@ -312,6 +312,7 @@ void LevelDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
     } else if (w == delete_soundtrack_button) {
         soundtrack_list->remove(soundtrack_list->currentIdentifier());
     }
+    Dialog::mouseDownEvent(event);
 }
 
 void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
