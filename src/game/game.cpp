@@ -205,8 +205,8 @@ void Game::showUi(bool enable)
 	const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
 	if (showui) {
-		viewport.y1=33;
-		viewport.y2=desktop.height - 33;
+		viewport.y1=32;
+		viewport.y2=desktop.height - 32;
 		world_widget->setViewport(viewport);
 		mainmenue->setVisible(true);
 		statusbar->setVisible(true);
