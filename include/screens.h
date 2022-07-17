@@ -116,7 +116,7 @@ public:
     virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
 
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+    virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
 
 };

@@ -262,7 +262,7 @@ private:
 public:
 	RainEmitterDialog(RainEmitter* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
+	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
@@ -301,14 +301,14 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size:"));
 	emitter_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	emitter_width->setEventHandler(this);
-	emitter_width->setDimension(1, 32);
+	emitter_width->setLimits(1, 32);
 	addChild(emitter_width);
 	y+=35;
 
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Max birth per cycle:"));
 	max_birth=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	max_birth->setEventHandler(this);
-	max_birth->setDimension(1, 32);
+	max_birth->setLimits(1, 32);
 	addChild(max_birth);
 	y+=35;
 
@@ -317,12 +317,12 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	birth_time_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
-	birth_time_min->setDimension(10, 2000);
+	birth_time_min->setLimits(10, 2000);
 	addChild(birth_time_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	birth_time_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	birth_time_max->setEventHandler(this);
-	birth_time_max->setDimension(10, 2000);
+	birth_time_max->setLimits(10, 2000);
 	addChild(birth_time_max);
 	y+=35;
 
@@ -332,12 +332,12 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	min_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity_y->setEventHandler(this);
-	min_velocity_y->setDimension(10, 10000);
+	min_velocity_y->setLimits(10, 10000);
 	addChild(min_velocity_y);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity_y->setEventHandler(this);
-	max_velocity_y->setDimension(10, 10000);
+	max_velocity_y->setLimits(10, 10000);
 	addChild(max_velocity_y);
 	y+=35;
 
@@ -345,7 +345,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "max:"));
 	max_velocity_x=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	max_velocity_x->setEventHandler(this);
-	max_velocity_x->setDimension(10, 5000);
+	max_velocity_x->setLimits(10, 5000);
 	addChild(max_velocity_x);
 	y+=35;
 
@@ -355,12 +355,12 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	scale_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	scale_min->setEventHandler(this);
-	scale_min->setDimension(10, 2000);
+	scale_min->setLimits(10, 2000);
 	addChild(scale_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	scale_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
-	scale_max->setDimension(10, 2000);
+	scale_max->setLimits(10, 2000);
 	addChild(scale_max);
 	y+=35;
 
@@ -370,12 +370,12 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	age_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	age_min->setEventHandler(this);
-	age_min->setDimension(10, 20000);
+	age_min->setLimits(10, 20000);
 	addChild(age_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	age_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	age_max->setEventHandler(this);
-	age_max->setDimension(10, 20000);
+	age_max->setLimits(10, 20000);
 	addChild(age_max);
 	y+=35;
 
@@ -433,10 +433,12 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void RainEmitterDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 {
-
+	printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
+	//ppl7::tk::Widget* widget=event->widget();
 }
+
 
 static RainEmitter clipboard;
 

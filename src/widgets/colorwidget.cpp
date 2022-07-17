@@ -51,7 +51,7 @@ void ColorSliderWidget::setupUi()
     color_red->setEventHandler(this);
     addChild(color_red);
     slider_red=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
-    slider_red->setDimension(0, 255);
+    slider_red->setLimits(0, 255);
     slider_red->setEventHandler(this);
     addChild(slider_red);
     y1+=35;
@@ -63,7 +63,7 @@ void ColorSliderWidget::setupUi()
     color_green->setEventHandler(this);
     addChild(color_green);
     slider_green=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
-    slider_green->setDimension(0, 255);
+    slider_green->setLimits(0, 255);
     slider_green->setEventHandler(this);
     addChild(slider_green);
     y1+=35;
@@ -75,7 +75,7 @@ void ColorSliderWidget::setupUi()
     color_blue->setEventHandler(this);
     addChild(color_blue);
     slider_blue=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
-    slider_blue->setDimension(0, 255);
+    slider_blue->setLimits(0, 255);
     slider_blue->setEventHandler(this);
     addChild(slider_blue);
     y1+=35;
@@ -88,7 +88,7 @@ void ColorSliderWidget::setupUi()
         color_alpha->setEventHandler(this);
         addChild(color_alpha);
         slider_alpha=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
-        slider_alpha->setDimension(0, 255);
+        slider_alpha->setLimits(0, 255);
         slider_alpha->setEventHandler(this);
         addChild(slider_alpha);
         y1+=35;
@@ -99,6 +99,7 @@ void ColorSliderWidget::setColor(const ppl7::grafix::Color& color)
 {
     // we need a copy
     ppl7::grafix::Color c=color;
+    //printf("setting Color to %d,%d,%d,%d\n", c.red(), c.green(), c.blue(), c.alpha());
     color_red->setValue(c.red());
     color_green->setValue(c.green());
     color_blue->setValue(c.blue());
@@ -141,7 +142,7 @@ void ColorSliderWidget::paint(ppl7::grafix::Drawable& draw)
 }
 
 
-void ColorSliderWidget::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ColorSliderWidget::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
     ppl7::tk::Widget* widget=event->widget();
     if (widget == slider_red) {
@@ -156,14 +157,7 @@ void ColorSliderWidget::valueChangedEvent(ppl7::tk::Event* event, int value)
     } else if (widget == slider_alpha) {
         if (color_alpha && color_alpha->value() != slider_alpha->value()) color_alpha->setValue(slider_alpha->value());
         updateColorPreview();
-    }
-}
-
-
-void ColorSliderWidget::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
-{
-    ppl7::tk::Widget* widget=event->widget();
-    if (widget == color_red) {
+    } else if (widget == color_red) {
         if (slider_red && slider_red->value() != color_red->value()) slider_red->setValue(color_red->value());
         updateColorPreview();
     } else if (widget == color_green) {

@@ -126,8 +126,7 @@ public:
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 
 };

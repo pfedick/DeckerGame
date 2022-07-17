@@ -237,6 +237,7 @@ public:
 	void paint(ppl7::grafix::Drawable& draw) override;
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 };
 
@@ -529,7 +530,7 @@ public:
 	ppl7::String widgetType() const override;
 	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
 	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
-	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
 };

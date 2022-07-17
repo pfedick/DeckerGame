@@ -146,21 +146,21 @@ ColorSelectionFrame::ColorSelectionFrame(int x, int y, int width, int height, Co
 	addChild(new ppl7::tk::Label(0, y1, 50, 25, "red:"));
 	slider_red=new ppl7::tk::HorizontalSlider(50, y1, client.width() - 50, 25);
 	slider_red->setEventHandler(this);
-	slider_red->setDimension(0, 255);
+	slider_red->setLimits(0, 255);
 	addChild(slider_red);
 	y1+=25;
 
 	addChild(new ppl7::tk::Label(0, y1, 50, 25, "green:"));
 	slider_green=new ppl7::tk::HorizontalSlider(50, y1, client.width() - 50, 25);
 	slider_green->setEventHandler(this);
-	slider_green->setDimension(0, 255);
+	slider_green->setLimits(0, 255);
 	addChild(slider_green);
 	y1+=25;
 
 	addChild(new ppl7::tk::Label(0, y1, 50, 25, "blue:"));
 	slider_blue=new ppl7::tk::HorizontalSlider(50, y1, client.width() - 50, 25);
 	slider_blue->setEventHandler(this);
-	slider_blue->setDimension(0, 255);
+	slider_blue->setLimits(0, 255);
 	addChild(slider_blue);
 	y1+=30;
 
@@ -230,24 +230,6 @@ void ColorSelectionFrame::textChangedEvent(ppl7::tk::Event* event, const ppl7::S
 			palette.setName(color_palette->colorIndex(), text.trimmed());
 		}
 
-	} else if (w == color_red) {
-		if (slider_red) slider_red->setValue(color_red->value());
-		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
-		c.setRed(color_red->value());
-		palette.setColor(color_palette->colorIndex(), c);
-		sendEventValueChanged();
-	} else if (w == color_green) {
-		if (slider_green) slider_green->setValue(color_green->value());
-		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
-		c.setGreen(color_green->value());
-		palette.setColor(color_palette->colorIndex(), c);
-		sendEventValueChanged();
-	} else if (w == color_blue) {
-		if (slider_blue) slider_blue->setValue(color_blue->value());
-		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
-		c.setBlue(color_blue->value());
-		palette.setColor(color_palette->colorIndex(), c);
-		sendEventValueChanged();
 	}
 	//printf("ColorSelectionFrame::textChangedEvent\n");
 
@@ -275,7 +257,12 @@ void ColorSelectionFrame::valueChangedEvent(ppl7::tk::Event* event, int value)
 		if (color_green) color_green->setValue(item.color.green());
 		if (color_blue) color_blue->setValue(item.color.blue());
 		sendEventValueChanged();
-	} else if (w == slider_red) {
+	}
+}
+void ColorSelectionFrame::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+{
+	ppl7::tk::Widget* w=event->widget();
+	if (w == slider_red) {
 		if (color_red) color_red->setValue(slider_red->value());
 		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
 		c.setRed(slider_red->value());
@@ -295,6 +282,24 @@ void ColorSelectionFrame::valueChangedEvent(ppl7::tk::Event* event, int value)
 		c.setBlue(slider_blue->value());
 		palette.setColor(color_palette->colorIndex(), c);
 		color_palette->needsRedraw();
+		sendEventValueChanged();
+	} else if (w == color_red) {
+		if (slider_red) slider_red->setValue(color_red->value());
+		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
+		c.setRed(color_red->value());
+		palette.setColor(color_palette->colorIndex(), c);
+		sendEventValueChanged();
+	} else if (w == color_green) {
+		if (slider_green) slider_green->setValue(color_green->value());
+		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
+		c.setGreen(color_green->value());
+		palette.setColor(color_palette->colorIndex(), c);
+		sendEventValueChanged();
+	} else if (w == color_blue) {
+		if (slider_blue) slider_blue->setValue(color_blue->value());
+		ppl7::grafix::Color c=palette.getColor(color_palette->colorIndex());
+		c.setBlue(color_blue->value());
+		palette.setColor(color_palette->colorIndex(), c);
 		sendEventValueChanged();
 	}
 }

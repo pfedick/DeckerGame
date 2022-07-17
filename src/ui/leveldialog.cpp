@@ -108,7 +108,7 @@ void LevelDialog::setupUi()
         color_red->setEventHandler(this);
         level_background_frame->addChild(color_red);
         slider_red=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
-        slider_red->setDimension(0, 255);
+        slider_red->setLimits(0, 255);
         slider_red->setEventHandler(this);
         level_background_frame->addChild(slider_red);
         y1+=35;
@@ -120,7 +120,7 @@ void LevelDialog::setupUi()
         color_green->setEventHandler(this);
         level_background_frame->addChild(color_green);
         slider_green=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
-        slider_green->setDimension(0, 255);
+        slider_green->setLimits(0, 255);
         slider_green->setEventHandler(this);
         level_background_frame->addChild(slider_green);
         y1+=35;
@@ -132,7 +132,7 @@ void LevelDialog::setupUi()
         color_blue->setEventHandler(this);
         level_background_frame->addChild(color_blue);
         slider_blue=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
-        slider_blue->setDimension(0, 255);
+        slider_blue->setLimits(0, 255);
         slider_blue->setEventHandler(this);
         level_background_frame->addChild(slider_blue);
         y1+=35;
@@ -314,7 +314,7 @@ void LevelDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
     }
 }
 
-void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
     ppl7::tk::Widget* widget=event->widget();
 
@@ -326,6 +326,15 @@ void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
         updateColorPreview();
     } else if (widget == slider_blue) {
         if (color_blue && color_blue->value() != slider_blue->value()) color_blue->setValue(slider_blue->value());
+        updateColorPreview();
+    } else if (widget == color_red) {
+        if (slider_red && slider_red->value() != color_red->value()) slider_red->setValue(color_red->value());
+        updateColorPreview();
+    } else if (widget == color_green) {
+        if (slider_green && slider_green->value() != color_green->value()) slider_green->setValue(color_green->value());
+        updateColorPreview();
+    } else if (widget == color_blue) {
+        if (slider_blue && slider_blue->value() != color_blue->value()) slider_blue->setValue(color_blue->value());
         updateColorPreview();
     }
 
@@ -342,16 +351,7 @@ void LevelDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& t
             ));
         }
     }
-    if (widget == color_red) {
-        if (slider_red && slider_red->value() != color_red->value()) slider_red->setValue(color_red->value());
-        updateColorPreview();
-    } else if (widget == color_green) {
-        if (slider_green && slider_green->value() != color_green->value()) slider_green->setValue(color_green->value());
-        updateColorPreview();
-    } else if (widget == color_blue) {
-        if (slider_blue && slider_blue->value() != color_blue->value()) slider_blue->setValue(color_blue->value());
-        updateColorPreview();
-    }
+
 
 }
 

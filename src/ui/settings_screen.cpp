@@ -177,7 +177,7 @@ void SettingsScreen::initPageAudio()
 
     audio_total_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 100, input_widget.width, input_widget.height);
     audio_total_slider->setEventHandler(this);
-    audio_total_slider->setDimension(0, 255);
+    audio_total_slider->setLimits(0, 255);
     audio_total_slider->setValue(game.config.volumeTotal * 255.0f);
     page_audio->addChild(audio_total_slider);
 
@@ -189,7 +189,7 @@ void SettingsScreen::initPageAudio()
 
     audio_music_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
     audio_music_slider->setEventHandler(this);
-    audio_music_slider->setDimension(0, 255);
+    audio_music_slider->setLimits(0, 255);
     audio_music_slider->setValue(game.config.volumeMusic * 255.0f * 2.0f);
     page_audio->addChild(audio_music_slider);
 
@@ -199,7 +199,7 @@ void SettingsScreen::initPageAudio()
 
     audio_effects_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 200, input_widget.width, input_widget.height);
     audio_effects_slider->setEventHandler(this);
-    audio_effects_slider->setDimension(0, 255);
+    audio_effects_slider->setLimits(0, 255);
     audio_effects_slider->setValue(game.config.volumeEffects * 255.0f);
     page_audio->addChild(audio_effects_slider);
 
@@ -412,7 +412,7 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 }
 
 
-void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
+void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
     if (event->widget() == video_device_combobox) updateVideoModes();
     else if (event->widget() == audio_total_slider) {
