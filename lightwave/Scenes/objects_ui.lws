@@ -3,14 +3,14 @@ LWSC
 
 RenderRangeType 0
 FirstFrame 40
-LastFrame 45
+LastFrame 46
 FrameStep 1
 RenderRangeObject 0
 RenderRangeArbitrary 0-18
 PreviewFirstFrame 0
 PreviewLastFrame 220
 PreviewFrameStep 1
-CurrentFrame 45
+CurrentFrame 46
 FramesPerSecond 30
 AutoKeyFixedFrame 0
 ChangeScene 0
@@ -1417,7 +1417,7 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.3490658503988658401
+          0.34906585039886589561
         }
       }
       { Attr
@@ -1674,7 +1674,7 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.3490658503988658401
+          0.34906585039886589561
         }
       }
       { Attr
@@ -4786,6 +4786,7 @@ LoadObjectLayer 1 10000001 Objects/objects/disc.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 8.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -5100,6 +5101,7 @@ LoadObjectLayer 1 10000002 Objects/objects/medikit.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 9.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -5414,6 +5416,7 @@ LoadObjectLayer 1 10000003 Objects/objects/coin-10-gold.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 10.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -5728,6 +5731,7 @@ LoadObjectLayer 1 10000005 Objects/objects/floater1.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 11.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -6051,6 +6055,7 @@ LoadObjectLayer 1 10000006 Objects/objects/floater2.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 12.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -6374,6 +6379,7 @@ LoadObjectLayer 1 10000007 Objects/enemies/3speers_out_of_studs.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 13.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -6697,6 +6703,7 @@ LoadObjectLayer 2 10000008 Objects/enemies/3speers_out_of_studs.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 14.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -6994,6 +7001,7 @@ LoadObjectLayer 1 10000009 Objects/skeleton_v2_rig.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 15.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -7012,7 +7020,7 @@ Channel 1
   6
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.56666666666666654084 0 0 0 0 18.893988888581382923 0.00029999998191164602536 0
-  Key 0.0053999996744096279144 0.5999999999999999778 0 0 0 0 0.0053975008314321119146 0 0
+  Key 0.0053999996744096279144 0.5999999999999999778 0 0 0 0 0.005397500831432112782 0 0
   Key -20 0.63333333333333319271 0 0 0 0 -19.840066115379581646 0 0
   Key 0 0.66666666666666651864 0 0 0 0 19.834710743801647226 0 0
   Key -20 0.69999999999999995559 0 0 0 0 -19.83738842912880429 0 0
@@ -7037,7 +7045,7 @@ Channel 3
   Key -1.6406090259551999733 0.5999999999999999778 0 0 0 0 -1.6398498362162112763 0 0
   Key -1.6406090259551999733 0.63333333333333319271 0 0 0 0 0 0 0
   Key 0 0.66666666666666651864 0 0 0 0 -2.2020952554548557625e-16 0 0
-  Key -1.6406090259551999733 0.69999999999999995559 0 0 0 0 -1.6270502736745786621 0 0
+  Key -1.6406090259551999733 0.69999999999999995559 0 0 0 0 -1.62705027367457844 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -7348,6 +7356,7 @@ ChangeObject 0
 ShowObject 7 7
 Group 0
 ItemLock 1
+SchematicPosition 16.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -7539,6 +7548,7 @@ AddBone 4000000a
 BoneName George: Hip
 // WeightBody
 ShowBone 1 3
+SchematicPosition 16.500000 -0.750000
 BoneActive 1
 BoneRestPosition 0 0.0116 0.0006
 BoneRestDirection 180 -86.13752 180
@@ -7629,6 +7639,7 @@ AddBone 4001000a
 BoneName George: Leg right
 // WeightLegRight
 ShowBone 1 3
+SchematicPosition 16.500000 -1.250000
 BoneActive 1
 BoneRestPosition 0 0.0116 0.0006
 BoneRestDirection -89.8982 0.08766872 90.00015
@@ -7719,6 +7730,7 @@ AddBone 4002000a
 BoneName George: Leg left
 // WeightLegLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -1.750000
 BoneActive 1
 BoneRestPosition 0 0.0116 0.0006
 BoneRestDirection 89.8982 -0.02687053 -89.99995
@@ -7809,6 +7821,7 @@ AddBone 4003000a
 BoneName George: Lower Leg right
 // WeightLegRight
 ShowBone 1 3
+SchematicPosition 16.500000 -2.250000
 BoneActive 1
 BoneRestPosition 1.029051e-10 -1.839927e-13 0.004149991
 BoneRestDirection -0.05725632 -4.662702 -6.253225e-09
@@ -7898,6 +7911,7 @@ AddBone 4004000a
 BoneName George: Upper Leg right
 // WeightLegRight
 ShowBone 1 3
+SchematicPosition 16.500000 -2.750000
 BoneActive 1
 BoneRestPosition -9.094947e-13 2.419256e-10 0.004007449
 BoneRestDirection -89.91233 -0.000155273 0.1018056
@@ -7987,6 +8001,7 @@ AddBone 4005000a
 BoneName George: Lower Leg left
 // WeightLegLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -3.250000
 BoneActive 1
 BoneRestPosition -3.215179e-10 -5.713768e-13 0.004149989
 BoneRestDirection 0.05719174 -4.657712 7.503872e-09
@@ -8014,7 +8029,7 @@ Channel 1
 Channel 2
 { Envelope
   1
-  Key 0.0041499887593090525537 0 0 0 0 0 0 0 0
+  Key 0.004149988759309053421 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -8076,6 +8091,7 @@ AddBone 4006000a
 BoneName George: Upper Leg left
 // WeightLegLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -3.750000
 BoneActive 1
 BoneRestPosition -1.136868e-13 2.396519e-10 0.004007445
 BoneRestDirection 90.02687 3.597217e-05 -0.1018058
@@ -8166,6 +8182,7 @@ AddBone 4007000a
 BoneName George: Shoulder right
 // WeightBody
 ShowBone 1 3
+SchematicPosition 16.500000 -4.250000
 BoneActive 1
 BoneRestPosition -1.091394e-11 -2.930989e-11 0.004953601
 BoneRestDirection -85.50482 -0.8527271 2.723316
@@ -8255,6 +8272,7 @@ AddBone 4008000a
 BoneName George: Shoulder left
 // WeightBody
 ShowBone 1 3
+SchematicPosition 16.500000 -4.750000
 BoneActive 1
 BoneRestPosition -1.091394e-11 -2.930989e-11 0.004953601
 BoneRestDirection 86.50864 -0.6815248 -2.726593
@@ -8344,6 +8362,7 @@ AddBone 4009000a
 BoneName George: Neck
 // WeightBody
 ShowBone 1 3
+SchematicPosition 16.500000 -5.250000
 BoneActive 1
 BoneRestPosition -1.091394e-11 -2.930989e-11 0.004953601
 BoneRestDirection 1.239641 -5.825324 -0.05915872
@@ -8433,6 +8452,7 @@ AddBone 400a000a
 BoneName George: Head
 // WeightHead
 ShowBone 1 3
+SchematicPosition 16.500000 -5.750000
 BoneActive 1
 BoneRestPosition 1.818989e-11 2.891909e-11 0.004373215
 BoneRestDirection -0.6570045 3.094202 -0.03546519
@@ -8466,7 +8486,7 @@ Channel 2
 Channel 3
 { Envelope
   1
-  Key -0.01146689243614673788 0 0 0 0 0 0 0 0
+  Key -0.011466892436146736145 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -8523,6 +8543,7 @@ AddBone 400b000a
 BoneName George: Arm right
 // WeightArmRight
 ShowBone 1 3
+SchematicPosition 16.500000 -6.250000
 BoneActive 1
 BoneRestPosition -4.074536e-10 2.182787e-11 0.008438602
 BoneRestDirection -90.03343 34.50583 -0.7739024
@@ -8622,6 +8643,7 @@ AddBone 400c000a
 BoneName George: Elbow right
 // WeightArmRight
 ShowBone 1 3
+SchematicPosition 16.500000 -6.750000
 BoneActive 1
 BoneRestPosition 6.984919e-10 -3.992682e-10 0.003965975
 BoneRestDirection 6.831016 -42.14962 -3.899569
@@ -8711,6 +8733,7 @@ AddBone 400d000a
 BoneName George: Hand right
 // WeightHandRight
 ShowBone 1 3
+SchematicPosition 16.500000 -7.250000
 BoneActive 1
 BoneRestPosition 0 4.129106e-10 0.004231479
 BoneRestDirection 0.5948213 -4.123267 0.08270225
@@ -8800,6 +8823,7 @@ AddBone 400e000a
 BoneName George: Arm left
 // WeightArmLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -7.750000
 BoneActive 1
 BoneRestPosition 1.164153e-10 1.455192e-11 0.008660067
 BoneRestDirection 90.10971 28.35575 0.5846139
@@ -8899,6 +8923,7 @@ AddBone 400f000a
 BoneName George: Elbow left
 // WeightArmLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -8.250000
 BoneActive 1
 BoneRestPosition 5.238689e-10 4.220055e-10 0.004253707
 BoneRestDirection -6.048346 -35.61634 2.892484
@@ -8988,6 +9013,7 @@ AddBone 4010000a
 BoneName George: Hand left
 // WeightHandLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -8.750000
 BoneActive 1
 BoneRestPosition -1.164153e-10 1.164153e-10 0.003788495
 BoneRestDirection -0.9293732 -3.106765 -0.1214825
@@ -9077,6 +9103,7 @@ AddBone 4011000a
 BoneName George: HandRotator right
 // WeightHandLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -9.250000
 BoneActive 1
 BoneRestPosition -1.164153e-10 -1.564331e-10 0.00372253
 BoneRestDirection -0.08219363 -9.059489 86.37235
@@ -9166,6 +9193,7 @@ AddBone 4012000a
 BoneName George: HandRotator left
 // WeightHandLeft
 ShowBone 1 3
+SchematicPosition 16.500000 -9.750000
 BoneActive 1
 BoneRestPosition -1.164153e-10 -1.091394e-11 0.003689387
 BoneRestDirection 0.2157073 -9.427067 93.45811
@@ -9255,6 +9283,7 @@ AddBone 4013000a
 BoneName George: Spine
 // WeightBody
 ShowBone 1 3
+SchematicPosition 16.500000 -10.250000
 BoneActive 1
 BoneRestPosition 5.245379e-11 -8.149073e-10 0.00890712
 BoneRestDirection -0.5821847 6.593839 -0.0392574
@@ -9470,6 +9499,7 @@ LoadObjectLayer 2 1000000b Objects/george.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 17.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -9811,6 +9841,7 @@ LoadObjectLayer 1 1000000c Objects/misc/StartSign.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 18.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -10125,6 +10156,7 @@ LoadObjectLayer 1 1000000d Objects/mummy.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 19.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -10439,6 +10471,7 @@ LoadObjectLayer 1 1000000e Objects/objects/doorframe.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 20.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -10753,6 +10786,7 @@ LoadObjectLayer 1 1000000f Objects/objects/door_with_windows.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 21.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -11067,6 +11101,7 @@ LoadObjectLayer 1 10000010 Objects/objects/grill.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 22.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -11381,6 +11416,7 @@ LoadObjectLayer 1 10000011 Objects/objects/grill.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 23.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -11695,6 +11731,7 @@ LoadObjectLayer 1 10000012 Objects/objects/grill.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 24.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -12009,6 +12046,7 @@ LoadObjectLayer 1 10000013 Objects/objects/grill.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 25.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -12323,6 +12361,7 @@ LoadObjectLayer 1 10000014 Objects/misc/flame.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 26.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -12339,7 +12378,7 @@ Channel 1
   4
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.80000000000000004441 0 0 0 0 19.200863999929278947 3.5999997053295373375e-05 0
-  Key 0.00089999992633238413108 0.83333333333333325932 0 0 0 0 0.00089970002632360976391 0 0
+  Key 0.0008999999263323842395 0.83333333333333325932 0 0 0 0 0.00089970002632360976391 0 0
   Key -20 0.86666666666666691832 0 0 0 0 -19.835603305712062649 0 0
   Behaviors 1 1
 }
@@ -12637,6 +12676,7 @@ LoadObjectLayer 1 10000015 Objects/misc/laserbeam.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 27.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -12956,10 +12996,11 @@ NodeEdges 0
 Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
-LoadObjectLayer 1 10000016 Objects/misc/wind_emitter.lwo
+LoadObjectLayer 1 10000016 Objects/misc/rain_emitter.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 28.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -12980,8 +13021,8 @@ Channel 1
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.9000000000000000222 0 0 0 0 19.292367856167931706 0.00024642853531986480412 0
   Key 0.0068999989889562121301 0.93333333333333312609 0 0 0 0 0.0068979460288285847705 0 0
-  Key -20 0.966666666666666341 0 0 0 0 -19.84155371800556722 -18.339658332406553853 0
-  Key -20 1.3333333333333330373 0 0 0 0 18.351208321750156927 0 0
+  Key -20 0.966666666666666341 0 0 0 0 -19.84155371800556722 -18.339658332406557406 0
+  Key -20 1.3333333333333330373 0 0 0 0 18.351208321750160479 0 0
   Key 0.019499987363815307617 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.844429750334128926 0 0
   Behaviors 1 1
@@ -13030,7 +13071,7 @@ Channel 5
   Key 0 0.93333333333333312609 0 0 0 0 0 0 0
   Key 0 0.966666666666666341 0 0 0 0 0 0 0
   Key 0 1.3333333333333330373 0 0 0 0 2.879793345928188586 0 0
-  Key 3.141592741012572354 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0 1.3666666666666666963 0 0 0 0 0 0 0
   Key 0 1.3999999999999999112 0 0 0 0 -3.1156291646405680495 0 0
   Behaviors 1 1
 }
@@ -13042,7 +13083,7 @@ Channel 6
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 1.1351927717526750783 0 0
-  Key 2.2383921146392826707 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13054,7 +13095,7 @@ Channel 7
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 0 0 0
-  Key 1 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13066,7 +13107,7 @@ Channel 8
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 0 0 0
-  Key 1 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13301,6 +13342,7 @@ LoadObjectLayer 1 10000018 Objects/misc/wind_object.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 29.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -13309,7 +13351,7 @@ Channel 0
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.9000000000000000222 0 0 0 0 0.00038804317279885137048 0 0
   Key 0.00040241514216177165508 0.93333333333333312609 0 0 0 0 0 0 0
-  Key 0 0.966666666666666341 0 0 0 0 0 -0.00036888054698162425207 0
+  Key 0 0.966666666666666341 0 0 0 0 0 -0.00036888054698162430628 0
   Key 0 1.3333333333333330373 0 0 0 0 0 0 0
   Key 0 1.3666666666666666963 0 0 0 0 0 0 0
   Key 0 1.3999999999999999112 0 0 0 0 0 0 0
@@ -13319,10 +13361,10 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.298828567112124688 0.0004857141258461135239 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.298828567112124688 0.00048571412584611346969 0
   Key 0.013599995523691175633 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.345799995896719281 0
-  Key -20 1.3333333333333330373 0 0 0 0 18.344516663889695707 0 0
+  Key -20 1.3333333333333330373 0 0 0 0 18.344516663889692154 0 0
   Key 0.012199996970593927556 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.837190082820121972 0 0
   Behaviors 1 1
@@ -13661,11 +13703,11 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.307507141759362668 0.0004857141258461135239 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.307507141759362668 0.00048571412584611346969 0
   Key 0.02259999886155128479 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
-  Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.354049998956419643 0
-  Key -20 1.3333333333333330373 0 0 0 0 18.336921617854372357 0 0
-  Key 0.0039144922047853452501 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
+  Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.35404999895641609 0
+  Key -20 1.3333333333333330373 0 0 0 0 18.336921617854365252 0 0
+  Key 0.0039144922047853443828 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
   Behaviors 1 1
 }
@@ -14003,11 +14045,11 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.306542850498651376 0.0004857141258461135239 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.306542850498651376 0.00048571412584611346969 0
   Key 0.021599993109703063965 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.353133327017228993 0
-  Key -20 1.3333333333333330373 0 0 0 0 18.336921617854372357 0 0
-  Key 0.0039144922047853452501 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
+  Key -20 1.3333333333333330373 0 0 0 0 18.336921617854365252 0 0
+  Key 0.0039144922047853443828 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
   Behaviors 1 1
 }
@@ -14345,9 +14387,9 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.315124994942124204 0.0004857141258461135239 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.315124994942124204 0.00048571412584611346969 0
   Key 0.030499994754791259766 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
-  Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.361291661858562207 0
+  Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.361291661858558655 0
   Key -20 1.3333333333333330373 0 0 0 0 18.329116667426799125 0 0
   Key -0.0045999991707503812971 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
@@ -14383,8 +14425,8 @@ Channel 4
   Key -0.91555905342102061883 0 0 0 0 0 0 0 0
   Key -0.91555905342102061883 0.9000000000000000222 0 0 0 0 3.7792956488473081755 -0.033909259097916727432 0
   Key 3.003710508346556729 0.93333333333333312609 0 0 0 0 -0.94917676165784192754 0 0
-  Key -0.91555905342102061883 0.966666666666666341 0 0 0 0 0.033620034367584983315 -3.5926637649536132813 0
-  Key -0.91555905342102061883 1.3333333333333330373 0 0 0 0 -0.26238096753756173785 0 0
+  Key -0.91555905342102061883 0.966666666666666341 0 0 0 0 0.033620034367584983315 -3.5926637649536128372 0
+  Key -0.91555905342102061883 1.3333333333333330373 0 0 0 0 -0.26238096753756168233 0 0
   Key -1.2017928361892700195 1.3666666666666666963 0 0 0 0 0 0 0
   Key -0.91555905342102061883 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -14687,10 +14729,10 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.315317858941853046 0.0004857141258461135239 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.315317858941853046 0.00048571412584611346969 0
   Key 0.030700001865625395348 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.361475001710161337 0
-  Key -20 1.3333333333333330373 0 0 0 0 18.329483333897449882 0 0
+  Key -20 1.3333333333333330373 0 0 0 0 18.329483333897446329 0 0
   Key -0.0041999993845820426941 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
   Behaviors 1 1
@@ -14725,7 +14767,7 @@ Channel 4
   Key -0.91555905342102061883 0 0 0 0 0 0 0 0
   Key -0.91555905342102061883 0.9000000000000000222 0 0 0 0 -1.0206086550440109928 -0.033909259097916727432 0
   Key -1.9739680290222170189 0.93333333333333312609 0 0 0 0 -0.94917676165784192754 0 0
-  Key -0.91555905342102061883 0.966666666666666341 0 0 0 0 0.033620034367584983315 0.97020822763443026471 0
+  Key -0.91555905342102061883 0.966666666666666341 0 0 0 0 0.033620034367584983315 0.97020822763443015369 0
   Key -0.91555905342102061883 1.3333333333333330373 0 0 0 0 -2.3662297129631029158 0 0
   Key -3.4969005584716801316 1.3666666666666666963 0 0 0 0 0 0 0
   Key -0.91555905342102061883 1.3999999999999999112 0 0 0 0 0 0 0
@@ -15010,6 +15052,7 @@ LoadObjectLayer 1 10000023 Objects/misc/speaker.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 34.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -15324,6 +15367,7 @@ LoadObjectLayer 2 10000025 Objects/objects/vent.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 35.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -15638,6 +15682,7 @@ LoadObjectLayer 1 10000024 Objects/misc/touchemitter.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 36.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -15952,6 +15997,7 @@ LoadObjectLayer 1 10000026 Objects/enemies/mushroom.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 37.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -16265,6 +16311,7 @@ LoadObjectLayer 1 10000027 Objects/objects/chest_dark_brown.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 38.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -16578,6 +16625,7 @@ LoadObjectLayer 2 10000028 Objects/objects/chest_dark_brown.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 39.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -16865,6 +16913,7 @@ LoadObjectLayer 1 10000029 Objects/enemies/scarabeus_rig.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 40.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -16888,10 +16937,10 @@ Channel 1
 Channel 2
 { Envelope
   4
-  Key -7.450580596923828125e-09 0 0 0 0 0 0 0 0
-  Key -7.450580596923828125e-09 1.1000000000000000888 0 0 0 0 0 0 0
-  Key -7.450580596923828125e-09 1.1333333333333333037 0 0 0 0 0 0 0
-  Key -7.450580596923828125e-09 1.1666666666666669627 0 0 0 0 0 0 0
+  Key -7.4505805969238272978e-09 0 0 0 0 0 0 0 0
+  Key -7.4505805969238272978e-09 1.1000000000000000888 0 0 0 0 0 0 0
+  Key -7.4505805969238272978e-09 1.1333333333333333037 0 0 0 0 0 0 0
+  Key -7.4505805969238272978e-09 1.1666666666666669627 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -17054,6 +17103,7 @@ NumLimitedBones 4
 AddBone 40000029
 BoneName BackSpine
 ShowBone 1 3
+SchematicPosition 40.500000 -0.750000
 BoneActive 1
 BoneRestPosition 0.017 0.0085 0
 BoneRestDirection -90 -0.3292819 6.010468e-16
@@ -17142,6 +17192,7 @@ UseIKChainValues 1
 AddBone 40010029
 BoneName Bone02
 ShowBone 1 3
+SchematicPosition 40.500000 -1.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection 5.009258e-06 0.766645 -90
@@ -17230,6 +17281,7 @@ UseIKChainValues 1
 AddBone 40020029
 BoneName Head
 ShowBone 1 3
+SchematicPosition 40.500000 -1.750000
 BoneActive 1
 BoneRestPosition 7.275958e-12 1.864828e-16 0.01310038
 BoneRestDirection -1.739314 1.529053e-07 5.035425e-06
@@ -17328,6 +17380,7 @@ UseIKChainValues 1
 AddBone 40030029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -2.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection 42.91899 -2.683169 0.2245208
@@ -17416,6 +17469,7 @@ UseIKChainValues 1
 AddBone 40040029
 BoneName LegRight1
 ShowBone 1 3
+SchematicPosition 40.500000 -2.750000
 BoneActive 1
 BoneRestPosition -9.313226e-10 -8.731149e-11 0.01176095
 BoneRestDirection 2.072726 2.922377 0.1057198
@@ -17504,6 +17558,7 @@ UseIKChainValues 1
 AddBone 40050029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -3.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection -45.69475 1.206091 -0.2356772
@@ -17592,6 +17647,7 @@ UseIKChainValues 1
 AddBone 40060029
 BoneName LegLeft1
 ShowBone 1 3
+SchematicPosition 40.500000 -3.750000
 BoneActive 1
 BoneRestPosition -9.313226e-10 -5.09317e-11 0.01174053
 BoneRestDirection -1.95256 -0.9755174 0.0332556
@@ -17680,6 +17736,7 @@ UseIKChainValues 1
 AddBone 40070029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -4.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection -89.05065 0.960183 -0.3292824
@@ -17768,6 +17825,7 @@ UseIKChainValues 1
 AddBone 40080029
 BoneName LegLeft2
 ShowBone 1 3
+SchematicPosition 40.500000 -4.750000
 BoneActive 1
 BoneRestPosition -1.280569e-09 -2.910383e-11 0.01200333
 BoneRestDirection -0.9549801 -0.9545788 0.01591121
@@ -17856,6 +17914,7 @@ UseIKChainValues 1
 AddBone 40090029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -5.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection 90.00558 0.9710087 0.3293292
@@ -17944,6 +18003,7 @@ UseIKChainValues 1
 AddBone 400a0029
 BoneName LegRight2
 ShowBone 1 3
+SchematicPosition 40.500000 -5.750000
 BoneActive 1
 BoneRestPosition -1.248101e-09 1.455192e-11 0.01180169
 BoneRestDirection 0.6161423 -0.9709686 -0.01044139
@@ -18032,6 +18092,7 @@ UseIKChainValues 1
 AddBone 400b0029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -6.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection 136.9337 0.669286 0.2248759
@@ -18120,6 +18181,7 @@ UseIKChainValues 1
 AddBone 400c0029
 BoneName LegRight3
 ShowBone 1 3
+SchematicPosition 40.500000 -6.750000
 BoneActive 1
 BoneRestPosition 0 2.182787e-11 0.01259524
 BoneRestDirection -1.524434 -0.9095198 0.02420374
@@ -18208,6 +18270,7 @@ UseIKChainValues 1
 AddBone 400d0029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -7.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection -136.3051 0.6823895 -0.2275026
@@ -18296,6 +18359,7 @@ UseIKChainValues 1
 AddBone 400e0029
 BoneName LegLeft3
 ShowBone 1 3
+SchematicPosition 40.500000 -7.750000
 BoneActive 1
 BoneRestPosition -2.793968e-09 -2.182787e-11 0.0124499
 BoneRestDirection 0.8838489 -0.9203543 -0.01419801
@@ -18384,6 +18448,7 @@ UseIKChainValues 1
 AddBone 400f0029
 BoneName Bone01
 ShowBone 1 3
+SchematicPosition 40.500000 -8.250000
 BoneActive 1
 BoneRestPosition 1.521156e-09 0 0.01740029
 BoneRestDirection -6.963718e-06 -89.67073 1.197256e-05
@@ -18472,6 +18537,7 @@ UseIKChainValues 1
 AddBone 40100029
 BoneName WingLeft
 ShowBone 1 3
+SchematicPosition 40.500000 -8.750000
 BoneActive 1
 BoneRestPosition -1.734723e-16 -8.296221e-10 0.0136
 BoneRestDirection -141.0718 -70.70977 -40.5554
@@ -18560,6 +18626,7 @@ UseIKChainValues 1
 AddBone 40110029
 BoneName WingRight
 ShowBone 1 3
+SchematicPosition 40.500000 -9.250000
 BoneActive 1
 BoneRestPosition -1.734723e-16 -8.296221e-10 0.0136
 BoneRestDirection 138.5763 -69.91403 43.0227
@@ -18774,6 +18841,7 @@ LoadObjectLayer 1 1000002a Objects/objects/switch_yellow.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 41.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -19087,6 +19155,7 @@ LoadObjectLayer 2 1000002b Objects/objects/switch_yellow.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 42.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -19375,6 +19444,7 @@ LoadObjectLayer 1 1000002c Objects/enemies/stamper4a.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 43.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -19688,6 +19758,7 @@ LoadObjectLayer 1 1000002d Objects/minifigs/wallenstein.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 44.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -20001,6 +20072,7 @@ LoadObjectLayer 1 1000002e Objects/minifigs/helena.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 45.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -20314,6 +20386,7 @@ LoadObjectLayer 1 1000002f Objects/enemies/bat-black.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 46.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -20627,6 +20700,7 @@ LoadObjectLayer 1 10000030 Objects/misc/gold-figure.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 47.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -20940,6 +21014,7 @@ LoadObjectLayer 1 10000031 Objects/objects/apple.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 48.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -21253,6 +21328,7 @@ LoadObjectLayer 1 10000032 Objects/doors_windows/levelend.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 49.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -21566,6 +21642,7 @@ LoadObjectLayer 2 10000033 Objects/doors_windows/levelend.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 50.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
@@ -21879,13 +21956,14 @@ LoadObjectLayer 1 10000034 Objects/enemies/bird_without_stud_black.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 51.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.433333333333332904 0 0 0 0 0 0 0
+  Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21894,16 +21972,16 @@ Channel 1
 { Envelope
   4
   Key 0 0 0 0 0 0 0 -19.996124782018988242 0
-  Key -20 1.433333333333332904 0 0 0 0 0 0 0
+  Key -20 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
-  Key -20 1.5 0 0 0 0 -19.834710743801650779 0 0
+  Key -20 1.5 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.433333333333332904 0 0 0 0 0 0 0
+  Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21912,7 +21990,7 @@ Channel 3
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.433333333333332904 0 0 0 0 0 0 0
+  Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21921,7 +21999,7 @@ Channel 4
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.433333333333332904 0 0 0 0 0 0 0
+  Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21930,7 +22008,7 @@ Channel 5
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.433333333333332904 0 0 0 0 0 0 0
+  Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21939,7 +22017,7 @@ Channel 6
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.433333333333332904 0 0 0 0 0 0 0
+  Key 1 1.433333333333332682 0 0 0 0 0 0 0
   Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21948,7 +22026,7 @@ Channel 7
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.433333333333332904 0 0 0 0 0 0 0
+  Key 1 1.433333333333332682 0 0 0 0 0 0 0
   Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -21957,7 +22035,7 @@ Channel 8
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.433333333333332904 0 0 0 0 0 0 0
+  Key 1 1.433333333333332682 0 0 0 0 0 0 0
   Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22192,13 +22270,14 @@ LoadObjectLayer 1 10000035 Objects/objects/cherry.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
+SchematicPosition 52.500000 -0.250000
 ObjectMotion
 NumChannels 9
 Channel 0
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.466666666666666563 0 0 0 0 0 0 0
+  Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22207,16 +22286,16 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 1.466666666666666563 0 0 0 0 19.565137778802050406 0.00021777780105670292992 0
-  Key 0.0098000010475516319275 1.5 0 0 0 0 0.009798186568557454984 0 0
-  Key -20 1.533333333333333437 0 0 0 0 -19.844429753105011116 0 0
+  Key -20 1.466666666666666341 0 0 0 0 19.565137778802046853 0.00021777780105670290281 0
+  Key 0.0098000010475516336622 1.5 0 0 0 0 0.009798186568557454984 0 0
+  Key -20 1.533333333333333437 0 0 0 0 -19.844429753105007563 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.466666666666666563 0 0 0 0 0 0 0
+  Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22225,7 +22304,7 @@ Channel 3
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.466666666666666563 0 0 0 0 0 0 0
+  Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22234,7 +22313,7 @@ Channel 4
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.466666666666666563 0 0 0 0 0 0 0
+  Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22243,7 +22322,7 @@ Channel 5
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 1.466666666666666563 0 0 0 0 0 0 0
+  Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22252,7 +22331,7 @@ Channel 6
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.466666666666666563 0 0 0 0 0 0 0
+  Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22261,7 +22340,7 @@ Channel 7
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.466666666666666563 0 0 0 0 0 0 0
+  Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -22270,9 +22349,323 @@ Channel 8
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 1.466666666666666563 0 0 0 0 0 0 0
+  Key 1 1.466666666666666341 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000036 Objects/misc/particle_emitter_ui.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+SchematicPosition 53.500000 -0.250000
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 -19.996296982040362877 0
+  Key -20 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key -20 1.5666666666666666519 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 IKInitCustomFrame 0
@@ -22850,6 +23243,7 @@ EndPlugin
 AddLight 20000002
 LightName crystal
 ShowLight 1 6
+SchematicPosition 1.500000 0.250000
 LightMotion
 NumChannels 9
 Channel 0
@@ -23045,6 +23439,7 @@ EndPlugin
 AddLight 20000003
 LightName ExtraLife
 ShowLight 1 6
+SchematicPosition 2.500000 0.250000
 LightMotion
 NumChannels 9
 Channel 0
@@ -23053,7 +23448,7 @@ Channel 0
   Key -0.027539456263184547424 0 0 0 0 0 0 0 0
   Key -0.027539456263184547424 1.2666666666666663854 0 0 0 0 0 0 0
   Key -0.027539456263184547424 1.3000000000000000444 0 0 0 0 -0.027539320103824135866 -0.00070613641291856783094 0
-  Key -0.028245456516742692421 1.3333333333333330373 0 0 0 0 -0.028239573272310979773 0 0
+  Key -0.028245456516742685482 1.3333333333333330373 0 0 0 0 -0.028239573272310979773 0 0
   Key -0.027539456263184547424 1.3666666666666666963 0 0 0 0 0.00070016554071883536393 0 0
   Key -0.027539456263184547424 1.3999999999999999112 0 0 0 0 0 0 0
   Key -0.03100373782217502594 1.433333333333332682 0 0 0 0 0 0 0
@@ -23391,7 +23786,7 @@ CameraMotion
 NumChannels 6
 Channel 0
 { Envelope
-  46
+  47
   Key 0.0002400376833975315365 0 0 0 0 0 0 0 0
   Key 0.0002400376833975315365 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0.0002400376833975315365 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23410,7 +23805,7 @@ Channel 0
   Key -0.00025996327167376875877 0.5 0 0 0 0 0 0 0
   Key -0.00025996327167376875877 0.53333333333333321491 0 0 0 0 0 0 0
   Key -0.0005915444344282152437 0.56666666666666654084 0 0 0 0 9.951913875550771481e-05 0 0
-  Key -0.0005915444344282152437 0.5999999999999999778 0 0 0 0 1.0752418239525662903e-19 0 0
+  Key -0.0005915444344282152437 0.5999999999999999778 0 0 0 0 1.075241823952566531e-19 0 0
   Key 0.00040845019975677127185 0.63333333333333319271 0 0 0 0 0 0 0
   Key 0.00040845019975677127185 0.66666666666666651864 0 0 0 0 0 0 0
   Key 0.00040845019975677127185 0.69999999999999995559 0 0 0 0 0 0 0
@@ -23434,15 +23829,16 @@ Channel 0
   Key -0.0092978626489639264879 1.3000000000000000444 0 0 0 0 0 0 0
   Key -0.0064709340222179889679 1.3333333333333330373 0 0 0 0 -1.7203869183241064497e-18 0 0
   Key -0.015109692700207231694 1.3666666666666666963 0 0 0 0 -4.3943339635517968047e-05 0 0
-  Key -0.011875843629240989685 1.3999999999999999112 0 0 0 0 0 0 0
+  Key -0.01187584362924098795 1.3999999999999999112 0 0 0 0 0 0 0
   Key -0.038804385811090483238 1.433333333333332682 0 0 0 0 6.842311502488193154e-05 0 0
   Key -0.00690280180424451828 1.466666666666666341 0 0 0 0 0.028996227447651640868 0 0
-  Key -0.00043783272849395871162 1.5 0 0 0 0 8.2041975880457358446e-05 0 0
+  Key -0.00043783272849395871162 1.5 0 0 0 0 8.2041975880457344893e-05 0 0
+  Key -0.00032231933437287807465 1.533333333333333437 0 0 0 0 -1.0385305028070104193e-06 0 0
   Behaviors 1 1
 }
 Channel 1
 { Envelope
-  46
+  47
   Key 0.0093099856749176979065 0 0 0 0 0 0 0 0
   Key 0.0093099856749176979065 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0.012209982611238956451 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23477,7 +23873,7 @@ Channel 1
   Key 0.013210009783506391698 1.033333333333333437 0 0 0 0 1.7203869183241064497e-18 0 0
   Key 0.049910038709640495991 1.0666666666666664298 0 0 0 0 0 0 0
   Key 0.029610028490424159658 1.1000000000000000888 0 0 0 0 -9.9175232501069407205e-05 0 0
-  Key 0.034009993076324462891 1.1333333333333333037 0 0 0 0 -3.4407738366482128994e-18 0 0
+  Key 0.03400999307632446983 1.1333333333333333037 0 0 0 0 -3.4407738366482128994e-18 0 0
   Key 0.023609988391399383545 1.1666666666666669627 0 0 0 0 -6.8815476732964257987e-18 0 0
   Key 0.066409945487976074219 1.1999999999999999556 0 0 0 0 0 0 0
   Key 0.037609931081533432007 1.2333333333333327264 0 0 0 0 -9.9175232501069407205e-05 0 0
@@ -23485,15 +23881,16 @@ Channel 1
   Key 0.016609940677881240845 1.3000000000000000444 0 0 0 0 0 0 0
   Key 0.01450993027538061142 1.3333333333333330373 0 0 0 0 0.00029752015574904512813 0 0
   Key -0.0018900671275332570076 1.3666666666666666963 0 0 0 0 0 0 0
-  Key 0.021709930151700973511 1.3999999999999999112 0 0 0 0 0.00029752061756189204355 0 0
+  Key 0.021709930151700970041 1.3999999999999999112 0 0 0 0 0.00029752061756189204355 0 0
   Key 0.085909977555274963379 1.433333333333332682 0 0 0 0 0 0 0
-  Key 0.020209932699799534189 1.466666666666666341 0 0 0 0 -0.063669468499412240625 0 0
-  Key 0.013809935189783573151 1.5 0 0 0 0 3.4407738366482125142e-18 0 0
+  Key 0.02020993269979953072 1.466666666666666341 0 0 0 0 -0.063669468499412240625 0 0
+  Key 0.013809935189783573151 1.5 0 0 0 0 3.4407738366482128994e-18 0 0
+  Key 0.019409935921430587769 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
-  46
+  47
   Key -0.042899198830127716064 0 0 0 0 0 0 0 0
   Key -0.042899198830127716064 0.033333333333333325932 0 0 0 0 0 0 0
   Key -0.042899198830127716064 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23534,17 +23931,18 @@ Channel 2
   Key -0.073495626449584960938 1.2333333333333327264 0 0 0 0 0 0 0
   Key -0.073495626449584960938 1.2666666666666663854 0 0 0 0 0 0 0
   Key -0.042658764868974692608 1.3000000000000000444 0 0 0 0 0 0 0
-  Key -0.029764641076326370239 1.3333333333333330373 0 0 0 0 6.8815476732964257987e-18 0 0
+  Key -0.02976464107632636677 1.3333333333333330373 0 0 0 0 6.8815476732964257987e-18 0 0
   Key -0.059494584798812880089 1.3666666666666666963 0 0 0 0 -0.00019341830379706771302 0 0
   Key -0.037654008716344833374 1.3999999999999999112 0 0 0 0 0 0 0
   Key -0.1328172832727432251 1.433333333333332682 0 0 0 0 -0.00012242843296902242481 0 0
   Key -0.033280510455369942402 1.466666666666666341 0 0 0 0 0.093728726314119076291 0 0
   Key -0.023386871442198753357 1.5 0 0 0 0 -0.00011375374045254473074 0 0
+  Key -0.050382386893033981323 1.533333333333333437 0 0 0 0 -0.00019834492324797574803 0 0
   Behaviors 1 1
 }
 Channel 3
 { Envelope
-  46
+  47
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23587,15 +23985,16 @@ Channel 3
   Key 0.22340221703052517976 1.3000000000000000444 0 0 0 0 2.7526190693185703195e-17 0 0
   Key 0.22340221703052517976 1.3333333333333330373 0 0 0 0 2.7526190693185703195e-17 0 0
   Key 0.2513274848461151123 1.3666666666666666963 0 0 0 0 2.7526190693185703195e-17 0 0
-  Key 0.27576217055320739746 1.3999999999999999112 0 0 0 0 0 0 0
+  Key 0.27576217055320734195 1.3999999999999999112 0 0 0 0 0 0 0
   Key 0.27576217055320734195 1.433333333333332682 0 0 0 0 0 0 0
   Key 0.16057020425796508789 1.466666666666666341 0 0 0 0 5.505238138637140639e-17 0 0
   Key 0.0052359132096171379089 1.5 0 0 0 0 0 0 0
+  Key -0.0034907329827547073364 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
 { Envelope
-  46
+  47
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23640,13 +24039,14 @@ Channel 4
   Key -0.18849529325962063875 1.3666666666666666963 0 0 0 0 -2.7526190693185703195e-17 0 0
   Key 0.35081169009208679199 1.3999999999999999112 0 0 0 0 0 0 0
   Key 0.35081169009208679199 1.433333333333332682 0 0 0 0 0 0 0
-  Key 0.33335813879966730289 1.466666666666666341 0 0 0 0 0 0 0
-  Key 0.3054326474666595459 1.5 0 0 0 0 5.5052381386371400227e-17 0 0
+  Key 0.33335813879966724738 1.466666666666666341 0 0 0 0 0 0 0
+  Key 0.30543264746665960141 1.5 0 0 0 0 5.505238138637140639e-17 0 0
+  Key 0.22689285874366760254 1.533333333333333437 0 0 0 0 -5.5052381386371400227e-17 0 0
   Behaviors 1 1
 }
 Channel 5
 { Envelope
-  46
+  47
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23693,6 +24093,7 @@ Channel 5
   Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 IKInitCustomFrame 0
@@ -23866,7 +24267,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 53
+CurrentObject 54
 CurrentLight 3
 CurrentCamera 1
 GraphEditorData
