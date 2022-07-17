@@ -252,7 +252,7 @@ ppl7::String ObjectSelection::widgetType() const
 
 void ObjectSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-	printf("ObjectSelection::valueChangedEvent\n");
+	//printf("ObjectSelection::valueChangedEvent\n");
 	game->setSpriteModeToDraw();
 }
 void ObjectSelection::mouseDownEvent(ppl7::tk::MouseEvent* event)

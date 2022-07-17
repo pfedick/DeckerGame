@@ -133,7 +133,7 @@ void RainEmitter::createParticle(const TileTypePlane& ttplane, double time)
 {
 	RainParticle* particle=new RainParticle();
 	particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * emitter_stud_width) - ((TILE_WIDTH * emitter_stud_width) / 2);
-	particle->p.y=p.y;
+	particle->p.y=p.y - 40;
 	particle->myLayer=myLayer;
 	particle->initial_p.x=particle->p.x;
 	particle->initial_p.y=particle->p.y;
@@ -442,22 +442,30 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == birth_time_min) {
 		object->birth_time_min=value;
+		if (value > birth_time_max->value()) birth_time_max->setValue(value);
 	} else if (widget == birth_time_max) {
 		object->birth_time_max=value;
+		if (value < birth_time_min->value()) birth_time_min->setValue(value);
 	} else if (widget == min_velocity_y) {
 		object->min_velocity_y=(float)value;
+		if (value > max_velocity_y->value()) max_velocity_y->setValue(value);
 	} else if (widget == max_velocity_y) {
 		object->max_velocity_y=(float)value;
+		if (value < min_velocity_y->value()) min_velocity_y->setValue(value);
 	} else if (widget == max_velocity_x) {
 		object->max_velocity_x=(float)value;
 	} else if (widget == scale_min) {
 		object->scale_min=(float)value;
+		if (value > scale_max->value()) scale_max->setValue(value);
 	} else if (widget == scale_max) {
 		object->scale_max=(float)value;
+		if (value < scale_min->value()) scale_min->setValue(value);
 	} else if (widget == age_min) {
 		object->age_min=(float)value;
+		if (value > age_max->value()) age_max->setValue(value);
 	} else if (widget == age_max) {
 		object->age_max=(float)value;
+		if (value < age_min->value()) age_min->setValue(value);
 	}
 }
 
