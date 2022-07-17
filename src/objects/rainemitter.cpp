@@ -244,9 +244,9 @@ private:
 	ppl7::tk::HorizontalSlider* emitter_width;
 	ppl7::tk::HorizontalSlider* max_birth;
 	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
-	ppl7::tk::HorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
-	ppl7::tk::HorizontalSlider* scale_min, * scale_max;
-	ppl7::tk::HorizontalSlider* age_min, * age_max;
+	ppl7::tk::DoubleHorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
+	ppl7::tk::DoubleHorizontalSlider* scale_min, * scale_max;
+	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
 	/*
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::ComboBox* on_start_state;
@@ -262,6 +262,7 @@ private:
 public:
 	RainEmitterDialog(RainEmitter* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value) override;
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
@@ -274,7 +275,7 @@ void RainEmitter::openUi()
 
 
 RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
-	: Decker::ui::Dialog(600, 500, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
+	: Decker::ui::Dialog(700, 520, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
 {
 	this->object=object;
 	this->setWindowTitle("Rain Emitter");
@@ -315,7 +316,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	y+=35;
 
 	int sw=(client.width() - col1 - 40 - 40) / 2;
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time:"));
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
@@ -334,22 +335,25 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	min_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	min_velocity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity_y->setEventHandler(this);
-	min_velocity_y->setLimits(10, 10000);
+	min_velocity_y->setLimits(0.010, 10.0f);
+	min_velocity_y->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(min_velocity_y);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_velocity_y=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	max_velocity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity_y->setEventHandler(this);
-	max_velocity_y->setLimits(10, 10000);
+	max_velocity_y->setLimits(0.010, 10.0f);
+	max_velocity_y->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(max_velocity_y);
 	y+=35;
 
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Horizontal Velocity:"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "max:"));
-	max_velocity_x=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	max_velocity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	max_velocity_x->setEventHandler(this);
-	max_velocity_x->setLimits(10, 5000);
+	max_velocity_x->setLimits(0.010, 5.0f);
+	max_velocity_x->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(max_velocity_x);
 	y+=35;
 
@@ -357,29 +361,33 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	scale_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	scale_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	scale_min->setEventHandler(this);
-	scale_min->setLimits(10, 2000);
+	scale_min->setLimits(0.010, 2.0f);
+	scale_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(scale_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	scale_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	scale_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
-	scale_max->setLimits(10, 2000);
+	scale_max->setLimits(0.010, 2.0f);
+	scale_max->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(scale_max);
 	y+=35;
 
 	// Age
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Age:"));
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Age (sec):"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	age_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	age_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	age_min->setEventHandler(this);
-	age_min->setLimits(10, 20000);
+	age_min->setLimits(0.010f, 2.0f);
+	age_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(age_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	age_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	age_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	age_max->setEventHandler(this);
-	age_max->setLimits(10, 20000);
+	age_max->setLimits(0.010f, 2.0f);
+	age_max->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(age_max);
 	y+=35;
 
@@ -394,57 +402,62 @@ void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 	max_birth->setValue(object->max_particle_birth_per_cycle);
 	birth_time_min->setValue(object->birth_time_min);
 	birth_time_max->setValue(object->birth_time_max);
-	min_velocity_y->setValue(object->min_velocity_y * 1000);
-	max_velocity_y->setValue(object->max_velocity_y * 1000);
-	max_velocity_x->setValue(object->max_velocity_x * 1000);
-	scale_min->setValue(object->scale_min * 1000);
-	scale_max->setValue(object->scale_max * 1000);
-	age_min->setValue(object->age_min * 1000);
-	age_max->setValue(object->age_max * 1000);
+	min_velocity_y->setValue(object->min_velocity_y);
+	max_velocity_y->setValue(object->max_velocity_y);
+	max_velocity_x->setValue(object->max_velocity_x);
+	scale_min->setValue(object->scale_min);
+	scale_max->setValue(object->scale_max);
+	age_min->setValue(object->age_min);
+	age_max->setValue(object->age_max);
 
 }
 
 
 void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
+	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == particle_type) {
 		object->particle_type=static_cast<RainEmitter::ParticleType>(particle_type->currentIdentifier().toInt());
 	} else if (widget == color) {
 		object->ParticleColor=color->color();
-	} else if (widget == emitter_width) {
+	}
+}
+
+void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+{
+	//printf("got a RainEmitterDialog::valueChangedEvent with int64_t value\n");
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == emitter_width) {
 		object->emitter_stud_width=value;
 	} else if (widget == max_birth) {
 		object->max_particle_birth_per_cycle=value;
-	} else if (widget == birth_time_min) {
-		object->birth_time_min=(float)value / 1000.0f;
-	} else if (widget == birth_time_max) {
-		object->birth_time_max=(float)value / 1000.0f;
-	} else if (widget == min_velocity_y) {
-		object->min_velocity_y=(float)value / 1000.0f;
-	} else if (widget == max_velocity_y) {
-		object->max_velocity_y=(float)value / 1000.0f;
-	} else if (widget == max_velocity_x) {
-		object->max_velocity_x=(float)value / 1000.0f;
-	} else if (widget == scale_min) {
-		object->scale_min=(float)value / 1000.0f;
-	} else if (widget == scale_max) {
-		object->scale_max=(float)value / 1000.0f;
-	} else if (widget == age_min) {
-		object->age_min=(float)value / 1000.0f;
-	} else if (widget == age_max) {
-		object->age_max=(float)value / 1000.0f;
 	}
+
 }
 
 void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 {
-	printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
+	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == birth_time_min) {
 		object->birth_time_min=value;
 	} else if (widget == birth_time_max) {
 		object->birth_time_max=value;
+	} else if (widget == min_velocity_y) {
+		object->min_velocity_y=(float)value;
+	} else if (widget == max_velocity_y) {
+		object->max_velocity_y=(float)value;
+	} else if (widget == max_velocity_x) {
+		object->max_velocity_x=(float)value;
+	} else if (widget == scale_min) {
+		object->scale_min=(float)value;
+	} else if (widget == scale_max) {
+		object->scale_max=(float)value;
+	} else if (widget == age_min) {
+		object->age_min=(float)value;
+	} else if (widget == age_max) {
+		object->age_max=(float)value;
 	}
 }
 
