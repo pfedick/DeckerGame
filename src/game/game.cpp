@@ -666,7 +666,7 @@ void Game::showTilesSelection()
 	if (tiles_selection) {
 		closeTileSelection();
 	} else {
-		tiles_selection=new Decker::ui::TilesSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
+		tiles_selection=new Decker::ui::TilesSelection(0, 32, 300, statusbar->y() - 32, this);
 		for (int i=1;i <= resources.getMaxTilesetId();i++) {
 			tiles_selection->setTileSet(i, resources.bricks[i].name, &resources.bricks[i].ui);
 		}
@@ -690,7 +690,7 @@ void Game::showTileTypeSelection()
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
 	} else {
-		tiletype_selection=new Decker::ui::TileTypeSelection(0, 33, 300, statusbar->y() - 2 - 33, this, &resources.TileTypes);
+		tiletype_selection=new Decker::ui::TileTypeSelection(0, 32, 300, statusbar->y() - 32, this, &resources.TileTypes);
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
@@ -708,7 +708,7 @@ void Game::showSpriteSelection()
 	if (sprite_selection) {
 		closeSpriteSelection();
 	} else {
-		sprite_selection=new Decker::ui::SpriteSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
+		sprite_selection=new Decker::ui::SpriteSelection(0, 32, 300, statusbar->y() - 32, this);
 		sprite_selection->setSpriteSet(1, "Nature", &resources.uiSpritesNature, 4);
 		sprite_selection->setSpriteSet(2, "Plants", &resources.uiSpritesPlants);
 		sprite_selection->setSpriteSet(3, "Objects", &resources.uiSpritesObjects, 1);
@@ -735,7 +735,7 @@ void Game::showObjectsSelection()
 	if (object_selection) {
 		closeObjectSelection();
 	} else {
-		object_selection=new Decker::ui::ObjectSelection(0, 33, 300, statusbar->y() - 2 - 33, this);
+		object_selection=new Decker::ui::ObjectSelection(0, 32, 300, statusbar->y() - 32, this);
 		object_selection->setSpriteSet(&resources.uiObjects);
 		this->addChild(object_selection);
 		viewport.x1=300;
@@ -755,7 +755,7 @@ void Game::showWayNetEdit()
 		closeWayNet();
 		mainmenue->setShowTileTypes(false);
 	} else {
-		waynet_edit=new Decker::ui::WayNetEdit(0, 33, 300, statusbar->y() - 2 - 33, this);
+		waynet_edit=new Decker::ui::WayNetEdit(0, 32, 300, statusbar->y() - 2 - 32, this);
 		//waynet_edit->setSpriteSet(&resources.uiObjects);
 		this->addChild(waynet_edit);
 		viewport.x1=300;
