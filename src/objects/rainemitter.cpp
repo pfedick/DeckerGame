@@ -243,7 +243,7 @@ private:
 	ppl7::tk::ComboBox* particle_type;
 	ppl7::tk::HorizontalSlider* emitter_width;
 	ppl7::tk::HorizontalSlider* max_birth;
-	ppl7::tk::HorizontalSlider* birth_time_min, * birth_time_max;
+	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
 	ppl7::tk::HorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
 	ppl7::tk::HorizontalSlider* scale_min, * scale_max;
 	ppl7::tk::HorizontalSlider* age_min, * age_max;
@@ -302,6 +302,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	emitter_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	emitter_width->setEventHandler(this);
 	emitter_width->setLimits(1, 32);
+	emitter_width->enableSpinBox(true, 1, 60);
 	addChild(emitter_width);
 	y+=35;
 
@@ -309,20 +310,23 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	max_birth=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	max_birth->setEventHandler(this);
 	max_birth->setLimits(1, 32);
+	max_birth->enableSpinBox(true, 1, 60);
 	addChild(max_birth);
 	y+=35;
 
 	int sw=(client.width() - col1 - 40 - 40) / 2;
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time:"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	birth_time_min=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
-	birth_time_min->setLimits(10, 2000);
+	birth_time_min->setLimits(0.010, 4.0f);
+	birth_time_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(birth_time_min);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	birth_time_max=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	birth_time_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	birth_time_max->setEventHandler(this);
-	birth_time_max->setLimits(10, 2000);
+	birth_time_max->setLimits(0.010, 4.0f);
+	birth_time_max->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(birth_time_max);
 	y+=35;
 
@@ -388,8 +392,8 @@ void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 	color->setColor(object->ParticleColor);
 	emitter_width->setValue(object->emitter_stud_width);
 	max_birth->setValue(object->max_particle_birth_per_cycle);
-	birth_time_min->setValue(object->birth_time_min * 1000);
-	birth_time_max->setValue(object->birth_time_max * 1000);
+	birth_time_min->setValue(object->birth_time_min);
+	birth_time_max->setValue(object->birth_time_max);
 	min_velocity_y->setValue(object->min_velocity_y * 1000);
 	max_velocity_y->setValue(object->max_velocity_y * 1000);
 	max_velocity_x->setValue(object->max_velocity_x * 1000);
@@ -436,7 +440,12 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 {
 	printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
-	//ppl7::tk::Widget* widget=event->widget();
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == birth_time_min) {
+		object->birth_time_min=value;
+	} else if (widget == birth_time_max) {
+		object->birth_time_max=value;
+	}
 }
 
 
