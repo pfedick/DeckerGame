@@ -7,6 +7,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	: ppl7::tk::Widget()
 {
 	setUseOwnDrawbuffer(true);
+	setTopmost(true);
 	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
 	//ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	myBackground=style.windowBackgroundColor * 1.4f;
