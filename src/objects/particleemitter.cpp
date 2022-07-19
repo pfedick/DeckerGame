@@ -111,6 +111,12 @@ ParticleEmitter::ParticleEmitter()
 	scale_max=1.0f;
 	age_min=5.0f;
 	age_max=10.0f;
+	weight_min=1.0f;
+	weight_max=1.0f;
+	gravity.x=0.0f;
+	gravity.y=0.0f;
+	direction=0.0f;
+
 
 
 	save_size+=43;
@@ -237,6 +243,8 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
 	ppl7::tk::DoubleHorizontalSlider* scale_min, * scale_max;
 	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
+	ppl7::tk::DoubleHorizontalSlider* weight_min, * weight_max;
+	ppl7::tk::DoubleHorizontalSlider* direction, * gravity_x, * gravity_y;
 	/*
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::ComboBox* on_start_state;
@@ -265,7 +273,7 @@ void ParticleEmitter::openUi()
 
 
 ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
-	: Decker::ui::Dialog(700, 520, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
+	: Decker::ui::Dialog(700, 620, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
 {
 	this->object=object;
 	this->setWindowTitle("Rain Emitter");

@@ -290,7 +290,6 @@ void Level::save(const ppl7::String& Filename)
 void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
-	if (!plane.isVisible()) return;
 	int tiles_width=viewport.width() / TILE_WIDTH + 9;
 	int tiles_height=viewport.height() / TILE_HEIGHT + 2;
 	int offset_x=worldcoords.x % TILE_WIDTH;
@@ -322,39 +321,55 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 	}
 }
 
-void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player)
+void Level::drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
-	if (HorizonPlane.isVisible()) {
-		if (showSprites) HorizonSprites[0].draw(renderer, viewport, worldcoords * planeFactor[5]);
-		drawPlane(renderer, HorizonPlane, worldcoords * planeFactor[5]);
-		if (showSprites) HorizonSprites[1].draw(renderer, viewport, worldcoords * planeFactor[5]);
+	if (!plane.isVisible()) return;
+	if (showSprites) {
+		metrics.time_sprites.start();
+		sprites1.draw(renderer, viewport, worldcoords);
+		metrics.time_sprites.stop();
 	}
+	metrics.time_plane.start();
+	drawPlane(renderer, plane, worldcoords);
+	metrics.time_plane.stop();
+	if (showSprites) {
+		metrics.time_sprites.start();
+		sprites2.draw(renderer, viewport, worldcoords);
+		metrics.time_sprites.stop();
+	}
+}
 
-	if (FarPlane.isVisible()) {
-		if (showSprites) FarSprites[0].draw(renderer, viewport, worldcoords * planeFactor[2]);
-		drawPlane(renderer, FarPlane, worldcoords * planeFactor[2]);
-		if (showSprites) FarSprites[1].draw(renderer, viewport, worldcoords * planeFactor[2]);
-	}
-	if (MiddlePlane.isVisible()) {
-		if (showSprites) MiddleSprites[0].draw(renderer, viewport, worldcoords * planeFactor[4]);
-		drawPlane(renderer, MiddlePlane, worldcoords * planeFactor[4]);
-		if (showSprites) MiddleSprites[1].draw(renderer, viewport, worldcoords * planeFactor[4]);
-	}
-	if (BackPlane.isVisible()) {
-		if (showSprites) BackSprites[0].draw(renderer, viewport, worldcoords * planeFactor[3]);
-		drawPlane(renderer, BackPlane, worldcoords * planeFactor[3]);
-		if (showSprites) BackSprites[1].draw(renderer, viewport, worldcoords * planeFactor[3]);
-	}
+
+void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
+{
+	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
+	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
+	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
+	drawNonePlayerPlane(renderer, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
+
 	if (PlayerPlane.isVisible()) {
-		if (showSprites) PlayerSprites[0].draw(renderer, viewport, worldcoords * planeFactor[0]);
+		if (showSprites) {
+			metrics.time_sprites.start();
+			PlayerSprites[0].draw(renderer, viewport, worldcoords * planeFactor[0]);
+			metrics.time_sprites.stop();
+		}
 		if (showObjects) {	// Objects behind Bricks
+			metrics.time_objects.start();
 			if (editMode)
 				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 			else
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
+			metrics.time_objects.stop();
 		}
+		metrics.time_plane.start();
 		drawPlane(renderer, PlayerPlane, worldcoords * planeFactor[0]);
-		if (showSprites) PlayerSprites[1].draw(renderer, viewport, worldcoords * planeFactor[0]);
+		metrics.time_plane.stop();
+		if (showSprites) {
+			metrics.time_sprites.start();
+			PlayerSprites[1].draw(renderer, viewport, worldcoords * planeFactor[0]);
+			metrics.time_sprites.stop();
+		}
+		metrics.time_objects.start();
 		if (showObjects) {	// Objects behind Player
 			if (editMode)
 				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
@@ -368,18 +383,11 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 			else
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
 		}
+		metrics.time_objects.stop();
 
 	}
-	if (FrontPlane.isVisible()) {
-		if (showSprites) FrontSprites[0].draw(renderer, viewport, worldcoords * planeFactor[1]);
-		drawPlane(renderer, FrontPlane, worldcoords * planeFactor[1]);
-		if (showSprites) FrontSprites[1].draw(renderer, viewport, worldcoords * planeFactor[1]);
-	}
-	if (NearPlane.isVisible()) {
-		if (showSprites) NearSprites[0].draw(renderer, viewport, worldcoords * planeFactor[6]);
-		drawPlane(renderer, NearPlane, worldcoords * planeFactor[6]);
-		if (showSprites) NearSprites[1].draw(renderer, viewport, worldcoords * planeFactor[6]);
-	}
+	drawNonePlayerPlane(renderer, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
+	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
@@ -398,7 +406,7 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, con
 	HorizonSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[5], viewport);
 	NearSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[6], viewport);
 	NearSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[6], viewport);
-	objects->updateVisibleObjectList(worldcoords * planeFactor[0], viewport);
+	//objects->updateVisibleObjectList(worldcoords * planeFactor[0], viewport);
 }
 
 size_t Level::countSprites() const

@@ -272,6 +272,8 @@ public:
 	float scale_min, scale_max;
 	float age_min, age_max;
 	float direction;
+	float weight_min, weight_max;
+	ppl7::grafix::PointF gravity;
 
 
 	ParticleEmitter();

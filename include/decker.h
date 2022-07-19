@@ -15,6 +15,7 @@
 #include "audiopool.h"
 #include "waynet.h"
 #include "translate.h"
+#include "metrics.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -564,6 +565,10 @@ private:
 		chunkColorPalette=33
 	};
 
+	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
+
+
 public:
 
 
@@ -577,8 +582,7 @@ public:
 	void create(int width, int height);
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player);
-	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics);
 	void setViewport(const ppl7::grafix::Rect& r);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
@@ -623,6 +627,7 @@ public:
 	void playSong(const ppl7::String& filename);
 	void fadeout(float seconds);
 };
+
 
 class Game : private ppl7::tk::Window
 {
@@ -690,6 +695,8 @@ private:
 	// Soundtrack
 	Soundtrack soundtrack=Soundtrack(audiosystem, level.params);
 
+	Metrics metrics;
+
 	void createWindow();
 	void presentStartupScreen();
 	void loadGrafix();
@@ -697,7 +704,7 @@ private:
 	void deleteUi();
 	void resizeMenueAndStatusbar();
 	void initAudio();
-	void updateUi(const ppl7::tk::MouseState& mouse);
+	void updateUi(const ppl7::tk::MouseState& mouse, const Metrics& metrics);
 	void drawWorld(SDL_Renderer* renderer);
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);

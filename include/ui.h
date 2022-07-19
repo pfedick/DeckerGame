@@ -5,6 +5,7 @@
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "widgets.h"
+#include "metrics.h"
 
 class Game;
 class SpriteTexture;
@@ -22,6 +23,7 @@ class ColorPalette;
 #endif
 
 class Player;
+class Metrics;
 
 namespace Decker {
 namespace ui {
@@ -91,6 +93,23 @@ public:
 
 class LevelDialog;
 
+class MetricsSubMenu : public ppl7::tk::Frame
+{
+private:
+	MainMenue* menue;
+	Metrics metrics;
+	ppl7::grafix::Font font;
+	void drawDoubleMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, double value);
+	void drawIntMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, uint64_t value);
+
+public:
+	MetricsSubMenu(int x, int y, MainMenue* menue);
+	void update(const Metrics& metrics);
+
+	virtual void paint(ppl7::grafix::Drawable& draw);
+
+};
+
 class MainMenue : public ppl7::tk::Frame
 {
 private:
@@ -108,6 +127,7 @@ private:
 	ppl7::tk::Button* edit_waynet_button;
 	ppl7::tk::Button* edit_level_button;
 	ppl7::tk::Button* show_visibility_submenu_button;
+	ppl7::tk::Button* show_metrics_submenu_button;
 
 	ppl7::tk::ComboBox* active_plane_combobox;
 
@@ -115,6 +135,7 @@ private:
 	ppl7::tk::CheckBox* soundtrack_checkbox;
 	ppl7::tk::CheckBox* godmode_checkbox;
 	VisibilitySubMenu* visibility;
+	MetricsSubMenu* metrics;
 
 	LevelDialog* level_dialog;
 	Game* game;
@@ -137,6 +158,8 @@ public:
 	void setCurrentPlane(int index);
 	void setWorldFollowsPlayer(bool enable);
 	void openLevelDialog(bool new_flag);
+	void updateMetrics(const Metrics& last_metrics);
+	void fitMetrics(const ppl7::grafix::Rect& viewport);
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;

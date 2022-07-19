@@ -22,6 +22,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_tiletypes=false;
 	visibility_collision=false;
 	level_dialog=NULL;
+	metrics=NULL;
 	controlsEnabled=game->getControlsEnabled();
 
 	setupUi();
@@ -110,6 +111,11 @@ void MainMenue::setupUi()
 
 	this->addChild(active_plane_combobox);
 
+	show_metrics_submenu_button=new ppl7::tk::Button(1098, 0, 70, s.height, "Metrics");
+	show_metrics_submenu_button->setEventHandler(this);
+	this->addChild(show_metrics_submenu_button);
+
+
 	godmode_checkbox=new ppl7::tk::CheckBox(width() - 520, 0, 100, s.height, "god mode", false);
 	this->addChild(godmode_checkbox);
 
@@ -177,6 +183,16 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 			ppl7::grafix::Point p=show_visibility_submenu_button->absolutePosition();
 			visibility=new VisibilitySubMenu(p.x, height(), this);
 			top->addChild(visibility);
+		}
+	} else if (event->widget() == show_metrics_submenu_button) {
+		if (metrics) {
+			delete metrics;
+			metrics=NULL;
+		} else {
+			ppl7::tk::Widget* top=show_metrics_submenu_button->getTopmostParent();
+			//ppl7::grafix::Point p=show_metrics_submenu_button->absolutePosition();
+			metrics=new MetricsSubMenu(top->width() - 450, height(), this);
+			top->addChild(metrics);
 		}
 	}
 }
@@ -254,6 +270,16 @@ bool MainMenue::soundTrackEnabled() const
 void MainMenue::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
 {
 	//printf ("MainMenue::textChangedEvent => %s\n",(const char*)text);
+}
+
+void MainMenue::updateMetrics(const Metrics& last_metrics)
+{
+	if (metrics) metrics->update(last_metrics);
+}
+
+void MainMenue::fitMetrics(const ppl7::grafix::Rect& viewport)
+{
+	if (metrics) metrics->setPos(viewport.right() - metrics->width(), viewport.top());
 }
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
@@ -350,6 +376,94 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 	} else if (widget == show_objects_checkbox) {
 		menue->visibility_objects=checked;
 	};
+}
+
+MetricsSubMenu::MetricsSubMenu(int x, int y, MainMenue* menue)
+	: ppl7::tk::Frame(x, y, 450, 150)
+{
+	this->menue=menue;
+	this->setTransparent(false);
+	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 196));
+	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	font=style.labelFont;
+	font.setColor(style.labelFontColor);
+	font.setSize(10);
+	font.setOrientation(ppl7::grafix::Font::Orientation::TOP);
+}
+
+void MetricsSubMenu::update(const Metrics& metrics)
+{
+	this->metrics=metrics;
+	needsRedraw();
+}
+
+void MetricsSubMenu::drawDoubleMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, double value)
+{
+	draw.print(font, c1, y, text);
+	ppl7::WideString v;
+	v.setf("%0.3f ms", value * 1000.0f);
+	ppl7::grafix::Size s=font.measure(v);
+	draw.print(font, c2 - s.width, y, v);
+
+}
+
+void MetricsSubMenu::drawIntMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, uint64_t value)
+{
+	draw.print(font, c1, y, text);
+	ppl7::WideString v;
+	v.setf("%ld", value);
+	ppl7::grafix::Size s=font.measure(v);
+	draw.print(font, c2 - s.width, y, v);
+}
+
+void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
+{
+	Frame::paint(draw);
+	int y=5;
+	int line=15;
+	int c1=5;
+	int c2=190;
+	drawDoubleMetric(draw, c1, c2, y, "total:", metrics.time_total.get());
+	drawDoubleMetric(draw, c2 + 5, c2 + 80, y, "of", metrics.time_frame.get());
+	ppl7::WideString v;
+	v.setf("= %0.1f%%", metrics.time_total.get() * 100.0f / metrics.time_frame.get());
+	draw.print(font, c2 + 85, y, v);
+
+
+	y+=line;
+	y+=line;
+	drawDoubleMetric(draw, c1, c2, y, "draw userinterface:", metrics.time_draw_ui.get());
+	y+=line;
+	drawDoubleMetric(draw, c1, c2, y, "handle events:", metrics.time_events.get());
+	y+=line;
+	drawDoubleMetric(draw, c1, c2, y, "misc:", metrics.time_misc.get());
+	y+=line * 2;
+	drawIntMetric(draw, c1, c2, y, "FPS", metrics.fps);
+	y+=line;
+	drawIntMetric(draw, c1, c2, y, "Sprites", metrics.total_sprites);
+	y+=line;
+	drawIntMetric(draw, c1, c2, y, "Objects", metrics.total_objects);
+
+	y=5 + 2 * line;
+	c1=220;
+	c2=440;
+	drawDoubleMetric(draw, c1, c2, y, "draw the world:", metrics.time_draw_world.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "update sprites:", metrics.time_update_sprites.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "update objects:", metrics.time_update_objects.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "draw background:", metrics.time_draw_background.get());
+	y+=line;
+	//drawDoubleMetric(draw, c1 + 20, c2, y, "time_draw_tsop", metrics.time_draw_tsop.get());
+	//y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "draw tiles:", metrics.time_plane.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "draw sprites:", metrics.time_sprites.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "draw objects:", metrics.time_objects.get());
+	y+=line;
+
 }
 
 } //EOF namespace Decker

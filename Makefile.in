@@ -38,6 +38,7 @@ OBJECTS=compile/main.o \
 	compile/config.o \
 	compile/translate.o \
 	compile/color.o \
+	compile/metrics.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_tileselection.o \
@@ -254,6 +255,10 @@ compile/sdl.o: src/game/sdl.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/sdl.o -c src/game/sdl.cpp $(CFLAGS)
 
+compile/metrics.o: src/game/metrics.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/metrics.o -c src/game/metrics.cpp $(CFLAGS)
+
 compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h include/translate.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
@@ -356,10 +361,6 @@ compile/object_apple.o: src/objects/apple.cpp Makefile include/objects.h include
 compile/object_cherry.o: src/objects/cherry.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_cherry.o -c src/objects/cherry.cpp $(CFLAGS)
-
-compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
-	- @mkdir -p compile
-	$(CXX) -o compile/object_coin.o -c src/objects/coin.cpp $(CFLAGS)
 
 compile/object_trap.o: src/objects/trap.cpp Makefile include/objects.h
 	- @mkdir -p compile

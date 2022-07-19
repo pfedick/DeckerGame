@@ -209,6 +209,7 @@ void Game::showUi(bool enable)
 		viewport.y2=desktop.height - 32;
 		world_widget->setViewport(viewport);
 		mainmenue->setVisible(true);
+		mainmenue->fitMetrics(viewport);
 		statusbar->setVisible(true);
 	} else {
 		closeTileTypeSelection();
@@ -223,6 +224,7 @@ void Game::showUi(bool enable)
 		viewport.y1=0;
 		viewport.x1=0;
 		viewport.y2=desktop.height;
+		mainmenue->fitMetrics(viewport);
 		world_widget->setViewport(viewport);
 	}
 }
@@ -443,16 +445,20 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse)
 	}
 }
 
-void Game::updateUi(const ppl7::tk::MouseState& mouse)
+void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metrics)
 {
 	fps.update();
+
 	statusbar->setFps(fps.getFPS());
 	statusbar->setMouse(mouse);
 	statusbar->setWorldCoords(WorldCoords);
 	if (player)
 		statusbar->setPlayerCoords(ppl7::grafix::Point(player->x, player->y));
-	statusbar->setSpriteCount(level.countSprites(), level.countVisibleSprites());
-	statusbar->setObjectCount(level.objects->count(), level.objects->countVisible());
+	size_t total_sprites=level.countSprites();
+	size_t visible_sprites=level.countVisibleSprites();
+	size_t total_objects=level.objects->count();
+	size_t visible_objects=level.objects->countVisible();
+
 	if (player) statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
 	if (selected_object) {
@@ -460,6 +466,13 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse)
 	} else {
 		statusbar->setSelectedObject(-1);
 	}
+
+	metrics.fps+=fps.getFPS();
+	metrics.total_sprites+=total_sprites;
+	metrics.visible_sprites+=visible_sprites;
+	metrics.total_objects+=total_objects;
+	metrics.visible_objects+=visible_objects;
+
 }
 
 void Game::updateWorldCoords()
@@ -483,38 +496,48 @@ ppl7::grafix::Point Game::getViewPos() const
 
 void Game::drawWorld(SDL_Renderer* renderer)
 {
+	metrics.time_draw_world.start();
 	double now=ppl7::GetMicrotime();
 	level.setEditmode(object_selection != NULL);
+
+	metrics.time_update_sprites.start();
 	level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
+	metrics.time_update_sprites.stop();
+	metrics.time_update_objects.start();
 	player->setGodMode(mainmenue->godModeEnabled());
 	player->WorldCoords=WorldCoords;
 	player->Viewport=viewport;
 	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
+
 	if (this->controlsEnabled)
 		player->update(now, level.TileTypeMatrix, level.objects);
 	level.objects->update(now, level.TileTypeMatrix, *player);
+	level.objects->updateVisibleObjectList(WorldCoords, viewport);
 	ppl7::tk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
 		updateWorldCoords();
+	metrics.time_update_objects.stop();
 
-	updateUi(mouse);
-
-
-
+	metrics.time_misc.start();
 	// TODO: Refactor into Events: Handle Mouse events inside World
 	if (mouse.p.inside(viewport)) {
 		moveWorldOnMouseClick(mouse);
 	}
 
 	level.setViewport(viewport);
+	metrics.time_misc.stop();
+
 
 	// Draw background
+	metrics.time_draw_background.start();
 	background.setColor(level.params.BackgroundColor);
 	background.setImage(level.params.BackgroundImage);
 	background.setBackgroundType(level.params.backgroundType);
 	background.draw(renderer, viewport, WorldCoords);
+	metrics.time_draw_background.stop();
 
 	// Draw Planes and Sprites
+	metrics.time_draw_tsop.start();
 	level.FarPlane.setVisible(mainmenue->visibility_plane_far);
 	level.PlayerPlane.setVisible(mainmenue->visibility_plane_player);
 	level.FrontPlane.setVisible(mainmenue->visibility_plane_front);
@@ -524,8 +547,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
-	level.draw(renderer, WorldCoords, player);
+	level.draw(renderer, WorldCoords, player, metrics);
+	metrics.time_draw_tsop.stop();
 
+	metrics.time_misc.start();
 	if (player->isDead() == true && death_state == 0) {
 		death_state=1;
 		fade_to_black=0;
@@ -544,6 +569,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		SDL_RenderFillRect(renderer, NULL);
 		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
 	}
+	metrics.time_misc.stop();
+	metrics.time_draw_world.stop();
 }
 
 void Game::run()
@@ -557,13 +584,33 @@ void Game::run()
 	wm->setKeyboardFocus(world_widget);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
+	Metrics last_metrics;
+	metrics.clear();
+	ppl7::ppl_time_t last_second=ppl7::GetTime();
 	while (!quitGame) {
+		ppl7::ppl_time_t current_second=ppl7::GetTime();
+		if (current_second > last_second) {
+			last_second=current_second;
+			last_metrics=metrics.getAverage();
+			mainmenue->updateMetrics(last_metrics);
+			metrics.clear();
+			statusbar->setSpriteCount(last_metrics.total_sprites, last_metrics.visible_sprites);
+			statusbar->setObjectCount(last_metrics.total_objects, last_metrics.visible_objects);
+
+		}
+		metrics.newFrame();
+		metrics.time_frame.start();
+		metrics.time_total.start();
+		metrics.time_events.start();
 		checkSoundtrack();
 		wm->handleEvents();
+		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (filedialog) checkFileDialog();
+		metrics.time_events.stop();
 		drawWorld(renderer);
 
-		ppl7::tk::MouseState mouse=wm->getMouseState();
+		metrics.time_draw_ui.start();
+		updateUi(mouse, last_metrics);
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
@@ -574,12 +621,16 @@ void Game::run()
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
-
 		// Widgets
 		drawWidgets();
 		// Mouse
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		metrics.time_draw_ui.stop();
+
+		metrics.time_total.stop();
 		presentScreen();
+		metrics.time_frame.stop();
+
 	}
 	soundtrack.fadeout(4.0f);
 }
