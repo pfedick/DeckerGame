@@ -52,6 +52,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Speaker, "Speaker", 29);
 	addObject(Decker::Objects::Type::WindEmitter, "Wind emiter", 28);
 	addObject(Decker::Objects::Type::RainEmitter, "Rain emiter", 41);
+	addObject(Decker::Objects::Type::ParticleEmitter, "Particle emiter", 46);
 	addObject(Decker::Objects::Type::TouchEmitter, "Object emiter", 30);
 	addObject(Decker::Objects::Type::Mushroom, "Mushroom", 32);
 	addObject(Decker::Objects::Type::TreasureChest, "Treasure Chest", 33);

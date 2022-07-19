@@ -26,6 +26,7 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::Fire: return ppl7::String("Fire");
 	case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
 	case ObjectType::RainEmitter: return ppl7::String("RainEmitter");
+	case ObjectType::ParticleEmitter: return ppl7::String("ParticleEmitter");
 	case ObjectType::Vent: return ppl7::String("Vent");
 	case ObjectType::Speaker: return ppl7::String("Speaker");
 	case ObjectType::Particle: return ppl7::String("Particle");
