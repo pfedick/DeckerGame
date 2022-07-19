@@ -262,14 +262,16 @@ public:
 	};
 	ParticleType particle_type;
 	ppl7::grafix::Color ParticleColor;
+	//std::map<float, ppl7::grafix::Color> ParticleColor;
 	int emitter_stud_width;
 	int max_particle_birth_per_cycle;
 	float birth_time_min, birth_time_max;
-	float max_velocity_x;
-	float min_velocity_y;
-	float max_velocity_y;
+	float variation;
+	float min_velocity;
+	float max_velocity;
 	float scale_min, scale_max;
 	float age_min, age_max;
+	float direction;
 
 
 	ParticleEmitter();
