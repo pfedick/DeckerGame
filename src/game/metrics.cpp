@@ -12,7 +12,7 @@ Metrics::Timer::Timer()
 
 void Metrics::Timer::start()
 {
-    start_time=ppl7::GetMicrotime();
+    //start_time=ppl7::GetMicrotime();
     s=SDL_GetPerformanceCounter();
 
 }

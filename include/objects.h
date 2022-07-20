@@ -260,20 +260,33 @@ public:
 		ParticleTransparent=0,
 		ParticleWhite,
 	};
+	class ScaleGradientItem
+	{
+	public:
+		float age;
+		float time;
+	};
+	class ColorGradientItem
+	{
+	public:
+		float age;
+		ppl7::grafix::Color color;
+	};
 	ParticleType particle_type;
 	ppl7::grafix::Color ParticleColor;
 	//std::map<float, ppl7::grafix::Color> ParticleColor;
-	int emitter_stud_width;
-	int max_particle_birth_per_cycle;
+	int emitter_pixel_width;
+	int min_birth_per_cycle, max_birth_per_cycle;
 	float birth_time_min, birth_time_max;
-	float variation;
 	float min_velocity;
 	float max_velocity;
 	float scale_min, scale_max;
 	float age_min, age_max;
-	float direction;
+	float direction, variation;
 	float weight_min, weight_max;
 	ppl7::grafix::PointF gravity;
+	std::map<float, float>scale_gradient;
+	std::map<float, ppl7::grafix::Color>color_gradient;
 
 
 	ParticleEmitter();
