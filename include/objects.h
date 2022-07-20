@@ -264,7 +264,7 @@ public:
 	{
 	public:
 		float age;
-		float time;
+		float scale;
 	};
 	class ColorGradientItem
 	{
@@ -274,7 +274,7 @@ public:
 	};
 	ParticleType particle_type;
 	ppl7::grafix::Color ParticleColor;
-	//std::map<float, ppl7::grafix::Color> ParticleColor;
+	Decker::Objects::Object::Layer particle_layer;
 	int emitter_pixel_width;
 	int min_birth_per_cycle, max_birth_per_cycle;
 	float birth_time_min, birth_time_max;
@@ -285,8 +285,8 @@ public:
 	float direction, variation;
 	float weight_min, weight_max;
 	ppl7::grafix::PointF gravity;
-	std::map<float, float>scale_gradient;
-	std::map<float, ppl7::grafix::Color>color_gradient;
+	std::list<ScaleGradientItem>scale_gradient;
+	std::list<ColorGradientItem>color_gradient;
 
 
 	ParticleEmitter();

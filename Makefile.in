@@ -471,7 +471,7 @@ compile/object_rainemitter.o: src/objects/rainemitter.cpp Makefile include/objec
 	- @mkdir -p compile
 	$(CXX) -o compile/object_rainemitter.o -c src/objects/rainemitter.cpp $(CFLAGS)
 
-compile/object_particleemitter.o: src/objects/particleemitter.cpp Makefile include/objects.h include/ui.h
+compile/object_particleemitter.o: src/objects/particleemitter.cpp Makefile include/objects.h include/ui.h include/particle.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_particleemitter.o -c src/objects/particleemitter.cpp $(CFLAGS)
 

@@ -4,6 +4,7 @@
 #include "objects.h"
 #include "decker.h"
 #include "player.h"
+#include <math.h>
 
 namespace Decker::Objects {
 
@@ -32,14 +33,22 @@ public:
 		float x;
 		float y;
 	};
+
+
 private:
+
 	double next_animation;
 	double death_time;
 	AnimationCycle animation;
 	Velocity velocity;
 	Velocity pf;
-	ppl7::grafix::Point end;
+	float weight;
+	float direction;
+	float v;
+	std::list<ParticleEmitter::ColorGradientItem>color_gradient;
+	std::list<ParticleEmitter::ScaleGradientItem>scale_gradient;
 public:
+
 	Particle();
 	static Representation representation();
 	virtual void update(double time, TileTypePlane& ttplane, Player& player);
@@ -55,6 +64,9 @@ Particle::Particle()
 	sprite_no_representation=216;
 	sprite_no=216;
 	next_animation=0.0f;
+	weight=0.0f;
+	direction=0.0f;
+	v=0.0f;
 	death_time=1.0f;
 	spawned=true;
 	myLayer=Layer::BeforePlayer;
@@ -73,7 +85,7 @@ void Particle::update(double time, TileTypePlane&, Player&)
 	p.x=(int)pf.x;
 	p.y=(int)pf.y;
 	updateBoundary();
-	if (p.y > end.y || time > death_time) deleteDefered=true;
+	if (time > death_time) deleteDefered=true;
 }
 
 /****************************************************************
@@ -97,15 +109,16 @@ ParticleEmitter::ParticleEmitter()
 	visibleAtPlaytime=false;
 	sprite_no_representation=428;
 	next_birth=0.0f;
-
 	particle_type=ParticleType::ParticleWhite;
+	particle_layer=Object::Layer::BehindPlayer;
 	ParticleColor.set(255, 255, 255, 255);
 	emitter_pixel_width=1;
 	min_birth_per_cycle=1;
 	max_birth_per_cycle = 4;
 	birth_time_min=0.020f;
 	birth_time_max=0.300f;
-	variation=0.5f; // Abweichung in Grad
+	direction=0.0f;
+	variation=0.0f; // Abweichung in Grad
 	min_velocity=4.0f;
 	max_velocity=7.3f;
 	scale_min=0.3f;
@@ -116,15 +129,15 @@ ParticleEmitter::ParticleEmitter()
 	weight_max=1.0f;
 	gravity.x=0.0f;
 	gravity.y=0.0f;
-	direction=0.0f;
 	weight_min=0.0f;
 	weight_max=0.0f;
 
-	save_size+=67 + 64 * 2;
+	save_size+=68 + 64 * 2;
 }
 
 static float randf(float min, float max)
 {
+	if (max == min) return min;
 	double range=max - min;
 	double r=(((double)ppl7::rand(0, RAND_MAX)) / (double)RAND_MAX * range) + min;
 	return r;
@@ -133,17 +146,46 @@ static float randf(float min, float max)
 void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 {
 	Particle* particle=new Particle();
-	int start_offset=ppl7::rand(0, emitter_pixel_width) - (emitter_pixel_width / 2);
+	//int start_offset=ppl7::rand(0, emitter_pixel_width) - (emitter_pixel_width / 2);
 	particle->p.x=p.x;
 	particle->p.y=p.y;
-	particle->myLayer=myLayer;
+	particle->myLayer=particle_layer;
 	particle->initial_p.x=particle->p.x;
 	particle->initial_p.y=particle->p.y;
 	particle->pf.x=(float)particle->p.x;
 	particle->pf.y=(float)particle->p.y;
-	particle->velocity.x=randf(0, variation) - (variation / 2.0f);
-	particle->velocity.y=randf(min_velocity, max_velocity);
-	particle->end=particle->p;
+	float c=randf(min_velocity, max_velocity);
+	float d=direction + randf(-variation, variation);
+	if (d < 0.0f) d+=360.0f;
+	if (d >= 360.0f) d-=360.0f;
+	particle->v=c;
+	particle->direction=d;
+	particle->weight=randf(weight_min, weight_max);
+	//printf("velocity: %0.3f, direction: %0.3f\n", c, d);
+	if (d == 0.0f) {
+		particle->velocity.x=0;
+		particle->velocity.y=-c;
+	} else if (d == 90.0f) {
+		particle->velocity.x=c;
+		particle->velocity.y=0;
+	} else if (d == 180.0f) {
+		particle->velocity.x=0;
+		particle->velocity.y=c;
+	} else if (d == 270.0f) {
+		particle->velocity.x=-c;
+		particle->velocity.y=0;
+	} else {
+
+		float r1=(90 - d) / 180 * 3.1415926535;
+		float r2=d / 180 * 3.1415926535;;
+		float x=c * sin(r2);
+		float y=c * sin(r1);
+		//printf("x=%0.3f, y=%0.3f\n", x, y);
+		particle->velocity.y=-y;
+		particle->velocity.x=x;
+		//particle->velocity.x=c * sin(d) / sin(90);
+
+	}
 	particle->scale=randf(scale_min, scale_max);
 	particle->color_mod=ParticleColor;
 	particle->death_time=randf(age_min, age_max) + time;
@@ -155,11 +197,10 @@ void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 		particle->animation.startRandom(particle_white, sizeof(particle_white) / sizeof(int), true, 0);
 		break;
 	};
-	ppl7::grafix::Size levelsize=ttplane.size();
-	levelsize.height*=TILE_HEIGHT;
-	while (particle->end.y < levelsize.height && ttplane.getType(particle->end) != TileType::Blocking)
-		particle->end.y+=TILE_HEIGHT;
-	particle->end.y-=TILE_HEIGHT;
+	particle->scale_gradient=scale_gradient;
+	particle->color_gradient=color_gradient;
+
+
 	GetObjectSystem()->addObject(particle);
 }
 
@@ -204,32 +245,33 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 	ppl7::PokeFloat(buffer + bytes + 52, weight_max);
 	ppl7::PokeFloat(buffer + bytes + 56, gravity.x);
 	ppl7::PokeFloat(buffer + bytes + 60, gravity.y);
-	size_t p=64;
+	ppl7::Poke8(buffer + bytes + 64, static_cast<int>(particle_layer));
+	size_t p=65;
 	{
 		ppl7::Poke8(buffer + bytes + p, color_gradient.size());	// Number of Color Gradients, bei 0 wird ParticleColor verwendet
 		p++;
-		std::map<float, ppl7::grafix::Color>::const_iterator it;
+		std::list<ColorGradientItem>::const_iterator it;
 		for (it=color_gradient.begin();it != color_gradient.end();++it) {
-			ppl7::PokeFloat(buffer + bytes + p, (*it).first);
-			ppl7::Poke8(buffer + bytes + p + 4, (*it).second.red());
-			ppl7::Poke8(buffer + bytes + p + 5, (*it).second.green());
-			ppl7::Poke8(buffer + bytes + p + 6, (*it).second.blue());
-			ppl7::Poke8(buffer + bytes + p + 7, (*it).second.alpha());
+			ppl7::PokeFloat(buffer + bytes + p, (*it).age);
+			ppl7::Poke8(buffer + bytes + p + 4, (*it).color.red());
+			ppl7::Poke8(buffer + bytes + p + 5, (*it).color.green());
+			ppl7::Poke8(buffer + bytes + p + 6, (*it).color.blue());
+			ppl7::Poke8(buffer + bytes + p + 7, (*it).color.alpha());
 			p+=8;
 		}
 	}
 	{
 		ppl7::Poke8(buffer + bytes + p, scale_gradient.size());	// Number of Size Gradients
 		p++;
-		std::map<float, float>::const_iterator it;
+		std::list<ScaleGradientItem>::const_iterator it;
 		for (it=scale_gradient.begin();it != scale_gradient.end();++it) {
-			ppl7::PokeFloat(buffer + bytes + p, (*it).first);
-			ppl7::PokeFloat(buffer + bytes + p, (*it).second);
+			ppl7::PokeFloat(buffer + bytes + p, (*it).age);
+			ppl7::PokeFloat(buffer + bytes + p, (*it).scale);
 			p+=8;
 		}
 	}
 	ppl7::Poke8(buffer + bytes + p, 0);	// 0
-	return bytes + p;
+	return save_size;
 }
 
 size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
@@ -258,28 +300,30 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	weight_max=ppl7::PeekFloat(buffer + bytes + 52);
 	gravity.x=ppl7::PeekFloat(buffer + bytes + 56);
 	gravity.y=ppl7::PeekFloat(buffer + bytes + 60);
-	size_t p=64;
+	particle_layer=static_cast<Object::Layer>(ppl7::Peek8(buffer + bytes + 64));
+	size_t p=65;
 
 	int num_color_gradients=ppl7::Peek8(buffer + bytes + p);
 	p++;
 	color_gradient.clear();
 	for (int i=0;i < num_color_gradients;i++) {
-		float age=ppl7::PeekFloat(buffer + bytes + p);
-		ppl7::grafix::Color c;
-		c.setRed(ppl7::Peek8(buffer + bytes + p + 4));
-		c.setGreen(ppl7::Peek8(buffer + bytes + p + 5));
-		c.setBlue(ppl7::Peek8(buffer + bytes + p + 6));
-		c.setAlpha(ppl7::Peek8(buffer + bytes + p + 7));
-		color_gradient.insert(std::pair<float, ppl7::grafix::Color>(age, c));
+		ColorGradientItem c;
+		c.age=ppl7::PeekFloat(buffer + bytes + p);
+		c.color.setRed(ppl7::Peek8(buffer + bytes + p + 4));
+		c.color.setGreen(ppl7::Peek8(buffer + bytes + p + 5));
+		c.color.setBlue(ppl7::Peek8(buffer + bytes + p + 6));
+		c.color.setAlpha(ppl7::Peek8(buffer + bytes + p + 7));
+		color_gradient.push_back(c);
 		p+=8;
 	}
 	int num_scale_gradients=ppl7::Peek8(buffer + bytes + p);
 	p++;
 	scale_gradient.clear();
 	for (int i=0;i < num_scale_gradients;i++) {
-		float age=ppl7::PeekFloat(buffer + bytes + p);
-		float scale=ppl7::PeekFloat(buffer + bytes + p + 4);
-		scale_gradient.insert(std::pair<float, float>(age, scale));
+		ScaleGradientItem s;
+		s.age=ppl7::PeekFloat(buffer + bytes + p);
+		s.scale=ppl7::PeekFloat(buffer + bytes + p + 4);
+		scale_gradient.push_back(s);
 		p+=8;
 	}
 	/*
@@ -302,6 +346,7 @@ class ParticleEmitterDialog : public Decker::ui::Dialog
 {
 private:
 	Decker::ui::ColorSliderWidget* color;
+	ppl7::tk::ComboBox* particle_layer;
 	ppl7::tk::ComboBox* particle_type;
 	ppl7::tk::HorizontalSlider* emitter_pixel_width;
 	ppl7::tk::HorizontalSlider* min_birth_per_cycle, * max_birth_per_cycle;
@@ -338,13 +383,24 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	int col1=100;
 	int y=0;
 	ppl7::grafix::Rect client=clientRect();
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Type:"));
-	particle_type=new ppl7::tk::ComboBox(col1, y, client.width() - col1, 30);
+	this->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
+	particle_layer=new ppl7::tk::ComboBox(60, y, 150, 30);
+	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
+	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
+	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
+	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
+	particle_layer->setEventHandler(this);
+	this->addChild(particle_layer);
+
+	addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
+	particle_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
 	particle_type->setEventHandler(this);
 	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleTransparent)));
 	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleWhite)));
 	addChild(particle_type);
 	y+=35;
+
+
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
 	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
 	color->setEventHandler(this);
@@ -388,7 +444,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_birth_per_cycle->setEventHandler(this);
-	max_birth_per_cycle->setLimits(0.010, 4.0f);
+	max_birth_per_cycle->setLimits(0, 60);
 	max_birth_per_cycle->enableSpinBox(true, 1, 80);
 	addChild(max_birth_per_cycle);
 	y+=35;
@@ -409,12 +465,13 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	addChild(max_velocity);
 	y+=35;
 
+	// Direction + variation
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Direction (degrees):"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "base:"));
 	direction=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	direction->setEventHandler(this);
 	direction->setLimits(0.0f, 360.0f);
-	direction->enableSpinBox(true, 1.0f, 1, 80);
+	direction->enableSpinBox(true, 15.0f, 1, 80);
 	addChild(direction);
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
 	variation=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
@@ -436,7 +493,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	scale_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
-	scale_max->setLimits(0.010, 2.0f);
+	scale_max->setLimits(0.010, 5.0f);
 	scale_max->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(scale_max);
 	y+=35;
@@ -477,14 +534,14 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 
 	// Gravity
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Gravity:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	addChild(new ppl7::tk::Label(col1, y, 40, 30, "x:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	gravity_x->setEventHandler(this);
 	gravity_x->setLimits(-20.0f, 20.0f);
 	gravity_x->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(gravity_x);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
 	gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	gravity_y->setEventHandler(this);
 	gravity_y->setLimits(-20.0f, 20.0f);
@@ -499,6 +556,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 {
 	particle_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_type)));
+	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_layer)));
 	color->setColor(object->ParticleColor);
 	emitter_pixel_width->setValue(object->emitter_pixel_width);
 	min_birth_per_cycle->setValue(object->min_birth_per_cycle);
@@ -518,6 +576,7 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	gravity_x->setValue(object->gravity.x);
 	gravity_y->setValue(object->gravity.y);
 
+
 }
 
 
@@ -527,6 +586,8 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == particle_type) {
 		object->particle_type=static_cast<ParticleEmitter::ParticleType>(particle_type->currentIdentifier().toInt());
+	} else if (widget == particle_layer) {
+		object->particle_layer=static_cast<Object::Layer>(particle_layer->currentIdentifier().toInt());
 	} else if (widget == color) {
 		object->ParticleColor=color->color();
 	}
@@ -540,8 +601,10 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t va
 		object->emitter_pixel_width=value;
 	} else if (widget == min_birth_per_cycle) {
 		object->min_birth_per_cycle=value;
+		if (value > object->max_birth_per_cycle) max_birth_per_cycle->setValue(value);
 	} else if (widget == max_birth_per_cycle) {
 		object->max_birth_per_cycle=value;
+		if (value < min_birth_per_cycle->value()) min_birth_per_cycle->setValue(value);
 	}
 
 }
@@ -599,6 +662,7 @@ void ParticleEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 {
 	if (button == Dialog::Buttons::Copy) {
 		clipboard.particle_type=object->particle_type;
+		clipboard.particle_layer=object->particle_layer;
 		clipboard.ParticleColor=object->ParticleColor;
 		clipboard.emitter_pixel_width=object->emitter_pixel_width;
 		clipboard.min_birth_per_cycle=object->min_birth_per_cycle;
@@ -621,6 +685,7 @@ void ParticleEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 
 	} else if (button == Dialog::Buttons::Paste) {
 		object->particle_type=clipboard.particle_type;
+		object->particle_layer=clipboard.particle_layer;
 		object->ParticleColor=clipboard.ParticleColor;
 		object->emitter_pixel_width=clipboard.emitter_pixel_width;
 		object->min_birth_per_cycle=clipboard.min_birth_per_cycle;
