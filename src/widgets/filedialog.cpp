@@ -24,9 +24,9 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     }
     ppl7::grafix::Size clientarea=this->clientSize();
 
-    ok_button=new ppl7::tk::Button(20, clientarea.height - 40, 200, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
+    ok_button=new ppl7::tk::Button(20, clientarea.height - 30, 200, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppl7::tk::Button(clientarea.width - 220, clientarea.height - 40, 200, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppl7::tk::Button(clientarea.width - 220, clientarea.height - 30, 200, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);

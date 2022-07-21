@@ -14,37 +14,46 @@ Dialog::Dialog(int width, int height, int buttons)
 	myBackground.setAlpha(240);
 	ppl7::tk::Window* gamewin=GetGameWindow();
 	create((gamewin->width() - width) / 2, (gamewin->height() - height) / 2, width, height);
+
 	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	ok_button=NULL;
 	copy_button=NULL;
 	paste_button=NULL;
+	int x=width - 2 - 16;
+	int y=height - 40;
+
+	int client_offset_y2=8;
 	if (buttons & Buttons::OK) {
-		ok_button=new ppl7::tk::Button((width - 80) / 2, height - 80, 80, 30, "OK");
+		ok_button=new ppl7::tk::Button((width - 80) / 2, y, 80, 30, "OK");
 		ok_button->setIcon(gfx->Toolbar.getDrawable(24));
 		ok_button->setEventHandler(this);
-		this->addChild(ok_button);
+		ppl7::tk::Widget::addChild(ok_button);
+		client_offset_y2=40 + 8;
 	}
-	int x=width - 2 - 16;
-	int y=height - 80; // 2
 	if (buttons & Buttons::Paste) {
 		paste_button=new ppl7::tk::Button(x - 32, y, 32, 32, "");
 		paste_button->setIcon(gfx->Toolbar.getDrawable(38));
 		paste_button->setEventHandler(this);
-		this->addChild(paste_button);
+		ppl7::tk::Widget::addChild(paste_button);
 		x-=32;
+		client_offset_y2=40 + 8;
 	}
 
 	if (buttons & Buttons::Copy) {
 		copy_button=new ppl7::tk::Button(x - 32, y, 32, 32, "");
 		copy_button->setIcon(gfx->Toolbar.getDrawable(37));
 		copy_button->setEventHandler(this);
-		this->addChild(copy_button);
+		ppl7::tk::Widget::addChild(copy_button);
 		x-=32;
+		client_offset_y2=40 + 8;
 	}
+	client_frame=new ppl7::tk::Frame(8, 40, this->width() - 16, this->height() - 40 - client_offset_y2, ppl7::tk::Frame::BorderStyle::NoBorder);
+	client_frame->setBackgroundColor(myBackground);
+	ppl7::tk::Widget::addChild(client_frame);
+
 	this->setModal(true);
-	this->setClientOffset(8, 40, 8, 8);
-	drag_started=true;
-	client_frame=NULL;
+	//this->setClientOffset(8, 40, 8, client_offset_y2);
+	drag_started=false;
 }
 
 Dialog::~Dialog()
@@ -54,6 +63,33 @@ Dialog::~Dialog()
 		ppl7::tk::GetWindowManager()->releaseMouse(this);
 	}
 }
+
+void Dialog::addChild(Widget* w)
+{
+	client_frame->addChild(w);
+}
+
+void Dialog::removeChild(Widget* w)
+{
+	client_frame->removeChild(w);
+}
+
+void Dialog::destroyChilds()
+{
+	client_frame->destroyChilds();
+}
+
+ppl7::grafix::Rect Dialog::clientRect() const
+{
+	return client_frame->clientRect();
+}
+
+ppl7::grafix::Size Dialog::clientSize() const
+{
+	return client_frame->clientSize();
+}
+
+
 
 const ppl7::String& Dialog::windowTitle() const
 {
@@ -84,6 +120,7 @@ const ppl7::grafix::Color& Dialog::backgroundColor() const
 void Dialog::setBackgroundColor(const ppl7::grafix::Color& c)
 {
 	myBackground=c;
+	client_frame->setBackgroundColor(myBackground);
 	needsRedraw();
 }
 
@@ -126,7 +163,7 @@ void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 		this->deleteLater();
 	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
 	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);
-	else if (widget == this && event->p.y < 33) {
+	else if (widget == this && event->p.y < 40) {
 		drag_started=true;
 		drag_start_pos=event->p;
 		ppl7::tk::GetWindowManager()->grabMouse(this);

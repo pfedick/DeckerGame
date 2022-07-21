@@ -42,6 +42,14 @@ public:
 	Dialog(int width, int height, int buttons=Buttons::OK);
 	~Dialog();
 
+	void addChild(Widget* w);
+	void removeChild(Widget* w);
+	void destroyChilds();
+	ppl7::grafix::Rect clientRect() const;
+	ppl7::grafix::Size clientSize() const;
+
+
+
 	const ppl7::String& windowTitle() const;
 	void setWindowTitle(const ppl7::String& title);
 	const ppl7::grafix::Drawable& windowIcon() const;
@@ -145,6 +153,7 @@ class TabWidget : public ppl7::tk::Widget
 {
 private:
 	int current_tab;
+	Widget* current_child;
 	class Tab {
 	public:
 		Tab();
@@ -159,15 +168,15 @@ public:
 	TabWidget(int x, int y, int width, int height);
 	~TabWidget();
 
-	void addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
-	void addWidget(int id, const ppl7::String& title, Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	ppl7::tk::Widget* addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	void addWidget(int id, const ppl7::String& title, ppl7::tk::Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
 	void removeTab(int id);
 	void setVisible(int id, bool visible);
 	void setEnabled(int id, bool enabled);
 	void setTitle(int id, const ppl7::String& title);
 	void setIcon(int id, const ppl7::grafix::Drawable& icon);
-	void setWidget(int id, Widget* widget);
-	Widget* getWidget(int id) const;
+	void setWidget(int id, ppl7::tk::Widget* widget);
+	ppl7::tk::Widget* getWidget(int id) const;
 	int currentTab() const;
 	void setCurrentTab(int id);
 	size_t tabCount() const;
@@ -175,7 +184,7 @@ public:
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
 
 };
 
