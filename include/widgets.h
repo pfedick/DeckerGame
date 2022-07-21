@@ -162,6 +162,8 @@ private:
 		ppl7::tk::Widget* widget;
 		ppl7::String title;
 		ppl7::grafix::Image icon;
+		int x;
+		int width;
 	};
 	std::map<int, Tab> tabs;
 public:

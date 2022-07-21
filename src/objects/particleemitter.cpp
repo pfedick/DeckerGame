@@ -385,7 +385,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	this->setWindowTitle("Particle Emitter");
 	ppl7::grafix::Rect client=clientRect();
 
-	tabwidget=new Decker::ui::TabWidget(client.x1, client.y1, client.width() - 10, client.height() - 10);
+	tabwidget=new Decker::ui::TabWidget(client.x1, client.y1, client.width(), client.height());
 	tabwidget->addTab(1, "Particle generation");
 	tabwidget->addTab(2, "Colors");
 	tabwidget->setCurrentTab(1);

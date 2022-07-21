@@ -9,6 +9,25 @@
 
 namespace Decker::ui {
 
+class TabWidgetItem : public ppl7::tk::Widget
+{
+public:
+    TabWidgetItem(int x, int y, int width, int height);
+    void paint(ppl7::grafix::Drawable& draw) override;
+
+};
+
+TabWidgetItem::TabWidgetItem(int x, int y, int width, int height)
+    :ppl7::tk::Widget(x, y, width, height)
+{
+
+}
+
+void TabWidgetItem::paint(ppl7::grafix::Drawable& draw)
+{
+
+}
+
 TabWidget::Tab::Tab() {
     widget=NULL;
 }
@@ -46,8 +65,8 @@ TabWidget::~TabWidget()
 ppl7::tk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
-    printf("addTab: %d:%d, %d:%d\n", client.x1, client.y1, client.width(), client.height());
-    ppl7::tk::Frame* widget=new ppl7::tk::Frame(client.x1, client.y1, client.width(), client.height());
+    TabWidgetItem* widget=new TabWidgetItem(client.x1 + 4, client.y1 + 40, client.width() - 8, client.height() - 40);
+    widget->setClientOffset(4, 4, 4, 4);
     Tab new_tab(widget, title, icon);
     tabs[id]=new_tab;
     needsRedraw();
@@ -58,8 +77,8 @@ ppl7::tk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl
 void TabWidget::addWidget(int id, const ppl7::String& title, ppl7::tk::Widget* widget, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
-    widget->setPos(client.x1, client.y1);
-    widget->setSize(client.width(), client.height());
+    widget->setPos(client.x1 + 4, client.y1 + 40);
+    widget->setSize(client.width() - 8, client.height() - 44);
     Tab new_tab(widget, title, icon);
     tabs[id]=new_tab;
     if (current_tab < 0) setCurrentTab(id);
@@ -163,9 +182,12 @@ void TabWidget::setCurrentTab(int id)
     if (!it->second.widget->isVisible()) return;
     if (current_child) removeChild(current_child);
     current_child=it->second.widget;
+    ppl7::grafix::Rect client=clientRect();
+    current_child->setPos(client.x1 + 4, client.y1 + 40);
+    current_child->setSize(client.width() - 12, client.height() - 48);
     this->addChild(current_child);
     current_tab=id;
-    printf("setCurrentTab gesetzt: %d\n", id);
+    //printf("setCurrentTab gesetzt: %d\n", id);
     needsRedraw();
 }
 
@@ -187,25 +209,51 @@ ppl7::String TabWidget::widgetType() const
 void TabWidget::paint(ppl7::grafix::Drawable& draw)
 {
     if (tabs.empty()) return;
-    Widget* widget=getWidget(current_tab);
-    int y=30;
-    int w=draw.width();
-    int h=draw.height() - y;
     const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+    ppl7::grafix::Color light=style.frameBackgroundColor * 1.8f;
+    ppl7::grafix::Color shadow=style.frameBackgroundColor * 0.4f;
+    ppl7::grafix::Font font=style.labelFont;
+    font.setColor(style.labelFontColor);
+    font.setOrientation(ppl7::grafix::Font::Orientation::TOP);
+    //draw.cls(ppl7::grafix::Color(255, 0, 0, 255));
+    int y=30;
+    int w=draw.width() - 1;
+    int h=draw.height() - 1;
+    ppl7::grafix::Color notselected_bg=style.frameBackgroundColor * 0.7f;
 
-    draw.drawRect(0, y, w, h, style.frameBackgroundColor);
+    //draw.drawRect(0, y, w, h, style.frameBackgroundColor);
+    draw.fillRect(0, y, w, h, style.frameBackgroundColor);
 
-    draw.line(0, y, w, y, style.frameBorderColorLight);
-    draw.line(0, y, 0, h, style.frameBorderColorLight);
-    draw.line(0, h, w, h, style.frameBorderColorShadow);
-    draw.line(w, y, w, h, style.frameBorderColorShadow);
-    int x=0;
+    draw.line(0, y, w, y, light);
+    draw.line(0, y, 0, h, light);
+    draw.line(0, h, w, h, shadow);
+    draw.line(w, y, w, h, shadow);
     if (w) {
-        std::map<int, Tab>::const_iterator it;
+        int x=0;
+        std::map<int, Tab>::iterator it;
         for (it=tabs.begin();it != tabs.end();++it) {
             if (it->second.widget && it->second.widget->isVisible()) {
+                it->second.x=x;
+                ppl7::WideString text=it->second.title;
+                ppl7::grafix::Size s=font.measure(text);
+                w=s.width + 15;
+                it->second.width=s.width + 16;
+                y=0;
+                if (it->first == current_tab) {
+                    draw.fillRect(x, 0, x + w, 31, style.frameBackgroundColor);
+                    draw.line(x, y, x + w, y, light);
+                    draw.line(x, y, x, y + 30, light);
+                    draw.line(x + w, y, x + w, y + 29, shadow);
+                    draw.print(font, x + 8, y + 4, text);
+                } else {
+                    draw.fillRect(x, 4, x + w, 30, notselected_bg);
+                    draw.line(x, y + 4, x + w, y + 4, light);
+                    if (x == 0) draw.line(x, y + 4, x, y + 30, light);
+                    draw.line(x + w, y + 4, x + w, y + 29, shadow);
+                    draw.print(font, x + 8, y + 6, text);
+                }
 
-                //draw.drawRect(0, y, w, h, style.frameBackgroundColor);
+                x+=it->second.width;
             }
         }
     }
@@ -213,7 +261,15 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
 
 void TabWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-    printf("TabWidget::mouseDownEvent\n");
+    if (event->p.y <= 30) {
+        std::map<int, Tab>::const_iterator it;
+        for (it=tabs.begin();it != tabs.end();++it) {
+            if (event->p.x >= it->second.x && event->p.x < it->second.x + it->second.width) {
+                if (it->first != current_tab) setCurrentTab(it->first);
+                return;
+            }
+        }
+    }
 }
 
 
