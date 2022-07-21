@@ -345,6 +345,7 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 class ParticleEmitterDialog : public Decker::ui::Dialog
 {
 private:
+	Decker::ui::TabWidget* tabwidget;
 	Decker::ui::ColorSliderWidget* color;
 	ppl7::tk::ComboBox* particle_layer;
 	ppl7::tk::ComboBox* particle_type;
@@ -358,6 +359,8 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* direction, * variation, * gravity_x, * gravity_y;
 
 	void setValuesToUi(const ParticleEmitter* object);
+	void setupParticleTab();
+	void setupColorTab();
 	ParticleEmitter* object;
 
 public:
@@ -380,177 +383,202 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 {
 	this->object=object;
 	this->setWindowTitle("Particle Emitter");
+	ppl7::grafix::Rect client=clientRect();
+
+	tabwidget=new Decker::ui::TabWidget(client.x1, client.y1, client.width() - 10, client.height() - 10);
+	tabwidget->addTab(1, "Particle generation");
+	tabwidget->addTab(2, "Colors");
+	tabwidget->setCurrentTab(1);
+	addChild(tabwidget);
+	setupParticleTab();
+	setupColorTab();
+	setValuesToUi(object);
+}
+
+void ParticleEmitterDialog::setupParticleTab()
+{
+	Widget* tab=tabwidget->getWidget(1);
+	if (!tab) return;
+
 	int col1=100;
 	int y=0;
-	ppl7::grafix::Rect client=clientRect();
-	this->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
+	ppl7::grafix::Rect client=tab->clientRect();
+
+	tab->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
 	particle_layer=new ppl7::tk::ComboBox(60, y, 150, 30);
 	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	particle_layer->setEventHandler(this);
-	this->addChild(particle_layer);
+	tab->addChild(particle_layer);
 
-	addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
+	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
 	particle_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
 	particle_type->setEventHandler(this);
 	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleTransparent)));
 	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleWhite)));
-	addChild(particle_type);
+	tab->addChild(particle_type);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
-	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
-	color->setEventHandler(this);
-	addChild(color);
-	y+=4 * 35;
-
 	col1=150;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size (pixel):"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size (pixel):"));
 	emitter_pixel_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	emitter_pixel_width->setEventHandler(this);
 	emitter_pixel_width->setLimits(1, 32);
 	emitter_pixel_width->enableSpinBox(true, 1, 60);
-	addChild(emitter_pixel_width);
+	tab->addChild(emitter_pixel_width);
 	y+=35;
 
 	int sw=(client.width() - col1 - 40 - 40) / 2;
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
 	birth_time_min->setLimits(0.010, 4.0f);
 	birth_time_min->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(birth_time_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(birth_time_min);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	birth_time_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	birth_time_max->setEventHandler(this);
 	birth_time_max->setLimits(0.010, 4.0f);
 	birth_time_max->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(birth_time_max);
+	tab->addChild(birth_time_max);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Birth per cycle:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Birth per cycle:"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	min_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	min_birth_per_cycle->setEventHandler(this);
 	min_birth_per_cycle->setLimits(0, 60);
 	min_birth_per_cycle->enableSpinBox(true, 1, 80);
-	addChild(min_birth_per_cycle);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(min_birth_per_cycle);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_birth_per_cycle->setEventHandler(this);
 	max_birth_per_cycle->setLimits(0, 60);
 	max_birth_per_cycle->enableSpinBox(true, 1, 80);
-	addChild(max_birth_per_cycle);
+	tab->addChild(max_birth_per_cycle);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	min_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity->setEventHandler(this);
 	min_velocity->setLimits(0.010, 20.0f);
 	min_velocity->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(min_velocity);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(min_velocity);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity->setEventHandler(this);
 	max_velocity->setLimits(0.010, 20.0f);
 	max_velocity->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(max_velocity);
+	tab->addChild(max_velocity);
 	y+=35;
 
 	// Direction + variation
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Direction (degrees):"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "base:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Direction (degrees):"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "base:"));
 	direction=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	direction->setEventHandler(this);
 	direction->setLimits(0.0f, 360.0f);
 	direction->enableSpinBox(true, 15.0f, 1, 80);
-	addChild(direction);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
+	tab->addChild(direction);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
 	variation=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	variation->setEventHandler(this);
 	variation->setLimits(0.0f, 180.0f);
 	variation->enableSpinBox(true, 1.0f, 1, 80);
-	addChild(variation);
+	tab->addChild(variation);
 	y+=35;
 
 	// Scale
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	scale_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	scale_min->setEventHandler(this);
 	scale_min->setLimits(0.010, 2.0f);
 	scale_min->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(scale_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(scale_min);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	scale_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
 	scale_max->setLimits(0.010, 5.0f);
 	scale_max->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(scale_max);
+	tab->addChild(scale_max);
 	y+=35;
 
 	// Age
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Age (sec):"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Age (sec):"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	age_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	age_min->setEventHandler(this);
 	age_min->setLimits(0.010f, 10.0f);
 	age_min->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(age_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(age_min);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	age_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	age_max->setEventHandler(this);
 	age_max->setLimits(0.010f, 10.0f);
 	age_max->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(age_max);
+	tab->addChild(age_max);
 	y+=35;
 
 	// Weight
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Weight:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Weight:"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	weight_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	weight_min->setEventHandler(this);
 	weight_min->setLimits(0.0f, 10.0f);
 	weight_min->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(weight_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	tab->addChild(weight_min);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	weight_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	weight_max->setEventHandler(this);
 	weight_max->setLimits(0.0f, 10.0f);
 	weight_max->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(weight_max);
+	tab->addChild(weight_max);
 	y+=35;
 
 	// Gravity
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Gravity:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "x:"));
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Gravity:"));
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "x:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	gravity_x->setEventHandler(this);
 	gravity_x->setLimits(-20.0f, 20.0f);
 	gravity_x->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(gravity_x);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
+	tab->addChild(gravity_x);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
 	gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	gravity_y->setEventHandler(this);
 	gravity_y->setLimits(-20.0f, 20.0f);
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
-	addChild(gravity_y);
+	tab->addChild(gravity_y);
 	y+=35;
+}
 
+void ParticleEmitterDialog::setupColorTab()
+{
+	Widget* tab=tabwidget->getWidget(2);
+	if (!tab) return;
 
-	setValuesToUi(object);
+	int col1=100;
+	int y=0;
+	ppl7::grafix::Rect client=tab->clientRect();
+
+	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
+	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
+	color->setEventHandler(this);
+	tab->addChild(color);
+	y+=4 * 35;
 }
 
 void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)

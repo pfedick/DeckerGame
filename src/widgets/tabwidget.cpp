@@ -32,8 +32,10 @@ TabWidget::TabWidget(int x, int y, int width, int height)
     : ppl7::tk::Widget(x, y, width, height)
 {
     this->setTransparent(true);
-    current_tab=0;
-    setClientOffset(5, 35, width - 10, height - 40);
+    current_tab=-1;
+    //setClientOffset(5, 35, width - 10, height - 40);
+
+    current_child=NULL;
 }
 
 TabWidget::~TabWidget()
@@ -41,22 +43,26 @@ TabWidget::~TabWidget()
     clear();
 }
 
-void TabWidget::addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon)
+ppl7::tk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
+    printf("addTab: %d:%d, %d:%d\n", client.x1, client.y1, client.width(), client.height());
     ppl7::tk::Frame* widget=new ppl7::tk::Frame(client.x1, client.y1, client.width(), client.height());
     Tab new_tab(widget, title, icon);
     tabs[id]=new_tab;
     needsRedraw();
+    if (current_tab < 0) setCurrentTab(id);
+    return widget;
 }
 
-void TabWidget::addWidget(int id, const ppl7::String& title, Widget* widget, const ppl7::grafix::Drawable& icon)
+void TabWidget::addWidget(int id, const ppl7::String& title, ppl7::tk::Widget* widget, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
     widget->setPos(client.x1, client.y1);
     widget->setSize(client.width(), client.height());
     Tab new_tab(widget, title, icon);
     tabs[id]=new_tab;
+    if (current_tab < 0) setCurrentTab(id);
     needsRedraw();
 }
 
@@ -64,10 +70,19 @@ void TabWidget::removeTab(int id)
 {
     Widget* widget=getWidget(id);
     if (widget) {
+        if (widget == current_child) {
+            this->removeChild(current_child);
+            current_child=NULL;
+        }
         tabs.erase(id);
         delete widget;
-        needsRedraw();
     }
+    // TODO current_tab aendern
+    if (current_tab == id) {
+        std::map<int, Tab>::const_iterator it=tabs.begin();
+        if (it != tabs.end()) setCurrentTab(it->first);
+    }
+    needsRedraw();
 }
 
 void TabWidget::clear()
@@ -77,6 +92,7 @@ void TabWidget::clear()
         if (it->second.widget) delete it->second.widget;
     }
     tabs.clear();
+    current_child=NULL;
     needsRedraw();
 }
 
@@ -143,7 +159,13 @@ void TabWidget::setCurrentTab(int id)
     std::map<int, Tab>::const_iterator it;
     it=tabs.find(id);
     if (it == tabs.end()) return;
+    if (!it->second.widget) return;
+    if (!it->second.widget->isVisible()) return;
+    if (current_child) removeChild(current_child);
+    current_child=it->second.widget;
+    this->addChild(current_child);
     current_tab=id;
+    printf("setCurrentTab gesetzt: %d\n", id);
     needsRedraw();
 }
 
@@ -173,7 +195,7 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
 
     draw.drawRect(0, y, w, h, style.frameBackgroundColor);
 
-    draw.line(0, y, w, 0, style.frameBorderColorLight);
+    draw.line(0, y, w, y, style.frameBorderColorLight);
     draw.line(0, y, 0, h, style.frameBorderColorLight);
     draw.line(0, h, w, h, style.frameBorderColorShadow);
     draw.line(w, y, w, h, style.frameBorderColorShadow);
@@ -189,9 +211,9 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
     }
 }
 
-void TabWidget::keyDownEvent(ppl7::tk::KeyEvent* event)
+void TabWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-    printf("TabWidget::keyDownEvent");
+    printf("TabWidget::mouseDownEvent\n");
 }
 
 
