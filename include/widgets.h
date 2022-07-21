@@ -134,6 +134,7 @@ private:
 	bool with_alphachannel;
 
 
+
 	void setupUi();
 	void updateColorPreview();
 
@@ -141,6 +142,7 @@ public:
 	ColorSliderWidget(int x, int y, int width, int height, bool withAlphaChannel=false);
 	void setColor(const ppl7::grafix::Color& color);
 	ppl7::grafix::Color color() const;
+	void setColorPreviewSize(int w, int h);
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;

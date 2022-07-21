@@ -346,7 +346,8 @@ class ParticleEmitterDialog : public Decker::ui::Dialog
 {
 private:
 	Decker::ui::TabWidget* tabwidget;
-	Decker::ui::ColorSliderWidget* color;
+
+	// Particle Tab
 	ppl7::tk::ComboBox* particle_layer;
 	ppl7::tk::ComboBox* particle_type;
 	ppl7::tk::HorizontalSlider* emitter_pixel_width;
@@ -357,6 +358,13 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
 	ppl7::tk::DoubleHorizontalSlider* weight_min, * weight_max;
 	ppl7::tk::DoubleHorizontalSlider* direction, * variation, * gravity_x, * gravity_y;
+
+	// Color Tab
+	Decker::ui::ColorSliderWidget* color;
+	ppl7::tk::RadioButton* radio_solid_color;
+	ppl7::tk::RadioButton* radio_color_gradient;
+	Decker::ui::ColorSliderWidget* color_gradient;
+	ppl7::tk::DoubleHorizontalSlider* color_gradient_age;
 
 	void setValuesToUi(const ParticleEmitter* object);
 	void setupParticleTab();
@@ -388,7 +396,8 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	tabwidget=new Decker::ui::TabWidget(client.x1, client.y1, client.width(), client.height());
 	tabwidget->addTab(1, "Particle generation");
 	tabwidget->addTab(2, "Colors");
-	tabwidget->setCurrentTab(1);
+	tabwidget->addTab(3, "Size gradient");
+	tabwidget->setCurrentTab(2);
 	addChild(tabwidget);
 	setupParticleTab();
 	setupColorTab();
@@ -570,15 +579,40 @@ void ParticleEmitterDialog::setupColorTab()
 	Widget* tab=tabwidget->getWidget(2);
 	if (!tab) return;
 
-	int col1=100;
+	int col1=30;
 	int y=0;
 	ppl7::grafix::Rect client=tab->clientRect();
 
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
+	radio_solid_color=new ppl7::tk::RadioButton(0, y, 200, 30, "solid color:", true);
+	radio_solid_color->setEventHandler(this);
+	tab->addChild(radio_solid_color);
+	y+=35;
+
 	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
 	color->setEventHandler(this);
 	tab->addChild(color);
 	y+=4 * 35;
+
+	radio_color_gradient=new ppl7::tk::RadioButton(0, y, 200, 30, "color gradient:", true);
+	radio_color_gradient->setEventHandler(this);
+	tab->addChild(radio_color_gradient);
+	y+=35;
+
+	int col3=tab->width() - 400;
+	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "age:"));
+	color_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 360, 30);
+	color_gradient_age->setEventHandler(this);
+	color_gradient_age->setLimits(0.0f, 1.0f);
+	color_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
+	tab->addChild(color_gradient_age);
+	y+=35;
+	color_gradient=new Decker::ui::ColorSliderWidget(col3, y, client.width() - col3, 4 * 35, true);
+	color_gradient->setEventHandler(this);
+	color_gradient->setEnabled(false);
+	color_gradient->setColorPreviewSize(2 * 35, 4 * 35);
+	tab->addChild(color_gradient);
+
+
 }
 
 void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)

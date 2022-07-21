@@ -95,6 +95,23 @@ void ColorSliderWidget::setupUi()
     }
 }
 
+void ColorSliderWidget::setColorPreviewSize(int w, int h)
+{
+    ppl7::grafix::Rect client=clientRect();
+    int col1=0;
+    int col2=col1 + 50;
+    int col3=col2 + 80;
+    int slider_width=client.width() - col3 - 10 - w;
+    int col4=col3 + slider_width + 10;
+    color_preview->setX(col4);
+    color_preview->setSize(w, h);
+    slider_red->setWidth(slider_width);
+    slider_green->setWidth(slider_width);
+    slider_blue->setWidth(slider_width);
+    if (slider_alpha) slider_alpha->setWidth(slider_width);
+    needsRedraw();
+}
+
 void ColorSliderWidget::setColor(const ppl7::grafix::Color& color)
 {
     // we need a copy
