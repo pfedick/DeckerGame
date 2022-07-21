@@ -642,6 +642,12 @@ void Game::quitEvent(ppl7::tk::Event* e)
 
 void Game::closeEvent(ppl7::tk::Event* e)
 {
+	ppl7::tk::Widget* widget=e->widget();
+	if (widget != NULL && widget == settings_screen) {
+		delete settings_screen;
+		settings_screen=NULL;
+		return;
+	}
 	quitGame=true;
 }
 
@@ -1253,9 +1259,6 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		level.load("level/test.lvl");
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
 		showUi(!showui);
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
-		// TODO
-
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_ALT) > 0) {
 		printf("toggle fullscreen or back\n");
 		ppl7::tk::WindowManager_SDL2* sdl2wm=(ppl7::tk::WindowManager_SDL2*)wm;
@@ -1287,6 +1290,12 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		} else {
 			printf("Aktueller mode ist Fullscreen\n");
 		}
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+		if (settings_screen) {
+			enableControls(true);
+			delete settings_screen;
+			settings_screen=NULL;
+		} else openSettingsScreen();
 	}
 }
 
@@ -1440,4 +1449,15 @@ void Game::openNewLevelDialog()
 	mainmenue->openLevelDialog(true);
 	player->setVisible(false);
 
+}
+
+void Game::openSettingsScreen()
+{
+	if (settings_screen) delete settings_screen;
+	settings_screen=NULL;
+	settings_screen=new SettingsScreen(*this,
+		100, 100, this->width() - 100, this->height() - 200);
+	this->addChild(settings_screen);
+	this->needsRedraw();
+	enableControls(false);
 }

@@ -5,10 +5,11 @@
 #include "screens.h"
 
 
-SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height)
+SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height, bool ingame)
     : game(g)
 {
     create(x, y, width, height);
+    this->ingame=ingame;
     this->setName("SettingsScreen");
     setupUi();
     selectSettingsPage(SettingsMenue::Audio);

@@ -57,6 +57,8 @@ class ObjectSystem;
 class Object;
 } // EOF namespace Decker::Objects
 
+class SettingsScreen;
+
 class Config
 {
 private:
@@ -798,6 +800,7 @@ public:
 	void openSaveAsDialog();
 	void openLoadDialog();
 	void openNewLevelDialog();
+	void openSettingsScreen();
 
 };
 

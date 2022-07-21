@@ -64,6 +64,7 @@ private:
         Back=3
     };
     Game& game;
+    bool ingame;
     //SDL& sdl;
     SettingsMenue currentMenueSelection;
     StyleElement style_heading, style_label, style_menue;
@@ -108,7 +109,7 @@ private:
 
 
 public:
-    SettingsScreen(Game& game, int x, int y, int width, int height);
+    SettingsScreen(Game& game, int x, int y, int width, int height, bool ingame=false);
     ~SettingsScreen();
     virtual void paint(ppl7::grafix::Drawable& draw);
 
