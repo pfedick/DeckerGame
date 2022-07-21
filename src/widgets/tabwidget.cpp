@@ -219,7 +219,7 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
     int y=30;
     int w=draw.width() - 1;
     int h=draw.height() - 1;
-    ppl7::grafix::Color notselected_bg=style.frameBackgroundColor * 0.7f;
+    ppl7::grafix::Color notselected_bg=style.frameBackgroundColor * 0.9f;
 
     //draw.drawRect(0, y, w, h, style.frameBackgroundColor);
     draw.fillRect(0, y, w, h, style.frameBackgroundColor);
@@ -237,20 +237,31 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
                 ppl7::WideString text=it->second.title;
                 ppl7::grafix::Size s=font.measure(text);
                 w=s.width + 15;
-                it->second.width=s.width + 16;
+                if (!it->second.icon.isEmpty()) w+=4 + it->second.icon.width();
+                it->second.width=w + 1;
                 y=0;
                 if (it->first == current_tab) {
                     draw.fillRect(x, 0, x + w, 31, style.frameBackgroundColor);
                     draw.line(x, y, x + w, y, light);
                     draw.line(x, y, x, y + 30, light);
                     draw.line(x + w, y, x + w, y + 29, shadow);
-                    draw.print(font, x + 8, y + 4, text);
+                    int tx=x;
+                    if (!it->second.icon.isEmpty()) {
+                        draw.bltAlpha(it->second.icon, x + 8, y + 4);
+                        tx+=it->second.icon.width();
+                    }
+                    draw.print(font, tx + 8, y + 4, text);
                 } else {
                     draw.fillRect(x, 4, x + w, 30, notselected_bg);
                     draw.line(x, y + 4, x + w, y + 4, light);
                     if (x == 0) draw.line(x, y + 4, x, y + 30, light);
                     draw.line(x + w, y + 4, x + w, y + 29, shadow);
-                    draw.print(font, x + 8, y + 6, text);
+                    int tx=x;
+                    if (!it->second.icon.isEmpty()) {
+                        draw.bltAlpha(it->second.icon, x + 8, y + 4);
+                        tx+=it->second.icon.width();
+                    }
+                    draw.print(font, tx + 8, y + 6, text);
                 }
 
                 x+=it->second.width;
