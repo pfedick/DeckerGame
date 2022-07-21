@@ -141,6 +141,46 @@ public:
 
 };
 
+class TabWidget : public ppl7::tk::Widget
+{
+private:
+	int current_tab;
+	class Tab {
+	public:
+		Tab();
+		Tab(ppl7::tk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+		Tab(const Tab& other);
+		ppl7::tk::Widget* widget;
+		ppl7::String title;
+		ppl7::grafix::Image icon;
+	};
+	std::map<int, Tab> tabs;
+public:
+	TabWidget(int x, int y, int width, int height);
+	~TabWidget();
+
+	void addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	void addWidget(int id, const ppl7::String& title, Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	void removeTab(int id);
+	void setVisible(int id, bool visible);
+	void setEnabled(int id, bool enabled);
+	void setTitle(int id, const ppl7::String& title);
+	void setIcon(int id, const ppl7::grafix::Drawable& icon);
+	void setWidget(int id, Widget* widget);
+	Widget* getWidget(int id) const;
+	int currentTab() const;
+	void setCurrentTab(int id);
+	size_t tabCount() const;
+	void clear();
+
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+
+};
+
+
+
 
 
 }	// EOF namespace ui
