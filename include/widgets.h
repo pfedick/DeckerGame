@@ -192,6 +192,51 @@ public:
 
 };
 
+class GradientWidget : public ppl7::tk::Widget
+{
+private:
+	class Item
+	{
+	public:
+		float age;
+		ppl7::grafix::Color color;
+	};
+	ppl7::grafix::Image gradient_bg;
+	ppl7::grafix::Image gradient_vg;
+	size_t max_items;
+	size_t max_id;
+	size_t selected_id;
+	std::map<size_t, Item> items;
+
+	typedef std::map<float, ppl7::grafix::Color> ColorMap;
+
+	ColorMap getSorted() const;
+
+	void drawCheckboard(ppl7::grafix::Drawable& draw);
+	void drawGradient(ppl7::grafix::Drawable& draw);
+
+public:
+	GradientWidget(int x, int y, int width, int height);
+	~GradientWidget();
+
+	void clear();
+	void addItem(float age, const ppl7::grafix::Color& color);
+
+	float currentAge() const;
+	ppl7::grafix::Color currentColor() const;
+	void setCurrentAge(float age);
+	void setCurrentColor(const ppl7::grafix::Color& color);
+
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseUpEvent(ppl7::tk::MouseEvent* event) override;
+	void lostFocusEvent(ppl7::tk::FocusEvent* event) override;
+	void mouseMoveEvent(ppl7::tk::MouseEvent* event) override;
+
+};
+
+
 
 
 

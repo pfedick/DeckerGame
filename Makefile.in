@@ -54,6 +54,7 @@ OBJECTS=compile/main.o \
 	compile/widgets_filedialog.o \
 	compile/widgets_colorwidget.o \
 	compile/widgets_tabwidget.o \
+	compile/widgets_gradientwidget.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -579,6 +580,10 @@ compile/widgets_filedialog.o: src/widgets/filedialog.cpp Makefile include/widget
 compile/widgets_colorwidget.o: src/widgets/colorwidget.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_colorwidget.o -c src/widgets/colorwidget.cpp $(CFLAGS)
+
+compile/widgets_gradientwidget.o: src/widgets/gradientwidget.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_gradientwidget.o -c src/widgets/gradientwidget.cpp $(CFLAGS)
 
 compile/widgets_tabwidget.o: src/widgets/tabwidget.cpp Makefile include/widgets.h
 	- @mkdir -p compile
