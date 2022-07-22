@@ -118,13 +118,15 @@ void GradientWidget::drawGradient(ppl7::grafix::Drawable& draw)
             float n1=1.0f - ((age - i1.age) / color_age_diff);
             float n2=1.0f - ((i2.age - age) / color_age_diff);
             ppl7::grafix::Color c=multiplyWithAlpha(i1.color, n1) + multiplyWithAlpha(i2.color, n2);
-            gradient_vg.line(0, y, w, y, c);
+            gradient_vg.line(16, y, w, y, c);
+            c.setAlpha(255);
+            gradient_vg.line(0, y, 16, y, c);
         }
     }
     draw.bltAlpha(gradient_vg);
 }
 
-void GradientWidget::addItem(float age, const ppl7::grafix::Color& color)
+void GradientWidget::addItem(float age, const ppl7::grafix::Color& color, float value)
 {
     if (age < 0.0f) age=0.0f;
     if (age > 1.0f) age=1.0f;
@@ -132,6 +134,7 @@ void GradientWidget::addItem(float age, const ppl7::grafix::Color& color)
     Item new_item;
     new_item.age=age;
     new_item.color=color;
+    new_item.value=value;
     max_id++;
     items.insert(std::pair<size_t, Item>(max_id, new_item));
     selected_id=max_id;
@@ -139,7 +142,7 @@ void GradientWidget::addItem(float age, const ppl7::grafix::Color& color)
 
 }
 
-std::map<float, ppl7::grafix::Color> GradientWidget::getItems() const
+std::map<float, ppl7::grafix::Color> GradientWidget::getColorItems() const
 {
     std::map<float, ppl7::grafix::Color> cm;
     std::map<size_t, Item>::const_iterator it;
@@ -148,6 +151,17 @@ std::map<float, ppl7::grafix::Color> GradientWidget::getItems() const
     }
     return cm;
 }
+
+std::map<float, float> GradientWidget::getValueItems() const
+{
+    std::map<float, float> cm;
+    std::map<size_t, Item>::const_iterator it;
+    for (it=items.begin();it != items.end();++it) {
+        cm.insert(std::pair<float, float>(it->second.age, it->second.value));
+    }
+    return cm;
+}
+
 
 std::list<GradientWidget::Item> GradientWidget::getSortedList() const
 {
@@ -173,6 +187,16 @@ float GradientWidget::currentAge() const
     return 0.0f;
 }
 
+float GradientWidget::currentValue() const
+{
+    if (selected_id) {
+        std::map<size_t, Item>::const_iterator it=items.find(selected_id);
+        if (it != items.end()) return it->second.value;
+    }
+    return 0.0f;
+}
+
+
 ppl7::grafix::Color GradientWidget::currentColor() const
 {
     if (selected_id) {
@@ -190,6 +214,19 @@ void GradientWidget::setCurrentAge(float age)
         if (it != items.end()) {
             if (it->second.age != age) {
                 it->second.age=age;
+                needsRedraw();
+            }
+        }
+    }
+}
+
+void GradientWidget::setCurrentValue(float value)
+{
+    if (selected_id) {
+        std::map<size_t, Item>::iterator it=items.find(selected_id);
+        if (it != items.end()) {
+            if (it->second.value != value) {
+                it->second.value=value;
                 needsRedraw();
             }
         }

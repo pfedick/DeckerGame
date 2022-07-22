@@ -200,6 +200,7 @@ private:
 	public:
 		Item();
 		float age;
+		float value;
 		ppl7::grafix::Color color;
 	};
 	ppl7::grafix::Image gradient_bg;
@@ -231,12 +232,15 @@ public:
 	~GradientWidget();
 
 	void clear();
-	void addItem(float age, const ppl7::grafix::Color& color);
-	std::map<float, ppl7::grafix::Color> getItems() const;
+	void addItem(float age, const ppl7::grafix::Color& color, float value=0.0f);
+	std::map<float, ppl7::grafix::Color> getColorItems() const;
+	std::map<float, float> getValueItems() const;
 
 	float currentAge() const;
+	float currentValue() const;
 	ppl7::grafix::Color currentColor() const;
 	void setCurrentAge(float age);
+	void setCurrentValue(float age);
 	void setCurrentColor(const ppl7::grafix::Color& color);
 	void deleteCurrentItem();
 

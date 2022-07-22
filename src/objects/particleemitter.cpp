@@ -53,7 +53,14 @@ private:
 	ParticleEmitter::ColorGradientItem next_color;
 	float color_age_diff;
 
+	bool useScaleGradient;
+	ParticleEmitter::ScaleGradientItem current_scale;
+	ParticleEmitter::ScaleGradientItem next_scale;
+	float scale_age_diff;
+	float base_scale;
+
 	void initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient);
+	void initScaleGradient(const std::list<ParticleEmitter::ScaleGradientItem>& gradient, float base_scale);
 public:
 
 	Particle();
@@ -70,7 +77,7 @@ Particle::Particle()
 	visibleAtPlaytime=true;
 	sprite_no_representation=216;
 	sprite_no=216;
-	next_animation=0.0f;
+	birth_time=next_animation=0.0f;
 	weight=0.0f;
 	direction=0.0f;
 	v=0.0f;
@@ -78,6 +85,9 @@ Particle::Particle()
 	spawned=true;
 	myLayer=Layer::BeforePlayer;
 	useColorGradient=false;
+	useScaleGradient=false;
+	color_age_diff=scale_age_diff=0.0f;
+	base_scale=0.0f;
 }
 
 void Particle::initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient)
@@ -103,6 +113,30 @@ void Particle::initColorGradient(const std::list<ParticleEmitter::ColorGradientI
 	color_age_diff=next_color.age - current_color.age;
 }
 
+void Particle::initScaleGradient(const std::list<ParticleEmitter::ScaleGradientItem>& gradient, float base_scale)
+{
+	if (gradient.empty()) return;
+	this->base_scale=base_scale;
+	scale_gradient=gradient;
+	useScaleGradient=true;
+	current_scale=scale_gradient.front();
+	scale_gradient.pop_front();
+
+	if (current_scale.age == 0.0f) {
+		if (scale_gradient.size() > 0) {
+			next_scale=scale_gradient.front();
+			scale_gradient.pop_front();
+		} else {
+			next_scale=current_scale;
+			next_scale.age=1.0;
+		}
+	} else {
+		next_scale=current_scale;
+		current_scale.age=0.0f;
+	}
+	scale_age_diff=next_scale.age - current_scale.age;
+}
+
 void Particle::update(double time, TileTypePlane&, Player&)
 {
 	if (time > next_animation) {
@@ -111,9 +145,10 @@ void Particle::update(double time, TileTypePlane&, Player&)
 		sprite_no=animation.getFrame();
 		sprite_no_representation=sprite_no;
 	}
+	float life_time=death_time - birth_time;
+	float age=(time - birth_time) / life_time;
+
 	if (useColorGradient) {
-		float life_time=death_time - birth_time;
-		float age=(time - birth_time) / life_time;
 		if (age > next_color.age) {
 			current_color=next_color;
 			if (color_gradient.size() > 0) {
@@ -128,6 +163,24 @@ void Particle::update(double time, TileTypePlane&, Player&)
 		float n2=1.0f - ((next_color.age - age) / color_age_diff);
 		color_mod=multiplyWithAlpha(current_color.color, n1) + multiplyWithAlpha(next_color.color, n2);
 	}
+
+	if (useScaleGradient) {
+		if (age > next_scale.age) {
+			current_scale=next_scale;
+			if (scale_gradient.size() > 0) {
+				next_scale=scale_gradient.front();
+				scale_gradient.pop_front();
+			} else {
+				next_scale.age=1.0f;
+			}
+			scale_age_diff=next_scale.age - current_scale.age;
+		}
+		float n1=1.0f - ((age - current_scale.age) / scale_age_diff);
+		float n2=1.0f - ((next_scale.age - age) / scale_age_diff);
+		scale=base_scale * (current_scale.scale * n1 + next_scale.scale * n2);
+		//printf("scale:%0.3f\n", scale);
+	}
+
 
 
 	pf.x+=velocity.x;
@@ -152,6 +205,19 @@ ParticleEmitter::ColorGradientItem::ColorGradientItem(float age, const ppl7::gra
 	this->age=age;
 	this->color=color;
 }
+
+ParticleEmitter::ScaleGradientItem::ScaleGradientItem()
+{
+	age=0.0f;
+	scale=0.0f;
+}
+
+ParticleEmitter::ScaleGradientItem::ScaleGradientItem(float age, float scale)
+{
+	this->age=age;
+	this->scale=scale;
+}
+
 
 
 Representation ParticleEmitter::representation()
@@ -262,7 +328,7 @@ void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 		break;
 	};
 	if (flags & static_cast<int>(Flags::useScaleGradient))
-		particle->scale_gradient=scale_gradient;
+		particle->initScaleGradient(scale_gradient, particle->scale);
 	if (flags & static_cast<int>(Flags::useColorGradient)) {
 		particle->initColorGradient(color_gradient);
 	}
@@ -335,7 +401,7 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 		std::list<ScaleGradientItem>::const_iterator it;
 		for (it=scale_gradient.begin();it != scale_gradient.end();++it) {
 			ppl7::PokeFloat(buffer + bytes + p, (*it).age);
-			ppl7::PokeFloat(buffer + bytes + p, (*it).scale);
+			ppl7::PokeFloat(buffer + bytes + p + 4, (*it).scale);
 			p+=8;
 		}
 	}
@@ -422,8 +488,9 @@ private:
 
 	// Particle Tab
 	ppl7::tk::ComboBox* particle_layer;
+	ppl7::tk::ComboBox* emitter_type;
 	ppl7::tk::ComboBox* particle_type;
-	ppl7::tk::HorizontalSlider* emitter_pixel_width;
+	ppl7::tk::HorizontalSlider* emitter_pixel_width, * emitter_pixel_height;
 	ppl7::tk::HorizontalSlider* min_birth_per_cycle, * max_birth_per_cycle;
 	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
 	ppl7::tk::DoubleHorizontalSlider* min_velocity, * max_velocity;
@@ -440,11 +507,20 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* color_gradient_age;
 	Decker::ui::GradientWidget* gradient_widget;
 
+	// Scale Gradient
+	ppl7::tk::CheckBox* checkbox_scale_gradient;
+	Decker::ui::GradientWidget* scale_gradient_widget;
+	ppl7::tk::DoubleHorizontalSlider* scale_gradient_age;
+	ppl7::tk::DoubleHorizontalSlider* scale_gradient_scale;
+
+
 	void setValuesToUi(const ParticleEmitter* object);
 	void setupParticleTab();
 	void setupColorTab();
+	void setupSizeTab();
 
 	void copyColorGradientToObject();
+	void copyScaleGradientToObject();
 	ParticleEmitter* object;
 
 public:
@@ -479,6 +555,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	addChild(tabwidget);
 	setupParticleTab();
 	setupColorTab();
+	setupSizeTab();
 	setValuesToUi(object);
 }
 
@@ -500,6 +577,16 @@ void ParticleEmitterDialog::setupParticleTab()
 	particle_layer->setEventHandler(this);
 	tab->addChild(particle_layer);
 
+	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Emitter Type:"));
+	emitter_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
+	emitter_type->setEventHandler(this);
+	emitter_type->add("Point", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Point)));
+	emitter_type->add("Rectangle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Rectangle)));
+	emitter_type->add("Ellipse", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Ellipse)));
+
+	tab->addChild(emitter_type);
+	y+=35;
+
 	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
 	particle_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
 	particle_type->setEventHandler(this);
@@ -510,16 +597,25 @@ void ParticleEmitterDialog::setupParticleTab()
 
 
 	col1=150;
+	int sw=(client.width() - col1 - 40 - 40) / 2;
 
 	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size (pixel):"));
-	emitter_pixel_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
+	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "width:"));
+	emitter_pixel_width=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	emitter_pixel_width->setEventHandler(this);
-	emitter_pixel_width->setLimits(1, 32);
-	emitter_pixel_width->enableSpinBox(true, 1, 60);
+	emitter_pixel_width->setLimits(1, 1024);
+	emitter_pixel_width->enableSpinBox(true, 1, 80);
 	tab->addChild(emitter_pixel_width);
+	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "height:"));
+	emitter_pixel_height=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	emitter_pixel_height->setEventHandler(this);
+	emitter_pixel_height->setLimits(1, 1024);
+	emitter_pixel_height->enableSpinBox(true, 1, 80);
+	tab->addChild(emitter_pixel_height);
+
 	y+=35;
 
-	int sw=(client.width() - col1 - 40 - 40) / 2;
+
 	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
 	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
@@ -540,13 +636,13 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	min_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
 	min_birth_per_cycle->setEventHandler(this);
-	min_birth_per_cycle->setLimits(0, 60);
+	min_birth_per_cycle->setLimits(0, 200);
 	min_birth_per_cycle->enableSpinBox(true, 1, 80);
 	tab->addChild(min_birth_per_cycle);
 	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_birth_per_cycle->setEventHandler(this);
-	max_birth_per_cycle->setLimits(0, 60);
+	max_birth_per_cycle->setLimits(0, 200);
 	max_birth_per_cycle->enableSpinBox(true, 1, 80);
 	tab->addChild(max_birth_per_cycle);
 	y+=35;
@@ -676,13 +772,13 @@ void ParticleEmitterDialog::setupColorTab()
 	tab->addChild(radio_color_gradient);
 	y+=35;
 
-	int col3=tab->width() - 400;
-	gradient_widget=new Decker::ui::GradientWidget(0, y, col3 - 10, 5 * 35);
+	int col3=tab->width() - 500;
+	gradient_widget=new Decker::ui::GradientWidget(0, y, col3 - 10, 7 * 35);
 	gradient_widget->setEventHandler(this);
 	tab->addChild(gradient_widget);
 
 	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "age:"));
-	color_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 360, 30);
+	color_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
 	color_gradient_age->setEventHandler(this);
 	color_gradient_age->setLimits(0.0f, 1.0f);
 	color_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
@@ -697,22 +793,50 @@ void ParticleEmitterDialog::setupColorTab()
 	color_gradient->setColorPreviewSize(2 * 35, 4 * 35);
 	tab->addChild(color_gradient);
 
-	/*
-	gradient_widget->addItem(0.0f, ppl7::grafix::Color(0, 0, 0, 255));
-	gradient_widget->addItem(0.25f, ppl7::grafix::Color(255, 0, 0, 255));
-	gradient_widget->addItem(0.5f, ppl7::grafix::Color(0, 255, 0, 255));
-	gradient_widget->addItem(0.75f, ppl7::grafix::Color(0, 0, 255, 255));
-	gradient_widget->addItem(1.0f, ppl7::grafix::Color(255, 255, 255, 0));
-	*/
+}
+
+void ParticleEmitterDialog::setupSizeTab()
+{
+	Widget* tab=tabwidget->getWidget(3);
+	if (!tab) return;
+	int y=0;
+	//ppl7::grafix::Rect client=tab->clientRect();
+
+	checkbox_scale_gradient=new ppl7::tk::CheckBox(0, y, 200, 30, "use scale gradient", false);
+	checkbox_scale_gradient->setEventHandler(this);
+	tab->addChild(checkbox_scale_gradient);
+	y+=35;
+	int col3=tab->width() - 500;
+	scale_gradient_widget=new Decker::ui::GradientWidget(0, y, col3 - 10, 7 * 35);
+	scale_gradient_widget->setEventHandler(this);
+	tab->addChild(scale_gradient_widget);
+
+	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "age:"));
+	scale_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
+	scale_gradient_age->setEventHandler(this);
+	scale_gradient_age->setLimits(0.0f, 1.0f);
+	scale_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
+	tab->addChild(scale_gradient_age);
+	y+=35;
+
+	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "scale:"));
+	scale_gradient_scale=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
+	scale_gradient_scale->setEventHandler(this);
+	scale_gradient_scale->setLimits(0.01f, 1.0f);
+	scale_gradient_scale->enableSpinBox(true, 0.010f, 3, 80);
+	tab->addChild(scale_gradient_scale);
+	y+=35;
 
 }
 
 void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 {
+	emitter_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->emitter_type)));
 	particle_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_type)));
 	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_layer)));
 	color->setColor(object->ParticleColor);
 	emitter_pixel_width->setValue(object->emitter_size.width);
+	emitter_pixel_height->setValue(object->emitter_size.height);
 	min_birth_per_cycle->setValue(object->min_birth_per_cycle);
 	max_birth_per_cycle->setValue(object->max_birth_per_cycle);
 	birth_time_min->setValue(object->birth_time_min);
@@ -729,20 +853,35 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	weight_max->setValue(object->weight_max);
 	gravity_x->setValue(object->gravity.x);
 	gravity_y->setValue(object->gravity.y);
-	gradient_widget->clear();
-	std::list<ParticleEmitter::ColorGradientItem>::const_iterator it;
-	for (it=object->color_gradient.begin();it != object->color_gradient.end();++it) {
-		gradient_widget->addItem(it->age, it->color);
+	{
+		gradient_widget->clear();
+		std::list<ParticleEmitter::ColorGradientItem>::const_iterator it;
+		for (it=object->color_gradient.begin();it != object->color_gradient.end();++it) {
+			gradient_widget->addItem(it->age, it->color);
+		}
+		if (!object->color_gradient.empty()) {
+			color_gradient->setEnabled(true);
+			color_gradient->setVisible(true);
+			color_gradient_age->setEnabled(true);
+			color_gradient_age->setVisible(true);
+		}
+		if (object->flags & static_cast<int>(ParticleEmitter::Flags::useColorGradient)) radio_color_gradient->setChecked(true);
+		else radio_solid_color->setChecked(true);
+		color_gradient->setColor(gradient_widget->currentColor());
+		color_gradient_age->setValue(gradient_widget->currentAge());
 	}
-	if (!object->color_gradient.empty()) {
-		color_gradient->setEnabled(true);
-		color_gradient->setVisible(true);
-		color_gradient_age->setEnabled(true);
-		color_gradient_age->setVisible(true);
-	}
-	if (object->flags & static_cast<int>(ParticleEmitter::Flags::useColorGradient)) radio_color_gradient->setChecked(true);
-	else radio_solid_color->setChecked(true);
+	{
+		scale_gradient_widget->clear();
+		std::list<ParticleEmitter::ScaleGradientItem>::const_iterator it;
+		for (it=object->scale_gradient.begin();it != object->scale_gradient.end();++it) {
+			int c=it->scale * 255;
+			scale_gradient_widget->addItem(it->age, ppl7::grafix::Color(c, c, c, 255), it->scale);
+		}
+		scale_gradient_age->setValue(scale_gradient_widget->currentAge());
+		scale_gradient_scale->setValue(scale_gradient_widget->currentValue());
 
+		if (object->flags & static_cast<int>(ParticleEmitter::Flags::useScaleGradient)) checkbox_scale_gradient->setChecked(true);
+	}
 
 }
 
@@ -753,6 +892,8 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == particle_type) {
 		object->particle_type=static_cast<ParticleEmitter::ParticleType>(particle_type->currentIdentifier().toInt());
+	} else 	if (widget == emitter_type) {
+		object->emitter_type=static_cast<ParticleEmitter::EmitterType>(emitter_type->currentIdentifier().toInt());
 	} else if (widget == particle_layer) {
 		object->particle_layer=static_cast<Object::Layer>(particle_layer->currentIdentifier().toInt());
 	} else if (widget == color) {
@@ -763,6 +904,10 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	} else if (widget == gradient_widget) {
 		color_gradient_age->setValue(gradient_widget->currentAge());
 		copyColorGradientToObject();
+	} else if (widget == scale_gradient_widget) {
+		scale_gradient_age->setValue(scale_gradient_widget->currentAge());
+		scale_gradient_scale->setValue(scale_gradient_widget->currentValue());
+		copyColorGradientToObject();
 	}
 }
 
@@ -772,6 +917,8 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t va
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == emitter_pixel_width) {
 		object->emitter_size.width=value;
+	} else if (widget == emitter_pixel_height) {
+		object->emitter_size.height=value;
 	} else if (widget == min_birth_per_cycle) {
 		object->min_birth_per_cycle=value;
 		if (value > object->max_birth_per_cycle) max_birth_per_cycle->setValue(value);
@@ -827,6 +974,14 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double val
 	} else if (widget == color_gradient_age) {
 		gradient_widget->setCurrentAge(color_gradient_age->value());
 		copyColorGradientToObject();
+	} else if (widget == scale_gradient_age) {
+		scale_gradient_widget->setCurrentAge(scale_gradient_age->value());
+		copyScaleGradientToObject();
+	} else if (widget == scale_gradient_scale) {
+		scale_gradient_widget->setCurrentValue(scale_gradient_scale->value());
+		int c=scale_gradient_scale->value() / scale_gradient_scale->maximum() * 255;
+		scale_gradient_widget->setCurrentColor(ppl7::grafix::Color(c, c, c, 255));
+		copyScaleGradientToObject();
 	}
 }
 
@@ -839,13 +994,16 @@ void ParticleEmitterDialog::selectionChangedEvent(ppl7::tk::Event* event)
 		color_gradient_age->setValue(gradient_widget->currentAge());
 		color_gradient_age->setEnabled(true);
 		color_gradient_age->setVisible(true);
+	} else if (event->widget() == scale_gradient_widget) {
+		scale_gradient_age->setValue(scale_gradient_widget->currentAge());
+		scale_gradient_scale->setValue(scale_gradient_widget->currentValue());
 	}
 }
 
 
 void ParticleEmitterDialog::copyColorGradientToObject()
 {
-	std::map<float, ppl7::grafix::Color> items=gradient_widget->getItems();
+	std::map<float, ppl7::grafix::Color> items=gradient_widget->getColorItems();
 	object->color_gradient.clear();
 	std::map<float, ppl7::grafix::Color>::const_iterator it;
 	for (it=items.begin();it != items.end();++it) {
@@ -853,13 +1011,29 @@ void ParticleEmitterDialog::copyColorGradientToObject()
 	}
 }
 
+void ParticleEmitterDialog::copyScaleGradientToObject()
+{
+	std::map<float, float> items=scale_gradient_widget->getValueItems();
+	object->scale_gradient.clear();
+	std::map<float, float>::const_iterator it;
+	for (it=items.begin();it != items.end();++it) {
+		//printf("copy scale item %0.3f: %0.3f\n", it->first, it->second);
+		object->scale_gradient.push_back(ParticleEmitter::ScaleGradientItem(it->first, it->second));
+	}
+}
+
 void ParticleEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
 	if (event->widget() == radio_color_gradient || event->widget() == radio_solid_color) {
-		int flags=object->flags & (!static_cast<int>(ParticleEmitter::Flags::useColorGradient));
+		int flags=object->flags & (0xffff - static_cast<int>(ParticleEmitter::Flags::useColorGradient));
 		if (radio_color_gradient->checked()) flags|=static_cast<int>(ParticleEmitter::Flags::useColorGradient);
 		object->flags=flags;
+	} else if (event->widget() == checkbox_scale_gradient) {
+		int flags=object->flags & (0xffff - static_cast<int>(ParticleEmitter::Flags::useScaleGradient));
+		if (checkbox_scale_gradient->checked()) flags|=static_cast<int>(ParticleEmitter::Flags::useScaleGradient);
+		object->flags=flags;
 	}
+	//printf("flags=%d\n", object->flags);
 
 }
 

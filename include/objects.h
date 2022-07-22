@@ -263,7 +263,7 @@ public:
 	enum class EmitterType {
 		Point=0,
 		Rectangle,
-		Elipse
+		Ellipse
 	};
 	enum class Flags {
 		useColorGradient=1,
@@ -273,6 +273,8 @@ public:
 	class ScaleGradientItem
 	{
 	public:
+		ScaleGradientItem();
+		ScaleGradientItem(float age, float scale);
 		float age;
 		float scale;
 	};
