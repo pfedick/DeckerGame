@@ -37,10 +37,12 @@ public:
     Timer time_events;
     Timer time_update_sprites;
     Timer time_update_objects;
+    Timer time_update_particles;
     Timer time_draw_background;
     Timer time_draw_tsop;
     Timer time_sprites;
     Timer time_objects;
+    Timer time_draw_particles;
     Timer time_plane;
     Timer time_misc;
 

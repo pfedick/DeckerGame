@@ -66,10 +66,12 @@ void Metrics::clear()
     time_events.clear();
     time_update_sprites.clear();
     time_update_objects.clear();
+    time_update_particles.clear();
     time_draw_background.clear();
     time_draw_tsop.clear();
     time_sprites.clear();
     time_objects.clear();
+    time_draw_particles.clear();
     time_plane.clear();
     time_misc.clear();
 }
@@ -91,10 +93,12 @@ Metrics Metrics::getAverage()
         m.time_events.duration=time_events.get() / framecount;
         m.time_update_sprites.duration=time_update_sprites.get() / framecount;
         m.time_update_objects.duration=time_update_objects.get() / framecount;
+        m.time_update_particles.duration=time_update_particles.get() / framecount;
         m.time_draw_background.duration=time_draw_background.get() / framecount;
         m.time_draw_tsop.duration=time_draw_tsop.get() / framecount;
         m.time_sprites.duration=time_sprites.get() / framecount;
         m.time_objects.duration=time_objects.get() / framecount;
+        m.time_draw_particles.duration=time_draw_particles.get() / framecount;
         m.time_plane.duration=time_plane.get() / framecount;
         m.time_misc.duration=time_misc.get() / framecount;
 

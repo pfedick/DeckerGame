@@ -379,7 +379,7 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 }
 
 MetricsSubMenu::MetricsSubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 450, 150)
+	: ppl7::tk::Frame(x, y, 450, 190)
 {
 	this->menue=menue;
 	this->setTransparent(false);
@@ -443,6 +443,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawIntMetric(draw, c1, c2, y, "Sprites", metrics.total_sprites);
 	y+=line;
 	drawIntMetric(draw, c1, c2, y, "Objects", metrics.total_objects);
+	y+=line;
+	drawIntMetric(draw, c1, c2, y, "Particles", metrics.total_particles);
 
 	y=5 + 2 * line;
 	c1=220;
@@ -453,6 +455,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	y+=line;
 	drawDoubleMetric(draw, c1 + 20, c2, y, "update objects:", metrics.time_update_objects.get());
 	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "update particles:", metrics.time_update_particles.get());
+	y+=line;
 	drawDoubleMetric(draw, c1 + 20, c2, y, "draw background:", metrics.time_draw_background.get());
 	y+=line;
 	//drawDoubleMetric(draw, c1 + 20, c2, y, "time_draw_tsop", metrics.time_draw_tsop.get());
@@ -462,6 +466,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawDoubleMetric(draw, c1 + 20, c2, y, "draw sprites:", metrics.time_sprites.get());
 	y+=line;
 	drawDoubleMetric(draw, c1 + 20, c2, y, "draw objects:", metrics.time_objects.get());
+	y+=line;
+	drawDoubleMetric(draw, c1 + 20, c2, y, "draw particles:", metrics.time_draw_particles.get());
 	y+=line;
 
 }
