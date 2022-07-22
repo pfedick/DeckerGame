@@ -9,17 +9,36 @@
 
 namespace Decker::ui {
 
+GradientWidget::Item::Item()
+{
+    age=0.0f;
+}
+
 GradientWidget::GradientWidget(int x, int y, int width, int height)
     : ppl7::tk::Widget(x, y, width, height)
 {
+    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
     max_items=8;
     max_id=0;
     selected_id=0;
+    drag_started=false;
+    drag_offset=0;
+    gradient_y1=0;
+    gradient_y2=0;
+    add_item_button=new ppl7::tk::Button(width - 32, 2, 30, 30, "", gfx->Toolbar.getDrawable(43));
+    add_item_button->setEventHandler(this);
+    addChild(add_item_button);
+    delete_item_button=new ppl7::tk::Button(width - 32, height - 32, 30, 30, "", gfx->Toolbar.getDrawable(44));
+    delete_item_button->setEventHandler(this);
+    addChild(delete_item_button);
 }
 
 GradientWidget::~GradientWidget()
 {
-
+    if (drag_started) {
+        drag_started=false;
+        ppl7::tk::GetWindowManager()->releaseMouse(this);
+    }
 
 }
 
@@ -63,11 +82,46 @@ void GradientWidget::drawGradient(ppl7::grafix::Drawable& draw)
         gradient_vg.create(draw.width(), draw.height());
     }
     gradient_vg.cls();
-    ColorMap cm=getSorted();
-    ppl7::grafix::Color c1, c2;
-
-
-
+    std::list<Item> cl=getSortedList();
+    if (!cl.empty()) {
+        int h=draw.height();
+        int w=draw.width();
+        Item i1, i2;
+        i1=cl.front();
+        cl.pop_front();
+        if (i1.age == 0.0f) {
+            if (cl.size() > 0) {
+                i2=cl.front();
+                cl.pop_front();
+            } else {
+                i2=i1;
+                i2.age=1.0;
+            }
+        } else {
+            i2=i1;
+            i1.age=0.0f;
+        }
+        float color_age_diff;
+        color_age_diff=i2.age - i1.age;
+        for (int y=0;y < h;y++) {
+            float age=(float)y / h;
+            if (age > i2.age) {
+                i1=i2;
+                if (cl.size() > 0) {
+                    i2=cl.front();
+                    cl.pop_front();
+                } else {
+                    i2.age=1.0f;
+                }
+                color_age_diff=i2.age - i1.age;
+            }
+            float n1=1.0f - ((age - i1.age) / color_age_diff);
+            float n2=1.0f - ((i2.age - age) / color_age_diff);
+            ppl7::grafix::Color c=multiplyWithAlpha(i1.color, n1) + multiplyWithAlpha(i2.color, n2);
+            gradient_vg.line(0, y, w, y, c);
+        }
+    }
+    draw.bltAlpha(gradient_vg);
 }
 
 void GradientWidget::addItem(float age, const ppl7::grafix::Color& color)
@@ -85,14 +139,29 @@ void GradientWidget::addItem(float age, const ppl7::grafix::Color& color)
 
 }
 
-GradientWidget::ColorMap GradientWidget::getSorted() const
+std::map<float, ppl7::grafix::Color> GradientWidget::getItems() const
 {
-    GradientWidget::ColorMap cm;
+    std::map<float, ppl7::grafix::Color> cm;
     std::map<size_t, Item>::const_iterator it;
     for (it=items.begin();it != items.end();++it) {
         cm.insert(std::pair<float, ppl7::grafix::Color>(it->second.age, it->second.color));
     }
     return cm;
+}
+
+std::list<GradientWidget::Item> GradientWidget::getSortedList() const
+{
+    std::list<GradientWidget::Item> cl;
+    std::map<size_t, Item>::const_iterator it;
+    std::map<float, Item> sorted_list;
+    for (it=items.begin();it != items.end();++it) {
+        sorted_list.insert(std::pair<float, Item>(it->second.age, it->second));
+    }
+    std::map<float, Item>::const_iterator sit;
+    for (sit=sorted_list.begin();sit != sorted_list.end();++sit) {
+        cl.push_back(sit->second);
+    }
+    return cl;
 }
 
 float GradientWidget::currentAge() const
@@ -115,11 +184,14 @@ ppl7::grafix::Color GradientWidget::currentColor() const
 
 void GradientWidget::setCurrentAge(float age)
 {
+    if (age < 0.0f || age>1.0f) return;
     if (selected_id) {
         std::map<size_t, Item>::iterator it=items.find(selected_id);
         if (it != items.end()) {
-            it->second.age=age;
-            needsRedraw();
+            if (it->second.age != age) {
+                it->second.age=age;
+                needsRedraw();
+            }
         }
     }
 }
@@ -129,11 +201,56 @@ void GradientWidget::setCurrentColor(const ppl7::grafix::Color& color)
     if (selected_id) {
         std::map<size_t, Item>::iterator it=items.find(selected_id);
         if (it != items.end()) {
-            it->second.color=color;
-            needsRedraw();
+            if (it->second.color != color) {
+                it->second.color=color;
+                needsRedraw();
+            }
         }
     }
+}
 
+void GradientWidget::deleteCurrentItem()
+{
+    if (selected_id) {
+        items.erase(selected_id);
+        selected_id=-1;
+        handler_pos.clear();
+        if (items.size() > 0) selected_id=items.begin()->first;
+        needsRedraw();
+    }
+}
+
+void GradientWidget::drawHandlerItem(ppl7::grafix::Drawable& draw, int y, const ppl7::grafix::Color handler_color)
+{
+    ppl7::grafix::Color light(255, 255, 255, 255);
+    ppl7::grafix::Color shadow(32, 32, 32, 255);
+
+    draw.line(11, y, 80, y, light);
+    draw.line(11, y + 1, 80, y + 1, shadow);
+    draw.fillRect(82, y - 4, 120, y + 4, handler_color);
+    draw.line(81, y - 4, 81, y + 5, light);
+    draw.line(82, y - 4, 120, y - 4, light);
+    draw.line(82, y + 5, 120, y + 5, shadow);
+    draw.line(120, y - 4, 120, y + 4, shadow);
+}
+
+void GradientWidget::drawHandler(ppl7::grafix::Drawable& draw, int y1, int y2)
+{
+    handler_pos.clear();
+    int selected_y=-1;
+    int h=y2 - y1;
+
+    std::map<size_t, Item>::const_iterator it;
+    for (it=items.begin();it != items.end();++it) {
+        int y=11 + it->second.age * (float)h;
+        if (it->first == selected_id) {
+            selected_y=y;
+        } else {
+            drawHandlerItem(draw, y, ppl7::grafix::Color(128, 128, 128, 255));
+        }
+        handler_pos.insert(std::pair<size_t, int>(it->first, y));
+    }
+    if (selected_y >= 0) drawHandlerItem(draw, selected_y, ppl7::grafix::Color(210, 210, 220, 255));
 }
 
 void GradientWidget::paint(ppl7::grafix::Drawable& draw)
@@ -162,32 +279,92 @@ void GradientWidget::paint(ppl7::grafix::Drawable& draw)
     draw.line(11, h - 9, hw + 11, h - 9, light);
     draw.line(hw + 12, 10, hw + 12, h - 10, light);
     //draw.drawRect(10,10,10+hw,h-10,)
+    gradient_y1=11;
+    gradient_y2=h - 11;
     ppl7::grafix::Drawable d=draw.getDrawable(11, 11, hw + 10, h - 11);
     drawCheckboard(d);
     drawGradient(d);
-
-
-
+    drawHandler(draw, 11, h - 11);
 }
 
 void GradientWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
+    std::map<size_t, int>::const_iterator it;
+    if (event->widget() == add_item_button) {
+        addItem(1.0f, currentColor());
+        ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+        ev.setWidget(this);
+        EventHandler::selectionChangedEvent(&ev);
+        return;
 
+    } else if (event->widget() == delete_item_button) {
+        deleteCurrentItem();
+        ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+        ev.setWidget(this);
+        EventHandler::selectionChangedEvent(&ev);
+        return;
+    }
+    if (event->p.x > 80 && event->p.x < 120) {
+        if (selected_id >= 0) {
+            it=handler_pos.find(selected_id);
+            if (it != handler_pos.end()) {
+                if (event->p.y >= it->second - 4 && event->p.y <= it->second + 4) {
+                    drag_started=true;
+                    drag_offset=event->p.y - it->second + 11;
+                    drag_start_pos=event->p;
+                    ppl7::tk::GetWindowManager()->grabMouse(this);
+                    return;
+                }
+            }
+        }
+        for (it=handler_pos.begin();it != handler_pos.end();++it) {
+            if (event->p.y >= it->second - 4 && event->p.y <= it->second + 4) {
+                selected_id=it->first;
+                ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+                ev.setWidget(this);
+                EventHandler::selectionChangedEvent(&ev);
+                drag_started=true;
+                drag_offset=event->p.y - it->second + 11;
+                drag_start_pos=event->p;
+                ppl7::tk::GetWindowManager()->grabMouse(this);
+                needsRedraw();
+                return;
+            }
+        }
+    }
 }
 
 void GradientWidget::mouseUpEvent(ppl7::tk::MouseEvent* event)
 {
-
+    if (drag_started) {
+        drag_started=false;
+        ppl7::tk::GetWindowManager()->releaseMouse(this);
+    }
 }
 
 void GradientWidget::lostFocusEvent(ppl7::tk::FocusEvent* event)
 {
-
+    if (drag_started) {
+        drag_started=false;
+        ppl7::tk::GetWindowManager()->releaseMouse(this);
+    }
 }
 
 void GradientWidget::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 {
-
+    if (event->buttonMask & ppl7::tk::MouseEvent::MouseButton::Left) {
+        if (drag_started) {
+            float draw_range=gradient_y2 - gradient_y1;
+            float age=(float)(event->p.y - drag_offset) / draw_range;
+            setCurrentAge(age);
+            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ev.setWidget(this);
+            EventHandler::valueChangedEvent(&ev, (int)selected_id);
+        }
+    } else if (drag_started) {
+        drag_started=false;
+        ppl7::tk::GetWindowManager()->releaseMouse(this);
+    }
 }
 
 }   // EOF namespace

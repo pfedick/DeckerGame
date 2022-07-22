@@ -92,6 +92,17 @@ void Particle::update(double time, TileTypePlane&, Player&)
  * Particle Emitter
  ***************************************************************/
 
+ParticleEmitter::ColorGradientItem::ColorGradientItem()
+{
+	age=0.0f;
+}
+
+ParticleEmitter::ColorGradientItem::ColorGradientItem(float age, const ppl7::grafix::Color& color)
+{
+	this->age=age;
+	this->color=color;
+}
+
 
 Representation ParticleEmitter::representation()
 {
@@ -370,10 +381,13 @@ private:
 	void setValuesToUi(const ParticleEmitter* object);
 	void setupParticleTab();
 	void setupColorTab();
+
+	void copyColorGradientToObject();
 	ParticleEmitter* object;
 
 public:
 	ParticleEmitterDialog(ParticleEmitter* object);
+	virtual void selectionChangedEvent(ppl7::tk::Event* event) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
@@ -609,16 +623,24 @@ void ParticleEmitterDialog::setupColorTab()
 	color_gradient_age->setEventHandler(this);
 	color_gradient_age->setLimits(0.0f, 1.0f);
 	color_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
+	color_gradient_age->setEnabled(false);
+	color_gradient_age->setVisible(false);
 	tab->addChild(color_gradient_age);
 	y+=35;
 	color_gradient=new Decker::ui::ColorSliderWidget(col3, y, client.width() - col3, 4 * 35, true);
 	color_gradient->setEventHandler(this);
 	color_gradient->setEnabled(false);
+	color_gradient->setVisible(false);
 	color_gradient->setColorPreviewSize(2 * 35, 4 * 35);
 	tab->addChild(color_gradient);
 
+	/*
 	gradient_widget->addItem(0.0f, ppl7::grafix::Color(0, 0, 0, 255));
-	gradient_widget->addItem(1.0f, ppl7::grafix::Color(255, 255, 255, 255));
+	gradient_widget->addItem(0.25f, ppl7::grafix::Color(255, 0, 0, 255));
+	gradient_widget->addItem(0.5f, ppl7::grafix::Color(0, 255, 0, 255));
+	gradient_widget->addItem(0.75f, ppl7::grafix::Color(0, 0, 255, 255));
+	gradient_widget->addItem(1.0f, ppl7::grafix::Color(255, 255, 255, 0));
+	*/
 
 }
 
@@ -644,6 +666,17 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	weight_max->setValue(object->weight_max);
 	gravity_x->setValue(object->gravity.x);
 	gravity_y->setValue(object->gravity.y);
+	gradient_widget->clear();
+	std::list<ParticleEmitter::ColorGradientItem>::const_iterator it;
+	for (it=object->color_gradient.begin();it != object->color_gradient.end();++it) {
+		gradient_widget->addItem(it->age, it->color);
+	}
+	if (!object->color_gradient.empty()) {
+		color_gradient->setEnabled(true);
+		color_gradient->setVisible(true);
+		color_gradient_age->setEnabled(true);
+		color_gradient_age->setVisible(true);
+	}
 
 
 }
@@ -659,6 +692,12 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 		object->particle_layer=static_cast<Object::Layer>(particle_layer->currentIdentifier().toInt());
 	} else if (widget == color) {
 		object->ParticleColor=color->color();
+	} else if (widget == color_gradient) {
+		gradient_widget->setCurrentColor(color_gradient->color());
+		copyColorGradientToObject();
+	} else if (widget == gradient_widget) {
+		color_gradient_age->setValue(gradient_widget->currentAge());
+		copyColorGradientToObject();
 	}
 }
 
@@ -720,10 +759,34 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double val
 	} else if (widget == weight_max) {
 		object->weight_max=(float)value;
 		if (value < weight_min->value()) weight_min->setValue(value);
-
+	} else if (widget == color_gradient_age) {
+		gradient_widget->setCurrentAge(color_gradient_age->value());
+		copyColorGradientToObject();
 	}
 }
 
+void ParticleEmitterDialog::selectionChangedEvent(ppl7::tk::Event* event)
+{
+	if (event->widget() == gradient_widget) {
+		color_gradient->setColor(gradient_widget->currentColor());
+		color_gradient->setEnabled(true);
+		color_gradient->setVisible(true);
+		color_gradient_age->setValue(gradient_widget->currentAge());
+		color_gradient_age->setEnabled(true);
+		color_gradient_age->setVisible(true);
+	}
+}
+
+
+void ParticleEmitterDialog::copyColorGradientToObject()
+{
+	std::map<float, ppl7::grafix::Color> items=gradient_widget->getItems();
+	object->color_gradient.clear();
+	std::map<float, ppl7::grafix::Color>::const_iterator it;
+	for (it=items.begin();it != items.end();++it) {
+		object->color_gradient.push_back(ParticleEmitter::ColorGradientItem(it->first, it->second));
+	}
+}
 
 static ParticleEmitter clipboard;
 

@@ -271,6 +271,8 @@ public:
 	public:
 		float age;
 		ppl7::grafix::Color color;
+		ColorGradientItem(float age, const ppl7::grafix::Color& color);
+		ColorGradientItem();
 	};
 	ParticleType particle_type;
 	ppl7::grafix::Color ParticleColor;

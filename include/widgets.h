@@ -198,6 +198,7 @@ private:
 	class Item
 	{
 	public:
+		Item();
 		float age;
 		ppl7::grafix::Color color;
 	};
@@ -207,13 +208,23 @@ private:
 	size_t max_id;
 	size_t selected_id;
 	std::map<size_t, Item> items;
+	std::map<size_t, int> handler_pos;
+	int gradient_y1;
+	int gradient_y2;
 
-	typedef std::map<float, ppl7::grafix::Color> ColorMap;
+	bool drag_started;
+	int drag_offset;
+	ppl7::grafix::Point drag_start_pos;
 
-	ColorMap getSorted() const;
+	ppl7::tk::Button* add_item_button;
+	ppl7::tk::Button* delete_item_button;
+
+	std::list<Item> getSortedList() const;
 
 	void drawCheckboard(ppl7::grafix::Drawable& draw);
 	void drawGradient(ppl7::grafix::Drawable& draw);
+	void drawHandler(ppl7::grafix::Drawable& draw, int y1, int y2);
+	void drawHandlerItem(ppl7::grafix::Drawable& draw, int y, const ppl7::grafix::Color handler_color);
 
 public:
 	GradientWidget(int x, int y, int width, int height);
@@ -221,11 +232,13 @@ public:
 
 	void clear();
 	void addItem(float age, const ppl7::grafix::Color& color);
+	std::map<float, ppl7::grafix::Color> getItems() const;
 
 	float currentAge() const;
 	ppl7::grafix::Color currentColor() const;
 	void setCurrentAge(float age);
 	void setCurrentColor(const ppl7::grafix::Color& color);
+	void deleteCurrentItem();
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
