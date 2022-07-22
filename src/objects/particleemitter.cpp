@@ -36,7 +36,7 @@ public:
 
 
 private:
-
+	double birth_time;
 	double next_animation;
 	double death_time;
 	AnimationCycle animation;
@@ -47,6 +47,13 @@ private:
 	float v;
 	std::list<ParticleEmitter::ColorGradientItem>color_gradient;
 	std::list<ParticleEmitter::ScaleGradientItem>scale_gradient;
+
+	bool useColorGradient;
+	ParticleEmitter::ColorGradientItem current_color;
+	ParticleEmitter::ColorGradientItem next_color;
+	float color_age_diff;
+
+	void initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient);
 public:
 
 	Particle();
@@ -70,6 +77,30 @@ Particle::Particle()
 	death_time=1.0f;
 	spawned=true;
 	myLayer=Layer::BeforePlayer;
+	useColorGradient=false;
+}
+
+void Particle::initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient)
+{
+	if (gradient.empty()) return;
+	color_gradient=gradient;
+	useColorGradient=true;
+	current_color=color_gradient.front();
+	color_gradient.pop_front();
+
+	if (current_color.age == 0.0f) {
+		if (color_gradient.size() > 0) {
+			next_color=color_gradient.front();
+			color_gradient.pop_front();
+		} else {
+			next_color=current_color;
+			next_color.age=1.0;
+		}
+	} else {
+		next_color=current_color;
+		current_color.age=0.0f;
+	}
+	color_age_diff=next_color.age - current_color.age;
 }
 
 void Particle::update(double time, TileTypePlane&, Player&)
@@ -80,6 +111,25 @@ void Particle::update(double time, TileTypePlane&, Player&)
 		sprite_no=animation.getFrame();
 		sprite_no_representation=sprite_no;
 	}
+	if (useColorGradient) {
+		float life_time=death_time - birth_time;
+		float age=(time - birth_time) / life_time;
+		if (age > next_color.age) {
+			current_color=next_color;
+			if (color_gradient.size() > 0) {
+				next_color=color_gradient.front();
+				color_gradient.pop_front();
+			} else {
+				next_color.age=1.0f;
+			}
+			color_age_diff=next_color.age - current_color.age;
+		}
+		float n1=1.0f - ((age - current_color.age) / color_age_diff);
+		float n2=1.0f - ((next_color.age - age) / color_age_diff);
+		color_mod=multiplyWithAlpha(current_color.color, n1) + multiplyWithAlpha(next_color.color, n2);
+	}
+
+
 	pf.x+=velocity.x;
 	pf.y+=velocity.y;
 	p.x=(int)pf.x;
@@ -121,9 +171,11 @@ ParticleEmitter::ParticleEmitter()
 	sprite_no_representation=428;
 	next_birth=0.0f;
 	particle_type=ParticleType::ParticleWhite;
+	emitter_type=EmitterType::Point;
 	particle_layer=Object::Layer::BehindPlayer;
 	ParticleColor.set(255, 255, 255, 255);
-	emitter_pixel_width=1;
+	emitter_size.setSize(1, 1);
+	flags=0;
 	min_birth_per_cycle=1;
 	max_birth_per_cycle = 4;
 	birth_time_min=0.020f;
@@ -143,7 +195,7 @@ ParticleEmitter::ParticleEmitter()
 	weight_min=0.0f;
 	weight_max=0.0f;
 
-	save_size+=68 + 64 * 2;
+	save_size+=73 + 64 * 2;
 }
 
 static float randf(float min, float max)
@@ -158,6 +210,7 @@ void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 {
 	Particle* particle=new Particle();
 	//int start_offset=ppl7::rand(0, emitter_pixel_width) - (emitter_pixel_width / 2);
+	particle->birth_time=time;
 	particle->p.x=p.x;
 	particle->p.y=p.y;
 	particle->myLayer=particle_layer;
@@ -208,10 +261,11 @@ void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 		particle->animation.startRandom(particle_white, sizeof(particle_white) / sizeof(int), true, 0);
 		break;
 	};
-	particle->scale_gradient=scale_gradient;
-	particle->color_gradient=color_gradient;
-
-
+	if (flags & static_cast<int>(Flags::useScaleGradient))
+		particle->scale_gradient=scale_gradient;
+	if (flags & static_cast<int>(Flags::useColorGradient)) {
+		particle->initColorGradient(color_gradient);
+	}
 	GetObjectSystem()->addObject(particle);
 }
 
@@ -235,29 +289,33 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 	memset(buffer, 0, size);
 	size_t bytes=Object::save(buffer, size);
 	ppl7::Poke8(buffer + bytes, static_cast<int>(particle_type));
-	ppl7::Poke8(buffer + bytes + 1, emitter_pixel_width);
-	ppl7::Poke8(buffer + bytes + 2, min_birth_per_cycle);
-	ppl7::Poke8(buffer + bytes + 3, max_birth_per_cycle);
-	ppl7::Poke8(buffer + bytes + 4, ParticleColor.red());
-	ppl7::Poke8(buffer + bytes + 5, ParticleColor.green());
-	ppl7::Poke8(buffer + bytes + 6, ParticleColor.blue());
-	ppl7::Poke8(buffer + bytes + 7, ParticleColor.alpha());
-	ppl7::PokeFloat(buffer + bytes + 8, birth_time_min);
-	ppl7::PokeFloat(buffer + bytes + 12, birth_time_max);
-	ppl7::PokeFloat(buffer + bytes + 16, direction);
-	ppl7::PokeFloat(buffer + bytes + 20, variation);
-	ppl7::PokeFloat(buffer + bytes + 24, min_velocity);
-	ppl7::PokeFloat(buffer + bytes + 28, max_velocity);
-	ppl7::PokeFloat(buffer + bytes + 32, scale_min);
-	ppl7::PokeFloat(buffer + bytes + 36, scale_max);
-	ppl7::PokeFloat(buffer + bytes + 40, age_min);
-	ppl7::PokeFloat(buffer + bytes + 44, age_max);
-	ppl7::PokeFloat(buffer + bytes + 48, weight_min);
-	ppl7::PokeFloat(buffer + bytes + 52, weight_max);
-	ppl7::PokeFloat(buffer + bytes + 56, gravity.x);
-	ppl7::PokeFloat(buffer + bytes + 60, gravity.y);
-	ppl7::Poke8(buffer + bytes + 64, static_cast<int>(particle_layer));
-	size_t p=65;
+	ppl7::Poke8(buffer + bytes + 1, static_cast<int>(emitter_type));
+	ppl7::Poke8(buffer + bytes + 2, emitter_size.width);
+	ppl7::Poke8(buffer + bytes + 3, emitter_size.height);
+	ppl7::Poke8(buffer + bytes + 4, min_birth_per_cycle);
+	ppl7::Poke8(buffer + bytes + 5, max_birth_per_cycle);
+	ppl7::Poke8(buffer + bytes + 6, ParticleColor.red());
+	ppl7::Poke8(buffer + bytes + 7, ParticleColor.green());
+	ppl7::Poke8(buffer + bytes + 8, ParticleColor.blue());
+	ppl7::Poke8(buffer + bytes + 9, ParticleColor.alpha());
+	ppl7::PokeFloat(buffer + bytes + 10, birth_time_min);
+	ppl7::PokeFloat(buffer + bytes + 14, birth_time_max);
+	ppl7::PokeFloat(buffer + bytes + 18, direction);
+	ppl7::PokeFloat(buffer + bytes + 22, variation);
+	ppl7::PokeFloat(buffer + bytes + 26, min_velocity);
+	ppl7::PokeFloat(buffer + bytes + 30, max_velocity);
+	ppl7::PokeFloat(buffer + bytes + 34, scale_min);
+	ppl7::PokeFloat(buffer + bytes + 38, scale_max);
+	ppl7::PokeFloat(buffer + bytes + 42, age_min);
+	ppl7::PokeFloat(buffer + bytes + 46, age_max);
+	ppl7::PokeFloat(buffer + bytes + 50, weight_min);
+	ppl7::PokeFloat(buffer + bytes + 54, weight_max);
+	ppl7::PokeFloat(buffer + bytes + 58, gravity.x);
+	ppl7::PokeFloat(buffer + bytes + 62, gravity.y);
+	ppl7::Poke8(buffer + bytes + 66, static_cast<int>(particle_layer));
+	ppl7::Poke16(buffer + bytes + 67, flags);
+	ppl7::Poke8(buffer + bytes + 69, 0);	// unused
+	size_t p=70;
 	{
 		ppl7::Poke8(buffer + bytes + p, color_gradient.size());	// Number of Color Gradients, bei 0 wird ParticleColor verwendet
 		p++;
@@ -290,29 +348,33 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < save_size) return 0;
 	particle_type=static_cast<ParticleType>(ppl7::Peek8(buffer + bytes));
-	emitter_pixel_width=ppl7::Peek8(buffer + bytes + 1);
-	min_birth_per_cycle=ppl7::Peek8(buffer + bytes + 2);
-	max_birth_per_cycle=ppl7::Peek8(buffer + bytes + 3);
-	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 4));
-	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 5));
-	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 6));
-	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 7));
-	birth_time_min=ppl7::PeekFloat(buffer + bytes + 8);
-	birth_time_max=ppl7::PeekFloat(buffer + bytes + 12);
-	direction=ppl7::PeekFloat(buffer + bytes + 16);
-	variation=ppl7::PeekFloat(buffer + bytes + 20);
-	min_velocity=ppl7::PeekFloat(buffer + bytes + 24);
-	max_velocity=ppl7::PeekFloat(buffer + bytes + 28);
-	scale_min=ppl7::PeekFloat(buffer + bytes + 32);
-	scale_max=ppl7::PeekFloat(buffer + bytes + 36);
-	age_min=ppl7::PeekFloat(buffer + bytes + 40);
-	age_max=ppl7::PeekFloat(buffer + bytes + 44);
-	weight_min=ppl7::PeekFloat(buffer + bytes + 48);
-	weight_max=ppl7::PeekFloat(buffer + bytes + 52);
-	gravity.x=ppl7::PeekFloat(buffer + bytes + 56);
-	gravity.y=ppl7::PeekFloat(buffer + bytes + 60);
-	particle_layer=static_cast<Object::Layer>(ppl7::Peek8(buffer + bytes + 64));
-	size_t p=65;
+	emitter_type=static_cast<EmitterType>(ppl7::Peek8(buffer + bytes + 1));
+	emitter_size.width=ppl7::Peek8(buffer + bytes + 2);
+	emitter_size.height=ppl7::Peek8(buffer + bytes + 3);
+	min_birth_per_cycle=ppl7::Peek8(buffer + bytes + 4);
+	max_birth_per_cycle=ppl7::Peek8(buffer + bytes + 5);
+	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 6));
+	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 7));
+	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 8));
+	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 9));
+	birth_time_min=ppl7::PeekFloat(buffer + bytes + 10);
+	birth_time_max=ppl7::PeekFloat(buffer + bytes + 14);
+	direction=ppl7::PeekFloat(buffer + bytes + 18);
+	variation=ppl7::PeekFloat(buffer + bytes + 22);
+	min_velocity=ppl7::PeekFloat(buffer + bytes + 26);
+	max_velocity=ppl7::PeekFloat(buffer + bytes + 30);
+	scale_min=ppl7::PeekFloat(buffer + bytes + 34);
+	scale_max=ppl7::PeekFloat(buffer + bytes + 38);
+	age_min=ppl7::PeekFloat(buffer + bytes + 42);
+	age_max=ppl7::PeekFloat(buffer + bytes + 46);
+	weight_min=ppl7::PeekFloat(buffer + bytes + 50);
+	weight_max=ppl7::PeekFloat(buffer + bytes + 54);
+	gravity.x=ppl7::PeekFloat(buffer + bytes + 58);
+	gravity.y=ppl7::PeekFloat(buffer + bytes + 62);
+	particle_layer=static_cast<Object::Layer>(ppl7::Peek8(buffer + bytes + 66));
+	flags=ppl7::Peek16(buffer + bytes + 67);
+	// 69 is unused
+	size_t p=70;
 
 	int num_color_gradients=ppl7::Peek8(buffer + bytes + p);
 	p++;
@@ -392,6 +454,7 @@ public:
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
 };
 
 void ParticleEmitter::openUi()
@@ -412,7 +475,7 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	tabwidget->addTab(1, "Particle generation");
 	tabwidget->addTab(2, "Colors");
 	tabwidget->addTab(3, "Size gradient");
-	tabwidget->setCurrentTab(2);
+	//tabwidget->setCurrentTab(2);
 	addChild(tabwidget);
 	setupParticleTab();
 	setupColorTab();
@@ -598,7 +661,7 @@ void ParticleEmitterDialog::setupColorTab()
 	int y=0;
 	ppl7::grafix::Rect client=tab->clientRect();
 
-	radio_solid_color=new ppl7::tk::RadioButton(0, y, 200, 30, "solid color:", true);
+	radio_solid_color=new ppl7::tk::RadioButton(0, y, 200, 30, "solid color:", false);
 	radio_solid_color->setEventHandler(this);
 	tab->addChild(radio_solid_color);
 	y+=35;
@@ -608,7 +671,7 @@ void ParticleEmitterDialog::setupColorTab()
 	tab->addChild(color);
 	y+=4 * 35;
 
-	radio_color_gradient=new ppl7::tk::RadioButton(0, y, 200, 30, "color gradient:", true);
+	radio_color_gradient=new ppl7::tk::RadioButton(0, y, 200, 30, "color gradient:", false);
 	radio_color_gradient->setEventHandler(this);
 	tab->addChild(radio_color_gradient);
 	y+=35;
@@ -649,7 +712,7 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	particle_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_type)));
 	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_layer)));
 	color->setColor(object->ParticleColor);
-	emitter_pixel_width->setValue(object->emitter_pixel_width);
+	emitter_pixel_width->setValue(object->emitter_size.width);
 	min_birth_per_cycle->setValue(object->min_birth_per_cycle);
 	max_birth_per_cycle->setValue(object->max_birth_per_cycle);
 	birth_time_min->setValue(object->birth_time_min);
@@ -677,6 +740,8 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 		color_gradient_age->setEnabled(true);
 		color_gradient_age->setVisible(true);
 	}
+	if (object->flags & static_cast<int>(ParticleEmitter::Flags::useColorGradient)) radio_color_gradient->setChecked(true);
+	else radio_solid_color->setChecked(true);
 
 
 }
@@ -706,7 +771,7 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t va
 	//printf("got a RainEmitterDialog::valueChangedEvent with int64_t value\n");
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == emitter_pixel_width) {
-		object->emitter_pixel_width=value;
+		object->emitter_size.width=value;
 	} else if (widget == min_birth_per_cycle) {
 		object->min_birth_per_cycle=value;
 		if (value > object->max_birth_per_cycle) max_birth_per_cycle->setValue(value);
@@ -788,15 +853,27 @@ void ParticleEmitterDialog::copyColorGradientToObject()
 	}
 }
 
+void ParticleEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	if (event->widget() == radio_color_gradient || event->widget() == radio_solid_color) {
+		int flags=object->flags & (!static_cast<int>(ParticleEmitter::Flags::useColorGradient));
+		if (radio_color_gradient->checked()) flags|=static_cast<int>(ParticleEmitter::Flags::useColorGradient);
+		object->flags=flags;
+	}
+
+}
+
 static ParticleEmitter clipboard;
 
 void ParticleEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 {
 	if (button == Dialog::Buttons::Copy) {
 		clipboard.particle_type=object->particle_type;
+		clipboard.emitter_type=object->emitter_type;
 		clipboard.particle_layer=object->particle_layer;
 		clipboard.ParticleColor=object->ParticleColor;
-		clipboard.emitter_pixel_width=object->emitter_pixel_width;
+		clipboard.emitter_size=object->emitter_size;
+		clipboard.flags=object->flags;
 		clipboard.min_birth_per_cycle=object->min_birth_per_cycle;
 		clipboard.max_birth_per_cycle=object->max_birth_per_cycle;
 		clipboard.birth_time_min=object->birth_time_min;
@@ -817,9 +894,11 @@ void ParticleEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 
 	} else if (button == Dialog::Buttons::Paste) {
 		object->particle_type=clipboard.particle_type;
+		object->emitter_type=clipboard.emitter_type;
 		object->particle_layer=clipboard.particle_layer;
 		object->ParticleColor=clipboard.ParticleColor;
-		object->emitter_pixel_width=clipboard.emitter_pixel_width;
+		object->emitter_size=clipboard.emitter_size;
+		object->flags=clipboard.flags;
 		object->min_birth_per_cycle=clipboard.min_birth_per_cycle;
 		object->max_birth_per_cycle=clipboard.max_birth_per_cycle;
 		object->birth_time_min=clipboard.birth_time_min;

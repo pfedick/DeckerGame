@@ -260,6 +260,16 @@ public:
 		ParticleTransparent=0,
 		ParticleWhite,
 	};
+	enum class EmitterType {
+		Point=0,
+		Rectangle,
+		Elipse
+	};
+	enum class Flags {
+		useColorGradient=1,
+		useScaleGradient=2,
+
+	};
 	class ScaleGradientItem
 	{
 	public:
@@ -275,9 +285,11 @@ public:
 		ColorGradientItem();
 	};
 	ParticleType particle_type;
+	EmitterType emitter_type;
 	ppl7::grafix::Color ParticleColor;
 	Decker::Objects::Object::Layer particle_layer;
-	int emitter_pixel_width;
+	ppl7::grafix::Size emitter_size;
+	int flags;
 	int min_birth_per_cycle, max_birth_per_cycle;
 	float birth_time_min, birth_time_max;
 	float min_velocity;
