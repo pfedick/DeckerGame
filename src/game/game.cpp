@@ -1269,9 +1269,13 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		player->move(pos.x, pos.y);
 		player->setSavePoint(pos);
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3) {
-		level.load("level/test.lvl");
+		level.load(LevelFile);
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
 		showUi(!showui);
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F10) {
+		mainmenue->showMetrics();
+		mainmenue->fitMetrics(viewport);
+
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_ALT) > 0) {
 		printf("toggle fullscreen or back\n");
 		ppl7::tk::WindowManager_SDL2* sdl2wm=(ppl7::tk::WindowManager_SDL2*)wm;
