@@ -15,13 +15,13 @@ class RainParticle : public Particle
 {
 public:
 	ppl7::grafix::Point end;
-	void update(double time, TileTypePlane& ttplane);
+	void update(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 };
 
 
-void RainParticle::update(double time, TileTypePlane& ttplane)
+void RainParticle::update(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
-	Particle::update(time, ttplane);
+	Particle::update(time, ttplane, frame_rate_compensation);
 	if (p.y > end.y) death_time=0.0f;
 }
 

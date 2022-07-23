@@ -112,10 +112,11 @@ public:
 
     ppl7::grafix::PointF p;
     ppl7::grafix::PointF velocity;
+    ppl7::grafix::PointF gravity;
 
     Particle();
     virtual ~Particle();
-    virtual void update(double time, TileTypePlane& ttplane);
+    virtual void update(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 
     void initAnimation(Particle::Type type);
     void initColorGradient(const std::list<ColorGradientItem>& gradient);
@@ -131,6 +132,7 @@ private:
     std::map<uint64_t, Particle*> particle_map;
     std::map<uint32_t, Particle*> visible_particle_map[static_cast<int>(Particle::Layer::maxLayer)];
     void deleteParticle(uint64_t id);
+    double last_update;
 public:
     ParticleSystem();
     ~ParticleSystem();

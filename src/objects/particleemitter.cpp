@@ -79,6 +79,7 @@ void ParticleEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& tt
 	if (d < 0.0f) d+=360.0f;
 	if (d >= 360.0f) d-=360.0f;
 	particle->weight=randf(weight_min, weight_max);
+	particle->gravity=gravity;
 	//printf("velocity: %0.3f, direction: %0.3f\n", c, d);
 	if (d == 0.0f) {
 		particle->velocity.x=0;
@@ -516,13 +517,13 @@ void ParticleEmitterDialog::setupParticleTab()
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	weight_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	weight_min->setEventHandler(this);
-	weight_min->setLimits(0.0f, 10.0f);
+	weight_min->setLimits(0.0f, 1.0f);
 	weight_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(weight_min);
 	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	weight_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	weight_max->setEventHandler(this);
-	weight_max->setLimits(0.0f, 10.0f);
+	weight_max->setLimits(0.0f, 1.0f);
 	weight_max->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(weight_max);
 	y+=35;
@@ -533,13 +534,13 @@ void ParticleEmitterDialog::setupParticleTab()
 	sw=(client.width() - col1 - 40 - 40) / 2;
 	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	gravity_x->setEventHandler(this);
-	gravity_x->setLimits(-20.0f, 20.0f);
+	gravity_x->setLimits(-1.0f, 1.0f);
 	gravity_x->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_x);
 	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
 	gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	gravity_y->setEventHandler(this);
-	gravity_y->setLimits(-20.0f, 20.0f);
+	gravity_y->setLimits(-1.0f, 1.0f);
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_y);
 	y+=35;

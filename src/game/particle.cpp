@@ -157,7 +157,7 @@ void Particle::initAnimation(Particle::Type type)
 }
 
 
-void Particle::update(double time, TileTypePlane& ttplane)
+void Particle::update(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
     if (time > next_animation) {
         next_animation=time + 0.056f;
@@ -166,10 +166,11 @@ void Particle::update(double time, TileTypePlane& ttplane)
     }
     if (useColorGradient) updateColorGradient();
     if (useScaleGradient) updateScaleGradient();
-
-    p.x+=velocity.x;
-    p.y+=velocity.y;
-    //if (time > death_time) deleteDefered=true;
+    //if (gravity.y!=0 || gravity
+    velocity+=(gravity * weight * frame_rate_compensation);
+    p+=(velocity * frame_rate_compensation);
+    //p.x+=velocity.x;
+    //p.y+=velocity.y;
 }
 
 void Particle::updateColorGradient()

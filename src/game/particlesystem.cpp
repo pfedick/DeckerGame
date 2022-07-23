@@ -19,6 +19,7 @@ ParticleSystem::ParticleSystem()
         spriteset[i]=new SpriteTexture();
     }
     nextid=1;
+    last_update=0.0f;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -38,6 +39,7 @@ void ParticleSystem::clear()
     }
     particle_map.clear();
     nextid=1;
+    last_update=0.0f;
 }
 
 void ParticleSystem::loadSpritesets(SDL& sdl)
@@ -72,6 +74,14 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
 {
     std::list<uint64_t> deleteme;
     std::map<uint64_t, Particle*>::iterator it;
+    float frame_rate_compensation=1.0f;
+    if (last_update > 0) {
+        float frametime=time - last_update;
+        frame_rate_compensation=(1.0f / 60.0f) / frametime;
+        //printf("frame_rate_compensation=%0.3f, frametime=%0.3f\n", frame_rate_compensation, frametime);
+    }
+    last_update=time;
+
     for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
         visible_particle_map[i].clear();
     }
@@ -83,7 +93,7 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
             deleteme.push_back(it->first);
         } else {
             particle->age=(time - particle->birth_time) / particle->life_time;
-            particle->update(time, ttplane);
+            particle->update(time, ttplane, frame_rate_compensation);
             int x=(int)particle->p.x - worldcoords.x;
             int y=(int)particle->p.y - worldcoords.y;
             if (x + 64 > 0 && y + 64 > 0 && x - 64 < width && y - 64 < height) {
