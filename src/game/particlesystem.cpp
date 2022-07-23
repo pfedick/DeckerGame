@@ -146,6 +146,7 @@ ppl7::String ParticleSystem::layerName(Particle::Layer layer)
     case Particle::Layer::BackplaneBack: return "BackplaneBack";
     case Particle::Layer::FrontplaneFront: return "FrontplaneFront";
     case Particle::Layer::FrontplaneBack: return "FrontplaneBack";
+    default: return "unknown";
     }
     return "unknown";
 }

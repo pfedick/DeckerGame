@@ -112,7 +112,8 @@ public:
     ppl7::grafix::PointF velocity;
 
     Particle();
-    void update(double time, TileTypePlane& ttplane);
+    virtual ~Particle();
+    virtual void update(double time, TileTypePlane& ttplane);
 
     void initAnimation(Particle::Type type);
     void initColorGradient(const std::list<ColorGradientItem>& gradient);

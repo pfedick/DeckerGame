@@ -220,15 +220,9 @@ class RainEmitter : public Object
 private:
 	double next_birth;
 
-	void createParticle(const TileTypePlane& ttplane, double time);
+	void createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time);
 public:
-	enum class ParticleType {
-		Rain=0,
-		ParticleWhite,
-		SnowflakeTransparent,
-		SnowflakeWhite
-	};
-	ParticleType particle_type;
+	Particle::Type particle_type;
 	ppl7::grafix::Color ParticleColor;
 	int emitter_stud_width;
 	int max_particle_birth_per_cycle;

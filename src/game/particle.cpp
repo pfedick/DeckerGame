@@ -57,6 +57,11 @@ Particle::Particle()
     color_mod.set(255, 255, 255, 255);
 }
 
+Particle::~Particle()
+{
+
+}
+
 void Particle::initColorGradient(const std::list<ColorGradientItem>& gradient)
 {
     if (gradient.empty()) return;
