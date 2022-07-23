@@ -559,7 +559,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
-	level.setShowParticles(mainmenue->visibility_objects); // TODO
+	level.setShowParticles(mainmenue->visibility_particles);
 	level.draw(renderer, WorldCoords, player, metrics);
 	metrics.time_draw_tsop.stop();
 

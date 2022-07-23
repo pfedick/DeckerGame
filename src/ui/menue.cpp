@@ -18,6 +18,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_plane_near=true;
 	visibility_sprites=true;
 	visibility_objects=true;
+	visibility_particles=true;
 	visibility_grid=false;
 	visibility_tiletypes=false;
 	visibility_collision=false;
@@ -185,15 +186,20 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 			top->addChild(visibility);
 		}
 	} else if (event->widget() == show_metrics_submenu_button) {
-		if (metrics) {
-			delete metrics;
-			metrics=NULL;
-		} else {
-			ppl7::tk::Widget* top=show_metrics_submenu_button->getTopmostParent();
-			//ppl7::grafix::Point p=show_metrics_submenu_button->absolutePosition();
-			metrics=new MetricsSubMenu(top->width() - 450, height(), this);
-			top->addChild(metrics);
-		}
+		showMetrics();
+	}
+}
+
+void MainMenue::showMetrics()
+{
+	if (metrics) {
+		delete metrics;
+		metrics=NULL;
+	} else {
+		ppl7::tk::Widget* top=show_metrics_submenu_button->getTopmostParent();
+		//ppl7::grafix::Point p=show_metrics_submenu_button->absolutePosition();
+		metrics=new MetricsSubMenu(top->width() - 450, height(), this);
+		top->addChild(metrics);
 	}
 }
 
@@ -283,62 +289,81 @@ void MainMenue::fitMetrics(const ppl7::grafix::Rect& viewport)
 }
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 140, 310)
+	: ppl7::tk::Frame(x, y, 140, 330)
 {
 	this->menue=menue;
-	this->addChild(new ppl7::tk::Label(0, 0, 100, 20, "Misc:"));
+	int y1=0;
+	this->addChild(new ppl7::tk::Label(0, y1, 100, 20, "Misc:"));
+	y1+=20;
 
-
-	show_grid_checkbox=new ppl7::tk::CheckBox(20, 20, 100, 20, "Grid", menue->visibility_grid);
+	show_grid_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Grid", menue->visibility_grid);
 	show_grid_checkbox->setEventHandler(this);
 	this->addChild(show_grid_checkbox);
+	y1+=20;
 
-	show_tiletypes_checkbox=new ppl7::tk::CheckBox(20, 40, 100, 20, "Tiletypes", menue->visibility_tiletypes);
+	show_tiletypes_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Tiletypes", menue->visibility_tiletypes);
 	show_tiletypes_checkbox->setEventHandler(this);
 	this->addChild(show_tiletypes_checkbox);
+	y1+=20;
 
-	show_collision_checkbox=new ppl7::tk::CheckBox(20, 60, 100, 20, "Collision", menue->visibility_collision);
+	show_collision_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Collision", menue->visibility_collision);
 	show_collision_checkbox->setEventHandler(this);
 	this->addChild(show_collision_checkbox);
+	y1+=20;
 
-	show_sprites_checkbox=new ppl7::tk::CheckBox(20, 80, 100, 20, "Sprites", menue->visibility_sprites);
+	show_sprites_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Sprites", menue->visibility_sprites);
 	show_sprites_checkbox->setEventHandler(this);
 	this->addChild(show_sprites_checkbox);
+	y1+=20;
 
-	show_objects_checkbox=new ppl7::tk::CheckBox(20, 100, 100, 20, "Objects", menue->visibility_objects);
+	show_objects_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Objects", menue->visibility_objects);
 	show_objects_checkbox->setEventHandler(this);
 	this->addChild(show_objects_checkbox);
+	y1+=20;
 
+	show_particles_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Particles", menue->visibility_particles);
+	show_particles_checkbox->setEventHandler(this);
+	this->addChild(show_particles_checkbox);
+	y1+=20;
 
-	this->addChild(new ppl7::tk::Label(0, 140, 100, 20, "visible Planes:"));
+	y1+=20;
+	this->addChild(new ppl7::tk::Label(0, y1, 100, 20, "visible Planes:"));
+	y1+=20;
 
-	visible_plane_near_checkbox=new ppl7::tk::CheckBox(20, 160, 100, 20, "Near", menue->visibility_plane_near);
+	visible_plane_near_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Near", menue->visibility_plane_near);
 	visible_plane_near_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_near_checkbox);
+	y1+=20;
 
-	visible_plane_front_checkbox=new ppl7::tk::CheckBox(20, 180, 100, 20, "Front", menue->visibility_plane_front);
+	visible_plane_front_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Front", menue->visibility_plane_front);
 	visible_plane_front_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_front_checkbox);
+	y1+=20;
 
-	visible_plane_player_checkbox=new ppl7::tk::CheckBox(20, 200, 100, 20, "Player", menue->visibility_plane_player);
+	visible_plane_player_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Player", menue->visibility_plane_player);
 	visible_plane_player_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_player_checkbox);
+	y1+=20;
 
-	visible_plane_back_checkbox=new ppl7::tk::CheckBox(20, 220, 100, 20, "Back", menue->visibility_plane_back);
+	visible_plane_back_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Back", menue->visibility_plane_back);
 	visible_plane_back_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_back_checkbox);
+	y1+=20;
 
-	visible_plane_middle_checkbox=new ppl7::tk::CheckBox(20, 240, 100, 20, "Middle", menue->visibility_plane_middle);
+	visible_plane_middle_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Middle", menue->visibility_plane_middle);
 	visible_plane_middle_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_middle_checkbox);
+	y1+=20;
 
-	visible_plane_far_checkbox=new ppl7::tk::CheckBox(20, 260, 100, 20, "Far", menue->visibility_plane_far);
+	visible_plane_far_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Far", menue->visibility_plane_far);
 	visible_plane_far_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_far_checkbox);
+	y1+=20;
 
-	visible_plane_horizon_checkbox=new ppl7::tk::CheckBox(20, 280, 100, 20, "Horizon", menue->visibility_plane_horizon);
+	visible_plane_horizon_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Horizon", menue->visibility_plane_horizon);
 	visible_plane_horizon_checkbox->setEventHandler(this);
 	this->addChild(visible_plane_horizon_checkbox);
+	y1+=20;
 
 }
 
@@ -375,6 +400,8 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 		menue->visibility_sprites=checked;
 	} else if (widget == show_objects_checkbox) {
 		menue->visibility_objects=checked;
+	} else if (widget == show_particles_checkbox) {
+		menue->visibility_particles=checked;
 	};
 }
 

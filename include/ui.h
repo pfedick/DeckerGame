@@ -77,6 +77,7 @@ private:
 	ppl7::tk::CheckBox* show_collision_checkbox;
 	ppl7::tk::CheckBox* show_sprites_checkbox;
 	ppl7::tk::CheckBox* show_objects_checkbox;
+	ppl7::tk::CheckBox* show_particles_checkbox;
 	ppl7::tk::CheckBox* visible_plane_player_checkbox;
 	ppl7::tk::CheckBox* visible_plane_front_checkbox;
 	ppl7::tk::CheckBox* visible_plane_far_checkbox;
@@ -160,6 +161,7 @@ public:
 	void openLevelDialog(bool new_flag);
 	void updateMetrics(const Metrics& last_metrics);
 	void fitMetrics(const ppl7::grafix::Rect& viewport);
+	void showMetrics();
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;
@@ -173,6 +175,7 @@ public:
 	bool visibility_plane_near;
 	bool visibility_sprites;
 	bool visibility_objects;
+	bool visibility_particles;
 	bool visibility_grid;
 	bool visibility_tiletypes;
 	bool visibility_collision;
