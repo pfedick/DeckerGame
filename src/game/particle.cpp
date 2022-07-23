@@ -134,11 +134,11 @@ void Particle::initAnimation(Particle::Type type)
     case Particle::Type::StaticBulletBig:
         animation.setStaticFrame(159);
         break;
-    case Particle::Type::StaticParticle:    // TODO
-        animation.setStaticFrame(1);
+    case Particle::Type::StaticParticle:
+        animation.setStaticFrame(161);
         break;
-    case Particle::Type::StaticParticleBig: // TODO
-        animation.setStaticFrame(1);
+    case Particle::Type::StaticParticleBig:
+        animation.setStaticFrame(163);
         break;
     case Particle::Type::StaticCircle:
         animation.setStaticFrame(157);
@@ -146,6 +146,13 @@ void Particle::initAnimation(Particle::Type type)
     case Particle::Type::StaticCircleBig:
         animation.setStaticFrame(158);
         break;
+    case Particle::Type::StaticStudSmall:
+        animation.setStaticFrame(160);
+        break;
+    case Particle::Type::StaticStudBig:
+        animation.setStaticFrame(162);
+        break;
+
     };
 }
 

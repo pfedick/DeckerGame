@@ -46,7 +46,9 @@ public:
         StaticCircle,
         StaticCircleBig,
         StaticBulletSmall,
-        StaticBulletBig
+        StaticBulletBig,
+        StaticStudSmall,
+        StaticStudBig
     };
 
 

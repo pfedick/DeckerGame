@@ -386,6 +386,9 @@ void ParticleEmitterDialog::setupParticleTab()
 	particle_type->add("static circle big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticCircleBig)));
 	particle_type->add("static bullet small", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticBulletSmall)));
 	particle_type->add("static bullet big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticBulletBig)));
+	particle_type->add("static stud small", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticStudSmall)));
+	particle_type->add("static stud big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticStudBig)));
+
 	tab->addChild(particle_type);
 	y+=35;
 
