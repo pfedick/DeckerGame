@@ -57,7 +57,7 @@ ParticleEmitter::ParticleEmitter()
 	save_size+=73 + 64 * 2;
 }
 
-static float randf(float min, float max)
+float randf(float min, float max)
 {
 	if (max == min) return min;
 	double range=max - min;
@@ -65,46 +65,44 @@ static float randf(float min, float max)
 	return r;
 }
 
+
+ppl7::grafix::PointF calculateVelocity(float speed, float direction)
+{
+	if (direction < 0.0f) direction+=360.0f;
+	if (direction >= 360.0f) direction-=360.0f;
+
+	ppl7::grafix::PointF velocity;
+	if (direction == 0.0f) {
+		velocity.x=0;
+		velocity.y=-speed;
+	} else if (direction == 90.0f) {
+		velocity.x=speed;
+		velocity.y=0;
+	} else if (direction == 180.0f) {
+		velocity.x=0;
+		velocity.y=speed;
+	} else if (direction == 270.0f) {
+		velocity.x=-speed;
+		velocity.y=0;
+	} else {
+		velocity.y=-speed * sin((90 - direction) / 180 * 3.1415926535);
+		velocity.x=speed * sin(direction / 180 * 3.1415926535);
+	}
+	return velocity;
+
+}
+
 void ParticleEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time)
 {
 	Particle* particle=new Particle();
-	//int start_offset=ppl7::rand(0, emitter_pixel_width) - (emitter_pixel_width / 2);
 	particle->birth_time=time;
 	particle->death_time=randf(age_min, age_max) + time;
 	particle->p.x=p.x;
 	particle->p.y=p.y;
 	particle->layer=particle_layer;
-	float c=randf(min_velocity, max_velocity);
-	float d=direction + randf(-variation, variation);
-	if (d < 0.0f) d+=360.0f;
-	if (d >= 360.0f) d-=360.0f;
 	particle->weight=randf(weight_min, weight_max);
 	particle->gravity=gravity;
-	//printf("velocity: %0.3f, direction: %0.3f\n", c, d);
-	if (d == 0.0f) {
-		particle->velocity.x=0;
-		particle->velocity.y=-c;
-	} else if (d == 90.0f) {
-		particle->velocity.x=c;
-		particle->velocity.y=0;
-	} else if (d == 180.0f) {
-		particle->velocity.x=0;
-		particle->velocity.y=c;
-	} else if (d == 270.0f) {
-		particle->velocity.x=-c;
-		particle->velocity.y=0;
-	} else {
-
-		float r1=(90 - d) / 180 * 3.1415926535;
-		float r2=d / 180 * 3.1415926535;;
-		float x=c * sin(r2);
-		float y=c * sin(r1);
-		//printf("x=%0.3f, y=%0.3f\n", x, y);
-		particle->velocity.y=-y;
-		particle->velocity.x=x;
-		//particle->velocity.x=c * sin(d) / sin(90);
-
-	}
+	particle->velocity=calculateVelocity(randf(min_velocity, max_velocity), direction + randf(-variation, variation));
 	particle->scale=randf(scale_min, scale_max);
 	particle->color_mod=ParticleColor;
 	particle->initAnimation(particle_type);

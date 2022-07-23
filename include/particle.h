@@ -147,5 +147,7 @@ public:
 };
 
 ParticleSystem* GetParticleSystem();
+float randf(float min, float max);
+ppl7::grafix::PointF calculateVelocity(float speed, float direction);
 
 #endif
