@@ -659,6 +659,8 @@ void Game::closeEvent(ppl7::tk::Event* e)
 	if (widget != NULL && widget == settings_screen) {
 		delete settings_screen;
 		settings_screen=NULL;
+		enableControls(true);
+		wm->setKeyboardFocus(world_widget);
 		return;
 	}
 	quitGame=true;
@@ -1277,14 +1279,14 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		mainmenue->fitMetrics(viewport);
 
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_ALT) > 0) {
-		printf("toggle fullscreen or back\n");
+		//printf("toggle fullscreen or back\n");
 		ppl7::tk::WindowManager_SDL2* sdl2wm=(ppl7::tk::WindowManager_SDL2*)wm;
 		Window::WindowMode mode=sdl2wm->getWindowMode(*this);
 		if (mode == Window::WindowMode::Window) {
 			windowedSize.setSize(width(), height());
-			printf("Aktueller mode ist Window mit %d x %d\n", windowedSize.width, windowedSize.height);
+			//printf("Aktueller mode ist Window mit %d x %d\n", windowedSize.width, windowedSize.height);
 			ppl7::grafix::Size s=sdl.getDisplaySize(config.videoDevice);
-			printf("switche zu FullscreenDesktop %d x %d\n", s.width, s.height);
+			//printf("switche zu FullscreenDesktop %d x %d\n", s.width, s.height);
 			sdl2wm->changeWindowMode(*this, Window::WindowMode::FullscreenDesktop);
 			ppl7::tk::Window::DisplayMode dmode;
 			dmode.format=rgbFormat();
@@ -1295,7 +1297,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			resizeEvent(NULL);
 		} else if (mode == Window::WindowMode::FullscreenDesktop) {
 			if (windowedSize.width == 0 || windowedSize.height == 0) windowedSize=config.ScreenResolution;
-			printf("Aktueller mode ist FullscreenDesktop, switche zu Fenster %d x %d\n", windowedSize.width, windowedSize.height);
+			//printf("Aktueller mode ist FullscreenDesktop, switche zu Fenster %d x %d\n", windowedSize.width, windowedSize.height);
 			sdl2wm->changeWindowMode(*this, Window::WindowMode::Window);
 			ppl7::tk::Window::DisplayMode dmode;
 			dmode.format=rgbFormat();
@@ -1305,13 +1307,14 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			setWindowDisplayMode(dmode);
 			resizeEvent(NULL);
 		} else {
-			printf("Aktueller mode ist Fullscreen\n");
+			//printf("Aktueller mode ist Fullscreen\n");
 		}
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
 		if (settings_screen) {
-			enableControls(true);
 			delete settings_screen;
 			settings_screen=NULL;
+			enableControls(true);
+			wm->setKeyboardFocus(world_widget);
 		} else openSettingsScreen();
 	}
 }
@@ -1348,8 +1351,6 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 
 void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
-	printf("Game::resizeEvent\n");
-	fflush(stdout);
 	if (tex_level_grid) {
 		sdl.destroyTexture(tex_level_grid);
 		tex_level_grid=NULL;
