@@ -8,217 +8,10 @@
 
 namespace Decker::Objects {
 
-static int particle_transparent[]={ 216,217,218,219,220,221,222,223,224,225,226,
-	227,228,229,230,231,232,233,234,235 };
-
-static int particle_white[]={ 272,273,274,275,276,277,278,279,280,281,282,283,284,
-285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301 };
-
-
-/****************************************************************
- * Rain Particle
- ***************************************************************/
-
-class Particle : public Object
-{
-	friend class ParticleEmitter;
-public:
-	class Velocity
-	{
-	public:
-		Velocity() {
-			x=0.0f;
-			y=0.0f;
-		}
-		float x;
-		float y;
-	};
-
-
-private:
-	double birth_time;
-	double next_animation;
-	double death_time;
-	AnimationCycle animation;
-	Velocity velocity;
-	Velocity pf;
-	float weight;
-	float direction;
-	float v;
-	std::list<ParticleEmitter::ColorGradientItem>color_gradient;
-	std::list<ParticleEmitter::ScaleGradientItem>scale_gradient;
-
-	bool useColorGradient;
-	ParticleEmitter::ColorGradientItem current_color;
-	ParticleEmitter::ColorGradientItem next_color;
-	float color_age_diff;
-
-	bool useScaleGradient;
-	ParticleEmitter::ScaleGradientItem current_scale;
-	ParticleEmitter::ScaleGradientItem next_scale;
-	float scale_age_diff;
-	float base_scale;
-
-	void initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient);
-	void initScaleGradient(const std::list<ParticleEmitter::ScaleGradientItem>& gradient, float base_scale);
-public:
-
-	Particle();
-	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-};
-
-
-Particle::Particle()
-	: Object(Type::ObjectType::Particle)
-{
-	sprite_set=Spriteset::GenericObjects;
-	collisionDetection=false;
-	visibleAtPlaytime=true;
-	sprite_no_representation=216;
-	sprite_no=216;
-	birth_time=next_animation=0.0f;
-	weight=0.0f;
-	direction=0.0f;
-	v=0.0f;
-	death_time=1.0f;
-	spawned=true;
-	myLayer=Layer::BeforePlayer;
-	useColorGradient=false;
-	useScaleGradient=false;
-	color_age_diff=scale_age_diff=0.0f;
-	base_scale=0.0f;
-}
-
-void Particle::initColorGradient(const std::list<ParticleEmitter::ColorGradientItem>& gradient)
-{
-	if (gradient.empty()) return;
-	color_gradient=gradient;
-	useColorGradient=true;
-	current_color=color_gradient.front();
-	color_gradient.pop_front();
-
-	if (current_color.age == 0.0f) {
-		if (color_gradient.size() > 0) {
-			next_color=color_gradient.front();
-			color_gradient.pop_front();
-		} else {
-			next_color=current_color;
-			next_color.age=1.0;
-		}
-	} else {
-		next_color=current_color;
-		current_color.age=0.0f;
-	}
-	color_age_diff=next_color.age - current_color.age;
-}
-
-void Particle::initScaleGradient(const std::list<ParticleEmitter::ScaleGradientItem>& gradient, float base_scale)
-{
-	if (gradient.empty()) return;
-	this->base_scale=base_scale;
-	scale_gradient=gradient;
-	useScaleGradient=true;
-	current_scale=scale_gradient.front();
-	scale_gradient.pop_front();
-
-	if (current_scale.age == 0.0f) {
-		if (scale_gradient.size() > 0) {
-			next_scale=scale_gradient.front();
-			scale_gradient.pop_front();
-		} else {
-			next_scale=current_scale;
-			next_scale.age=1.0;
-		}
-	} else {
-		next_scale=current_scale;
-		current_scale.age=0.0f;
-	}
-	scale_age_diff=next_scale.age - current_scale.age;
-}
-
-void Particle::update(double time, TileTypePlane&, Player&)
-{
-	if (time > next_animation) {
-		next_animation=time + 0.056f;
-		animation.update();
-		sprite_no=animation.getFrame();
-		sprite_no_representation=sprite_no;
-	}
-	float life_time=death_time - birth_time;
-	float age=(time - birth_time) / life_time;
-
-	if (useColorGradient) {
-		if (age > next_color.age) {
-			current_color=next_color;
-			if (color_gradient.size() > 0) {
-				next_color=color_gradient.front();
-				color_gradient.pop_front();
-			} else {
-				next_color.age=1.0f;
-			}
-			color_age_diff=next_color.age - current_color.age;
-		}
-		float n1=1.0f - ((age - current_color.age) / color_age_diff);
-		float n2=1.0f - ((next_color.age - age) / color_age_diff);
-		color_mod=multiplyWithAlpha(current_color.color, n1) + multiplyWithAlpha(next_color.color, n2);
-	}
-
-	if (useScaleGradient) {
-		if (age > next_scale.age) {
-			current_scale=next_scale;
-			if (scale_gradient.size() > 0) {
-				next_scale=scale_gradient.front();
-				scale_gradient.pop_front();
-			} else {
-				next_scale.age=1.0f;
-			}
-			scale_age_diff=next_scale.age - current_scale.age;
-		}
-		float n1=1.0f - ((age - current_scale.age) / scale_age_diff);
-		float n2=1.0f - ((next_scale.age - age) / scale_age_diff);
-		scale=base_scale * (current_scale.scale * n1 + next_scale.scale * n2);
-		//printf("scale:%0.3f\n", scale);
-	}
-
-
-
-	pf.x+=velocity.x;
-	pf.y+=velocity.y;
-	p.x=(int)pf.x;
-	p.y=(int)pf.y;
-	updateBoundary();
-	if (time > death_time) deleteDefered=true;
-}
 
 /****************************************************************
  * Particle Emitter
  ***************************************************************/
-
-ParticleEmitter::ColorGradientItem::ColorGradientItem()
-{
-	age=0.0f;
-}
-
-ParticleEmitter::ColorGradientItem::ColorGradientItem(float age, const ppl7::grafix::Color& color)
-{
-	this->age=age;
-	this->color=color;
-}
-
-ParticleEmitter::ScaleGradientItem::ScaleGradientItem()
-{
-	age=0.0f;
-	scale=0.0f;
-}
-
-ParticleEmitter::ScaleGradientItem::ScaleGradientItem(float age, float scale)
-{
-	this->age=age;
-	this->scale=scale;
-}
-
-
 
 Representation ParticleEmitter::representation()
 {
@@ -236,9 +29,9 @@ ParticleEmitter::ParticleEmitter()
 	visibleAtPlaytime=false;
 	sprite_no_representation=428;
 	next_birth=0.0f;
-	particle_type=ParticleType::ParticleWhite;
+	particle_type=Particle::Type::RotatingParticleWhite;
 	emitter_type=EmitterType::Point;
-	particle_layer=Object::Layer::BehindPlayer;
+	particle_layer=Particle::Layer::BehindPlayer;
 	ParticleColor.set(255, 255, 255, 255);
 	emitter_size.setSize(1, 1);
 	flags=0;
@@ -272,24 +65,19 @@ static float randf(float min, float max)
 	return r;
 }
 
-void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
+void ParticleEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time)
 {
 	Particle* particle=new Particle();
 	//int start_offset=ppl7::rand(0, emitter_pixel_width) - (emitter_pixel_width / 2);
 	particle->birth_time=time;
+	particle->death_time=randf(age_min, age_max) + time;
 	particle->p.x=p.x;
 	particle->p.y=p.y;
-	particle->myLayer=particle_layer;
-	particle->initial_p.x=particle->p.x;
-	particle->initial_p.y=particle->p.y;
-	particle->pf.x=(float)particle->p.x;
-	particle->pf.y=(float)particle->p.y;
+	particle->layer=particle_layer;
 	float c=randf(min_velocity, max_velocity);
 	float d=direction + randf(-variation, variation);
 	if (d < 0.0f) d+=360.0f;
 	if (d >= 360.0f) d-=360.0f;
-	particle->v=c;
-	particle->direction=d;
 	particle->weight=randf(weight_min, weight_max);
 	//printf("velocity: %0.3f, direction: %0.3f\n", c, d);
 	if (d == 0.0f) {
@@ -318,33 +106,26 @@ void ParticleEmitter::createParticle(const TileTypePlane& ttplane, double time)
 	}
 	particle->scale=randf(scale_min, scale_max);
 	particle->color_mod=ParticleColor;
-	particle->death_time=randf(age_min, age_max) + time;
-	switch (particle_type) {
-	case ParticleType::ParticleTransparent:
-		particle->animation.startRandom(particle_transparent, sizeof(particle_transparent) / sizeof(int), true, 0);
-		break;
-	case ParticleType::ParticleWhite:
-		particle->animation.startRandom(particle_white, sizeof(particle_white) / sizeof(int), true, 0);
-		break;
-	};
+	particle->initAnimation(particle_type);
 	if (flags & static_cast<int>(Flags::useScaleGradient))
 		particle->initScaleGradient(scale_gradient, particle->scale);
 	if (flags & static_cast<int>(Flags::useColorGradient)) {
 		particle->initColorGradient(color_gradient);
 	}
-	GetObjectSystem()->addObject(particle);
+	ps->addParticle(particle);
 }
 
 void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 {
 	if (next_birth < time) {
+		ParticleSystem* ps=GetParticleSystem();
 		next_birth=time + randf(birth_time_min, birth_time_max);
 		double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
 			player.WorldCoords.y + player.Viewport.height() / 2), p);
 		if (d > 2 * player.Viewport.width()) return;
 		int new_particles=ppl7::rand(min_birth_per_cycle, max_birth_per_cycle);
 		for (int i=0;i < new_particles;i++) {
-			createParticle(ttplane, time);
+			createParticle(ps, ttplane, time);
 		}
 	}
 }
@@ -385,7 +166,7 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 	{
 		ppl7::Poke8(buffer + bytes + p, color_gradient.size());	// Number of Color Gradients, bei 0 wird ParticleColor verwendet
 		p++;
-		std::list<ColorGradientItem>::const_iterator it;
+		std::list<Particle::ColorGradientItem>::const_iterator it;
 		for (it=color_gradient.begin();it != color_gradient.end();++it) {
 			ppl7::PokeFloat(buffer + bytes + p, (*it).age);
 			ppl7::Poke8(buffer + bytes + p + 4, (*it).color.red());
@@ -398,7 +179,7 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 	{
 		ppl7::Poke8(buffer + bytes + p, scale_gradient.size());	// Number of Size Gradients
 		p++;
-		std::list<ScaleGradientItem>::const_iterator it;
+		std::list<Particle::ScaleGradientItem>::const_iterator it;
 		for (it=scale_gradient.begin();it != scale_gradient.end();++it) {
 			ppl7::PokeFloat(buffer + bytes + p, (*it).age);
 			ppl7::PokeFloat(buffer + bytes + p + 4, (*it).scale);
@@ -413,7 +194,7 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < save_size) return 0;
-	particle_type=static_cast<ParticleType>(ppl7::Peek8(buffer + bytes));
+	particle_type=static_cast<Particle::Type>(ppl7::Peek8(buffer + bytes));
 	emitter_type=static_cast<EmitterType>(ppl7::Peek8(buffer + bytes + 1));
 	emitter_size.width=ppl7::Peek8(buffer + bytes + 2);
 	emitter_size.height=ppl7::Peek8(buffer + bytes + 3);
@@ -437,7 +218,7 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	weight_max=ppl7::PeekFloat(buffer + bytes + 54);
 	gravity.x=ppl7::PeekFloat(buffer + bytes + 58);
 	gravity.y=ppl7::PeekFloat(buffer + bytes + 62);
-	particle_layer=static_cast<Object::Layer>(ppl7::Peek8(buffer + bytes + 66));
+	particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 66));
 	flags=ppl7::Peek16(buffer + bytes + 67);
 	// 69 is unused
 	size_t p=70;
@@ -446,7 +227,7 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	p++;
 	color_gradient.clear();
 	for (int i=0;i < num_color_gradients;i++) {
-		ColorGradientItem c;
+		Particle::ColorGradientItem c;
 		c.age=ppl7::PeekFloat(buffer + bytes + p);
 		c.color.setRed(ppl7::Peek8(buffer + bytes + p + 4));
 		c.color.setGreen(ppl7::Peek8(buffer + bytes + p + 5));
@@ -459,7 +240,7 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	p++;
 	scale_gradient.clear();
 	for (int i=0;i < num_scale_gradients;i++) {
-		ScaleGradientItem s;
+		Particle::ScaleGradientItem s;
 		s.age=ppl7::PeekFloat(buffer + bytes + p);
 		s.scale=ppl7::PeekFloat(buffer + bytes + p + 4);
 		scale_gradient.push_back(s);
@@ -570,10 +351,14 @@ void ParticleEmitterDialog::setupParticleTab()
 
 	tab->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
 	particle_layer=new ppl7::tk::ComboBox(60, y, 150, 30);
-	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
-	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
-	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
-	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
+	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BeforePlayer)));
+	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
+	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindBricks)));
+	particle_layer->add("Backplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BackplaneFront)));
+	particle_layer->add("Backplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BackplaneBack)));
+	particle_layer->add("Frontplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneFront)));
+	particle_layer->add("Frontplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneBack)));
+	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
 	particle_layer->setEventHandler(this);
 	tab->addChild(particle_layer);
 
@@ -590,8 +375,17 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
 	particle_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
 	particle_type->setEventHandler(this);
-	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleTransparent)));
-	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::ParticleType::ParticleWhite)));
+	particle_type->add("rotating transparent particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleTransparent)));
+	particle_type->add("rotating particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleWhite)));
+	particle_type->add("rotating snowflake transparent", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeTransparent)));
+	particle_type->add("rotating snowflake", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeWhite)));
+	particle_type->add("rotating cylinder", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingCylinder)));
+	particle_type->add("static particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticParticle)));
+	particle_type->add("static particle big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticParticleBig)));
+	particle_type->add("static circle", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticCircle)));
+	particle_type->add("static circle big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticCircleBig)));
+	particle_type->add("static bullet small", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticBulletSmall)));
+	particle_type->add("static bullet big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticBulletBig)));
 	tab->addChild(particle_type);
 	y+=35;
 
@@ -855,7 +649,7 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	gravity_y->setValue(object->gravity.y);
 	{
 		gradient_widget->clear();
-		std::list<ParticleEmitter::ColorGradientItem>::const_iterator it;
+		std::list<Particle::ColorGradientItem>::const_iterator it;
 		for (it=object->color_gradient.begin();it != object->color_gradient.end();++it) {
 			gradient_widget->addItem(it->age, it->color);
 		}
@@ -872,7 +666,7 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	}
 	{
 		scale_gradient_widget->clear();
-		std::list<ParticleEmitter::ScaleGradientItem>::const_iterator it;
+		std::list<Particle::ScaleGradientItem>::const_iterator it;
 		for (it=object->scale_gradient.begin();it != object->scale_gradient.end();++it) {
 			int c=it->scale * 255;
 			scale_gradient_widget->addItem(it->age, ppl7::grafix::Color(c, c, c, 255), it->scale);
@@ -891,11 +685,11 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == particle_type) {
-		object->particle_type=static_cast<ParticleEmitter::ParticleType>(particle_type->currentIdentifier().toInt());
+		object->particle_type=static_cast<Particle::Type>(particle_type->currentIdentifier().toInt());
 	} else 	if (widget == emitter_type) {
 		object->emitter_type=static_cast<ParticleEmitter::EmitterType>(emitter_type->currentIdentifier().toInt());
 	} else if (widget == particle_layer) {
-		object->particle_layer=static_cast<Object::Layer>(particle_layer->currentIdentifier().toInt());
+		object->particle_layer=static_cast<Particle::Layer>(particle_layer->currentIdentifier().toInt());
 	} else if (widget == color) {
 		object->ParticleColor=color->color();
 	} else if (widget == color_gradient) {
@@ -1007,7 +801,7 @@ void ParticleEmitterDialog::copyColorGradientToObject()
 	object->color_gradient.clear();
 	std::map<float, ppl7::grafix::Color>::const_iterator it;
 	for (it=items.begin();it != items.end();++it) {
-		object->color_gradient.push_back(ParticleEmitter::ColorGradientItem(it->first, it->second));
+		object->color_gradient.push_back(Particle::ColorGradientItem(it->first, it->second));
 	}
 }
 
@@ -1018,7 +812,7 @@ void ParticleEmitterDialog::copyScaleGradientToObject()
 	std::map<float, float>::const_iterator it;
 	for (it=items.begin();it != items.end();++it) {
 		//printf("copy scale item %0.3f: %0.3f\n", it->first, it->second);
-		object->scale_gradient.push_back(ParticleEmitter::ScaleGradientItem(it->first, it->second));
+		object->scale_gradient.push_back(Particle::ScaleGradientItem(it->first, it->second));
 	}
 }
 

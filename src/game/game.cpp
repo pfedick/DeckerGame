@@ -5,6 +5,7 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 #include "objects.h"
+#include "particle.h"
 #include "screens.h"
 
 static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
@@ -151,6 +152,7 @@ void Game::loadGrafix()
 	resources.uiSpritesWhite.load(sdl, "res/sprites_white_ui.tex");
 
 	level.objects->loadSpritesets(sdl);
+	level.particles->loadSpritesets(sdl);
 
 }
 
@@ -458,6 +460,8 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metri
 	size_t visible_sprites=level.countVisibleSprites();
 	size_t total_objects=level.objects->count();
 	size_t visible_objects=level.objects->countVisible();
+	size_t total_particles=level.particles->count();
+	size_t visible_particles=level.particles->countVisible();
 
 	if (player) statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
@@ -472,6 +476,8 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metri
 	metrics.visible_sprites+=visible_sprites;
 	metrics.total_objects+=total_objects;
 	metrics.visible_objects+=visible_objects;
+	metrics.total_particles+=total_particles;
+	metrics.visible_particles+=visible_particles;
 
 }
 
@@ -518,6 +524,12 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		updateWorldCoords();
 	metrics.time_update_objects.stop();
 
+	// Particles
+	metrics.time_update_particles.start();
+	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport);	// => TODO: own Thread
+	metrics.time_update_particles.stop();
+
+
 	metrics.time_misc.start();
 	// TODO: Refactor into Events: Handle Mouse events inside World
 	if (mouse.p.inside(viewport)) {
@@ -547,6 +559,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
+	level.setShowParticles(mainmenue->visibility_objects); // TODO
 	level.draw(renderer, WorldCoords, player, metrics);
 	metrics.time_draw_tsop.stop();
 

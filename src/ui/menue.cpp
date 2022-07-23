@@ -416,6 +416,19 @@ void MetricsSubMenu::drawIntMetric(ppl7::grafix::Drawable& draw, int c1, int  c2
 	draw.print(font, c2 - s.width, y, v);
 }
 
+void MetricsSubMenu::drawCountMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int c3, int y, const ppl7::String& text, uint64_t value1, uint64_t value2)
+{
+	draw.print(font, c1, y, text);
+	ppl7::WideString v;
+	v.setf("%ld", value1);
+	ppl7::grafix::Size s=font.measure(v);
+	draw.print(font, c2 - s.width, y, v);
+
+	v.setf("%ld", value2);
+	s=font.measure(v);
+	draw.print(font, c3 - s.width, y, v);
+}
+
 void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 {
 	Frame::paint(draw);
@@ -438,13 +451,13 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	y+=line;
 	drawDoubleMetric(draw, c1, c2, y, "misc:", metrics.time_misc.get());
 	y+=line * 2;
-	drawIntMetric(draw, c1, c2, y, "FPS", metrics.fps);
+	drawIntMetric(draw, c1, c2, y, "FPS:", metrics.fps);
 	y+=line;
-	drawIntMetric(draw, c1, c2, y, "Sprites", metrics.total_sprites);
+	drawCountMetric(draw, c1, 120, 190, y, "Sprites:", metrics.total_sprites, metrics.visible_sprites);
 	y+=line;
-	drawIntMetric(draw, c1, c2, y, "Objects", metrics.total_objects);
+	drawCountMetric(draw, c1, 120, 190, y, "Objects:", metrics.total_objects, metrics.visible_objects);
 	y+=line;
-	drawIntMetric(draw, c1, c2, y, "Particles", metrics.total_particles);
+	drawCountMetric(draw, c1, 120, 190, y, "Particles:", metrics.total_particles, metrics.visible_particles);
 
 	y=5 + 2 * line;
 	c1=220;

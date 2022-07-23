@@ -101,7 +101,7 @@ private:
 	ppl7::grafix::Font font;
 	void drawDoubleMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, double value);
 	void drawIntMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int y, const ppl7::String& text, uint64_t value);
-
+	void drawCountMetric(ppl7::grafix::Drawable& draw, int c1, int  c2, int c3, int y, const ppl7::String& text, uint64_t value1, uint64_t value2);
 public:
 	MetricsSubMenu(int x, int y, MainMenue* menue);
 	void update(const Metrics& metrics);

@@ -12,69 +12,133 @@ class SDL;
 struct SDL_Renderer;
 class SpriteTexture;
 
+class ParticleSpriteset
+{
+public:
+    enum SpritesetIds {
+        GenericParticles=0,
+        MaxSpritesets
+    };
+};
+
 class Particle
 {
-    friend class ParticleEmitter;
+    friend class ParticleSystem;
 public:
-    class Velocity
-    {
-    public:
-        Velocity() {
-            x=0.0f;
-            y=0.0f;
-        }
-        float x;
-        float y;
+    enum class Layer {
+        BehindBricks=0,
+        BehindPlayer=1,
+        BeforePlayer=2,
+        BackplaneFront=3,
+        BackplaneBack=4,
+        FrontplaneFront=5,
+        FrontplaneBack=6,
+        maxLayer
     };
+    enum class Type {
+        RotatingParticleTransparent=0,
+        RotatingParticleWhite,
+        RotatingSnowflakeTransparent,
+        RotatingSnowflakeWhite,
+        RotatingCylinder,
+        StaticParticle,
+        StaticParticleBig,
+        StaticCircle,
+        StaticCircleBig,
+        StaticBulletSmall,
+        StaticBulletBig
+    };
+
+
     class ScaleGradientItem
     {
     public:
         float age;
-        float time;
+        float scale;
+
+        ScaleGradientItem();
+        ScaleGradientItem(float age, float scale);
     };
     class ColorGradientItem
     {
     public:
         float age;
         ppl7::grafix::Color color;
+
+        ColorGradientItem(float age, const ppl7::grafix::Color& color);
+        ColorGradientItem();
     };
 
 
 private:
     double next_animation;
-    double death_time;
+    float life_time;
+    float age;
     AnimationCycle animation;
-    Velocity velocity;
-    Velocity pf;
-    float weight;
-    float direction;
-    float v;
+
+    //float weight;
+    //float direction;
+
+    // Color gradient
+    bool useColorGradient;
     std::list<ColorGradientItem>color_gradient;
+    ColorGradientItem current_color;
+    ColorGradientItem next_color;
+    float color_age_diff;
+
+    // Scale gradient
+    bool useScaleGradient;
+    std::list<ScaleGradientItem>scale_gradient;
+    ScaleGradientItem current_scale;
+    ScaleGradientItem next_scale;
+    float scale_age_diff;
+    float base_scale;
+
+    void updateColorGradient();
+    void updateScaleGradient();
+
 public:
+    double death_time;
+    double birth_time;
+
+    Layer layer;
+    int sprite_set;
+    int sprite_no;
+    float scale;
+    float weight;
+    ppl7::grafix::Color color_mod;
+
     ppl7::grafix::PointF p;
+    ppl7::grafix::PointF velocity;
+
     Particle();
-    void update(double time, TileTypePlane& ttplane, Player& player);
+    void update(double time, TileTypePlane& ttplane);
+
+    void initAnimation(Particle::Type type);
+    void initColorGradient(const std::list<ColorGradientItem>& gradient);
+    void initScaleGradient(const std::list<ScaleGradientItem>& gradient, float base_scale);
 };
 
 
 class ParticleSystem
 {
-public:
-    enum class Layer {
-        BehindBricks=0,
-        BeforeBricks=1,
-        BeforePlayer=2,
-        BehindPlayer=1
-    };
+private:
+    uint64_t nextid;
+    SpriteTexture* spriteset[ParticleSpriteset::MaxSpritesets];
+    std::map<uint64_t, Particle*> particle_map;
+    std::map<uint32_t, Particle*> visible_particle_map[static_cast<int>(Particle::Layer::maxLayer)];
+    void deleteParticle(uint64_t id);
 public:
     ParticleSystem();
     ~ParticleSystem();
     void clear();
     void loadSpritesets(SDL& sdl);
-    void addParticle(Layer layer, Particle* particle);
-    void update(double time, TileTypePlane& ttplane, Player& player);
-    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, ParticleSystem::Layer layer) const;
+    void addParticle(Particle* particle);
+    void update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;
     size_t count() const;
+    size_t countVisible() const;
+    static ppl7::String layerName(Particle::Layer layer);
 };
 
 ParticleSystem* GetParticleSystem();

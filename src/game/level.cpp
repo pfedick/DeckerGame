@@ -6,6 +6,7 @@
 #include <ppl7-grafix.h>
 #include "player.h"
 #include "objects.h"
+#include "particle.h"
 
 
 
@@ -20,14 +21,18 @@ Level::Level()
 		spriteset[i]=NULL;
 	}
 	objects=new Decker::Objects::ObjectSystem(&waynet);
+	particles=new ParticleSystem();
 	editMode=false;
 	showSprites=true;
 	showObjects=true;
+	showParticles=true;
 }
 
 Level::~Level()
 {
 	clear();
+	if (objects) delete objects;
+	if (particles) delete particles;
 }
 
 void Level::clear()
@@ -55,6 +60,7 @@ void Level::clear()
 	NearSprites[0].clear();
 	NearSprites[1].clear();
 	objects->clear();
+	particles->clear();
 	waynet.clear();
 	params.clear();
 }
@@ -72,6 +78,11 @@ void Level::setShowSprites(bool enabled)
 void Level::setShowObjects(bool enabled)
 {
 	showObjects=enabled;
+}
+
+void Level::setShowParticles(bool enabled)
+{
+	showParticles=enabled;
 }
 
 void Level::setTileset(int no, SpriteTexture* tileset)
@@ -339,13 +350,23 @@ void Level::drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, cons
 	}
 }
 
+void Level::drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
+{
+	if (!showParticles) return;
+	metrics.time_draw_particles.start();
+	particles->draw(renderer, viewport, worldcoords, layer);
+	metrics.time_draw_particles.stop();
+}
+
 
 void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
 {
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
 	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
 	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
+	drawParticles(renderer, Particle::Layer::BackplaneBack, worldcoords * planeFactor[3], metrics);
 	drawNonePlayerPlane(renderer, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
+	drawParticles(renderer, Particle::Layer::BackplaneFront, worldcoords * planeFactor[3], metrics);
 
 	if (PlayerPlane.isVisible()) {
 		if (showSprites) {
@@ -361,6 +382,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 			metrics.time_objects.stop();
 		}
+		drawParticles(renderer, Particle::Layer::BehindBricks, worldcoords * planeFactor[0], metrics);
 		metrics.time_plane.start();
 		drawPlane(renderer, PlayerPlane, worldcoords * planeFactor[0]);
 		metrics.time_plane.stop();
@@ -369,6 +391,9 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 			PlayerSprites[1].draw(renderer, viewport, worldcoords * planeFactor[0]);
 			metrics.time_sprites.stop();
 		}
+
+		// Behind Player
+		drawParticles(renderer, Particle::Layer::BehindPlayer, worldcoords * planeFactor[0], metrics);
 		metrics.time_objects.start();
 		if (showObjects) {	// Objects behind Player
 			if (editMode)
@@ -376,6 +401,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 			else
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
 		}
+		// Player
 		player->draw(renderer, viewport, worldcoords * planeFactor[0]);
 		if (showObjects) {	// Objects before Player
 			if (editMode)
@@ -384,9 +410,12 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
 		}
 		metrics.time_objects.stop();
+		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
 
 	}
+	drawParticles(renderer, Particle::Layer::FrontplaneBack, worldcoords * planeFactor[1], metrics);
 	drawNonePlayerPlane(renderer, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
+	drawParticles(renderer, Particle::Layer::FrontplaneFront, worldcoords * planeFactor[1], metrics);
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
 }
 

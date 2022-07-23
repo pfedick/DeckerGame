@@ -6,6 +6,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "animation.h"
+#include "particle.h"
 class SDL;
 struct SDL_Renderer;
 class SpriteTexture;
@@ -254,12 +255,8 @@ class ParticleEmitter : public Object
 private:
 	double next_birth;
 
-	void createParticle(const TileTypePlane& ttplane, double time);
+	void createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time);
 public:
-	enum class ParticleType {
-		ParticleTransparent=0,
-		ParticleWhite,
-	};
 	enum class EmitterType {
 		Point=0,
 		Rectangle,
@@ -270,26 +267,11 @@ public:
 		useScaleGradient=2,
 
 	};
-	class ScaleGradientItem
-	{
-	public:
-		ScaleGradientItem();
-		ScaleGradientItem(float age, float scale);
-		float age;
-		float scale;
-	};
-	class ColorGradientItem
-	{
-	public:
-		float age;
-		ppl7::grafix::Color color;
-		ColorGradientItem(float age, const ppl7::grafix::Color& color);
-		ColorGradientItem();
-	};
-	ParticleType particle_type;
+
+	Particle::Type particle_type;
 	EmitterType emitter_type;
 	ppl7::grafix::Color ParticleColor;
-	Decker::Objects::Object::Layer particle_layer;
+	Particle::Layer particle_layer;
 	ppl7::grafix::Size emitter_size;
 	int flags;
 	int min_birth_per_cycle, max_birth_per_cycle;
@@ -301,8 +283,8 @@ public:
 	float direction, variation;
 	float weight_min, weight_max;
 	ppl7::grafix::PointF gravity;
-	std::list<ScaleGradientItem>scale_gradient;
-	std::list<ColorGradientItem>color_gradient;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
 
 
 	ParticleEmitter();

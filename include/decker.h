@@ -16,6 +16,7 @@
 #include "waynet.h"
 #include "translate.h"
 #include "metrics.h"
+#include "particle.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -55,9 +56,11 @@ EXCEPTION(SDLException, ppl7::Exception);
 namespace Decker::Objects {
 class ObjectSystem;
 class Object;
+
 } // EOF namespace Decker::Objects
 
 class SettingsScreen;
+class ParticleSystem;
 
 class Config
 {
@@ -527,6 +530,7 @@ private:
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	Decker::Objects::ObjectSystem* objects;
+	ParticleSystem* particles;
 	Waynet waynet;
 
 	ppl7::grafix::Rect viewport;
@@ -535,6 +539,7 @@ private:
 	bool editMode;
 	bool showSprites;
 	bool showObjects;
+	bool showParticles;
 
 	void clear();
 
@@ -569,7 +574,7 @@ private:
 
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
-
+	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 
 public:
 
@@ -579,6 +584,7 @@ public:
 	void setEditmode(bool enabled);
 	void setShowSprites(bool enabled);
 	void setShowObjects(bool enabled);
+	void setShowParticles(bool enabled);
 	void setTileset(int no, SpriteTexture* tileset);
 	void setSpriteset(int no, SpriteTexture* spriteset);
 	void create(int width, int height);
