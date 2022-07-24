@@ -52,6 +52,7 @@ ParticleEmitter::ParticleEmitter()
 	gravity.y=0.0f;
 	weight_min=0.0f;
 	weight_max=0.0f;
+	current_state=true;
 
 	save_size+=75 + 64 * 2;
 }
