@@ -37,8 +37,7 @@ private:
 	ppl7::tk::Label* player_coords;
 	ppl7::tk::Label* mouse_buttons;
 	ppl7::tk::Label* time_label;
-	ppl7::tk::Label* sprite_count;
-	ppl7::tk::Label* object_count;
+	ppl7::tk::Label* version_label;
 	ppl7::tk::Label* player_state;
 	ppl7::tk::Label* object_id;
 
@@ -56,8 +55,6 @@ public:
 	void setMouse(const ppl7::tk::MouseState& mouse);
 	void setWorldCoords(const ppl7::grafix::Point& p);
 	void setPlayerCoords(const ppl7::grafix::Point& p);
-	void setSpriteCount(size_t total, size_t visible);
-	void setObjectCount(size_t total, size_t visible);
 	void setPlayerState(const ppl7::String& state);
 	void setSelectedObject(int id);
 

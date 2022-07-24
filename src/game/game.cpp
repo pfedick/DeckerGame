@@ -609,9 +609,6 @@ void Game::run()
 			last_metrics=metrics.getAverage();
 			mainmenue->updateMetrics(last_metrics);
 			metrics.clear();
-			statusbar->setSpriteCount(last_metrics.total_sprites, last_metrics.visible_sprites);
-			statusbar->setObjectCount(last_metrics.total_objects, last_metrics.visible_objects);
-
 		}
 		metrics.newFrame();
 		metrics.time_frame.start();

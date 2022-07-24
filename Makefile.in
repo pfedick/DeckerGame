@@ -1,4 +1,4 @@
-VERSION ?= 0.6.1
+VERSION ?= 0.7.0
 PREVIOUS_TAG = 0.6.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
@@ -535,7 +535,7 @@ compile/object_levelend.o: src/objects/levelend.cpp Makefile include/objects.h i
 	$(CXX) -o compile/object_levelend.o -c src/objects/levelend.cpp $(CFLAGS)
 
 # Userinterface
-compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h
+compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_statusbar.o -c src/ui/statusbar.cpp $(CFLAGS)
 
