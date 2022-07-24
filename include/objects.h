@@ -251,11 +251,6 @@ private:
 
 	void createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time);
 public:
-	enum class EmitterType {
-		Point=0,
-		Rectangle,
-		Ellipse
-	};
 	enum class Flags {
 		useColorGradient=1,
 		useScaleGradient=2,

@@ -21,6 +21,12 @@ public:
     };
 };
 
+enum class EmitterType {
+    Point=0,
+    Rectangle,
+    Ellipse
+};
+
 class Particle
 {
     friend class ParticleSystem;
@@ -149,5 +155,6 @@ public:
 ParticleSystem* GetParticleSystem();
 float randf(float min, float max);
 ppl7::grafix::PointF calculateVelocity(float speed, float direction);
+ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const EmitterType type, const ppl7::grafix::Size emitter_size, float rotation=0.0f);
 
 #endif

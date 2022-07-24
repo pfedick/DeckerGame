@@ -1,5 +1,6 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
+#include <math.h>
 #include "particle.h"
 
 static int particle_transparent[]={ 33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,
@@ -205,4 +206,64 @@ void Particle::updateScaleGradient()
     float n1=1.0f - ((age - current_scale.age) / scale_age_diff);
     float n2=1.0f - ((next_scale.age - age) / scale_age_diff);
     scale=base_scale * (current_scale.scale * n1 + next_scale.scale * n2);
+}
+
+
+/****************************************************************************************
+ * Functions
+ ****************************************************************************************/
+
+//static float pi=3.1415926535f;
+static float rad_pi=3.1415926535f / 180.0f;
+
+float randf(float min, float max)
+{
+    if (max == min) return min;
+    double range=max - min;
+    double r=(((double)ppl7::rand(0, RAND_MAX)) / (double)RAND_MAX * range) + min;
+    return r;
+}
+
+
+ppl7::grafix::PointF calculateVelocity(float speed, float direction)
+{
+    if (direction < 0.0f) direction+=360.0f;
+    if (direction >= 360.0f) direction-=360.0f;
+
+    ppl7::grafix::PointF velocity;
+    if (direction == 0.0f) {
+        velocity.x=0;
+        velocity.y=-speed;
+    } else if (direction == 90.0f) {
+        velocity.x=speed;
+        velocity.y=0;
+    } else if (direction == 180.0f) {
+        velocity.x=0;
+        velocity.y=speed;
+    } else if (direction == 270.0f) {
+        velocity.x=-speed;
+        velocity.y=0;
+    } else {
+        velocity.y=-speed * sinf((90 - direction) * rad_pi);
+        velocity.x=speed * sinf(direction * rad_pi);
+    }
+    return velocity;
+}
+
+ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const EmitterType type, const ppl7::grafix::Size emitter_size, float rotation)
+{
+    if (type == EmitterType::Point) return emitter;
+    ppl7::grafix::PointF p1;
+    if (type == EmitterType::Rectangle) {
+        p1.setPoint(emitter.x + randf(0.0, emitter_size.width) - emitter_size.width / 2,
+            emitter.y + randf(0.0, emitter_size.height) - emitter_size.height / 2);
+    } else {
+        float d=randf(0.0, 359.99999);
+        p1.setPoint(emitter.x + (sinf(d * rad_pi) * randf(0.0f, (float)emitter_size.width / 2)),
+            emitter.y + (cosf(d * rad_pi) * randf(0.0f, (float)emitter_size.height / 2)));
+
+    }
+
+    return p1;
+
 }

@@ -4,7 +4,6 @@
 #include "objects.h"
 #include "decker.h"
 #include "player.h"
-#include <math.h>
 
 namespace Decker::Objects {
 
@@ -57,48 +56,13 @@ ParticleEmitter::ParticleEmitter()
 	save_size+=73 + 64 * 2;
 }
 
-float randf(float min, float max)
-{
-	if (max == min) return min;
-	double range=max - min;
-	double r=(((double)ppl7::rand(0, RAND_MAX)) / (double)RAND_MAX * range) + min;
-	return r;
-}
-
-
-ppl7::grafix::PointF calculateVelocity(float speed, float direction)
-{
-	if (direction < 0.0f) direction+=360.0f;
-	if (direction >= 360.0f) direction-=360.0f;
-
-	ppl7::grafix::PointF velocity;
-	if (direction == 0.0f) {
-		velocity.x=0;
-		velocity.y=-speed;
-	} else if (direction == 90.0f) {
-		velocity.x=speed;
-		velocity.y=0;
-	} else if (direction == 180.0f) {
-		velocity.x=0;
-		velocity.y=speed;
-	} else if (direction == 270.0f) {
-		velocity.x=-speed;
-		velocity.y=0;
-	} else {
-		velocity.y=-speed * sin((90 - direction) / 180 * 3.1415926535);
-		velocity.x=speed * sin(direction / 180 * 3.1415926535);
-	}
-	return velocity;
-
-}
 
 void ParticleEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time)
 {
 	Particle* particle=new Particle();
 	particle->birth_time=time;
 	particle->death_time=randf(age_min, age_max) + time;
-	particle->p.x=p.x;
-	particle->p.y=p.y;
+	particle->p=getBirthPosition(p, emitter_type, emitter_size, direction);
 	particle->layer=particle_layer;
 	particle->weight=randf(weight_min, weight_max);
 	particle->gravity=gravity;
@@ -364,9 +328,9 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Emitter Type:"));
 	emitter_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
 	emitter_type->setEventHandler(this);
-	emitter_type->add("Point", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Point)));
-	emitter_type->add("Rectangle", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Rectangle)));
-	emitter_type->add("Ellipse", ppl7::ToString("%d", static_cast<int>(ParticleEmitter::EmitterType::Ellipse)));
+	emitter_type->add("Point", ppl7::ToString("%d", static_cast<int>(EmitterType::Point)));
+	emitter_type->add("Rectangle", ppl7::ToString("%d", static_cast<int>(EmitterType::Rectangle)));
+	emitter_type->add("Ellipse", ppl7::ToString("%d", static_cast<int>(EmitterType::Ellipse)));
 
 	tab->addChild(emitter_type);
 	y+=35;
@@ -689,7 +653,7 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	if (widget == particle_type) {
 		object->particle_type=static_cast<Particle::Type>(particle_type->currentIdentifier().toInt());
 	} else 	if (widget == emitter_type) {
-		object->emitter_type=static_cast<ParticleEmitter::EmitterType>(emitter_type->currentIdentifier().toInt());
+		object->emitter_type=static_cast<EmitterType>(emitter_type->currentIdentifier().toInt());
 	} else if (widget == particle_layer) {
 		object->particle_layer=static_cast<Particle::Layer>(particle_layer->currentIdentifier().toInt());
 	} else if (widget == color) {
