@@ -249,7 +249,7 @@ class ParticleEmitter : public Object
 private:
 	double next_birth;
 
-	void createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time);
+	void createParticle(ParticleSystem* ps, double time);
 public:
 	enum class Flags {
 		useColorGradient=1,
@@ -283,6 +283,8 @@ public:
 	size_t save(unsigned char* buffer, size_t size) override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
+
+	ppl7::String generateCode() const;
 
 };
 
@@ -775,12 +777,19 @@ class Floater : public Object
 private:
 	int direction;
 	double next_state, next_animation;
+	double next_birth;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	ppl7::grafix::PointF emmit_position;
+	float emmit_angle;
+	float particle_velocity_correction;
 	int state;
 	int flame_sprite1, flame_sprite2;
 	bool current_state;
 	ppl7::grafix::Point velocity;
 	AnimationCycle animation;
 	AudioInstance* audio;
+	void emmitParticles(double time, const Player& player, const ppl7::grafix::PointF p, float angle);
 public:
 	bool initial_state;
 	unsigned char floater_type;

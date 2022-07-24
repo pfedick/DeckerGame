@@ -22,6 +22,21 @@ Floater::Floater(Type::ObjectType type)
 	current_state=enabled;
 	floater_type=0;
 	save_size+=2;
+	/* Particles */
+	next_birth=0.0f;
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.063));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.068, 0.235));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.320, 0.353));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.604, 0.241));
+	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 255, 0, 220)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.149, ppl7::grafix::Color(255, 99, 0, 101)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.311, ppl7::grafix::Color(40, 41, 43, 101)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.428, ppl7::grafix::Color(11, 14, 12, 69)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.590, ppl7::grafix::Color(126, 127, 130, 87)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.775, ppl7::grafix::Color(255, 255, 255, 23)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(114, 116, 116, 0)));
+	particle_velocity_correction=0;
 	init();
 }
 
@@ -69,6 +84,11 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 			velocity.x=4;
 			velocity.y=0;
 			p+=velocity;
+			if (next_birth < time) {
+				particle_velocity_correction=0.0f;
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 64, p.y - 20), 270);
+				next_birth=time + randf(0.020, 0.085);
+			}
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 64, p.y));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
@@ -85,6 +105,11 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 			velocity.x=-4;
 			velocity.y=0;
 			p+=velocity;
+			if (next_birth < time) {
+				particle_velocity_correction=0.0f;
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x + 64, p.y - 20), 90);
+				next_birth=time + randf(0.020, 0.085);
+			}
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 64, p.y));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
@@ -106,6 +131,12 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 			velocity.x=0;
 			velocity.y=4;
 			p+=velocity;
+			if (next_birth < time) {
+				particle_velocity_correction=velocity.y;
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x + 16, p.y - 20), 180);
+				next_birth=time + randf(0.020, 0.085);
+			}
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 64));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
@@ -123,6 +154,12 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 			velocity.x=0;
 			velocity.y=-4;
 			p+=velocity;
+			if (next_birth < time) {
+				particle_velocity_correction=0.0f;
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
+				emmitParticles(time, player, ppl7::grafix::PointF(p.x + 16, p.y - 20), 180);
+				next_birth=time + randf(0.020, 0.085);
+			}
 			updateBoundary();
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 64));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
@@ -212,6 +249,32 @@ size_t Floater::load(const unsigned char* buffer, size_t size)
 	init();
 	return size;
 }
+
+void Floater::emmitParticles(double time, const Player& player, const ppl7::grafix::PointF p, float angle)
+{
+
+	ParticleSystem* ps=GetParticleSystem();
+	if (!emitterInPlayerRange(p, player)) return;
+	int new_particles=ppl7::rand(33, 67);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.293, 0.858) + time;
+		particle->p=p;
+		particle->layer=Particle::Layer::BehindBricks;
+		particle->weight=randf(0.000, 0.000);
+		particle->gravity.setPoint(0.000, 0.000);
+		particle->velocity=calculateVelocity(randf(2.462, 5.102) + particle_velocity_correction, angle + randf(-10.189, 10.189));
+		particle->scale=randf(0.554, 1.422);
+		particle->color_mod.set(226, 126, 69, 41);
+		particle->initAnimation(Particle::Type::RotatingParticleWhite);
+		particle->initScaleGradient(scale_gradient, particle->scale);
+		particle->initColorGradient(color_gradient);
+		ps->addParticle(particle);
+	}
+
+}
+
 
 class FloaterDialog : public Decker::ui::Dialog
 {
