@@ -153,10 +153,14 @@ private:
     float frame_rate_compensation;
     double thread_duration;
     std::map<uint32_t, Particle*>* visible_particle_map;
+    bool thread_running;
 
 public:
+    ppl7::Mutex mutex;
+
     ParticleUpdateThread(ParticleSystem& ps);
     void run() override;
+    bool isRunning() const;
     double getThreadDuration() const;
     void setVisibleParticleMap(std::map<uint32_t, Particle*>* visible_particle_map);
 
