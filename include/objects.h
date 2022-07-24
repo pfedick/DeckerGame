@@ -254,6 +254,7 @@ public:
 	enum class Flags {
 		useColorGradient=1,
 		useScaleGradient=2,
+		initialStateDisabled=4,
 
 	};
 
@@ -274,6 +275,7 @@ public:
 	ppl7::grafix::PointF gravity;
 	std::list<Particle::ScaleGradientItem>scale_gradient;
 	std::list<Particle::ColorGradientItem>color_gradient;
+	bool current_state;
 
 
 	ParticleEmitter();
@@ -283,6 +285,7 @@ public:
 	size_t save(unsigned char* buffer, size_t size) override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
+	void toggle(bool enable, Object* source=NULL) override;
 
 	ppl7::String generateCode() const;
 
@@ -365,6 +368,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void reset() override;
+	void toggle(bool enable, Object* source=NULL) override;
 };
 
 

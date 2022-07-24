@@ -80,7 +80,7 @@ void ParticleEmitter::createParticle(ParticleSystem* ps, double time)
 
 void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 {
-	if (next_birth < time) {
+	if (next_birth < time && current_state == true) {
 		ParticleSystem* ps=GetParticleSystem();
 		next_birth=time + randf(birth_time_min, birth_time_max);
 		if (!emitterInPlayerRange(p, player)) return;
@@ -207,11 +207,20 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 		scale_gradient.push_back(s);
 		p+=8;
 	}
+
+	if (flags & static_cast<int>(Flags::initialStateDisabled)) current_state=false;
+	else current_state=true;
 	/*
 	int null_byte=ppl7::Peek8(buffer + bytes + p);
 	p++;
 	*/
 	return size;
+}
+
+void ParticleEmitter::toggle(bool enable, Object* source)
+{
+	current_state=enable;
+
 }
 
 
@@ -331,6 +340,7 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
 	ppl7::tk::DoubleHorizontalSlider* weight_min, * weight_max;
 	ppl7::tk::DoubleHorizontalSlider* direction, * variation, * gravity_x, * gravity_y;
+	ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
 
 	// Color Tab
 	Decker::ui::ColorSliderWidget* color;
@@ -595,6 +605,13 @@ void ParticleEmitterDialog::setupParticleTab()
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_y);
 	y+=35;
+	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
+	initial_state_checkbox->setEventHandler(this);
+	tab->addChild(initial_state_checkbox);
+	current_state_checkbox=new ppl7::tk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
+	current_state_checkbox->setEventHandler(this);
+	tab->addChild(current_state_checkbox);
+
 }
 
 void ParticleEmitterDialog::setupColorTab()
@@ -702,6 +719,9 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 	weight_max->setValue(object->weight_max);
 	gravity_x->setValue(object->gravity.x);
 	gravity_y->setValue(object->gravity.y);
+	current_state_checkbox->setChecked(object->current_state);
+	initial_state_checkbox->setChecked(!(object->flags & static_cast<int>(ParticleEmitter::Flags::initialStateDisabled)));
+
 	{
 		gradient_widget->clear();
 		std::list<Particle::ColorGradientItem>::const_iterator it;
@@ -881,6 +901,15 @@ void ParticleEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 		int flags=object->flags & (0xffff - static_cast<int>(ParticleEmitter::Flags::useScaleGradient));
 		if (checkbox_scale_gradient->checked()) flags|=static_cast<int>(ParticleEmitter::Flags::useScaleGradient);
 		object->flags=flags;
+		needsRedraw();
+	} else if (event->widget() == initial_state_checkbox) {
+		int flags=object->flags & (0xffff - static_cast<int>(ParticleEmitter::Flags::initialStateDisabled));
+		if (!initial_state_checkbox->checked()) flags|=static_cast<int>(ParticleEmitter::Flags::initialStateDisabled);
+		object->flags=flags;
+		needsRedraw();
+	} else if (event->widget() == current_state_checkbox) {
+		object->current_state=current_state_checkbox->checked();
+		needsRedraw();
 	}
 	//printf("flags=%d\n", object->flags);
 

@@ -74,6 +74,14 @@ void Switch::notify_targets()
 	}
 }
 
+void Switch::toggle(bool enable, Object* source)
+{
+	if (source == this) return;
+	current_state=enable;
+	init();
+	notify_targets();
+}
+
 
 void Switch::update(double time, TileTypePlane& ttplane, Player& player)
 {
