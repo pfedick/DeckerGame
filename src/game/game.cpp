@@ -526,7 +526,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	// Particles
 	metrics.time_update_particles.start();
-	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport);	// => TODO: own Thread
+	metrics.time_particle_thread.addDuration(level.particles->waitForUpdateThreadFinished());
+	level.particles->cleanupParticles(now);
+	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport);
 	metrics.time_update_particles.stop();
 
 

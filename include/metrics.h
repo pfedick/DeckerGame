@@ -24,6 +24,7 @@ public:
         void stop();
         void clear();
         double get() const;
+        void addDuration(double d);
     };
     Metrics();
     void clear();
@@ -38,6 +39,7 @@ public:
     Timer time_update_sprites;
     Timer time_update_objects;
     Timer time_update_particles;
+    Timer time_particle_thread;
     Timer time_draw_background;
     Timer time_draw_tsop;
     Timer time_sprites;

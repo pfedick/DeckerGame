@@ -273,6 +273,6 @@ bool emitterInPlayerRange(const ppl7::grafix::PointF& emitter, const Player& pla
 {
     double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
         player.WorldCoords.y + player.Viewport.height() / 2), emitter);
-    if (d > 2 * player.Viewport.width()) return false;
+    if (d > player.Viewport.width()) return false;
     return true;
 }

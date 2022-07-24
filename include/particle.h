@@ -30,6 +30,7 @@ enum class EmitterType {
 class Particle
 {
     friend class ParticleSystem;
+    friend class ParticleUpdateThread;
 public:
     enum class Layer {
         BehindBricks=0,
@@ -129,16 +130,51 @@ public:
     void initScaleGradient(const std::list<ScaleGradientItem>& gradient, float base_scale);
 };
 
+class ParticleSystem;
+
+class ParticleToDraw
+{
+public:
+    ppl7::grafix::Color color_mod;
+    ppl7::grafix::PointF p;
+    float scale;
+};
+
+class ParticleUpdateThread : public ppl7::Thread
+{
+    friend class ParticleSystem;
+private:
+    ParticleSystem& ps;
+    double time;
+    TileTypePlane* ttplane;
+    Player* player;
+    ppl7::grafix::Point worldcoords;
+    ppl7::grafix::Rect viewport;
+    float frame_rate_compensation;
+    double thread_duration;
+    std::map<uint32_t, Particle*>* visible_particle_map;
+
+public:
+    ParticleUpdateThread(ParticleSystem& ps);
+    void run() override;
+    double getThreadDuration() const;
+    void setVisibleParticleMap(std::map<uint32_t, Particle*>* visible_particle_map);
+
+};
 
 class ParticleSystem
 {
+    friend class ParticleUpdateThread;
 private:
     uint64_t nextid;
     SpriteTexture* spriteset[ParticleSpriteset::MaxSpritesets];
     std::map<uint64_t, Particle*> particle_map;
-    std::map<uint32_t, Particle*> visible_particle_map[static_cast<int>(Particle::Layer::maxLayer)];
+    std::map<uint64_t, Particle*> new_particles;
+    std::map<uint32_t, Particle*> visible_particle_map[2][static_cast<int>(Particle::Layer::maxLayer)];
     void deleteParticle(uint64_t id);
     double last_update;
+    int active_map;
+    ParticleUpdateThread update_thread=ParticleUpdateThread(*this);
 public:
     ParticleSystem();
     ~ParticleSystem();
@@ -146,10 +182,14 @@ public:
     void loadSpritesets(SDL& sdl);
     void addParticle(Particle* particle);
     void update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+    void cleanupParticles(double time);
+    double waitForUpdateThreadFinished();
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;
     size_t count() const;
     size_t countVisible() const;
     static ppl7::String layerName(Particle::Layer layer);
+
+
 };
 
 ParticleSystem* GetParticleSystem();

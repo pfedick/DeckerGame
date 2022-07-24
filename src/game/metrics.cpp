@@ -36,6 +36,11 @@ double Metrics::Timer::get() const
     return duration;
 }
 
+void Metrics::Timer::addDuration(double d)
+{
+    duration+=d;
+}
+
 
 Metrics::Metrics()
 {
@@ -67,6 +72,7 @@ void Metrics::clear()
     time_update_sprites.clear();
     time_update_objects.clear();
     time_update_particles.clear();
+    time_particle_thread.clear();
     time_draw_background.clear();
     time_draw_tsop.clear();
     time_sprites.clear();
@@ -94,6 +100,7 @@ Metrics Metrics::getAverage()
         m.time_update_sprites.duration=time_update_sprites.get() / framecount;
         m.time_update_objects.duration=time_update_objects.get() / framecount;
         m.time_update_particles.duration=time_update_particles.get() / framecount;
+        m.time_particle_thread.duration=time_particle_thread.get() / framecount;
         m.time_draw_background.duration=time_draw_background.get() / framecount;
         m.time_draw_tsop.duration=time_draw_tsop.get() / framecount;
         m.time_sprites.duration=time_sprites.get() / framecount;

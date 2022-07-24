@@ -20,6 +20,7 @@ ParticleSystem::ParticleSystem()
     }
     nextid=1;
     last_update=0.0f;
+    active_map=0;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -30,8 +31,10 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::clear()
 {
+    waitForUpdateThreadFinished();
     for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
-        visible_particle_map[i].clear();
+        visible_particle_map[0][i].clear();
+        visible_particle_map[1][i].clear();
     }
     std::map<uint64_t, Particle*>::iterator it;
     for (it=particle_map.begin();it != particle_map.end();++it) {
@@ -55,7 +58,7 @@ void ParticleSystem::addParticle(Particle* particle)
     if (!particle) return;
     if (particle->birth_time == 0.0f || particle->birth_time > particle->death_time) return;
     particle->life_time=particle->death_time - particle->birth_time;
-    particle_map.insert(std::pair<uint64_t, Particle*>(nextid, particle));
+    new_particles.insert(std::pair<uint64_t, Particle*>(nextid, particle));
     nextid++;
 }
 
@@ -72,43 +75,53 @@ void ParticleSystem::deleteParticle(uint64_t id)
 
 void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
-    std::list<uint64_t> deleteme;
-    std::map<uint64_t, Particle*>::iterator it;
-    float frame_rate_compensation=1.0f;
+    while (update_thread.threadIsRunning()) ppl7::MSleep(1);
+    update_thread.frame_rate_compensation=1.0f;
     if (last_update > 0) {
         float frametime=time - last_update;
-        frame_rate_compensation=(1.0f / 60.0f) / frametime;
-        //printf("frame_rate_compensation=%0.3f, frametime=%0.3f\n", frame_rate_compensation, frametime);
+        update_thread.frame_rate_compensation=(1.0f / 60.0f) / frametime;
     }
     last_update=time;
+    update_thread.time=time;
+    update_thread.ttplane=&ttplane;
+    update_thread.player=&player;
+    update_thread.worldcoords=worldcoords;
+    update_thread.viewport=viewport;
+    update_thread.setVisibleParticleMap(visible_particle_map[active_map]);
+    active_map=(active_map + 1) & 1;
+    update_thread.threadStart();
+}
 
-    for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
-        visible_particle_map[i].clear();
-    }
-    int width=viewport.width();
-    int height=viewport.height();
+double ParticleSystem::waitForUpdateThreadFinished()
+{
+    while (update_thread.threadIsRunning()) ppl7::MSleep(1);
+    return update_thread.getThreadDuration();
+}
+
+void ParticleSystem::cleanupParticles(double time)
+{
+    std::list<uint64_t> deleteme;
+    std::map<uint64_t, Particle*>::iterator it;
     for (it=particle_map.begin();it != particle_map.end();++it) {
         Particle* particle=it->second;
         if (time > particle->death_time) {
             deleteme.push_back(it->first);
-        } else {
-            particle->age=(time - particle->birth_time) / particle->life_time;
-            particle->update(time, ttplane, frame_rate_compensation);
-            int x=(int)particle->p.x - worldcoords.x;
-            int y=(int)particle->p.y - worldcoords.y;
-            if (x + 64 > 0 && y + 64 > 0 && x - 64 < width && y - 64 < height) {
-                uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
-                visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
-            }
         }
     }
     if (deleteme.size() > 0) {
-        std::list<uint64_t>::iterator it;
-        for (it=deleteme.begin();it != deleteme.end();++it) {
-            deleteParticle(*it);
+        std::list<uint64_t>::iterator dit;
+        for (dit=deleteme.begin();dit != deleteme.end();++dit) {
+            deleteParticle(*dit);
         }
     }
+    // Insert new Particles
+    for (it=new_particles.begin();it != new_particles.end();++it) {
+        particle_map.insert(std::pair<uint64_t, Particle*>(it->first, it->second));
+    }
+    new_particles.clear();
+
 }
+
 
 void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const
 {
@@ -116,7 +129,7 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
     ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
     int l=static_cast<int>(layer);
 
-    for (it=visible_particle_map[l].begin();it != visible_particle_map[l].end();++it) {
+    for (it=visible_particle_map[active_map][l].begin();it != visible_particle_map[active_map][l].end();++it) {
         const Particle* particle=it->second;
         if (particle->layer == layer) {
             spriteset[particle->sprite_set]->drawScaled(renderer,
@@ -136,7 +149,7 @@ size_t ParticleSystem::countVisible() const
 {
     size_t c=0;
     for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
-        c+=visible_particle_map[i].size();
+        c+=visible_particle_map[active_map][i].size();
     }
     return c;
 }
@@ -159,4 +172,50 @@ ppl7::String ParticleSystem::layerName(Particle::Layer layer)
     default: return "unknown";
     }
     return "unknown";
+}
+
+
+ParticleUpdateThread::ParticleUpdateThread(ParticleSystem& ps)
+    :ps(ps)
+{
+    time=0.0f;
+    ttplane=NULL;
+    player=NULL;
+    frame_rate_compensation=1.0f;
+    thread_duration=0.0f;
+}
+
+double ParticleUpdateThread::getThreadDuration() const
+{
+    return thread_duration;
+}
+
+void ParticleUpdateThread::setVisibleParticleMap(std::map<uint32_t, Particle*>* visible_particle_map)
+{
+    this->visible_particle_map=visible_particle_map;
+}
+
+void ParticleUpdateThread::run()
+{
+    double thread_start_time=ppl7::GetMicrotime();
+    std::map<uint64_t, Particle*>::iterator it;
+    for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
+        visible_particle_map[i].clear();
+    }
+    int width=viewport.width();
+    int height=viewport.height();
+    for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
+        Particle* particle=it->second;
+        if (time <= particle->death_time) {
+            particle->age=(time - particle->birth_time) / particle->life_time;
+            particle->update(time, *ttplane, frame_rate_compensation);
+            int x=(int)particle->p.x - worldcoords.x;
+            int y=(int)particle->p.y - worldcoords.y;
+            if (x + 64 > 0 && y + 64 > 0 && x - 64 < width && y - 64 < height) {
+                uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
+                visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
+            }
+        }
+    }
+    thread_duration=ppl7::GetMicrotime() - thread_start_time;
 }

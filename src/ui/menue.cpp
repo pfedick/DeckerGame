@@ -406,7 +406,7 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 }
 
 MetricsSubMenu::MetricsSubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 450, 190)
+	: ppl7::tk::Frame(x, y, 450, 210)
 {
 	this->menue=menue;
 	this->setTransparent(false);
@@ -508,6 +508,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawDoubleMetric(draw, c1 + 20, c2, y, "draw objects:", metrics.time_objects.get());
 	y+=line;
 	drawDoubleMetric(draw, c1 + 20, c2, y, "draw particles:", metrics.time_draw_particles.get());
+	y+=line;
+	drawDoubleMetric(draw, c1, c2, y, "particle update thread:", metrics.time_particle_thread.get());
 	y+=line;
 
 }
