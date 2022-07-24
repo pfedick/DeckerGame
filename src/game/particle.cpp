@@ -2,6 +2,7 @@
 #include <ppl7-grafix.h>
 #include <math.h>
 #include "particle.h"
+#include "player.h"
 
 static int particle_transparent[]={ 33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,
     52,53,54,55,56,57,58,59,60,61,62 };
@@ -261,9 +262,17 @@ ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const
         float d=randf(0.0, 359.99999);
         p1.setPoint((sinf(d * rad_pi) * randf(0.0f, (float)emitter_size.width / 2)),
             (cosf(d * rad_pi) * randf(0.0f, (float)emitter_size.height / 2)));
-
     }
 
     return p1 + emitter;
 
+}
+
+
+bool emitterInPlayerRange(const ppl7::grafix::PointF& emitter, const Player& player)
+{
+    double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
+        player.WorldCoords.y + player.Viewport.height() / 2), emitter);
+    if (d > 2 * player.Viewport.width()) return false;
+    return true;
 }

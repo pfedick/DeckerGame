@@ -57,7 +57,7 @@ ParticleEmitter::ParticleEmitter()
 }
 
 
-void ParticleEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time)
+void ParticleEmitter::createParticle(ParticleSystem* ps, double time)
 {
 	Particle* particle=new Particle();
 	particle->birth_time=time;
@@ -83,12 +83,10 @@ void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player
 	if (next_birth < time) {
 		ParticleSystem* ps=GetParticleSystem();
 		next_birth=time + randf(birth_time_min, birth_time_max);
-		double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
-			player.WorldCoords.y + player.Viewport.height() / 2), p);
-		if (d > 2 * player.Viewport.width()) return;
+		if (!emitterInPlayerRange(p, player)) return;
 		int new_particles=ppl7::rand(min_birth_per_cycle, max_birth_per_cycle);
 		for (int i=0;i < new_particles;i++) {
-			createParticle(ps, ttplane, time);
+			createParticle(ps, time);
 		}
 	}
 }
@@ -216,6 +214,97 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	return size;
 }
 
+
+ppl7::String ParticleEmitter::generateCode() const
+{
+	ppl7::String Tmp;
+	ppl7::String code="/*\n * add the following variables to your object class:\n */\n";
+	code+="    double next_birth;\n";
+	if (scale_gradient.size() > 0 && (flags & static_cast<int>(Flags::useScaleGradient))) code +="    std::list<Particle::ScaleGradientItem>scale_gradient;\n";
+	if (color_gradient.size() > 0 && (flags & static_cast<int>(Flags::useColorGradient))) code +="    std::list<Particle::ColorGradientItem>color_gradient;\n";
+	code +="/*\n * add the following code to your constructor:\n */\n";
+	code +="    next_birth=0.0f;\n";
+	if (flags & static_cast<int>(Flags::useScaleGradient)) {
+		std::list<Particle::ScaleGradientItem>::const_iterator it;
+		for (it=scale_gradient.begin();it != scale_gradient.end();++it) {
+			code.appendf("    scale_gradient.push_back(Particle::ScaleGradientItem(%0.3f, %0.3f));\n",
+				it->age, it->scale);
+		}
+	}
+	if (flags & static_cast<int>(Flags::useColorGradient)) {
+		std::list<Particle::ColorGradientItem>::const_iterator it;
+		for (it=color_gradient.begin();it != color_gradient.end();++it) {
+			code.appendf("    color_gradient.push_back(Particle::ColorGradientItem(%0.3f, ppl7::grafix::Color(%d, %d, %d, %d)));\n",
+				it->age, it->color.red(), it->color.green(), it->color.blue(), it->color.alpha());
+		}
+	}
+	code +="\n/*\n * add the following function to your class:\n */\n\n";
+	code +="void MyObject::emmitParticles(double time, const Player& player)\n";
+	code +="{\n";
+	code +="    if (next_birth < time) {\n";
+	code.appendf("        next_birth=time + randf(%0.3f, %0.3f);\n", birth_time_min, birth_time_max);
+	code +="        ParticleSystem* ps=GetParticleSystem();\n";
+	code +="        if (!emitterInPlayerRange(p, player)) return;\n";
+	code.appendf("        int new_particles=ppl7::rand(%d, %d);\n", min_birth_per_cycle, max_birth_per_cycle);
+	code +="        for (int i=0;i < new_particles;i++) {\n";
+	code +="            Particle* particle=new Particle();\n";
+	code +="            particle->birth_time=time;\n";
+	code.appendf("            particle->death_time=randf(%0.3f, %0.3f) + time;\n", age_min, age_max);
+	if (emitter_type == EmitterType::Point) {
+		code +="            particle->p=p;\n";
+	} else {
+		Tmp="EmitterType::Ellipse";
+		if (emitter_type == EmitterType::Rectangle) Tmp="EmitterType::Rectangle";
+		code.appendf("            particle->p=getBirthPosition(p, %s, ppl7::grafix::Size(%d, %d), %0.3f);\n",
+			(const char*)Tmp, emitter_size.width, emitter_size.height, direction);
+	}
+	switch (particle_layer) {
+	case Particle::Layer::BehindBricks: Tmp="BehindBricks"; break;
+	case Particle::Layer::BehindPlayer: Tmp="BehindPlayer"; break;
+	case Particle::Layer::BeforePlayer: Tmp="BeforePlayer"; break;
+	case Particle::Layer::BackplaneFront: Tmp="BackplaneFront"; break;
+	case Particle::Layer::BackplaneBack: Tmp="BackplaneBack"; break;
+	case Particle::Layer::FrontplaneFront: Tmp="FrontplaneFront"; break;
+	case Particle::Layer::FrontplaneBack: Tmp="FrontplaneBack"; break;
+	default: Tmp="BeforePlayer";
+	}
+	code.appendf("            particle->layer=Particle::Layer::%s;\n", (const char*)Tmp);
+	code.appendf("            particle->weight=randf(%0.3f, %0.3f);\n", weight_min, weight_max);
+	code.appendf("            particle->gravity.setPoint(%0.3f, %0.3f);\n", gravity.x, gravity.y);
+	code.appendf("            particle->velocity=calculateVelocity(randf(%0.3f, %0.3f), %0.3f + randf(-%0.3f, %0.3f));\n",
+		min_velocity, max_velocity, direction, variation, variation);
+	code.appendf("            particle->scale=randf(%0.3f, %0.3f);\n", scale_min, scale_max);
+	code.appendf("            particle->color_mod.set(%d, %d, %d, %d);\n", ParticleColor.red(), ParticleColor.green(),
+		ParticleColor.blue(), ParticleColor.alpha());
+	switch (particle_type) {
+	case Particle::Type::RotatingParticleTransparent: Tmp="RotatingParticleTransparent"; break;
+	case Particle::Type::RotatingParticleWhite: Tmp="RotatingParticleWhite"; break;
+	case Particle::Type::RotatingSnowflakeTransparent: Tmp="RotatingSnowflakeTransparent"; break;
+	case Particle::Type::RotatingSnowflakeWhite: Tmp="RotatingSnowflakeWhite"; break;
+	case Particle::Type::RotatingCylinder: Tmp="RotatingCylinder"; break;
+	case Particle::Type::StaticParticle: Tmp="StaticParticle"; break;
+	case Particle::Type::StaticParticleBig: Tmp="StaticParticleBig"; break;
+	case Particle::Type::StaticCircle: Tmp="StaticCircle"; break;
+	case Particle::Type::StaticCircleBig: Tmp="StaticCircleBig"; break;
+	case Particle::Type::StaticBulletSmall: Tmp="StaticBulletSmall"; break;
+	case Particle::Type::StaticBulletBig: Tmp="StaticBulletBig"; break;
+	case Particle::Type::StaticStudSmall: Tmp="StaticStudSmall"; break;
+	case Particle::Type::StaticStudBig: Tmp="StaticStudBig"; break;
+	default: Tmp="RotatingParticleWhite"; break;
+	}
+	code.appendf("            particle->initAnimation(Particle::Type::%s);\n", (const char*)Tmp);
+	if (flags & static_cast<int>(Flags::useScaleGradient)) {
+		code +="            particle->initScaleGradient(scale_gradient, particle->scale);\n";
+	}
+	if (flags & static_cast<int>(Flags::useScaleGradient)) {
+		code +="            particle->initColorGradient(color_gradient);\n";
+	}
+	code +="            ps->addParticle(particle);\n";
+	code +="        }\n";
+	code +="    }\n";
+	code +="}\n\n";
+	return code;
+}
 
 
 /****************************************************************
@@ -825,6 +914,8 @@ void ParticleEmitterDialog::dialogButtonEvent(Dialog::Buttons button)
 		clipboard.gravity=object->gravity;
 		clipboard.scale_gradient=object->scale_gradient;
 		clipboard.color_gradient=object->color_gradient;
+
+		SDL_SetClipboardText(object->generateCode());
 
 	} else if (button == Dialog::Buttons::Paste) {
 		object->particle_type=clipboard.particle_type;
