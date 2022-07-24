@@ -53,7 +53,7 @@ ParticleEmitter::ParticleEmitter()
 	weight_min=0.0f;
 	weight_max=0.0f;
 
-	save_size+=73 + 64 * 2;
+	save_size+=75 + 64 * 2;
 }
 
 
@@ -100,32 +100,32 @@ size_t ParticleEmitter::save(unsigned char* buffer, size_t size)
 	size_t bytes=Object::save(buffer, size);
 	ppl7::Poke8(buffer + bytes, static_cast<int>(particle_type));
 	ppl7::Poke8(buffer + bytes + 1, static_cast<int>(emitter_type));
-	ppl7::Poke8(buffer + bytes + 2, emitter_size.width);
-	ppl7::Poke8(buffer + bytes + 3, emitter_size.height);
-	ppl7::Poke8(buffer + bytes + 4, min_birth_per_cycle);
-	ppl7::Poke8(buffer + bytes + 5, max_birth_per_cycle);
-	ppl7::Poke8(buffer + bytes + 6, ParticleColor.red());
-	ppl7::Poke8(buffer + bytes + 7, ParticleColor.green());
-	ppl7::Poke8(buffer + bytes + 8, ParticleColor.blue());
-	ppl7::Poke8(buffer + bytes + 9, ParticleColor.alpha());
-	ppl7::PokeFloat(buffer + bytes + 10, birth_time_min);
-	ppl7::PokeFloat(buffer + bytes + 14, birth_time_max);
-	ppl7::PokeFloat(buffer + bytes + 18, direction);
-	ppl7::PokeFloat(buffer + bytes + 22, variation);
-	ppl7::PokeFloat(buffer + bytes + 26, min_velocity);
-	ppl7::PokeFloat(buffer + bytes + 30, max_velocity);
-	ppl7::PokeFloat(buffer + bytes + 34, scale_min);
-	ppl7::PokeFloat(buffer + bytes + 38, scale_max);
-	ppl7::PokeFloat(buffer + bytes + 42, age_min);
-	ppl7::PokeFloat(buffer + bytes + 46, age_max);
-	ppl7::PokeFloat(buffer + bytes + 50, weight_min);
-	ppl7::PokeFloat(buffer + bytes + 54, weight_max);
-	ppl7::PokeFloat(buffer + bytes + 58, gravity.x);
-	ppl7::PokeFloat(buffer + bytes + 62, gravity.y);
-	ppl7::Poke8(buffer + bytes + 66, static_cast<int>(particle_layer));
-	ppl7::Poke16(buffer + bytes + 67, flags);
-	ppl7::Poke8(buffer + bytes + 69, 0);	// unused
-	size_t p=70;
+	ppl7::Poke16(buffer + bytes + 2, emitter_size.width);
+	ppl7::Poke16(buffer + bytes + 4, emitter_size.height);
+	ppl7::Poke8(buffer + bytes + 6, min_birth_per_cycle);
+	ppl7::Poke8(buffer + bytes + 7, max_birth_per_cycle);
+	ppl7::Poke8(buffer + bytes + 8, ParticleColor.red());
+	ppl7::Poke8(buffer + bytes + 9, ParticleColor.green());
+	ppl7::Poke8(buffer + bytes + 10, ParticleColor.blue());
+	ppl7::Poke8(buffer + bytes + 11, ParticleColor.alpha());
+	ppl7::PokeFloat(buffer + bytes + 12, birth_time_min);
+	ppl7::PokeFloat(buffer + bytes + 16, birth_time_max);
+	ppl7::PokeFloat(buffer + bytes + 20, direction);
+	ppl7::PokeFloat(buffer + bytes + 24, variation);
+	ppl7::PokeFloat(buffer + bytes + 28, min_velocity);
+	ppl7::PokeFloat(buffer + bytes + 32, max_velocity);
+	ppl7::PokeFloat(buffer + bytes + 36, scale_min);
+	ppl7::PokeFloat(buffer + bytes + 40, scale_max);
+	ppl7::PokeFloat(buffer + bytes + 44, age_min);
+	ppl7::PokeFloat(buffer + bytes + 48, age_max);
+	ppl7::PokeFloat(buffer + bytes + 52, weight_min);
+	ppl7::PokeFloat(buffer + bytes + 56, weight_max);
+	ppl7::PokeFloat(buffer + bytes + 60, gravity.x);
+	ppl7::PokeFloat(buffer + bytes + 64, gravity.y);
+	ppl7::Poke8(buffer + bytes + 68, static_cast<int>(particle_layer));
+	ppl7::Poke16(buffer + bytes + 69, flags);
+	ppl7::Poke8(buffer + bytes + 71, 0);	// unused
+	size_t p=72;
 	{
 		ppl7::Poke8(buffer + bytes + p, color_gradient.size());	// Number of Color Gradients, bei 0 wird ParticleColor verwendet
 		p++;
@@ -159,32 +159,32 @@ size_t ParticleEmitter::load(const unsigned char* buffer, size_t size)
 	if (bytes == 0 || size < save_size) return 0;
 	particle_type=static_cast<Particle::Type>(ppl7::Peek8(buffer + bytes));
 	emitter_type=static_cast<EmitterType>(ppl7::Peek8(buffer + bytes + 1));
-	emitter_size.width=ppl7::Peek8(buffer + bytes + 2);
-	emitter_size.height=ppl7::Peek8(buffer + bytes + 3);
-	min_birth_per_cycle=ppl7::Peek8(buffer + bytes + 4);
-	max_birth_per_cycle=ppl7::Peek8(buffer + bytes + 5);
-	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 6));
-	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 7));
-	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 8));
-	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 9));
-	birth_time_min=ppl7::PeekFloat(buffer + bytes + 10);
-	birth_time_max=ppl7::PeekFloat(buffer + bytes + 14);
-	direction=ppl7::PeekFloat(buffer + bytes + 18);
-	variation=ppl7::PeekFloat(buffer + bytes + 22);
-	min_velocity=ppl7::PeekFloat(buffer + bytes + 26);
-	max_velocity=ppl7::PeekFloat(buffer + bytes + 30);
-	scale_min=ppl7::PeekFloat(buffer + bytes + 34);
-	scale_max=ppl7::PeekFloat(buffer + bytes + 38);
-	age_min=ppl7::PeekFloat(buffer + bytes + 42);
-	age_max=ppl7::PeekFloat(buffer + bytes + 46);
-	weight_min=ppl7::PeekFloat(buffer + bytes + 50);
-	weight_max=ppl7::PeekFloat(buffer + bytes + 54);
-	gravity.x=ppl7::PeekFloat(buffer + bytes + 58);
-	gravity.y=ppl7::PeekFloat(buffer + bytes + 62);
-	particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 66));
-	flags=ppl7::Peek16(buffer + bytes + 67);
+	emitter_size.width=ppl7::Peek16(buffer + bytes + 2);
+	emitter_size.height=ppl7::Peek16(buffer + bytes + 4);
+	min_birth_per_cycle=ppl7::Peek8(buffer + bytes + 6);
+	max_birth_per_cycle=ppl7::Peek8(buffer + bytes + 7);
+	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 8));
+	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 9));
+	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 10));
+	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 11));
+	birth_time_min=ppl7::PeekFloat(buffer + bytes + 12);
+	birth_time_max=ppl7::PeekFloat(buffer + bytes + 16);
+	direction=ppl7::PeekFloat(buffer + bytes + 20);
+	variation=ppl7::PeekFloat(buffer + bytes + 24);
+	min_velocity=ppl7::PeekFloat(buffer + bytes + 28);
+	max_velocity=ppl7::PeekFloat(buffer + bytes + 32);
+	scale_min=ppl7::PeekFloat(buffer + bytes + 36);
+	scale_max=ppl7::PeekFloat(buffer + bytes + 40);
+	age_min=ppl7::PeekFloat(buffer + bytes + 44);
+	age_max=ppl7::PeekFloat(buffer + bytes + 48);
+	weight_min=ppl7::PeekFloat(buffer + bytes + 52);
+	weight_max=ppl7::PeekFloat(buffer + bytes + 56);
+	gravity.x=ppl7::PeekFloat(buffer + bytes + 60);
+	gravity.y=ppl7::PeekFloat(buffer + bytes + 64);
+	particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 68));
+	flags=ppl7::Peek16(buffer + bytes + 69);
 	// 69 is unused
-	size_t p=70;
+	size_t p=72;
 
 	int num_color_gradients=ppl7::Peek8(buffer + bytes + p);
 	p++;
@@ -412,13 +412,13 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	min_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity->setEventHandler(this);
-	min_velocity->setLimits(0.010, 20.0f);
+	min_velocity->setLimits(0.0f, 20.0f);
 	min_velocity->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(min_velocity);
 	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
 	max_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity->setEventHandler(this);
-	max_velocity->setLimits(0.010, 20.0f);
+	max_velocity->setLimits(0.0f, 20.0f);
 	max_velocity->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(max_velocity);
 	y+=35;

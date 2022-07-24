@@ -255,15 +255,15 @@ ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const
     if (type == EmitterType::Point) return emitter;
     ppl7::grafix::PointF p1;
     if (type == EmitterType::Rectangle) {
-        p1.setPoint(emitter.x + randf(0.0, emitter_size.width) - emitter_size.width / 2,
-            emitter.y + randf(0.0, emitter_size.height) - emitter_size.height / 2);
+        p1.setPoint(randf(0.0, emitter_size.width) - emitter_size.width / 2,
+            randf(0.0, emitter_size.height) - emitter_size.height / 2);
     } else {
         float d=randf(0.0, 359.99999);
-        p1.setPoint(emitter.x + (sinf(d * rad_pi) * randf(0.0f, (float)emitter_size.width / 2)),
-            emitter.y + (cosf(d * rad_pi) * randf(0.0f, (float)emitter_size.height / 2)));
+        p1.setPoint((sinf(d * rad_pi) * randf(0.0f, (float)emitter_size.width / 2)),
+            (cosf(d * rad_pi) * randf(0.0f, (float)emitter_size.height / 2)));
 
     }
 
-    return p1;
+    return p1 + emitter;
 
 }
