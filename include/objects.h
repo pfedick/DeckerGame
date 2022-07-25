@@ -331,12 +331,11 @@ public:
 	int sample_id;
 	int max_distance;
 	float volume;
-	/*
+
 	int flags;
 	bool current_state;
-	*/
 	enum class Flags {
-		currentStateEnabled=1
+		initialStateEnabled=1
 	};
 
 
@@ -348,7 +347,7 @@ public:
 	size_t save(unsigned char* buffer, size_t size) override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	//void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source=NULL) override;
 };
 
 class Switch : public Object
