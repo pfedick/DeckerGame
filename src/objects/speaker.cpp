@@ -100,7 +100,6 @@ size_t Speaker::load(const unsigned char* buffer, size_t size)
 	max_distance=ppl7::Peek16(buffer + bytes + 2);
 	volume=ppl7::PeekFloat(buffer + bytes + 4);
 	if (size >= bytes + 8) {
-		printf("new version\n");
 		flags=ppl7::Peek16(buffer + bytes + 8);
 		current_state=false;
 		if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
