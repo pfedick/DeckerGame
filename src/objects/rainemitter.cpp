@@ -60,7 +60,8 @@ RainEmitter::RainEmitter()
 	scale_max=1.0f;
 	age_min=5.0f;
 	age_max=10.0f;
-	flags=static_cast<int>(RainEmitter::Flags::initialStateEnables);
+	current_state=true;
+	flags=static_cast<int>(RainEmitter::Flags::initialStateEnabled);
 
 
 	save_size+=46;
@@ -97,7 +98,7 @@ void RainEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplan
 
 void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 {
-	if (next_birth < time) {
+	if (next_birth < time && current_state == true) {
 		ParticleSystem* ps=GetParticleSystem();
 		next_birth=time + randf(birth_time_min, birth_time_max);
 		double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
@@ -156,11 +157,18 @@ size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 	age_min=ppl7::PeekFloat(buffer + bytes + 35);
 	age_max=ppl7::PeekFloat(buffer + bytes + 39);
 	if (size > bytes + 44) {
-		//printf("lade auch particle layer\n");
 		particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 43));
 		flags=ppl7::Peek16(buffer + bytes + 44);
+		if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
+		else current_state=false;
 	}
 	return size;
+}
+
+void RainEmitter::toggle(bool enable, Object* source)
+{
+	current_state=enable;
+
 }
 
 
@@ -184,6 +192,7 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
 	ppl7::tk::DoubleHorizontalSlider* scale_min, * scale_max;
 	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
+	ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
 	/*
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::ComboBox* on_start_state;
@@ -202,6 +211,7 @@ public:
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
 };
 
 void RainEmitter::openUi()
@@ -212,7 +222,7 @@ void RainEmitter::openUi()
 
 
 RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
-	: Decker::ui::Dialog(700, 520, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
+	: Decker::ui::Dialog(700, 560, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
 {
 	this->object=object;
 	this->setWindowTitle("Rain Emitter");
@@ -343,6 +353,14 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(age_max);
 	y+=35;
 
+	// State
+	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
+	initial_state_checkbox->setEventHandler(this);
+	addChild(initial_state_checkbox);
+	current_state_checkbox=new ppl7::tk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
+	current_state_checkbox->setEventHandler(this);
+	addChild(current_state_checkbox);
+
 	setValuesToUi(object);
 }
 
@@ -362,6 +380,8 @@ void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 	scale_max->setValue(object->scale_max);
 	age_min->setValue(object->age_min);
 	age_max->setValue(object->age_max);
+	current_state_checkbox->setChecked(object->current_state);
+	initial_state_checkbox->setChecked(object->flags & static_cast<int>(RainEmitter::Flags::initialStateEnabled));
 
 }
 
@@ -422,6 +442,21 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 		object->age_max=(float)value;
 		if (value < age_min->value()) age_min->setValue(value);
 	}
+}
+
+void RainEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	if (event->widget() == initial_state_checkbox) {
+		int flags=object->flags & (0xffff - static_cast<int>(RainEmitter::Flags::initialStateEnabled));
+		if (initial_state_checkbox->checked()) flags|=static_cast<int>(RainEmitter::Flags::initialStateEnabled);
+		object->flags=flags;
+		needsRedraw();
+	} else if (event->widget() == current_state_checkbox) {
+		object->current_state=current_state_checkbox->checked();
+		needsRedraw();
+	}
+	//printf("flags=%d\n", object->flags);
+
 }
 
 

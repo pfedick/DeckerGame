@@ -606,6 +606,8 @@ void ParticleEmitterDialog::setupParticleTab()
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_y);
 	y+=35;
+
+	// State
 	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	tab->addChild(initial_state_checkbox);
