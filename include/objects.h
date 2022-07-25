@@ -880,23 +880,33 @@ private:
 	double next_animation;
 
 public:
+	enum class State
+	{
+		Inactive,
+		Active
+	};
+	enum class Flags
+	{
+		initialStateActive=1
+	};
 	uint32_t key_id;
-	unsigned char frame_type;
-	unsigned char door_type;
-	int state;
-	bool initial_open;
-	bool left_sided;
+	Flags flags;
+	State state;
+	ppl7::String next_level;
+	AudioInstance* audio;
 
 	LevelEnd();
+	~LevelEnd();
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	//void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset() override;
 	void openUi() override;
+	void toggle(bool enable, Object* source=NULL) override;
 
 };
 
