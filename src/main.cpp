@@ -29,17 +29,6 @@ void start()
 		throw std::exception();
 	}
 	SDL_Init(SDL_INIT_VIDEO);
-	/*
-	float b=10;
-	float w=30;
-	float r1=w / 180 * 3.1415926535;
-	float r2=(90 - w) / 180 * 3.1415926535;;
-	float x=b * sin(r2);
-	float y=b * sin(r1);
-	printf("x=%0.3f, y=%0.3f\n", x, y);
-
-	return;
-	*/
 
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
@@ -47,13 +36,13 @@ void start()
 	game.init();
 	game.init_grafix();
 
-	/*
+
 	//game.startLevel("level/heaven.lvl");
 	game.startLevel("level/particle.lvl");
 	game.showUi(false);
 	game.run();
 	return;
-	*/
+
 
 
 

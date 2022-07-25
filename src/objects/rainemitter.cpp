@@ -46,8 +46,8 @@ RainEmitter::RainEmitter()
 	visibleAtPlaytime=false;
 	sprite_no_representation=303;
 	next_birth=0.0f;
-
 	particle_type=Particle::Type::RotatingParticleTransparent;
+	particle_layer=Particle::Layer::BehindPlayer;
 	ParticleColor.set(255, 255, 255, 255);
 	emitter_stud_width=16;
 	max_particle_birth_per_cycle = 4;
@@ -60,9 +60,10 @@ RainEmitter::RainEmitter()
 	scale_max=1.0f;
 	age_min=5.0f;
 	age_max=10.0f;
+	flags=static_cast<int>(RainEmitter::Flags::initialStateEnables);
 
 
-	save_size+=43;
+	save_size+=46;
 }
 
 static float randf(float min, float max)
@@ -77,7 +78,7 @@ void RainEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplan
 	RainParticle* particle=new RainParticle();
 	particle->p.x=p.x + ppl7::rand(0, TILE_WIDTH * emitter_stud_width) - ((TILE_WIDTH * emitter_stud_width) / 2);
 	particle->p.y=p.y - 40;
-	particle->layer=static_cast<Particle::Layer>(myLayer);
+	particle->layer=particle_layer;
 	particle->velocity.x=randf(0, max_velocity_x) - (max_velocity_x / 2.0f);
 	particle->velocity.y=randf(min_velocity_y, max_velocity_y);
 	particle->end=particle->p;
@@ -129,13 +130,15 @@ size_t RainEmitter::save(unsigned char* buffer, size_t size)
 	ppl7::PokeFloat(buffer + bytes + 31, scale_max);
 	ppl7::PokeFloat(buffer + bytes + 35, age_min);
 	ppl7::PokeFloat(buffer + bytes + 39, age_max);
-	return bytes + 43;
+	ppl7::Poke8(buffer + bytes + 43, static_cast<int>(particle_layer));
+	ppl7::Poke16(buffer + bytes + 44, flags);
+	return bytes + 46;
 }
 
 size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
+	if (bytes == 0 || size < bytes + 43) return 0;
 	particle_type=static_cast<Particle::Type>(ppl7::Peek8(buffer + bytes));
 	emitter_stud_width=ppl7::Peek8(buffer + bytes + 1);
 	max_particle_birth_per_cycle=ppl7::Peek8(buffer + bytes + 2);
@@ -152,6 +155,11 @@ size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 	scale_max=ppl7::PeekFloat(buffer + bytes + 31);
 	age_min=ppl7::PeekFloat(buffer + bytes + 35);
 	age_max=ppl7::PeekFloat(buffer + bytes + 39);
+	if (size > bytes + 44) {
+		//printf("lade auch particle layer\n");
+		particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 43));
+		flags=ppl7::Peek16(buffer + bytes + 44);
+	}
 	return size;
 }
 
@@ -169,6 +177,7 @@ class RainEmitterDialog : public Decker::ui::Dialog
 private:
 	Decker::ui::ColorSliderWidget* color;
 	ppl7::tk::ComboBox* particle_type;
+	ppl7::tk::ComboBox* particle_layer;
 	ppl7::tk::HorizontalSlider* emitter_width;
 	ppl7::tk::HorizontalSlider* max_birth;
 	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
@@ -210,15 +219,30 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	int col1=100;
 	int y=0;
 	ppl7::grafix::Rect client=clientRect();
+	int sw=(client.width() - col1 - 40 - 40) / 2;
+
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Type:"));
-	particle_type=new ppl7::tk::ComboBox(col1, y, client.width() - col1, 30);
+	particle_type=new ppl7::tk::ComboBox(col1, y, sw, 30);
 	particle_type->setEventHandler(this);
 	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleTransparent)));
 	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleWhite)));
 	particle_type->add("Transparent Snowflake", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeTransparent)));
 	particle_type->add("White Snowflake", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeWhite)));
 	addChild(particle_type);
+	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, col1, 40, "Layer:"));
+	particle_layer=new ppl7::tk::ComboBox(col1 + 90 + sw, y, sw - 10, 30);
+	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BeforePlayer)));
+	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
+	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindBricks)));
+	particle_layer->add("Backplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BackplaneFront)));
+	particle_layer->add("Backplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BackplaneBack)));
+	particle_layer->add("Frontplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneFront)));
+	particle_layer->add("Frontplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneBack)));
+	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
+	particle_layer->setEventHandler(this);
+	addChild(particle_layer);
 	y+=35;
+
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
 	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
 	color->setEventHandler(this);
@@ -243,7 +267,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(max_birth);
 	y+=35;
 
-	int sw=(client.width() - col1 - 40 - 40) / 2;
+
 	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
 	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
 	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
@@ -325,6 +349,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 {
 	particle_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_type)));
+	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->particle_layer)));
 	color->setColor(object->ParticleColor);
 	emitter_width->setValue(object->emitter_stud_width);
 	max_birth->setValue(object->max_particle_birth_per_cycle);
@@ -349,6 +374,8 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 		object->particle_type=static_cast<Particle::Type>(particle_type->currentIdentifier().toInt());
 	} else if (widget == color) {
 		object->ParticleColor=color->color();
+	} else if (widget == particle_layer) {
+		object->particle_layer=static_cast<Particle::Layer>(particle_layer->currentIdentifier().toInt());
 	}
 }
 

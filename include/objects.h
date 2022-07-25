@@ -223,6 +223,7 @@ private:
 	void createParticle(ParticleSystem* ps, const TileTypePlane& ttplane, double time);
 public:
 	Particle::Type particle_type;
+	Particle::Layer particle_layer;
 	ppl7::grafix::Color ParticleColor;
 	int emitter_stud_width;
 	int max_particle_birth_per_cycle;
@@ -232,7 +233,11 @@ public:
 	float max_velocity_y;
 	float scale_min, scale_max;
 	float age_min, age_max;
+	int flags;
+	enum class Flags {
+		initialStateEnables=1,
 
+	};
 
 	RainEmitter();
 	static Representation representation();
