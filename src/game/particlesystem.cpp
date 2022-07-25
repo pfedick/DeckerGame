@@ -185,6 +185,7 @@ ParticleUpdateThread::ParticleUpdateThread(ParticleSystem& ps)
     time=0.0f;
     ttplane=NULL;
     player=NULL;
+    visible_particle_map=NULL;
     frame_rate_compensation=1.0f;
     thread_duration=0.0f;
     thread_running=false;
