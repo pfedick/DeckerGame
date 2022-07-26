@@ -894,6 +894,9 @@ public:
 	State state;
 	ppl7::String next_level;
 	AudioInstance* audio;
+	ppl7::grafix::Color color_doorframe;
+	ppl7::grafix::Color color_background;
+	ppl7::grafix::Color color_puddle;
 
 	LevelEnd();
 	~LevelEnd();

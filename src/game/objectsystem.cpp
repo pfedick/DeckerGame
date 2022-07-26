@@ -345,6 +345,7 @@ Representation getRepresentation(int object_type)
 	case Type::Bat: return Bat::representation();
 	case Type::Bird: return Bird::representation();
 	case Type::Scorpion: return Scorpion::representation();
+	case Type::LevelEnd: return LevelEnd::representation();
 	default: return Object::representation();
 	}
 }
@@ -415,6 +416,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Bat: return new Bat();
 	case Type::Bird: return new Bird();
 	case Type::Scorpion: return new Scorpion();
+	case Type::LevelEnd: return new LevelEnd();
 	}
 	return NULL;
 }

@@ -37,8 +37,8 @@ void start()
 	game.init_grafix();
 
 
-	//game.startLevel("level/heaven.lvl");
-	game.startLevel("level/particle.lvl");
+	game.startLevel("level/heaven.lvl");
+	//game.startLevel("level/particle.lvl");
 	game.showUi(false);
 	game.run();
 	return;
