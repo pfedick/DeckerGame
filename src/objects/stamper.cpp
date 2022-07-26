@@ -35,6 +35,7 @@ StamperVertical::StamperVertical()
 	stamper_type=0;
 	time_active=ppl7::randf(0.2f, 0.5f);
 	time_inactive=ppl7::randf(0.2f, 0.5f);
+	//printf("Stamper Initial: %0.3f, %0.3f\n", time_active, time_inactive);
 	auto_intervall=true;
 	next_animation=0.0f;
 	init();
@@ -156,7 +157,7 @@ size_t StamperVertical::load(const unsigned char* buffer, size_t size)
 	initial_state=ppl7::Peek8(buffer + bytes + 2);
 	stamper_type=ppl7::Peek8(buffer + bytes + 3);
 	time_active=ppl7::PeekFloat(buffer + bytes + 4);
-	time_inactive=ppl7::PeekFloat(buffer + bytes + 87);
+	time_inactive=ppl7::PeekFloat(buffer + bytes + 8);
 	init();
 	return size;
 }
@@ -167,14 +168,14 @@ private:
 	ppl7::tk::ComboBox* stamper_type;
 	ppl7::tk::CheckBox* initial_state;
 	ppl7::tk::CheckBox* auto_intervall;
-	ppl7::tk::LineInput* time_active;
-	ppl7::tk::LineInput* time_inactive;
+	ppl7::tk::DoubleSpinBox* time_active;
+	ppl7::tk::DoubleSpinBox* time_inactive;
 	StamperVertical* object;
 
 public:
 	StamperDialog(StamperVertical* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
 	//virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
 };
@@ -187,14 +188,14 @@ void StamperVertical::openUi()
 }
 
 StamperDialog::StamperDialog(StamperVertical* object)
-	: Decker::ui::Dialog(640, 660)
+	: Decker::ui::Dialog(640, 280)
 {
 	this->object=object;
 	setWindowTitle("Stamper");
 	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Stamper-Type: "));
 	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Flags: "));
-	addChild(new ppl7::tk::Label(0, 140, 120, 30, "Time active: "));
-	addChild(new ppl7::tk::Label(0, 180, 120, 30, "Time inactive: "));
+	addChild(new ppl7::tk::Label(0, 110, 120, 30, "Time active: "));
+	addChild(new ppl7::tk::Label(0, 145, 120, 30, "Time inactive: "));
 
 	stamper_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	stamper_type->add("4 Tiles yellow", "0");
@@ -204,22 +205,25 @@ StamperDialog::StamperDialog(StamperVertical* object)
 	stamper_type->setEventHandler(this);
 	addChild(stamper_type);
 
-	initial_state=new ppl7::tk::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
+	initial_state=new ppl7::tk::CheckBox(120, 40, 400, 30, "Initial state: on", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	auto_intervall=new ppl7::tk::CheckBox(120, 100, 400, 30, "Auto Intervall", object->auto_intervall);
+	auto_intervall=new ppl7::tk::CheckBox(120, 75, 400, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
 
-	time_active=new ppl7::tk::LineInput(120, 140, 100, 30, ppl7::ToString("%0.3f", object->time_active));
+	time_active=new ppl7::tk::DoubleSpinBox(120, 110, 100, 30, object->time_active, 3);
+	time_active->setLimits(0.0f, 10.0f);
+	time_active->setStepSize(0.01f);
 	time_active->setEventHandler(this);
 	addChild(time_active);
 
-	time_inactive=new ppl7::tk::LineInput(120, 180, 100, 30, ppl7::ToString("%0.3f", object->time_inactive));
+	time_inactive=new ppl7::tk::DoubleSpinBox(120, 145, 100, 30, object->time_inactive, 3);
+	time_inactive->setLimits(0.0f, 10.0f);
+	time_inactive->setStepSize(0.01f);
 	time_inactive->setEventHandler(this);
 	addChild(time_inactive);
-
 }
 
 
@@ -231,17 +235,18 @@ void StamperDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void StamperDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void StamperDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 {
-	if (event->widget() == time_active) object->time_active=text.toFloat();
-	else if (event->widget() == time_inactive) object->time_inactive=text.toFloat();
+	if (event->widget() == time_active) object->time_active=value;
+	else if (event->widget() == time_inactive) object->time_inactive=value;
+	printf("Stamper valueChangedEvent: %0.3f, %0.3f\n", object->time_active, object->time_inactive);
 }
 
 void StamperDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) object->initial_state=(int)checked * 2;
 	else if (event->widget() == auto_intervall) object->auto_intervall=checked;
-	printf("object->initial_state=%d\n", object->initial_state);
+	//printf("object->initial_state=%d\n", object->initial_state);
 	object->init();
 
 }
