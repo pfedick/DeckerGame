@@ -143,6 +143,7 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 
 	if (size < 16) return 0;
 	int version=ppl7::Peek8(buffer + 0);
+	if (version != 1) return 0;
 	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
 	id=ppl7::Peek32(buffer + 4);
 	initial_p.x=ppl7::Peek32(buffer + 8);

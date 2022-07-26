@@ -162,10 +162,10 @@ class SwitchDialog : public Decker::ui::Dialog
 private:
 	ppl7::tk::ComboBox* color_scheme;
 	ppl7::tk::CheckBox* visible_at_playtime;
-	ppl7::tk::CheckBox* initial_state;
+	ppl7::tk::CheckBox* initial_state, * current_state;
 	ppl7::tk::CheckBox* one_time_switch;
 	ppl7::tk::CheckBox* auto_toggle_on_collision;
-	ppl7::tk::LineInput* target_id[10];
+	ppl7::tk::SpinBox* target_id[10];
 	ppl7::tk::CheckBox* target_state[10];
 	ppl7::tk::Button* reset;
 
@@ -174,7 +174,7 @@ private:
 public:
 	SwitchDialog(Switch* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
 	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
@@ -208,6 +208,11 @@ SwitchDialog::SwitchDialog(Switch* object)
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
+	current_state=new ppl7::tk::CheckBox(300, 70, 400, 30, "current state: on", object->current_state);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+
+
 	one_time_switch=new ppl7::tk::CheckBox(120, 100, 400, 30, "one time switch", object->one_time_switch);
 	one_time_switch->setEventHandler(this);
 	addChild(one_time_switch);
@@ -216,16 +221,20 @@ SwitchDialog::SwitchDialog(Switch* object)
 	auto_toggle_on_collision->setEventHandler(this);
 	addChild(auto_toggle_on_collision);
 
+	int y=170;
+
 	for (int i=0;i < 10;i++) {
-		addChild(new ppl7::tk::Label(120, 200 + i * 35, 80, 30, ppl7::ToString("Object %d: ", i * 1)));
-		target_id[i]=new ppl7::tk::LineInput(220, 200 + i * 35, 100, 30, ppl7::ToString("%d", object->targets[i].object_id));
+		addChild(new ppl7::tk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i * 1)));
+		target_id[i]=new ppl7::tk::SpinBox(220, y, 100, 30, object->targets[i].object_id);
+		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
-		target_state[i]=new ppl7::tk::CheckBox(325, 200 + i * 35, 100, 30, "enable", object->targets[i].enable);
+		target_state[i]=new ppl7::tk::CheckBox(325, y, 100, 30, "enable", object->targets[i].enable);
 		target_state[i]->setEventHandler(this);
 		addChild(target_state[i]);
+		y+=35;
 	}
-	reset=new ppl7::tk::Button(0, 560, 80, 30, "Reset");
+	reset=new ppl7::tk::Button(0, y, 80, 30, "Reset");
 	reset->setEventHandler(this);
 	addChild(reset);
 }
@@ -239,12 +248,12 @@ void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void SwitchDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
 	for (int i=0;i < 10;i++) {
 		if (event->widget() == target_id[i]) {
 			//handled=true;
-			object->targets[i].object_id=(text.toInt() & 0xffff);
+			object->targets[i].object_id=(value & 0xffff);
 		}
 	}
 }
@@ -258,6 +267,7 @@ void SwitchDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 	}
 	if (event->widget() == visible_at_playtime) object->visibleAtPlaytime=checked;
 	else if (event->widget() == initial_state) object->initial_state=checked;
+	else if (event->widget() == current_state) object->toggle(checked);
 	else if (event->widget() == one_time_switch) object->one_time_switch=checked;
 	else if (event->widget() == auto_toggle_on_collision) object->auto_toggle_on_collision=checked;
 

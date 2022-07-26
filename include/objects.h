@@ -358,7 +358,6 @@ class Switch : public Object
 private:
 	double cooldown;
 	int state;
-	bool current_state;
 
 	void notify_targets();
 
@@ -370,6 +369,7 @@ public:
 		int object_id;
 		bool enable;
 	};
+	bool current_state;
 	bool initial_state;
 	bool one_time_switch;
 	bool auto_toggle_on_collision;
