@@ -25,7 +25,6 @@ StamperVertical::StamperVertical()
 	visibleAtPlaytime=true;
 	sprite_no_representation=5;
 	pixelExactCollision=false;
-	save_size+=11;
 	next_state=0.0f;
 	state=0;
 	if (ppl7::rand(0, 1) == 1) {
@@ -123,30 +122,41 @@ void StamperVertical::toggle(bool enabled, Object* source)
 	}
 }
 
-size_t StamperVertical::save(unsigned char* buffer, size_t size)
+size_t StamperVertical::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 12;
+}
+
+
+size_t StamperVertical::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
 	int flags=0;
 	if (auto_intervall) flags|=1;
-	ppl7::Poke8(buffer + bytes, flags);
-	ppl7::Poke8(buffer + bytes + 1, initial_state);
-	ppl7::Poke8(buffer + bytes + 2, stamper_type);
-	ppl7::PokeFloat(buffer + bytes + 3, time_active);
-	ppl7::PokeFloat(buffer + bytes + 7, time_inactive);
-	return bytes + 11;
+	ppl7::Poke8(buffer + bytes + 1, flags);
+	ppl7::Poke8(buffer + bytes + 2, initial_state);
+	ppl7::Poke8(buffer + bytes + 3, stamper_type);
+	ppl7::PokeFloat(buffer + bytes + 4, time_active);
+	ppl7::PokeFloat(buffer + bytes + 8, time_inactive);
+	return bytes + 12;
 }
 
 size_t StamperVertical::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
-	int flags=ppl7::Peek8(buffer + bytes);
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	int flags=ppl7::Peek8(buffer + bytes + 1);
 	auto_intervall=(bool)(flags & 1);
-	initial_state=ppl7::Peek8(buffer + bytes + 1);
-	stamper_type=ppl7::Peek8(buffer + bytes + 2);
-	time_active=ppl7::PeekFloat(buffer + bytes + 3);
-	time_inactive=ppl7::PeekFloat(buffer + bytes + 7);
+	initial_state=ppl7::Peek8(buffer + bytes + 2);
+	stamper_type=ppl7::Peek8(buffer + bytes + 3);
+	time_active=ppl7::PeekFloat(buffer + bytes + 4);
+	time_inactive=ppl7::PeekFloat(buffer + bytes + 87);
 	init();
 	return size;
 }

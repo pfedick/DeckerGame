@@ -21,7 +21,6 @@ Floater::Floater(Type::ObjectType type)
 	initial_state=enabled;
 	current_state=enabled;
 	floater_type=0;
-	save_size+=2;
 	/* Particles */
 	next_birth=0.0f;
 	scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.063));
@@ -228,22 +227,32 @@ void Floater::reset()
 	}
 }
 
-size_t Floater::save(unsigned char* buffer, size_t size)
+size_t Floater::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 3;
+}
+
+
+size_t Floater::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke8(buffer + bytes, floater_type);
-	ppl7::Poke8(buffer + bytes + 1, initial_state);
-	return bytes + 2;
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke8(buffer + bytes + 1, floater_type);
+	ppl7::Poke8(buffer + bytes + 2, initial_state);
+	return bytes + 3;
 }
 
 size_t Floater::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	//printf("lade floater, basisbytes: %d, size: %d, save_size=%d\n", bytes, size, save_size);
-	if (bytes == 0 || size < save_size) return 0;
-	floater_type=ppl7::Peek8(buffer + bytes);
-	initial_state=(bool)(ppl7::Peek8(buffer + bytes + 1) & 1);
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	floater_type=ppl7::Peek8(buffer + bytes + 1);
+	initial_state=(bool)(ppl7::Peek8(buffer + bytes + 2) & 1);
 	current_state=initial_state;
 	//printf("floater-type: %d, initial_state=%d\n", floater_type, initial_state);
 	init();

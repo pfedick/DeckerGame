@@ -66,7 +66,6 @@ TouchEmitter::TouchEmitter()
 	direction=0;
 	touchtype=0;
 	emitted_object=Type::Crystal;
-	save_size+=4;
 	pixelExactCollision=false;
 	collisionDetection=true;
 	next_touch_time=0.0f;
@@ -141,25 +140,35 @@ void TouchEmitter::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
-size_t TouchEmitter::save(unsigned char* buffer, size_t size)
+size_t TouchEmitter::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 6;
+}
+
+size_t TouchEmitter::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke8(buffer + bytes, max_toggles);
-	ppl7::Poke8(buffer + bytes + 1, direction);
-	ppl7::Poke8(buffer + bytes + 2, emitted_object);
-	ppl7::Poke8(buffer + bytes + 3, touchtype);
-	return bytes + 4;
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke8(buffer + bytes + 1, max_toggles);
+	ppl7::Poke8(buffer + bytes + 2, direction);
+	ppl7::Poke16(buffer + bytes + 3, emitted_object);
+	ppl7::Poke8(buffer + bytes + 5, touchtype);
+	return bytes + 6;
 }
 
 size_t TouchEmitter::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
-	max_toggles=ppl7::Peek8(buffer + bytes);
-	direction=ppl7::Peek8(buffer + bytes + 1);
-	emitted_object=(Type::ObjectType)ppl7::Peek8(buffer + bytes + 2);
-	touchtype=ppl7::Peek8(buffer + bytes + 3);
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	max_toggles=ppl7::Peek8(buffer + bytes + 1);
+	direction=ppl7::Peek8(buffer + bytes + 2);
+	emitted_object=(Type::ObjectType)ppl7::Peek8(buffer + bytes + 3);
+	touchtype=ppl7::Peek8(buffer + bytes + 5);
 	init();
 	return size;
 }

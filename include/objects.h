@@ -157,8 +157,6 @@ public:
 	int sprite_no;
 	int sprite_no_representation;
 	float scale;
-	unsigned char save_size;
-	unsigned char state_size;
 	bool collisionDetection;
 	bool visibleAtPlaytime;
 	bool enabled;
@@ -172,8 +170,9 @@ public:
 	ppl7::String typeName() const;
 	void updateBoundary();
 	virtual void update(double time, TileTypePlane& ttplane, Player& player);
-	virtual size_t save(unsigned char* buffer, size_t size);
+	virtual size_t save(unsigned char* buffer, size_t size) const;
 	virtual size_t load(const unsigned char* buffer, size_t size);
+	virtual size_t saveSize() const;
 	virtual void handleCollision(Player* player, const Collision& collision);
 	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
 	virtual void openUi();
@@ -244,7 +243,8 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
@@ -289,7 +289,8 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
@@ -317,7 +318,8 @@ public:
 	static Representation representation();
 	void init();
 	void handleCollision(Player* player, const Collision& collision) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void reset() override;
@@ -344,7 +346,8 @@ public:
 	static Representation representation();
 	void setSample(int id, float volume, int max_distance=1600);
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
@@ -379,7 +382,8 @@ public:
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void reset() override;
@@ -561,7 +565,8 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 
@@ -586,7 +591,8 @@ public:
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
@@ -625,7 +631,8 @@ public:
 	static Representation representation();
 	void changeDirection(int new_direction);
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 
@@ -821,7 +828,8 @@ public:
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const  override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 
@@ -866,7 +874,8 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset() override;
 	void openUi() override;
@@ -905,7 +914,8 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player) override;
 	//void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	size_t save(unsigned char* buffer, size_t size) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset() override;
 	void openUi() override;
@@ -942,8 +952,6 @@ public:
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
-	void saveState(ppl7::FileObject& file, unsigned char id) const;
-	void loadState(const ppl7::ByteArrayPtr& ba) const;
 	Object* getObject(uint32_t object_id);
 	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
 	Object* detectCollision(const std::list<ppl7::grafix::Point>& player);

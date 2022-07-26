@@ -77,8 +77,7 @@ Object::Object(Type::ObjectType type)
 	collisionDetection=false;
 	visibleAtPlaytime=true;
 	enabled=true;
-	save_size=14;
-	state_size=0;
+	//save_size=14;
 	pixelExactCollision=true;
 	spawned=false;
 	deleteDefered=false;
@@ -122,18 +121,37 @@ void Object::update(double, TileTypePlane&, Player&)
 
 }
 
-size_t Object::save(unsigned char* buffer, size_t size)
+size_t Object::save(unsigned char* buffer, size_t size) const
 {
-	if (size < 14) return 0;
-	ppl7::Poke8(buffer + 0, myType);
-	ppl7::Poke8(buffer + 1, static_cast<int>(myLayer));
-	ppl7::Poke32(buffer + 2, id);
-	ppl7::Poke32(buffer + 6, initial_p.x);
-	ppl7::Poke32(buffer + 10, initial_p.y);
-	return 14;
+	if (size < 16) return 0;
+	ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
+	ppl7::Poke16(buffer + 1, myType);
+	ppl7::Poke8(buffer + 3, static_cast<int>(myLayer));
+	ppl7::Poke32(buffer + 4, id);
+	ppl7::Poke32(buffer + 8, initial_p.x);
+	ppl7::Poke32(buffer + 12, initial_p.y);
+	return 16;
+}
+
+size_t Object::saveSize() const
+{
+	return 16;
 }
 
 size_t Object::load(const unsigned char* buffer, size_t size)
+{
+
+	if (size < 16) return 0;
+	int version=ppl7::Peek8(buffer + 0);
+	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
+	id=ppl7::Peek32(buffer + 4);
+	initial_p.x=ppl7::Peek32(buffer + 8);
+	initial_p.y=ppl7::Peek32(buffer + 12);
+	p=initial_p;
+	return 16;
+}
+/*
+size_t Object::load1(const unsigned char* buffer, size_t size)
 {
 
 	if (size < 14) return 0;
@@ -143,16 +161,9 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 	initial_p.y=ppl7::Peek32(buffer + 10);
 	p=initial_p;
 	return 14;
-	/*
-	if (size < 9) return 0;
-	//myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));
-	id=ppl7::Peek32(buffer + 1);
-	initial_p.x=ppl7::Peek16(buffer + 5);
-	initial_p.y=ppl7::Peek16(buffer + 7);
-	p=initial_p;
-	return 9;
-	*/
+
 }
+*/
 
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {

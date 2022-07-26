@@ -63,8 +63,6 @@ RainEmitter::RainEmitter()
 	current_state=true;
 	flags=static_cast<int>(RainEmitter::Flags::initialStateEnabled);
 
-
-	save_size+=46;
 }
 
 static float randf(float min, float max)
@@ -111,57 +109,65 @@ void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player)
 	}
 }
 
-size_t RainEmitter::save(unsigned char* buffer, size_t size)
+size_t RainEmitter::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 47;
+}
+
+size_t RainEmitter::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke8(buffer + bytes, static_cast<int>(particle_type));
-	ppl7::Poke8(buffer + bytes + 1, emitter_stud_width);
-	ppl7::Poke8(buffer + bytes + 2, max_particle_birth_per_cycle);
-	ppl7::Poke8(buffer + bytes + 3, ParticleColor.red());
-	ppl7::Poke8(buffer + bytes + 4, ParticleColor.green());
-	ppl7::Poke8(buffer + bytes + 5, ParticleColor.blue());
-	ppl7::Poke8(buffer + bytes + 6, ParticleColor.alpha());
-	ppl7::PokeFloat(buffer + bytes + 7, birth_time_min);
-	ppl7::PokeFloat(buffer + bytes + 11, birth_time_max);
-	ppl7::PokeFloat(buffer + bytes + 15, max_velocity_x);
-	ppl7::PokeFloat(buffer + bytes + 19, min_velocity_y);
-	ppl7::PokeFloat(buffer + bytes + 23, max_velocity_y);
-	ppl7::PokeFloat(buffer + bytes + 27, scale_min);
-	ppl7::PokeFloat(buffer + bytes + 31, scale_max);
-	ppl7::PokeFloat(buffer + bytes + 35, age_min);
-	ppl7::PokeFloat(buffer + bytes + 39, age_max);
-	ppl7::Poke8(buffer + bytes + 43, static_cast<int>(particle_layer));
-	ppl7::Poke16(buffer + bytes + 44, flags);
-	return bytes + 46;
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke8(buffer + bytes + 1, static_cast<int>(particle_type));
+	ppl7::Poke8(buffer + bytes + 2, emitter_stud_width);
+	ppl7::Poke8(buffer + bytes + 3, max_particle_birth_per_cycle);
+	ppl7::Poke8(buffer + bytes + 4, ParticleColor.red());
+	ppl7::Poke8(buffer + bytes + 5, ParticleColor.green());
+	ppl7::Poke8(buffer + bytes + 6, ParticleColor.blue());
+	ppl7::Poke8(buffer + bytes + 7, ParticleColor.alpha());
+	ppl7::PokeFloat(buffer + bytes + 8, birth_time_min);
+	ppl7::PokeFloat(buffer + bytes + 12, birth_time_max);
+	ppl7::PokeFloat(buffer + bytes + 16, max_velocity_x);
+	ppl7::PokeFloat(buffer + bytes + 20, min_velocity_y);
+	ppl7::PokeFloat(buffer + bytes + 24, max_velocity_y);
+	ppl7::PokeFloat(buffer + bytes + 28, scale_min);
+	ppl7::PokeFloat(buffer + bytes + 32, scale_max);
+	ppl7::PokeFloat(buffer + bytes + 36, age_min);
+	ppl7::PokeFloat(buffer + bytes + 40, age_max);
+	ppl7::Poke8(buffer + bytes + 44, static_cast<int>(particle_layer));
+	ppl7::Poke16(buffer + bytes + 45, flags);
+	return bytes + 47;
 }
 
 size_t RainEmitter::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < bytes + 43) return 0;
-	particle_type=static_cast<Particle::Type>(ppl7::Peek8(buffer + bytes));
-	emitter_stud_width=ppl7::Peek8(buffer + bytes + 1);
-	max_particle_birth_per_cycle=ppl7::Peek8(buffer + bytes + 2);
-	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 3));
-	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 4));
-	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 5));
-	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 6));
-	birth_time_min=ppl7::PeekFloat(buffer + bytes + 7);
-	birth_time_max=ppl7::PeekFloat(buffer + bytes + 11);
-	max_velocity_x=ppl7::PeekFloat(buffer + bytes + 15);
-	min_velocity_y=ppl7::PeekFloat(buffer + bytes + 19);
-	max_velocity_y=ppl7::PeekFloat(buffer + bytes + 23);
-	scale_min=ppl7::PeekFloat(buffer + bytes + 27);
-	scale_max=ppl7::PeekFloat(buffer + bytes + 31);
-	age_min=ppl7::PeekFloat(buffer + bytes + 35);
-	age_max=ppl7::PeekFloat(buffer + bytes + 39);
-	if (size > bytes + 44) {
-		particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 43));
-		flags=ppl7::Peek16(buffer + bytes + 44);
-		if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
-		else current_state=false;
-	}
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	particle_type=static_cast<Particle::Type>(ppl7::Peek8(buffer + bytes + 1));
+	emitter_stud_width=ppl7::Peek8(buffer + bytes + 2);
+	max_particle_birth_per_cycle=ppl7::Peek8(buffer + bytes + 3);
+	ParticleColor.setRed(ppl7::Peek8(buffer + bytes + 4));
+	ParticleColor.setGreen(ppl7::Peek8(buffer + bytes + 5));
+	ParticleColor.setBlue(ppl7::Peek8(buffer + bytes + 6));
+	ParticleColor.setAlpha(ppl7::Peek8(buffer + bytes + 7));
+	birth_time_min=ppl7::PeekFloat(buffer + bytes + 8);
+	birth_time_max=ppl7::PeekFloat(buffer + bytes + 12);
+	max_velocity_x=ppl7::PeekFloat(buffer + bytes + 16);
+	min_velocity_y=ppl7::PeekFloat(buffer + bytes + 20);
+	max_velocity_y=ppl7::PeekFloat(buffer + bytes + 24);
+	scale_min=ppl7::PeekFloat(buffer + bytes + 28);
+	scale_max=ppl7::PeekFloat(buffer + bytes + 32);
+	age_min=ppl7::PeekFloat(buffer + bytes + 36);
+	age_max=ppl7::PeekFloat(buffer + bytes + 40);
+	particle_layer=static_cast<Particle::Layer>(ppl7::Peek8(buffer + bytes + 44));
+	flags=ppl7::Peek16(buffer + bytes + 45);
+	if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
+	else current_state=false;
 	return size;
 }
 

@@ -33,7 +33,6 @@ Switch::Switch()
 	one_time_switch=false;
 	auto_toggle_on_collision=false;
 	color_scheme=0;
-	save_size+=1 + 10 * 3;
 	cooldown=0.0f;
 	state=0;
 	current_state=initial_state;
@@ -106,18 +105,25 @@ void Switch::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
-size_t Switch::save(unsigned char* buffer, size_t size)
+size_t Switch::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 2 + 10 * 3;
+}
+
+size_t Switch::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
 	int flags=(color_scheme << 4) & 0xf0;
 	if (initial_state) flags|=1;
 	if (one_time_switch) flags|=2;
 	if (auto_toggle_on_collision) flags|=4;
 	if (visibleAtPlaytime) flags|=8;
 
-	ppl7::Poke8(buffer + bytes, flags);
-	bytes+=1;
+	ppl7::Poke8(buffer + bytes + 1, flags);
+	bytes+=2;
 	for (int i=0;i < 10;i++) {
 		ppl7::Poke16(buffer + bytes, targets[i].object_id);
 		ppl7::Poke8(buffer + bytes + 2, (int)targets[i].enable);
@@ -129,9 +135,12 @@ size_t Switch::save(unsigned char* buffer, size_t size)
 size_t Switch::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
-	int flags=ppl7::Peek8(buffer + bytes);
-	bytes+=1;
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	int flags=ppl7::Peek8(buffer + bytes + 1);
+	bytes+=2;
 	color_scheme=flags >> 4;
 	initial_state=(bool)(flags & 1);
 	current_state=initial_state;

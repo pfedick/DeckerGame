@@ -26,7 +26,6 @@ Door::Door()
 	initial_open=false;
 	collisionDetection=true;
 	pixelExactCollision=false;
-	save_size+=7;
 	sprite_set=Spriteset::Doors;
 	sprite_no=20;
 	sprite_no_representation=20;
@@ -98,28 +97,38 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
-size_t Door::save(unsigned char* buffer, size_t size)
+size_t Door::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 8;
+}
+
+size_t Door::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke32(buffer + bytes, key_id);
-	ppl7::Poke8(buffer + bytes + 4, frame_type);
-	ppl7::Poke8(buffer + bytes + 5, door_type);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke32(buffer + bytes + 1, key_id);
+	ppl7::Poke8(buffer + bytes + 5, frame_type);
+	ppl7::Poke8(buffer + bytes + 6, door_type);
 	int flags=0;
 	if (initial_open) flags|=1;
 	if (left_sided) flags|=2;
-	ppl7::Poke8(buffer + bytes + 6, (unsigned char)initial_open);
-	return bytes + 7;
+	ppl7::Poke8(buffer + bytes + 7, (unsigned char)flags);
+	return bytes + 8;
 }
 
 size_t Door::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
-	key_id=ppl7::Peek32(buffer + bytes);
-	frame_type=ppl7::Peek8(buffer + bytes + 4);
-	door_type=ppl7::Peek8(buffer + bytes + 5);
-	int flags=ppl7::Peek8(buffer + bytes + 6);
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	key_id=ppl7::Peek32(buffer + bytes + 1);
+	frame_type=ppl7::Peek8(buffer + bytes + 5);
+	door_type=ppl7::Peek8(buffer + bytes + 6);
+	int flags=ppl7::Peek8(buffer + bytes + 7);
 	initial_open=false;
 	left_sided=false;
 	if (flags & 1) initial_open=true;

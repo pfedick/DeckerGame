@@ -38,7 +38,6 @@ LaserBarrier::LaserBarrier(Type::ObjectType type)
 	always_on=false;
 	block_player=false;
 	color_scheme=0;
-	save_size+=18;
 	init();
 }
 
@@ -67,29 +66,58 @@ void LaserBarrier::init()
 
 }
 
-size_t LaserBarrier::save(unsigned char* buffer, size_t size)
+size_t LaserBarrier::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 19;
+}
+
+size_t LaserBarrier::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
 	int flags=0;
 	if (initial_state) flags|=1;
 	if (always_on) flags|=2;
 	if (block_player) flags|=4;
 	if (start_state) flags|=8;
 
-	ppl7::Poke8(buffer + bytes, flags);
-	ppl7::Poke8(buffer + bytes + 1, color_scheme);
-	ppl7::PokeFloat(buffer + bytes + 2, time_on_min);
-	ppl7::PokeFloat(buffer + bytes + 6, time_off_min);
-	ppl7::PokeFloat(buffer + bytes + 10, time_on_max);
-	ppl7::PokeFloat(buffer + bytes + 14, time_off_max);
-	return bytes + 18;
+	ppl7::Poke8(buffer + bytes + 1, flags);
+	ppl7::Poke8(buffer + bytes + 2, color_scheme);
+	ppl7::PokeFloat(buffer + bytes + 3, time_on_min);
+	ppl7::PokeFloat(buffer + bytes + 7, time_off_min);
+	ppl7::PokeFloat(buffer + bytes + 11, time_on_max);
+	ppl7::PokeFloat(buffer + bytes + 15, time_off_max);
+	return bytes + 19;
 }
 
 size_t LaserBarrier::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	int flags=ppl7::Peek8(buffer + bytes + 1);
+	color_scheme=(unsigned char)ppl7::Peek8(buffer + bytes + 2);
+	time_on_min=ppl7::PeekFloat(buffer + bytes + 3);
+	time_off_min=ppl7::PeekFloat(buffer + bytes + 7);
+	time_on_max=ppl7::PeekFloat(buffer + bytes + 11);
+	time_off_max=ppl7::PeekFloat(buffer + bytes + 15);
+	initial_state=(bool)(flags & 1);
+	always_on=(bool)(flags & 2);
+	block_player=(bool)(flags & 4);
+	start_state=(bool)(flags & 8);
+	init();
+	return size;
+}
+/*
+
+size_t LaserBarrier::load1(const unsigned char* buffer, size_t size)
+{
+	size_t bytes=Object::load1(buffer, size);
+	if (bytes == 0) return 0;
 	int flags=ppl7::Peek8(buffer + bytes);
 	color_scheme=(unsigned char)(ppl7::Peek8(buffer + bytes + 1) & 0xff);
 	time_on_min=ppl7::PeekFloat(buffer + bytes + 2);
@@ -103,6 +131,7 @@ size_t LaserBarrier::load(const unsigned char* buffer, size_t size)
 	init();
 	return size;
 }
+*/
 
 
 void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const

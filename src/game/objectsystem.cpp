@@ -429,7 +429,7 @@ void ObjectSystem::save(ppl7::FileObject& file, unsigned char id) const
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
 		if (!object->spawned)
-			buffersize+=object->save_size + 1;
+			buffersize+=object->saveSize() + 4;
 	}
 	unsigned char* buffer=(unsigned char*)malloc(buffersize + 5);
 	ppl7::Poke32(buffer + 0, 0);
@@ -438,12 +438,11 @@ void ObjectSystem::save(ppl7::FileObject& file, unsigned char id) const
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
 		if (!object->spawned) {
-			ppl7::Poke8(buffer + p, object->save_size + 1);
-			size_t bytes_saved=object->save(buffer + p + 1, object->save_size);
-			if (bytes_saved == object->save_size && bytes_saved > 0) {
-				p+=object->save_size + 1;
-				//printf ("saved object %d of type %d with size %d\n",
-				//		object->id, object->type(), object->save_size+1);
+			size_t object_size=object->saveSize();
+			ppl7::Poke32(buffer + p, object_size + 4);
+			size_t bytes_saved=object->save(buffer + p + 4, object_size);
+			if (bytes_saved == object_size && bytes_saved > 0) {
+				p+=object_size + 4;
 			}
 		}
 	}
@@ -459,22 +458,19 @@ void ObjectSystem::load(const ppl7::ByteArrayPtr& ba)
 	const unsigned char* buffer=(const unsigned char*)ba.toCharPtr();
 	//printf("chunk size=%zd\n",ba.size());
 	while (p < ba.size()) {
-		int save_size=ppl7::Peek8(buffer + p);
-		int type=ppl7::Peek8(buffer + p + 1);
+		int save_size=ppl7::Peek32(buffer + p);
+		int type=ppl7::Peek16(buffer + p + 5);
 		Object* object=getInstance(type);
 		//printf("try to load object of type %d (%s), size: %d\n", type, (const char*)object->typeName(), save_size);
 		//ppl7::HexDump(buffer + p + 1, save_size - 1);
 		if (object) {
-			if (object->load(buffer + p + 1, save_size - 1)) {
+			if (object->load(buffer + p + 4, save_size - 4)) {
 				if (object->id >= nextid) nextid=object->id + 1;
 				if (object->sprite_set < Spriteset::MaxSpritesets && this->spriteset[object->sprite_set] != NULL) {
 					object->texture=this->spriteset[object->sprite_set];
 					object->updateBoundary();
 				}
-				//printf("Erhoehe save_size von %d auf %d\n", object->save_size, object->save_size + 1);
-				//object->save_size+=4;
 				object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
-				//printf ("found object %d of type %d with size %d\n",object->id, type,save_size);
 			}
 		}
 		p+=save_size;

@@ -45,7 +45,6 @@ Speaker::Speaker()
 	audio=NULL;
 	sample_id=AudioClip::none;
 	volume=1.0f;
-	save_size+=10;
 	max_distance=1600;
 	flags=static_cast<int>(Flags::initialStateEnabled);
 	current_state=true;
@@ -77,33 +76,41 @@ void Speaker::update(double time, TileTypePlane& ttplane, Player& player)
 	}
 }
 
-
-size_t Speaker::save(unsigned char* buffer, size_t size)
+size_t Speaker::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 11;
+}
+
+size_t Speaker::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke16(buffer + bytes, sample_id);
-	ppl7::Poke16(buffer + bytes + 2, max_distance);
-	ppl7::PokeFloat(buffer + bytes + 4, volume);
-	ppl7::Poke16(buffer + bytes + 8, flags);
-	return bytes + 10;
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke16(buffer + bytes + 1, sample_id);
+	ppl7::Poke16(buffer + bytes + 3, max_distance);
+	ppl7::PokeFloat(buffer + bytes + 5, volume);
+	ppl7::Poke16(buffer + bytes + 9, flags);
+	return bytes + 11;
 }
 
 size_t Speaker::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (!bytes) return 0;
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
 	sample_id=0;
 	volume=1.0f;
-	if (size < bytes + 8) return 0;
-	sample_id=ppl7::Peek16(buffer + bytes);
-	max_distance=ppl7::Peek16(buffer + bytes + 2);
-	volume=ppl7::PeekFloat(buffer + bytes + 4);
-	if (size >= bytes + 8) {
-		flags=ppl7::Peek16(buffer + bytes + 8);
-		current_state=false;
-		if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
-	}
+
+	sample_id=ppl7::Peek16(buffer + bytes + 1);
+	max_distance=ppl7::Peek16(buffer + bytes + 3);
+	volume=ppl7::PeekFloat(buffer + bytes + 5);
+	flags=ppl7::Peek16(buffer + bytes + 9);
+	current_state=false;
+	if (flags & static_cast<int>(Flags::initialStateEnabled)) current_state=true;
+
 	if (audio) {
 		getAudioPool().stopInstace(audio);
 		delete audio;

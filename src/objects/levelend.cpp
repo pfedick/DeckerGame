@@ -68,12 +68,17 @@ void LevelEnd::handleCollision(Player* player, const Collision& collision)
 
 }
 
-size_t LevelEnd::save(unsigned char* buffer, size_t size)
+size_t LevelEnd::saveSize() const
 {
-    //if (size < save_size) return 0;
+    return Object::saveSize() + 20 + next_level.size();
+}
+
+size_t LevelEnd::save(unsigned char* buffer, size_t size) const
+{
     size_t bytes=Object::save(buffer, size);
-    return bytes;
-    ppl7::Poke8(buffer + bytes + 0, 1); // Version 1
+    if (!bytes) return 0;
+    ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
     ppl7::Poke16(buffer + bytes + 1, static_cast<int>(flags));
     ppl7::Poke8(buffer + bytes + 3, color_doorframe.red());
     ppl7::Poke8(buffer + bytes + 4, color_doorframe.green());
@@ -97,7 +102,11 @@ size_t LevelEnd::save(unsigned char* buffer, size_t size)
 size_t LevelEnd::load(const unsigned char* buffer, size_t size)
 {
     size_t bytes=Object::load(buffer, size);
-    return bytes;
+    if (bytes == 0 || size < bytes + 1) return 0;
+    int version=ppl7::Peek8(buffer + bytes);
+    if (version != 1) return 0;
+
+    return size;
 }
 
 void LevelEnd::reset()

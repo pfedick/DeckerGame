@@ -84,7 +84,6 @@ Arrow::Arrow()
 	collisionDetection=false;
 	visibleAtPlaytime=false;
 	direction=0;
-	save_size+=11;
 	state=0;
 	player_activation_distance=200;
 	min_cooldown_time=15.0f;
@@ -146,25 +145,35 @@ void Arrow::fire()
 	getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.4f);
 }
 
-size_t Arrow::save(unsigned char* buffer, size_t size)
+size_t Arrow::saveSize() const
 {
-	if (size < save_size) return 0;
+	return Object::saveSize() + 12;
+}
+
+size_t Arrow::save(unsigned char* buffer, size_t size) const
+{
 	size_t bytes=Object::save(buffer, size);
-	ppl7::Poke8(buffer + bytes, direction);
-	ppl7::Poke16(buffer + bytes + 1, player_activation_distance);
-	ppl7::PokeFloat(buffer + bytes + 3, min_cooldown_time);
-	ppl7::PokeFloat(buffer + bytes + 7, max_cooldown_time);
-	return bytes + 11;
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+
+	ppl7::Poke8(buffer + bytes + 1, direction);
+	ppl7::Poke16(buffer + bytes + 2, player_activation_distance);
+	ppl7::PokeFloat(buffer + bytes + 4, min_cooldown_time);
+	ppl7::PokeFloat(buffer + bytes + 8, max_cooldown_time);
+	return bytes + 12;
 }
 
 size_t Arrow::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
-	if (bytes == 0 || size < save_size) return 0;
-	changeDirection((int)ppl7::Peek8(buffer + bytes));
-	player_activation_distance=ppl7::Peek16(buffer + bytes + 1);
-	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 3);
-	max_cooldown_time=ppl7::PeekFloat(buffer + bytes + 7);
+	if (bytes == 0 || size < bytes + 1) return 0;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+
+	changeDirection((int)ppl7::Peek8(buffer + bytes + 1));
+	player_activation_distance=ppl7::Peek16(buffer + bytes + 2);
+	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 4);
+	max_cooldown_time=ppl7::PeekFloat(buffer + bytes + 8);
 	return size;
 }
 
