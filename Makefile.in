@@ -231,7 +231,7 @@ sprites:
 	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
 	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
 	./texmaker -s "lightwave/Render/objects/doors/*.png" -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
-	./texmaker -s "lightwave/Render/objects/levelend/*.png" -t res/levelend.tex -w 1024 -h 1024 -px 144 -py 253
+	./texmaker -s "lightwave/Render/objects/levelend/*.png" -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 
 
 fonts:

@@ -175,6 +175,7 @@ public:
 	virtual size_t saveSize() const;
 	virtual void handleCollision(Player* player, const Collision& collision);
 	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
 	virtual void openUi();
 	virtual void reset();
 	virtual void toggle(bool enable, Object* source=NULL);
@@ -887,6 +888,7 @@ class LevelEnd : public Object
 private:
 	AnimationCycle animation;
 	double next_animation;
+	double cooldown;
 
 public:
 	enum class State
@@ -896,16 +898,21 @@ public:
 	};
 	enum class Flags
 	{
-		initialStateActive=1
+		initialStateActive=1,
+		useBackgroundColorWhenActive=2,
+		transferOnCollision=4,
 	};
 	uint32_t key_id;
 	Flags flags;
 	State state;
 	ppl7::String next_level;
 	AudioInstance* audio;
-	ppl7::grafix::Color color_doorframe;
-	ppl7::grafix::Color color_background;
-	ppl7::grafix::Color color_puddle;
+	int color_doorframe;
+	int color_background;
+	int color_puddle;
+	int color_details_doorframe;
+	int color_details_arch;
+	int color_stairs;
 
 	LevelEnd();
 	~LevelEnd();
@@ -917,9 +924,10 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
-	void reset() override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 
 };
 

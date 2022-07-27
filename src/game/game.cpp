@@ -19,6 +19,16 @@ ppl7::tk::Window* GetGameWindow()
 	return GameWindow;
 }
 
+ColorPalette& GetColorPalette()
+{
+	return GameInstance->getLevel().palette;
+}
+
+Game& GetGame()
+{
+	return *GameInstance;
+}
+
 ppl7::grafix::Point GetViewPos()
 {
 	return GameInstance->getViewPos();
@@ -53,6 +63,7 @@ Game::Game()
 	controlsEnabled=true;
 	settings_screen=NULL;
 	filedialog=NULL;
+	gameState=GameState::None;
 }
 
 Game::~Game()
@@ -570,10 +581,26 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		death_state=1;
 		fade_to_black=0;
 	}
-	if (death_state) handleDeath(renderer);
-	else if (fade_to_black > 0) {
-		fade_to_black-=5;
-		if (fade_to_black < 0) fade_to_black=0;
+	if (gameState == GameState::Running) {
+		if (death_state) handleDeath(renderer);
+		else if (fade_to_black > 0) {
+			fade_to_black-=5;
+			if (fade_to_black < 0) fade_to_black=0;
+		}
+	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver) {
+		if (fade_to_black < 255) fade_to_black+=5;
+		else {
+			if (gameState == GameState::LevelEndTriggerd) {
+				// TODO
+				//printf("Jump to next level: %s\n", (const char*)nextLevelFile);
+				startLevel(nextLevelFile);
+			} else if (gameState == GameState::GameOver) {
+				player->resetState();
+				world_widget->resetPlayerStats(player);
+				startLevel(LevelFile);
+
+			}
+		}
 	}
 	if (fade_to_black > 0) {
 		SDL_BlendMode currentBlendMode;
@@ -583,6 +610,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
 		SDL_RenderFillRect(renderer, NULL);
 		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+	}
+	if (gameState == GameState::ShowStatsThenRestartLevel) {
+		// TODO
+		gameState = GameState::GameOver;
 	}
 	metrics.time_misc.stop();
 	metrics.time_draw_world.stop();
@@ -1014,6 +1045,7 @@ void Game::startLevel(const ppl7::String& filename)
 	background.setColor(level.params.BackgroundColor);
 	background.setImage(level.params.BackgroundImage);
 	background.setLevelDimension(level.getOccupiedAreaFromTileTypePlane());
+	gameState=GameState::Running;
 
 }
 
@@ -1374,6 +1406,10 @@ void Game::handleDeath(SDL_Renderer* renderer)
 	} else if (death_state == 2) {
 		player->dropLifeAndResetToLastSavePoint();
 		death_state=3;
+		if (player->lifes <= 0) {
+			death_state = 0;
+			gameState = GameState::ShowStatsThenRestartLevel;
+		}
 	} else if (death_state == 3) {
 		if (fade_to_black > 0) {
 			fade_to_black-=5;
@@ -1477,4 +1513,25 @@ void Game::openSettingsScreen()
 	this->addChild(settings_screen);
 	this->needsRedraw();
 	enableControls(false);
+}
+
+bool Game::nextLevel(const ppl7::String& filename)
+/*!Jump to next level
+ * @param filename Filename of level to load
+ * @return Returns true, if level exists and will be loaded, returns false, when level is not loadable
+ */
+{
+	nextLevelFile.clear();
+	if (ppl7::File::exists(filename)) {
+		nextLevelFile=filename;
+	} else if (ppl7::File::exists("level/" + filename)) {
+		nextLevelFile="level/" + filename;
+	}
+	if (nextLevelFile.isEmpty()) return false;
+	enableControls(false);
+	gameState=GameState::LevelEndTriggerd;
+	fade_to_black=0;
+	printf("wir sollten hierhin gehen: %s\n", (const char*)nextLevelFile);
+
+	return true;
 }

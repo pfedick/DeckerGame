@@ -166,6 +166,15 @@ size_t Object::load1(const unsigned char* buffer, size_t size)
 }
 */
 
+
+void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	texture->draw(renderer,
+		initial_p.x + coords.x,
+		initial_p.y + coords.y,
+		sprite_no, color_mod);
+}
+
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	if (scale == 1.0f)

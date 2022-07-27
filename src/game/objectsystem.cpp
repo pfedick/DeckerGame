@@ -219,10 +219,7 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 			}
 		} else {
 			if (object->texture != NULL && object->myLayer == layer) {
-				object->texture->draw(renderer,
-					object->initial_p.x + coords.x,
-					object->initial_p.y + coords.y,
-					object->sprite_no);
+				object->drawEditMode(renderer, coords);
 			}
 		}
 	}

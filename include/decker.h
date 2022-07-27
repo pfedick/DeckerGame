@@ -610,7 +610,12 @@ enum class GameState {
 	QuitGame,
 	StartGame,
 	ShowSettings,
-	StartEditor
+	StartEditor,
+	Running,
+	GameOver,
+	LevelEndTriggerd,
+	ShowStatsThenNextLevel,
+	ShowStatsThenRestartLevel
 };
 
 class StartScreen;
@@ -705,6 +710,8 @@ private:
 
 	Metrics metrics;
 
+	ppl7::String nextLevelFile;
+
 	void createWindow();
 	void presentStartupScreen();
 	void loadGrafix();
@@ -740,6 +747,8 @@ private:
 	Player* player;
 	int fade_to_black;
 	int death_state;
+
+	GameState gameState;
 
 	enum spriteMode {
 		spriteModeDraw,
@@ -791,6 +800,7 @@ public:
 	Level& getLevel();
 
 	void startLevel(const ppl7::String& filename);
+	bool nextLevel(const ppl7::String& filename);
 	void save(const ppl7::String& filename);
 	void load();
 	void createNewLevel(const LevelParameter& params);
@@ -811,6 +821,9 @@ public:
 };
 
 ppl7::tk::Window* GetGameWindow();
+ColorPalette& GetColorPalette();
+Game& GetGame();
+
 
 
 #endif /* INCLUDE_DECKER_H_ */
