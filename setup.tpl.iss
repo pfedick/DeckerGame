@@ -46,6 +46,7 @@ Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "res/*.tex"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.fnt6"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.png"; DestDir: "{app}/res"; Flags: ignoreversion nocompression;
+Source: "res/backgrounds/*.*"; DestDir: "{app}/res/backgrounds"; Flags: ignoreversion nocompression;
 Source: "res/audio/*.wav"; DestDir: "{app}/res/audio"; Flags: ignoreversion;
 Source: "res/audio/*.mp3"; DestDir: "{app}/res/audio"; Flags: ignoreversion nocompression;
 Source: "res/video/*"; DestDir: "{app}/res/video"; Flags: ignoreversion nocompression;
@@ -84,5 +85,3 @@ Name: "{commondesktop}\GeorgeDecker"; Filename: "{app}\decker.exe"; Tasks: deskt
 
 [Run]
 Filename: "{app}\decker.exe"; Description: "{cm:LaunchProgram,GeorgeDecker}"; Flags: 64bit nowait postinstall skipifsilent;
-
-
