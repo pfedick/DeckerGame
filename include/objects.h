@@ -913,6 +913,7 @@ public:
 	int color_details_doorframe;
 	int color_details_arch;
 	int color_stairs;
+	int background_alpha;
 
 	LevelEnd();
 	~LevelEnd();

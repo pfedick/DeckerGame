@@ -30,6 +30,7 @@ LevelEnd::LevelEnd()
     color_details_doorframe=1;
     color_details_arch=1;
     color_stairs=1;
+    background_alpha=255;
 }
 
 LevelEnd::~LevelEnd()
@@ -81,14 +82,14 @@ void LevelEnd::handleCollision(Player* player, const Collision& collision)
 
 size_t LevelEnd::saveSize() const
 {
-    return Object::saveSize() + 21 + next_level.size();
+    return Object::saveSize() + 22 + next_level.size();
 }
 
 size_t LevelEnd::save(unsigned char* buffer, size_t size) const
 {
     size_t bytes=Object::save(buffer, size);
     if (!bytes) return 0;
-    ppl7::Poke8(buffer + bytes, 2);		// Object Version
+    ppl7::Poke8(buffer + bytes, 3);		// Object Version
 
     ppl7::Poke16(buffer + bytes + 1, static_cast<int>(flags));
     ppl7::Poke16(buffer + bytes + 3, color_doorframe);
@@ -100,8 +101,10 @@ size_t LevelEnd::save(unsigned char* buffer, size_t size) const
     ppl7::Poke32(buffer + bytes + 15, key_id);
     ppl7::Poke16(buffer + bytes + 19, next_level.size());
     memcpy(buffer + bytes + 21, next_level.c_str(), next_level.size());
-
-    return bytes + 21 + next_level.size();
+    size_t p=21 + next_level.size();
+    ppl7::Poke8(buffer + bytes + p, background_alpha);
+    p++;
+    return bytes + p;
 }
 
 size_t LevelEnd::load(const unsigned char* buffer, size_t size)
@@ -123,6 +126,10 @@ size_t LevelEnd::load(const unsigned char* buffer, size_t size)
     key_id=ppl7::Peek32(buffer + bytes + 15);
     size_t next_level_size=key_id=ppl7::Peek16(buffer + bytes + 19);
     next_level.set((const char*)(buffer + bytes + 21), next_level_size);
+    if (version > 2) {
+        size_t p=21 + next_level_size;
+        background_alpha=ppl7::Peek8(buffer + bytes + p);
+    }
 
     state=State::Inactive;
 
@@ -161,6 +168,18 @@ void LevelEnd::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) c
     // Puddle if active
     if (state == State::Active) {
         // Background
+        ppl7::grafix::Color bg=palette.getColor(color_background);
+        SDL_BlendMode currentBlendMode;
+        SDL_Rect r;
+        r.x=p.x + coords.x - 2 * TILE_WIDTH;
+        r.y=p.y + coords.y - 7 * TILE_HEIGHT;
+        r.w=5 * TILE_WIDTH;
+        r.h=8 * TILE_HEIGHT;
+        SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, bg.red(), bg.green(), bg.blue(), background_alpha);
+        SDL_RenderFillRect(renderer, &r);
+        SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
 
         // Puddle
         texture->draw(renderer,
@@ -220,6 +239,7 @@ private:
     ppl7::tk::Frame* frame_color_puddle;
     ppl7::tk::Label* current_element_label;
     ppl7::tk::Frame* current_element_color_frame;
+    ppl7::tk::HorizontalSlider* background_alpha;
     int* color_target;
 
     enum class Element {
@@ -356,6 +376,12 @@ LevelEndDialog::LevelEndDialog(LevelEnd* object)
     addChild(frame_color_stairs);
     y+=35;
 
+    addChild(new ppl7::tk::Label(0, y, 80, 30, "Background-Alpha:"));
+    y+=35;
+    background_alpha=new ppl7::tk::HorizontalSlider(0, y, client.width() - 300, 30);
+    background_alpha->setEventHandler(this);
+    background_alpha->setLimits(0, 255);
+    addChild(background_alpha);
 
     next_level->setText(object->next_level);
     initial_state_checkbox->setChecked(static_cast<int>(object->flags) & static_cast<int>(LevelEnd::Flags::initialStateActive));
@@ -363,6 +389,7 @@ LevelEndDialog::LevelEndDialog(LevelEnd* object)
     transfer_on_collision->setChecked(static_cast<int>(object->flags) & static_cast<int>(LevelEnd::Flags::transferOnCollision));
     current_state_checkbox->setChecked(object->state == LevelEnd::State::Active);
     key_id->setValue(object->key_id);
+    background_alpha->setValue(object->background_alpha);
 
     setCurrentElement(Element::Background);
 }
@@ -436,6 +463,7 @@ void LevelEndDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
     ppl7::tk::Widget* widget=event->widget();
     if (widget == key_id) object->key_id=value;
+    if (widget == background_alpha) object->background_alpha=value;
 }
 
 void LevelEndDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
