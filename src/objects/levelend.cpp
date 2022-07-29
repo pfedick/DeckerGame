@@ -21,6 +21,7 @@ LevelEnd::LevelEnd()
     flags=static_cast<Flags>(0);
     key_id=0;
     collisionDetection=false;
+    pixelExactCollision=false;
     next_animation=0.0;
     cooldown=0.0f;
     audio=NULL;
