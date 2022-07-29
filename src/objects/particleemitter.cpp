@@ -77,7 +77,7 @@ void ParticleEmitter::createParticle(ParticleSystem* ps, double time)
 	ps->addParticle(particle);
 }
 
-void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player)
+void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (next_birth < time && current_state == true) {
 		ParticleSystem* ps=GetParticleSystem();

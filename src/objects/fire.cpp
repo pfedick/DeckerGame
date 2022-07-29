@@ -12,7 +12,7 @@ Representation Fire::representation()
 }
 
 Fire::Fire()
-: Trap(Type::ObjectType::Fire)
+	: Trap(Type::ObjectType::Fire)
 {
 	next_animation=0.0f;
 	sprite_set=Spriteset::GenericObjects;
@@ -21,16 +21,16 @@ Fire::Fire()
 	collisionDetection=true;
 }
 
-void Fire::update(double time, TileTypePlane &ttplane, Player &player)
+void Fire::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
-	if (time>next_animation) {
-		next_animation=time+0.05f;
-		sprite_no=ppl7::rand(182,191);
+	if (time > next_animation) {
+		next_animation=time + 0.05f;
+		sprite_no=ppl7::rand(182, 191);
 		updateBoundary();
 	}
 }
 
-void Fire::handleCollision(Player *player, const Collision &collision)
+void Fire::handleCollision(Player* player, const Collision& collision)
 {
 	player->dropHealth(2);
 }

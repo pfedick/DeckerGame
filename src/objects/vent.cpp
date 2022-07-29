@@ -5,7 +5,7 @@
 
 namespace Decker::Objects {
 
-static int vent_cycle[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+static int vent_cycle[]={ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 };
 
 Representation Vent::representation()
 {
@@ -14,10 +14,10 @@ Representation Vent::representation()
 
 
 Vent::Vent()
-:Object(Type::ObjectType::Vent)
+	:Object(Type::ObjectType::Vent)
 {
 	sprite_set=Spriteset::Vent;
-	animation.start(vent_cycle,sizeof(vent_cycle)/sizeof(int),true,0);
+	animation.start(vent_cycle, sizeof(vent_cycle) / sizeof(int), true, 0);
 	sprite_no=0;
 	collisionDetection=false;
 	sprite_no_representation=0;
@@ -34,17 +34,17 @@ Vent::~Vent()
 	}
 }
 
-void Vent::update(double time, TileTypePlane &, Player &)
+void Vent::update(double time, TileTypePlane&, Player&, float)
 {
-	if (time>next_animation) {
-		next_animation=time+0.056f;
+	if (time > next_animation) {
+		next_animation=time + 0.056f;
 		animation.update();
 		sprite_no=animation.getFrame();
 		sprite_no_representation=sprite_no;
 		updateBoundary();
 	}
 	if (!audio) {
-		AudioPool &pool=getAudioPool();
+		AudioPool& pool=getAudioPool();
 		audio=pool.getInstance(AudioClip::vent1);
 		if (audio) {
 			audio->setLoop(true);

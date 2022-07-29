@@ -13,7 +13,7 @@ Representation Bat::representation()
 }
 
 Bat::Bat()
-:Enemy(Type::ObjectType::Bat)
+	:Enemy(Type::ObjectType::Bat)
 {
 	sprite_set=Spriteset::Bat;
 	sprite_no=0;
@@ -25,36 +25,36 @@ Bat::Bat()
 	velocity=-3;
 }
 
-void Bat::handleCollision(Player *player, const Collision &collision)
+void Bat::handleCollision(Player* player, const Collision& collision)
 {
 	player->dropHealth(10);
 }
 
-void Bat::update(double time, TileTypePlane &ttplane, Player &player)
+void Bat::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	if (time>next_animation) {
-		next_animation=time+0.03f;
+	if (time > next_animation) {
+		next_animation=time + 0.03f;
 		animation.update();
 		sprite_no=animation.getFrame();
 		updateBoundary();
 	}
-	p.y+=velocity;
-	if (state==0) {
-		if (velocity>-3.0f) {
-			velocity-=0.2f;
+	p.y+=velocity * frame_rate_compensation;
+	if (state == 0) {
+		if (velocity > -3.0f) {
+			velocity-=0.2f * frame_rate_compensation;
 		}
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y-48));
-		if (t1!=TileType::NonBlocking) {
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 48));
+		if (t1 != TileType::NonBlocking) {
 			state=1;
 		}
 		updateBoundary();
-	} else if (state==1) {
-		if (velocity<3.0f) {
-			velocity+=0.2f;
+	} else if (state == 1) {
+		if (velocity < 3.0f) {
+			velocity+=0.2f * frame_rate_compensation;
 		}
 
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y+8));
-		if (t1!=TileType::NonBlocking) {
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 8));
+		if (t1 != TileType::NonBlocking) {
 			state=0;
 		}
 		updateBoundary();

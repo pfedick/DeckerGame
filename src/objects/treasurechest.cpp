@@ -17,7 +17,7 @@ Representation TreasureChest::representation()
 
 
 TreasureChest::TreasureChest()
-:Object(Type::ObjectType::TreasureChest)
+	:Object(Type::ObjectType::TreasureChest)
 {
 	sprite_set=Spriteset::TreasureChest;
 	sprite_no=0;
@@ -29,31 +29,31 @@ TreasureChest::TreasureChest()
 
 
 
-void TreasureChest::update(double time, TileTypePlane &ttplane, Player &player)
+void TreasureChest::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
-	if (state==0) {
-		double distance=ppl7::grafix::Distance(p,player.position());
-		if (distance<200) {
+	if (state == 0) {
+		double distance=ppl7::grafix::Distance(p, player.position());
+		if (distance < 200) {
 			state=1;
-			animation.startSequence(0,32,false,32);
+			animation.startSequence(0, 32, false, 32);
 		}
 	}
-	if (state>0 && time>next_animation) {
-		next_animation=time+0.07f;
+	if (state > 0 && time > next_animation) {
+		next_animation=time + 0.07f;
 		animation.update();
 		int new_sprite=animation.getFrame();
-		if (new_sprite!=sprite_no) {
+		if (new_sprite != sprite_no) {
 			sprite_no=new_sprite;
 			updateBoundary();
 		}
-		if (state==1 && animation.isFinished()) {
+		if (state == 1 && animation.isFinished()) {
 			state=2;
-			animation.startSequence(33,62,true,33);
+			animation.startSequence(33, 62, true, 33);
 		}
 	}
 }
 
-void TreasureChest::handleCollision(Player *player, const Collision &collision)
+void TreasureChest::handleCollision(Player* player, const Collision& collision)
 {
 	player->addPoints(1000);
 	collisionDetection=false;

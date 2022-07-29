@@ -64,8 +64,9 @@ void Floater::init()
 }
 
 
-void Floater::update(double time, TileTypePlane& ttplane, Player& player)
+void Floater::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	this->frame_rate_compensation=frame_rate_compensation;
 	if (current_state == false && (state == 0 || state == 2)) return;
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
@@ -82,7 +83,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 		} else if (state == 1) {
 			velocity.x=4;
 			velocity.y=0;
-			p+=velocity;
+			p+=velocity * frame_rate_compensation;
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 64, p.y - 20), 270);
@@ -103,7 +104,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 		} else if (state == 3) {
 			velocity.x=-4;
 			velocity.y=0;
-			p+=velocity;
+			p+=velocity * frame_rate_compensation;
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x + 64, p.y - 20), 90);
@@ -129,7 +130,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 		} else if (state == 1) {
 			velocity.x=0;
 			velocity.y=4;
-			p+=velocity;
+			p+=velocity * frame_rate_compensation;
 			if (next_birth < time) {
 				particle_velocity_correction=velocity.y;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
@@ -152,7 +153,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player)
 		} else if (state == 3) {
 			velocity.x=0;
 			velocity.y=-4;
-			p+=velocity;
+			p+=velocity * frame_rate_compensation;
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
@@ -205,8 +206,8 @@ void Floater::handleCollision(Player* player, const Collision& collision)
 	if (collision.onFoot()) {
 		//printf ("collision with floater\n");
 		player->setStandingOnObject(this);
-		player->x+=velocity.x;
-		player->y+=velocity.y;
+		player->x+=velocity.x * frame_rate_compensation;
+		player->y+=velocity.y * frame_rate_compensation;
 	}
 }
 

@@ -13,7 +13,7 @@ Representation Rat::representation()
 }
 
 Rat::Rat()
-:Enemy(Type::ObjectType::Rat)
+	:Enemy(Type::ObjectType::Rat)
 {
 	sprite_no=38;
 	sprite_no_representation=38;
@@ -22,10 +22,10 @@ Rat::Rat()
 
 }
 
-void Rat::handleCollision(Player *player, const Collision &collision)
+void Rat::handleCollision(Player* player, const Collision& collision)
 {
 	Player::PlayerMovement movement=player->getMovement();
-	if (collision.onFoot()==true && movement==Player::Falling) {
+	if (collision.onFoot() == true && movement == Player::Falling) {
 		state=0;
 		collisionDetection=false;
 		enabled=false;
@@ -35,22 +35,22 @@ void Rat::handleCollision(Player *player, const Collision &collision)
 	}
 }
 
-void Rat::update(double time, TileTypePlane &ttplane, Player &player)
+void Rat::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	if (state==0) {
-		p.x-=2;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x-60, p.y-12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x-60, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+	if (state == 0) {
+		p.x-=2 * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			state=1;
 			sprite_no=39;
 		}
 		updateBoundary();
-	} else if (state==1) {
-		p.x+=2;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x+60, p.y-12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x+60, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+	} else if (state == 1) {
+		p.x+=2 * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			state=0;
 			sprite_no=38;
 		}

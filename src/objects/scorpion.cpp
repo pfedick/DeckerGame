@@ -13,7 +13,7 @@ Representation Scorpion::representation()
 }
 
 Scorpion::Scorpion()
-:Enemy(Type::ObjectType::Scorpion)
+	:Enemy(Type::ObjectType::Scorpion)
 {
 	sprite_set=Spriteset::Scorpion;
 	sprite_no=0;
@@ -24,33 +24,33 @@ Scorpion::Scorpion()
 	next_animation=0.0f;
 }
 
-void Scorpion::handleCollision(Player *player, const Collision &collision)
+void Scorpion::handleCollision(Player* player, const Collision& collision)
 {
 	player->dropHealth(10);
 }
 
-void Scorpion::update(double time, TileTypePlane &ttplane, Player &player)
+void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	if (time>next_animation) {
-		next_animation=time+0.07f;
+	if (time > next_animation) {
+		next_animation=time + 0.07f;
 		animation.update();
 		sprite_no=animation.getFrame();
 		updateBoundary();
 	}
-	if (state==0) {
-		p.x-=2;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x-60, p.y-12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x-60, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+	if (state == 0) {
+		p.x-=2 * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			state=1;
 			sprite_no=0;
 		}
 		updateBoundary();
-	} else if (state==1) {
-		p.x+=2;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x+60, p.y-12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x+60, p.y+6));
-		if (t1!=TileType::NonBlocking || t2!=TileType::Blocking) {
+	} else if (state == 1) {
+		p.x+=2 * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			state=0;
 			sprite_no=0;
 		}

@@ -32,7 +32,7 @@ private:
 public:
 	ArrowFired();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	virtual void handleCollision(Player* player, const Collision& collision);
 };
 
@@ -54,9 +54,9 @@ Representation ArrowFired::representation()
 	return Representation(Spriteset::GenericObjects, 35);
 }
 
-void ArrowFired::update(double time, TileTypePlane& ttplane, Player& player)
+void ArrowFired::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	p+=velocity;
+	p+=velocity * frame_rate_compensation;
 	updateBoundary();
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
 	if (t1 == TileType::Blocking) {
@@ -108,7 +108,7 @@ void Arrow::changeDirection(int new_direction)
 	}
 }
 
-void Arrow::update(double time, TileTypePlane& ttplane, Player& player)
+void Arrow::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	if (state == 0) {
 		double dist=ppl7::grafix::Distance(p, player.position());

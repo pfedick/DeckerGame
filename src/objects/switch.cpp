@@ -82,7 +82,7 @@ void Switch::toggle(bool enable, Object* source)
 }
 
 
-void Switch::update(double time, TileTypePlane& ttplane, Player& player)
+void Switch::update(double, TileTypePlane&, Player&, float)
 {
 
 }

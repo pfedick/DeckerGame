@@ -19,7 +19,6 @@ ParticleSystem::ParticleSystem()
         spriteset[i]=new SpriteTexture();
     }
     nextid=1;
-    last_update=0.0f;
     active_map=0;
     update_thread.threadStart();
 }
@@ -45,7 +44,6 @@ void ParticleSystem::clear()
     }
     particle_map.clear();
     nextid=1;
-    last_update=0.0f;
 }
 
 void ParticleSystem::loadSpritesets(SDL& sdl)
@@ -76,15 +74,10 @@ void ParticleSystem::deleteParticle(uint64_t id)
     }
 }
 
-void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport, float frame_rate_compensation)
 {
     while (update_thread.isRunning()) ppl7::MSleep(1);
-    update_thread.frame_rate_compensation=1.0f;
-    if (last_update > 0) {
-        float frametime=time - last_update;
-        update_thread.frame_rate_compensation=(1.0f / 60.0f) / frametime;
-    }
-    last_update=time;
+    update_thread.frame_rate_compensation=frame_rate_compensation;
     update_thread.time=time;
     update_thread.ttplane=&ttplane;
     update_thread.player=&player;

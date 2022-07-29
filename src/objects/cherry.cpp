@@ -24,7 +24,7 @@ CherryReward::CherryReward()
 	sprite_no_representation=304;
 }
 
-void CherryReward::update(double time, TileTypePlane&, Player&)
+void CherryReward::update(double time, TileTypePlane&, Player&, float)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.056f;

@@ -84,7 +84,7 @@ public:
 	ppl7::grafix::Rect getBoundingBox() const;
 	void setStandingOnObject(Decker::Objects::Object* object);
 
-	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects);
+	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 
 

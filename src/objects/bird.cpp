@@ -63,7 +63,7 @@ void Bird::handleCollision(Player* player, const Collision& collision)
 	player->dropHealth(10);
 }
 
-void Bird::update(double time, TileTypePlane& ttplane, Player& player)
+void Bird::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.03f;
@@ -73,13 +73,13 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player)
 		}
 	}
 	if (state == BirdState::FlyLeft) {
-		p.x-=velocity;
+		p.x-=velocity * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y));
 		if (t1 != TileType::NonBlocking) {
 			changeState(BirdState::FlyRight);
 		}
 	} else 	if (state == BirdState::FlyRight) {
-		p.x+=velocity;
+		p.x+=velocity * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y));
 		if (t1 != TileType::NonBlocking) {
 			changeState(BirdState::FlyLeft);

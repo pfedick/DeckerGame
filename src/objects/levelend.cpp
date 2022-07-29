@@ -53,7 +53,7 @@ void LevelEnd::init()
 
 }
 
-void LevelEnd::update(double time, TileTypePlane& ttplane, Player& player)
+void LevelEnd::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
     if (state == State::Active) {
         collisionDetection=true;

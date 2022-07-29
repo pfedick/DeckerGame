@@ -15,11 +15,11 @@ Representation Helena::representation()
 }
 
 Helena::Helena()
-:AiEnemy(Type::ObjectType::Helena)
+	:AiEnemy(Type::ObjectType::Helena)
 {
 	sprite_set=Spriteset::Helena;
 	sprite_no=27;
-	next_state=ppl7::GetMicrotime()+5.0f;
+	next_state=ppl7::GetMicrotime() + 5.0f;
 	state=StateWaitForEnable;
 	animation.setStaticFrame(27);
 	keys=0;
@@ -30,78 +30,78 @@ Helena::Helena()
 
 
 
-void Helena::handleCollision(Player *player, const Collision &collision)
+void Helena::handleCollision(Player* player, const Collision& collision)
 {
 
 }
 
 
-void Helena::toggle(bool enable, Object *source)
+void Helena::toggle(bool enable, Object* source)
 {
-	if (enable && state==StateWaitForEnable) state=StatePatrol;
+	if (enable && state == StateWaitForEnable) state=StatePatrol;
 }
 
-void Helena::update(double time, TileTypePlane &ttplane, Player &player)
+void Helena::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	//printf ("s=%d, state=%s, keys=%d\n", state, (const char*)getState(), keys);
 	this->time=time;
 	if (!enabled) return;
 	updateAnimation(time);
-	if (movement==Dead) {
+	if (movement == Dead) {
 		if (animation.isFinished()) {
 			enabled=false;
 		}
 		return;
 	}
 	double dist=ppl7::grafix::Distance(p, player.position());
-	if (state==StateWaitForEnable && dist<800) state=StatePatrol;
-	if (state!=StateFollowPlayer && dist<600) {
+	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
+	if (state != StateFollowPlayer && dist < 600) {
 		state=StateFollowPlayer;
 		clearWaypoints();
 	}
 
 
-	if (time<next_state && state==StateStand) {
+	if (time < next_state && state == StateStand) {
 		state=StatePatrol;
-		if (ppl7::rand(0,1)==0) turn(Left);
+		if (ppl7::rand(0, 1) == 0) turn(Left);
 		else turn(Right);
 	}
 
-	if (movement==Turn) {
+	if (movement == Turn) {
 		if (!animation.isFinished()) return;
 		movement=Stand;
 		orientation=turnTarget;
 		velocity_move.stop();
 	}
 
-	updateMovementAndPhysics(time,ttplane);
+	updateMovementAndPhysics(time, ttplane, frame_rate_compensation);
 
-	if (movement==Slide || movement==Dead || movement==Jump) {
+	if (movement == Slide || movement == Dead || movement == Jump) {
 		return;
 	}
 	keys=0;
-	if (state==StatePatrol) updateStatePatrol(time, ttplane);
-	if (state==StateFollowPlayer) updateStateFollowPlayer(time, ttplane, player);
+	if (state == StatePatrol) updateStatePatrol(time, ttplane);
+	if (state == StateFollowPlayer) updateStateFollowPlayer(time, ttplane, player);
 	executeKeys();
 
 }
 
-void Helena::updateStatePatrol(double time, TileTypePlane &ttplane)
+void Helena::updateStatePatrol(double time, TileTypePlane& ttplane)
 {
 	//printf ("movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
 	//		keys, (int)time, (int)next_state);
-	if (movement==Turn) return;
-	if (movement==Stand && next_state<time && substate==0) {
+	if (movement == Turn) return;
+	if (movement == Stand && next_state < time && substate == 0) {
 		//printf ("next_state is turn\n");
-		if (orientation==Left) turn(Right);
+		if (orientation == Left) turn(Right);
 		else turn(Left);
 		substate=1;
 		return;
-	} else if (movement==Stand && substate==0) {
+	} else if (movement == Stand && substate == 0) {
 		return;
 	}
 	substate=0;
-	if (orientation==Left) {
+	if (orientation == Left) {
 		keys=KeyboardKeys::Left;
 	} else {
 		keys=KeyboardKeys::Right;

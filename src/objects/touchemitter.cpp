@@ -20,7 +20,7 @@ public:
 	TouchParticle(Type::ObjectType type);
 	~TouchParticle();
 	static Representation representation();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 };
 
 class TouchEmitterDialog : public Decker::ui::Dialog
@@ -201,9 +201,9 @@ Representation TouchParticle::representation()
 	return Representation(Spriteset::GenericObjects, 238);
 }
 
-void TouchParticle::update(double time, TileTypePlane& ttplane, Player& player)
+void TouchParticle::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	p+=velocity;
+	p+=velocity * frame_rate_compensation;
 	if (ppl7::grafix::Distance(p, initial_p) > max_distance) {
 		deleteDefered=true;
 		ObjectSystem* objs=GetObjectSystem();
@@ -213,7 +213,7 @@ void TouchParticle::update(double time, TileTypePlane& ttplane, Player& player)
 		object->spawned=true;
 		objs->addObject(object);
 	} else {
-		child->update(time, ttplane, player);
+		child->update(time, ttplane, player, frame_rate_compensation);
 		sprite_no=child->sprite_no;
 	}
 }

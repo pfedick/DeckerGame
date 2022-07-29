@@ -34,7 +34,7 @@ WindEmitter::WindEmitter()
 	next_birth=0.0f;
 }
 
-void WindEmitter::update(double time, TileTypePlane& ttplane, Player&)
+void WindEmitter::update(double time, TileTypePlane& ttplane, Player&, float)
 {
 	if (next_birth < time) {
 		next_birth=time + (float)ppl7::rand(200, 1200) / 1000;

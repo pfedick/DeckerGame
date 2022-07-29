@@ -60,7 +60,7 @@ Speaker::~Speaker()
 }
 
 
-void Speaker::update(double time, TileTypePlane& ttplane, Player& player)
+void Speaker::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (current_state) {
 		if (audio == NULL && sample_id != AudioClip::none) {

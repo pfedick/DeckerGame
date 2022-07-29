@@ -84,14 +84,14 @@ public:
 	int collision_matrix[4][6];
 	int collision_at_pivoty[3];
 	int collision_type_count[TileType::Type::MaxType];
-	Decker::Objects::Object *player_stands_on_object;
+	Decker::Objects::Object* player_stands_on_object;
 
 	Physic();
 
-	bool updatePhysics(const TileTypePlane &world);
-	PlayerMovement checkCollisionWithWorld(const TileTypePlane &world, float &x, float &y);
+	bool updatePhysics(const TileTypePlane& world, float frame_rate_compensation);
+	PlayerMovement checkCollisionWithWorld(const TileTypePlane& world, float& x, float& y);
 	int detectFallingDamage(double time);
-	void updateMovement();
+	void updateMovement(float frame_rate_compensation);
 
 	bool isCollisionLeft() const;
 	bool isCollisionRight() const;

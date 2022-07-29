@@ -697,6 +697,7 @@ private:
 	ppl7::grafix::Point WorldCoords;
 	ppl7::grafix::Point WorldMoveStart;
 	ppl7::String LevelFile;
+	double last_frame_time;
 	bool worldIsMoving;
 	bool showui;
 	bool quitGame;

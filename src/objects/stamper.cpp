@@ -69,7 +69,7 @@ void StamperVertical::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 
 
 
-void StamperVertical::update(double time, TileTypePlane& ttplane, Player& player)
+void StamperVertical::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.03f;

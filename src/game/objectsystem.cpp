@@ -186,12 +186,12 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 	}
 }
 
-void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player)
+void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	std::map<uint32_t, Object*>::iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
-		object->update(time, ttplane, player);
+		object->update(time, ttplane, player, frame_rate_compensation);
 	}
 }
 

@@ -119,24 +119,24 @@ void AiEnemy::updateAnimation(double time)
 	}
 }
 
-void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane)
+void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
-	updateMovement();
+	updateMovement(frame_rate_compensation);
 	if (movement == Dead) return;
 	Physic::PlayerMovement new_movement=Physic::checkCollisionWithWorld(ttplane, p.x, p.y);
 	if (new_movement == Stand && movement != Stand) {
 		//printf ("checkCollisionWithWorld sagt: stand\n");
 		stand();
 	}
-	if (updatePhysics(ttplane)) {
+	if (updatePhysics(ttplane, frame_rate_compensation)) {
 		if (movement == Slide && orientation == Left) {
 			animation.start(anicycleSlideLeft);
 		} else if (movement == Slide && orientation == Right) {
 			animation.start(anicycleSlideRight);
 		}
 	}
-	p.x+=velocity_move.x;
-	p.y+=velocity_move.y + gravity;
+	p.x+=velocity_move.x * frame_rate_compensation;
+	p.y+=(velocity_move.y + gravity) * frame_rate_compensation;
 	updateBoundary();
 }
 

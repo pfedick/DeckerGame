@@ -51,7 +51,7 @@ void Door::init()
 	if (state == 2) door_sprite_no+=14;
 }
 
-void Door::update(double time, TileTypePlane& ttplane, Player& player)
+void Door::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (state == 1 && time > next_animation) {
 		next_animation=time + 0.056f;

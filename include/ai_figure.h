@@ -24,7 +24,7 @@ private:
 	Connection current_way;
 
 
-	void updateWay(double time, Player &player);
+	void updateWay(double time, Player& player);
 
 
 public:
@@ -62,10 +62,10 @@ public:
 	void turn(PlayerOrientation target);
 	void stand();
 	void executeKeys();
-	void updateStateFollowPlayer(double time, TileTypePlane &ttplane, Player &player);
+	void updateStateFollowPlayer(double time, TileTypePlane& ttplane, Player& player);
 
 	void updateAnimation(double time);
-	void updateMovementAndPhysics(double time, TileTypePlane &ttplane);
+	void updateMovementAndPhysics(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 	void clearWaypoints();
 };
 }	// EOF Decker::Objects

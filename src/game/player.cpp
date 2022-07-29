@@ -260,7 +260,7 @@ void Player::dropLifeAndResetToLastSavePoint()
 	stand();
 }
 
-void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects)
+void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	this->time=time;
 	if (time > next_animation) {
@@ -275,12 +275,12 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	}
 	if (dead) return;
 	dropHealth(detectFallingDamage(time), HealthDropReason::FallingDeep);
-	updateMovement();
+	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
-	if (updatePhysics(world)) {
+	if (updatePhysics(world, frame_rate_compensation)) {
 		if (movement == Slide && orientation == Left) {
 			animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
 		} else if (movement == Slide && orientation == Right) {

@@ -157,8 +157,7 @@ public:
 	int sprite_no;
 	int sprite_no_representation;
 	float scale;
-	float
-		bool collisionDetection;
+	bool collisionDetection;
 	bool visibleAtPlaytime;
 	bool enabled;
 	bool pixelExactCollision;
@@ -170,7 +169,7 @@ public:
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
 	void updateBoundary();
-	virtual void update(double time, TileTypePlane& ttplane, Player& player);
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	virtual size_t save(unsigned char* buffer, size_t size) const;
 	virtual size_t load(const unsigned char* buffer, size_t size);
 	virtual size_t saveSize() const;
@@ -202,7 +201,7 @@ public:
 	Vent();
 	~Vent();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
 class WindEmitter : public Object
@@ -212,7 +211,7 @@ private:
 public:
 	WindEmitter();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -243,7 +242,7 @@ public:
 
 	RainEmitter();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -289,7 +288,7 @@ public:
 
 	ParticleEmitter();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -347,7 +346,7 @@ public:
 	~Speaker();
 	static Representation representation();
 	void setSample(int id, float volume, int max_distance=1600);
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -382,7 +381,7 @@ public:
 	Switch();
 	static Representation representation();
 	void init();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -404,7 +403,7 @@ public:
 	CoinReward();
 	static Representation representation();
 
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -418,7 +417,7 @@ public:
 	AppleReward();
 	static Representation representation();
 
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -432,7 +431,7 @@ public:
 	CherryReward();
 	static Representation representation();
 
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -446,7 +445,7 @@ public:
 	ExtraLife();
 	static Representation representation();
 
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -459,7 +458,7 @@ private:
 public:
 	GemReward();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -471,7 +470,7 @@ private:
 public:
 	CrystalReward();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -484,7 +483,7 @@ private:
 public:
 	TreasureChest();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -515,7 +514,7 @@ private:
 public:
 	SavePoint();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -537,7 +536,7 @@ private:
 public:
 	ThreeSpeers();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -564,7 +563,7 @@ public:
 	static Representation representation(Type::ObjectType type);
 	void init();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -591,7 +590,7 @@ public:
 	StamperVertical();
 	static Representation representation();
 	void init();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -610,7 +609,7 @@ private:
 public:
 	Fire();
 	static Representation representation();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
@@ -632,7 +631,7 @@ public:
 	Arrow();
 	static Representation representation();
 	void changeDirection(int new_direction);
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -656,7 +655,7 @@ public:
 	Rat();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -670,7 +669,7 @@ public:
 	Scorpion();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -685,7 +684,7 @@ public:
 	Bat();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -711,7 +710,7 @@ public:
 	Bird();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -727,7 +726,7 @@ public:
 	Skeleton();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
 class Mummy : public Enemy
@@ -741,7 +740,7 @@ public:
 	Mummy();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -756,7 +755,7 @@ public:
 	Mushroom();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
 class Scarabeus : public Enemy
@@ -773,7 +772,7 @@ public:
 	static Representation representation();
 	void update_animation();
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -789,7 +788,7 @@ public:
 	static Representation representation();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 
@@ -806,7 +805,7 @@ public:
 	static Representation representation();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
 class Floater : public Object
@@ -817,6 +816,7 @@ private:
 	int direction;
 	double next_state, next_animation;
 	double next_birth;
+	float frame_rate_compensation;
 	std::list<Particle::ScaleGradientItem>scale_gradient;
 	std::list<Particle::ColorGradientItem>color_gradient;
 	ppl7::grafix::PointF emmit_position;
@@ -825,7 +825,7 @@ private:
 	int state;
 	int flame_sprite1, flame_sprite2;
 	bool current_state;
-	ppl7::grafix::Point velocity;
+	ppl7::grafix::PointF velocity;
 	AnimationCycle animation;
 	AudioInstance* audio;
 	void emmitParticles(double time, const Player& player, const ppl7::grafix::PointF p, float angle);
@@ -837,7 +837,7 @@ public:
 	~Floater();
 	void init();
 	void reset() override;
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const  override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
@@ -884,7 +884,7 @@ public:
 	Door();
 	static Representation representation();
 	void init();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -931,7 +931,7 @@ public:
 	~LevelEnd();
 	static Representation representation();
 	void init();
-	void update(double time, TileTypePlane& ttplane, Player& player) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	//void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -956,7 +956,6 @@ private:
 	std::map<uint32_t, Object*> object_list;
 	std::map<uint32_t, Object*> visible_object_map;
 	SpriteTexture* spriteset[Spriteset::MaxSpritesets];
-
 	Waynet* waynet;
 	SpriteTexture* getTexture(int sprite_set) const;
 
@@ -967,7 +966,7 @@ public:
 	void loadSpritesets(SDL& sdl);
 	void addObject(Object* object);
 	Object* getInstance(int object_type) const;
-	void update(double time, TileTypePlane& ttplane, Player& player);
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;

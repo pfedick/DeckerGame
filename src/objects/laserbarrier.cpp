@@ -154,7 +154,7 @@ void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 
 }
 
-void LaserBarrier::update(double time, TileTypePlane& ttplane, Player& player)
+void LaserBarrier::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (!enabled) return;
 	flicker++;

@@ -94,7 +94,7 @@ void RainEmitter::createParticle(ParticleSystem* ps, const TileTypePlane& ttplan
 	ps->addParticle(particle);
 }
 
-void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player)
+void RainEmitter::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (next_birth < time && current_state == true) {
 		ParticleSystem* ps=GetParticleSystem();

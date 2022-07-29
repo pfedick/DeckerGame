@@ -116,7 +116,7 @@ Representation Object::representation()
 	return Representation(-1, 0);
 }
 
-void Object::update(double, TileTypePlane&, Player&)
+void Object::update(double, TileTypePlane&, Player&, float)
 {
 
 }

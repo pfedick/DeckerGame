@@ -64,6 +64,7 @@ Game::Game()
 	settings_screen=NULL;
 	filedialog=NULL;
 	gameState=GameState::None;
+	last_frame_time=0.0f;
 }
 
 Game::~Game()
@@ -515,6 +516,14 @@ void Game::drawWorld(SDL_Renderer* renderer)
 {
 	metrics.time_draw_world.start();
 	double now=ppl7::GetMicrotime();
+	float frame_rate_compensation=1.0f;
+	if (last_frame_time > 0.0f) {
+		float frametime=now - last_frame_time;
+		frame_rate_compensation=(1.0f / 60.0f) / frametime;
+	}
+	last_frame_time=now;
+
+
 	level.setEditmode(object_selection != NULL);
 
 	metrics.time_update_sprites.start();
@@ -527,8 +536,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
 
 	if (this->controlsEnabled)
-		player->update(now, level.TileTypeMatrix, level.objects);
-	level.objects->update(now, level.TileTypeMatrix, *player);
+		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
+	level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
 	level.objects->updateVisibleObjectList(WorldCoords, viewport);
 	ppl7::tk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
@@ -539,7 +548,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	metrics.time_update_particles.start();
 	metrics.time_particle_thread.addDuration(level.particles->waitForUpdateThreadFinished());
 	level.particles->cleanupParticles(now);
-	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport);
+	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport, frame_rate_compensation);
 	metrics.time_update_particles.stop();
 
 
@@ -622,7 +631,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 void Game::run()
 {
 	resizeEvent(NULL);
-
+	last_frame_time=0.0f;
 	death_state=0;
 	fade_to_black=255;
 	world_widget->setVisible(true);
@@ -1046,6 +1055,7 @@ void Game::startLevel(const ppl7::String& filename)
 	background.setImage(level.params.BackgroundImage);
 	background.setLevelDimension(level.getOccupiedAreaFromTileTypePlane());
 	gameState=GameState::Running;
+	last_frame_time=0.0f;
 
 }
 
@@ -1074,6 +1084,7 @@ void Game::save(const ppl7::String& filename)
 
 void Game::load()
 {
+	last_frame_time=0.0f;
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
@@ -1087,6 +1098,7 @@ void Game::load()
 
 void Game::createNewLevel(const LevelParameter& params)
 {
+	last_frame_time=0.0f;
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();

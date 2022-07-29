@@ -25,7 +25,7 @@ CoinReward::CoinReward()
 	sprite_no_representation=84;
 }
 
-void CoinReward::update(double time, TileTypePlane&, Player&)
+void CoinReward::update(double time, TileTypePlane&, Player&, float)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.056f;

@@ -176,7 +176,6 @@ private:
     std::map<uint64_t, Particle*> new_particles;
     std::map<uint32_t, Particle*> visible_particle_map[2][static_cast<int>(Particle::Layer::maxLayer)];
     void deleteParticle(uint64_t id);
-    double last_update;
     int active_map;
     ParticleUpdateThread update_thread=ParticleUpdateThread(*this);
 public:
@@ -185,7 +184,7 @@ public:
     void clear();
     void loadSpritesets(SDL& sdl);
     void addParticle(Particle* particle);
-    void update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+    void update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport, float frame_rate_compensation);
     void cleanupParticles(double time);
     double waitForUpdateThreadFinished();
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;

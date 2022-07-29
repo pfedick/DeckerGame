@@ -24,7 +24,7 @@ ExtraLife::ExtraLife()
 	sprite_no_representation=241;
 }
 
-void ExtraLife::update(double time, TileTypePlane&, Player&)
+void ExtraLife::update(double time, TileTypePlane&, Player&, float)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
