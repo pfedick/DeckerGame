@@ -157,7 +157,8 @@ public:
 	int sprite_no;
 	int sprite_no_representation;
 	float scale;
-	bool collisionDetection;
+	float
+		bool collisionDetection;
 	bool visibleAtPlaytime;
 	bool enabled;
 	bool pixelExactCollision;
@@ -691,10 +692,21 @@ public:
 class Bird : public Enemy
 {
 private:
+	enum class BirdState
+	{
+		FlyFront=0,
+		FlyLeft,
+		FlyRight,
+		FlyBack,
+		AttackLeft,
+		AttackRight
+	};
+
 	AnimationCycle animation;
 	double next_animation;
 	float velocity;
-	int state;
+	BirdState state;
+	void changeState(BirdState state);
 public:
 	Bird();
 	static Representation representation();
