@@ -519,7 +519,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	float frame_rate_compensation=1.0f;
 	if (last_frame_time > 0.0f) {
 		float frametime=now - last_frame_time;
-		frame_rate_compensation=(1.0f / 60.0f) / frametime;
+		frame_rate_compensation=frametime / (1.0f / 60.0f);
+		// 30Hz, frametime=0.033333
+		// 90Hz, frametime=0.011111
+		// 60Hz, frametime=0.016667
 	}
 	last_frame_time=now;
 
@@ -1543,7 +1546,7 @@ bool Game::nextLevel(const ppl7::String& filename)
 	enableControls(false);
 	gameState=GameState::LevelEndTriggerd;
 	fade_to_black=0;
-	printf("wir sollten hierhin gehen: %s\n", (const char*)nextLevelFile);
+	//printf("wir sollten hierhin gehen: %s\n", (const char*)nextLevelFile);
 
 	return true;
 }
