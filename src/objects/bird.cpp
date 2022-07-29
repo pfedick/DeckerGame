@@ -139,12 +139,12 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player, float fra
 			ppl7::grafix::PointF d=player.position() - p;
 			if (abs(d.x) > abs(d.y) - 16 && abs(d.x) < abs(d.y) + 16) {
 				if (p.x < player.position().x && state == BirdState::FlyRight) {
-					if (ppl7::rand(1, 2) == 1) {	// Decide to attack?
+					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackRight);
 					}
 					next_state_change=time + 2.0;
 				} else if (p.x > player.position().x && state == BirdState::FlyLeft) {
-					if (ppl7::rand(1, 2) == 1) {	// Decide to attack?
+					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackLeft);
 					}
 					next_state_change=time + 2.0;
