@@ -698,11 +698,15 @@ private:
 		FlyRight,
 		FlyBack,
 		AttackLeft,
-		AttackRight
+		AttackRight,
+		FlyOnPlace,
+		FlyUp,
+		WaitThenFlyUp
 	};
 
 	AnimationCycle animation;
 	double next_animation;
+	double next_state_change;
 	float velocity;
 	BirdState state;
 	void changeState(BirdState state);
