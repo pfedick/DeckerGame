@@ -76,7 +76,11 @@ void ParticleSystem::deleteParticle(uint64_t id)
 
 void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport, float frame_rate_compensation)
 {
-    while (update_thread.isRunning()) ppl7::MSleep(1);
+    if (update_thread.isRunning()) {
+        printf("Particle Update Thread too slow!\n");
+        fflush(stdout);
+        while (update_thread.isRunning()) ppl7::MSleep(1);
+    }
     update_thread.frame_rate_compensation=frame_rate_compensation;
     update_thread.time=time;
     update_thread.ttplane=&ttplane;
