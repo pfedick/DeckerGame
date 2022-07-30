@@ -32,7 +32,7 @@ Yeti::Yeti()
 
 void Yeti::handleCollision(Player* player, const Collision& collision)
 {
-
+	player->dropHealth(100);
 }
 
 
