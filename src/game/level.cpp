@@ -677,10 +677,11 @@ void LevelParameter::save(ppl7::File& ff, int chunk_id) const
 	storeParameters(a, *this);
 	ppl7::ByteArray ba;
 	a.exportBinary(ba);
-	unsigned char buffer[5];
-	ppl7::Poke32(buffer + 0, ba.size() + 5);
+	unsigned char buffer[6];
+	ppl7::Poke32(buffer + 0, ba.size() + 6);
 	ppl7::Poke8(buffer + 4, chunk_id);
-	ff.write(buffer, 5);
+	ppl7::Poke8(buffer + 5, 1);		// Version
+	ff.write(buffer, 6);
 	ff.write(ba.ptr(), ba.size());
 }
 
@@ -689,7 +690,15 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 	clear();
 	ppl7::AssocArray a;
 	ppl7::String Default, Tmp;
-	a.importBinary(ba);
+	const char* buffer=ba.toCharPtr();
+	int version=ppl7::Peek8(buffer);
+	if (version != 1) {
+		printf("Can't load LevelParameter, unknown version! [%d]\n", version);
+		return;
+	}
+	ppl7::ByteArrayPtr assoc_ba(buffer + 1, ba.size() - 1);
+
+	a.importBinary(assoc_ba);
 	Default="";
 	width=a.getInt("level_width", width);
 	height=a.getInt("level_height", height);

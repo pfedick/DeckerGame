@@ -197,10 +197,11 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem
 void SpriteSystem::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (sprite_list.size() == 0) return;
-	unsigned char* buffer=(unsigned char*)malloc(sprite_list.size() * 18 + 5);
+	unsigned char* buffer=(unsigned char*)malloc(sprite_list.size() * 18 + 6);
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
-	size_t p=5;
+	ppl7::Poke8(buffer + 5, 1);		// Version
+	size_t p=6;
 	std::map<int, SpriteSystem::Item>::const_iterator it;
 	for (it=sprite_list.begin();it != sprite_list.end();++it) {
 		const SpriteSystem::Item& item=(it->second);
@@ -221,16 +222,22 @@ void SpriteSystem::save(ppl7::FileObject& file, unsigned char id) const
 void SpriteSystem::load(const ppl7::ByteArrayPtr& ba)
 {
 	clear();
-	size_t p=0;
 	const char* buffer=ba.toCharPtr();
-	while (p < ba.size()) {
-		addSprite(ppl7::Peek32(buffer + p),
-			ppl7::Peek32(buffer + p + 4),
-			ppl7::Peek8(buffer + p + 8),
-			ppl7::Peek16(buffer + p + 10),
-			ppl7::Peek16(buffer + p + 12),
-			ppl7::PeekFloat(buffer + p + 14),
-			ppl7::Peek8(buffer + p + 9));
-		p+=18;
+	int version=ppl7::Peek8(buffer);
+	size_t p=1;
+	if (version == 1) {
+		while (p < ba.size()) {
+			addSprite(ppl7::Peek32(buffer + p),
+				ppl7::Peek32(buffer + p + 4),
+				ppl7::Peek8(buffer + p + 8),
+				ppl7::Peek16(buffer + p + 10),
+				ppl7::Peek16(buffer + p + 12),
+				ppl7::PeekFloat(buffer + p + 14),
+				ppl7::Peek8(buffer + p + 9));
+			p+=18;
+		}
+	} else {
+		printf("Can't load SpriteSystem, unknown version! [%d]\n", version);
+
 	}
 }

@@ -110,12 +110,13 @@ void TileTypePlane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	// We only save tiles with type>0
 	if (tilematrix == NULL) return;
-	unsigned char* buffer=(unsigned char*)malloc(9 + (width * height * 5));
+	unsigned char* buffer=(unsigned char*)malloc(10 + (width * height * 5));
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
-	ppl7::Poke16(buffer + 5, width);
-	ppl7::Poke16(buffer + 7, height);
-	size_t p=9;
+	ppl7::Poke8(buffer + 5, 1);		// Version
+	ppl7::Poke16(buffer + 6, width);
+	ppl7::Poke16(buffer + 8, height);
+	size_t p=10;
 	for (int y=0;y < height;y++) {
 		for (int x=0;x < width;x++) {
 			TileType::Type type=tilematrix[y * width + x];
@@ -136,16 +137,22 @@ void TileTypePlane::load(const ppl7::ByteArrayPtr& ba)
 {
 	size_t p=0;
 	const char* buffer=ba.toCharPtr();
-	width=ppl7::Peek16(buffer);
-	height=ppl7::Peek16(buffer + 2);
+	int version=ppl7::Peek8(buffer);
+	p+=1;
+	width=ppl7::Peek16(buffer + p);
+	height=ppl7::Peek16(buffer + p + 2);
 	create(width, height);
 	p+=4;
-	while (p < ba.size()) {
-		int x=ppl7::Peek16(buffer + p);
-		int y=ppl7::Peek16(buffer + p + 2);
-		int type=ppl7::Peek8(buffer + p + 4);
-		setType(x, y, (TileType::Type)type);
-		p+=5;
+	if (version == 1) {
+		while (p < ba.size()) {
+			int x=ppl7::Peek16(buffer + p);
+			int y=ppl7::Peek16(buffer + p + 2);
+			int type=ppl7::Peek8(buffer + p + 4);
+			setType(x, y, (TileType::Type)type);
+			p+=5;
+		}
+	} else {
+		printf("Can't load TileTypePlane, unknown version! [%d]\n", version);
 	}
 }
 

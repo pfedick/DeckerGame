@@ -125,14 +125,14 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
     //         6: 4-Byte Color: red,green,blue,alpha
     //        10: n-Byte name + finaly 0-Byte
     // Last entry contains only 2-Byte Entry size with value=0
-    size_t size=7;
+    size_t size=8;
     for (int i=0;i < 256;i++) {
         size+=10 + palette[i].name.size() + 1;
     }
     //printf("Total size palette: %zd Byte\n", size);
     ppl7::ByteArray ba;
     unsigned char* buffer=(unsigned char*)ba.malloc(size);
-    size_t p=5;
+    size_t p=6;
     for (int i=0;i < 256;i++) {
         ppl7::Poke16(buffer + p, 0);
         ppl7::Poke16(buffer + p + 2, i);
@@ -150,6 +150,7 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
     p+=2;
     ppl7::Poke32(buffer + 0, p);
     ppl7::Poke8(buffer + 4, id);
+    ppl7::Poke8(buffer + 5, 1); // Version
     file.write(buffer, p);
     //printf("real size: %zd\n", p);
 }
@@ -158,21 +159,24 @@ void ColorPalette::load(const ppl7::ByteArrayPtr& ba)
 {
     setDefaults();
     const unsigned char* buffer=(unsigned char*)ba.ptr();
-    size_t p=0;
+    int version=ppl7::Peek8(buffer);
+    size_t p=1;
     ppl7::grafix::Color color;
     ppl7::String name;
-    int c=0;
-    while (1) {
-        size_t size=ppl7::Peek16(buffer + p + 0);
-        if (!size) break;
-        uint32_t index=ppl7::Peek16(buffer + p + 2);
-        int ldraw_material=ppl7::Peek16(buffer + p + 4);
-        color.set(ppl7::Peek8(buffer + p + 6), ppl7::Peek8(buffer + p + 7), ppl7::Peek8(buffer + p + 8), ppl7::Peek8(buffer + p + 9));
-        name.set((const char*)(buffer + p + 10));
-        set(index, color, name, ldraw_material);
-        p+=size;
-        c++;
+    if (version == 1) {
+        while (1) {
+            size_t size=ppl7::Peek16(buffer + p + 0);
+            if (!size) break;
+            uint32_t index=ppl7::Peek16(buffer + p + 2);
+            int ldraw_material=ppl7::Peek16(buffer + p + 4);
+            color.set(ppl7::Peek8(buffer + p + 6), ppl7::Peek8(buffer + p + 7), ppl7::Peek8(buffer + p + 8), ppl7::Peek8(buffer + p + 9));
+            name.set((const char*)(buffer + p + 10));
+            set(index, color, name, ldraw_material);
+            p+=size;
+
+        }
+    } else {
+        printf("Can't load ColorPalette, unknown version! [%d]\n", version);
     }
-    //printf("loaded %d colors\n", c);
     //ba.hexDump();
 }

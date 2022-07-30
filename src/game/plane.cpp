@@ -178,12 +178,13 @@ bool Plane::isVisible() const
 void Plane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (tilematrix == NULL) return;
-	unsigned char* buffer=(unsigned char*)malloc(9 + width * height * (MAX_TILE_LAYER * 11));
+	unsigned char* buffer=(unsigned char*)malloc(10 + width * height * (MAX_TILE_LAYER * 11));
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
-	ppl7::Poke16(buffer + 5, width);
-	ppl7::Poke16(buffer + 7, height);
-	size_t p=9;
+	ppl7::Poke8(buffer + 5, 1);		// Version
+	ppl7::Poke16(buffer + 6, width);
+	ppl7::Poke16(buffer + 8, height);
+	size_t p=10;
 	for (int y=0;y < height;y++) {
 		for (int x=0;x < width;x++) {
 			const Tile* t=tilematrix[y * width + x];
@@ -212,32 +213,37 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 
 void Plane::load(const ppl7::ByteArrayPtr& ba)
 {
-	size_t p=0;
 	const char* buffer=ba.toCharPtr();
-	width=ppl7::Peek16(buffer);
-	height=ppl7::Peek16(buffer + 2);
-	//printf ("width: %d, height: %d\n",width,height);
-	create(width, height);
-	p+=4;
-	while (p < ba.size()) {
-		int x=ppl7::Peek16(buffer + p);
-		int y=ppl7::Peek16(buffer + p + 2);
-		bool block_background=(bool)ppl7::Peek8(buffer + p + 4);
-		p+=5;
-		for (int z=0;z < MAX_TILE_LAYER;z++) {
-			int tileset=ppl7::Peek16(buffer + p);
-			int tileno=ppl7::Peek16(buffer + p + 2);
-			int origin_x=ppl7::Peek16(buffer + p + 4);
-			int origin_y=ppl7::Peek16(buffer + p + 6);
-			int occupation=ppl7::Peek8(buffer + p + 8);
-			bool showStuds=ppl7::Peek8(buffer + p + 9);
-			int color_index=ppl7::Peek8(buffer + p + 10);
-			//if (tileset > 1) tileset=1;
-			setTile(x, y, z, tileset, tileno, color_index, showStuds);
-			setOccupation(x, y, z, (Tile::TileOccupation)occupation, origin_x, origin_y);
-			p+=11;
+	int version=ppl7::Peek8(buffer);
+	size_t p=1;
+	if (version == 1) {
+		width=ppl7::Peek16(buffer + p);
+		height=ppl7::Peek16(buffer + p + 2);
+		p+=4;
+		//printf ("width: %d, height: %d\n",width,height);
+		create(width, height);
+		while (p < ba.size()) {
+			int x=ppl7::Peek16(buffer + p);
+			int y=ppl7::Peek16(buffer + p + 2);
+			bool block_background=(bool)ppl7::Peek8(buffer + p + 4);
+			p+=5;
+			for (int z=0;z < MAX_TILE_LAYER;z++) {
+				int tileset=ppl7::Peek16(buffer + p);
+				int tileno=ppl7::Peek16(buffer + p + 2);
+				int origin_x=ppl7::Peek16(buffer + p + 4);
+				int origin_y=ppl7::Peek16(buffer + p + 6);
+				int occupation=ppl7::Peek8(buffer + p + 8);
+				bool showStuds=ppl7::Peek8(buffer + p + 9);
+				int color_index=ppl7::Peek8(buffer + p + 10);
+				//if (tileset > 1) tileset=1;
+				setTile(x, y, z, tileset, tileno, color_index, showStuds);
+				setOccupation(x, y, z, (Tile::TileOccupation)occupation, origin_x, origin_y);
+				p+=11;
+			}
+			setBlockBackground(x, y, block_background);
 		}
-		setBlockBackground(x, y, block_background);
+	} else {
+		printf("Can't load Plane, unknown version! [%d]\n", version);
 	}
 	//printf("Plane hat %zd tiles\n", tileCount());
 }
