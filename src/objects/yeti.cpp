@@ -55,10 +55,12 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 	}
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
+	/*
 	if (state != StateFollowPlayer && dist < 600) {
 		state=StateFollowPlayer;
 		clearWaypoints();
 	}
+	*/
 
 
 	if (time < next_state && state == StateStand) {
@@ -88,11 +90,12 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 
 void Yeti::updateStatePatrol(double time, TileTypePlane& ttplane)
 {
-	//printf ("movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
-	//		keys, (int)time, (int)next_state);
+	//printf("Yeti::updateStatePatrol: movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
+	//	keys, (int)time, (int)next_state);
 	if (movement == Turn) return;
+	/*
 	if (movement == Stand && next_state < time && substate == 0) {
-		//printf ("next_state is turn\n");
+		printf("next_state is turn\n");
 		if (orientation == Left) turn(Right);
 		else turn(Left);
 		substate=1;
@@ -100,11 +103,18 @@ void Yeti::updateStatePatrol(double time, TileTypePlane& ttplane)
 	} else if (movement == Stand && substate == 0) {
 		return;
 	}
+	*/
 	substate=0;
 	if (orientation == Left) {
-		keys=KeyboardKeys::Left;
+		//printf("move left\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 64));
+		if (t1 != TileType::NonBlocking) turn(Right);
+		else keys=KeyboardKeys::Left;
 	} else {
-		keys=KeyboardKeys::Right;
+		//printf("move right\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y - 64));
+		if (t1 != TileType::NonBlocking) turn(Left);
+		else keys=KeyboardKeys::Right;
 	}
 }
 
