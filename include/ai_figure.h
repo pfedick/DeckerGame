@@ -68,6 +68,38 @@ public:
 	void updateMovementAndPhysics(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 	void clearWaypoints();
 };
+
+
+class Yeti : public AiEnemy
+{
+private:
+	enum State {
+		StateWaitForEnable,
+		StateStand,
+		StatePatrol,
+		StatePatrolLeft,
+		StatePatrolRight,
+		StateGoToOrigin,
+		StateFollowPlayer
+	};
+	double next_state;
+	int state;
+	int substate;
+
+	void updateStatePatrol(double time, TileTypePlane& ttplane);
+
+public:
+	Yeti();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void toggle(bool enable, Object* source=NULL) override;
+};
+
+
+
+
+
 }	// EOF Decker::Objects
 
 #endif

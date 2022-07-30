@@ -108,6 +108,7 @@ OBJECTS=compile/main.o \
 	compile/object_ai_figure.o \
 	compile/object_wallenstein.o \
 	compile/object_helena.o \
+	compile/object_yeti.o \
 	compile/object_extralife.o \
 	compile/object_levelend.o \
 	compile/audio_audiosystem.o \
@@ -224,6 +225,7 @@ sprites:
 	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
 	./texmaker -s "lightwave/Render/enemies/wallenstein/*.png" -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/enemies/helena/*.png" -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s "lightwave/Render/enemies/yeti/*.png" -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s "lightwave/Render/enemies/bat/*.png" -t res/bat.tex -w 512 -h 512 -px 64 -py 120
 	./texmaker -s "lightwave/Render/enemies/bird/*.png" -t res/bird.tex -w 512 -h 512 -px 64 -py 120
 
@@ -525,6 +527,11 @@ compile/object_helena.o: src/objects/helena.cpp Makefile include/objects.h inclu
 	include/ai_figure.h include/helena.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_helena.o -c src/objects/helena.cpp $(CFLAGS)
+
+compile/object_yeti.o: src/objects/yeti.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_yeti.o -c src/objects/yeti.cpp $(CFLAGS)
 
 compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile

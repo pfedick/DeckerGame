@@ -2,15 +2,15 @@ LWSC
 8
 
 RenderRangeType 0
-FirstFrame 40
-LastFrame 46
+FirstFrame 47
+LastFrame 47
 FrameStep 1
 RenderRangeObject 0
 RenderRangeArbitrary 0-18
 PreviewFirstFrame 0
 PreviewLastFrame 220
 PreviewFrameStep 1
-CurrentFrame 46
+CurrentFrame 47
 FramesPerSecond 30
 AutoKeyFixedFrame 0
 ChangeScene 0
@@ -489,6 +489,8 @@ VERS 2
   LayoutItemListSortMode 6
   ChannelListSortMode 0
 }
+EndPlugin
+Plugin MasterHandler 8 FiberFX
 EndPlugin
 Plugin ViewportObjectHandler 1 .VPR
 0
@@ -1417,7 +1419,7 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.34906585039886589561
+          0.3490658503988658401
         }
       }
       { Attr
@@ -1674,7 +1676,7 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.34906585039886589561
+          0.3490658503988658401
         }
       }
       { Attr
@@ -7020,7 +7022,7 @@ Channel 1
   6
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.56666666666666654084 0 0 0 0 18.893988888581382923 0.00029999998191164602536 0
-  Key 0.0053999996744096279144 0.5999999999999999778 0 0 0 0 0.005397500831432112782 0 0
+  Key 0.0053999996744096279144 0.5999999999999999778 0 0 0 0 0.0053975008314321119146 0 0
   Key -20 0.63333333333333319271 0 0 0 0 -19.840066115379581646 0 0
   Key 0 0.66666666666666651864 0 0 0 0 19.834710743801647226 0 0
   Key -20 0.69999999999999995559 0 0 0 0 -19.83738842912880429 0 0
@@ -7045,7 +7047,7 @@ Channel 3
   Key -1.6406090259551999733 0.5999999999999999778 0 0 0 0 -1.6398498362162112763 0 0
   Key -1.6406090259551999733 0.63333333333333319271 0 0 0 0 0 0 0
   Key 0 0.66666666666666651864 0 0 0 0 -2.2020952554548557625e-16 0 0
-  Key -1.6406090259551999733 0.69999999999999995559 0 0 0 0 -1.62705027367457844 0 0
+  Key -1.6406090259551999733 0.69999999999999995559 0 0 0 0 -1.6270502736745786621 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -8029,7 +8031,7 @@ Channel 1
 Channel 2
 { Envelope
   1
-  Key 0.004149988759309053421 0 0 0 0 0 0 0 0
+  Key 0.0041499887593090525537 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -8486,7 +8488,7 @@ Channel 2
 Channel 3
 { Envelope
   1
-  Key -0.011466892436146736145 0 0 0 0 0 0 0 0
+  Key -0.01146689243614673788 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -12378,7 +12380,7 @@ Channel 1
   4
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.80000000000000004441 0 0 0 0 19.200863999929278947 3.5999997053295373375e-05 0
-  Key 0.0008999999263323842395 0.83333333333333325932 0 0 0 0 0.00089970002632360976391 0 0
+  Key 0.00089999992633238413108 0.83333333333333325932 0 0 0 0 0.00089970002632360976391 0 0
   Key -20 0.86666666666666691832 0 0 0 0 -19.835603305712062649 0 0
   Behaviors 1 1
 }
@@ -13083,7 +13085,7 @@ Channel 6
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 1.1351927717526750783 0 0
-  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698109015 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13095,7 +13097,7 @@ Channel 7
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 0 0 0
-  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698109015 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13107,7 +13109,7 @@ Channel 8
   Key 1 0.93333333333333312609 0 0 0 0 0 0 0
   Key 1 0.966666666666666341 0 0 0 0 0 0 0
   Key 1 1.3333333333333330373 0 0 0 0 0 0 0
-  Key 0.57600039243698120117 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0.57600039243698109015 1.3666666666666666963 0 0 0 0 0 0 0
   Key 1 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -13361,7 +13363,7 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.298828567112124688 0.00048571412584611346969 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.298828567112124688 0.0004857141258461135239 0
   Key 0.013599995523691175633 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.345799995896719281 0
   Key -20 1.3333333333333330373 0 0 0 0 18.344516663889692154 0 0
@@ -13703,11 +13705,11 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.307507141759362668 0.00048571412584611346969 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.307507141759362668 0.0004857141258461135239 0
   Key 0.02259999886155128479 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.35404999895641609 0
   Key -20 1.3333333333333330373 0 0 0 0 18.336921617854365252 0 0
-  Key 0.0039144922047853443828 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
+  Key 0.0039144922047853435154 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
   Behaviors 1 1
 }
@@ -14045,11 +14047,11 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.306542850498651376 0.00048571412584611346969 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.306542850498651376 0.0004857141258461135239 0
   Key 0.021599993109703063965 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.353133327017228993 0
   Key -20 1.3333333333333330373 0 0 0 0 18.336921617854365252 0 0
-  Key 0.0039144922047853443828 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
+  Key 0.0039144922047853435154 1.3666666666666666963 0 0 0 0 19.834710743801647226 0 0
   Key -20 1.3999999999999999112 0 0 0 0 -19.83282644671103867 0 0
   Behaviors 1 1
 }
@@ -14387,7 +14389,7 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.315124994942124204 0.00048571412584611346969 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.315124994942124204 0.0004857141258461135239 0
   Key 0.030499994754791259766 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.361291661858558655 0
   Key -20 1.3333333333333330373 0 0 0 0 18.329116667426799125 0 0
@@ -14426,7 +14428,7 @@ Channel 4
   Key -0.91555905342102061883 0.9000000000000000222 0 0 0 0 3.7792956488473081755 -0.033909259097916727432 0
   Key 3.003710508346556729 0.93333333333333312609 0 0 0 0 -0.94917676165784192754 0 0
   Key -0.91555905342102061883 0.966666666666666341 0 0 0 0 0.033620034367584983315 -3.5926637649536128372 0
-  Key -0.91555905342102061883 1.3333333333333330373 0 0 0 0 -0.26238096753756168233 0 0
+  Key -0.91555905342102061883 1.3333333333333330373 0 0 0 0 -0.26238096753756162682 0 0
   Key -1.2017928361892700195 1.3666666666666666963 0 0 0 0 0 0 0
   Key -0.91555905342102061883 1.3999999999999999112 0 0 0 0 0 0 0
   Behaviors 1 1
@@ -14729,7 +14731,7 @@ Channel 1
 { Envelope
   7
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.9000000000000000222 0 0 0 0 19.315317858941853046 0.00048571412584611346969 0
+  Key -20 0.9000000000000000222 0 0 0 0 19.315317858941853046 0.0004857141258461135239 0
   Key 0.030700001865625395348 0.93333333333333312609 0 0 0 0 0.01359594911026550286 0 0
   Key -20 0.966666666666666341 0 0 0 0 -19.848198342668123217 -18.361475001710161337 0
   Key -20 1.3333333333333330373 0 0 0 0 18.329483333897446329 0 0
@@ -16937,10 +16939,10 @@ Channel 1
 Channel 2
 { Envelope
   4
-  Key -7.4505805969238272978e-09 0 0 0 0 0 0 0 0
-  Key -7.4505805969238272978e-09 1.1000000000000000888 0 0 0 0 0 0 0
-  Key -7.4505805969238272978e-09 1.1333333333333333037 0 0 0 0 0 0 0
-  Key -7.4505805969238272978e-09 1.1666666666666669627 0 0 0 0 0 0 0
+  Key -7.450580596923828125e-09 0 0 0 0 0 0 0 0
+  Key -7.450580596923828125e-09 1.1000000000000000888 0 0 0 0 0 0 0
+  Key -7.450580596923828125e-09 1.1333333333333333037 0 0 0 0 0 0 0
+  Key -7.450580596923828125e-09 1.1666666666666669627 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -21344,7 +21346,7 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 1.3999999999999999112 0 0 0 0 19.630591614994902017 0 0
+  Key -20 1.3999999999999999112 0 0 0 0 19.630591614994905569 0 0
   Key 0.097986653447151184082 1.433333333333332682 0 0 0 0 0 0 0
   Key -20 1.466666666666666341 0 0 0 0 -19.931887590195518811 0 0
   Behaviors 1 1
@@ -21658,7 +21660,7 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 1.3999999999999999112 0 0 0 0 19.53488372093024239 0 0
+  Key -20 1.3999999999999999112 0 0 0 0 19.534883720930238837 0 0
   Key 0 1.433333333333332682 0 0 0 0 0 0 0
   Key -20 1.466666666666666341 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
@@ -21971,7 +21973,7 @@ Channel 0
 Channel 1
 { Envelope
   4
-  Key 0 0 0 0 0 0 0 -19.996124782018988242 0
+  Key 0 0 0 0 0 0 0 -19.996124782018991795 0
   Key -20 1.433333333333332682 0 0 0 0 0 0 0
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key -20 1.5 0 0 0 0 -19.834710743801647226 0 0
@@ -22286,8 +22288,8 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 1.466666666666666341 0 0 0 0 19.565137778802046853 0.00021777780105670290281 0
-  Key 0.0098000010475516336622 1.5 0 0 0 0 0.009798186568557454984 0 0
+  Key -20 1.466666666666666341 0 0 0 0 19.565137778802050406 0.00021777780105670290281 0
+  Key 0.0098000010475516319275 1.5 0 0 0 0 0.009798186568557454984 0 0
   Key -20 1.533333333333333437 0 0 0 0 -19.844429753105007563 0 0
   Behaviors 1 1
 }
@@ -22593,16 +22595,16 @@ Channel 0
   Key 0 0 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 1
 { Envelope
   4
-  Key 0 0 0 0 0 0 0 -19.996296982040362877 0
+  Key 0 0 0 0 0 0 0 -19.996296982040359325 0
   Key -20 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key -20 1.5666666666666666519 0 0 0 0 -19.834710743801654331 0 0
+  Key -20 1.5666666666666664298 0 0 0 0 -19.834710743801650779 0 0
   Behaviors 1 1
 }
 Channel 2
@@ -22611,7 +22613,7 @@ Channel 2
   Key 0 0 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -22620,7 +22622,7 @@ Channel 3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -22629,7 +22631,7 @@ Channel 4
   Key 0 0 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 5
@@ -22638,7 +22640,7 @@ Channel 5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
-  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 6
@@ -22647,7 +22649,7 @@ Channel 6
   Key 1 0 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
-  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 7
@@ -22656,7 +22658,7 @@ Channel 7
   Key 1 0 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
-  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 8
@@ -22665,7 +22667,7 @@ Channel 8
   Key 1 0 0 0 0 0 0 0 0
   Key 1 1.5 0 0 0 0 0 0 0
   Key 1 1.533333333333333437 0 0 0 0 0 0 0
-  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.5666666666666664298 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 IKInitCustomFrame 0
@@ -22892,6 +22894,1423 @@ NodeEdges 0
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000037 Objects/enemies/yeti.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key -20 1.6000000000000000888 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1.533333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5666666666666666519 0 0 0 0 0 0 0
+  Key 1 1.6000000000000000888 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin DisplacementHandler 7 .Anchor
+EndPlugin
+Plugin DisplacementHandler 8 .Anchor
+EndPlugin
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+AddNullObject 10000038 yeti_primitive
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+ParentItem 10000037
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 FiberPrimitive
+{ SurfaceLibrary
+  { Surface
+    "fiber"
+    ""
+    CompatibilityVersion 77a
+    { SurfaceCustomAOVs
+    }
+    { Nodes
+      { Root
+        Location 0 0
+        Zoom 1
+        Disabled 1
+      }
+      Version 1
+      { Nodes
+        Server "Surface"
+        { Tag
+          RealName "Surface"
+          Name "Surface"
+          Coordinates -1321 -386
+          Mode 1
+          Selected 0
+          { Data
+          }
+          Preview ""
+        }
+        Server "Input"
+        { Tag
+          RealName "Input"
+          Name "Input"
+          Coordinates 0 -114
+          Mode 1
+          Selected 0
+          { Data
+          }
+          Preview "Item ID"
+        }
+        Server "Principled BSDF"
+        { Tag
+          RealName "Principled BSDF"
+          Name "Principled BSDF (1)"
+          Coordinates -610 -218
+          Mode 1
+          Selected 0
+          { Data
+            { Attributes
+              { Metadata
+                Version 1
+                Enumerations 0
+                { AttributeData
+                  { Attr
+                    Name "Color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.50200000000000000178 0.50200000000000000178 0.50200000000000000178
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Roughness"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.10000000000000000555
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Specular"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.5
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Specular Tint"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Sheen"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Sheen Tint"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Thin"
+                    Flags 0
+                    Tag "FORMAT" "Float"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "int"
+                      0
+                    }
+                  }
+                  { Attr
+                    Name "Translucency"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Flatness"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Subsurface"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Subsurface Color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.50200000000000000178 0.50200000000000000178 0.50200000000000000178
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Distance"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Distance"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.10000000000000000555
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Luminous"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Luminous Color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.50200000000000000178 0.50200000000000000178 0.50200000000000000178
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Metallic"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Anisotropic"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Rotation"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Clearcoat"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Clearcoat Gloss"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        1
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Transparency"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Transmittance"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.50200000000000000178 0.50200000000000000178 0.50200000000000000178
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Transmittance Distance"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Distance"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        1
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Refraction Index"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Float"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        1.5
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Bump Height"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Preview "Material"
+        }
+        Server "Hair"
+        { Tag
+          RealName "Hair"
+          Name "Hair (1)"
+          Coordinates 0 0
+          Mode 1
+          Selected 0
+          { Data
+            { Attributes
+              { Metadata
+                Version 1
+                Enumerations 0
+                { AttributeData
+                  { Attr
+                    Name "colormode"
+                    Flags 0
+                    { Value
+                      "int"
+                      1
+                    }
+                  }
+                  { Attr
+                    Name "textured_color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.2999999999999999889 0.2000000000000000111 0.10000000000000000555
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Root Color 1"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.4156862795352935791 0.40000000596046447754 0.34117648005485534668
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Tip Color 1"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.96078431606292724609 0.96078431606292724609 0.96078431606292724609
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Blend"
+                    Flags 0
+                    { Value
+                      "int"
+                      0
+                    }
+                  }
+                  { Attr
+                    Name "Root Color 2"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.46274510025978088379 0.3764705955982208252 0.36078432202339172363
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Tip Color 2"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        0.92156863212585449219 0.9176470637321472168 0.91372549533843994141
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Color Mix"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.5
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Highlight"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.5
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Diffuse"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.80000000000000004441
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Specular Color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        1 1 1
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Specular"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.10000000000000000555
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Glossiness"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.05999999999999999778
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Translucency"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Tip Transparency"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Cuticle Tilt"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        -0.14999999999999999445
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Secondary Specular Color"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Color"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam3"
+                      { Value
+                        3
+                        1 1 1
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Secondary Specular"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Secondary Glossiness"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.020000000000000000416
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Secondary Cuticle Tilt"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0.14999999999999999445
+                      }
+                    }
+                  }
+                  { Attr
+                    Name "Shadow Transparency"
+                    Flags 0
+                    Tag "ENVELOPE" "On"
+                    Tag "FORMAT" "Percent"
+                    Tag "TEXTURE" "On"
+                    Tag "NodeInputID" ""
+                    { Value
+                      "vparam"
+                      { Value
+                        1
+                        0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          Preview "Material"
+          Placement 3
+        }
+      }
+      { Connections
+        NodeName "Surface"
+        InputName "Material"
+        InputNodeName "Hair (1)"
+        InputOutputName "Material"
+      }
+    }
+    { SurfaceShader
+      SurfaceShaderName "Photoreal Integrator"
+      { SurfaceShaderData
+        { Attributes
+          { Metadata
+            Version 1
+            Enumerations 0
+            { AttributeData
+              { Attr
+                Name "AlphaChannel"
+                Flags 0
+                { Value
+                  "int"
+                  2
+                }
+              }
+              { Attr
+                Name "ConstantAlpha"
+                Flags 0
+                { Value
+                  "double"
+                  1
+                }
+              }
+              { Attr
+                Name "Glossy Reflections"
+                Flags 0
+                { Value
+                  "int"
+                  1
+                }
+              }
+              { Attr
+                Name "Reflection Options"
+                Flags 0
+                { Value
+                  "int"
+                  0
+                }
+              }
+              { Attr
+                Name "Refraction Options"
+                Flags 0
+                { Value
+                  "int"
+                  0
+                }
+              }
+              { Attr
+                Name "Reflection Map Seam Angle"
+                Flags 0
+                Tag "FORMAT" "Angle"
+                { Value
+                  "double"
+                  0
+                }
+              }
+              { Attr
+                Name "Reflection Map Image"
+                Flags 0
+                { Value
+                  "ClipID"
+                }
+              }
+              { Attr
+                Name "Refraction Map Seam Angle"
+                Flags 0
+                Tag "FORMAT" "Angle"
+                { Value
+                  "double"
+                  0
+                }
+              }
+              { Attr
+                Name "Refraction Map Image"
+                Flags 0
+                { Value
+                  "ClipID"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+{ ParentName
+  "yeti"
+}
+{ MeshProxy
+  10000037
+}
+{ Clone
+  1
+}
 EndPlugin
 
 GlobalMipmapMultiplier 1.000000
@@ -23786,7 +25205,7 @@ CameraMotion
 NumChannels 6
 Channel 0
 { Envelope
-  47
+  48
   Key 0.0002400376833975315365 0 0 0 0 0 0 0 0
   Key 0.0002400376833975315365 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0.0002400376833975315365 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23805,7 +25224,7 @@ Channel 0
   Key -0.00025996327167376875877 0.5 0 0 0 0 0 0 0
   Key -0.00025996327167376875877 0.53333333333333321491 0 0 0 0 0 0 0
   Key -0.0005915444344282152437 0.56666666666666654084 0 0 0 0 9.951913875550771481e-05 0 0
-  Key -0.0005915444344282152437 0.5999999999999999778 0 0 0 0 1.075241823952566531e-19 0 0
+  Key -0.0005915444344282152437 0.5999999999999999778 0 0 0 0 1.0752418239525662903e-19 0 0
   Key 0.00040845019975677127185 0.63333333333333319271 0 0 0 0 0 0 0
   Key 0.00040845019975677127185 0.66666666666666651864 0 0 0 0 0 0 0
   Key 0.00040845019975677127185 0.69999999999999995559 0 0 0 0 0 0 0
@@ -23829,16 +25248,17 @@ Channel 0
   Key -0.0092978626489639264879 1.3000000000000000444 0 0 0 0 0 0 0
   Key -0.0064709340222179889679 1.3333333333333330373 0 0 0 0 -1.7203869183241064497e-18 0 0
   Key -0.015109692700207231694 1.3666666666666666963 0 0 0 0 -4.3943339635517968047e-05 0 0
-  Key -0.01187584362924098795 1.3999999999999999112 0 0 0 0 0 0 0
+  Key -0.01187584362924099142 1.3999999999999999112 0 0 0 0 0 0 0
   Key -0.038804385811090483238 1.433333333333332682 0 0 0 0 6.842311502488193154e-05 0 0
   Key -0.00690280180424451828 1.466666666666666341 0 0 0 0 0.028996227447651640868 0 0
   Key -0.00043783272849395871162 1.5 0 0 0 0 8.2041975880457344893e-05 0 0
-  Key -0.00032231933437287807465 1.533333333333333437 0 0 0 0 -1.0385305028070104193e-06 0 0
+  Key -0.00032231933437287812886 1.533333333333333437 0 0 0 0 -1.0385305028070104193e-06 0 0
+  Key -0.00014203327009454369545 1.5666666666666666519 0 0 0 0 0.00010021151166624772146 0 0
   Behaviors 1 1
 }
 Channel 1
 { Envelope
-  47
+  48
   Key 0.0093099856749176979065 0 0 0 0 0 0 0 0
   Key 0.0093099856749176979065 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0.012209982611238956451 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23873,7 +25293,7 @@ Channel 1
   Key 0.013210009783506391698 1.033333333333333437 0 0 0 0 1.7203869183241064497e-18 0 0
   Key 0.049910038709640495991 1.0666666666666664298 0 0 0 0 0 0 0
   Key 0.029610028490424159658 1.1000000000000000888 0 0 0 0 -9.9175232501069407205e-05 0 0
-  Key 0.03400999307632446983 1.1333333333333333037 0 0 0 0 -3.4407738366482128994e-18 0 0
+  Key 0.034009993076324462891 1.1333333333333333037 0 0 0 0 -3.4407738366482128994e-18 0 0
   Key 0.023609988391399383545 1.1666666666666669627 0 0 0 0 -6.8815476732964257987e-18 0 0
   Key 0.066409945487976074219 1.1999999999999999556 0 0 0 0 0 0 0
   Key 0.037609931081533432007 1.2333333333333327264 0 0 0 0 -9.9175232501069407205e-05 0 0
@@ -23881,16 +25301,17 @@ Channel 1
   Key 0.016609940677881240845 1.3000000000000000444 0 0 0 0 0 0 0
   Key 0.01450993027538061142 1.3333333333333330373 0 0 0 0 0.00029752015574904512813 0 0
   Key -0.0018900671275332570076 1.3666666666666666963 0 0 0 0 0 0 0
-  Key 0.021709930151700970041 1.3999999999999999112 0 0 0 0 0.00029752061756189204355 0 0
+  Key 0.021709930151700966572 1.3999999999999999112 0 0 0 0 0.00029752061756189204355 0 0
   Key 0.085909977555274963379 1.433333333333332682 0 0 0 0 0 0 0
-  Key 0.02020993269979953072 1.466666666666666341 0 0 0 0 -0.063669468499412240625 0 0
+  Key 0.02020993269979952725 1.466666666666666341 0 0 0 0 -0.063669468499412240625 0 0
   Key 0.013809935189783573151 1.5 0 0 0 0 3.4407738366482128994e-18 0 0
   Key 0.019409935921430587769 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0.039409920573234558105 1.5666666666666666519 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
-  47
+  48
   Key -0.042899198830127716064 0 0 0 0 0 0 0 0
   Key -0.042899198830127716064 0.033333333333333325932 0 0 0 0 0 0 0
   Key -0.042899198830127716064 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23931,18 +25352,19 @@ Channel 2
   Key -0.073495626449584960938 1.2333333333333327264 0 0 0 0 0 0 0
   Key -0.073495626449584960938 1.2666666666666663854 0 0 0 0 0 0 0
   Key -0.042658764868974692608 1.3000000000000000444 0 0 0 0 0 0 0
-  Key -0.02976464107632636677 1.3333333333333330373 0 0 0 0 6.8815476732964257987e-18 0 0
+  Key -0.029764641076326370239 1.3333333333333330373 0 0 0 0 6.8815476732964257987e-18 0 0
   Key -0.059494584798812880089 1.3666666666666666963 0 0 0 0 -0.00019341830379706771302 0 0
   Key -0.037654008716344833374 1.3999999999999999112 0 0 0 0 0 0 0
   Key -0.1328172832727432251 1.433333333333332682 0 0 0 0 -0.00012242843296902242481 0 0
   Key -0.033280510455369942402 1.466666666666666341 0 0 0 0 0.093728726314119076291 0 0
   Key -0.023386871442198753357 1.5 0 0 0 0 -0.00011375374045254473074 0 0
-  Key -0.050382386893033981323 1.533333333333333437 0 0 0 0 -0.00019834492324797574803 0 0
+  Key -0.050382386893033981323 1.533333333333333437 0 0 0 0 -0.00019834492324797572092 0 0
+  Key -0.073381900787353515625 1.5666666666666666519 0 0 0 0 -0.00029717102523677603899 0 0
   Behaviors 1 1
 }
 Channel 3
 { Envelope
-  47
+  48
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -23989,12 +25411,13 @@ Channel 3
   Key 0.27576217055320734195 1.433333333333332682 0 0 0 0 0 0 0
   Key 0.16057020425796508789 1.466666666666666341 0 0 0 0 5.505238138637140639e-17 0 0
   Key 0.0052359132096171379089 1.5 0 0 0 0 0 0 0
-  Key -0.0034907329827547073364 1.533333333333333437 0 0 0 0 0 0 0
+  Key -0.0034907329827547077701 1.533333333333333437 0 0 0 0 0 0 0
+  Key -0.0034907329827547073364 1.5666666666666666519 0 0 0 0 4.3009672958102656427e-19 0 0
   Behaviors 1 1
 }
 Channel 4
 { Envelope
-  47
+  48
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -24041,12 +25464,13 @@ Channel 4
   Key 0.35081169009208679199 1.433333333333332682 0 0 0 0 0 0 0
   Key 0.33335813879966724738 1.466666666666666341 0 0 0 0 0 0 0
   Key 0.30543264746665960141 1.5 0 0 0 0 5.505238138637140639e-17 0 0
-  Key 0.22689285874366760254 1.533333333333333437 0 0 0 0 -5.5052381386371400227e-17 0 0
+  Key 0.22689285874366760254 1.533333333333333437 0 0 0 0 -5.505238138637140639e-17 0 0
+  Key 0.22689285874366760254 1.5666666666666666519 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 5
 { Envelope
-  47
+  48
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
   Key 0 0.066666666666666651864 0 0 0 0 0 0 0
@@ -24094,6 +25518,7 @@ Channel 5
   Key 0 1.466666666666666341 0 0 0 0 0 0 0
   Key 0 1.5 0 0 0 0 0 0 0
   Key 0 1.533333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5666666666666666519 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 IKInitCustomFrame 0
@@ -24172,6 +25597,524 @@ CopyToPerspective 0
 VolumeClipDiscance 0.1
 DynamicRangeMin 0
 DynamicRangeLimit 1
+Plugin PixelFilterHandler 1 FiberFilter
+Header "FiberFX © 1995-2016 NewTek"
+Version 6.0999999
+EdgeLimit 100000
+ToggleOff "1"
+{ FFobject
+  Name "yeti"
+  Itemid 10000037
+  { Quantity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.40000001
+        0
+      }
+    }
+  }
+  Cluster 1
+  { Width
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.00050000002
+        0
+      }
+    }
+  }
+  Subdivide 2
+  { Kink
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { Radius
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.02
+        0
+      }
+    }
+  }
+  { ClusterRadius
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.003
+        0
+      }
+    }
+  }
+  { Swirl
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Splay
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Tuft
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Stray
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Random
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Clump
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Scale
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { Gravity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Bias
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { BiasMapName
+    ""
+  }
+  { SurfaceQty
+    0
+  }
+  { Relax
+    0
+  }
+  { Vmap
+    ""
+  }
+  { Endcap
+    0
+  }
+  { Bundle
+    0
+  }
+  { BundleCnt
+    3
+  }
+  { BundleTwist
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { BundleStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        2
+        0
+      }
+    }
+  }
+  { BundleSpread
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.02
+        0
+      }
+    }
+  }
+  { PartAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  Surface
+  { Usedot
+    0
+  }
+  { DynaGravity
+    0
+  }
+  { EdgeQty
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        2
+        0
+      }
+    }
+  }
+  { Tilt
+    -0.2
+  }
+  { Bump
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  StrandVCnt 1
+  ToolDraw 0
+  SubdLevel -1
+  RandomSwirl 0
+  { SwirlTurns
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  VolumeType 0
+  VMapRemap 0
+  UVMap 0
+  PrimitiveID 10000038
+  Active 0
+}
+{ FFobject
+  Name "yeti"
+  Itemid 10000037
+  { Quantity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  Cluster a
+  { Width
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.00015000001
+        0
+      }
+    }
+  }
+  Subdivide 3
+  { Kink
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { Radius
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.02
+        0
+      }
+    }
+  }
+  { ClusterRadius
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.00030000001
+        0
+      }
+    }
+  }
+  { Swirl
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.2
+        0
+      }
+    }
+  }
+  { Splay
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { Tuft
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { Stray
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { Random
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.2
+        0
+      }
+    }
+  }
+  { Clump
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { Scale
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.89999998
+        0
+      }
+    }
+  }
+  { Gravity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { Bias
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { BiasMapName
+    ""
+  }
+  { SurfaceQty
+    5
+  }
+  { Relax
+    0
+  }
+  { Vmap
+    ""
+  }
+  { Endcap
+    0
+  }
+  { Bundle
+    0
+  }
+  { BundleCnt
+    3
+  }
+  { BundleTwist
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { BundleStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        2
+        0
+      }
+    }
+  }
+  { BundleSpread
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.02
+        0
+      }
+    }
+  }
+  { PartAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  Surface "Beard" "Arms" "Legs" "Body" "Hip"
+  { Usedot
+    0
+  }
+  { DynaGravity
+    0
+  }
+  { EdgeQty
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        2
+        0
+      }
+    }
+  }
+  { Tilt
+    -0.2
+  }
+  { Bump
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  StrandVCnt 1
+  ToolDraw 0
+  SubdLevel -1
+  RandomSwirl 0
+  { SwirlTurns
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  VolumeType 0
+  VMapRemap 0
+  UVMap 0
+  PrimitiveID 10000038
+  Active 1
+}
+EndPlugin
 
 RenderMode 2
 RayTraceEffects 15
@@ -24267,7 +26210,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 54
+CurrentObject 55
 CurrentLight 3
 CurrentCamera 1
 GraphEditorData

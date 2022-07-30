@@ -7,6 +7,7 @@
 #include <ppl7-grafix.h>
 #include "animation.h"
 #include "particle.h"
+
 class SDL;
 struct SDL_Renderer;
 class SpriteTexture;
@@ -69,7 +70,8 @@ public:
 		Helena=112,
 		Scorpion=113,
 		Bat=114,
-		Bird=115
+		Bird=115,
+		Yeti=116
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -95,6 +97,7 @@ public:
 		Scorpion,
 		Bird,
 		LevelEnd,
+		Yeti,
 		MaxSpritesets
 	};
 };
@@ -947,7 +950,6 @@ public:
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 
 };
-
 
 
 

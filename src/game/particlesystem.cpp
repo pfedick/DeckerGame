@@ -128,12 +128,10 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 
     for (it=visible_particle_map[active_map][l].begin();it != visible_particle_map[active_map][l].end();++it) {
         const Particle* particle=it->second;
-        if (particle->layer == layer) {
-            spriteset[particle->sprite_set]->drawScaled(renderer,
-                particle->p.x + coords.x,
-                particle->p.y + coords.y,
-                particle->sprite_no, particle->scale, particle->color_mod);
-        }
+        spriteset[particle->sprite_set]->drawScaled(renderer,
+            particle->p.x + coords.x,
+            particle->p.y + coords.y,
+            particle->sprite_no, particle->scale, particle->color_mod);
     }
 }
 
