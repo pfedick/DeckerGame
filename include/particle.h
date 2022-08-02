@@ -83,6 +83,7 @@ private:
     double next_animation;
     float life_time;
     float age;
+    bool visible;
     AnimationCycle animation;
 
     //float weight;

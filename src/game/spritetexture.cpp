@@ -461,7 +461,7 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
-void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, ppl7::grafix::Color color_modulation) const
+void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
@@ -469,7 +469,6 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	if (it == SpriteList.end()) return;
 	const SpriteIndexItem& item=it->second;
 	SDL_Rect tr;
-	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
 	if (scale_factor == 1.0) {
 		tr.x=x + item.Offset.x - item.Pivot.x;
 		tr.y=y + item.Offset.y - item.Pivot.y;

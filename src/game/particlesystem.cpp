@@ -224,6 +224,9 @@ void ParticleUpdateThread::run()
                     if (x + 64 > 0 && y + 64 > 0 && x - 64 < width && y - 64 < height) {
                         uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
                         visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
+                        particle->visible=true;
+                    } else {
+                        particle->visible=false;
                     }
                 }
             }

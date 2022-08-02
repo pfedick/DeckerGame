@@ -57,6 +57,7 @@ Particle::Particle()
     base_scale=0.0f;
     birth_time=next_animation=0.0f;
     color_mod.set(255, 255, 255, 255);
+    visible=true;
 }
 
 Particle::~Particle()
@@ -161,18 +162,20 @@ void Particle::initAnimation(Particle::Type type)
 
 void Particle::update(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
-    if (time > next_animation) {
-        next_animation=time + 0.056f;
-        animation.update();
-        sprite_no=animation.getFrame();
+    // Color and scale gradients and animation must only be updated if particle is visible
+    if (visible) {
+        if (time > next_animation) {
+            next_animation=time + 0.056f;
+            animation.update();
+            sprite_no=animation.getFrame();
+        }
+        if (useColorGradient) updateColorGradient();
+        if (useScaleGradient) updateScaleGradient();
     }
-    if (useColorGradient) updateColorGradient();
-    if (useScaleGradient) updateScaleGradient();
-    //if (gravity.y!=0 || gravity
-    velocity+=(gravity * weight * frame_rate_compensation);
-    p+=(velocity * frame_rate_compensation);
-    //p.x+=velocity.x;
-    //p.y+=velocity.y;
+    velocity.x+=gravity.x * weight * frame_rate_compensation;
+    velocity.y+=gravity.y * weight * frame_rate_compensation;
+    p.x+=velocity.x * frame_rate_compensation;
+    p.y+=velocity.y * frame_rate_compensation;
 }
 
 void Particle::updateColorGradient()
@@ -190,6 +193,7 @@ void Particle::updateColorGradient()
     float n1=1.0f - ((age - current_color.age) / color_age_diff);
     float n2=1.0f - ((next_color.age - age) / color_age_diff);
     color_mod=multiplyWithAlpha(current_color.color, n1) + multiplyWithAlpha(next_color.color, n2);
+
 }
 
 void Particle::updateScaleGradient()
