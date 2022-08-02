@@ -41,6 +41,13 @@ void Metrics::Timer::addDuration(double d)
     duration+=d;
 }
 
+Metrics::Timer& Metrics::Timer::operator +=(const Metrics::Timer& other)
+{
+    duration+=other.duration;
+    return *this;
+}
+
+
 
 Metrics::Metrics()
 {
@@ -87,7 +94,7 @@ void Metrics::newFrame()
     framecount++;
 }
 
-Metrics Metrics::getAverage()
+Metrics Metrics::getAverage() const
 {
     Metrics m;
     if (framecount) {
@@ -118,4 +125,63 @@ Metrics Metrics::getAverage()
         m.visible_particles=visible_particles / framecount;
     }
     return m;
+}
+
+
+Metrics& Metrics::operator+=(const Metrics& other)
+{
+    framecount+=other.framecount;
+    fps+=other.fps;
+    total_sprites+=other.total_sprites;
+    visible_sprites+=other.visible_sprites;
+    total_objects+=other.total_objects;
+    visible_objects+=other.visible_objects;
+    total_particles+=other.total_particles;
+    visible_particles+=other.visible_particles;
+    time_frame+=other.time_frame;
+    time_total+=other.time_total;
+    time_draw_ui+=other.time_draw_ui;
+    time_draw_world+=other.time_draw_world;
+    time_events+=other.time_events;
+    time_update_sprites+=other.time_update_sprites;
+    time_update_objects+=other.time_update_objects;
+    time_update_particles+=other.time_update_particles;
+    time_particle_thread+=other.time_particle_thread;
+    time_draw_background+=other.time_draw_background;
+    time_draw_tsop+=other.time_draw_tsop;
+    time_sprites+=other.time_sprites;
+    time_objects+=other.time_objects;
+    time_draw_particles+=other.time_draw_particles;
+    time_plane+=other.time_plane;
+    time_misc+=other.time_misc;
+    return *this;
+}
+
+
+void Metrics::print() const
+{
+    printf("==================== METRICS DUMP ==============================\n");
+    printf("Total Frames collected: %d\n", framecount);
+    Metrics avg=getAverage();
+    printf("fps: %d\n", avg.fps);
+    printf("Total Sprites:   %6zu, visible sprites:   %6zu\n", avg.total_sprites, avg.visible_sprites);
+    printf("Total Objects:   %6zu, visible Objects:   %6zu\n", avg.total_objects, avg.visible_objects);
+    printf("Total Particles: %6zu, visible Particles: %6zu\n", avg.total_particles, avg.visible_particles);
+    printf("\n");
+    printf("Timer total: %6.3f ms, Time Frame: %6.3f\n", avg.time_total.get() * 1000.0f, avg.time_frame.get() * 1000.0f);
+    printf("  draw userinterface:     %6.3f\n", avg.time_draw_ui.get() * 1000.0f);
+    printf("  handle events:          %6.3f\n", avg.time_events.get() * 1000.0f);
+    printf("  misc:                   %6.3f\n", avg.time_misc.get() * 1000.0f);
+    printf("  draw the world:         %6.3f\n", avg.time_draw_world.get() * 1000.0f);
+    printf("    update sprites:       %6.3f\n", avg.time_update_sprites.get() * 1000.0f);
+    printf("    update objects:       %6.3f\n", avg.time_update_objects.get() * 1000.0f);
+    printf("    update particles:     %6.3f\n", avg.time_update_particles.get() * 1000.0f);
+    printf("    draw background:      %6.3f\n", avg.time_draw_background.get() * 1000.0f);
+    printf("    draw tiles:           %6.3f\n", avg.time_plane.get() * 1000.0f);
+    printf("    draw sprites:         %6.3f\n", avg.time_sprites.get() * 1000.0f);
+    printf("    draw objects:         %6.3f\n", avg.time_objects.get() * 1000.0f);
+    printf("    draw particles:       %6.3f\n", avg.time_draw_particles.get() * 1000.0f);
+    printf("  particle update thread: %6.3f\n", avg.time_particle_thread.get() * 1000.0f);
+
+    fflush(stdout);
 }

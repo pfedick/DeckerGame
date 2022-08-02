@@ -25,11 +25,15 @@ public:
         void clear();
         double get() const;
         void addDuration(double d);
+
+        Timer& operator +=(const Timer& other);
     };
     Metrics();
     void clear();
     void newFrame();
-    Metrics getAverage();
+    void print() const;
+    Metrics getAverage() const;
+    Metrics& operator +=(const Metrics& other);
 
     Timer time_frame;
     Timer time_total;

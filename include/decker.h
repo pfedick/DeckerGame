@@ -200,10 +200,11 @@ public:
 	void draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
+	void draw(SDL_Renderer* renderer, int x, int y, int id, const SDL_Color& color_modulation) const;
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
-	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, ppl7::grafix::Color color_modulation) const;
+	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
 	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;

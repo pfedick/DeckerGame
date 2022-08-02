@@ -642,13 +642,23 @@ void Game::run()
 	wm->setKeyboardFocus(world_widget);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
-	Metrics last_metrics;
+	Metrics last_metrics, total_metrics;
 	metrics.clear();
 	ppl7::ppl_time_t last_second=ppl7::GetTime();
+	ppl7::ppl_time_t start_total_metrics=last_second + 5;
+	ppl7::ppl_time_t end_total_metrics=start_total_metrics + 60;
 	while (!quitGame) {
 		ppl7::ppl_time_t current_second=ppl7::GetTime();
 		if (current_second > last_second) {
 			last_second=current_second;
+			if (current_second >= start_total_metrics) {
+				total_metrics+=metrics;
+				if (current_second >= end_total_metrics) {
+					total_metrics.print();
+					total_metrics.clear();
+					end_total_metrics=current_second + 60;
+				}
+			}
 			last_metrics=metrics.getAverage();
 			mainmenue->updateMetrics(last_metrics);
 			metrics.clear();
