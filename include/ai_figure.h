@@ -96,6 +96,17 @@ public:
 	void toggle(bool enable, Object* source=NULL) override;
 };
 
+class AutoGeorge : public AiEnemy
+{
+private:
+
+
+public:
+	AutoGeorge();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+};
+
 
 
 

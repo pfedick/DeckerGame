@@ -383,3 +383,59 @@ Timer total:  4.288 ms, Time Frame: 16.679
   particle update thread:  5.326
 ```
 This would bring a bit. But most of the particles in this scene are visible. So this is not realy a good idea.
+
+
+## replace map with list
+we insert all visible particles into a map, which is ordered by drawing coordinates. But
+does drawing order is relevant for particles? We could dramatically reduce cpu time when
+we replace the map by a simple list:
+
+### timings with map
+```
+==================== METRICS DUMP ==============================
+Total Frames collected: 3656
+fps: 59
+Total Sprites:        0, visible sprites:        0
+Total Objects:        6, visible Objects:        6
+Total Particles:  15028, visible Particles:  14090
+
+Timer total:  4.141 ms, Time Frame: 16.679
+  draw userinterface:      0.043
+  handle events:           0.019
+  misc:                    0.000
+  draw the world:          4.078
+    update sprites:        0.001
+    update objects:        0.242
+    update particles:      0.660
+    draw background:       0.002
+    draw tiles:            0.157
+    draw sprites:          0.001
+    draw objects:          0.003
+    draw particles:        3.009
+  particle update thread:  5.545
+```
+### timings with list
+```
+==================== METRICS DUMP ==============================
+Total Frames collected: 3653
+fps: 59
+Total Sprites:        0, visible sprites:        0
+Total Objects:        6, visible Objects:        6
+Total Particles:  14915, visible Particles:  14864
+
+Timer total:  4.328 ms, Time Frame: 16.692
+  draw userinterface:      0.035
+  handle events:           0.010
+  misc:                    0.001
+  draw the world:          4.283
+    update sprites:        0.001
+    update objects:        0.229
+    update particles:      0.954
+    draw background:       0.002
+    draw tiles:            0.161
+    draw sprites:          0.001
+    draw objects:          0.003
+    draw particles:        2.929
+  particle update thread:  3.522
+```
+But Flames look much better when we keep the drawing order

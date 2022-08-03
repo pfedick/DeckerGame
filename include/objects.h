@@ -71,7 +71,8 @@ public:
 		Scorpion=113,
 		Bat=114,
 		Bird=115,
-		Yeti=116
+		Yeti=116,
+		AutoGeorge=117
 	};
 	static ppl7::String name(Type::ObjectType type);
 };

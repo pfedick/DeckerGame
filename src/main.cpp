@@ -38,7 +38,7 @@ void start()
 
 
 	//game.startLevel("level/test.lvl");
-	game.startLevel("level/perftest.lvl");
+	game.startLevel("level/start.lvl");
 	//game.startLevel("level/particle.lvl");
 	game.showUi(true);
 	game.run();

@@ -109,6 +109,7 @@ OBJECTS=compile/main.o \
 	compile/object_wallenstein.o \
 	compile/object_helena.o \
 	compile/object_yeti.o \
+	compile/object_autogeorge.o \
 	compile/object_extralife.o \
 	compile/object_levelend.o \
 	compile/audio_audiosystem.o \
@@ -532,6 +533,11 @@ compile/object_yeti.o: src/objects/yeti.cpp Makefile include/objects.h include/p
 	include/ai_figure.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_yeti.o -c src/objects/yeti.cpp $(CFLAGS)
+
+compile/object_autogeorge.o: src/objects/autogeorge.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_autogeorge.o -c src/objects/autogeorge.cpp $(CFLAGS)
 
 compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
