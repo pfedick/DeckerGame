@@ -160,7 +160,7 @@ void Particle::initAnimation(Particle::Type type)
 }
 
 
-void Particle::update(double time, TileTypePlane& ttplane, float frame_rate_compensation)
+void Particle::update(double time, float frame_rate_compensation)
 {
     // Color and scale gradients and animation must only be updated if particle is visible
     if (visible) {

@@ -27,6 +27,18 @@ enum class EmitterType {
     Ellipse
 };
 
+typedef struct {
+    float x;
+    float y;
+} PARTICLE_POINT;
+
+typedef struct {
+    PARTICLE_POINT p;
+    PARTICLE_POINT velocity;
+    PARTICLE_POINT gravity;
+    float weight;
+} PARTICLE;
+
 class Particle
 {
     friend class ParticleSystem;
@@ -124,7 +136,7 @@ public:
 
     Particle();
     virtual ~Particle();
-    virtual void update(double time, TileTypePlane& ttplane, float frame_rate_compensation);
+    virtual void update(double time, float frame_rate_compensation);
 
     void initAnimation(Particle::Type type);
     void initColorGradient(const std::list<ColorGradientItem>& gradient);
@@ -149,7 +161,7 @@ private:
     double time;
     TileTypePlane* ttplane;
     Player* player;
-    ppl7::grafix::Point worldcoords;
+    ppl7::grafix::PointF worldcoords;
     ppl7::grafix::Rect viewport;
     float frame_rate_compensation;
     double thread_duration;

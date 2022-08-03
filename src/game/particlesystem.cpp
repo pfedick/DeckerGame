@@ -85,7 +85,8 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
     update_thread.time=time;
     update_thread.ttplane=&ttplane;
     update_thread.player=&player;
-    update_thread.worldcoords=worldcoords;
+    update_thread.worldcoords.x=worldcoords.x;
+    update_thread.worldcoords.y=worldcoords.y;
     update_thread.viewport=viewport;
     update_thread.setVisibleParticleMap(visible_particle_map[active_map]);
     active_map=(active_map + 1) & 1;
@@ -212,16 +213,16 @@ void ParticleUpdateThread::run()
             for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
                 visible_particle_map[i].clear();
             }
-            int width=viewport.width();
-            int height=viewport.height();
+            float width=viewport.width() + 64;
+            float height=viewport.height() + 64;
             for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
-                    particle->age=(time - particle->birth_time) / particle->life_time;
-                    particle->update(time, *ttplane, frame_rate_compensation);
-                    int x=(int)particle->p.x - worldcoords.x;
-                    int y=(int)particle->p.y - worldcoords.y;
-                    if (x + 64 > 0 && y + 64 > 0 && x - 64 < width && y - 64 < height) {
+                    particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
+                    particle->update(time, frame_rate_compensation);
+                    float x=particle->p.x - (float)worldcoords.x;
+                    float y=particle->p.y - (float)worldcoords.y;
+                    if (x > -64 && y > -64 && x < width && y < height) {
                         uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
                         visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
                         particle->visible=true;

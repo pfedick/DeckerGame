@@ -13,7 +13,7 @@ public:
 private:
 	ppl7::grafix::Point end;
 public:
-	virtual void update(double time, TileTypePlane& ttplane, float frame_rate_compensation);
+	virtual void update(double time, float frame_rate_compensation);
 };
 
 
@@ -56,9 +56,9 @@ void WindEmitter::update(double time, TileTypePlane& ttplane, Player&, float)
 	}
 }
 
-void WindParticle::update(double time, TileTypePlane& ttplane, float frame_rate_compensation)
+void WindParticle::update(double time, float frame_rate_compensation)
 {
-	Particle::update(time, ttplane, frame_rate_compensation);
+	Particle::update(time, frame_rate_compensation);
 	if (p.y < end.y) death_time=0;
 }
 
