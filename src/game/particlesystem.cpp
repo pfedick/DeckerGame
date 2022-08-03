@@ -213,16 +213,17 @@ void ParticleUpdateThread::run()
             for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
                 visible_particle_map[i].clear();
             }
-            float width=viewport.width() + 64;
-            float height=viewport.height() + 64;
+            float left=worldcoords.x - 64;
+            float top=worldcoords.y - 64;
+            float right=worldcoords.x + viewport.width() + 64;
+            float bottom=worldcoords.y + viewport.height() + 64;
+
             for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
                     particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
                     particle->update(time, frame_rate_compensation);
-                    float x=particle->p.x - (float)worldcoords.x;
-                    float y=particle->p.y - (float)worldcoords.y;
-                    if (x > -64 && y > -64 && x < width && y < height) {
+                    if (particle->p.x > left && particle->p.y > top && particle->p.x < right && particle->p.y < bottom) {
                         uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
                         visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
                         particle->visible=true;
