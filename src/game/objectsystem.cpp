@@ -511,6 +511,11 @@ ppl7::grafix::Point ObjectSystem::nextPlayerStart()
 	return findPlayerStart();
 }
 
+void ObjectSystem::resetPlayerStart()
+{
+	player_start=0;
+}
+
 size_t ObjectSystem::count() const
 {
 	return object_list.size();

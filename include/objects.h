@@ -987,6 +987,7 @@ public:
 	void deleteObject(int id);
 	ppl7::grafix::Point findPlayerStart() const;
 	ppl7::grafix::Point nextPlayerStart();
+	void resetPlayerStart();
 	size_t count() const;
 	size_t countVisible() const;
 	Waynet& getWaynet();

@@ -59,7 +59,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	int fade_state=0;
 	quitGame=false;
 	startLevel("level/start.lvl");
-	player->setVisible(false);
 	enableControls(false);
 	ppl7::grafix::Rect last_viewport=viewport;
 	while (1) {

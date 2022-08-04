@@ -1069,6 +1069,10 @@ void Game::startLevel(const ppl7::String& filename)
 	background.setLevelDimension(level.getOccupiedAreaFromTileTypePlane());
 	gameState=GameState::Running;
 	last_frame_time=0.0f;
+	if (filename == "level/start.lvl") {
+		//player->enableAutoWalk(true);
+		enableControls(true);
+	}
 
 }
 
