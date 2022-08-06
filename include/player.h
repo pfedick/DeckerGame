@@ -41,6 +41,7 @@ private:
 	bool godmode;
 	bool dead;
 	bool visible;
+	bool autoWalk;
 
 
 	void turn(PlayerOrientation target);
@@ -83,6 +84,8 @@ public:
 	void move(int x, int y);
 	ppl7::grafix::Rect getBoundingBox() const;
 	void setStandingOnObject(Decker::Objects::Object* object);
+	void setAutoWalk(bool enabled);
+	bool isAutoWalk() const;
 
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 

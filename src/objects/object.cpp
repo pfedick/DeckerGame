@@ -55,6 +55,7 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::Scorpion: return ppl7::String("Scorpion");
 	case ObjectType::Bat: return ppl7::String("Bat");
 	case ObjectType::Bird: return ppl7::String("Bird");
+	case ObjectType::AutoGeorge: return ppl7::String("AutoGeorge");
 
 	default: return ppl7::String("unknown object type: %d", static_cast<int>(type));
 	}

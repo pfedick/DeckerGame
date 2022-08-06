@@ -122,6 +122,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::LevelEnd]->enableMemoryBuffer(true);
 	spriteset[Spriteset::LevelEnd]->load(sdl, "res/levelend.tex");
 
+	spriteset[Spriteset::George]->enableOutlines(true);
+	spriteset[Spriteset::George]->enableMemoryBuffer(true);
+	spriteset[Spriteset::George]->load(sdl, "res/george.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -348,6 +352,7 @@ Representation getRepresentation(int object_type)
 	case Type::Yeti: return Yeti::representation();
 	case Type::Scorpion: return Scorpion::representation();
 	case Type::LevelEnd: return LevelEnd::representation();
+	case Type::AutoGeorge: return AutoGeorge::representation();
 	default: return Object::representation();
 	}
 }
@@ -420,6 +425,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Bird: return new Bird();
 	case Type::Scorpion: return new Scorpion();
 	case Type::LevelEnd: return new LevelEnd();
+	case Type::AutoGeorge: return new AutoGeorge();
 	}
 	return NULL;
 }

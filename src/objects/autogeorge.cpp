@@ -13,7 +13,7 @@ namespace Decker::Objects {
 AutoGeorge::AutoGeorge()
 	:AiEnemy(Type::ObjectType::AutoGeorge)
 {
-	sprite_set=Spriteset::Helena;
+	sprite_set=Spriteset::George;
 	sprite_no=27;
 	animation.setStaticFrame(27);
 	keys=0;
@@ -21,12 +21,20 @@ AutoGeorge::AutoGeorge()
 	speed_run=5.5f;
 }
 
+Representation AutoGeorge::representation()
+{
+	return Representation(Spriteset::George, 27);
+}
 
 
 
 void AutoGeorge::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	//printf ("s=%d, state=%s, keys=%d\n", state, (const char*)getState(), keys);
+	player.x=p.x;
+	player.y=p.y;
+
+
 	this->time=time;
 	if (!enabled) return;
 	updateAnimation(time);
@@ -49,9 +57,27 @@ void AutoGeorge::update(double time, TileTypePlane& ttplane, Player& player, flo
 	if (movement == Slide || movement == Dead || movement == Jump) {
 		return;
 	}
-	keys=0;
-	executeKeys();
+	Decker::Objects::ObjectSystem* objects=GetObjectSystem();
+	if (target.isNull()) {
+		objects->resetPlayerStart();
+		target=objects->findPlayerStart();
+		//printf("Next Target: %d, %d\n", target.x, target.y);
+	}
+	double dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(target));
+	if (dist < 500) {
+		target=objects->nextPlayerStart();
+		//printf("Next Target: %d, %d\n", target.x, target.y);
+	}
+	fflush(stdout);
 
+
+
+	updateStateFollowPlayer(time, ttplane, target);
+
+
+	executeKeys();
+	player.x=p.x;
+	player.y=p.y;
 }
 
 

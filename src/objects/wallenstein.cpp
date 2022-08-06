@@ -116,7 +116,7 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		if (dist < 128) {
 			if (movement != Stand) stand();
 		} else {
-			updateStateFollowPlayer(time, ttplane, player);
+			updateStateFollowPlayer(time, ttplane, ppl7::grafix::Point((int)player.x, (int)player.y));
 		}
 
 	}

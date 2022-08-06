@@ -99,6 +99,7 @@ public:
 		Bird,
 		LevelEnd,
 		Yeti,
+		George,
 		MaxSpritesets
 	};
 };

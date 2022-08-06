@@ -33,8 +33,13 @@ WayNetEdit::WayNetEdit(int x, int y, int width, int height, Game* game)
 	type_climb=new ppl7::tk::RadioButton(50, 180, width - 50, 30, "climp up/down");
 	this->addChild(type_climb);
 
-	this->addChild(new ppl7::tk::Label(0, 240, 60, 30, "Cost:"));
-	cost=new ppl7::tk::LineInput(60, 240, 100, 30, "1");
+	type_go=new ppl7::tk::RadioButton(50, 210, width - 50, 30, "go left/right");
+	this->addChild(type_go);
+	y=240;
+
+
+	this->addChild(new ppl7::tk::Label(0, y, 60, 30, "Cost:"));
+	cost=new ppl7::tk::LineInput(60, y, 100, 30, "1");
 	this->addChild(cost);
 }
 
@@ -46,6 +51,7 @@ int WayNetEdit::getSelectedWayType() const
 	if (type_jump_left->checked()) return Connection::JumpLeft;
 	if (type_jump_right->checked()) return Connection::JumpRight;
 	if (type_climb->checked()) return Connection::Climb;
+	if (type_go->checked()) return Connection::Go;
 	return Connection::Invalid;
 }
 

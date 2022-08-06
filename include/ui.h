@@ -437,6 +437,7 @@ private:
 	ppl7::tk::RadioButton* type_jump_left;
 	ppl7::tk::RadioButton* type_jump_right;
 	ppl7::tk::RadioButton* type_climb;
+	ppl7::tk::RadioButton* type_go;
 	ppl7::tk::LineInput* cost;
 
 

@@ -62,6 +62,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);
 	addObject(Decker::Objects::Type::Yeti, "Yeti", 47);
+	addObject(Decker::Objects::Type::AutoGeorge, "AutoGeorge", 48);
 
 	scrollbar->setSize(object_map.size() / 2);
 	scrollbar->setVisibleItems((height - 44) / 160 / 2);

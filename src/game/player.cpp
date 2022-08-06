@@ -45,6 +45,7 @@ Player::Player(Game* game)
 	this->game=game;
 	dead=false;
 	visible=true;
+	autoWalk=false;
 }
 
 Player::~Player()
@@ -280,6 +281,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	checkCollisionWithObjects(objects);
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
+	if (autoWalk) return;
 	if (updatePhysics(world, frame_rate_compensation)) {
 		if (movement == Slide && orientation == Left) {
 			animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
@@ -502,4 +504,19 @@ ppl7::grafix::Rect Player::getBoundingBox() const
 {
 	return sprite_resource->spriteBoundary(animation.getFrame(), 1.0f, x, y);
 
+}
+
+void Player::setAutoWalk(bool enabled)
+{
+	autoWalk=enabled;
+	if (autoWalk) {
+		visible=false;
+		dead=false;
+		godmode=true;
+	}
+}
+
+bool Player::isAutoWalk() const
+{
+	return autoWalk;
 }

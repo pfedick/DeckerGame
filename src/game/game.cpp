@@ -538,7 +538,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	player->Viewport=viewport;
 	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
 
-	if (this->controlsEnabled)
+	if (this->controlsEnabled || player->isAutoWalk())
 		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
 	level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
 	level.objects->updateVisibleObjectList(WorldCoords, viewport);
@@ -1070,8 +1070,11 @@ void Game::startLevel(const ppl7::String& filename)
 	gameState=GameState::Running;
 	last_frame_time=0.0f;
 	if (filename == "level/start.lvl") {
-		//player->enableAutoWalk(true);
-		enableControls(true);
+		player->setAutoWalk(true);
+		enableControls(false);
+
+	} else {
+		player->setAutoWalk(false);
 	}
 
 }

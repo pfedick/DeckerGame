@@ -140,7 +140,7 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, floa
 	updateBoundary();
 }
 
-void AiEnemy::updateWay(double time, Player& player)
+void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 {
 	Waynet& waynet=GetObjectSystem()->getWaynet();
 	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x / TILE_WIDTH, (uint16_t)player.y / TILE_HEIGHT));
@@ -172,9 +172,9 @@ void AiEnemy::updateWay(double time, Player& player)
 
 }
 
-void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, Player& player)
+void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const ppl7::grafix::Point& player)
 {
-	double dist=ppl7::grafix::Distance(p, player.position());
+	double dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(player));
 	if (dist > 2048 && (movement == Falling || movement == Dead)) {
 		//printf("something's wrong, back to patrol\n");
 		p=initial_p;
@@ -183,6 +183,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, Playe
 	}
 	int y_dist=abs((int)p.y - player.y);
 	if (current_way.type == Connection::Invalid || next_wayfind < time) {
+		//printf("current_way.type=%d, next_wayfinf=%0.3f, time=%0.3f\n", current_way.type, next_wayfind, time);
 		if (movement == Walk || movement == Run || movement == Stand || movement == Falling)
 			updateWay(time, player);
 	}
@@ -210,6 +211,12 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, Playe
 		else {
 			arrived=true;
 		}
+	} else if (current_way.type == Connection::Go) {
+		if ((uint16_t)(p.x / TILE_WIDTH) > current_way.target.x) keys=KeyboardKeys::Left;
+		else if ((uint16_t)(p.x / TILE_WIDTH) < current_way.target.x) keys=KeyboardKeys::Right;
+		else {
+			arrived=true;
+		}
 	} else if (current_way.type == Connection::JumpLeft) {
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Left | KeyboardKeys::Shift | KeyboardKeys::Up;
@@ -230,7 +237,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, Playe
 		}
 		keys=0;
 		//printf("arrived at point: %d:%d, real: %d:%d, movement was: %d\n", current_way.target.x, current_way.target.y,
-		//	(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT, movement);
+		//(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT, movement);
 		current_way.clear();
 		if (movement == Walk || movement == Run) {
 			if (player.x < p.x && orientation != Left && y_dist < TILE_HEIGHT) turn(Left);
