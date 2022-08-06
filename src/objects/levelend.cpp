@@ -67,16 +67,30 @@ void LevelEnd::update(double time, TileTypePlane& ttplane, Player& player, float
 void LevelEnd::handleCollision(Player* player, const Collision& collision)
 {
     if (state != State::Active) return;
-    int keyboard=player->getKeyboardMatrix();
-    double now=ppl7::GetMicrotime();
-    if (cooldown < now && (keyboard & KeyboardKeys::Action)) {
-        cooldown=now + 0.2;
-        if (!GetGame().nextLevel(next_level)) {
-            toggle(false);
-            return;
-        } else {
-            //printf("switch\n");
-            cooldown=now + 20000;
+    if (player->x > p.x - TILE_WIDTH * 2 && player->x < p.x + TILE_WIDTH * 2 &&
+        player->y<p.y + TILE_HEIGHT && player->y>p.y - TILE_HEIGHT * 5) {
+        double now=ppl7::GetMicrotime();
+        if ((static_cast<int>(flags) & static_cast<int>(Flags::transferOnCollision)) && cooldown < now) {
+            cooldown=now + 0.2;
+            if (!GetGame().nextLevel(next_level)) {
+                toggle(false);
+                return;
+            } else {
+                //printf("switch\n");
+                cooldown=now + 20000;
+            }
+        }
+        int keyboard=player->getKeyboardMatrix();
+
+        if (cooldown < now && (keyboard & KeyboardKeys::Action)) {
+            cooldown=now + 0.2;
+            if (!GetGame().nextLevel(next_level)) {
+                toggle(false);
+                return;
+            } else {
+                //printf("switch\n");
+                cooldown=now + 20000;
+            }
         }
     }
 }
@@ -125,7 +139,7 @@ size_t LevelEnd::load(const unsigned char* buffer, size_t size)
     color_stairs=ppl7::Peek16(buffer + bytes + 13);
 
     key_id=ppl7::Peek32(buffer + bytes + 15);
-    size_t next_level_size=key_id=ppl7::Peek16(buffer + bytes + 19);
+    size_t next_level_size=ppl7::Peek16(buffer + bytes + 19);
     next_level.set((const char*)(buffer + bytes + 21), next_level_size);
     if (version > 2) {
         size_t p=21 + next_level_size;
@@ -134,7 +148,7 @@ size_t LevelEnd::load(const unsigned char* buffer, size_t size)
 
     state=State::Inactive;
 
-    if (static_cast<int>(flags) & static_cast<int>(Flags::initialStateActive)) state=State::Active;
+    if (static_cast<int>(flags) & static_cast<int>(Flags::initialStateActive)) toggle(true, NULL);
     return size;
 }
 
@@ -167,7 +181,7 @@ void LevelEnd::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) c
     const ColorPalette& palette=GetColorPalette();
     int sprite=animation.getFrame();
     // Puddle if active
-    if (state == State::Active) {
+    if (state == State::Active && (static_cast<int>(flags) & static_cast<int>(Flags::useBackgroundColorWhenActive))) {
         // Background
         ppl7::grafix::Color bg=palette.getColor(color_background);
         SDL_BlendMode currentBlendMode;
@@ -212,6 +226,18 @@ void LevelEnd::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) c
         p.x + coords.x,
         p.y + coords.y,
         2, palette.getColor(color_details_doorframe));
+        /*
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_Rect r;
+        r.x=p.x + coords.x - 2 * TILE_WIDTH;
+        r.y=p.y + coords.y - 6 * TILE_HEIGHT;
+        r.w=4 * TILE_WIDTH;
+        r.h=6 * TILE_HEIGHT;
+        SDL_RenderDrawRect(renderer, &r);
+    }
+    */
+
 }
 
 class LevelEndDialog : public Decker::ui::Dialog
