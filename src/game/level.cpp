@@ -323,7 +323,7 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 						if (tile->layer[z].tileset > 1) {
 							tileset[2]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, palette.getColor(tile->layer[z].color_index));
 						} else {
-							tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno);
+							tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, palette.getColor(tile->layer[z].color_index));
 						}
 					}
 				}
