@@ -52,7 +52,10 @@ public:
 		Slide,
 		Floating,
 		Dead,
-		Swim
+		Swim,
+		SwimStraight,
+		SwimUp,
+		SwimDown
 	};
 	enum PlayerOrientation {
 		Left,
@@ -65,6 +68,7 @@ public:
 		Unknown,
 		FallingDeep,
 		Smashed,
+		Drowned
 	};
 
 	PlayerMovement movement=Stand;
