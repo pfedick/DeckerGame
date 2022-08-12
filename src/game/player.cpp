@@ -308,6 +308,10 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		handleKeyboardWhileJumpOrFalling(time, world, objects);
 		return;
 	}
+	if (movement == Swim) {
+		handleKeyboardWhileSwimming(time, world, objects);
+		return;
+	}
 	//if (time>next_keycheck) {
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -437,6 +441,12 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& 
 			animation.setStaticFrame(39);
 		}
 	}
+}
+
+void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects)
+{
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	int keys=getKeyboardMatrix(state);
 }
 
 void Player::checkCollisionWithWorld(const TileTypePlane& world)

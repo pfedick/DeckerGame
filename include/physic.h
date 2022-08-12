@@ -51,7 +51,8 @@ public:
 		Falling,
 		Slide,
 		Floating,
-		Dead
+		Dead,
+		Swim
 	};
 	enum PlayerOrientation {
 		Left,

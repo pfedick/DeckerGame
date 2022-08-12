@@ -50,6 +50,7 @@ private:
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects);
+	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects);
 
 public:
 	float x, y;
