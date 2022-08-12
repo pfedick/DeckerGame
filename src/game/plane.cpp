@@ -235,7 +235,7 @@ void Plane::load(const ppl7::ByteArrayPtr& ba)
 				int occupation=ppl7::Peek8(buffer + p + 8);
 				bool showStuds=ppl7::Peek8(buffer + p + 9);
 				int color_index=ppl7::Peek8(buffer + p + 10);
-				//if (tileset > 1) tileset=1;
+				if (tileset > 2) tileset=2;
 				setTile(x, y, z, tileset, tileno, color_index, showStuds);
 				setOccupation(x, y, z, (Tile::TileOccupation)occupation, origin_x, origin_y);
 				p+=11;
