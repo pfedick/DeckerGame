@@ -1,9 +1,9 @@
 #include "decker.h"
 #include "physic.h"
 
-static const char* movement_string[13]={ "Unchanged", "Stand",
+static const char* movement_string[17]={ "Unchanged", "Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide", "Floating", "Dead" };
+		"Jump","Falling", "Slide", "Floating", "Dead", "Swim", "SwimStraight", "SwimUp", "SwimDown" };
 
 static const char* orientation_string[4]={ "Left",
 		"Right", "Front", "Back" };
@@ -54,6 +54,7 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 {
 	if (movement == Jump || movement == Slide || movement == Dead) return false;
 	bool match=false;
+	bool inWater=false;
 	if (collision_matrix[1][4] == TileType::NonBlocking && collision_matrix[2][4] == TileType::NonBlocking) {
 		if (collision_matrix[1][5] == TileType::NonBlocking && collision_matrix[2][5] == TileType::NonBlocking) {
 			if (!player_stands_on_object) {
@@ -64,13 +65,38 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 			}
 		}
 	}
+
+	if (collision_matrix[1][5] == TileType::Water && collision_matrix[2][5] == TileType::Water) {
+		if (!player_stands_on_object) {
+			//printf ("gravity\n");
+			if (acceleration_gravity < 1.0f) acceleration_gravity+=0.05f * frame_rate_compensation;
+			if (acceleration_gravity > 1.0f) acceleration_gravity=1.0f * frame_rate_compensation;
+			match=true;
+			inWater=true;
+			fallstart=0.0f;
+			if (collision_matrix[1][1] == TileType::Water && collision_matrix[2][1] == TileType::Water) {
+				if (movement != Swim) {
+					movement=Swim;
+					return true;
+				}
+			}
+		}
+	}
+
 	if (acceleration_gravity > 0.0f) {
 		if (!match) {
 			acceleration_gravity-=(acceleration_gravity / 2.0f) * frame_rate_compensation;
 			if (acceleration_gravity < 0.0f) acceleration_gravity=0.0f;
 		}
-		gravity+=acceleration_gravity * frame_rate_compensation;
-		if (gravity > 16.0f) gravity=16.0f;
+		if (inWater) {
+			if (gravity < 5.0f) gravity+=acceleration_gravity * frame_rate_compensation;
+			if (gravity > 5.0f) gravity-=acceleration_gravity * frame_rate_compensation;
+			if (gravity > 5.0f && gravity < 5.5) gravity=5.0f;
+		} else {
+			gravity+=acceleration_gravity * frame_rate_compensation;
+			if (gravity > 16.0f) gravity=16.0f;
+		}
+
 	}
 	match=false;
 	if (collision_matrix[1][4] == TileType::AirStream || collision_matrix[2][4] == TileType::AirStream) {
@@ -322,13 +348,17 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 		}
 	}
 	if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking) {
-		//printf ("col 1\n");
+		//printf("col 1\n");
 		while (world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::Blocking
 			|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::Blocking) {
 			y--;
 		}
-		velocity_move.x=0;
-		velocity_move.y=0;
+		if (movement >= Swim && movement <= SwimDown) {
+			if (velocity_move.y > 0) velocity_move.y=0;
+		} else {
+			velocity_move.x=0;
+			velocity_move.y=0;
+		}
 		acceleration_gravity=0.0f;
 		gravity=0.0f;
 		if (movement == ClimbDown) new_movement=Stand;

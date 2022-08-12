@@ -133,10 +133,12 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 
     for (it=visible_particle_map[active_map][l].begin();it != visible_particle_map[active_map][l].end();++it) {
         const Particle* particle=it->second;
-        spriteset[particle->sprite_set]->drawScaled(renderer,
-            particle->p.x + coords.x,
-            particle->p.y + coords.y,
-            particle->sprite_no, particle->scale, particle->color_mod);
+        if (particle->sprite_set <= 2) {
+            spriteset[particle->sprite_set]->drawScaled(renderer,
+                particle->p.x + coords.x,
+                particle->p.y + coords.y,
+                particle->sprite_no, particle->scale, particle->color_mod);
+        }
     }
 }
 
@@ -221,6 +223,10 @@ void ParticleUpdateThread::run()
             for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
+                    if (particle->sprite_set > 2) {
+                        printf("ups, illegal particle 1\n");
+                        fflush(stdout);
+                    }
                     particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
                     particle->update(time, frame_rate_compensation);
                     if (particle->p.x > left && particle->p.y > top && particle->p.x < right && particle->p.y < bottom) {

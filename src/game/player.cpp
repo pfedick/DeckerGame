@@ -27,6 +27,17 @@ static int death_by_falling[]={ 89,89,106,106,89,89,106,106,89,106,89,106,89,89,
 		106,106,89 };
 
 
+static int swimm_inplace_front[]={ 126,127,128,129,130,131,132,133,134,135 };
+static int swimm_inplace_left[]={ 106,107,108,109,110,111,112,113,114,115 };
+static int swimm_inplace_right[]={ 116,117,118,119,120,121,122,123,124,125 };
+static int swimm_inplace_back[]={ 136,137,138,139,140,141,142,143,144,145 };
+static int swimm_up_left[]={ 146,147,148,149,150,151,152,153,154,155 };
+static int swimm_straight_left[]={ 196,197,198,199,200,201,202,203,204,205 };
+static int swimm_down_left[]={ 156,157,158,159,160,161,162,163,164,165 };
+static int swimm_up_right[]={ 166,167,168,169,170,171,172,173,174,175 };
+static int swimm_straigth_right[]={ 186,187,188,189,190,191,192,193,194,195 };
+static int swimm_down_right[]={ 176,177,178,179,180,181,182,183,184,185 };
+
 
 
 Player::Player(Game* game)
@@ -287,8 +298,17 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
 		} else if (movement == Slide && orientation == Right) {
 			animation.start(slide_right, sizeof(slide_right) / sizeof(int), false, 82);
+		} else if (movement == Swim && orientation == Left) {
+			animation.start(swimm_inplace_left, sizeof(swimm_inplace_left) / sizeof(int), true, 106);
+		} else if (movement == Swim && orientation == Right) {
+			animation.start(swimm_inplace_right, sizeof(swimm_inplace_right) / sizeof(int), true, 106);
+		} else if (movement == Swim) {
+			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
 		}
 	}
+	//printf("%0.3f:%0.3f\n", velocity_move.x, velocity_move.y);
+	fflush(stdout);
+
 	x+=velocity_move.x;
 	y+=velocity_move.y + gravity;
 
@@ -308,7 +328,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		handleKeyboardWhileJumpOrFalling(time, world, objects);
 		return;
 	}
-	if (movement == Swim) {
+	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
 		handleKeyboardWhileSwimming(time, world, objects);
 		return;
 	}
@@ -447,6 +467,38 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
+	if (keys == KeyboardKeys::Up) {
+		if (movement != Swim || orientation != Front) {
+			movement=Swim;
+			orientation=Front;
+			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
+		}
+		velocity_move.y=-2;
+
+	} else if (keys == KeyboardKeys::Down) {
+		if (movement != Swim || orientation != Front) {
+			movement=Swim;
+			orientation=Front;
+			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
+		}
+		velocity_move.y=2;
+	} else if (keys == KeyboardKeys::Right) {
+		if (movement != SwimStraight || orientation != Right) {
+			movement=SwimStraight;
+			orientation=Right;
+			animation.start(swimm_straigth_right, sizeof(swimm_straigth_right) / sizeof(int), true, 0);
+		}
+		velocity_move.x=5;
+
+	} else if (keys == KeyboardKeys::Left) {
+		if (movement != SwimStraight || orientation != Left) {
+			movement=SwimStraight;
+			orientation=Left;
+			animation.start(swimm_straight_left, sizeof(swimm_straight_left) / sizeof(int), true, 0);
+		}
+		velocity_move.x=-5;
+	}
+
 }
 
 void Player::checkCollisionWithWorld(const TileTypePlane& world)
