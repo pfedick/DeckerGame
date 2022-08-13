@@ -306,8 +306,12 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
 		}
 	}
+	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
+		handleKeyboardWhileSwimming(time, world, objects);
+
+	}
 	//printf("%0.3f:%0.3f\n", velocity_move.x, velocity_move.y);
-	fflush(stdout);
+	//fflush(stdout);
 
 	x+=velocity_move.x;
 	y+=velocity_move.y + gravity;
@@ -465,8 +469,10 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& 
 
 void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects)
 {
+	printf("old movement: %s, ", (const char*)getState());
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
+	if (keys & KeyboardKeys::Shift) keys-=KeyboardKeys::Shift;
 	if (keys == KeyboardKeys::Up) {
 		if (movement != Swim || orientation != Front) {
 			movement=Swim;
@@ -474,7 +480,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
 		}
 		velocity_move.y=-2;
-
+		velocity_move.x=0;
 	} else if (keys == KeyboardKeys::Down) {
 		if (movement != Swim || orientation != Front) {
 			movement=Swim;
@@ -482,6 +488,15 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
 		}
 		velocity_move.y=2;
+		velocity_move.x=0;
+	} else if (keys == KeyboardKeys::Right && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+		if (movement != Swim || orientation != Right) {
+			movement=Swim;
+			orientation=Right;
+			animation.start(swimm_up_right, sizeof(swimm_up_right) / sizeof(int), true, 0);
+		}
+		velocity_move.x=5;
+		velocity_move.y=0;
 	} else if (keys == KeyboardKeys::Right) {
 		if (movement != SwimStraight || orientation != Right) {
 			movement=SwimStraight;
@@ -489,7 +504,15 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			animation.start(swimm_straigth_right, sizeof(swimm_straigth_right) / sizeof(int), true, 0);
 		}
 		velocity_move.x=5;
-
+		velocity_move.y=0;
+	} else if (keys == KeyboardKeys::Left && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+		if (movement != Swim || orientation != Left) {
+			movement=Swim;
+			orientation=Left;
+			animation.start(swimm_up_left, sizeof(swimm_up_left) / sizeof(int), true, 0);
+		}
+		velocity_move.x=-5;
+		velocity_move.y=0;
 	} else if (keys == KeyboardKeys::Left) {
 		if (movement != SwimStraight || orientation != Left) {
 			movement=SwimStraight;
@@ -497,7 +520,43 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			animation.start(swimm_straight_left, sizeof(swimm_straight_left) / sizeof(int), true, 0);
 		}
 		velocity_move.x=-5;
+		velocity_move.y=0;
+	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Up)) {
+		if (movement != SwimUp || orientation != Left) {
+			movement=SwimUp;
+			orientation=Left;
+			animation.start(swimm_up_left, sizeof(swimm_up_left) / sizeof(int), true, 0);
+		}
+		velocity_move.x=-5;
+		velocity_move.y=-2;
+	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Up)) {
+		if (movement != SwimUp || orientation != Right) {
+			movement=SwimUp;
+			orientation=Right;
+			animation.start(swimm_up_right, sizeof(swimm_up_right) / sizeof(int), true, 0);
+		}
+		velocity_move.x=5;
+		velocity_move.y=-2;
+	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Down)) {
+		if (movement != SwimDown || orientation != Right) {
+			movement=SwimDown;
+			orientation=Right;
+			animation.start(swimm_down_right, sizeof(swimm_down_right) / sizeof(int), true, 0);
+		}
+		velocity_move.x=5;
+		velocity_move.y=2;
+	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Down)) {
+		if (movement != SwimDown || orientation != Left) {
+			movement=SwimDown;
+			orientation=Left;
+			animation.start(swimm_down_left, sizeof(swimm_down_left) / sizeof(int), true, 0);
+		}
+		velocity_move.x=-5;
+		velocity_move.y=2;
+
 	}
+	printf(", new movement: %s\n", (const char*)getState());
+	fflush(stdout);
 
 }
 
