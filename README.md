@@ -137,7 +137,7 @@ The following Tools/Libraries are required:
 
 #### Fedora
     sudo dnf install -y git gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
-        bzip2-devel libpng-devel mpg123-devel ffmpeg-devel
+        bzip2-devel libpng-devel mpg123-devel ffmpeg-free-devel libjpeg-turbo-devel
 
 #### Ubuntu
     sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev \
