@@ -654,7 +654,7 @@ void Game::run()
 			if (current_second >= start_total_metrics) {
 				total_metrics+=metrics;
 				if (current_second >= end_total_metrics) {
-					total_metrics.print();
+					//total_metrics.print();
 					total_metrics.clear();
 					end_total_metrics=current_second + 60;
 				}
