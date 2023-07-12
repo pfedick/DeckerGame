@@ -39,17 +39,17 @@ void start()
 
 	//game.startLevel("level/test.lvl");
 	//game.startLevel("level/start.lvl");
-	game.startLevel("level/heaven.lvl");
+	//game.startLevel("level/heaven.lvl");
 	//game.startLevel("level/particle.lvl");
-	game.showUi(true);
-	game.run();
-	return;
+	//game.showUi(true);
+	//game.run();
+	//return;
 
 
 
 
 
-	//game.playIntroVideo();
+	game.playIntroVideo();
 
 	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
 
@@ -82,8 +82,7 @@ int WinMain()
 	try {
 		start();
 		return 0;
-	}
-	catch (const ppl7::Exception& ex) {
+	} catch (const ppl7::Exception& ex) {
 		ex.print();
 		throw;
 		return 1;
