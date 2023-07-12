@@ -1,0 +1,26 @@
+name: MSYS2
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  msys2-ucrt64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-ffmpeg mingw-w64-ucrt-x86_64-libjpeg-turbo
+      - name: CI-Build
+        run: |
+          echo 'Running in MSYS2!'
+          ./configure
+          make
