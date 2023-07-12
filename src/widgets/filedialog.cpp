@@ -58,7 +58,8 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
         int i=0;
         while (drives[i] != 0) {
             ppl7::WideString str(drives + i);
-            if (ppl7::Dir::canOpen(str)) drives_combobox->add(str);
+            //if (ppl7::Dir::canOpen(str)) drives_combobox->add(str);
+            drives_combobox->add(str);
             i+=str.size() + 1;
         }
     }
@@ -158,7 +159,6 @@ void FileDialog::setDirectory(const ppl7::String& path)
         setDirectory(ppl7::File::getPath(new_path));
         return;
     }
-
     if (!entry.isDir()) return;
     ppl7::Dir dir;
     if (!dir.tryOpen(new_path, ppl7::Dir::SORT_FILENAME_IGNORCASE)) {
@@ -204,8 +204,7 @@ void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
                 new_path.replace("//", "/");
 
                 setDirectory(new_path);
-            }
-            catch (...) {}
+            } catch (...) {}
 
         } else {
             new_path=ppl7::String(path_lineinput->text()).trimmed();
