@@ -137,9 +137,9 @@ all: update_version $(PROGRAM) texmaker
 mingw: update_version
 	rm -rf release/deploy
 	mkdir -p release/deploy
-	mingw32-make -j ppl7
-	mingw32-make -j $(PROGRAM)
-	ldd decker.exe  | grep -v WINDOWS | grep mingw64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
+	make -j 16 ppl7
+	make -j 16 $(PROGRAM)
+	ldd decker.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
 
 	cat setup.tpl.iss | sed "s/^AppVersion=.*/AppVersion=${VERSION}.${BUILD_NUMBER}/"  \
 		| sed "s/^AppVerName=.*/AppVerName=GeorgeDecker ${VERSION}/"  \

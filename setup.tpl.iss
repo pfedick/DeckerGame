@@ -52,26 +52,6 @@ Source: "res/audio/*.mp3"; DestDir: "{app}/res/audio"; Flags: ignoreversion noco
 Source: "res/video/*"; DestDir: "{app}/res/video"; Flags: ignoreversion nocompression;
 Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 
-;Source: "C:/msys64/mingw64/bin/sdl2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libmpg123-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
-;ffmpeg
-;Source: "C:/msys64/mingw64/bin/avcodec-58.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/avformat-58.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/avutil-56.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/swscale-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libvpx-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libdav1d.dll"; DestDir: "{app}"; Flags: ignoreversion;
-;Source: "C:/msys64/mingw64/bin/libaom.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
 Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
