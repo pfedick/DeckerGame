@@ -7,9 +7,6 @@
 </p>
 
 
-#Test
-
-
 This is my attempt of writing a Jump'n'Run game in C++. It uses the [Simple DirectMedia Layer](https://www.libsdl.org/) library for graphics and my own library [pplib](https://github.com/pfedick/pplib) for graphics and ui.
 
 It features George Decker, one of the main characters of my Lego(tm) stopmotion film [The Adventures Of Charlie and George Decker](https://youtu.be/-aJDTe_obKI), which I made a few years ago and is available on YouTube.
@@ -103,7 +100,7 @@ When walking an pressing the key for up, the player will jump in the direction o
 ## On what platforms will the game be available
 My target platforms are:
 
-- Linux (development is done on Fedora 34)
+- Linux (development is done on Fedora)
 - Windows 10
 
 The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/)
@@ -150,17 +147,20 @@ The following Tools/Libraries are required:
 
 For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
 
-    pacman -S git make mingw-w64-x86_64-gcc mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv \
-         mingw-w64-x86_64-bzip2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-mpg123 \
-         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng
-
+    pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv \
+        mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 \
+        mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-ffmpeg \
+        mingw-w64-ucrt-x86_64-libjpeg-turbo
 
 ### Checkout and compile
 
     git clone --recurse-submodules https://github.com/pfedick/DeckerGame.git
     cd DeckerGame
     ./configure
-    make -j
+    make
+    # for faster compile you can add the paraneter "-j CORES", where CORES is the number
+    # of cores on you cpu:
+    make -j 8
 
     # run the game:
     ./decker
@@ -170,4 +170,4 @@ If you already cloned the project and want to update to the newest version:
     git pull
     git submodule update --init --recursive
     ./configure
-    make -j
+    make
