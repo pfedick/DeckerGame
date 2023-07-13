@@ -1097,8 +1097,18 @@ const ppl7::String& Game::getLevelFilename() const
 
 void Game::save(const ppl7::String& filename)
 {
-	level.save(filename);
-	LevelFile=filename;
+	try {
+		level.save(filename);
+		LevelFile=filename;
+	} catch (...) {
+		ppl7::String levelname=ppl7::File::getFilename(filename);
+		LevelFile=config.CustomLevelPath + "/" + levelname;
+#ifdef WIN32
+		LevelFile.replace("/", "\\");
+		openSaveAsDialog();
+		return;
+#endif
+	}
 	if (mainmenue) mainmenue->update();
 }
 

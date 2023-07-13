@@ -60,8 +60,6 @@ void Config::load()
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
     if (volumeMusic > 0.5f) volumeMusic=0.5f;
-    printf("ConfigVersion=%d\n", version);
-    CustomLevelPath.printnl();
 }
 
 void Config::save()
