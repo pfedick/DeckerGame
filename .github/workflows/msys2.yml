@@ -14,13 +14,13 @@ jobs:
         shell: msys2 {0}
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
       - uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
           update: true
           install: git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-ffmpeg mingw-w64-ucrt-x86_64-libjpeg-turbo
-      - name: checkout submodules
-        run: git submodule update --init --recursive
       - name: CI-Build
         run: |
           echo 'Running in MSYS2!'
