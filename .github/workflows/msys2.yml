@@ -25,4 +25,4 @@ jobs:
         run: |
           echo 'Running in MSYS2!'
           ./configure
-          make
+          make -j2
