@@ -1491,6 +1491,12 @@ void Game::openSaveAsDialog()
 
 	filedialog=new Decker::ui::FileDialog(w, h);
 	filedialog->setFilename(LevelFile);
+	if (!ppl7::File::exists("Makefile")) {
+		// we check if the save file is inside the installation path. We won't be able to write here
+		if (LevelFile.startsWith(ppl7::Dir::currentPath()) || LevelFile.startsWith("level/")) {
+			filedialog->setFilename(config.CustomLevelPath + "/" + ppl7::File::getFilename(LevelFile));
+		}
+	}
 	filedialog->setWindowTitle("save level");
 	filedialog->custom_id=1;
 	this->addChild(filedialog);

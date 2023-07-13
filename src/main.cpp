@@ -33,6 +33,8 @@ void start()
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
 	Game game;
+
+
 	game.init();
 	game.init_grafix();
 
@@ -43,6 +45,10 @@ void start()
 		//game.startLevel("level/particle.lvl");
 		game.showUi(true);
 		game.run();
+
+
+
+
 		return;
 	}
 

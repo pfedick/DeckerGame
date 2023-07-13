@@ -1,13 +1,12 @@
 #include "decker.h"
 #include "decker_sdl.h"
 
-const int CONFIG_VERSION=2;
+const int CONFIG_VERSION=3;
 
 Config::Config()
 {
     ppl7::String config_path=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
     ConfigFile=config_path + "/decker.conf";
-
     windowMode=WindowMode::FullscreenDesktop;
     CustomLevelPath=ppl7::Dir::documentsPath(APP_COMPANY, APP_NAME);
     SDL::DisplayMode mode=SDL::desktopDisplayMode();
@@ -38,7 +37,7 @@ void Config::load()
     // Misc
     conf.setSection("misc");
     int version=conf.getInt("ConfigVersion", 1);
-    if (version >= 2) {
+    if (version >= 3) {
         CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
     }
     LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
