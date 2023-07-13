@@ -152,8 +152,10 @@ setup: mingw
 
 
 history:
-	@echo "Git history between Tag $(PREVIOUS_TAG) and head"
-	@git log --pretty=format:%s $(PREVIOUS_TAG)...main
+	@echo "Git history between Tag $(PREVIOUS_TAG) and head" >  history.tmp
+	@echo "================================================================================" >>  history.tmp
+	@git log --pretty=format:"%ad=!=%s" --date=iso8601-strict $(PREVIOUS_TAG)...main | sort | awk -F "=!=" '{ print $$2}' >> history.tmp
+	cat history.tmp
 
 ppl7:
 	-mkdir -p pplib/release
