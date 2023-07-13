@@ -1525,6 +1525,11 @@ void Game::checkFileDialog()
 		ppl7::String filename=filedialog->filename();
 		save(filename);
 		config.LastEditorLevel=filename;
+		LevelFile=filename;
+		// Are we in dev environment?
+		if (!ppl7::File::exists("Makefile")) {
+			config.CustomLevelPath=ppl7::File::getPath(filename);
+		}
 		config.save();
 
 	} else if (filedialog->custom_id == 2) {	// load level
