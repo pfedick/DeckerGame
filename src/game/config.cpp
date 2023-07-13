@@ -1,6 +1,7 @@
 #include "decker.h"
 #include "decker_sdl.h"
 
+const int CONFIG_VERSION=2;
 
 Config::Config()
 {
@@ -8,7 +9,7 @@ Config::Config()
     ConfigFile=config_path + "/decker.conf";
 
     windowMode=WindowMode::FullscreenDesktop;
-    CustomLevelPath=ppl7::Dir::applicationDataPath(APP_COMPANY, APP_NAME);
+    CustomLevelPath=ppl7::Dir::documentsPath(APP_COMPANY, APP_NAME);
     SDL::DisplayMode mode=SDL::desktopDisplayMode();
     ScreenResolution.setSize(mode.width, mode.height);
     ScreenRefreshRate=mode.refresh_rate;
@@ -20,8 +21,7 @@ Config::Config()
     Language="en";
     try {
         load();
-    }
-    catch (...) {}
+    } catch (...) {}
 }
 
 Config::~Config()
@@ -34,6 +34,16 @@ void Config::load()
     if (!ppl7::File::exists(ConfigFile)) return;
     ppl7::ConfigParser conf;
     conf.load(ConfigFile);
+
+    // Misc
+    conf.setSection("misc");
+    int version=conf.getInt("ConfigVersion", 1);
+    if (version >= 2) {
+        CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
+    }
+    LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
+    Language=conf.get("Language", Language);
+
 
     // Video
     conf.setSection("video");
@@ -50,11 +60,8 @@ void Config::load()
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
     if (volumeMusic > 0.5f) volumeMusic=0.5f;
-    // Misc
-    conf.setSection("misc");
-    CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
-    LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
-    Language=conf.get("Language", Language);
+    printf("ConfigVersion=%d\n", version);
+    CustomLevelPath.printnl();
 }
 
 void Config::save()
@@ -87,6 +94,7 @@ void Config::save()
     conf.add("CustomLevelPath", CustomLevelPath);
     conf.add("LastEditorLevel", LastEditorLevel);
     conf.add("Language", Language);
+    conf.add("ConfigVersion", CONFIG_VERSION);
 
     conf.save(ConfigFile);
 }
