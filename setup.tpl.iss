@@ -55,7 +55,7 @@ Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 [Dirs]
-Name: "{userdocs}\Patrick F.-Productions\GeorgeDecker"
+Name: "{userdocs}\Patrick F.-Productions\George Decker"
 
 
 [Icons]
