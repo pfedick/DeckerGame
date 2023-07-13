@@ -5,7 +5,7 @@
 AppId={{471ED94B-BCB3-4348-9B3F-8BC88C4A2DDA}}
 AppName=GeorgeDecker
 AppVerName=GeorgeDecker 0.6.0
-AppCopyright=Copyright (C) 2022 Patrick Fedick
+AppCopyright=Copyright (C) 2023 Patrick Fedick
 AppVersion=0.6.0.0
 VersionInfoVersion=0.6.0
 AppPublisher=Patrick F.-Productions
@@ -54,6 +54,8 @@ Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 
 Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
+[Dirs]
+Name: "{userdocs}\Patrick F.-Productions\GeorgeDecker"
 
 
 [Icons]
