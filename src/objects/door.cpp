@@ -84,9 +84,13 @@ void Door::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 void Door::handleCollision(Player* player, const Collision& collision)
 {
 	if (state < 2) {
-		//printf ("Door::handleCollision\n");
-		if (collision.objectRight() && player->x < p.x + 48) player->x=p.x + 48;
-		if (collision.objectLeft() && player->x > p.x - 16) player->x=p.x - 16;
+		if (left_sided) {
+			if (collision.objectLeft() && player->x > p.x - 48) player->x=p.x - 48;
+			if (collision.objectRight() && player->x < p.x + 32) player->x=p.x + 32;
+		} else {
+			if (collision.objectRight() && player->x < p.x + 48) player->x=p.x + 48;
+			if (collision.objectLeft() && player->x > p.x - 32) player->x=p.x - 32;
+		}
 		if (state == 0) {
 			//int keyboard=player->getKeyboardMatrix();
 			if (player->isInInventory(key_id)) {
