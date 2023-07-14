@@ -68,6 +68,26 @@ void AudioInstance::setPositional(const ppl7::grafix::Point& p, int max_distance
 	this->max_distance=max_distance;
 }
 
+size_t AudioInstance::skipSamples(size_t num)
+{
+	size_t samples_read=0;
+	if (loop == true) {
+		size_t rest=num;
+		while (rest) {
+			samples_read=sample->skipSamples(position, rest);
+			position+=samples_read;
+			if (samples_read < rest) {
+				position=0;
+			}
+			rest-=samples_read;
+		}
+		return num;
+	}
+	samples_read=sample->skipSamples(position, num);
+	position+=samples_read;
+	return samples_read;
+}
+
 size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume)
 {
 	if (!sample) return 0;
@@ -76,7 +96,9 @@ size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float
 	if (positional) {
 		ppl7::grafix::Point v=GetViewPos();
 		float d=ppl7::grafix::Distance(p, v);
-		if ((int)d > max_distance) return num;
+		if ((int)d > max_distance) {
+			return skipSamples(num);
+		}
 		float leftness=1.0f;
 		float rightness=1.0f;
 		float dx=abs(v.x - p.x);

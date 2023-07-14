@@ -146,6 +146,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 	mutex.lock();
 	size_t num_tracks=tracks.size();
 	if (num_tracks) {
+		//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks\n", num_tracks);
 		for (it=tracks.begin();it != tracks.end();++it) {
 			Audio* audio=(*it);
 			float volume=globalVolume * a_class_volume[static_cast<int>(audio->audioclass())];
@@ -159,6 +160,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 			mergebuffer[i].right=clamp(mixbuffer[i].right);
 		}
 		if (to_remove.size() > 0) {
+			//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks to delete\n", to_remove.size());
 			for (it=to_remove.begin();it != to_remove.end();++it) {
 				Audio* audio=(*it);
 				std::set<Audio*>::iterator del=tracks.find(audio);
@@ -178,6 +180,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 
 void AudioSystem::play(Audio* audio)
 {
+	//ppl7::PrintDebugTime("AudioSystem::play\n");
 	mutex.lock();
 	tracks.insert(audio);
 	mutex.unlock();
@@ -185,6 +188,7 @@ void AudioSystem::play(Audio* audio)
 
 void AudioSystem::stop(Audio* audio)
 {
+	//ppl7::PrintDebugTime("AudioSystem::stop\n");
 	mutex.lock();
 	std::set<Audio*>::iterator it=tracks.find(audio);
 	if (it != tracks.end()) tracks.erase(it);
