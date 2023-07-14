@@ -104,16 +104,17 @@ void Scarabeus::update(double time, TileTypePlane& ttplane, Player& player, floa
 		}
 
 		if (time > next_state) {
-			if (velocity.x != 0) velocity.x=velocity.x * 2.8f / 3.0f * frame_rate_compensation;
-			if (velocity.y != 0) velocity.y=velocity.y * 2.8f / 3.0f * frame_rate_compensation;
-			if (fabsf(velocity.x) < 0.1) velocity.x=0.0f;
-			if (fabsf(velocity.y) < 0.1) velocity.y=0.0f;
+			if (velocity.x != 0.0f) velocity.x=(velocity.x * 2.8f / 3.0f);
+			if (velocity.y != 0.0f) velocity.y=(velocity.y * 2.8f / 3.0f);
+			if (fabsf(velocity.x) < 0.1f) velocity.x=0.0f;
+			if (fabsf(velocity.y) < 0.1f) velocity.y=0.0f;
 			if (velocity.x == 0.0f && velocity.y == 0.0f) {
 				next_state=time + ppl7::randf(0.5f, 2.0f);
 				state=2;
 			}
+			//ppl7::PrintDebugTime("State 00 set velocity to: %0.3f/%0.3f\n", velocity.x, velocity.y);
 		}
-		p+=velocity * frame_rate_compensation;
+		p+=(velocity * frame_rate_compensation);
 		audio->setPositional(p, 1800);
 		TileType::Type t_left=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y));
 		TileType::Type t_right=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y));
@@ -130,6 +131,7 @@ void Scarabeus::update(double time, TileTypePlane& ttplane, Player& player, floa
 				else animation.setStaticFrame(1);
 			}
 			velocity.setPoint(0, 0);
+			//ppl7::PrintDebugTime("State 0a set velocity to: %0.3f/%0.3f\n", velocity.x, velocity.y);
 			state=1;
 			next_state=time + ppl7::randf(0.2f, 7.0f);
 			p.y=(int)(p.y / TILE_HEIGHT) * TILE_HEIGHT + TILE_HEIGHT - 5;
@@ -139,25 +141,28 @@ void Scarabeus::update(double time, TileTypePlane& ttplane, Player& player, floa
 		}
 		if (t_left != TileType::NonBlocking || t_right != TileType::NonBlocking) {
 			velocity.x*=-1;
-			p.x+=velocity.x * frame_rate_compensation;
+			p.x+=(velocity.x * frame_rate_compensation);
 			update_animation();
 		}
 		if (t_top != TileType::NonBlocking && velocity.y < 0.0f) {
 			velocity.y*=-1;
-			p.y+=velocity.y * frame_rate_compensation;
+			p.y+=(velocity.y * frame_rate_compensation);
 			update_animation();
 		}
 	} else if (state == 1 && next_state < time) {
 		state=0;
 		next_state=time + ppl7::randf(2.0f, 15.0f);
-		velocity.setPoint(scarab_rand_velocity(), ppl7::randf(-3.0f, -0.5f));
+		velocity.setPoint(scarab_rand_velocity(), -ppl7::randf(0.50f, 3.0f));
+		//ppl7::PrintDebugTime("State 1 set velocity to: %0.3f/%0.3f\n", velocity.x, velocity.y);
 		update_animation();
 	} else if (state == 2 && next_state < time) {
 		velocity.setPoint(scarab_rand_velocity(), scarab_rand_velocity());
+		//ppl7::PrintDebugTime("State 2 set velocity to: %0.3f/%0.3f\n", velocity.x, velocity.y);
 		update_animation();
 		state=0;
 		next_state=time + ppl7::randf(2.0f, 15.0f);
 	}
+	//ppl7::PrintDebugTime("velocity=%0.3f/%0.3f\n", velocity.x, velocity.y);
 }
 
 void Scarabeus::handleCollision(Player* player, const Collision& collision)
