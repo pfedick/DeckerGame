@@ -257,7 +257,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 
 }
 
-void AiEnemy::executeKeys()
+void AiEnemy::executeKeys(float frame_rate_compensation)
 {
 	//printf ("Wallenstein::executeKeys: %d\n",keys);
 	if (keys == KeyboardKeys::Left) {
@@ -294,8 +294,8 @@ void AiEnemy::executeKeys()
 		} else {
 			if (movement != Jump) {
 				movement=Jump;
-				jump_climax=time + 0.4f;
-				acceleration_jump=1.0f;
+				jump_climax=time + 0.6f;
+				acceleration_jump=1.0f * frame_rate_compensation;
 				if (orientation == Front) animation.start(anicycleJumpUpFront);
 				else if (orientation == Left) animation.start(anicycleJumpUpLeft);
 				else if (orientation == Right) animation.start(anicycleJumpUpRight);
@@ -305,17 +305,17 @@ void AiEnemy::executeKeys()
 	} else if ((keys & KeyboardKeys::JumpLeft) == KeyboardKeys::JumpLeft) {
 		movement=Jump;
 		orientation=Left;
-		jump_climax=time + 0.4f;
-		acceleration_jump=1.0f;
-		velocity_move.x=-2;
+		jump_climax=time + 0.6f;
+		acceleration_jump=1.0f * frame_rate_compensation;
+		velocity_move.x=-2 * frame_rate_compensation;
 		if (keys & KeyboardKeys::Shift) velocity_move.x=-6;
 		animation.start(anicycleJumpLeft);
 	} else if ((keys & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
 		movement=Jump;
 		orientation=Right;
-		jump_climax=time + 0.4f;
-		acceleration_jump=1.0f;
-		velocity_move.x=2;
+		jump_climax=time + 0.6f;
+		acceleration_jump=1.0f * frame_rate_compensation;
+		velocity_move.x=2 * frame_rate_compensation;
 		if (keys & KeyboardKeys::Shift) velocity_move.x=6;
 		animation.start(anicycleJumpRight);
 	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
@@ -332,13 +332,13 @@ void AiEnemy::executeKeys()
 		}
 
 	} else if (keys == (KeyboardKeys::Left) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=-2;
+		if (!isCollisionLeft()) velocity_move.x=-2 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Right) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=2;
+		if (!isCollisionLeft()) velocity_move.x=2 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=-6;
+		if (!isCollisionLeft()) velocity_move.x=-6 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=6;
+		if (!isCollisionLeft()) velocity_move.x=6 * frame_rate_compensation;
 
 	} else {
 		if (movement != Stand && movement != Jump && movement != Falling && movement != Turn) {

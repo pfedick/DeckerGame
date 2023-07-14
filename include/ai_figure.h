@@ -61,7 +61,7 @@ public:
 
 	void turn(PlayerOrientation target);
 	void stand();
-	void executeKeys();
+	void executeKeys(float frame_rate_compensation);
 	void updateStateFollowPlayer(double time, TileTypePlane& ttplane, const ppl7::grafix::Point& player);
 
 	void updateAnimation(double time);

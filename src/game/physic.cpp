@@ -93,7 +93,7 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 			if (gravity > 0.0f && gravity < 0.5) gravity=0.0f;
 		} else {
 			gravity+=(acceleration_gravity * frame_rate_compensation);
-			if (gravity > 16.0f * frame_rate_compensation) gravity=16.0f * frame_rate_compensation;
+			if (gravity > 14.0f * frame_rate_compensation) gravity=14.0f * frame_rate_compensation;
 		}
 
 	}
@@ -426,11 +426,13 @@ void Physic::updateMovement(float frame_rate_compensation)
 			velocity_move.y-=acceleration_jump;
 			if (velocity_move.y < (-12.0f * frame_rate_compensation)) velocity_move.y=-(12.0f * frame_rate_compensation);
 		} else {
-			if (acceleration_jump > 0) acceleration_jump-=((acceleration_jump / 1.5) * frame_rate_compensation);
+			if (acceleration_jump > 0) acceleration_jump-=(acceleration_jump / (10.0f * frame_rate_compensation));
 			if (acceleration_jump < 0.5f) {
 				acceleration_jump=0.5;
 			}
-			velocity_move.y+=(4.0f * frame_rate_compensation) - (acceleration_jump * frame_rate_compensation);
+			//velocity_move.y+=(4.0f * frame_rate_compensation) - (acceleration_jump * frame_rate_compensation);
+			velocity_move.y+=(4.0f * frame_rate_compensation) - acceleration_jump;
+
 			if (velocity_move.y > -0.1f) {
 				velocity_move.y=0.0f;
 				acceleration_jump=0.0f;

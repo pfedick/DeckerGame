@@ -120,7 +120,7 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		}
 
 	}
-	executeKeys();
+	executeKeys(frame_rate_compensation);
 
 }
 

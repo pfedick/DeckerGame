@@ -84,7 +84,7 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 	keys=0;
 	if (state == StatePatrol) updateStatePatrol(time, ttplane);
 	if (state == StateFollowPlayer) updateStateFollowPlayer(time, ttplane, ppl7::grafix::Point((int)player.x, (int)player.y));
-	executeKeys();
+	executeKeys(frame_rate_compensation);
 
 }
 

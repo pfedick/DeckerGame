@@ -75,7 +75,7 @@ void AutoGeorge::update(double time, TileTypePlane& ttplane, Player& player, flo
 	updateStateFollowPlayer(time, ttplane, target);
 
 
-	executeKeys();
+	executeKeys(frame_rate_compensation);
 	player.x=p.x;
 	player.y=p.y;
 }
