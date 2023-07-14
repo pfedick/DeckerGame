@@ -38,10 +38,10 @@ void Bat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		sprite_no=animation.getFrame();
 		updateBoundary();
 	}
-	p.y+=velocity * frame_rate_compensation;
+	p.y+=(velocity * frame_rate_compensation);
 	if (state == 0) {
 		if (velocity > -3.0f) {
-			velocity-=0.2f * frame_rate_compensation;
+			velocity-=(0.2f * frame_rate_compensation);
 		}
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 48));
 		if (t1 != TileType::NonBlocking) {
@@ -50,7 +50,7 @@ void Bat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		updateBoundary();
 	} else if (state == 1) {
 		if (velocity < 3.0f) {
-			velocity+=0.2f * frame_rate_compensation;
+			velocity+=(0.2f * frame_rate_compensation);
 		}
 
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 8));
