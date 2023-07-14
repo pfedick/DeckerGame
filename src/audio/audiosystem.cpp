@@ -119,13 +119,12 @@ void AudioSystem::init(const ppl7::String& device)
 	desired.samples=1024;
 	desired.callback=AudioSystem_AudioCallback;
 	desired.userdata=this;
-	mixbuffer=(ppl7::STEREOSAMPLE32*)malloc(desired.samples * desired.channels * sizeof(ppl7::STEREOSAMPLE32));
-
 	device_id=SDL_OpenAudioDevice(
 		device_name, 0, &desired, &obtained, 0);
 	if (device_id == 0) {
 		throw AudioSystemFailed("could not open audio device: %s", SDL_GetError());
 	}
+	mixbuffer=(ppl7::STEREOSAMPLE32*)malloc(obtained.samples * obtained.channels * sizeof(ppl7::STEREOSAMPLE32));
 	SDL_PauseAudioDevice(device_id, 0); /* start audio playing. */
 }
 
@@ -141,7 +140,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 {
 	size_t samples=len / sizeof(ppl7::STEREOSAMPLE16);
 	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE32));
-	//printf ("callback called, len=%d\n",len);
+	//ppl7::PrintDebugTime("callback called, len=%d\n", len);
 	std::set<Audio*>::iterator it;
 	std::set<Audio*> to_remove;
 	mutex.lock();
