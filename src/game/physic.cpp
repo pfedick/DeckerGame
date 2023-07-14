@@ -100,19 +100,21 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 	match=false;
 	if (collision_matrix[1][4] == TileType::AirStream || collision_matrix[2][4] == TileType::AirStream) {
 		//if (acceleration_airstream<8.0f) acceleration_airstream+=(0.1f+(acceleration_airstream/200.0f));
-		if (acceleration_airstream < 8.0f) acceleration_airstream+=(0.02f * frame_rate_compensation);
-		if (acceleration_airstream > 8.0f) acceleration_airstream=(8.0f * frame_rate_compensation);
+		if (acceleration_airstream < 8.0f * frame_rate_compensation) acceleration_airstream+=(0.2f * frame_rate_compensation);
+		if (acceleration_airstream > 8.0f * frame_rate_compensation) acceleration_airstream=(8.0f * frame_rate_compensation);
 		match=true;
 		movement=Floating;
 	}
 	if (acceleration_airstream > 0.0f) {
 		if (!match) {
-			acceleration_airstream-=(acceleration_airstream / 3.0f * frame_rate_compensation);
-			if (acceleration_airstream < 0.0f) acceleration_airstream=0.0f;
+			//acceleration_airstream-=(acceleration_airstream / 3.0f * frame_rate_compensation);
+			//if (acceleration_airstream < 0.0f) acceleration_airstream=0.0f;
+			acceleration_airstream=0.0f;
 		}
-		if (gravity > 0.0f) gravity-=((gravity / 20.0f) * frame_rate_compensation);
+		if (gravity > 0.0f) gravity-=(gravity / (20.0f * frame_rate_compensation));
 		gravity-=acceleration_airstream;
 		if (gravity < -8.0f) gravity=-(8.0f * frame_rate_compensation);
+		//ppl7::PrintDebugTime("out of air, acc=%0.3f, gravity=%0.3f\n", acceleration_airstream, gravity);
 
 	}
 	if (collision_at_pivoty[1] == TileType::SteepRampLeft && movement != Slide) {
@@ -136,8 +138,8 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 	}
 
 	/*
-	printf ("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f, velocity_move.y=%0.3f\n",
-			gravity, acceleration_gravity, acceleration_airstream, velocity_move.y);
+	ppl7::PrintDebugTime("gravity: %2.3f, acceleration_gravity: %2.3f, acceleration_airstream: %2.3f, velocity_move.y=%0.3f\n",
+		gravity, acceleration_gravity, acceleration_airstream, velocity_move.y);
 	*/
 	return false;
 }
