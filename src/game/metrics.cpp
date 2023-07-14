@@ -59,6 +59,8 @@ Metrics::Metrics()
     total_particles=0;
     visible_particles=0;
     framecount=0;
+    frame_rate_compensation=0.0f;
+    frametime=0.0f;
 }
 
 void Metrics::clear()
@@ -71,6 +73,8 @@ void Metrics::clear()
     visible_objects=0;
     total_particles=0;
     visible_particles=0;
+    frame_rate_compensation=0.0f;
+    frametime=0.0f;
     time_frame.clear();
     time_total.clear();
     time_draw_ui.clear();
@@ -123,6 +127,8 @@ Metrics Metrics::getAverage() const
         m.visible_objects=visible_objects / framecount;
         m.total_particles=total_particles / framecount;
         m.visible_particles=visible_particles / framecount;
+        m.frame_rate_compensation=frame_rate_compensation / framecount;
+        m.frametime=frametime / framecount;
     }
     return m;
 }
@@ -154,6 +160,8 @@ Metrics& Metrics::operator+=(const Metrics& other)
     time_draw_particles+=other.time_draw_particles;
     time_plane+=other.time_plane;
     time_misc+=other.time_misc;
+    frame_rate_compensation+=other.frame_rate_compensation;
+    frametime+=other.frametime;
     return *this;
 }
 
@@ -163,7 +171,7 @@ void Metrics::print() const
     printf("==================== METRICS DUMP ==============================\n");
     printf("Total Frames collected: %d\n", framecount);
     Metrics avg=getAverage();
-    printf("fps: %d\n", avg.fps);
+    printf("fps: %d, Frametime: %0.3f, FPS-Compensation: %0.3f\n", avg.fps, avg.frametime, avg.frame_rate_compensation);
     printf("Total Sprites:   %6zu, visible sprites:   %6zu\n", avg.total_sprites, avg.visible_sprites);
     printf("Total Objects:   %6zu, visible Objects:   %6zu\n", avg.total_objects, avg.visible_objects);
     printf("Total Particles: %6zu, visible Particles: %6zu\n", avg.total_particles, avg.visible_particles);

@@ -60,6 +60,8 @@ public:
     size_t visible_objects;
     size_t total_particles;
     size_t visible_particles;
+    double frame_rate_compensation;
+    float frametime;
 
 };
 

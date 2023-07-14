@@ -520,8 +520,12 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	double now=ppl7::GetMicrotime();
 	float frame_rate_compensation=1.0f;
 	if (last_frame_time > 0.0f) {
+
 		float frametime=now - last_frame_time;
 		frame_rate_compensation=frametime / (1.0f / 60.0f);
+		metrics.frame_rate_compensation+=frame_rate_compensation;
+		metrics.frametime+=frametime;
+		//ppl7::PrintDebugTime("Updated Frametime to: %0.3f, fpscomp=%0.3f\n", frametime, frame_rate_compensation);
 		// 30Hz, frametime=0.033333
 		// 90Hz, frametime=0.011111
 		// 60Hz, frametime=0.016667
