@@ -92,26 +92,27 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 			if (gravity > 0.0f) gravity-=(gravity / 4.0f);
 			if (gravity > 0.0f && gravity < 0.5) gravity=0.0f;
 		} else {
-			gravity+=acceleration_gravity * frame_rate_compensation;
-			if (gravity > 16.0f) gravity=16.0f;
+			gravity+=(acceleration_gravity * frame_rate_compensation);
+			if (gravity > 16.0f * frame_rate_compensation) gravity=16.0f * frame_rate_compensation;
 		}
 
 	}
 	match=false;
 	if (collision_matrix[1][4] == TileType::AirStream || collision_matrix[2][4] == TileType::AirStream) {
 		//if (acceleration_airstream<8.0f) acceleration_airstream+=(0.1f+(acceleration_airstream/200.0f));
-		if (acceleration_airstream < 8.0f) acceleration_airstream+=0.02f * frame_rate_compensation;
-		if (acceleration_airstream > 8.0f) acceleration_airstream=8.0f * frame_rate_compensation;
+		if (acceleration_airstream < 8.0f) acceleration_airstream+=(0.02f * frame_rate_compensation);
+		if (acceleration_airstream > 8.0f) acceleration_airstream=(8.0f * frame_rate_compensation);
 		match=true;
 		movement=Floating;
 	}
 	if (acceleration_airstream > 0.0f) {
 		if (!match) {
-			acceleration_airstream-=(acceleration_airstream / 5.0f) * frame_rate_compensation;
+			acceleration_airstream-=(acceleration_airstream / 3.0f * frame_rate_compensation);
 			if (acceleration_airstream < 0.0f) acceleration_airstream=0.0f;
 		}
+		if (gravity > 0.0f) gravity-=((gravity / 20.0f) * frame_rate_compensation);
 		gravity-=acceleration_airstream;
-		if (gravity < -8.0f) gravity=-8.0f * frame_rate_compensation;
+		if (gravity < -8.0f) gravity=-(8.0f * frame_rate_compensation);
 
 	}
 	if (collision_at_pivoty[1] == TileType::SteepRampLeft && movement != Slide) {
@@ -400,34 +401,34 @@ void Physic::updateMovement(float frame_rate_compensation)
 	if (movement == Slide || movement == Dead) return;
 	if (movement == Walk) {
 		if (orientation == Left) {
-			velocity_move.x=-speed_walk;
+			velocity_move.x=-speed_walk * frame_rate_compensation;
 		} else if (orientation == Right) {
-			velocity_move.x=speed_walk;
+			velocity_move.x=speed_walk * frame_rate_compensation;
 		}
 	} else if (movement == Run) {
 		if (orientation == Left) {
-			velocity_move.x=-speed_run;
+			velocity_move.x=-speed_run * frame_rate_compensation;
 		} else if (orientation == Right) {
-			velocity_move.x=speed_run;
+			velocity_move.x=speed_run * frame_rate_compensation;
 		}
 	} else if (movement == ClimbUp) {
-		velocity_move.y=-4;
+		velocity_move.y=-4 * frame_rate_compensation;
 	} else if (movement == ClimbDown) {
-		velocity_move.y=4;
+		velocity_move.y=4 * frame_rate_compensation;
 	} else if (movement == Jump) {
-		//printf ("we are jumping... ");
+		//printf("we are jumping... ");
 		if (jump_climax > time) {
-			if (acceleration_jump < 4.0f) acceleration_jump+=0.1f * frame_rate_compensation;
-			if (acceleration_jump > 4.0f) acceleration_jump=4.0f * frame_rate_compensation;
-			//printf ("under climax, accelerating %0.3f ", acceleration_jump);
+			if (acceleration_jump < (4.0f * frame_rate_compensation)) acceleration_jump+=(acceleration_jump / 10.f * frame_rate_compensation);
+			if (acceleration_jump > (4.0f * frame_rate_compensation)) acceleration_jump=(4.0f * frame_rate_compensation);
+			//printf("under climax, accelerating %0.3f ", acceleration_jump);
 			velocity_move.y-=acceleration_jump;
-			if (velocity_move.y < -12.0f) velocity_move.y=-12.0f;
+			if (velocity_move.y < (-12.0f * frame_rate_compensation)) velocity_move.y=-(12.0f * frame_rate_compensation);
 		} else {
-			if (acceleration_jump > 0) acceleration_jump-=(acceleration_jump / 1.5) * frame_rate_compensation;
+			if (acceleration_jump > 0) acceleration_jump-=((acceleration_jump / 1.5) * frame_rate_compensation);
 			if (acceleration_jump < 0.5f) {
 				acceleration_jump=0.5;
 			}
-			velocity_move.y+=acceleration_jump;
+			velocity_move.y+=(4.0f * frame_rate_compensation) - (acceleration_jump * frame_rate_compensation);
 			if (velocity_move.y > -0.1f) {
 				velocity_move.y=0.0f;
 				acceleration_jump=0.0f;
@@ -435,10 +436,12 @@ void Physic::updateMovement(float frame_rate_compensation)
 			}
 		}
 		/*
-		printf ("Jump, climax in %0.3f s, acceleration=%0.3f, velocity=%0.3f\n",
-				time<jump_climax?jump_climax-time:0.0f,
-						acceleration_jump, velocity_move.y);
-		*/
+		printf("Jump, climax in %0.3f s, acceleration=%0.3f, velocity=%0.3f\n",
+			time < jump_climax ? jump_climax - time : 0.0f,
+			acceleration_jump, velocity_move.y);
+		fflush(stdout);
+			*/
+
 	} else if (movement == Falling) {
 		if (velocity_move.y < -0.1f) velocity_move.y-=(velocity_move.y / 3.0f) * frame_rate_compensation;
 		if (velocity_move.y > -0.1f) velocity_move.y=0;

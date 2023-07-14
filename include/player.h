@@ -49,8 +49,8 @@ private:
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects);
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
-	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects);
-	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects);
+	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
+	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 public:
 	float x, y;
