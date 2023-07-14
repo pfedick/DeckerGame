@@ -96,7 +96,7 @@ size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float
 	if (positional) {
 		ppl7::grafix::Point v=GetViewPos();
 		float d=ppl7::grafix::Distance(p, v);
-		if ((int)d > max_distance) {
+		if ((int)d > max_distance || (int)d < 0) {
 			return skipSamples(num);
 		}
 		float leftness=1.0f;
@@ -110,11 +110,13 @@ size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float
 		}
 		vol_l=(int)((float)vol_l * ((float)max_distance - d) / (float)max_distance * leftness);
 		vol_r=(int)((float)vol_r * ((float)max_distance - d) / (float)max_distance * rightness);
-		/*
-		printf ("distance: %d, max_distance=%d, vol_org=%d, vol_l=%d, vol_r=%d, leftness=%0.3f, rightness=%0.3f\n",
-				(int)d, max_distance,volume_left,vol_l,vol_r,leftness,rightness);
-				*/
+
+		//ppl7::PrintDebugTime("distance: %d, max_distance=%d, vol_org=%d, vol_l=%d, vol_r=%d, leftness=%0.3f, rightness=%0.3f\n",
+		//	(int)d, max_distance, (int)(32768 * (volume * this->volume)), vol_l, vol_r, leftness, rightness);
+
 	}
+	if (vol_l > 32768) vol_l=32768;
+	if (vol_r > 32768) vol_r=32768;
 
 	size_t samples_read=0;
 	if (loop == true) {
