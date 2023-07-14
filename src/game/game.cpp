@@ -8,6 +8,8 @@
 #include "particle.h"
 #include "screens.h"
 
+//#define EVENTTRACKING 1
+
 static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 
 static ppl7::tk::Window* GameWindow=NULL;
@@ -1151,6 +1153,9 @@ void Game::createNewLevel(const LevelParameter& params)
 
 void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::mouseDownEvent\n");
+#endif
 	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
@@ -1166,6 +1171,10 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 
 void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 {
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::mouseDownEventOnSprite\n");
+#endif
+
 	if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
 		int nr=sprite_selection->selectedSprite();
 		if (nr < 0) {
@@ -1202,6 +1211,10 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 {
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::mouseDownEventOnObject\n");
+#endif
+
 	if (event->widget() == world_widget && (event->buttonMask == ppl7::tk::MouseState::Middle
 		|| (event->buttonMask == ppl7::tk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))) {
 		Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
@@ -1249,6 +1262,9 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 
 void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 {
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::mouseDownEventOnWayNet\n");
+#endif
 	ppl7::grafix::Point coords=WorldCoords;
 	int x=(event->p.x + coords.x) / TILE_WIDTH;
 	int y=(event->p.y + coords.y) / TILE_HEIGHT;
@@ -1298,6 +1314,9 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 
 void Game::selectSprite(const ppl7::grafix::Point& mouse)
 {
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::selectSprite\n");
+#endif
 	int plane=0;
 	int layer=0;
 	if (level.findSprite(mouse, WorldCoords, selected_sprite, plane, layer)) {
@@ -1338,13 +1357,14 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		}
 	}
 	//printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
-	if (event->key == ppl7::tk::KeyEvent::KEY_F4) {
-		// TODO: for developing only
+	if (event->key == ppl7::tk::KeyEvent::KEY_F4 && showui == true) {
 		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
 		player->move(pos.x, pos.y);
 		player->setSavePoint(pos);
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3) {
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3 && showui == true) {
 		level.load(LevelFile);
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F5 && showui == true) {
+		player->resetState();
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
 		showUi(!showui);
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F10) {

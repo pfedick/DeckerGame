@@ -72,6 +72,7 @@ void Player::resetState()
 	godmode=false;
 	dead=false;
 	visible=true;
+	Inventory.clear();
 }
 
 void Player::setVisible(bool flag)
