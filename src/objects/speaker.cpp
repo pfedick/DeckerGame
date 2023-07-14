@@ -233,7 +233,7 @@ void SpeakerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-	ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int): >>%d<<", value);
+	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int): >>%d<<", value);
 	if (event->widget() == sample_name) {
 		int id=sample_name->currentIdentifier().toInt();
 		//printf ("id=%d",id);
@@ -243,7 +243,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 
 void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
-	ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int64_t): >>%d<<", (int)value);
+	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int64_t): >>%d<<", (int)value);
 	if (event->widget() == max_distance) {
 		object->max_distance=(int)value;
 	}
@@ -251,7 +251,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 
 void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 {
-	ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
+	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
 	if (event->widget() == volume) {
 		object->volume=value;
 	}
@@ -259,7 +259,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 
 void SpeakerDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
 {
-	ppl7::PrintDebugTime("SpeakerDialog::textChangedEvent: >>%s<<", (const char*)text);
+	//ppl7::PrintDebugTime("SpeakerDialog::textChangedEvent: >>%s<<", (const char*)text);
 	if (event->widget() == volume) {
 		float volume=text.toFloat();
 		//printf ("new volume: %0.3f\n",volume);
