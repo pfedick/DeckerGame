@@ -39,9 +39,10 @@ void start()
 	game.init_grafix();
 
 	if (ppl7::File::exists("Makefile")) {
-		//game.startLevel("level/test.lvl");
+		//game.startLevel("level/devel.lvl");
+		game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
-		game.startLevel("level/heaven.lvl");
+		//game.startLevel("level/heaven.lvl");
 		//game.startLevel("level/particle.lvl");
 		game.showUi(true);
 		game.run();
