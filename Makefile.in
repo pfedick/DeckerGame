@@ -1,5 +1,5 @@
-VERSION ?= 0.8.0
-PREVIOUS_TAG = 0.7.0
+VERSION ?= 0.8.1
+PREVIOUS_TAG = 0.8.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
@@ -117,13 +117,12 @@ OBJECTS=compile/main.o \
 	compile/audio_audiosample.o \
 	compile/audio_audioinstance.o \
 	compile/audio_audiopool.o \
-	compile/video_videoplayer.o \
-	compile/intro_screen.o \
 	compile/start_screen.o \
 	compile/settings_screen.o \
 	compile/level_screen.o \
-	compile/ingame_menue_screen.o
-
+	compile/ingame_menue_screen.o \
+	compile/video_videoplayer.o \
+	compile/intro_screen.o
 
 
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
