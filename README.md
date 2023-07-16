@@ -149,8 +149,8 @@ For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://w
 
     pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv \
         mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 \
-        mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-ffmpeg \
-        mingw-w64-ucrt-x86_64-libjpeg-turbo
+        mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng \
+        mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-libwebm mingw-w64-ucrt-x86_64-dav1d
 
 ### Checkout and compile
 

@@ -38,7 +38,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 
 [Files]
-Source: "decker.exe"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "release/deploy/decker.exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "res/decker.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 ;Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;

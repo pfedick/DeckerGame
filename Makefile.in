@@ -1,5 +1,5 @@
-VERSION ?= 0.8.2
-PREVIOUS_TAG = 0.8.0
+VERSION ?= 0.8.3
+PREVIOUS_TAG = 0.8.2
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
@@ -145,6 +145,8 @@ mingw: update_version
 		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
 		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=GeorgeDecker-${VERSION}-Setup/"  \
 		> setup.iss
+	cp decker.exe release/deploy
+	strip release/deploy/decker.exe
 
 setup: mingw
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss

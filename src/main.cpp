@@ -39,6 +39,8 @@ void start()
 	game.init_grafix();
 
 	if (ppl7::File::exists("Makefile")) {
+		//game.playIntroVideo();
+
 		game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
