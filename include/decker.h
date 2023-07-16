@@ -408,7 +408,6 @@ public:
 class Resources
 {
 private:
-	void loadBricks(SDL& sdl, int tileset, const ppl7::String& name, int ldraw_material, const ppl7::grafix::Color& tint);
 	int max_tileset_id;
 
 public:
