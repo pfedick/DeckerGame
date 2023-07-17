@@ -19,7 +19,7 @@ class ColorPalette;
 
 
 #ifndef MAX_SPRITESETS
-#define MAX_SPRITESETS 10
+#define MAX_SPRITESETS 15
 #endif
 
 class Player;

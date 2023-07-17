@@ -41,7 +41,8 @@ void start()
 	if (ppl7::File::exists("Makefile")) {
 		//game.playIntroVideo();
 
-		game.startLevel("level/devel.lvl");
+		game.startLevel("level/egypt.lvl");
+		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
 		//game.startLevel("level/heaven.lvl");

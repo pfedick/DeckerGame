@@ -121,6 +121,10 @@ void Game::loadGrafix()
 	resources.Sprites_White.enableMemoryBuffer(true);
 	resources.Sprites_White.load(sdl, "res/sprites_white_x8.tex");
 
+	resources.Sprites_Trees.enableOutlines(true);
+	resources.Sprites_Trees.enableMemoryBuffer(true);
+	resources.Sprites_Trees.load(sdl, "res/sprites_trees.tex");
+
 
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
@@ -164,6 +168,10 @@ void Game::loadGrafix()
 	resources.uiSpritesWhite.enableSDLBuffer(false);
 	resources.uiSpritesWhite.enableMemoryBuffer(true);
 	resources.uiSpritesWhite.load(sdl, "res/sprites_white_ui.tex");
+
+	resources.uiSpritesTrees.enableSDLBuffer(false);
+	resources.uiSpritesTrees.enableMemoryBuffer(true);
+	resources.uiSpritesTrees.load(sdl, "res/sprites_trees_ui.tex");
 
 	level.objects->loadSpritesets(sdl);
 	level.particles->loadSpritesets(sdl);
@@ -376,6 +384,7 @@ void Game::init_grafix()
 	level.setSpriteset(6, &resources.Sprites_Flowers);
 	level.setSpriteset(7, &resources.Sprites_Treasure);
 	level.setSpriteset(8, &resources.Sprites_White);
+	level.setSpriteset(9, &resources.Sprites_Trees);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -847,6 +856,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(6, "Flowers", &resources.uiSpritesFlowers, 1);
 		sprite_selection->setSpriteSet(7, "Treasure", &resources.uiSpritesTreasure, 1);
 		sprite_selection->setSpriteSet(8, "Recolorable Sprites", &resources.uiSpritesWhite, 8);
+		sprite_selection->setSpriteSet(9, "Trees", &resources.uiSpritesTrees, 4);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		sprite_mode=spriteModeDraw;

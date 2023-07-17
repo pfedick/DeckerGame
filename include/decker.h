@@ -27,7 +27,7 @@
 
 
 #ifndef MAX_SPRITESETS
-#define MAX_SPRITESETS 10
+#define MAX_SPRITESETS 15
 #endif
 
 #define MAX_TILE_LAYER 4
@@ -432,6 +432,8 @@ public:
 	SpriteTexture uiSpritesTreasure;
 	SpriteTexture Sprites_White;
 	SpriteTexture uiSpritesWhite;
+	SpriteTexture Sprites_Trees;
+	SpriteTexture uiSpritesTrees;
 
 	std::list<ppl7::String> background_images;
 
