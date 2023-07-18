@@ -72,7 +72,8 @@ public:
 		Bat=114,
 		Bird=115,
 		Yeti=116,
-		AutoGeorge=117
+		AutoGeorge=117,
+		Ostrich=118,
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -100,6 +101,7 @@ public:
 		LevelEnd,
 		Yeti,
 		George,
+		Ostrich,
 		MaxSpritesets
 	};
 };
@@ -992,6 +994,7 @@ public:
 	size_t count() const;
 	size_t countVisible() const;
 	Waynet& getWaynet();
+	void getObjectCounter(std::map<int, size_t>& object_counter) const;
 
 };
 
