@@ -124,8 +124,8 @@ public:
     double birth_time;
 
     Layer layer;
-    int sprite_set;
-    int sprite_no;
+    unsigned int sprite_set;
+    unsigned int sprite_no;
     float scale;
     float weight;
     ppl7::grafix::Color color_mod;
