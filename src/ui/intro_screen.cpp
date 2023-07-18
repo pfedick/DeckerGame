@@ -6,18 +6,6 @@
 #include "videoplayer.h"
 
 
-static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
-{
-	if (fade_to_black > 0) {
-		SDL_BlendMode currentBlendMode;
-		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
-		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
-		SDL_RenderFillRect(renderer, NULL);
-		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
-	}
-}
 
 static void getVideoDestination(VideoPlayer& video, ppl7::tk::Window& window, SDL_Rect& dest)
 {

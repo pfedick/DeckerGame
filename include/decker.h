@@ -629,12 +629,17 @@ enum class GameState {
 	Running,
 	GameOver,
 	LevelEndTriggerd,
-	ShowStatsThenNextLevel,
-	ShowStatsThenRestartLevel
+	ShowStats
+};
+
+enum class StatsScreenReason {
+	PlayerDied,
+	LevelEnd
 };
 
 class StartScreen;
 class SettingsScreen;
+class GameStatsScreen;
 
 
 
@@ -702,6 +707,7 @@ private:
 	Decker::ui::WayNetEdit* waynet_edit;
 	//StartScreen* start_screen;
 	SettingsScreen* settings_screen;
+	GameStatsScreen* game_stats_screen;
 	Decker::ui::FileDialog* filedialog;
 
 	BrickOccupation brick_occupation;
@@ -828,7 +834,7 @@ public:
 
 	void playIntroVideo();
 	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
-	void showStatsScreen();
+	void showStatsScreen(StatsScreenReason reason);
 
 	void openSaveAsDialog();
 	void openLoadDialog();
@@ -841,6 +847,6 @@ ppl7::tk::Window* GetGameWindow();
 ColorPalette& GetColorPalette();
 Game& GetGame();
 
-
+void FadeToBlack(SDL_Renderer* renderer, int fade_to_black);
 
 #endif /* INCLUDE_DECKER_H_ */

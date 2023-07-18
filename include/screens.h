@@ -212,23 +212,20 @@ public:
 
 class GameStatsScreen : public ppl7::tk::Widget
 {
-public:
-    enum class Reason {
-        GameOver,
-        LevelEndReached
-    };
-
 private:
     Game& game;
-    Reason reason;
+    StatsScreenReason reason;
+    bool closeWindow;
 
 public:
-    GameStatsScreen(Game& g, int x, int y, int width, int height, Reason reason);
+    GameStatsScreen(Game& g, int x, int y, int width, int height, StatsScreenReason reason);
     ~GameStatsScreen();
     virtual void paint(ppl7::grafix::Drawable& draw);
     void setPlayer(const Player& player);
     void setLevelStats(const LevelStats& level);
     void setupUi();
+    void signalContinue();
+    bool continueSignaled() const;
 };
 
 

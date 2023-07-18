@@ -5,10 +5,11 @@
 #include "screens.h"
 
 
-GameStatsScreen::GameStatsScreen(Game& g, int x, int y, int width, int height, Reason reason)
+GameStatsScreen::GameStatsScreen(Game& g, int x, int y, int width, int height, StatsScreenReason reason)
     : game(g)
 {
     this->reason=reason;
+    closeWindow=false;
     create(x, y, width, height);
 }
 
@@ -25,33 +26,47 @@ void GameStatsScreen::setupUi()
 
 void GameStatsScreen::paint(ppl7::grafix::Drawable& draw)
 {
-
-}
-
-
-static void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
-{
-    if (fade_to_black > 0) {
-        SDL_BlendMode currentBlendMode;
-        SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
-        //SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
-        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
-        SDL_RenderFillRect(renderer, NULL);
-        SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+    ppl7::grafix::Color bg(20, 10, 0, 192);
+    ppl7::grafix::Color border(255, 200, 0, 255);
+    ppl7::grafix::Color fg(128, 128, 128, 255);
+    draw.cls(bg);
+    for (int i=0;i < 6;i++) {
+        draw.drawRect(i, i, draw.width() - i, draw.height() - i, border);
     }
+    ppl7::String title=translate("Game over");
+    if (reason == StatsScreenReason::LevelEnd) {
+        title=translate("Level completed");
+    }
+
+}
+
+void GameStatsScreen::signalContinue()
+{
+    closeWindow=true;
+}
+
+bool GameStatsScreen::continueSignaled() const
+{
+    return closeWindow;
 }
 
 
-void Game::showStatsScreen()
+void Game::showStatsScreen(StatsScreenReason reason)
 {
-    //world_widget->setVisible(false);
-    //world_widget->setEnabled(false);
+    world_widget->setVisible(false);
+    world_widget->setEnabled(false);
     ppl7::grafix::Color black(128, 0, 0, 255);
     SDL_Renderer* renderer=sdl.getRenderer();
+    bool save_ui_state=this->showui;
     showUi(false);
     int fade_to_black=255;
     int fade_state=0;
+    game_stats_screen=new GameStatsScreen(*this,
+        100, 100, this->width() - 200, this->height() - 200, reason);
+    this->addChild(game_stats_screen);
+    this->needsRedraw();
+
+
     enableControls(false);
     last_frame_time=0.0f;
     while (1) {
@@ -89,6 +104,17 @@ void Game::showStatsScreen()
         } else if (quitGame == true && fade_state == 3) {
             break;
         }
+        if (game_stats_screen->continueSignaled()) {
+            if (fade_state == 1) {
+                fade_state = 2;
+                fade_to_black=0;
+            } else if (fade_state == 3) break;
+        }
     }
-
+    delete game_stats_screen;
+    game_stats_screen=NULL;
+    world_widget->setVisible(true);
+    world_widget->setEnabled(true);
+    showUi(save_ui_state);
+    enableControls(true);
 }

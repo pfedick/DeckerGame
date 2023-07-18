@@ -15,6 +15,20 @@ static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 static ppl7::tk::Window* GameWindow=NULL;
 static Game* GameInstance=NULL;
 
+void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
+{
+	if (fade_to_black > 0) {
+		SDL_BlendMode currentBlendMode;
+		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
+		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
+		SDL_RenderFillRect(renderer, NULL);
+		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
+	}
+}
+
+
 
 ppl7::tk::Window* GetGameWindow()
 {
@@ -65,6 +79,7 @@ Game::Game()
 	controlsEnabled=true;
 	settings_screen=NULL;
 	filedialog=NULL;
+	game_stats_screen=NULL;
 	gameState=GameState::None;
 	last_frame_time=0.0f;
 }
@@ -618,32 +633,26 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		if (fade_to_black < 255) fade_to_black+=5;
 		else {
 			if (gameState == GameState::LevelEndTriggerd) {
-				gameState=GameState::ShowStatsThenNextLevel;
-				showStatsScreen();
+				gameState=GameState::ShowStats;
+				showStatsScreen(StatsScreenReason::LevelEnd);
 
 				startLevel(nextLevelFile);
 			} else if (gameState == GameState::GameOver) {
-				gameState=GameState::ShowStatsThenRestartLevel;
-				showStatsScreen();
+				gameState=GameState::ShowStats;
+				showStatsScreen(StatsScreenReason::PlayerDied);
 				player->resetState();
 				world_widget->resetPlayerStats(player);
 				startLevel(LevelFile);
+				//ppl7::PrintDebugTime("fade_to_black=%d\n", fade_to_black);
 			}
 		}
 	}
-	if (fade_to_black > 0) {
-		SDL_BlendMode currentBlendMode;
-		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
-		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, fade_to_black);
-		SDL_RenderFillRect(renderer, NULL);
-		SDL_SetRenderDrawBlendMode(renderer, currentBlendMode);
-	}
+	/* Hä, wozu soll das gut sein?
 	if (gameState == GameState::ShowStatsThenRestartLevel) {
 		// TODO
 		gameState = GameState::GameOver;
 	}
+	*/
 	metrics.time_misc.stop();
 	metrics.time_draw_world.stop();
 }
@@ -713,6 +722,8 @@ void Game::run()
 		drawWidgets();
 		// Mouse
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		if (fade_to_black) FadeToBlack(renderer, fade_to_black);
+
 		metrics.time_draw_ui.stop();
 
 		metrics.time_total.stop();
@@ -1359,6 +1370,14 @@ void Game::selectSprite(const ppl7::grafix::Point& mouse)
 
 void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
+	if (gameState == GameState::ShowStats) {
+		if (game_stats_screen) {
+			if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE || event->key == ppl7::tk::KeyEvent::KEY_SPACE) {
+				game_stats_screen->signalContinue();
+			}
+		}
+		return;
+	}
 	if (event->widget() == world_widget) {
 		if (sprite_mode == SpriteModeEdit && sprite_selection != NULL && selected_sprite.id >= 0
 			&& selected_sprite_system != NULL) {
@@ -1492,7 +1511,7 @@ void Game::handleDeath(SDL_Renderer* renderer)
 		death_state=3;
 		if (player->lifes <= 0) {
 			death_state = 0;
-			gameState = GameState::ShowStatsThenRestartLevel;
+			gameState = GameState::GameOver;
 		}
 	} else if (death_state == 3) {
 		if (fade_to_black > 0) {
@@ -1604,7 +1623,7 @@ void Game::openSettingsScreen()
 	if (settings_screen) delete settings_screen;
 	settings_screen=NULL;
 	settings_screen=new SettingsScreen(*this,
-		100, 100, this->width() - 100, this->height() - 200);
+		100, 100, this->width() - 200, this->height() - 200);
 	this->addChild(settings_screen);
 	this->needsRedraw();
 	enableControls(false);
