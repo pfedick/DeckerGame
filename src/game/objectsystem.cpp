@@ -537,6 +537,25 @@ Waynet& ObjectSystem::getWaynet()
 	return *waynet;
 }
 
+void ObjectSystem::getObjectCounter(std::map<int, size_t>& object_counter) const
+{
+	object_counter.clear();
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		const Object* obj=(*it).second;
+		if (obj) {
+			object_counter[obj->type()]++;
+			if (obj->type() == Type::ObjectType::TouchEmitter) {
+				int t=((const TouchEmitter*)obj)->emitted_object;
+				object_counter[t]+=((const TouchEmitter*)obj)->max_toggles;
+			}
+		}
+	}
+
+}
+
+
+
 Collision::Collision()
 {
 	object=NULL;

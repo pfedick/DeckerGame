@@ -674,6 +674,11 @@ void Game::run()
 					end_total_metrics=current_second + 60;
 				}
 			}
+			/*
+			LevelStats stats;
+			level.getLevelStats(stats);
+			stats.print();
+			*/
 			last_metrics=metrics.getAverage();
 			mainmenue->updateMetrics(last_metrics);
 			metrics.clear();

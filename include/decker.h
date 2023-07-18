@@ -507,6 +507,15 @@ public:
 
 };
 
+class LevelStats
+{
+public:
+	std::map<int, size_t>object_counter;
+	void clear();
+	size_t getObjectCount(int type) const;
+	void print() const;
+};
+
 
 class Level
 {
@@ -600,6 +609,7 @@ public:
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
+	void getLevelStats(LevelStats& stats) const;
 
 	size_t tileCount() const;
 	ppl7::grafix::Rect getOccupiedArea() const;

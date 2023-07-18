@@ -234,8 +234,7 @@ void Level::load(const ppl7::String& Filename)
 			} else if (id == LevelChunkId::chunkWayNet) {
 				waynet.load(ba);
 			}
-		}
-		catch (const ppl7::EndOfFileException&) {
+		} catch (const ppl7::EndOfFileException&) {
 			break;
 		}
 	}
@@ -611,6 +610,35 @@ ppl7::grafix::Rect Level::getOccupiedAreaFromTileTypePlane() const
 }
 
 
+void LevelStats::clear()
+{
+	object_counter.clear();
+}
+
+size_t LevelStats::getObjectCount(int type) const
+{
+	std::map<int, size_t>::const_iterator it=object_counter.find(type);
+	if (it != object_counter.end())return (*it).second;
+	return 0;
+}
+
+void LevelStats::print() const
+{
+	std::map<int, size_t>::const_iterator it;
+	printf("\n\n");
+	for (it=object_counter.begin();it != object_counter.end();++it) {
+		ppl7::PrintDebugTime("%s: %zd\n",
+			(const char*)Decker::Objects::Type::name((Decker::Objects::Type::ObjectType)(*it).first),
+			(*it).second);
+	}
+}
+
+void Level::getLevelStats(LevelStats& stats) const
+{
+	stats.clear();
+	if (objects) objects->getObjectCounter(stats.object_counter);
+
+}
 
 
 LevelParameter::LevelParameter()
