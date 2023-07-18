@@ -73,6 +73,7 @@ void Player::resetState()
 	dead=false;
 	visible=true;
 	Inventory.clear();
+	object_counter.clear();
 }
 
 void Player::setVisible(bool flag)
@@ -213,6 +214,20 @@ void Player::addLife(int lifes)
 {
 	if (movement == Dead) return;
 	this->lifes+=lifes;
+}
+
+void Player::countObject(int type)
+{
+	object_counter[type]++;
+}
+
+
+size_t Player::getObjectCount(int type) const
+{
+	std::map<int, size_t>::const_iterator it;
+	it=object_counter.find(type);
+	if (it != object_counter.end()) return (*it).second;
+	return 0;
 }
 
 void Player::dropHealth(int points, HealthDropReason reason)

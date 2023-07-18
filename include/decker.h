@@ -509,9 +509,12 @@ public:
 
 class LevelStats
 {
+	Player* player;
 public:
 	std::map<int, size_t>object_counter;
+	LevelStats();
 	void clear();
+	void setPlayer(Player* player);
 	size_t getObjectCount(int type) const;
 	void print() const;
 };
@@ -825,6 +828,7 @@ public:
 
 	void playIntroVideo();
 	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
+	void showStatsScreen();
 
 	void openSaveAsDialog();
 	void openLoadDialog();

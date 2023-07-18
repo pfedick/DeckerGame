@@ -43,6 +43,7 @@ void CoinReward::handleCollision(Player* player, const Collision&)
 	enabled=false;
 	if (spawned) deleteDefered=true;
 	player->addPoints(10);
+	player->countObject(type());
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::coin1, 0.1f);
 }

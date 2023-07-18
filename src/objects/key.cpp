@@ -12,7 +12,7 @@ Representation KeyReward::representation()
 }
 
 KeyReward::KeyReward()
-: Object(Type::ObjectType::Key)
+	: Object(Type::ObjectType::Key)
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=50;
@@ -20,10 +20,11 @@ KeyReward::KeyReward()
 	sprite_no_representation=50;
 }
 
-void KeyReward::handleCollision(Player *player, const Collision &)
+void KeyReward::handleCollision(Player* player, const Collision&)
 {
 	enabled=false;
 	if (spawned) deleteDefered=true;
+	player->countObject(type());
 	player->addInventory(id, Representation(Spriteset::GenericObjects, sprite_no));
 	// TODO: audio sound
 	//AudioPool &audio=getAudioPool();

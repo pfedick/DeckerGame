@@ -38,6 +38,7 @@ private:
 	ppl7::grafix::Point lastSavePoint;
 
 	std::map<int, Decker::Objects::Representation> Inventory;
+	std::map<int, size_t>object_counter;
 	bool godmode;
 	bool dead;
 	bool visible;
@@ -71,6 +72,8 @@ public:
 	void addPoints(int points);
 	void addHealth(int points);
 	void addLife(int lifes);
+	void countObject(int type);
+	size_t getObjectCount(int type) const;
 	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation& repr);
 	bool isInInventory(int object_id) const;

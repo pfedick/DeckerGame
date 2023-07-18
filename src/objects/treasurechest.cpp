@@ -56,6 +56,7 @@ void TreasureChest::update(double time, TileTypePlane& ttplane, Player& player, 
 void TreasureChest::handleCollision(Player* player, const Collision& collision)
 {
 	player->addPoints(1000);
+	player->countObject(type());
 	collisionDetection=false;
 	enabled=false;
 }

@@ -12,7 +12,7 @@ Representation Medikit::representation()
 
 
 Medikit::Medikit()
-: Object(Type::ObjectType::Medikit)
+	: Object(Type::ObjectType::Medikit)
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=83;
@@ -21,9 +21,10 @@ Medikit::Medikit()
 }
 
 
-void Medikit::handleCollision(Player *player, const Collision &)
+void Medikit::handleCollision(Player* player, const Collision&)
 {
 	player->health=100;
+	player->countObject(type());
 	enabled=false;
 	collisionDetection=false;
 }

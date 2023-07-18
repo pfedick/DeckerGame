@@ -609,10 +609,19 @@ ppl7::grafix::Rect Level::getOccupiedAreaFromTileTypePlane() const
 	return TileTypeMatrix.getOccupiedArea();
 }
 
+LevelStats::LevelStats()
+{
+	player=NULL;
+}
 
 void LevelStats::clear()
 {
 	object_counter.clear();
+}
+
+void LevelStats::setPlayer(Player* player)
+{
+	this->player=player;
 }
 
 size_t LevelStats::getObjectCount(int type) const
@@ -627,9 +636,17 @@ void LevelStats::print() const
 	std::map<int, size_t>::const_iterator it;
 	printf("\n\n");
 	for (it=object_counter.begin();it != object_counter.end();++it) {
-		ppl7::PrintDebugTime("%s: %zd\n",
-			(const char*)Decker::Objects::Type::name((Decker::Objects::Type::ObjectType)(*it).first),
-			(*it).second);
+		if (player) {
+			ppl7::PrintDebugTime("%-30s: Total: %5zd, Player: %zd\n",
+				(const char*)Decker::Objects::Type::name((Decker::Objects::Type::ObjectType)(*it).first),
+				(*it).second,
+				player->getObjectCount((*it).first));
+
+		} else {
+			ppl7::PrintDebugTime("%s: %zd\n",
+				(const char*)Decker::Objects::Type::name((Decker::Objects::Type::ObjectType)(*it).first),
+				(*it).second);
+		}
 	}
 }
 

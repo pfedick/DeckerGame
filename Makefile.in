@@ -112,6 +112,7 @@ OBJECTS=compile/main.o \
 	compile/object_autogeorge.o \
 	compile/object_extralife.o \
 	compile/object_levelend.o \
+	compile/object_ostrich.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -122,7 +123,8 @@ OBJECTS=compile/main.o \
 	compile/level_screen.o \
 	compile/ingame_menue_screen.o \
 	compile/video_videoplayer.o \
-	compile/intro_screen.o
+	compile/intro_screen.o \
+	compile/gamestats_screen.o
 
 
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
@@ -564,6 +566,10 @@ compile/object_levelend.o: src/objects/levelend.cpp Makefile include/objects.h i
 	- @mkdir -p compile
 	$(CXX) -o compile/object_levelend.o -c src/objects/levelend.cpp $(CFLAGS)
 
+compile/object_ostrich.o: src/objects/ostrich.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_ostrich.o -c src/objects/ostrich.cpp $(CFLAGS)
+
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h
 	- @mkdir -p compile
@@ -651,6 +657,11 @@ compile/level_screen.o: src/ui/level_screen.cpp Makefile include/screens.h
 compile/ingame_menue_screen.o: src/ui/ingame_menue_screen.cpp Makefile include/screens.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ingame_menue_screen.o -c src/ui/ingame_menue_screen.cpp $(CFLAGS)
+
+compile/gamestats_screen.o: src/ui/gamestats_screen.cpp Makefile include/screens.h include/decker.h include/player.h
+	- @mkdir -p compile
+	$(CXX) -o compile/gamestats_screen.o -c src/ui/gamestats_screen.cpp $(CFLAGS)
+
 
 # Video
 compile/video_videoplayer.o: src/video/videoplayer.cpp Makefile include/videoplayer.h include/decker_sdl.h

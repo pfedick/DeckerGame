@@ -41,6 +41,7 @@ void ExtraLife::handleCollision(Player* player, const Collision&)
 {
 	enabled=false;
 	if (spawned) deleteDefered=true;
+	player->countObject(type());
 	player->addPoints(100);
 	player->addLife(1);
 	//TODO

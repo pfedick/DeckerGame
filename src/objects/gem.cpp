@@ -45,6 +45,7 @@ void GemReward::handleCollision(Player* player, const Collision&)
 	enabled=false;
 	if (spawned) deleteDefered=true;
 	player->addPoints(50);
+	player->countObject(type());
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::coin2, 0.1f);
 }
@@ -83,6 +84,7 @@ void CrystalReward::handleCollision(Player* player, const Collision&)
 	enabled=false;
 	if (spawned) deleteDefered=true;
 	player->addPoints(100);
+	player->countObject(type());
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::crystal, 1.0f);
 }

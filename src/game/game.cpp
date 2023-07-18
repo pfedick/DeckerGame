@@ -618,14 +618,16 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		if (fade_to_black < 255) fade_to_black+=5;
 		else {
 			if (gameState == GameState::LevelEndTriggerd) {
-				// TODO
-				//printf("Jump to next level: %s\n", (const char*)nextLevelFile);
+				gameState=GameState::ShowStatsThenNextLevel;
+				showStatsScreen();
+
 				startLevel(nextLevelFile);
 			} else if (gameState == GameState::GameOver) {
+				gameState=GameState::ShowStatsThenRestartLevel;
+				showStatsScreen();
 				player->resetState();
 				world_widget->resetPlayerStats(player);
 				startLevel(LevelFile);
-
 			}
 		}
 	}
@@ -676,6 +678,7 @@ void Game::run()
 			}
 			/*
 			LevelStats stats;
+			stats.setPlayer(player);
 			level.getLevelStats(stats);
 			stats.print();
 			*/
