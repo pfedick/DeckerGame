@@ -183,6 +183,9 @@ void GameStatsScreen::addResult(const ppl7::String& caption, int object_type, si
 
     y+=72;
 
+    AudioPool& audio=getAudioPool();
+    audio.playOnce(AudioClip::coin1, 0.1f);
+
 }
 
 void GameStatsScreen::addTotal(const ppl7::String& caption, int points)
@@ -200,6 +203,9 @@ void GameStatsScreen::addTotal(const ppl7::String& caption, int points)
     label->setFont(style_label.font);
     this->addChild(label);
     y+=72;
+    AudioPool& audio=getAudioPool();
+    audio.playOnce(AudioClip::coin1, 0.1f);
+
 }
 
 void GameStatsScreen::addLine(const ppl7::String& caption)
@@ -209,6 +215,9 @@ void GameStatsScreen::addLine(const ppl7::String& caption)
     label->setFont(style_label.font);
     this->addChild(label);
     y+=72;
+    AudioPool& audio=getAudioPool();
+    audio.playOnce(AudioClip::coin1, 0.1f);
+
 }
 
 
@@ -232,7 +241,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     enableControls(false);
     last_frame_time=0.0f;
     double next_result=0;
-    int line=-1;
+    int line=-2;
     int bonus=0;
     int total_bonus =0;
     while (1) {
@@ -243,56 +252,67 @@ void Game::showStatsScreen(StatsScreenReason reason)
             frame_rate_compensation=frametime / (1.0f / 60.0f);
         }
         last_frame_time=now;
-        if (next_result < now && fade_state == 1) {
-            if (line < 0) {
+        if (next_result < now && fade_state >0) {
+            if (line == -2) {
+                game_stats_screen->addTotal(translate("Points so far:"), player->points);
+            } else if (line == -1) {
                 game_stats_screen->addLine(translate("You collected:"));
 
             } else if (line == 0 && stats.getObjectCount(Decker::Objects::Type::Coin) > 0) {
+                bonus=0;
                 if (stats.getObjectCount(Decker::Objects::Type::Coin) == player->getObjectCount(Decker::Objects::Type::Coin)) {
-                    bonus=(player->points * 0.1f);
+                    bonus=stats.getObjectCount(Decker::Objects::Type::Coin) * 10;
                     total_bonus+=bonus;
                 }
                 game_stats_screen->addResult(translate("Coins:"), Decker::Objects::Type::Coin,
                     stats.getObjectCount(Decker::Objects::Type::Coin),
                     player->getObjectCount(Decker::Objects::Type::Coin), bonus);
             } else if (line == 1 && stats.getObjectCount(Decker::Objects::Type::Diamond) > 0) {
+                bonus=0;
                 if (stats.getObjectCount(Decker::Objects::Type::Diamond) == player->getObjectCount(Decker::Objects::Type::Diamond)) {
-                    bonus=(player->points * 0.2f);
+                    bonus=stats.getObjectCount(Decker::Objects::Type::Diamond) * 50;
                     total_bonus+=bonus;
                 }
                 game_stats_screen->addResult(translate("Diamonds:"), Decker::Objects::Type::Diamond,
                     stats.getObjectCount(Decker::Objects::Type::Diamond),
                     player->getObjectCount(Decker::Objects::Type::Diamond), bonus);
             } else if (line == 2 && stats.getObjectCount(Decker::Objects::Type::Crystal) > 0) {
+                bonus=0;
                 if (stats.getObjectCount(Decker::Objects::Type::Crystal) == player->getObjectCount(Decker::Objects::Type::Crystal)) {
-                    bonus=(player->points * 0.6f);
+                    bonus=stats.getObjectCount(Decker::Objects::Type::Crystal) * 100;
                     total_bonus+=bonus;
                 }
                 game_stats_screen->addResult(translate("Chrystals:"), Decker::Objects::Type::Crystal,
                     stats.getObjectCount(Decker::Objects::Type::Crystal),
                     player->getObjectCount(Decker::Objects::Type::Crystal), bonus);
             } else if (line == 3 && stats.getObjectCount(Decker::Objects::Type::TreasureChest) > 0) {
+                bonus=0;
                 if (stats.getObjectCount(Decker::Objects::Type::TreasureChest) == player->getObjectCount(Decker::Objects::Type::TreasureChest)) {
-                    bonus=(player->points * 0.8f);
+                    bonus=stats.getObjectCount(Decker::Objects::Type::TreasureChest) * 1000;
                     total_bonus+=bonus;
                 }
                 game_stats_screen->addResult(translate("Treasure Chests:"), Decker::Objects::Type::TreasureChest,
                     stats.getObjectCount(Decker::Objects::Type::TreasureChest),
                     player->getObjectCount(Decker::Objects::Type::TreasureChest), bonus);
             } else if (line == 4 && stats.getObjectCount(Decker::Objects::Type::ExtraLife) > 0) {
+                bonus=0;
+                if (stats.getObjectCount(Decker::Objects::Type::ExtraLife) == player->getObjectCount(Decker::Objects::Type::ExtraLife)) {
+                    bonus=stats.getObjectCount(Decker::Objects::Type::ExtraLife) * 100;
+                    total_bonus+=bonus;
+                }
                 game_stats_screen->addResult(translate("Extra Lives:"), Decker::Objects::Type::ExtraLife,
                     stats.getObjectCount(Decker::Objects::Type::ExtraLife),
-                    player->getObjectCount(Decker::Objects::Type::ExtraLife));
-            } else if (line == 5 && bonus > 0) {
+                    player->getObjectCount(Decker::Objects::Type::ExtraLife), bonus);
+            } else if (line == 5 && total_bonus > 0) {
                 game_stats_screen->addTotal(translate("Bonus Points:"), total_bonus);
                 player->points+=total_bonus;
             } else if (line == 6) {
-                game_stats_screen->addTotal(translate("Total Points:"), player->points);
+                game_stats_screen->addTotal(translate("Final Points:"), player->points);
             }
 
 
             line++;
-            next_result=now + 0.5f;
+            next_result=now + 0.3f;
         }
 
         wm->handleEvents();
@@ -326,6 +346,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
                 fade_state = 2;
                 fade_to_black=0;
             } else if (fade_state == 3) break;
+            next_result=0;
         }
     }
     delete game_stats_screen;
