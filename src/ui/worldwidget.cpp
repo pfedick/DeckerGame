@@ -106,19 +106,31 @@ ppl7::String WorldWidget::widgetType() const
 	return "WorldWidget";
 }
 
+static int calculatePointDiff(int display, int player)
+{
+
+	if (display < player) {
+		int pdiff=(player - display) / 30;
+		if (pdiff < 1) pdiff=1;
+		return pdiff;
+	} else if (display > player) {
+		int pdiff=(display - player) / 30;
+		if (pdiff < 1) pdiff=1;
+		return -pdiff;
+	}
+	return 0;
+}
+
 
 void WorldWidget::updatePlayerStats(const Player* player)
 {
-	if (value_health > player->health) value_health--;
-	else if (value_health < player->health) value_health++;
-	if (value_lifes > player->lifes) value_lifes--;
-	else if (value_lifes < player->lifes) value_lifes++;
-	if (value_points > player->points) value_points--;
-	else if (value_points < player->points) value_points++;
+	if (value_health != player->health) value_health+=calculatePointDiff(value_health, player->health);
+	if (value_points != player->points) value_points+=calculatePointDiff(value_points, player->points);
+	if (value_lifes != player->lifes) value_lifes+=calculatePointDiff(value_lifes, player->lifes);
 
 	stats_health->setValue(ppl7::ToString("%d %%", value_health));
 	stats_lifes->setValue(ppl7::ToString("%d", value_lifes));
-	stats_points->setValue(ppl7::ToString("%d", value_points));
+	stats_points->setValue(ppl7::ToString("%d", (int)value_points));
 
 }
 
