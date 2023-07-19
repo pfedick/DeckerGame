@@ -76,6 +76,14 @@ void Player::resetState()
 	object_counter.clear();
 }
 
+void Player::resetLevelObjects()
+{
+	Inventory.clear();
+	object_counter.clear();
+}
+
+
+
 void Player::setVisible(bool flag)
 {
 	visible=flag;

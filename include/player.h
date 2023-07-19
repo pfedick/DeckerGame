@@ -67,6 +67,7 @@ public:
 	ppl7::grafix::PointF position() const;
 	int getKeyboardMatrix(const unsigned char* state=NULL);
 	void resetState();
+	void resetLevelObjects();
 	void setZeroVelocity();
 	void setVisible(bool flag);
 	void addPoints(int points);

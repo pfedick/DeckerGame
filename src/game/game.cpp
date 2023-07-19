@@ -635,7 +635,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 			if (gameState == GameState::LevelEndTriggerd) {
 				gameState=GameState::ShowStats;
 				showStatsScreen(StatsScreenReason::LevelEnd);
-
+				player->resetLevelObjects();
 				startLevel(nextLevelFile);
 			} else if (gameState == GameState::GameOver) {
 				gameState=GameState::ShowStats;
@@ -685,12 +685,6 @@ void Game::run()
 					end_total_metrics=current_second + 60;
 				}
 			}
-			/*
-			LevelStats stats;
-			stats.setPlayer(player);
-			level.getLevelStats(stats);
-			stats.print();
-			*/
 			last_metrics=metrics.getAverage();
 			mainmenue->updateMetrics(last_metrics);
 			metrics.clear();

@@ -217,15 +217,23 @@ private:
     StatsScreenReason reason;
     bool closeWindow;
 
+    StyleElement style_heading, style_label, style_anykey;
+    int y, x1, x2, x3;
+
+    void updateStyles();
+
 public:
     GameStatsScreen(Game& g, int x, int y, int width, int height, StatsScreenReason reason);
     ~GameStatsScreen();
     virtual void paint(ppl7::grafix::Drawable& draw);
     void setPlayer(const Player& player);
     void setLevelStats(const LevelStats& level);
-    void setupUi();
     void signalContinue();
     bool continueSignaled() const;
+
+    void addResult(const ppl7::String& caption, int object_type, size_t max, size_t achived, size_t bonus =0);
+    void addTotal(const ppl7::String& caption, int points);
+    void addLine(const ppl7::String& caption);
 };
 
 
