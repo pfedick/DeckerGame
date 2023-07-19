@@ -258,9 +258,9 @@ sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white
 
 fonts:
 	- rm -rf res/*.fnt6
-	pplfontmaker -t res/notosans-black.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Black.ttf -s "12,14,16,18,20,30,40,50" --idn --aa4 -n "NotoSans-Black" --zlib -6
-	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Regular.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6
-	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Bold.ttf -s "8,10,12,14,16,18,20" --idn --aa4 -n "NotoSans" --zlib -6 --isbold
+	pplfontmaker -t res/notosans-black.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Black.ttf -s "12,14,16,18,20,30,40,50,64" --idn --aa4 -n "NotoSans-Black" --zlib -6
+	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Regular.ttf -s "8,10,12,14,16,18,20,30" --idn --aa4 -n "NotoSans" --zlib -6
+	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Bold.ttf -s "8,10,12,14,16,18,20,30" --idn --aa4 -n "NotoSans" --zlib -6 --isbold
 
 
 update_version:
