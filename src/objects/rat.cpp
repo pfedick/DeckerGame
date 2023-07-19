@@ -81,7 +81,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			audio->setVolume(0.4f);
 			audio->setAutoDelete(false);
 			audio->setLoop(true);
-			audio->setPositional(p, 1920);
+			audio->setPositional(p, 960);
 			pool.playInstance(audio);
 		}
 	} else {
