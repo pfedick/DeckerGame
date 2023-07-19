@@ -622,6 +622,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	if (player->isDead() == true && death_state == 0) {
 		death_state=1;
 		fade_to_black=0;
+		if (player->lifes <= 1)soundtrack.fadeout(1.0f);
 	}
 	if (gameState == GameState::Running) {
 		if (death_state) handleDeath(renderer);
@@ -1110,6 +1111,7 @@ void Game::startLevel(const ppl7::String& filename)
 
 void Game::checkSoundtrack()
 {
+	if (player->isDead()) return;
 	soundtrack.update();
 	if (mainmenue->soundTrackEnabled()) {
 		audiosystem.setVolume(AudioClass::Music, config.volumeMusic);

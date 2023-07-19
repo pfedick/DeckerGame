@@ -237,8 +237,18 @@ void Game::showStatsScreen(StatsScreenReason reason)
     this->needsRedraw();
     LevelStats stats;
     level.getLevelStats(stats);
+    soundtrack.fadeout(2.0f);
+
+    if (reason == StatsScreenReason::LevelEnd) {
+        soundtrack.playSong("res/audio/LevelCompleted.mp3");
+    } else {
+        soundtrack.playSong("res/audio/GameOver.mp3");
+
+    }
 
     enableControls(false);
+
+
     last_frame_time=0.0f;
     double next_result=0;
     int line=-2;
