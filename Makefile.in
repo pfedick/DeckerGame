@@ -208,8 +208,13 @@ bricks_white:
 	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
 	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
 
+interactive_objects:
+	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
+	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
 
-sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white
+
+
+sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white interactive_objects
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/george_adventure/" -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s "res/tiletypes/*.png" -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x res/tiletypes
@@ -233,8 +238,6 @@ sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white
 
 	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
 	./texmaker -s "lightwave/Render/bricks_white/*.png" -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
-	./texmaker -s "lightwave/Render/objects/ui/*.png" -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
-	./texmaker -s "lightwave/Render/objects/interactive/*.png" -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
 	./texmaker -s "lightwave/Render/particles/*.png" -t res/particles.tex -w 1024 -h 1024 -px 128 -py 128
 
 	./texmaker -s "lightwave/Render/enemies/3speers/*.png" -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255 --pivot_detection lower_middle

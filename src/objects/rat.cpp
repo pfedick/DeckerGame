@@ -19,7 +19,17 @@ Rat::Rat()
 	sprite_no_representation=38;
 	state=0;
 	collisionDetection=true;
+	audio=NULL;
 
+}
+
+Rat::~Rat()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 void Rat::handleCollision(Player* player, const Collision& collision)
@@ -30,6 +40,13 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 		collisionDetection=false;
 		enabled=false;
 		player->addPoints(50);
+		if (audio) {
+			getAudioPool().stopInstace(audio);
+			delete audio;
+			audio=NULL;
+			state=3;
+
+		}
 	} else {
 		player->dropHealth(2);
 	}
@@ -37,6 +54,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 
 void Rat::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	if (state == 3) return;
 	if (state == 0) {
 		p.x-=2 * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
@@ -55,6 +73,19 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			sprite_no=38;
 		}
 		updateBoundary();
+	}
+	if (!audio) {
+		AudioPool& pool=getAudioPool();
+		audio=pool.getInstance(AudioClip::rat_squeek);
+		if (audio) {
+			audio->setVolume(0.4f);
+			audio->setAutoDelete(false);
+			audio->setLoop(true);
+			audio->setPositional(p, 1920);
+			pool.playInstance(audio);
+		}
+	} else {
+		audio->setPositional(p, 960);
 	}
 }
 

@@ -52,6 +52,7 @@ public:
 		scarabeus_death3,
 		scarabeus_death4,
 		scarabeus_death5,
+		rat_squeek,
 
 		// this must always be the last entry!
 		maxClips

@@ -657,9 +657,11 @@ public:
 class Rat : public Enemy
 {
 private:
+	AudioInstance* audio;
 	int state;
 public:
 	Rat();
+	~Rat();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
