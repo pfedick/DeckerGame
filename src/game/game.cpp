@@ -15,6 +15,8 @@ static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 static ppl7::tk::Window* GameWindow=NULL;
 static Game* GameInstance=NULL;
 
+double game_start=0.0f;
+
 void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 {
 	if (fade_to_black > 0) {
@@ -52,6 +54,7 @@ ppl7::grafix::Point GetViewPos()
 
 Game::Game()
 {
+	game_start=ppl7::GetMicrotime();
 	GameWindow=this;
 	GameInstance=this;
 	tex_level_grid=NULL;
@@ -402,6 +405,8 @@ void Game::init_grafix()
 	level.setSpriteset(9, &resources.Sprites_Trees);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
+
+	ppl7::PrintDebugTime("Startup time: %0.3f s\n", ppl7::GetMicrotime() - game_start);
 
 }
 
