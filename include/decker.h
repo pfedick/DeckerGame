@@ -439,8 +439,8 @@ public:
 	SpriteTexture uiSpritesTreasure;
 	SpriteTexture Sprites_White;
 	SpriteTexture uiSpritesWhite;
-	SpriteTexture Sprites_Trees;
-	SpriteTexture uiSpritesTrees;
+	SpriteTexture Sprites_Tropical;
+	SpriteTexture uiSpritesTropical;
 
 	std::list<ppl7::String> background_images;
 
