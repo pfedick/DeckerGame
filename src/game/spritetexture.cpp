@@ -195,9 +195,10 @@ void SpriteTexture::loadIndex(ppl7::PFPChunk* chunk)
 	SpriteIndexItem item;
 	for (int i=0;i < num;i++) {
 		item.id=Peek32(p + 0);
-		item.tex=findTexture(Peek16(p + 4));
-		item.outlines=findOutlines(Peek16(p + 4));
-		item.drawable=findInMemoryTexture(Peek16(p + 4));
+		item.textureId=Peek16(p + 4);
+		item.tex=findTexture(item.textureId);
+		item.outlines=findOutlines(item.textureId);
+		item.drawable=findInMemoryTexture(item.textureId);
 		item.r.x=Peek16(p + 6 + 0);
 		item.r.y=Peek16(p + 6 + 2);
 		item.r.w=Peek16(p + 6 + 4) + 1 - item.r.x;
@@ -268,7 +269,7 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 		InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id, surface));
 	}
 	if (bOutlinesEnabled) {
-		generateOutlines(sdl, id, surface);
+		//generateOutlines(sdl.getRenderer(), id, surface);
 	}
 	if (bSDLBufferd) {
 		SDL_Texture* tex=sdl.createTexture(surface);
@@ -276,7 +277,7 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 	}
 }
 
-void SpriteTexture::generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image& src)
+SDL_Texture* SpriteTexture::generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src)
 {
 	ppl7::grafix::Image surface;
 	ppl7::grafix::Color white(255, 255, 255, 255);
@@ -297,9 +298,9 @@ void SpriteTexture::generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image
 			}
 		}
 	}
-
-	SDL_Texture* tex=sdl.createTexture(surface);
+	SDL_Texture* tex=SDL::createTexture(renderer, surface);
 	OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
+	return tex;
 }
 
 void SpriteTexture::load(SDL& sdl, const String& filename, const ppl7::grafix::Color& tint)
@@ -485,13 +486,41 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
-void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const
+SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int id)
+{
+	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
+	std::map<int, SpriteIndexItem>::iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return NULL;
+	SpriteIndexItem& item=it->second;
+	if (item.outlines) return item.outlines;
+	if (!item.drawable) return NULL;
+
+	SDL_Texture* tex=findOutlines(item.textureId);
+	if (tex) {
+		//ppl7::PrintDebugTime("found already generated outlines for texture %d!\n", item.textureId);
+		item.outlines=tex;
+		return tex;
+	}
+	//ppl7::PrintDebugTime("postGenerate outlines for texture %d!\n", item.textureId);
+	item.outlines=generateOutlines(renderer, item.textureId, *item.drawable);
+	return item.outlines;
+}
+
+void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor)
 {
 	if (!bOutlinesEnabled) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
 	it=SpriteList.find(id);
 	if (it == SpriteList.end()) return;
 	const SpriteIndexItem& item=it->second;
+
+	SDL_Texture* tex=item.outlines;
+	if (!item.outlines) {
+		//ppl7::PrintDebugTime("no outlines!\n");
+		tex=postGenerateOutlines(renderer, id);
+		if (!tex) return;
+	}
 	SDL_Rect tr;
 	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
 	if (scale_factor == 1.0) {
@@ -505,7 +534,7 @@ void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, f
 		tr.w=(int)((float)item.r.w * scale_factor);
 		tr.h=(int)((float)item.r.h * scale_factor);
 	}
-	SDL_RenderCopy(renderer, item.outlines, &item.r, &tr);
+	SDL_RenderCopy(renderer, tex, &item.r, &tr);
 }
 
 ppl7::grafix::Size SpriteTexture::spriteSize(int id, float scale_factor) const

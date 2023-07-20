@@ -151,6 +151,7 @@ private:
 	{
 	public:
 		int id;
+		int textureId;
 		SDL_Texture* tex;
 		SDL_Texture* outlines;
 		const ppl7::grafix::Drawable* drawable;
@@ -161,6 +162,7 @@ private:
 		SpriteIndexItem()
 		{
 			id=0;
+			textureId=0;
 			tex=outlines=NULL;
 			drawable=NULL;
 		}
@@ -168,6 +170,7 @@ private:
 			:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
 		{
 			id=other.id;
+			textureId=other.textureId;
 			tex=other.tex;
 			outlines=other.outlines;
 			drawable=other.drawable;
@@ -185,7 +188,9 @@ private:
 
 	void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
 	void loadIndex(ppl7::PFPChunk* chunk);
-	void generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image& src);
+	SDL_Texture* postGenerateOutlines(SDL_Renderer* renderer, int id);
+	//void generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image& src);
+	SDL_Texture* generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src);
 	SDL_Texture* findTexture(int id) const;
 	SDL_Texture* findOutlines(int id) const;
 	const ppl7::grafix::Drawable* findInMemoryTexture(int id) const;
@@ -205,7 +210,9 @@ public:
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
-	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
+	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor);
+
+
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
 	const ppl7::grafix::Drawable getDrawable(int id) const;
