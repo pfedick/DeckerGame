@@ -122,9 +122,10 @@ OBJECTS=compile/main.o \
 	compile/settings_screen.o \
 	compile/level_screen.o \
 	compile/ingame_menue_screen.o \
-	compile/video_videoplayer.o \
-	compile/intro_screen.o \
 	compile/gamestats_screen.o
+
+#	compile/video_videoplayer.o \
+#	compile/intro_screen.o \
 
 
 TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o

@@ -1334,13 +1334,13 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		if (sprite_mode == spriteModeDraw) {
 			float scale=sprite_selection->spriteScale();
-			if (event->wheel.y < 0 && scale>0.1) scale-=0.1;
-			else if (event->wheel.y > 0 && scale < 1.0) scale+=0.1;
+			if (event->wheel.y < 0 && scale>0.1) scale-=0.05;
+			else if (event->wheel.y > 0 && scale < 2.0) scale+=0.05;
 			sprite_selection->setSpriteScale(scale);
 		} else if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
 			//printf ("wheel\n");
-			if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.1;
-			else if (event->wheel.y > 0 && selected_sprite.scale < 1.0) selected_sprite.scale+=0.1;
+			if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.05;
+			else if (event->wheel.y > 0 && selected_sprite.scale < 2.0) selected_sprite.scale+=0.05;
 			selected_sprite_system->modifySprite(selected_sprite);
 		}
 	}
