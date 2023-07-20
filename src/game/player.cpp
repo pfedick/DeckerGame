@@ -399,8 +399,14 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		} else {
 			if (movement != Jump) {
 				movement=Jump;
-				jump_climax=time + 0.6f;
-				acceleration_jump=0.5f * frame_rate_compensation;
+				if (keys & KeyboardKeys::Shift) {
+					jump_climax=time + 0.45f;
+					acceleration_jump=2.0f * frame_rate_compensation;
+				} else {
+					jump_climax=time + 0.3f;
+					acceleration_jump=0.3f * frame_rate_compensation;
+				}
+
 				if (orientation == Front) animation.setStaticFrame(42);
 				else if (orientation == Left) animation.setStaticFrame(40);
 				else if (orientation == Right) animation.setStaticFrame(41);
@@ -410,17 +416,31 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	} else if ((keys & KeyboardKeys::JumpLeft) == KeyboardKeys::JumpLeft) {
 		movement=Jump;
 		orientation=Left;
-		jump_climax=time + 0.6f;
-		acceleration_jump=1.0f * frame_rate_compensation;
-		velocity_move.x=-2 * frame_rate_compensation;
+		if (keys & KeyboardKeys::Shift) {
+			jump_climax=time + 0.45f;
+			acceleration_jump=2.0f * frame_rate_compensation;
+			velocity_move.x=-2 * frame_rate_compensation;
+		} else {
+			jump_climax=time + 0.3f;
+			acceleration_jump=0.3f * frame_rate_compensation;
+			velocity_move.x=-2 * frame_rate_compensation;
+		}
+
 		if (keys & KeyboardKeys::Shift) velocity_move.x=-6 * frame_rate_compensation;
 		animation.setStaticFrame(38);
 	} else if ((keys & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
 		movement=Jump;
 		orientation=Right;
-		jump_climax=time + 0.6f;
-		acceleration_jump=1.0f * frame_rate_compensation;
-		velocity_move.x=2 * frame_rate_compensation;
+		if (keys & KeyboardKeys::Shift) {
+			jump_climax=time + 0.45f;
+			acceleration_jump=2.0f * frame_rate_compensation;
+			velocity_move.x=2 * frame_rate_compensation;
+		} else {
+			jump_climax=time + 0.3f;
+			acceleration_jump=0.3f * frame_rate_compensation;
+			velocity_move.x=2 * frame_rate_compensation;
+		}
+
 		if (keys & KeyboardKeys::Shift) velocity_move.x=6 * frame_rate_compensation;
 		animation.setStaticFrame(39);
 	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
