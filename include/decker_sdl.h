@@ -47,6 +47,8 @@ public:
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);
 	static void getDisplayModes(int display_id, std::list<DisplayMode>& mode_list);
 
+	static SDL_Texture* createTexture(SDL_Renderer* renderer, const ppl7::grafix::Drawable& d);
+
 };
 
 #endif

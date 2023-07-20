@@ -174,9 +174,7 @@ SDL_Texture* SDL::createRenderTargetTexture(int width, int height)
 	return texture;
 }
 
-
-
-SDL_Texture* SDL::createTexture(const ppl7::grafix::Drawable& d)
+SDL_Texture* SDL::createTexture(SDL_Renderer* renderer, const ppl7::grafix::Drawable& d)
 {
 	SDL_Surface* surface=SDL_CreateRGBSurfaceWithFormat(0,
 		d.width(),
@@ -200,6 +198,11 @@ SDL_Texture* SDL::createTexture(const ppl7::grafix::Drawable& d)
 	SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
 	SDL_FreeSurface(surface);
 	return tex;
+}
+
+SDL_Texture* SDL::createTexture(const ppl7::grafix::Drawable& d)
+{
+	return SDL::createTexture(renderer, d);
 }
 
 void SDL::destroyTexture(SDL_Texture* texture)
