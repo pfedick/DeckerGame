@@ -67,7 +67,7 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
         state=1;
         animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
     } else if (state == 1) {	// walk left
-        p.x-=3 * frame_rate_compensation;
+        p.x-=8 * frame_rate_compensation;
         updateBoundary();
         TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 20, p.y - 6));
         TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 20, p.y + 6));
@@ -87,7 +87,7 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
         animation.start(walk_cycle_right, sizeof(walk_cycle_right) / sizeof(int), true, 20);
 
     } else if (state == 4) {
-        p.x+=3 * frame_rate_compensation;
+        p.x+=8 * frame_rate_compensation;
         updateBoundary();
         TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 20, p.y - 6));
         TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 20, p.y + 6));
