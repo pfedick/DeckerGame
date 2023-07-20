@@ -93,7 +93,7 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 			if (gravity > 0.0f && gravity < 0.5) gravity=0.0f;
 		} else {
 			gravity+=(acceleration_gravity * frame_rate_compensation);
-			if (gravity > 14.0f * frame_rate_compensation) gravity=14.0f * frame_rate_compensation;
+			if (gravity > 16.0f * frame_rate_compensation) gravity=16.0f * frame_rate_compensation;
 		}
 
 	}
@@ -145,22 +145,24 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 }
 
 
-int Physic::detectFallingDamage(double time)
+int Physic::detectFallingDamage(double time, float frame_rate_compensation)
 {
 	if (movement != Falling && fallstart > 0.0f) {
 		double falltime=time - fallstart;
-		//printf ("Falling ended at %0.3f, falltime: %0.3f\n", time, falltime);
+		//ppl7::PrintDebugTime("Falling ended at %0.3f, falltime: %0.3f\n", time, falltime);
 		if (falltime > 1.1f) return 100;
 		else if (falltime > 1.0f) return 80;
 		else if (falltime > 0.9f) return 50;
 		else if (falltime > 0.8f) return 20;
 		fallstart=0.0f;
-	} else if (movement == Falling && fallstart == 0.0f && gravity > 15.0f) {
-		//printf ("we start to fall at %0.3f\n",time);
+	} else if (movement == Falling && fallstart == 0.0f && gravity > (15.0f * frame_rate_compensation)) {
+		//ppl7::PrintDebugTime("we start to fall at %0.3f, gravity=%0.3f\n", time, gravity);
 		fallstart=time;
 	} else if (movement == Falling && fallstart > 0.0f && time - fallstart > 10.0f) {
 		// the player probably falls through the level
 		return 100;
+	} else  if (movement == Falling && fallstart == 0.0f) {
+		//ppl7::PrintDebugTime("we are falling with gravity at: %0.3f\n", gravity);
 	}
 	return 0;
 }

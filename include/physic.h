@@ -79,6 +79,7 @@ public:
 	float gravity, acceleration_gravity;
 	float acceleration_airstream;
 	float acceleration_jump;
+	float acceleration_jump_sideways;
 	float speed_walk;
 	float speed_run;
 
@@ -95,7 +96,7 @@ public:
 
 	bool updatePhysics(const TileTypePlane& world, float frame_rate_compensation);
 	PlayerMovement checkCollisionWithWorld(const TileTypePlane& world, float& x, float& y);
-	int detectFallingDamage(double time);
+	int detectFallingDamage(double time, float frame_rate_compensation);
 	void updateMovement(float frame_rate_compensation);
 
 	bool isCollisionLeft() const;

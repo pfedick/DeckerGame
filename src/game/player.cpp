@@ -310,7 +310,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		return;
 	}
 	if (dead) return;
-	dropHealth(detectFallingDamage(time), HealthDropReason::FallingDeep);
+	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
@@ -361,6 +361,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 		return;
 	}
+	acceleration_jump_sideways=0;
 	//if (time>next_keycheck) {
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -402,9 +403,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 				if (keys & KeyboardKeys::Shift) {
 					jump_climax=time + 0.45f;
 					acceleration_jump=2.0f * frame_rate_compensation;
+					acceleration_jump_sideways=0;
 				} else {
 					jump_climax=time + 0.3f;
 					acceleration_jump=0.3f * frame_rate_compensation;
+					acceleration_jump_sideways=0;
 				}
 
 				if (orientation == Front) animation.setStaticFrame(42);
@@ -419,14 +422,14 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (keys & KeyboardKeys::Shift) {
 			jump_climax=time + 0.45f;
 			acceleration_jump=2.0f * frame_rate_compensation;
-			velocity_move.x=-2 * frame_rate_compensation;
+			acceleration_jump_sideways=-6;
+
 		} else {
 			jump_climax=time + 0.3f;
 			acceleration_jump=0.3f * frame_rate_compensation;
-			velocity_move.x=-2 * frame_rate_compensation;
+			acceleration_jump_sideways=-2;
 		}
-
-		if (keys & KeyboardKeys::Shift) velocity_move.x=-6 * frame_rate_compensation;
+		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.setStaticFrame(38);
 	} else if ((keys & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
 		movement=Jump;
@@ -434,14 +437,14 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (keys & KeyboardKeys::Shift) {
 			jump_climax=time + 0.45f;
 			acceleration_jump=2.0f * frame_rate_compensation;
-			velocity_move.x=2 * frame_rate_compensation;
+			acceleration_jump_sideways=6.0f;
+			velocity_move.x=8 * frame_rate_compensation;
 		} else {
 			jump_climax=time + 0.3f;
 			acceleration_jump=0.3f * frame_rate_compensation;
-			velocity_move.x=2 * frame_rate_compensation;
+			acceleration_jump_sideways=2.0f;
 		}
-
-		if (keys & KeyboardKeys::Shift) velocity_move.x=6 * frame_rate_compensation;
+		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.setStaticFrame(39);
 	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
 		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
@@ -461,9 +464,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	} else if (keys == (KeyboardKeys::Right) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=2 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=-6 * frame_rate_compensation;
+		if (!isCollisionLeft()) velocity_move.x=-8 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=6 * frame_rate_compensation;
+		if (!isCollisionLeft()) velocity_move.x=8 * frame_rate_compensation;
 
 	} else {
 		if (movement != Stand && movement != Jump && movement != Falling) {
@@ -487,29 +490,34 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& 
 			return;
 		}
 		if ((keys & KeyboardKeys::Left) && velocity_move.x == 0) {
-			velocity_move.x=-2 * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift) velocity_move.x=-6 * frame_rate_compensation;
+			if (acceleration_jump_sideways > -6.0f) acceleration_jump_sideways=-6.0f;
+			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
 			orientation=Left;
 			animation.setStaticFrame(38);
 		} else if ((keys & KeyboardKeys::Right) && velocity_move.x == 0) {
-			velocity_move.x=2 * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift) velocity_move.x=6 * frame_rate_compensation;
+			if (acceleration_jump_sideways < 6.0f) acceleration_jump_sideways=6.0f;
+			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
 			orientation=Right;
 			animation.setStaticFrame(39);
 		}
 	} else {
 		if (keys & KeyboardKeys::Left) {
-			velocity_move.x=-2 * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift) velocity_move.x=-6 * frame_rate_compensation;
+			if (acceleration_jump_sideways > -6.0f) acceleration_jump_sideways=-6.0f;
+			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
 			orientation=Left;
 			animation.setStaticFrame(38);
 		} else if (keys & KeyboardKeys::Right) {
-			velocity_move.x=2 * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift) velocity_move.x=6 * frame_rate_compensation;
+			if (acceleration_jump_sideways < 6.0f) acceleration_jump_sideways=6.0f;
+			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
 			orientation=Right;
 			animation.setStaticFrame(39);
 		}
 	}
+	//ppl7::PrintDebugTime("acceleration_jump_sideways=%0.3f\n", acceleration_jump_sideways);
 }
 
 void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
