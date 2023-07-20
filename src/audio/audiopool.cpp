@@ -108,4 +108,9 @@ void AudioPool::load()
 	sample[AudioClip::scarabeus_death4].load("res/audio/scarab_death4.wav");
 	sample[AudioClip::scarabeus_death5].load("res/audio/scarab_death5.wav");
 	sample[AudioClip::rat_squeek].load("res/audio/rat.mp3");
+	sample[AudioClip::turkey_sound].load("res/audio/turkey-sound.mp3");
+	sample[AudioClip::turkey_gobble].load("res/audio/turkey-gobble.mp3");
+	sample[AudioClip::digging].load("res/audio/digging.mp3");
+
+
 }

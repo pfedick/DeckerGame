@@ -757,6 +757,23 @@ public:
 
 };
 
+
+class Ostrich : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	AudioInstance* audio;
+	int state;
+public:
+	Ostrich();
+	~Ostrich();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+};
+
+
 class Mushroom : public Enemy
 {
 private:

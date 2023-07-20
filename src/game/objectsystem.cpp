@@ -126,6 +126,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::George]->enableMemoryBuffer(true);
 	spriteset[Spriteset::George]->load(sdl, "res/george.tex");
 
+	spriteset[Spriteset::Ostrich]->enableOutlines(true);
+	spriteset[Spriteset::Ostrich]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Ostrich]->load(sdl, "res/ostrich.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -353,6 +357,7 @@ Representation getRepresentation(int object_type)
 	case Type::Scorpion: return Scorpion::representation();
 	case Type::LevelEnd: return LevelEnd::representation();
 	case Type::AutoGeorge: return AutoGeorge::representation();
+	case Type::Ostrich: return Ostrich::representation();
 	default: return Object::representation();
 	}
 }
@@ -426,6 +431,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Scorpion: return new Scorpion();
 	case Type::LevelEnd: return new LevelEnd();
 	case Type::AutoGeorge: return new AutoGeorge();
+	case Type::Ostrich: return new Ostrich();
 	}
 	return NULL;
 }

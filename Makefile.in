@@ -208,13 +208,19 @@ bricks_white:
 	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
 	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
 
-interactive_objects:
+
+enemy_ostrich:
+	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
+
+objects_ui:
 	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
+
+interactive_objects:
 	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
 
+enemies: enemy_ostrich
 
-
-sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white interactive_objects
+sprites: sprites_white sprites_nature sprites_trees sprites_objects bricks_white interactive_objects enemies objects_ui
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/george_adventure/" -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s "res/tiletypes/*.png" -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x res/tiletypes
