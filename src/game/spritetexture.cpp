@@ -152,7 +152,12 @@ void SpriteTexture::clear()
 	for (it=TextureMap.begin();it != TextureMap.end();++it) {
 		SDL_DestroyTexture(it->second);
 	}
+	for (it=OutlinesTextureMap.begin();it != OutlinesTextureMap.end();++it) {
+		SDL_DestroyTexture(it->second);
+	}
 	TextureMap.clear();
+	OutlinesTextureMap.clear();
+	InMemoryTextureMap.clear();
 	SpriteList.clear();
 }
 
