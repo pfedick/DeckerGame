@@ -56,6 +56,7 @@ public:
 		turkey_sound,
 		turkey_gobble,
 		digging,
+		wind2,
 
 		// this must always be the last entry!
 		maxClips
