@@ -56,10 +56,16 @@ AudioSystem::~AudioSystem()
 
 void AudioSystem::shutdown()
 {
+	std::set<Audio*>::iterator it;
 	if (device_id > 0) {
 		SDL_CloseAudioDevice(device_id);
 	}
 	mutex.lock();
+	for (it=tracks.begin();it != tracks.end();++it) {
+		if ((*it)->autoDelete()) {
+			delete (*it);
+		}
+	}
 	tracks.clear();
 	mutex.unlock();
 	device_id=0;
