@@ -81,6 +81,7 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
         fflush(stdout);
         while (update_thread.isRunning()) ppl7::MSleep(1);
     }
+    cleanupParticles(time);
     update_thread.frame_rate_compensation=frame_rate_compensation;
     update_thread.time=time;
     update_thread.ttplane=&ttplane;
@@ -138,6 +139,8 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
                 particle->p.x + coords.x,
                 particle->p.y + coords.y,
                 particle->sprite_no, particle->scale, particle->color_mod);
+        } else {
+            ppl7::PrintDebugTime("Found invalid particle\n");
         }
     }
 }

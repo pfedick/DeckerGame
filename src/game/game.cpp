@@ -585,7 +585,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	// Particles
 	metrics.time_update_particles.start();
 	metrics.time_particle_thread.addDuration(level.particles->waitForUpdateThreadFinished());
-	level.particles->cleanupParticles(now);
+	//level.particles->cleanupParticles(now);
 	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport, frame_rate_compensation);
 	metrics.time_update_particles.stop();
 
