@@ -31,6 +31,9 @@ ObjectSystem::~ObjectSystem()
 {
 	clear();
 	if (object_system == this) object_system=NULL;
+	for (int i=0;i < Spriteset::MaxSpritesets;i++) {
+		delete spriteset[i];
+	}
 }
 
 void ObjectSystem::clear()
