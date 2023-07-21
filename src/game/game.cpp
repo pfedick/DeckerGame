@@ -92,7 +92,6 @@ Game::~Game()
 	if (settings_screen) delete  settings_screen;
 	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
-	wm->destroyWindow(*this);
 }
 
 void Game::loadGrafix()
