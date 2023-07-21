@@ -20,8 +20,16 @@ Plane::~Plane()
 
 void Plane::clear()
 {
-	free(tilematrix);
-	tilematrix=NULL;
+	if (tilematrix) {
+		for (int y=0;y < height;y++) {
+			for (int x=0;x < width;x++) {
+				if (tilematrix[y * width + x]) delete tilematrix[y * width + x];
+			}
+		}
+
+		free(tilematrix);
+		tilematrix=NULL;
+	}
 	width=0;
 	height=0;
 	tile_count=0;
