@@ -189,8 +189,9 @@ private:
     std::map<uint64_t, Particle*> particle_map;
     std::map<uint64_t, Particle*> new_particles;
     std::map<uint32_t, Particle*> visible_particle_map[2][static_cast<int>(Particle::Layer::maxLayer)];
+    std::list<uint64_t> particles_to_delete;
     void deleteParticle(uint64_t id);
-    void cleanupParticles(double time);
+    void cleanupParticles();
     int active_map;
     ParticleUpdateThread update_thread=ParticleUpdateThread(*this);
 public:

@@ -46,6 +46,8 @@ void ParticleSystem::clear()
     for (it=particle_map.begin();it != particle_map.end();++it) {
         delete it->second;
     }
+    new_particles.clear();
+    particles_to_delete.clear();
     particle_map.clear();
     nextid=1;
 }
@@ -74,6 +76,7 @@ void ParticleSystem::deleteParticle(uint64_t id)
     if (it != particle_map.end()) {
         Particle* particle=it->second;
         particle_map.erase(it);
+        particle->sprite_set=1234567;
         delete particle;
     }
 }
@@ -81,11 +84,11 @@ void ParticleSystem::deleteParticle(uint64_t id)
 void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport, float frame_rate_compensation)
 {
     if (update_thread.isRunning()) {
-        printf("Particle Update Thread too slow!\n");
-        fflush(stdout);
+        ppl7::PrintDebugTime("Particle Update Thread too slow!\n");
         while (update_thread.isRunning()) ppl7::MSleep(1);
     }
-    cleanupParticles(time);
+    //ppl7::PrintDebugTime("ParticleSystem::update: started, map=%d\n", active_map);
+    cleanupParticles();
     update_thread.frame_rate_compensation=frame_rate_compensation;
     update_thread.time=time;
     update_thread.ttplane=&ttplane;
@@ -95,6 +98,7 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
     update_thread.viewport=viewport;
     update_thread.setVisibleParticleMap(visible_particle_map[active_map]);
     active_map=(active_map + 1) & 1;
+    //ppl7::PrintDebugTime("ParticleSystem::update: ended, draw on map: %d\n", active_map);
     update_thread.mutex.signal();
 
 }
@@ -105,23 +109,18 @@ double ParticleSystem::waitForUpdateThreadFinished()
     return update_thread.getThreadDuration();
 }
 
-void ParticleSystem::cleanupParticles(double time)
+void ParticleSystem::cleanupParticles()
 {
-    std::list<uint64_t> deleteme;
-    std::map<uint64_t, Particle*>::iterator it;
-    for (it=particle_map.begin();it != particle_map.end();++it) {
-        Particle* particle=it->second;
-        if (time > particle->death_time) {
-            deleteme.push_back(it->first);
-        }
-    }
-    if (deleteme.size() > 0) {
+    if (particles_to_delete.size() > 0) {
+        //ppl7::PrintDebugTime("deleting %zd particles\n", particles_to_delete.size());
         std::list<uint64_t>::iterator dit;
-        for (dit=deleteme.begin();dit != deleteme.end();++dit) {
+        for (dit=particles_to_delete.begin();dit != particles_to_delete.end();++dit) {
             deleteParticle(*dit);
         }
+        particles_to_delete.clear();
     }
     // Insert new Particles
+    std::map<uint64_t, Particle*>::const_iterator it;
     for (it=new_particles.begin();it != new_particles.end();++it) {
         particle_map.insert(std::pair<uint64_t, Particle*>(it->first, it->second));
     }
@@ -135,6 +134,7 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
     std::map<uint32_t, Particle*>::const_iterator it;
     ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
     int l=static_cast<int>(layer);
+    //ppl7::PrintDebugTime("   draw with active_map=%d\n", active_map);
 
     for (it=visible_particle_map[active_map][l].begin();it != visible_particle_map[active_map][l].end();++it) {
         const Particle* particle=it->second;
@@ -143,9 +143,11 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
                 particle->p.x + coords.x,
                 particle->p.y + coords.y,
                 particle->sprite_no, particle->scale, particle->color_mod);
+
         } else {
             ppl7::PrintDebugTime("Found invalid particle\n");
         }
+
     }
 }
 
@@ -213,9 +215,12 @@ bool ParticleUpdateThread::isRunning() const
 
 void ParticleUpdateThread::run()
 {
+    thread_running=false;
     //printf("ParticleUpdateThread started\n");
     while (!threadShouldStop()) {
+        mutex.wait();
         thread_running=true;
+        //ppl7::PrintDebugTime("    ParticleUpdateThread: started\n");
         double thread_start_time=ppl7::GetMicrotime();
         if (visible_particle_map) {
             std::map<uint64_t, Particle*>::iterator it;
@@ -230,10 +235,6 @@ void ParticleUpdateThread::run()
             for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
-                    if (particle->sprite_set > 2) {
-                        printf("ups, illegal particle 1\n");
-                        fflush(stdout);
-                    }
                     particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
                     particle->update(time, frame_rate_compensation);
                     if (particle->p.x > left && particle->p.y > top && particle->p.x < right && particle->p.y < bottom) {
@@ -243,12 +244,15 @@ void ParticleUpdateThread::run()
                     } else {
                         particle->visible=false;
                     }
+                } else {
+                    ps.particles_to_delete.push_back(it->first);
                 }
             }
         }
         thread_duration=ppl7::GetMicrotime() - thread_start_time;
         thread_running=false;
-        mutex.wait();
+        //ppl7::PrintDebugTime("    ParticleUpdateThread: sleep\n");
+
         //printf("ParticleUpdateThread signaled\n");
     }
     //printf("ParticleUpdateThread ended\n");
