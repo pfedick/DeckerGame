@@ -28,6 +28,10 @@ ParticleSystem::~ParticleSystem()
     update_thread.mutex.signal();
     update_thread.threadStop();
     clear();
+    for (int i=0;i < ParticleSpriteset::MaxSpritesets;i++) {
+        delete spriteset[i];
+    }
+
     if (particle_system == this) particle_system=NULL;
 }
 
