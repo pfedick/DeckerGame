@@ -54,7 +54,7 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
     if (state > 6) return;
 
     if (time > next_animation) {
-        next_animation=time + 0.05f;
+        next_animation=time + 0.03f;
         animation.update();
         int new_sprite=animation.getFrame();
         if (new_sprite != sprite_no) {
