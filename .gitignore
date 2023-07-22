@@ -23,3 +23,4 @@ include/version.h
 lightwave/Objects/presentation/holiday-update-2022.lwo
 lightwave/Scenes/making of
 *.tmp
+studio/*.ldr

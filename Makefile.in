@@ -213,13 +213,17 @@ bricks_white:
 enemy_ostrich:
 	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
 
+enemy_scorpion:
+	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125
+
+
 objects_ui:
 	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
 
 interactive_objects:
 	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
 
-enemies: enemy_ostrich
+enemies: enemy_ostrich enemy_scorpion
 
 sprites: sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
