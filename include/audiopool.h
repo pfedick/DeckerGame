@@ -59,6 +59,15 @@ public:
 		wind2,
 		scorpion_breath,
 		scorpion_run,
+		step1,
+		step2,
+		step3,
+		step4,
+		jungle1,
+		jungle2,
+		waterflow1,
+		waterflow2,
+		waterflow3,
 
 		// this must always be the last entry!
 		maxClips

@@ -114,4 +114,13 @@ void AudioPool::load()
 	sample[AudioClip::wind2].load("res/audio/wind2.mp3");
 	sample[AudioClip::scorpion_breath].load("res/audio/scorpion_breath.mp3");
 	sample[AudioClip::scorpion_run].load("res/audio/scorpion_run.mp3");
+	sample[AudioClip::step1].load("res/audio/step1.mp3");
+	sample[AudioClip::step2].load("res/audio/step2.mp3");
+	sample[AudioClip::step3].load("res/audio/step3.mp3");
+	sample[AudioClip::step4].load("res/audio/step4.mp3");
+	sample[AudioClip::jungle1].load("res/audio/jungle1.mp3");
+	sample[AudioClip::jungle2].load("res/audio/jungle2.mp3");
+	sample[AudioClip::waterflow1].load("res/audio/waterflow1.mp3");
+	sample[AudioClip::waterflow2].load("res/audio/waterflow2.mp3");
+	sample[AudioClip::waterflow3].load("res/audio/waterflow3.mp3");
 }

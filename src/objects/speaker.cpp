@@ -175,6 +175,11 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Desert Wind", ppl7::ToString("%d", AudioClip::wind2));
 	sample_name->add("Fire 1", ppl7::ToString("%d", AudioClip::fire1));
 	sample_name->add("Fire 2", ppl7::ToString("%d", AudioClip::fire2));
+	sample_name->add("Jungle 1", ppl7::ToString("%d", AudioClip::jungle1));
+	sample_name->add("Jungle 2", ppl7::ToString("%d", AudioClip::jungle2));
+	sample_name->add("Waterflow 1", ppl7::ToString("%d", AudioClip::waterflow1));
+	sample_name->add("Waterflow 2", ppl7::ToString("%d", AudioClip::waterflow2));
+	sample_name->add("Waterflow 3", ppl7::ToString("%d", AudioClip::waterflow3));
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
 	sample_name->setEventHandler(this);
 	addChild(sample_name);
