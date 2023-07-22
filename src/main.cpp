@@ -42,8 +42,8 @@ void start()
 		//game.playIntroVideo();
 
 		//game.startLevel("level/levelstats_test.lvl");
-		//game.startLevel("level/egypt.lvl");
-		game.startLevel("level/devel.lvl");
+		game.startLevel("level/egypt.lvl");
+		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
 		//game.startLevel("level/heaven.lvl");
