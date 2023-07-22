@@ -220,4 +220,13 @@ void Object::toggle(bool, Object*)
 
 }
 
+void Object::updateSpriteset(int spriteset)
+{
+	if (spriteset != this->sprite_set) {
+		sprite_set=spriteset;
+		texture=GetObjectSystem()->getTexture(sprite_set);
+	}
+
+}
+
 }	// EOF namespace Decker::Objects

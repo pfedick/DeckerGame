@@ -177,6 +177,7 @@ public:
 	Type::ObjectType type() const;
 	ppl7::String typeName() const;
 	void updateBoundary();
+	void updateSpriteset(int spriteset);
 	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	virtual size_t save(unsigned char* buffer, size_t size) const;
 	virtual size_t load(const unsigned char* buffer, size_t size);
@@ -684,6 +685,7 @@ public:
 	int player_activation_distance;
 	float minspeed, maxspeed, max_speed_when_player_is_near;
 	float min_idle_time, max_idle_time;
+	float speed_acceleration;
 
 	Scorpion();
 	~Scorpion();
@@ -1004,7 +1006,6 @@ private:
 	std::map<uint32_t, Object*> visible_object_map;
 	SpriteTexture* spriteset[Spriteset::MaxSpritesets];
 	Waynet* waynet;
-	SpriteTexture* getTexture(int sprite_set) const;
 
 public:
 	ObjectSystem(Waynet* waynet);
@@ -1027,6 +1028,7 @@ public:
 	void deleteObject(int id);
 	ppl7::grafix::Point findPlayerStart() const;
 	ppl7::grafix::Point nextPlayerStart();
+	SpriteTexture* getTexture(int sprite_set) const;
 	void resetPlayerStart();
 	size_t count() const;
 	size_t countVisible() const;

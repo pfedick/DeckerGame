@@ -24,10 +24,6 @@ Scorpion::Scorpion()
 {
 	sprite_set=Spriteset::Scorpion;
 	type=0;
-	if (ppl7::rand(0, 2) == 1) {
-		sprite_set=Spriteset::ScorpionMetalic;
-		type=1;
-	}
 	sprite_no=0;
 	sprite_no_representation=0;
 	state=0;
@@ -42,6 +38,7 @@ Scorpion::Scorpion()
 	player_activation_distance=500;
 	min_idle_time=1.0f;
 	max_idle_time=10.0f;
+	speed_acceleration=0.05;
 }
 
 Scorpion::~Scorpion()
@@ -77,7 +74,11 @@ void Scorpion::handleCollision(Player* player, const Collision& collision)
 
 void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+
 	if (time > next_animation) {
+		if (type == 0) updateSpriteset(Spriteset::Scorpion);
+		else updateSpriteset(Spriteset::ScorpionMetalic);
+		//ppl7::PrintDebugTime("type=%d, spriteset=%d\n", type, (int)sprite_set);
 		next_animation=time + 0.05f;
 		animation.update();
 		int new_sprite=animation.getFrame();
@@ -89,7 +90,7 @@ void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float
 
 
 	double dist=ppl7::grafix::Distance(p, player.position());
-	if (dist < player_activation_distance && speed < max_speed_when_player_is_near) speed+=0.05 * frame_rate_compensation;
+	if (dist < player_activation_distance && speed < max_speed_when_player_is_near) speed+=speed_acceleration * frame_rate_compensation;
 
 	if (state == 0) {	// do nothing, look to left
 		state=1;
@@ -162,12 +163,13 @@ size_t Scorpion::save(unsigned char* buffer, size_t size) const
 	ppl7::PokeFloat(buffer + bytes + 12, max_speed_when_player_is_near);
 	ppl7::PokeFloat(buffer + bytes + 16, min_idle_time);
 	ppl7::PokeFloat(buffer + bytes + 20, max_idle_time);
-	return bytes + 24;
+	ppl7::PokeFloat(buffer + bytes + 24, speed_acceleration);
+	return bytes + 28;
 }
 
 size_t Scorpion::saveSize() const
 {
-	return Object::saveSize() + 24;
+	return Object::saveSize() + 28;
 }
 
 size_t Scorpion::load(const unsigned char* buffer, size_t size)
@@ -183,6 +185,7 @@ size_t Scorpion::load(const unsigned char* buffer, size_t size)
 	max_speed_when_player_is_near=ppl7::PeekFloat(buffer + bytes + 12);
 	min_idle_time=ppl7::PeekFloat(buffer + bytes + 16);
 	max_idle_time=ppl7::PeekFloat(buffer + bytes + 20);
+	speed_acceleration=ppl7::PeekFloat(buffer + bytes + 24);
 	return size;
 }
 
@@ -190,25 +193,198 @@ size_t Scorpion::load(const unsigned char* buffer, size_t size)
 class ScorpionDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* type;
-	ppl7::tk::LineInput* min_cooldown;
-	ppl7::tk::LineInput* max_cooldown;
-	ppl7::tk::LineInput* distance;
-	Arrow* arrow_trap;
+	ppl7::tk::ComboBox* scorpion_type;
+	ppl7::tk::HorizontalSlider* player_distance;
+	ppl7::tk::DoubleHorizontalSlider* minspeed;
+	ppl7::tk::DoubleHorizontalSlider* maxspeed;
+	ppl7::tk::DoubleHorizontalSlider* max_speed_when_player_is_near;
+	ppl7::tk::DoubleHorizontalSlider* min_idle_time;
+	ppl7::tk::DoubleHorizontalSlider* max_idle_time;
+	ppl7::tk::DoubleHorizontalSlider* speed_acceleration;
+	Scorpion* object;
+
+	void setValuesToUi(const Scorpion* object);
 
 public:
 	ScorpionDialog(Scorpion* object);
-	~ScorpionDialog();
+	//virtual void selectionChangedEvent(ppl7::tk::Event* event) override;
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
+	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
 void Scorpion::openUi()
 {
-	//ScorpionDialog* dialog=new ScorpionDialog(this);
-	//GetGameWindow()->addChild(dialog);
+	ScorpionDialog* dialog=new ScorpionDialog(this);
+	GetGameWindow()->addChild(dialog);
 }
 
+ScorpionDialog::ScorpionDialog(Scorpion* object)
+	: Decker::ui::Dialog(600, 400, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
+{
+	this->object=object;
+	this->setWindowTitle("Scorpion");
+	ppl7::grafix::Rect client=clientRect();
+	int y=0;
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "Scorpion-Type:"));
+	scorpion_type=new ppl7::tk::ComboBox(100, y, 150, 30);
+	scorpion_type->add("normal", "0");
+	scorpion_type->add("metalic", "1");
+	scorpion_type->setEventHandler(this);
+	addChild(scorpion_type);
+	y+=35;
 
+	int sw=(client.width() - 140 - 20);
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Minimum speed:"));
+	minspeed=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	minspeed->setEventHandler(this);
+	minspeed->setLimits(1.0f, 20.0f);
+	minspeed->enableSpinBox(true, 0.1f, 3, 80);
+	addChild(minspeed);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Maximum speed:"));
+	maxspeed=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	maxspeed->setEventHandler(this);
+	maxspeed->setLimits(1.0f, 20.0f);
+	maxspeed->enableSpinBox(true, 0.1f, 3, 80);
+	addChild(maxspeed);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Min idle time:"));
+	min_idle_time=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	min_idle_time->setEventHandler(this);
+	min_idle_time->setLimits(0.0f, 20.0f);
+	min_idle_time->enableSpinBox(true, 0.1f, 3, 80);
+	addChild(min_idle_time);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Max idle time:"));
+	max_idle_time=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	max_idle_time->setEventHandler(this);
+	max_idle_time->setLimits(0.0f, 20.0f);
+	max_idle_time->enableSpinBox(true, 0.1f, 3, 80);
+	addChild(max_idle_time);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Player distance:"));
+	player_distance=new ppl7::tk::HorizontalSlider(140, y, sw, 30);
+	player_distance->setEventHandler(this);
+	player_distance->setLimits(100, 1920);
+	player_distance->enableSpinBox(true, 100, 80);
+	addChild(player_distance);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 300, 30, "Max speed when player is near:"));
+	y+=35;
+	max_speed_when_player_is_near=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	max_speed_when_player_is_near->setEventHandler(this);
+	max_speed_when_player_is_near->setLimits(1.0f, 20.0f);
+	max_speed_when_player_is_near->enableSpinBox(true, 0.1f, 3, 80);
+	addChild(max_speed_when_player_is_near);
+	y+=35;
+	addChild(new ppl7::tk::Label(0, y, 300, 30, "Speed acceleration:"));
+	speed_acceleration=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	speed_acceleration->setEventHandler(this);
+	speed_acceleration->setLimits(0.01f, 2.0f);
+	speed_acceleration->enableSpinBox(true, 0.01f, 2, 80);
+	addChild(speed_acceleration);
+	y+=35;
+
+
+	setValuesToUi(object);
+}
+
+void ScorpionDialog::setValuesToUi(const Scorpion* object)
+{
+	scorpion_type->setCurrentIdentifier(ppl7::ToString("%d", object->type));
+	minspeed->setValue(object->minspeed);
+	maxspeed->setValue(object->maxspeed);
+	min_idle_time->setValue(object->min_idle_time);
+	max_idle_time->setValue(object->max_idle_time);
+	max_speed_when_player_is_near->setValue(object->max_speed_when_player_is_near);
+	player_distance->setValue(object->player_activation_distance);
+	speed_acceleration->setValue(object->speed_acceleration);
+}
+
+void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+{
+	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == scorpion_type) {
+		object->type=scorpion_type->currentIdentifier().toInt();
+	}
+}
+
+void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+{
+	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == minspeed) {
+		object->minspeed=value;
+		if (object->minspeed > object->maxspeed) {
+			object->maxspeed=value;
+			maxspeed->setValue(object->maxspeed);
+		}
+	} else if (widget == maxspeed) {
+		object->maxspeed=value;
+		if (object->maxspeed < object->minspeed) {
+			object->minspeed=value;
+			minspeed->setValue(object->minspeed);
+		}
+	} else if (widget == min_idle_time) {
+		object->min_idle_time=value;
+		if (object->min_idle_time > object->max_idle_time) {
+			object->max_idle_time=value;
+			max_idle_time->setValue(object->max_idle_time);
+		}
+	} else if (widget == max_idle_time) {
+		object->max_idle_time=value;
+		if (object->max_idle_time < object->min_idle_time) {
+			object->min_idle_time=value;
+			min_idle_time->setValue(object->min_idle_time);
+		}
+	} else if (widget == max_speed_when_player_is_near) {
+		object->max_speed_when_player_is_near=value;
+	} else if (widget == speed_acceleration) {
+		object->speed_acceleration=value;
+	}
+}
+
+void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+{
+	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == player_distance) {
+		object->player_activation_distance=(int)value;
+	}
+}
+
+static Scorpion clipboard;
+
+void ScorpionDialog::dialogButtonEvent(Dialog::Buttons button)
+{
+	if (button == Dialog::Buttons::Copy) {
+		clipboard.type=object->type;
+		clipboard.player_activation_distance=object->player_activation_distance;
+		clipboard.minspeed=object->minspeed;
+		clipboard.maxspeed=object->maxspeed;
+		clipboard.max_speed_when_player_is_near=object->max_speed_when_player_is_near;
+		clipboard.min_idle_time=object->min_idle_time;
+		clipboard.max_idle_time=object->max_idle_time;
+		clipboard.speed_acceleration=object->speed_acceleration;
+	} else if (button == Dialog::Buttons::Paste) {
+		object->type=clipboard.type;
+		object->player_activation_distance=clipboard.player_activation_distance;
+		object->minspeed=clipboard.minspeed;
+		object->maxspeed=clipboard.maxspeed;
+		object->max_speed_when_player_is_near=clipboard.max_speed_when_player_is_near;
+		object->min_idle_time=clipboard.min_idle_time;
+		object->max_idle_time=clipboard.max_idle_time;
+		object->speed_acceleration=clipboard.speed_acceleration;
+	}
+}
 
 }	// EOF namespace Decker::Objects
