@@ -115,7 +115,11 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 
 	spriteset[Spriteset::Scorpion]->enableOutlines(true);
 	spriteset[Spriteset::Scorpion]->enableMemoryBuffer(true);
-	spriteset[Spriteset::Scorpion]->load(sdl, "res/bat.tex");
+	spriteset[Spriteset::Scorpion]->load(sdl, "res/scorpion.tex");
+
+	spriteset[Spriteset::ScorpionMetalic]->enableOutlines(true);
+	spriteset[Spriteset::ScorpionMetalic]->enableMemoryBuffer(true);
+	spriteset[Spriteset::ScorpionMetalic]->load(sdl, "res/scorpion_metalic.tex");
 
 	spriteset[Spriteset::Bird]->enableOutlines(true);
 	spriteset[Spriteset::Bird]->enableMemoryBuffer(true);

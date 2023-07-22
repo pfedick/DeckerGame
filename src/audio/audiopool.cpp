@@ -112,6 +112,6 @@ void AudioPool::load()
 	sample[AudioClip::turkey_gobble].load("res/audio/turkey-gobble.mp3");
 	sample[AudioClip::digging].load("res/audio/digging.mp3");
 	sample[AudioClip::wind2].load("res/audio/wind2.mp3");
-
-
+	sample[AudioClip::scorpion_breath].load("res/audio/scorpion_breath.mp3");
+	sample[AudioClip::scorpion_run].load("res/audio/scorpion_run.mp3");
 }

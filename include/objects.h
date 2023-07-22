@@ -102,6 +102,7 @@ public:
 		Yeti,
 		George,
 		Ostrich,
+		ScorpionMetalic,
 		MaxSpritesets
 	};
 };
@@ -672,13 +673,28 @@ class Scorpion : public Enemy
 {
 private:
 	AnimationCycle animation;
-	double next_animation;
+	double next_state, next_animation;
+	AudioInstance* audio;
 	int state;
+	float speed;
+
+	void playAudio(int id, float volume);
 public:
+	int type;
+	int player_activation_distance;
+	float minspeed, maxspeed, max_speed_when_player_is_near;
+	float min_idle_time, max_idle_time;
+
 	Scorpion();
+	~Scorpion();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 
 };
 
@@ -689,6 +705,7 @@ private:
 	double next_animation;
 	float velocity;
 	int state;
+	AudioInstance* audio;
 public:
 	Bat();
 	static Representation representation();
@@ -718,6 +735,7 @@ private:
 	double next_state_change;
 	float velocity;
 	BirdState state;
+	AudioInstance* audio;
 	void changeState(BirdState state);
 public:
 	Bird();

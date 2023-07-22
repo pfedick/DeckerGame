@@ -57,6 +57,8 @@ public:
 		turkey_gobble,
 		digging,
 		wind2,
+		scorpion_breath,
+		scorpion_run,
 
 		// this must always be the last entry!
 		maxClips
