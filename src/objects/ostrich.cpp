@@ -38,6 +38,11 @@ Ostrich::Ostrich()
     collisionDetection=true;
     updateBoundary();
     audio=NULL;
+    scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.168));
+    scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.500));
+    color_gradient.push_back(Particle::ColorGradientItem(0.005, ppl7::grafix::Color(255, 219, 177, 80)));
+    color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(255, 207, 182, 0)));
+
 }
 
 Ostrich::~Ostrich()
@@ -52,12 +57,19 @@ Ostrich::~Ostrich()
 void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
     if (state > 6) return;
+    AudioPool& audiopool=getAudioPool();
 
     if (time > next_animation) {
         next_animation=time + 0.03f;
         animation.update();
         int new_sprite=animation.getFrame();
         if (new_sprite != sprite_no) {
+            if (new_sprite == 3 || new_sprite == 11) emmitParticles(time, player, 34.0f);
+            else if (new_sprite == 24 || new_sprite == 32) emmitParticles(time, player, 320.0f);
+            if (new_sprite == 0 || new_sprite == 8 || new_sprite == 20 || new_sprite == 28) {
+                int r=ppl7::rand(0, 3);
+                audiopool.playOnce(static_cast<AudioClip::Id>(static_cast<int>(AudioClip::step1) + r), p, 1600, 0.6f);
+            }
             sprite_no=new_sprite;
             updateBoundary();
         }
@@ -77,8 +89,8 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
             next_state=time + (double)ppl7::rand(1, 5);
         }
     } else if (state == 2 && time > next_state) {
-        getAudioPool().playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
-        getAudioPool().playOnce(AudioClip::turkey_gobble, p, 1600, 0.4f);
+        audiopool.playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
+        audiopool.playOnce(AudioClip::turkey_gobble, p, 1600, 0.4f);
         animation.start(turn_from_left_to_right, sizeof(turn_from_left_to_right) / sizeof(int), false, 20);
 
         state=3;
@@ -97,8 +109,8 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
             next_state=time + (double)ppl7::rand(1, 5);
         }
     } else if (state == 5 && time > next_state) {
-        getAudioPool().playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
-        getAudioPool().playOnce(AudioClip::turkey_gobble, p, 1600, 0.4f);
+        audiopool.playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
+        audiopool.playOnce(AudioClip::turkey_gobble, p, 1600, 0.4f);
         animation.start(turn_from_right_to_left, sizeof(turn_from_right_to_left) / sizeof(int), false, 0);
         state=0;
     } else if (state == 6) {
@@ -112,7 +124,6 @@ void Ostrich::update(double time, TileTypePlane& ttplane, Player& player, float 
 
 
     if (!audio && state < 6) {
-        AudioPool& audiopool=getAudioPool();
         audio=audiopool.getInstance(AudioClip::turkey_sound);
         if (audio) {
             audio->setVolume(0.4f);
@@ -152,5 +163,37 @@ void Ostrich::handleCollision(Player* player, const Collision& collision)
         player->dropHealth(4);
     }
 }
+
+
+
+void Ostrich::emmitParticles(double time, const Player& player, float angle)
+{
+    ParticleSystem* ps=GetParticleSystem();
+    if (!emitterInPlayerRange(p, player)) return;
+    int new_particles=ppl7::rand(200, 500);
+    ppl7::grafix::PointF po=p;
+    po.y +=10;
+    if (angle < 180) po.x-=20;
+    else po.x+=20;
+    for (int i=0;i < new_particles;i++) {
+        Particle* particle=new Particle();
+        particle->birth_time=time;
+        particle->death_time=randf(0.100, 0.721) + time;
+        particle->p=po;
+        particle->layer=Particle::Layer::BehindBricks;
+        particle->weight=randf(0.066, 0.317);
+        particle->gravity.setPoint(0.000, 0.736);
+        particle->velocity=calculateVelocity(randf(4.000, 7.300), angle + randf(-15.283, 15.283));
+        particle->scale=randf(0.300, 1.000);
+        particle->color_mod.set(255, 255, 255, 255);
+        particle->initAnimation(Particle::Type::RotatingParticleWhite);
+        particle->initScaleGradient(scale_gradient, particle->scale);
+        particle->initColorGradient(color_gradient);
+        ps->addParticle(particle);
+    }
+
+}
+
+
 
 }	// EOF namespace Decker::Objects

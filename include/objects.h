@@ -785,6 +785,11 @@ private:
 	double next_state, next_animation;
 	AudioInstance* audio;
 	int state;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	void emmitParticles(double time, const Player& player, float angle);
+
+
 public:
 	Ostrich();
 	~Ostrich();
