@@ -14,7 +14,7 @@ AnimationCycle::AnimationCycle()
 	seq_end=0;
 }
 
-void AnimationCycle::start(int *cycle_array, int size, bool loop, int endframe)
+void AnimationCycle::start(int* cycle_array, int size, bool loop, int endframe)
 {
 	//printf("start\n");
 	cycle=cycle_array;
@@ -25,7 +25,7 @@ void AnimationCycle::start(int *cycle_array, int size, bool loop, int endframe)
 	index=0;
 }
 
-void AnimationCycle::start(const AnimationCycle &other)
+void AnimationCycle::start(const AnimationCycle& other)
 {
 	cycle=other.cycle;
 	index=other.index;
@@ -37,11 +37,11 @@ void AnimationCycle::start(const AnimationCycle &other)
 	finished=other.finished;
 }
 
-void AnimationCycle::startRandom(int *cycle_array, int size, bool loop, int endframe)
+void AnimationCycle::startRandom(int* cycle_array, int size, bool loop, int endframe)
 {
-	start(cycle_array,size,loop,endframe);
+	start(cycle_array, size, loop, endframe);
 	index=ppl7::rand(0, size);
-	if (index>=size) index=0;
+	if (index >= size) index=0;
 }
 
 void AnimationCycle::setStaticFrame(int nr)
@@ -61,7 +61,10 @@ void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
 	seq_start=start;
 	seq_end=end;
 	index=0;
-	size=seq_end-seq_start+1;
+	if (seq_end > seq_start)
+		size=seq_end - seq_start + 1;
+	else
+		size=-(seq_start - seq_end + 1);
 	this->loop=loop;
 	finished=false;
 	this->endframe=endframe;
@@ -70,21 +73,32 @@ void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
 void AnimationCycle::update()
 {
 	if (finished) return;
-	index++;
-	if (index>=size) {
-		if (loop==true) {
-			index=0;
-		} else {
-			finished=true;
+	if (size >= 0) {
+		index++;
+		if (index >= size) {
+			if (loop == true) {
+				index=0;
+			} else {
+				finished=true;
+			}
+		}
+	} else {
+		index--;
+		if (index <= size) {
+			if (loop == true) {
+				index=0;
+			} else {
+				finished=true;
+			}
 		}
 	}
 }
 
 int AnimationCycle::getFrame() const
 {
-	if(finished) return endframe;
+	if (finished) return endframe;
 	if (cycle) return cycle[index];
-	return seq_start+index;
+	return seq_start + index;
 }
 
 int AnimationCycle::getIndex() const
