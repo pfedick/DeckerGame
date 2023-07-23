@@ -39,7 +39,7 @@ void TreasureChest::update(double time, TileTypePlane& ttplane, Player& player, 
 		}
 	}
 	if (state > 0 && time > next_animation) {
-		next_animation=time + 0.07f;
+		next_animation=time + 0.03f;
 		animation.update();
 		int new_sprite=animation.getFrame();
 		if (new_sprite != sprite_no) {
