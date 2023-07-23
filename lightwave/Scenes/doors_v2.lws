@@ -1,0 +1,4612 @@
+LWSC
+8
+
+RenderRangeType 0
+FirstFrame 0
+LastFrame 244
+FrameStep 1
+RenderRangeObject 0
+RenderRangeArbitrary 0-120
+PreviewFirstFrame 0
+PreviewLastFrame 250
+PreviewFrameStep 1
+CurrentFrame 244
+FramesPerSecond 30
+AutoKeyFixedFrame 0
+ChangeScene 0
+Plugin ViewportObjectHandler 1 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 2 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 3 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 4 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+PluginEnabled 0
+ColorSpaceViewer "Linear" "none"
+ColorSpaceSurfaceColor "Linear" "none"
+ColorSpaceLightColor "Linear" "none"
+ColorSpacePaletteFiles "Linear" "none"
+ColorSpace8BitFiles "Linear" "none"
+ColorSpaceFloatFiles "Linear" "none"
+ColorSpaceAlpha "Linear" "none"
+ColorSpaceOutput "Linear" "none"
+ColorSpaceOutputAlpha "Linear" "none"
+ColorSpaceOutputVPR "Linear" "none"
+ColorSpaceOutputVPRAlpha "Linear" "none"
+ColorSpaceAutoSense 0
+ColorSpace8BitToFloat 0
+ColorSpaceCorrectOpenGL 0
+ColorSpaceAffectPicker 0
+FirstBackgroundImageSyncFrame 0
+BufferList
+{ BufferList
+  { Group
+    "root"
+    { List
+      "Final_Render"
+      ""
+      "LW_PNG32(.png)"
+      ""
+      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\door_v2"
+      "frame_%####%"
+      35
+      3
+    }
+    { List
+      "Alpha"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      1
+      3
+    }
+    { List
+      "Backdrop"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Camera_Tangent_Space_XYZ"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Coverage"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Depth"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Edges"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Geometry"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Lens_Flare"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Motion"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Normals"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Object_ID"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Object_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Pre_Effect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Surface_ID"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Texture_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "UV"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "World_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "dPdu"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "dPdv"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Fog"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Legacy_Volumetric"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Luminosity"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Raw_RGB"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "SSS_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "SSS_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Shadow"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Transparency"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Emission"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Light"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Transmittance"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+  }
+}
+EndAttribute
+NoiseFilter
+{ NoiseFilter
+  Filtersize 3
+  PixelTolerance 0.10000000000000000555
+  GeometricTolerance 0.050000000000000002776
+  NormalTolerance 0.020000000000000000416
+  GeometricToleranceSwitch 0
+  NormalToleranceSwitch 0
+}
+EndAttribute
+NoiseFilterGlobal 0
+NavigationDesiredDevice Keyboard
+Plugin GlobalIlluminationHandler 1 MonteCarlo
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Rays"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Caustics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Sample Backdrop"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "ISBG Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "ISBG Samples"
+        Flags 0
+        { Value
+          "int"
+          512
+        }
+      }
+      { Attr
+        Name "Affected By Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolated"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Primary Rays"
+        Flags 0
+        { Value
+          "int"
+          128
+        }
+      }
+      { Attr
+        Name "Secondary Rays"
+        Flags 0
+        { Value
+          "int"
+          64
+        }
+      }
+      { Attr
+        Name "Enable Caching"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Save After Each Frame"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Animation"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Frame Step"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Cache File"
+        Flags 0
+        { Value
+          "text"
+          "InterpolatedGI.cache"
+        }
+      }
+      { Attr
+        Name "Use Bumps"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Behind Test"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Show Octree"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Color Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Samples"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Render"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Second Bounce"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Behind Test"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Minimum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          2
+        }
+      }
+      { Attr
+        Name "Maximum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          64
+        }
+      }
+      { Attr
+        Name "Angular Tolerance"
+        Flags 0
+        Tag "FORMAT" "Angle"
+        { Value
+          "double"
+          0.3490658503988658401
+        }
+      }
+      { Attr
+        Name "Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolation Softness"
+        Flags 0
+        Tag "FORMAT" "Percent"
+        { Value
+          "double"
+          0.5
+        }
+      }
+    }
+  }
+}
+EndPlugin
+Plugin GlobalIlluminationHandler 2 MonteCarlo
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Rays"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Caustics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Sample Backdrop"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "ISBG Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "ISBG Samples"
+        Flags 0
+        { Value
+          "int"
+          512
+        }
+      }
+      { Attr
+        Name "Affected By Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolated"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Primary Rays"
+        Flags 0
+        { Value
+          "int"
+          128
+        }
+      }
+      { Attr
+        Name "Secondary Rays"
+        Flags 0
+        { Value
+          "int"
+          64
+        }
+      }
+      { Attr
+        Name "Enable Caching"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Save After Each Frame"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Animation"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Frame Step"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Cache File"
+        Flags 0
+        { Value
+          "text"
+          "InterpolatedGI.cache"
+        }
+      }
+      { Attr
+        Name "Use Bumps"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Behind Test"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Show Octree"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Color Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Samples"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Render"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Second Bounce"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Behind Test"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Minimum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          2
+        }
+      }
+      { Attr
+        Name "Maximum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          64
+        }
+      }
+      { Attr
+        Name "Angular Tolerance"
+        Flags 0
+        Tag "FORMAT" "Angle"
+        { Value
+          "double"
+          0.3490658503988658401
+        }
+      }
+      { Attr
+        Name "Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolation Softness"
+        Flags 0
+        Tag "FORMAT" "Percent"
+        { Value
+          "double"
+          0.5
+        }
+      }
+    }
+  }
+}
+EndPlugin
+Plugin VolumeIntegratorHandler 1 VolumeIntegrator
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Indirect Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Indirect Samples"
+        Flags 0
+        { Value
+          "int"
+          16
+        }
+      }
+      { Attr
+        Name "Indirect Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Primitives Unseen By Camera"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Fog Type"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Min Distance"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Distance"
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Max Distance"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Distance"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Min Amount"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Max Amount"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Fog Color"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Color"
+        { Value
+          "vparam3"
+          { Value
+            3
+            1 1 1
+          }
+        }
+      }
+      { Attr
+        Name "Use Backdrop Color"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Use Legacy Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Use Nodes"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Use Volumetric Scattering"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Scattering Color"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Color"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam3"
+          { Value
+            3
+            1 1 1
+          }
+        }
+      }
+      { Attr
+        Name "Scattering Weight"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Scattering Asymmetry"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Float"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Lights Unseen By Camera"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+    }
+  }
+}
+{ NodeEditor
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "VolumeIntegrator"
+    { Tag
+      RealName "VolumeIntegrator"
+      Name "VolumeIntegrator"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+  }
+  { Connections
+  }
+}
+EndPlugin
+
+LoadObjectLayer 1 10000000 Objects/BackDome.lwo
+ChangeObject 0
+ShowObject 0 7
+Group 0
+ItemLock 1
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+MatteObject 1
+MatteColor 0.619608 0.619608 0.619608
+UnaffectedByFog 1
+UnseenByRays 1
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000003 Objects/doors_windows/doorframe-bright_white.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key -20 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 -19.834710743801647226 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 -19.834710743801654331 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 19.834710743801654331 0 0
+  Key -20 0.16666666666666665741 0 0 0 0 -19.834710743801654331 -19.333333333333332149 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 1000000e Objects/doors_windows/door_with_windows_white.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  15
+  Key 0.002442609984427690506 0 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.13333333333333333148 3 0 0 0 -5.0058588385581970215e-09 -5.0058588385581970215e-09 0
+  Key 0.0024425999727100133896 0.16666666666666665741 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.63333333333333641235 3 0 0 0 -0.0046335013583302490925 -0.00033096438273787491969 0
+  Key -0.0025218557566404342651 0.66666666666666984931 3 0 0 0 -0.00033096438273787491969 -0.0042552942676203475009 0
+  Key -0.0025218999944627285004 0.86666666666666669627 3 0 0 0 0 0 0
+  Key -0.0025218557566404342651 1.133333333333339743 3 0 0 0 0.0046335013583302490925 -0.0012423671885494638831 0
+  Key -0.013703204691410064697 1.1666666666666667407 3 0 0 0 -0.00074542326231784100058 -0.010435925672451789106 0
+  Key -0.013703204691410064697 1.6333333333333333037 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 1.6666666666666667407 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 2.1333333333333333037 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 2.1666666666666665186 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 4.1333333333333328596 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  13
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 0 0 0
+  Key -20 0.13333333333333333148 0 0 0 0 10.001560000353492796 0 0
+  Key 0.0031200007069855928421 0.16666666666666665741 3 0 0 0 1.3335413333804657654 18.669578667326522492 0
+  Key 0.0031200007069855928421 0.63333333333333641235 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 0.66666666666666984931 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 0.86666666666666669627 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 1.133333333333339743 3 0 0 0 -18.669578667326522492 -6.222230796183601993e-05 0
+  Key 0.0025599999353289604187 1.1666666666666667407 3 0 0 0 -3.7333384777102097138e-05 -0.00052266738687953035337 0
+  Key 0.0025599999353289604187 1.6333333333333333037 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 1.6666666666666667407 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 2.1333333333333333037 3 0 0 0 -18.669055999939651258 -1.3335039999956790346 0
+  Key -20 2.1666666666666665186 0 0 0 0 -19.83724958671272276 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  15
+  Key 0.012733999639749526978 0 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.13333333333333333148 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.16666666666666665741 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.63333333333333641235 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.66666666666666984931 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.86666666666666669627 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 1.133333333333339743 3 0 0 0 -0.012701306078169388378 -0.0015876632597708283372 0
+  Key -0.0015549696981906890869 1.1666666666666667407 3 0 0 0 -0.00095259795586250938394 -0.013336371382077705922 0
+  Key -0.0015549696981906890869 1.6333333333333333037 3 0 0 0 0 0 0
+  Key 0.0023007984273135662079 1.6666666666666667407 3 0 0 0 0 0.0035987169171373049707 0
+  Key 0.0023007984273135662079 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  15
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 1.1780972778797149658 0.39269909262657165527 0
+  Key 1.5707963705062866211 0.13333333333333333148 0 0 0 0 0.78539818525314331055 0 0
+  Key 1.5707963705062866211 0.16666666666666665741 5 -0.20555472222222229139 0 0.20555472222222229139 0 0 0
+  Key 0 0.63333333333333641235 5 -0.18869648467432958983 0 0.18869648467432958983 0 0 0
+  Key 1.5707963705062866211 0.66666666666666984931 5 -0.18869648467432958983 -0.0031216215060619854904 0.18869648467432958983 0.0031216215060619854904 2.9321532249450679153 0
+  Key 2.2089862823486328125 0.86666666666666669627 5 -0.077777000000000554025 -0.061085914654434164683 0.077777000000000554025 0.061085914654434164683 0.89759792600360766013 0
+  Key 3.1415927410125732422 1.133333333333339743 5 -0.20976928160919547373 0.0012804914774571488252 0.20976928160919547373 -0.0012804914774571488252 -0.10471975803375245528 0
+  Key 0 1.1666666666666667407 5 -0.083332499999998935203 0.053377432306408199858 0.083332499999998935203 -0.053377432306408199858 -1.1956664403279775311 0
+  Key 1.8605215549468994141 1.6333333333333333037 5 -0.083332500000000003793 -0 0.083332500000000003793 0 0 0
+  Key 0 1.6666666666666667407 5 -0.083332500000000003793 0.083332500000000003793 0.083332500000000003793 -0.083332500000000003793 -3.1227442582448325936 0
+  Key -1.4852758646011352539 2.1333333333333333037 5 -0.15555400000000002558 0.11545157974266426204 0.15555400000000002558 -0.11545157974266426204 0 0
+  Key -1.4997733831405639648 2.1666666666666665186 0 0 0 0 0 0 0
+  Key -1.4852758646011352539 4.1333333333333328596 5 -0.15555400000000002558 0.11545157974266426204 0.15555400000000002558 -0.11545157974266426204 0 0
+  Key -1.4852758646011352539 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  15
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.63333333333333641235 0 0 0 0 0 0 0
+  Key 0 0.66666666666666984931 0 0 0 0 0 0 0
+  Key 0 0.86666666666666669627 0 0 0 0 0 0 0
+  Key 0 1.133333333333339743 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0 1.6333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.6666666666666667407 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 0 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  15
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 0.16666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.63333333333333641235 0 0 0 0 0 0 0
+  Key 0 0.66666666666666984931 0 0 0 0 0 0 0
+  Key 0 0.86666666666666669627 0 0 0 0 0 0 0
+  Key 0 1.133333333333339743 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0 1.6333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.6666666666666667407 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 0 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  15
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.63333333333333641235 0 0 0 0 0 0 0
+  Key 1 0.66666666666666984931 0 0 0 0 0 0 0
+  Key 1 0.86666666666666669627 0 0 0 0 0 0 0
+  Key 1 1.133333333333339743 0 0 0 0 0 0 0
+  Key 1 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 1.6666666666666667407 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 1 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  15
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.63333333333333641235 0 0 0 0 0 0 0
+  Key 1 0.66666666666666984931 0 0 0 0 0 0 0
+  Key 1 0.86666666666666669627 0 0 0 0 0 0 0
+  Key 1 1.133333333333339743 0 0 0 0 0 0 0
+  Key 1 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 1.6666666666666667407 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 1 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  15
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 0.16666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.63333333333333641235 0 0 0 0 0 0 0
+  Key 1 0.66666666666666984931 0 0 0 0 0 0 0
+  Key 1 0.86666666666666669627 0 0 0 0 0 0 0
+  Key 1 1.133333333333339743 0 0 0 0 0 0 0
+  Key 1 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 1.6666666666666667407 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 4.1333333333333328596 0 0 0 0 0 0 0
+  Key 1 4.1666666666666660745 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+LockedChannels 48
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition -0.013 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000004 Objects/doors_windows/doorframe-bright_white_front.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  5
+  Key -20 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key -20 0.066666666666666665741 0 0 0 0 -19.834710743801654331 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 -19.834710743801654331 0 0
+  Key -20 0.13333333333333333148 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.033333333333333332871 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000001 Objects/doors_windows/door_flat_white.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+SchematicPosition 0.600000 -0.400000
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  14
+  Key 0.002442609984427690506 0 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.13333333333333333148 3 0 0 0 -5.0058588385581970215e-09 -9.6185774099631382798e-09 0
+  Key 0.0024426002055406570435 2.1333333333333333037 0 0 0 0 -9.8475911578194056039e-09 -1.6412651929698885263e-10 0
+  Key 0.0024425999727100133896 2.1666666666666665186 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 2.6333333333333333037 3 0 0 0 -0.0046335013583302490925 -0.00033096438273787491969 0
+  Key -0.0025218557566404342651 2.6666666666666665186 3 0 0 0 -0.00033096438273787491969 -0.0042552942676203475009 0
+  Key -0.0025218999944627285004 2.8666666666666622554 3 0 0 0 0 0 0
+  Key -0.0025218557566404342651 3.1333333333333341919 3 0 0 0 0.0046335013583302490925 -0.0012423671885494638831 0
+  Key -0.013703204691410064697 3.1666666666666611896 3 0 0 0 -0.00074542326231784100058 -0.010435925672451789106 0
+  Key -0.013703204691410064697 3.6333333333333270865 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 3.6666666666666603014 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 4.1333333333333257542 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  14
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 0 0 0
+  Key -20 0.13333333333333333148 0 0 0 0 10.001560000353492796 0 0
+  Key -20 2.1333333333333333037 0 0 0 0 19.675200000695397762 0.327920000011587498 0
+  Key 0.0031200007069855928421 2.1666666666666665186 3 0 0 0 1.3335413333804657654 18.669578667326522492 0
+  Key 0.0031200007069855928421 2.6333333333333333037 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 2.6666666666666665186 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 2.8666666666666622554 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 3.1333333333333341919 3 0 0 0 -18.669578667326522492 -6.222230796183601993e-05 0
+  Key 0.0025599999353289604187 3.1666666666666611896 3 0 0 0 -3.7333384777102097138e-05 -0.00052266738687953035337 0
+  Key 0.0025599999353289604187 3.6333333333333270865 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 3.6666666666666603014 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 4.1333333333333257542 3 0 0 0 -18.669055999939651258 -1.3335039999956790346 0
+  Key -20 4.1666666666666554164 0 0 0 0 -19.83724958671272276 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  14
+  Key 0.012733999639749526978 0 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.13333333333333333148 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.012733999639749526978 2.1666666666666665186 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 2.6333333333333333037 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 2.6666666666666665186 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 2.8666666666666622554 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 3.1333333333333341919 3 0 0 0 -0.012701306078169388378 -0.0015876632597708283372 0
+  Key -0.0015549696981906890869 3.1666666666666611896 3 0 0 0 -0.00095259795586250938394 -0.013336371382077705922 0
+  Key -0.0015549696981906890869 3.6333333333333270865 3 0 0 0 0 0 0
+  Key 0.0023007984273135662079 3.6666666666666603014 3 0 0 0 0 0.0035987169171373080065 0
+  Key 0.0023007984273135662079 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 1.1780972778797149658 0.39269909262657165527 0
+  Key 1.5707963705062866211 0.13333333333333333148 0 0 0 0 0.78539818525314331055 1.5450456103340524106 0
+  Key 1.5707963705062866211 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 2.1666666666666665186 5 -0.20555472222222229139 0 0.20555472222222229139 0 0 0
+  Key 0 2.6333333333333333037 5 -0.18869648467432958983 0 0.18869648467432958983 0 0 0
+  Key 1.5707963705062866211 2.6666666666666665186 5 -0.18869648467432958983 -0.0031216215060619854904 0.18869648467432958983 0.0031216215060619854904 2.9321532249450679153 0
+  Key 2.2089862823486328125 2.8666666666666622554 5 -0.077777000000000554025 -0.061085914654434164683 0.077777000000000554025 0.061085914654434164683 0.89759792600360766013 0
+  Key 3.1415927410125732422 3.1333333333333341919 5 -0.20976928160919547373 0.0012804914774571488252 0.20976928160919547373 -0.0012804914774571488252 -0.10471975803375245528 0
+  Key 0 3.1666666666666611896 5 -0.083332499999998935203 0.053377432306408199858 0.083332499999998935203 -0.053377432306408199858 -1.1956664403279775311 0
+  Key 1.8605215549468994141 3.6333333333333270865 5 -0.083332500000000003793 -0 0.083332500000000003793 0 0 0
+  Key 0 3.6666666666666603014 5 -0.083332500000000003793 0.083332500000000003793 0.083332500000000003793 -0.083332500000000003793 -3.1227442582448325936 0
+  Key -1.4852758646011352539 4.1333333333333257542 5 -0.15555400000000002558 0.11545157974266426204 0.15555400000000002558 -0.11545157974266426204 0 0
+  Key -1.4997733831405639648 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.6333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.6666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.8666666666666622554 0 0 0 0 0 0 0
+  Key 0 3.1333333333333341919 0 0 0 0 0 0 0
+  Key 0 3.1666666666666611896 0 0 0 0 0 0 0
+  Key 0 3.6333333333333270865 0 0 0 0 0 0 0
+  Key 0 3.6666666666666603014 0 0 0 0 0 0 0
+  Key 0 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 0 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.6333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.6666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.8666666666666622554 0 0 0 0 0 0 0
+  Key 0 3.1333333333333341919 0 0 0 0 0 0 0
+  Key 0 3.1666666666666611896 0 0 0 0 0 0 0
+  Key 0 3.6333333333333270865 0 0 0 0 0 0 0
+  Key 0 3.6666666666666603014 0 0 0 0 0 0 0
+  Key 0 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 0 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.6666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.8666666666666622554 0 0 0 0 0 0 0
+  Key 1 3.1333333333333341919 0 0 0 0 0 0 0
+  Key 1 3.1666666666666611896 0 0 0 0 0 0 0
+  Key 1 3.6333333333333270865 0 0 0 0 0 0 0
+  Key 1 3.6666666666666603014 0 0 0 0 0 0 0
+  Key 1 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 1 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.6666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.8666666666666622554 0 0 0 0 0 0 0
+  Key 1 3.1333333333333341919 0 0 0 0 0 0 0
+  Key 1 3.1666666666666611896 0 0 0 0 0 0 0
+  Key 1 3.6333333333333270865 0 0 0 0 0 0 0
+  Key 1 3.6666666666666603014 0 0 0 0 0 0 0
+  Key 1 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 1 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.6333333333333333037 0 0 0 0 0 0 0
+  Key 1 2.6666666666666665186 0 0 0 0 0 0 0
+  Key 1 2.8666666666666622554 0 0 0 0 0 0 0
+  Key 1 3.1333333333333341919 0 0 0 0 0 0 0
+  Key 1 3.1666666666666611896 0 0 0 0 0 0 0
+  Key 1 3.6333333333333270865 0 0 0 0 0 0 0
+  Key 1 3.6666666666666603014 0 0 0 0 0 0 0
+  Key 1 4.1333333333333257542 0 0 0 0 0 0 0
+  Key 1 4.1666666666666554164 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+LockedChannels 48
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition -0.013 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000002 Objects/doors_windows/gittertuer-steel_v2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+SchematicPosition 1.200000 -0.800000
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  14
+  Key 0.002442609984427690506 0 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.13333333333333333148 3 0 0 0 -5.0058588385581970215e-09 -9.698069785252090287e-09 0
+  Key 0.0024426002055406570435 4.1333333333333337478 0 0 0 0 -9.9289762087104730345e-09 -1.6412651929698885263e-10 0
+  Key 0.0024425999727100133896 4.1666666666666669627 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 4.6333333333333319715 3 0 0 0 -0.0046335013583302490925 -0.00033096438273787491969 0
+  Key -0.0025218557566404342651 4.6666666666666660745 3 0 0 0 -0.00033096438273787491969 -0.0042552942676203475009 0
+  Key -0.0025218999944627285004 4.8666666666666609231 3 0 0 0 0 0 0
+  Key -0.0025218557566404342651 5.1333333333333319715 3 0 0 0 0.0046335013583302490925 -0.0012423671885494638831 0
+  Key -0.013703204691410064697 5.1666666666666589691 3 0 0 0 -0.00074542326231784100058 -0.010435925672451789106 0
+  Key -0.013703204691410064697 5.6333333333333230897 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 5.6666666666666563046 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 6.133333333333319537 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  14
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 0 0 0
+  Key -20 0.13333333333333333148 0 0 0 0 10.001560000353492796 0 0
+  Key -20 4.1333333333333337478 0 0 0 0 19.837804959378829039 0.327920000011587498 0
+  Key 0.0031200007069855928421 4.1666666666666669627 3 0 0 0 1.3335413333804657654 18.669578667326522492 0
+  Key 0.0031200007069855928421 4.6333333333333319715 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 4.6666666666666660745 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 4.8666666666666609231 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 5.1333333333333319715 3 0 0 0 -18.669578667326522492 -6.222230796183601993e-05 0
+  Key 0.0025599999353289604187 5.1666666666666589691 3 0 0 0 -3.7333384777102097138e-05 -0.00052266738687953035337 0
+  Key 0.0025599999353289604187 5.6333333333333230897 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 5.6666666666666563046 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 6.133333333333319537 3 0 0 0 -18.669055999939651258 -1.3335039999956790346 0
+  Key -20 6.1666666666666491992 0 0 0 0 -19.83724958671272276 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  14
+  Key 0.012733999639749526978 0 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.13333333333333333148 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 0.012733999639749526978 4.1666666666666669627 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 4.6333333333333319715 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 4.6666666666666660745 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 4.8666666666666609231 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 5.1333333333333319715 3 0 0 0 -0.012701306078169388378 -0.0015876632597708283372 0
+  Key -0.0015549696981906890869 5.1666666666666589691 3 0 0 0 -0.00095259795586250938394 -0.013336371382077705922 0
+  Key -0.0015549696981906890869 5.6333333333333230897 3 0 0 0 0 0 0
+  Key 0.0023007984273135662079 5.6666666666666563046 3 0 0 0 0 0.0035987169171373028023 0
+  Key 0.0023007984273135662079 6.133333333333319537 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 1.1780972778797149658 0.39269909262657165527 0
+  Key 1.5707963705062866211 0.13333333333333333148 0 0 0 0 0.78539818525314331055 1.5578145823202842468 0
+  Key 1.5707963705062866211 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 4.1666666666666669627 5 -0.20555472222222229139 0 0.20555472222222229139 0 0 0
+  Key 0 4.6333333333333319715 5 -0.18869648467432958983 0 0.18869648467432958983 0 0 0
+  Key 1.5707963705062866211 4.6666666666666660745 5 -0.18869648467432958983 -0.0031216215060619854904 0.18869648467432958983 0.0031216215060619854904 2.9321532249450679153 0
+  Key 2.2089862823486328125 4.8666666666666609231 5 -0.077777000000000554025 -0.061085914654434164683 0.077777000000000554025 0.061085914654434164683 0.89759792600360766013 0
+  Key 3.1415927410125732422 5.1333333333333319715 5 -0.20976928160919547373 0.0012804914774571488252 0.20976928160919547373 -0.0012804914774571488252 -0.10471975803375245528 0
+  Key 0 5.1666666666666589691 5 -0.083332499999998935203 0.053377432306408199858 0.083332499999998935203 -0.053377432306408199858 -1.1956664403279775311 0
+  Key 1.8605215549468994141 5.6333333333333230897 5 -0.083332500000000003793 -0 0.083332500000000003793 0 0 0
+  Key 0 5.6666666666666563046 5 -0.083332500000000003793 0.083332500000000003793 0.083332500000000003793 -0.083332500000000003793 -3.1227442582448325936 0
+  Key -1.4852758646011352539 6.133333333333319537 5 -0.15555400000000002558 0.11545157974266426204 0.15555400000000002558 -0.11545157974266426204 0 0
+  Key -1.4997733831405639648 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 0 4.1666666666666669627 0 0 0 0 0 0 0
+  Key 0 4.6333333333333319715 0 0 0 0 0 0 0
+  Key 0 4.6666666666666660745 0 0 0 0 0 0 0
+  Key 0 4.8666666666666609231 0 0 0 0 0 0 0
+  Key 0 5.1333333333333319715 0 0 0 0 0 0 0
+  Key 0 5.1666666666666589691 0 0 0 0 0 0 0
+  Key 0 5.6333333333333230897 0 0 0 0 0 0 0
+  Key 0 5.6666666666666563046 0 0 0 0 0 0 0
+  Key 0 6.133333333333319537 0 0 0 0 0 0 0
+  Key 0 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 0 4.1666666666666669627 0 0 0 0 0 0 0
+  Key 0 4.6333333333333319715 0 0 0 0 0 0 0
+  Key 0 4.6666666666666660745 0 0 0 0 0 0 0
+  Key 0 4.8666666666666609231 0 0 0 0 0 0 0
+  Key 0 5.1333333333333319715 0 0 0 0 0 0 0
+  Key 0 5.1666666666666589691 0 0 0 0 0 0 0
+  Key 0 5.6333333333333230897 0 0 0 0 0 0 0
+  Key 0 5.6666666666666563046 0 0 0 0 0 0 0
+  Key 0 6.133333333333319537 0 0 0 0 0 0 0
+  Key 0 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 4.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 4.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 4.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 4.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 5.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 5.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 5.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 5.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 6.133333333333319537 0 0 0 0 0 0 0
+  Key 1 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 4.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 4.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 4.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 4.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 5.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 5.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 5.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 5.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 6.133333333333319537 0 0 0 0 0 0 0
+  Key 1 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 4.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 4.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 4.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 4.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 4.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 5.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 5.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 5.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 5.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 6.133333333333319537 0 0 0 0 0 0 0
+  Key 1 6.1666666666666491992 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+LockedChannels 48
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition -0.013 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000005 Objects/doors_windows/gittertuer-white_v2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+SchematicPosition 1.800000 -1.200000
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  14
+  Key 0.002442609984427690506 0 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 0.13333333333333333148 3 0 0 0 -5.0058588385581970215e-09 -9.7248600332776491918e-09 0
+  Key 0.0024426002055406570435 6.1333333333333337478 0 0 0 0 -9.9564043197842591778e-09 -1.6412651929698885263e-10 0
+  Key 0.0024425999727100133896 6.1666666666666669627 3 0 0 0 0 0 0
+  Key 0.002442609984427690506 6.6333333333333319715 3 0 0 0 -0.0046335013583302490925 -0.00033096438273787491969 0
+  Key -0.0025218557566404342651 6.6666666666666660745 3 0 0 0 -0.00033096438273787491969 -0.0042552942676203475009 0
+  Key -0.0025218999944627285004 6.8666666666666609231 3 0 0 0 0 0 0
+  Key -0.0025218557566404342651 7.1333333333333319715 3 0 0 0 0.0046335013583302490925 -0.0012423671885494638831 0
+  Key -0.013703204691410064697 7.1666666666666589691 3 0 0 0 -0.00074542326231784100058 -0.010435925672451789106 0
+  Key -0.013703204691410064697 7.6333333333333230897 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 7.6666666666666563046 3 0 0 0 0 0 0
+  Key -0.013703204691410064697 8.1333333333333186488 0 0 0 0 0 0 0
+  Key -0.013703204691410064697 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  14
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 0 0 0
+  Key -20 0.13333333333333333148 0 0 0 0 10.001560000353492796 0 0
+  Key -20 6.1333333333333337478 0 0 0 0 19.892605525564960089 0.327920000011587498 0
+  Key 0.0031200007069855928421 6.1666666666666669627 3 0 0 0 1.3335413333804657654 18.669578667326522492 0
+  Key 0.0031200007069855928421 6.6333333333333319715 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 6.6666666666666660745 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 6.8666666666666609231 3 0 0 0 0 0 0
+  Key 0.0031200007069855928421 7.1333333333333319715 3 0 0 0 -18.669578667326522492 -6.222230796183601993e-05 0
+  Key 0.0025599999353289604187 7.1666666666666589691 3 0 0 0 -3.7333384777102097138e-05 -0.00052266738687953035337 0
+  Key 0.0025599999353289604187 7.6333333333333230897 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 7.6666666666666563046 3 0 0 0 0 0 0
+  Key 0.0025599999353289604187 8.1333333333333186488 3 0 0 0 -18.669055999939651258 -1.3335039999956790346 0
+  Key -20 8.1666666666666500873 0 0 0 0 -19.83724958671272276 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  14
+  Key 0.012733999639749526978 0 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.10000000000000000555 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 0.13333333333333333148 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 0.012733999639749526978 6.1666666666666669627 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 6.6333333333333319715 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 6.6666666666666660745 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 6.8666666666666609231 3 0 0 0 0 0 0
+  Key 0.012733999639749526978 7.1333333333333319715 3 0 0 0 -0.012701306078169388378 -0.0015876632597708283372 0
+  Key -0.0015549696981906890869 7.1666666666666589691 3 0 0 0 -0.00095259795586250938394 -0.013336371382077705922 0
+  Key -0.0015549696981906890869 7.6333333333333230897 3 0 0 0 0 0 0
+  Key 0.0023007984273135662079 7.6666666666666563046 3 0 0 0 0 0.0035987169171373023686 0
+  Key 0.0023007984273135662079 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 0.0023007984273135662079 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 1.1780972778797149658 0.39269909262657165527 0
+  Key 1.5707963705062866211 0.13333333333333333148 0 0 0 0 0.78539818525314331055 1.5621179375200640038 0
+  Key 1.5707963705062866211 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 6.1666666666666669627 5 -0.20555472222222229139 0 0.20555472222222229139 0 0 0
+  Key 0 6.6333333333333319715 5 -0.18869648467432958983 0 0.18869648467432958983 0 0 0
+  Key 1.5707963705062866211 6.6666666666666660745 5 -0.18869648467432958983 -0.0031216215060619854904 0.18869648467432958983 0.0031216215060619854904 2.9321532249450679153 0
+  Key 2.2089862823486328125 6.8666666666666609231 5 -0.077777000000000554025 -0.061085914654434164683 0.077777000000000554025 0.061085914654434164683 0.89759792600360766013 0
+  Key 3.1415927410125732422 7.1333333333333319715 5 -0.20976928160919547373 0.0012804914774571488252 0.20976928160919547373 -0.0012804914774571488252 -0.10471975803375245528 0
+  Key 0 7.1666666666666589691 5 -0.083332499999998935203 0.053377432306408199858 0.083332499999998935203 -0.053377432306408199858 -1.1956664403279775311 0
+  Key 1.8605215549468994141 7.6333333333333230897 5 -0.083332500000000003793 -0 0.083332500000000003793 0 0 0
+  Key 0 7.6666666666666563046 5 -0.083332500000000003793 0.083332500000000003793 0.083332500000000003793 -0.083332500000000003793 -3.1227442582448325936 0
+  Key -1.4852758646011352539 8.1333333333333186488 5 -0.15555400000000002558 0.11545157974266426204 0.15555400000000002558 -0.11545157974266426204 0 0
+  Key -1.4997733831405639648 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 0 6.1666666666666669627 0 0 0 0 0 0 0
+  Key 0 6.6333333333333319715 0 0 0 0 0 0 0
+  Key 0 6.6666666666666660745 0 0 0 0 0 0 0
+  Key 0 6.8666666666666609231 0 0 0 0 0 0 0
+  Key 0 7.1333333333333319715 0 0 0 0 0 0 0
+  Key 0 7.1666666666666589691 0 0 0 0 0 0 0
+  Key 0 7.6333333333333230897 0 0 0 0 0 0 0
+  Key 0 7.6666666666666563046 0 0 0 0 0 0 0
+  Key 0 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 0 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  14
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 0 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 0 6.1666666666666669627 0 0 0 0 0 0 0
+  Key 0 6.6333333333333319715 0 0 0 0 0 0 0
+  Key 0 6.6666666666666660745 0 0 0 0 0 0 0
+  Key 0 6.8666666666666609231 0 0 0 0 0 0 0
+  Key 0 7.1333333333333319715 0 0 0 0 0 0 0
+  Key 0 7.1666666666666589691 0 0 0 0 0 0 0
+  Key 0 7.6333333333333230897 0 0 0 0 0 0 0
+  Key 0 7.6666666666666563046 0 0 0 0 0 0 0
+  Key 0 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 0 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 6.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 6.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 6.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 6.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 7.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 7.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 7.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 7.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 1 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 6.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 6.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 6.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 6.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 7.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 7.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 7.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 7.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 1 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  14
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 1 0.13333333333333333148 0 0 0 0 0 0 0
+  Key 1 6.1333333333333337478 0 0 0 0 0 0 0
+  Key 1 6.1666666666666669627 0 0 0 0 0 0 0
+  Key 1 6.6333333333333319715 0 0 0 0 0 0 0
+  Key 1 6.6666666666666660745 0 0 0 0 0 0 0
+  Key 1 6.8666666666666609231 0 0 0 0 0 0 0
+  Key 1 7.1333333333333319715 0 0 0 0 0 0 0
+  Key 1 7.1666666666666589691 0 0 0 0 0 0 0
+  Key 1 7.6333333333333230897 0 0 0 0 0 0 0
+  Key 1 7.6666666666666563046 0 0 0 0 0 0 0
+  Key 1 8.1333333333333186488 0 0 0 0 0 0 0
+  Key 1 8.1666666666666500873 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+LockedChannels 48
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition -0.013 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+GlobalMipmapMultiplier 1.000000
+GlobalEdgeMultiplier 1
+EdgeVerticalPoints 0
+DiffuseLimit 5.000000
+ReflectionLimit 5.000000
+RefractionLimit 5.000000
+EnableDespike 0
+DespikeTolerance 0.800000
+EnableMipMapping 0
+EnableVolumetric 1
+EnableRadiosity 1
+RadiosityType 1
+RadiosityInterpolated 0
+RadiosityTransparency 0
+RadiosityIntensity 1
+DiffuseBounces 2
+VolumetricRadiosity 1
+RadiosityUseAmbient 1
+RadiosityDirectionalRays 0
+RadiosityUseGradients 0
+RadiosityUseBehindTest 0
+BlurRadiosity 0
+RadiosityEnable0 1
+RadiosityFlags 0
+RadiosityCacheModulus 1
+RadiositySaveEachFrame 0
+RadiosityCacheFilePath Radiosity/radiosity.cache
+PixelFilterForceMT 0
+ExternalRenderer .VPR
+Plugin ExtRendererHandler 1 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+UseZminMax 1
+ZMinimum 0
+ZMaximum 1000000
+
+AddLight 20000000
+LightName Light
+ShowLight 1 6
+LightMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key -2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key -2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0.78539816339744816798 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0.61086523819801519242 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+LightColor 1 1 1
+LightIntensity 3.14
+AffectCaustics 1
+VolumetricLighting 1
+VolumetricSamples 2
+VolumetricIntensity 1
+LightUseNodes 1
+LightShader 1
+{ LightShader_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Light Shader"
+    { Tag
+      RealName "Light Shader"
+      Name "Light Shader"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Direction"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+LightType 0
+LensFlare 0
+FlareIntensity 0.5
+FlareDissolve 0
+LensFlareFade 4
+LensFlareOptions 11
+FlareRingColor 0.3137 0.0784 0.0392
+FlareRingSize 0.22
+FlareRandStreakInt 0.03
+FlareRandStreakDens 50
+FlareRandStreakSharp 6
+ShadowType 1
+ShadowColor 0 0 0
+Plugin LightHandler 1 DistantLight
+{ DistantLight
+  Version 1
+  Samples 4
+  { Angle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0090757096
+        0
+      }
+    }
+  }
+  Normalize 1
+  VolumetricDistance 1
+}
+EndPlugin
+
+AddCamera 30000000
+CameraName Camera
+ShowCamera 1 14
+CameraMotion
+NumChannels 6
+Channel 0
+{ Envelope
+  24
+  Key 0.032000001519918441772 0 0 0 0 0 0 0 0
+  Key 0.032000001519918441772 0.033333333333333325932 0 0 0 0 0 -0.042666668693224579778 0
+  Key -0.032000001519918441772 0.066666666666666651864 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.032000001519918441772 0.16666666666666662966 0 0 0 0 0 0.029714287125638554066 0
+  Key 0.032000001519918441772 0.2000000000000000111 0 0 0 0 0 0 0
+  Key 0.032000001519918441772 0.5999999999999999778 0 0 0 0 0 0 0
+  Key 0.032000001519918441772 0.63333333333333330373 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 0.66666666666666662966 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 0.69999999999999995559 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 1.1000000000000000888 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 1.1333333333333333037 0 0 0 0 0 0.061935486812745382812 0
+  Key 0 1.1666666666666667407 0 0 0 0 0.0021333334346612295961 0.06186666960517565178 0
+  Key 0 1.1999999999999999556 0 0 0 0 0.0011034483282730497312 0 0
+  Key 0 2.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0.030896553191645401149 0 0
+  Key 0.032000001519918441772 2.1666666666666665186 0 0 0 0 0 0.029538462941463186628 0
+  Key 0.032000001519918441772 2.5666666666666650976 0 0 0 0 0 0 0
+  Key 0.032000001519918441772 2.5999999999999983125 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 2.6333333333333315274 0 0 0 0 -0.063471077394879560352 0 0
+  Key -0.032000001519918441772 2.6666666666666647423 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 3.0666666666666642094 0 0 0 0 0 0 0
+  Key -0.032000001519918441772 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  24
+  Key 0.028710000216960900044 0 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.16666666666666662966 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.2000000000000000111 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.5999999999999999778 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 1.1999999999999999556 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.5666666666666650976 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.5999999999999983125 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.6333333333333315274 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 2.6666666666666647423 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 3.0666666666666642094 0 0 0 0 0 0 0
+  Key 0.028710000216960906982 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  24
+  Key -0.11595274507999420166 0 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.033333333333333325932 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.066666666666666651864 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.10000000000000000555 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.13333333333333330373 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.16666666666666662966 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.2000000000000000111 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.5999999999999999778 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.63333333333333330373 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.66666666666666662966 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 0.69999999999999995559 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 1.1000000000000000888 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 1.1333333333333333037 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 1.1666666666666667407 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 1.1999999999999999556 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.1000000000000000888 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.1333333333333333037 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.1666666666666665186 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.5666666666666650976 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.5999999999999983125 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.6333333333333315274 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 2.6666666666666647423 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 3.0666666666666642094 0 0 0 0 0 0 0
+  Key -0.11595274507999420166 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  24
+  Key -0.26179939508438115903 0 0 0 0 0 0 0 0
+  Key -0.26179939508438110352 0.033333333333333325932 0 0 0 0 0 0.34906586011250811952 0
+  Key 0.26179939508438110352 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key -0.26179939508438110352 0.16666666666666662966 0 0 0 0 0 -0.24309943829263960802 0
+  Key -0.26179939508438110352 0.2000000000000000111 0 0 0 0 0 0 0
+  Key -0.26179939508438110352 0.5999999999999999778 0 0 0 0 0 0 0
+  Key -0.26179939508438110352 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 1.1333333333333333037 0 0 0 0 0 -0.50670850661493127554 0
+  Key 0 1.1666666666666667407 0 0 0 0 -0.017453293005625408058 -0.50614549716313683714 0
+  Key 0 1.1999999999999999556 0 0 0 0 -0.0090275653477372794914 0 0
+  Key 0 2.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 -0.25277182973664391596 0 0
+  Key -0.26179939508438110352 2.1666666666666665186 0 0 0 0 0 -0.24166098007789033053 0
+  Key -0.26179939508438110352 2.5666666666666650976 0 0 0 0 0 0 0
+  Key -0.26179939508438110352 2.5999999999999983125 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 2.6333333333333315274 0 0 0 0 0.51927152744009474894 0 0
+  Key 0.26179939508438110352 2.6666666666666647423 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 3.0666666666666642094 0 0 0 0 0 0 0
+  Key 0.26179939508438110352 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  24
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.16666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.2000000000000000111 0 0 0 0 0 0 0
+  Key 0 0.5999999999999999778 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0 1.1999999999999999556 0 0 0 0 0 0 0
+  Key 0 2.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.5666666666666650976 0 0 0 0 0 0 0
+  Key 0 2.5999999999999983125 0 0 0 0 0 0 0
+  Key 0 2.6333333333333315274 0 0 0 0 0 0 0
+  Key 0 2.6666666666666647423 0 0 0 0 0 0 0
+  Key 0 3.0666666666666642094 0 0 0 0 0 0 0
+  Key 0 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  24
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.16666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.2000000000000000111 0 0 0 0 0 0 0
+  Key 0 0.5999999999999999778 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0 1.1999999999999999556 0 0 0 0 0 0 0
+  Key 0 2.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 2.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 2.1666666666666665186 0 0 0 0 0 0 0
+  Key 0 2.5666666666666650976 0 0 0 0 0 0 0
+  Key 0 2.5999999999999983125 0 0 0 0 0 0 0
+  Key 0 2.6333333333333315274 0 0 0 0 0 0 0
+  Key 0 2.6666666666666647423 0 0 0 0 0 0 0
+  Key 0 3.0666666666666642094 0 0 0 0 0 0 0
+  Key 0 3.0999999999999974243 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+LockedChannels 48
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+ZoomFactor 3.2
+ZoomType 1
+ResolutionMultiplier 1.0
+FrameSize 288 256
+OverscanMode 0
+OverscanSize 0 0 0 0
+PixelAspect 1
+MotionBlur 0
+MotionBlurSubFrames 20
+ShutterEfficiency 1
+RollingShutter 0
+ShutterOpen 0
+Oversampling 0.5
+UndockPreview 0
+FieldRendering 0
+ApertureHeight 0.015
+EyeSeparation 0.07
+ConvergencePoint 1
+UseConvergence 0
+StereoTrackedEye 0
+StereoOpenGL 1
+ConvergenceToeIn 1
+DepthOfField 0
+FocalDistance 1
+LensFStop 4
+DiaphragmSides 0
+DiaphragmRotation 0
+AASamples 1
+Sampler 0
+AdaptiveThreshold 0.01
+MinimumSamples 32
+MaximumSamples 64
+Plugin CameraHandler 1 Orthographic
+{ ACT
+  Version 1
+  { VParm
+    { Size
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          0.071999997
+          0
+        }
+      }
+    }
+  }
+}
+EndPlugin
+
+AdaptiveSampling 1
+
+UseBackgroundColor 0
+BackgroundColor 0 0 0
+SolidBackdrop 1
+BackdropColor 0.2 0.2 0.2
+ZenithColor 0.6167 0.7238 0.9647
+SkyColor 0.9155 0.9191 0.9647
+GroundColor 0.9155 0.9191 0.9647
+NadirColor 0.4706 0.4667 0.4667
+SkySqueezeAmount 6
+GroundSqueezeAmount 6
+FogType 0
+FogMinDistance 0
+FogMaxDistance 1
+FogMinAmount 0
+FogMaxAmount 1
+FogColor 0.5098 0.5098 0.549
+BackdropFog 0
+CopyToPerspective 0
+VolumeClipDiscance 0.1
+DynamicRangeMin 0
+DynamicRangeLimit 1
+
+RenderMode 2
+RayTraceEffects 15
+DepthBufferAA 0
+RenderLines 1
+RenderInstances 1
+RenderTileSize 0
+RenderAlgorithm 1
+RayRecursionLimit 6
+TransparencyRecursionLimit 6
+ReflectionRecursionLimit 4
+RefractionRecursionLimit 4
+RayPrecision 6
+RayCutoff 0.01
+ReflectionSamples 1
+RefractionSamples 1
+SubsurfaceScatteringSamples 1
+LightSamples 1
+DataOverlayLabel  
+OutputFilenameFormat 3
+SaveRGB 1
+SaveRGBImagesPrefix C:\git\DeckerGame\lightwave\Render\objects\door_v2\frame_
+RGBImageSaver LW_PNG32(.png)
+SaveAlpha 0
+SaveAlphaImagesPrefix C:\git\DeckerGame\lightwave\Renders\Alpha_
+AlphaImageSaver LW_PNG24(.png)
+MultiLayerEnabled 0
+MultiLayerUseOutputPath 1
+MultiLayerPath 
+MultiLayerFilename 
+
+ViewConfiguration 0
+DefineView 0
+ViewType 7
+ViewLevel 5
+ViewAimpoint -0.006356608 0.0188 0.01718483
+ViewRotation 108.9 45.10002 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 11 31 500 300
+ViewFOVZoom 4
+DefineView 1
+ViewType 1
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 11 31 500 300
+ViewFOVZoom 4
+DefineView 2
+ViewType 5
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 11 31 500 300
+ViewFOVZoom 4
+DefineView 3
+ViewType 3
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 11 31 500 300
+ViewFOVZoom 4
+
+GridNumber 80
+GridSize 0.016
+CameraViewBG 0
+ShowMotionPath 0
+ShowFogRadius 0
+ShowFogEffect 0
+ShowFieldChart 0
+OverlayColor_fv 0 0 0
+MeshBackgroundGroup 1
+Plugin VirtualStudio 1 VirtualStudio
+{ Version
+  2
+  Active 1
+  LIVE 0
+  LIVE_FPS 30
+  Play 0
+  Arm 0
+  PunchIn 0
+  PunchOut 0
+}
+EndPlugin
+
+CurrentObject 6
+CurrentLight 0
+CurrentCamera 0
+GraphEditorData
+{ GraphEd_Favorites
+}
+{ GE_Expression_Lib
+  1
+}
+ImageEditorData
+NumberOfClips 1
+Clip 0
+{ ClipObject
+  "scratches2.png"
+  128
+  0
+}
+
+ContentDir C:git/DeckerGame/lightwave

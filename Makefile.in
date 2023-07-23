@@ -223,9 +223,13 @@ objects_ui:
 interactive_objects:
 	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
 
+doors:
+	#./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
+	./texmaker -s lightwave/Render/objects/door_v2/ -t res/doors.tex -w 2048 -h 2048 -px 144 -py 242
+
 enemies: enemy_ostrich enemy_scorpion
 
-sprites: sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui
+sprites: sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/george_adventure/" -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s "res/tiletypes/*.png" -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x res/tiletypes
