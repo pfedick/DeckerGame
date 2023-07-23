@@ -457,5 +457,15 @@ void Physic::updateMovement(float frame_rate_compensation)
 		velocity_move.y=0;
 		velocity_move.x=0;
 	}
-	if (gravity > 10) movement=Falling;
+	if (gravity > 10) {
+		movement=Falling;
+		if (velocity_move.x > 0.0f) {
+			velocity_move.x-=0.2f * frame_rate_compensation;
+			if (velocity_move.x < 0.0f) velocity_move.x=0.0f;
+		} else if (velocity_move.x < 0.0f) {
+			velocity_move.x+=0.2f * frame_rate_compensation;
+			if (velocity_move.x > 0.0f) velocity_move.x=0.0f;
+
+		}
+	}
 }
