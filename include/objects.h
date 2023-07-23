@@ -927,20 +927,52 @@ private:
 	AnimationCycle animation;
 	double next_animation;
 	int door_sprite_no;
+	double cooldown;
+
+	void load_v1(const unsigned char* buffer, size_t size);
 
 public:
+	enum class DoorOrientation {
+		right=0,
+		left=1,
+		front=2,
+		back=3
+	};
+
+	enum class DoorType {
+		windowed=0,
+		flat=1,
+		lattice_metalic=2,
+		lattice_opaque=3
+	};
+
+	enum class DoorState {
+		closed=0,
+		opening=1,
+		open=2,
+		closing=3
+	};
+
+	int color_frame;
+	int color_door;
+	int color_background;
 	uint32_t key_id;
-	unsigned char frame_type;
-	unsigned char door_type;
-	int state;
+	uint32_t warp_to_id;
+	DoorOrientation orientation;
+	DoorType door_type;
+	DoorState state;
 	bool initial_open;
-	bool left_sided;
+	bool auto_opens_on_collision;
+	bool can_close_again;
+	bool use_background_color;
+
 
 	Door();
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
