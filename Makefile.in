@@ -215,7 +215,7 @@ enemy_ostrich:
 
 enemy_scorpion:
 	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125
-	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 128 -py 134
+	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 140 -py 154
 
 objects_ui:
 	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
