@@ -198,16 +198,14 @@ void Door::handleCollision(Player* player, const Collision& collision)
 				target->state=DoorState::open;
 				target->init();
 				target->state=DoorState::closing;
-				target->animation.startSequence(target->door_sprite_no + 14, target->door_sprite_no, false, target->door_sprite_no);
+				target->animation.startSequence(target->door_sprite_no, target->door_sprite_no - 14, false, target->door_sprite_no - 14);
 				target->cooldown=now + 2.0f;
 				player->move(target->p.x, target->p.y);
 				state=DoorState::closing;
-				animation.startSequence(door_sprite_no + 14, door_sprite_no, false, door_sprite_no);
-
+				animation.startSequence(door_sprite_no, door_sprite_no - 14, false, door_sprite_no - 14);
 			}
 		}
 	}
-
 }
 
 size_t Door::saveSize() const
