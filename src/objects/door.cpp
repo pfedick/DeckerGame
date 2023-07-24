@@ -302,8 +302,10 @@ void Door::load_v1(const unsigned char* buffer, size_t size)
 	if (flags & 2) {
 		orientation=DoorOrientation::left;
 		p.x-=16;
+		initial_p.x-=16;
 	} else {
 		p.x+=16;
+		initial_p.x+=16;
 	}
 	auto_opens_on_collision=true;
 	can_close_again=false;
