@@ -499,10 +499,26 @@ public:
 class KeyReward : public Object
 {
 private:
+	double next_animation;
+	AnimationCycle animation;
 public:
+	enum class KeyType {
+		silver=0,
+		golden=1,
+		colored=2
+	};
+	KeyType key_type;
+	int color_modification;
 	KeyReward();
 	static Representation representation();
+	void init();
+	void updateColor();
 	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 };
 
 class Medikit : public Object
