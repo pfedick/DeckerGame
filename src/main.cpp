@@ -44,7 +44,7 @@ void start()
 		//game.playIntroVideo();
 
 		//game.startLevel("level/levelstats_test.lvl");
-		game.startLevel("level/egypt.lvl");
+		game.startLevel("level/desert.lvl");
 		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
@@ -70,7 +70,7 @@ void start()
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
 			game.resetPlayer();
-			game.startLevel("level/egypt.lvl");
+			game.startLevel("level/desert.lvl");
 			game.enableControls(true);
 			game.run();
 		} else if (state == GameState::StartEditor) {
