@@ -14,7 +14,7 @@ namespace Decker::Objects {
 
 Representation ParticleEmitter::representation()
 {
-	return Representation(Spriteset::GenericObjects, 428);
+	return Representation(Spriteset::GenericObjects, 302);
 }
 
 
@@ -23,10 +23,10 @@ ParticleEmitter::ParticleEmitter()
 	:Object(Type::ObjectType::ParticleEmitter)
 {
 	sprite_set=Spriteset::GenericObjects;
-	sprite_no=428;
+	sprite_no=302;
 	collisionDetection=false;
 	visibleAtPlaytime=false;
-	sprite_no_representation=428;
+	sprite_no_representation=302;
 	next_birth=0.0f;
 	particle_type=Particle::Type::RotatingParticleWhite;
 	emitter_type=EmitterType::Point;

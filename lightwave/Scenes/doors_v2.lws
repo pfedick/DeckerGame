@@ -1741,7 +1741,7 @@ NodeEdges 0
 Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
-LoadObjectLayer 1 10000003 Objects/doors_windows/doorframe-bright_white.lwo
+LoadObjectLayer 1 10000003 Objects/doors_windows/doorframe-black.lwo
 ChangeObject 0
 ShowObject 7 7
 Group 0
