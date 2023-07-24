@@ -70,6 +70,24 @@ void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
 	this->endframe=endframe;
 }
 
+void AnimationCycle::startRandomSequence(int start, int end, bool loop, int endframe)
+{
+	cycle=NULL;
+	seq_start=start;
+	seq_end=end;
+	if (seq_end > seq_start) {
+		size=seq_end - seq_start + 1;
+		index=ppl7::rand(0, size);
+	} else {
+		size=-(seq_start - seq_end + 1);
+		index=-ppl7::rand(0, -size);
+	}
+
+	this->loop=loop;
+	finished=false;
+	this->endframe=endframe;
+}
+
 void AnimationCycle::update()
 {
 	if (finished) return;

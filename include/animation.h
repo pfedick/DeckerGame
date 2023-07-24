@@ -4,7 +4,7 @@
 class AnimationCycle
 {
 private:
-	int *cycle;
+	int* cycle;
 	int index;
 	int size;
 	int endframe;
@@ -15,10 +15,11 @@ private:
 public:
 	AnimationCycle();
 	void setStaticFrame(int nr);
-	void start(int *cycle_array, int size, bool loop, int endframe);
-	void start(const AnimationCycle &other);
-	void startRandom(int *cycle_array, int size, bool loop, int endframe);
+	void start(int* cycle_array, int size, bool loop, int endframe);
+	void start(const AnimationCycle& other);
+	void startRandom(int* cycle_array, int size, bool loop, int endframe);
 	void startSequence(int start, int end, bool loop, int endframe);
+	void startRandomSequence(int start, int end, bool loop, int endframe);
 	void update();
 	int getFrame() const;
 	bool isFinished() const;
