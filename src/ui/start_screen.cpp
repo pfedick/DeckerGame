@@ -43,7 +43,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	this->addChild(start_screen);
 	wm->setKeyboardFocus(start_screen);
 	showUi(false);
-	int fade_to_black=255;
+	//int fade_to_black=255;
 	int fade_state=0;
 	quitGame=false;
 	startLevel("level/start.lvl");
@@ -68,19 +68,19 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		drawWidgets();
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		if (fade_state == 0) {
-			fade_to_black-=2;
-			if (fade_to_black <= 0) {
+			fade_to_black-=5 * frame_rate_compensation;
+			if (fade_to_black <= 0.0f) {
 				fade_state=1;
 				fade_to_black=0;
 			}
 		} else if (fade_state == 2) {
-			fade_to_black+=5;
-			if (fade_to_black >= 255) {
+			fade_to_black+=5 * frame_rate_compensation;
+			if (fade_to_black >= 255.0f) {
 				fade_state=3;
-				fade_to_black=255;
+				fade_to_black=255.0f;
 			}
 		}
-		if (fade_to_black) FadeToBlack(renderer, fade_to_black);
+		if (fade_to_black > 0.0f) FadeToBlack(renderer, (int)fade_to_black);
 		presentScreen();
 
 		if (quitGame == true && fade_state == 1) {
@@ -89,6 +89,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		if (start_screen->getState() != StartScreen::State::None && fade_state == 1) {
 			fade_state = 2;
 			fade_to_black=0;
+			gameState=GameState::BlendOut;
 			if (start_screen->getState() != StartScreen::State::ShowSettings)
 				GeorgeDeckerTheme.fadeout(4.0f);
 		} else if (start_screen->getState() != StartScreen::State::None && fade_state == 3) {

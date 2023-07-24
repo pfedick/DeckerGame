@@ -20,6 +20,7 @@ double game_start=0.0f;
 void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 {
 	if (fade_to_black > 0) {
+		//ppl7::PrintDebugTime("FadeToBlack triggered with value: %d\n", fade_to_black);
 		SDL_BlendMode currentBlendMode;
 		SDL_GetRenderDrawBlendMode(renderer, &currentBlendMode);
 		//SDL_BlendMode newBlendMode=SDL_BLENDMODE_BLEND;
@@ -85,6 +86,7 @@ Game::Game()
 	game_stats_screen=NULL;
 	gameState=GameState::None;
 	last_frame_time=0.0f;
+	frame_rate_compensation=1.0f;
 }
 
 Game::~Game()
@@ -546,7 +548,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 {
 	metrics.time_draw_world.start();
 	double now=ppl7::GetMicrotime();
-	float frame_rate_compensation=1.0f;
+	frame_rate_compensation=1.0f;
 	if (last_frame_time > 0.0f) {
 
 		float frametime=now - last_frame_time;
@@ -635,17 +637,19 @@ void Game::drawWorld(SDL_Renderer* renderer)
 			if (fade_to_black < 0) fade_to_black=0;
 		}
 	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver) {
-		if (fade_to_black < 255) fade_to_black+=(5.0f * frame_rate_compensation);
-		else {
+		if (fade_to_black < 255) {
+			fade_to_black+=(5.0f * frame_rate_compensation);
+			if (fade_to_black > 255.0f) fade_to_black=255.0f;
+		} else {
 			if (gameState == GameState::LevelEndTriggerd) {
-				if (controlsEnabled) {
+				if (LevelFile != "level/start.lvl") {
 					gameState=GameState::ShowStats;
 					showStatsScreen(StatsScreenReason::LevelEnd);
 				}
 				player->resetLevelObjects();
 				startLevel(nextLevelFile);
 			} else if (gameState == GameState::GameOver) {
-				if (controlsEnabled) {
+				if (LevelFile != "level/start.lvl") {
 					gameState=GameState::ShowStats;
 					showStatsScreen(StatsScreenReason::PlayerDied);
 				}

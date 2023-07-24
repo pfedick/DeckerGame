@@ -637,7 +637,8 @@ enum class GameState {
 	GameOver,
 	LevelEndTriggerd,
 	ShowStats,
-	TransferPlayer
+	TransferPlayer,
+	BlendOut
 };
 
 enum class StatsScreenReason {
@@ -741,6 +742,7 @@ private:
 	Metrics metrics;
 
 	ppl7::String nextLevelFile;
+	float frame_rate_compensation;
 
 	void createWindow();
 	void presentStartupScreen();
