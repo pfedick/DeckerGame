@@ -678,22 +678,30 @@ void DoorDialog::dialogButtonEvent(Dialog::Buttons button)
 	if (button == Dialog::Buttons::Copy) {
 		clipboard.color_frame=object->color_frame;
 		clipboard.color_door=object->color_door;
+		clipboard.color_background=object->color_background;
 		clipboard.key_id=object->key_id;
 		clipboard.warp_to_id=object->warp_to_id;
 		clipboard.orientation=object->orientation;
 		clipboard.door_type=object->door_type;
 		clipboard.state=object->state;
 		clipboard.initial_open=object->initial_open;
+		clipboard.auto_opens_on_collision=object->auto_opens_on_collision;
+		clipboard.can_close_again=object->can_close_again;
+		clipboard.use_background_color=object->use_background_color;
 
 	} else if (button == Dialog::Buttons::Paste) {
 		object->color_frame=clipboard.color_frame;
 		object->color_door=clipboard.color_door;
+		object->color_background=clipboard.color_background;
 		object->key_id=clipboard.key_id;
 		object->warp_to_id=clipboard.warp_to_id;
 		object->orientation=clipboard.orientation;
 		object->door_type=clipboard.door_type;
 		object->state=clipboard.state;
 		object->initial_open=clipboard.initial_open;
+		object->auto_opens_on_collision=clipboard.auto_opens_on_collision;
+		object->can_close_again=clipboard.can_close_again;
+		object->use_background_color=clipboard.use_background_color;
 		object->init();
 	}
 }

@@ -636,7 +636,8 @@ enum class GameState {
 	Running,
 	GameOver,
 	LevelEndTriggerd,
-	ShowStats
+	ShowStats,
+	TransferPlayer
 };
 
 enum class StatsScreenReason {
@@ -764,7 +765,7 @@ private:
 	void closeWayNet();
 	void selectSprite(const ppl7::grafix::Point& mouse);
 	void updateWorldCoords();
-	void handleDeath(SDL_Renderer* renderer);
+	void handleDeath(SDL_Renderer* renderer, float frame_rate_compensation);
 
 	void mouseDownEventOnSprite(ppl7::tk::MouseEvent* event);
 	void mouseDownEventOnObject(ppl7::tk::MouseEvent* event);
@@ -774,7 +775,7 @@ private:
 	void checkSoundtrack();
 
 	Player* player;
-	int fade_to_black;
+	float fade_to_black;
 	int death_state;
 
 	GameState gameState;

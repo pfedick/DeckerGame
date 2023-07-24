@@ -629,13 +629,13 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		if (player->lifes <= 1)soundtrack.fadeout(1.0f);
 	}
 	if (gameState == GameState::Running) {
-		if (death_state) handleDeath(renderer);
+		if (death_state) handleDeath(renderer, frame_rate_compensation);
 		else if (fade_to_black > 0) {
-			fade_to_black-=5;
+			fade_to_black-=(5.0f * frame_rate_compensation);
 			if (fade_to_black < 0) fade_to_black=0;
 		}
 	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver) {
-		if (fade_to_black < 255) fade_to_black+=5;
+		if (fade_to_black < 255) fade_to_black+=(5.0f * frame_rate_compensation);
 		else {
 			if (gameState == GameState::LevelEndTriggerd) {
 				gameState=GameState::ShowStats;
@@ -721,7 +721,7 @@ void Game::run()
 		drawWidgets();
 		// Mouse
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
-		if (fade_to_black) FadeToBlack(renderer, fade_to_black);
+		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
 
 		metrics.time_draw_ui.stop();
 
@@ -1499,11 +1499,11 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 
 }
 
-void Game::handleDeath(SDL_Renderer* renderer)
+void Game::handleDeath(SDL_Renderer* renderer, float frame_rate_compensation)
 {
 	if (death_state == 1) {
 		if (fade_to_black < 255) {
-			fade_to_black+=5;
+			fade_to_black+=(5.0f * frame_rate_compensation);
 			if (fade_to_black > 255) fade_to_black=255;
 		} else death_state=2;
 	} else if (death_state == 2) {
@@ -1515,7 +1515,7 @@ void Game::handleDeath(SDL_Renderer* renderer)
 		}
 	} else if (death_state == 3) {
 		if (fade_to_black > 0) {
-			fade_to_black-=5;
+			fade_to_black-=(5.0f * frame_rate_compensation);
 			if (fade_to_black < 0) fade_to_black=0;
 		} else death_state=0;
 	}
