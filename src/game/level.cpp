@@ -301,7 +301,7 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	int tiles_width=viewport.width() / TILE_WIDTH + 9;
-	int tiles_height=viewport.height() / TILE_HEIGHT + 2;
+	int tiles_height=viewport.height() / TILE_HEIGHT + 4;
 	int offset_x=worldcoords.x % TILE_WIDTH;
 	int offset_y=worldcoords.y % TILE_HEIGHT;
 	int start_x=worldcoords.x / TILE_WIDTH - 7;
