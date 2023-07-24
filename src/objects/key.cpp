@@ -94,7 +94,7 @@ size_t KeyReward::load(const unsigned char* buffer, size_t size)
 	key_type=KeyType::silver;
 	color_modification=2;
 	size_t bytes=Object::load(buffer, size);
-	ppl7::PrintDebugTime("bytes=%zd, size=%zd\n", bytes, size);
+	//ppl7::PrintDebugTime("bytes=%zd, size=%zd\n", bytes, size);
 	if (bytes > 0 || size > bytes + 1) {
 		int version=ppl7::Peek8(buffer + bytes);
 		if (version == 2) {

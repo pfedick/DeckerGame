@@ -169,6 +169,7 @@ void Door::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 
 void Door::handleCollision(Player* player, const Collision& collision)
 {
+	int keyboard=player->getKeyboardMatrix();
 	if (state != DoorState::open) {
 		if (orientation == DoorOrientation::left) {
 			if (collision.objectLeft() && player->x > p.x - 48) player->x=p.x - 48;
@@ -179,18 +180,20 @@ void Door::handleCollision(Player* player, const Collision& collision)
 		}
 		if (state == DoorState::closed) {
 			//int keyboard=player->getKeyboardMatrix();
-			if (player->isInInventory(key_id)) {
+			if (auto_opens_on_collision && (key_id == 0 || player->isInInventory(key_id))) {
 				state=DoorState::opening;
 				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
 			}
 		}
 	}
-	int keyboard=player->getKeyboardMatrix();
+
 	double now=ppl7::GetMicrotime();
 	if (warp_to_id > 0 && (keyboard & KeyboardKeys::Action)) {
 		if (state == DoorState::closed) {
-			state=DoorState::opening;
-			animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
+			if (key_id == 0 || player->isInInventory(key_id)) {
+				state=DoorState::opening;
+				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
+			}
 		} else if (state == DoorState::open && cooldown < now) {
 			Door* target=static_cast<Door*>(GetObjectSystem()->getObject(warp_to_id));
 			if (target != NULL && target->type() == Type::ObjectType::Door) {
