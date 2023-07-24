@@ -1096,6 +1096,7 @@ void Game::startLevel(const ppl7::String& filename)
 		player->setVisible(false);
 		enableControls(false);
 	}
+	player->resetLevelObjects();
 	soundtrack.playInitialSong();
 	background.setBackgroundType(level.params.backgroundType);
 	background.setColor(level.params.BackgroundColor);
