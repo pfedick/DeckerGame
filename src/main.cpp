@@ -7,7 +7,7 @@
 #include "audio.h"
 #include <math.h>
 
-
+//#define DEBUGTIME
 void help()
 {
 
@@ -37,6 +37,7 @@ void start()
 
 	game.init();
 	game.init_grafix();
+
 
 #ifdef DEBUGTIME
 
