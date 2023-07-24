@@ -77,7 +77,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 			fade_to_black+=5 * frame_rate_compensation;
 			if (fade_to_black >= 255.0f) {
 				fade_state=3;
-				ppl7::PrintDebugTime("fade_state 3 reached\n");
 				fade_to_black=255.0f;
 			}
 		}
