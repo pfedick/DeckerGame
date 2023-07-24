@@ -38,12 +38,14 @@ void start()
 	game.init();
 	game.init_grafix();
 
+#ifdef DEBUGTIME
+
 	if (ppl7::File::exists("Makefile")) {
 		//game.playIntroVideo();
 
 		//game.startLevel("level/levelstats_test.lvl");
-		//game.startLevel("level/egypt.lvl");
-		game.startLevel("level/devel.lvl");
+		game.startLevel("level/egypt.lvl");
+		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
 		//game.startLevel("level/heaven.lvl");
@@ -56,7 +58,7 @@ void start()
 
 		return;
 	}
-
+#endif
 
 	//game.playIntroVideo();
 
@@ -68,7 +70,7 @@ void start()
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
 			game.resetPlayer();
-			game.startLevel("level/test.lvl");
+			game.startLevel("level/egypt.lvl");
 			game.enableControls(true);
 			game.run();
 		} else if (state == GameState::StartEditor) {

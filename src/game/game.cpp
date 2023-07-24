@@ -638,13 +638,17 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		if (fade_to_black < 255) fade_to_black+=(5.0f * frame_rate_compensation);
 		else {
 			if (gameState == GameState::LevelEndTriggerd) {
-				gameState=GameState::ShowStats;
-				showStatsScreen(StatsScreenReason::LevelEnd);
+				if (controlsEnabled) {
+					gameState=GameState::ShowStats;
+					showStatsScreen(StatsScreenReason::LevelEnd);
+				}
 				player->resetLevelObjects();
 				startLevel(nextLevelFile);
 			} else if (gameState == GameState::GameOver) {
-				gameState=GameState::ShowStats;
-				showStatsScreen(StatsScreenReason::PlayerDied);
+				if (controlsEnabled) {
+					gameState=GameState::ShowStats;
+					showStatsScreen(StatsScreenReason::PlayerDied);
+				}
 				player->resetState();
 				world_widget->resetPlayerStats(player);
 				startLevel(LevelFile);
