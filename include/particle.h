@@ -169,6 +169,8 @@ private:
     std::map<uint32_t, Particle*>* visible_particle_map;
     std::atomic_bool thread_running;
 
+    ppl7::Mutex datamutex;
+
 public:
     ppl7::Mutex mutex;
 
@@ -176,7 +178,7 @@ public:
     void run() override;
     bool isRunning() const;
     double getThreadDuration() const;
-    void setVisibleParticleMap(std::map<uint32_t, Particle*>* visible_particle_map);
+    void setVisibleParticleMapAndContinue(std::map<uint32_t, Particle*>* visible_particle_map);
 
 };
 

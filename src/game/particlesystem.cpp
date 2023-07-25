@@ -4,6 +4,9 @@
 #include "decker.h"
 #include "particle.h"
 
+
+//#define DEBUGOUT
+
 static ParticleSystem* particle_system=NULL;
 
 ParticleSystem* GetParticleSystem()
@@ -87,7 +90,9 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
         ppl7::PrintDebugTime("Particle Update Thread too slow!\n");
         while (update_thread.isRunning()) ppl7::MSleep(1);
     }
-    //ppl7::PrintDebugTime("ParticleSystem::update: started, map=%d\n", active_map);
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::update: started, map=%d\n", ppl7::ThreadID(), active_map);
+#endif
     cleanupParticles();
     update_thread.frame_rate_compensation=frame_rate_compensation;
     update_thread.time=time;
@@ -96,21 +101,35 @@ void ParticleSystem::update(double time, TileTypePlane& ttplane, Player& player,
     update_thread.worldcoords.x=worldcoords.x;
     update_thread.worldcoords.y=worldcoords.y;
     update_thread.viewport=viewport;
-    update_thread.setVisibleParticleMap(visible_particle_map[active_map]);
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::update: set visible map to %d\n", ppl7::ThreadID(), active_map);
+#endif
+    update_thread.setVisibleParticleMapAndContinue(visible_particle_map[active_map]);
     active_map=(active_map + 1) & 1;
-    //ppl7::PrintDebugTime("ParticleSystem::update: ended, draw on map: %d\n", active_map);
-    update_thread.mutex.signal();
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::update:  ended, draw on map: %d, send signal to ParticleUpdateThread\n", ppl7::ThreadID(), active_map);
+#endif
 
 }
 
 double ParticleSystem::waitForUpdateThreadFinished()
 {
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::waitForUpdateThreadFinished\n", ppl7::ThreadID());
+#endif
     while (update_thread.isRunning()) ppl7::MSleep(1);
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::waitForUpdateThreadFinished => OK\n", ppl7::ThreadID());
+#endif
+
     return update_thread.getThreadDuration();
 }
 
 void ParticleSystem::cleanupParticles()
 {
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::cleanupParticles, particles to delete: %zd, insert: %zd\n", ppl7::ThreadID(), particles_to_delete.size(), new_particles.size());
+#endif
     if (particles_to_delete.size() > 0) {
         //ppl7::PrintDebugTime("deleting %zd particles\n", particles_to_delete.size());
         std::list<uint64_t>::iterator dit;
@@ -125,12 +144,18 @@ void ParticleSystem::cleanupParticles()
         particle_map.insert(std::pair<uint64_t, Particle*>(it->first, it->second));
     }
     new_particles.clear();
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::cleanupParticles => DONE\n", ppl7::ThreadID());
+#endif
 
 }
 
 
 void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const
 {
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::draw => DONE\n", ppl7::ThreadID());
+#endif
     std::map<uint32_t, Particle*>::const_iterator it;
     ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
     int l=static_cast<int>(layer);
@@ -145,10 +170,13 @@ void ParticleSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
                 particle->sprite_no, particle->scale, particle->color_mod);
 
         } else {
-            ppl7::PrintDebugTime("Found invalid particle\n");
+            ppl7::PrintDebugTime("[%llu] Found invalid particle!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", ppl7::ThreadID());
         }
-
     }
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleSystem::draw => DONE\n", ppl7::ThreadID());
+#endif
+
 }
 
 size_t ParticleSystem::count() const
@@ -168,10 +196,6 @@ size_t ParticleSystem::countVisible() const
 
 ppl7::String ParticleSystem::layerName(Particle::Layer layer)
 {
-    switch (static_cast<int>(layer)) {
-
-    }
-
     switch (layer) {
     case Particle::Layer::BehindBricks: return "BehindBricks";
     case Particle::Layer::BeforePlayer: return "BeforePlayer";
@@ -203,9 +227,16 @@ double ParticleUpdateThread::getThreadDuration() const
     return thread_duration;
 }
 
-void ParticleUpdateThread::setVisibleParticleMap(std::map<uint32_t, Particle*>* visible_particle_map)
+void ParticleUpdateThread::setVisibleParticleMapAndContinue(std::map<uint32_t, Particle*>* visible_particle_map)
 {
+    datamutex.lock();
     this->visible_particle_map=visible_particle_map;
+    for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
+        this->visible_particle_map[i].clear();
+    }
+    thread_running=true;
+    datamutex.unlock();
+    mutex.signal();
 }
 
 bool ParticleUpdateThread::isRunning() const
@@ -215,23 +246,29 @@ bool ParticleUpdateThread::isRunning() const
 
 void ParticleUpdateThread::run()
 {
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleUpdateThread STARTED\n", ppl7::ThreadID());
+#endif
     thread_running=false;
-    //printf("ParticleUpdateThread started\n");
     while (!threadShouldStop()) {
+#ifdef DEBUGOUT
+        ppl7::PrintDebugTime("[%llu] ParticleUpdateThread waiting for signal\n", ppl7::ThreadID());
+#endif
+
         mutex.wait();
+        datamutex.lock();
         thread_running=true;
-        //ppl7::PrintDebugTime("    ParticleUpdateThread: started\n");
+#ifdef DEBUGOUT
+        ppl7::PrintDebugTime("[%llu] ParticleUpdateThread running\n", ppl7::ThreadID());
+#endif
+
         double thread_start_time=ppl7::GetMicrotime();
         if (visible_particle_map) {
-            std::map<uint64_t, Particle*>::iterator it;
-            for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) {
-                visible_particle_map[i].clear();
-            }
             float left=worldcoords.x - 64;
             float top=worldcoords.y - 64;
             float right=worldcoords.x + viewport.width() + 64;
             float bottom=worldcoords.y + viewport.height() + 64;
-
+            std::map<uint64_t, Particle*>::iterator it;
             for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
@@ -251,9 +288,13 @@ void ParticleUpdateThread::run()
         }
         thread_duration=ppl7::GetMicrotime() - thread_start_time;
         thread_running=false;
+        datamutex.unlock();
         //ppl7::PrintDebugTime("    ParticleUpdateThread: sleep\n");
 
         //printf("ParticleUpdateThread signaled\n");
     }
-    //printf("ParticleUpdateThread ended\n");
+#ifdef DEBUGOUT
+    ppl7::PrintDebugTime("[%llu] ParticleUpdateThread ENDED\n", ppl7::ThreadID());
+#endif
+
 }
