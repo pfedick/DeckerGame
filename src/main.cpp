@@ -45,7 +45,8 @@ void start()
 		//game.playIntroVideo();
 
 		//game.startLevel("level/levelstats_test.lvl");
-		game.startLevel("level/desert.lvl");
+		//game.startLevel("level/desert.lvl");
+		game.startLevel("level/water.lvl");
 		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		//game.startLevel("level/start.lvl");
