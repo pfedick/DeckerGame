@@ -180,6 +180,12 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Waterflow 1", ppl7::ToString("%d", AudioClip::waterflow1));
 	sample_name->add("Waterflow 2", ppl7::ToString("%d", AudioClip::waterflow2));
 	sample_name->add("Waterflow 3", ppl7::ToString("%d", AudioClip::waterflow3));
+	/*
+	sample_name->add("Birds in the Rain", ppl7::ToString("%d", AudioClip::birds_in_rain));
+	sample_name->add("Soft Rain", ppl7::ToString("%d", AudioClip::soft_rain));
+	sample_name->add("Desert at Night", ppl7::ToString("%d", AudioClip::desert_at_night));
+	sample_name->add("More Wind", ppl7::ToString("%d", AudioClip::wind3));
+	*/
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
 	sample_name->setEventHandler(this);
 	addChild(sample_name);
@@ -187,7 +193,7 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 
 	addChild(new ppl7::tk::Label(0, y, 120, 30, "volume: "));
 	volume=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 120, 30);
-	volume->setLimits(0.0f, 1.0f);
+	volume->setLimits(0.0f, 2.0f);
 	volume->setValue(object->volume);
 	volume->enableSpinBox(true, 0.01f, 3, 80);
 	volume->setEventHandler(this);

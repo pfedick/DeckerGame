@@ -72,7 +72,12 @@ public:
 		watersplash2,
 		watersplash3,
 		watersplash4,
-
+		/*
+		birds_in_rain,
+		soft_rain,
+		desert_at_night,
+		wind3,
+		*/
 		// this must always be the last entry!
 		maxClips
 	};
@@ -104,6 +109,7 @@ public:
 	~AudioPool();
 	void load();
 	void setAudioSystem(AudioSystem* audio);
+	size_t size() const;
 	AudioInstance* getInstance(AudioClip::Id id, AudioClass a=AudioClass::Effect);
 	void playOnce(AudioClip::Id id, float volume=1.0f, AudioClass a=AudioClass::Effect);
 	void playOnce(AudioClip::Id id, const ppl7::grafix::Point& p, int max_distance=1600, float volume=1.0f, AudioClass a=AudioClass::Effect);
