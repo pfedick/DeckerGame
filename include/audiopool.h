@@ -68,6 +68,10 @@ public:
 		waterflow1,
 		waterflow2,
 		waterflow3,
+		watersplash1,
+		watersplash2,
+		watersplash3,
+		watersplash4,
 
 		// this must always be the last entry!
 		maxClips
