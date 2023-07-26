@@ -418,6 +418,7 @@ void Game::initAudio()
 	audiosystem.setVolume(AudioClass::Effect, config.volumeEffects);
 	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 	audiopool.load();
+	//ppl7::PrintDebugTime("Size of audio pool: %zd MB\n", audiopool.size() / 1024 / 1024);
 	audiopool.setAudioSystem(&audiosystem);
 }
 
