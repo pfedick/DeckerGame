@@ -21,6 +21,8 @@ public:
 	Position(uint32_t id);
 	Position(uint16_t x, uint16_t y);
 	operator uint32_t() const;
+	bool operator==(const Position& other) const;
+	bool isNear(const Position& other) const;
 };
 
 class Connection
@@ -42,6 +44,7 @@ public:
 	Connection();
 	Connection(const Position& source, const Position& target, ConnectionType type, uint8_t cost=1);
 	void clear();
+	const char* name() const;
 };
 
 class WayPoint : public Position

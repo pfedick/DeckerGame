@@ -6,6 +6,8 @@
 #include "waynet.h"
 #include "objects.h"
 
+//#define DEBUGWAYNET
+
 namespace Decker::Objects {
 
 static int walk_cycle_left[]={ 1,2,3,4,5,6,7,8 };
@@ -135,8 +137,11 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, floa
 			animation.start(anicycleSlideRight);
 		}
 	}
-	p.x+=velocity_move.x * frame_rate_compensation;
-	p.y+=(velocity_move.y + gravity) * frame_rate_compensation;
+	p.x+=velocity_move.x;
+	p.y+=velocity_move.y + gravity;
+
+	//p.x+=velocity_move.x * frame_rate_compensation;
+	//p.y+=(velocity_move.y + gravity) * frame_rate_compensation;
 	updateBoundary();
 }
 
@@ -144,28 +149,58 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 {
 	Waynet& waynet=GetObjectSystem()->getWaynet();
 	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x / TILE_WIDTH, (uint16_t)player.y / TILE_HEIGHT));
-	//printf ("pwp=%d:%d, last_pwp=%d:%d\n", pwp.x,pwp.y,last_pwp.x,last_pwp.y);
+	Position source_p(p.x / TILE_WIDTH, p.y / TILE_HEIGHT);
+	Position target_p(player.x / TILE_WIDTH, player.y / TILE_HEIGHT);
+
+#ifdef DEBUGWAYNET
+
+
+	ppl7::PrintDebugTime("AiEnemy::updateWay, Object: %d:%d, Target: %d:%d, nearest wp=%d:%d, last_pwp=%d:%d\n",
+		(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT,
+		player.x / TILE_WIDTH, player.y / TILE_HEIGHT,
+		pwp.x, pwp.y, last_pwp.x, last_pwp.y);
+#endif
 	next_wayfind=time + 3.0f;
 	if (pwp.id == last_pwp.id && waypoints.size() > 0) return;
 	last_pwp=pwp;
 	waypoints.clear();
 	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
 		const Connection& first=waypoints.front();
-		//printf("found a way, starting at: %d:%d ==========================\n", first.source.x, first.source.y);
 		current_way.type=Connection::Walk;
 		current_way.source=0;
 		current_way.target=first.source;
 		/*
-		std::list<Connection>::const_iterator it;
-		for (it=waypoints.begin();it!=waypoints.end();++it) {
-			printf ("source: (%d:%d), target: (%d:%d), type: %d, cost: %d\n",
-					(*it).source.x, (*it).source.y,
-					(*it).target.x, (*it).target.y,
-					(*it).type, (*it).cost);
+		if (current_way.target.y < p.y / TILE_HEIGHT) {
+			if (current_way.target.x < p.x / TILE_WIDTH) current_way.type=Connection::JumpLeft;
+			if (current_way.target.x > p.x / TILE_WIDTH) current_way.type=Connection::JumpRight;
 		}
 		*/
+	/*
+		if (source_p.isNear(current_way.target)) {
+			ppl7::PrintDebugTime("already near, using next waypoint\n");
+			current_way=waypoints.front();
+			waypoints.pop_front();
+		}
+		*/
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebugTime("found a way, starting at: %d:%d, to get there: %s ==========================\n",
+			first.source.x, first.source.y, current_way.name());
+
+#endif
+
+#ifdef DEBUGWAYNET
+		std::list<Connection>::const_iterator it;
+		for (it=waypoints.begin();it != waypoints.end();++it) {
+			ppl7::PrintDebugTime("source: (%d:%d), target: (%d:%d), type: %9s, cost: %d\n",
+				(*it).source.x, (*it).source.y,
+				(*it).target.x, (*it).target.y,
+				(*it).name(), (*it).cost);
+		}
+#endif
 	} else {
-		//printf ("found no way\n");
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebugTime("found no way\n");
+#endif
 		waypoints.clear();
 		current_way.clear();
 	}
@@ -183,9 +218,15 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 	}
 	int y_dist=abs((int)p.y - player.y);
 	if (current_way.type == Connection::Invalid || next_wayfind < time) {
-		//printf("current_way.type=%d, next_wayfinf=%0.3f, time=%0.3f\n", current_way.type, next_wayfind, time);
-		if (movement == Walk || movement == Run || movement == Stand || movement == Falling)
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebugTime("current_way.type=%d, next_wayfinf=%0.3f, time=%0.3f\n", current_way.type, next_wayfind, time);
+#endif
+		if (movement == Walk || movement == Run || movement == Stand || movement == Falling) {
+#ifdef DEBUGWAYNET
+			ppl7::PrintDebug("updateWay Reason 1\n");
+#endif
 			updateWay(time, player);
+		}
 	}
 	/*
 	if (next_wayfind<time) {
@@ -206,9 +247,15 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 	//const Connection &first=waypoints.front();
 	bool arrived=false;
 	if (current_way.type == Connection::Walk) {
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebug("walk\n");
+#endif
 		if ((uint16_t)(p.x / TILE_WIDTH) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
 		else if ((uint16_t)(p.x / TILE_WIDTH) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
 		else {
+#ifdef DEBUGWAYNET
+			ppl7::PrintDebug("arrived\n");
+#endif
 			arrived=true;
 		}
 	} else if (current_way.type == Connection::Go) {
@@ -236,13 +283,18 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 			last_pwp.id=0;
 		}
 		keys=0;
-		//printf("arrived at point: %d:%d, real: %d:%d, movement was: %d\n", current_way.target.x, current_way.target.y,
-		//(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT, movement);
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebugTime("arrived at point: %d:%d, real: %d:%d, movement was: %d\n", current_way.target.x, current_way.target.y,
+			(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT, movement);
+#endif
 		current_way.clear();
 		if (movement == Walk || movement == Run) {
 			if (player.x < p.x && orientation != Left && y_dist < TILE_HEIGHT) turn(Left);
 			if (player.x > p.x && orientation != Right && y_dist < TILE_HEIGHT) turn(Right);
 		}
+#ifdef DEBUGWAYNET
+		ppl7::PrintDebug("updateWay Reason 2\n");
+#endif
 		updateWay(time, player);
 		if (waypoints.size() > 0) {
 			current_way=waypoints.front();
@@ -294,8 +346,15 @@ void AiEnemy::executeKeys(float frame_rate_compensation)
 		} else {
 			if (movement != Jump) {
 				movement=Jump;
-				jump_climax=time + 0.6f;
-				acceleration_jump=1.0f * frame_rate_compensation;
+				if (keys & KeyboardKeys::Shift) {
+					jump_climax=time + 0.45f;
+					acceleration_jump=2.0f * frame_rate_compensation;
+					acceleration_jump_sideways=0;
+				} else {
+					jump_climax=time + 0.3f;
+					acceleration_jump=0.3f * frame_rate_compensation;
+					acceleration_jump_sideways=0;
+				}
 				if (orientation == Front) animation.start(anicycleJumpUpFront);
 				else if (orientation == Left) animation.start(anicycleJumpUpLeft);
 				else if (orientation == Right) animation.start(anicycleJumpUpRight);
@@ -305,18 +364,32 @@ void AiEnemy::executeKeys(float frame_rate_compensation)
 	} else if ((keys & KeyboardKeys::JumpLeft) == KeyboardKeys::JumpLeft) {
 		movement=Jump;
 		orientation=Left;
-		jump_climax=time + 0.6f;
-		acceleration_jump=1.0f * frame_rate_compensation;
-		velocity_move.x=-2 * frame_rate_compensation;
-		if (keys & KeyboardKeys::Shift) velocity_move.x=-6;
+		if (keys & KeyboardKeys::Shift) {
+			jump_climax=time + 0.45f;
+			acceleration_jump=2.0f * frame_rate_compensation;
+			acceleration_jump_sideways=-6;
+
+		} else {
+			jump_climax=time + 0.3f;
+			acceleration_jump=0.3f * frame_rate_compensation;
+			acceleration_jump_sideways=-2;
+		}
+		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.start(anicycleJumpLeft);
 	} else if ((keys & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
 		movement=Jump;
 		orientation=Right;
-		jump_climax=time + 0.6f;
-		acceleration_jump=1.0f * frame_rate_compensation;
-		velocity_move.x=2 * frame_rate_compensation;
-		if (keys & KeyboardKeys::Shift) velocity_move.x=6;
+		if (keys & KeyboardKeys::Shift) {
+			jump_climax=time + 0.45f;
+			acceleration_jump=2.0f * frame_rate_compensation;
+			acceleration_jump_sideways=6.0f;
+			velocity_move.x=8 * frame_rate_compensation;
+		} else {
+			jump_climax=time + 0.3f;
+			acceleration_jump=0.3f * frame_rate_compensation;
+			acceleration_jump_sideways=2.0f;
+		}
+		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.start(anicycleJumpRight);
 	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
 		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
@@ -336,9 +409,9 @@ void AiEnemy::executeKeys(float frame_rate_compensation)
 	} else if (keys == (KeyboardKeys::Right) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=2 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=-6 * frame_rate_compensation;
+		if (!isCollisionLeft()) velocity_move.x=-8 * frame_rate_compensation;
 	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Shift) && movement == Jump) {
-		if (!isCollisionLeft()) velocity_move.x=6 * frame_rate_compensation;
+		if (!isCollisionLeft()) velocity_move.x=8 * frame_rate_compensation;
 
 	} else {
 		if (movement != Stand && movement != Jump && movement != Falling && movement != Turn) {

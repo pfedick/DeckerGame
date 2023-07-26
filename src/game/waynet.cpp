@@ -4,6 +4,8 @@
 #include "decker.h"
 #include "waynet.h"
 
+//#define DEBUGWAYNET
+
 Position::Position()
 {
 	id=0;
@@ -27,6 +29,19 @@ Position::Position(uint16_t x, uint16_t y)
 Position::operator uint32_t() const
 {
 	return id;
+}
+
+bool Position::isNear(const Position& other) const
+{
+	ppl7::PrintDebug("Position::isNear, distance x=%d, distance y=%d\n", abs(x - other.x), abs(y - other.y));
+	if (abs(x - other.x) <= 1 && abs(y - other.y) <= 1) return true;
+
+	return false;
+}
+
+bool Position::operator==(const Position& other) const
+{
+	return (id == other.id);
 }
 
 WayPoint::WayPoint(uint16_t x, uint16_t y)
@@ -79,6 +94,20 @@ void Connection::clear()
 	target.id=0;
 	type=Connection::Invalid;
 	cost=0;
+}
+
+const char* Connection::name() const
+{
+	switch (type) {
+	case ConnectionType::Invalid: return "invalid";
+	case ConnectionType::Walk: return "Walk";
+	case ConnectionType::JumpUp: return "JumpUp";
+	case ConnectionType::JumpLeft: return "JumpLeft";
+	case ConnectionType::JumpRight: return "JumpRight";
+	case ConnectionType::Climb: return "Climb";
+	case ConnectionType::Go: return "Go";
+	}
+	return "unknown";
 }
 
 Waynet::Waynet()
@@ -332,6 +361,9 @@ const WayPoint& Waynet::findNearestWaypoint(const Position& p)
 		}
 	}
 	if (best) return *best;
+#ifdef DEBUGWAYNET
+	ppl7::PrintDebugTime("Waynet::findNearestWaypoint (%d, %d) => invalid position", p.x, p.y);
+#endif
 	return invalid_waypoint;
 }
 
@@ -348,7 +380,9 @@ static int calcCosts(const std::list<Connection>& conns)
 
 bool Waynet::findBestWay(std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
 {
-	//printf ("Waynet::findBestWay %d, we have %d choices\n", maxNodes, (int)start.connection_map.size());
+#ifdef DEBUGWAYNET
+	//ppl7::PrintDebugTime("Waynet::findBestWay %d, we have %d choices\n", maxNodes, (int)start.connection_map.size());
+#endif
 	if (maxNodes <= 0) return false;
 	std::list<Connection>best;
 	int best_cost=9999999;
@@ -358,7 +392,9 @@ bool Waynet::findBestWay(std::list<Connection>& way_list, const WayPoint& previo
 		std::list<Connection>current;
 		current.push_back(it->second);
 		if (it->second.target.id == target.id) {
-			//printf ("found target %d\n", maxNodes);
+#ifdef DEBUGWAYNET
+			//ppl7::PrintDebugTime("found target %d\n", maxNodes);
+#endif
 			int cost=calcCosts(current);
 			if (cost < best_cost) {
 				best_cost=cost;
@@ -395,6 +431,6 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 	const WayPoint& wp_source=findNearestWaypoint(pt_source);
 	const WayPoint& wp_target=findNearestWaypoint(pt_target);
 	if (wp_source == invalid_waypoint || wp_target == invalid_waypoint) return false;
-	return findBestWay(way_list, WayPoint(), wp_source, wp_target, 15);
+	return findBestWay(way_list, WayPoint(), wp_source, wp_target, 25);
 
 }
