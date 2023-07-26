@@ -47,15 +47,17 @@ void start()
 
 		//game.startLevel("level/levelstats_test.lvl");
 		//game.startLevel("level/desert.lvl");
-		//game.startLevel("level/water.lvl");
+		game.startLevel("level/water.lvl");
 		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
+		/*
 		game.startLevel("level/start.lvl");
 		Decker::Objects::LevelEnd* leo=static_cast<Decker::Objects::LevelEnd*>(Decker::Objects::GetObjectSystem()->getObject(64));
 		if (leo && leo->type() == Decker::Objects::Type::LevelEnd) {
 			leo->state=Decker::Objects::LevelEnd::State::Inactive;
 
 		}
+		*/
 
 		//game.startLevel("level/heaven.lvl");
 		//game.startLevel("level/particle.lvl");

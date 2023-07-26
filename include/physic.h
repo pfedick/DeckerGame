@@ -101,8 +101,12 @@ public:
 
 	bool isCollisionLeft() const;
 	bool isCollisionRight() const;
+	bool isSwimming() const;
+	bool isDiving() const;
 	PlayerMovement getMovement() const;
 	ppl7::String getState() const;
+
+	void updateCollisionMatrix(const TileTypePlane& world, float& x, float& y);
 
 
 };

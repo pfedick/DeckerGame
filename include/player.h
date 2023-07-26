@@ -43,10 +43,11 @@ private:
 	bool dead;
 	bool visible;
 	bool autoWalk;
+	bool waterSplashPlayed;
 
 
 	void turn(PlayerOrientation target);
-	void stand();
+	void splashIntoWater(float gravity);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects);
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
@@ -56,6 +57,7 @@ private:
 public:
 	float x, y;
 	int points, health, lifes;
+	float air;
 
 	// is updated every frame
 	ppl7::grafix::Point WorldCoords;
@@ -65,6 +67,7 @@ public:
 	explicit Player(Game* game);
 	~Player();
 	ppl7::grafix::PointF position() const;
+	void stand();
 	int getKeyboardMatrix(const unsigned char* state=NULL);
 	void resetState();
 	void resetLevelObjects();

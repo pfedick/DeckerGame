@@ -57,6 +57,8 @@ Player::Player(Game* game)
 	dead=false;
 	visible=true;
 	autoWalk=false;
+	waterSplashPlayed=false;
+	air=100.0f;
 }
 
 Player::~Player()
@@ -72,6 +74,9 @@ void Player::resetState()
 	godmode=false;
 	dead=false;
 	visible=true;
+	air=100.0f;
+	waterSplashPlayed=false;
+	stand();
 	Inventory.clear();
 	object_counter.clear();
 }
@@ -144,6 +149,7 @@ void Player::drawCollision(SDL_Renderer* renderer, const ppl7::grafix::Rect& vie
 		for (int cy=0;cy < 6;cy++) {
 			for (int cx=0;cx < 4;cx++) {
 				tiletype_resource->draw(renderer, p.x - (TILE_WIDTH * 2) + (cx * TILE_WIDTH), p.y - (5 * TILE_HEIGHT) + (cy * TILE_HEIGHT), collision_matrix[cx][cy]);
+				//ppl7::PrintDebugTime("cx:cy %d:%d = %d\n", cx, cy, collision_matrix[cx][cy]);
 			}
 		}
 	}
@@ -197,6 +203,7 @@ int Player::getKeyboardMatrix(const Uint8* state)
 
 void Player::stand()
 {
+	waterSplashPlayed=false;
 	movement=Stand;
 	if (orientation == Left) animation.setStaticFrame(0);
 	else if (orientation == Right) animation.setStaticFrame(9);
@@ -317,7 +324,15 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
 	if (autoWalk) return;
+	//PlayerMovement last_movement=movement;
 	if (updatePhysics(world, frame_rate_compensation)) {
+		//ppl7::PrintDebugTime("update Physics movement=%d\n", movement);
+		/*
+		if (last_movement == PlayerMovement::Falling && isSwimming()) {
+			//ppl7::PrintDebugTime("SPLASH!\n");
+			splashIntoWater(gravity);
+		}
+		*/
 		if (movement == Slide && orientation == Left) {
 			animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
 		} else if (movement == Slide && orientation == Right) {
@@ -330,10 +345,20 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
 		}
 	}
+	if (collision_matrix[1][4] == TileType::Water || collision_matrix[2][4] == TileType::Water) {
+		if (!waterSplashPlayed && gravity > 0.0f) {
+			waterSplashPlayed=true;
+			splashIntoWater(gravity);
+		}
+	} else {
+		waterSplashPlayed=false;
+	}
+
 	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
 		handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 
 	}
+
 
 	//ppl7::PrintDebugTime("gravity: %0.3f, velocity_move x: %0.3f, y: %0.3f, acceleration_jump: %0.3f\n",
 	//	gravity, velocity_move.x, velocity_move.y, acceleration_jump);
@@ -357,10 +382,12 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		handleKeyboardWhileJumpOrFalling(time, world, objects, frame_rate_compensation);
 		return;
 	}
+
 	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
-		handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
+		//handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 		return;
 	}
+
 	acceleration_jump_sideways=0;
 	//if (time>next_keycheck) {
 	//next_keycheck=time+0.1f;
@@ -522,10 +549,49 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& 
 
 void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
-	printf("old movement: %s, ", (const char*)getState());
+	//ppl7::PrintDebugTime("Player::handleKeyboardWhileSwimming: old movement: %s, ", (const char*)getState());
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
-	if (keys & KeyboardKeys::Shift) keys-=KeyboardKeys::Shift;
+	if (keys & KeyboardKeys::Shift) {
+		if (keys & KeyboardKeys::Up) {
+			if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water) {
+				if (keys & KeyboardKeys::Left) {
+					movement=Jump;
+					orientation=Left;
+					if (keys & KeyboardKeys::Shift) {
+						jump_climax=time + 0.3f;
+						acceleration_jump=2.0f * frame_rate_compensation;
+						acceleration_jump_sideways=-6;
+
+					} else {
+						jump_climax=time + 0.2f;
+						acceleration_jump=0.3f * frame_rate_compensation;
+						acceleration_jump_sideways=-2;
+					}
+					velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+					animation.setStaticFrame(38);
+					return;
+				} else if (keys & KeyboardKeys::Right) {
+					movement=Jump;
+					orientation=Right;
+					if (keys & KeyboardKeys::Shift) {
+						jump_climax=time + 0.3f;
+						acceleration_jump=2.0f * frame_rate_compensation;
+						acceleration_jump_sideways=6.0f;
+						velocity_move.x=8 * frame_rate_compensation;
+					} else {
+						jump_climax=time + 0.2f;
+						acceleration_jump=0.3f * frame_rate_compensation;
+						acceleration_jump_sideways=2.0f;
+					}
+					velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+					animation.setStaticFrame(39);
+					return;
+				}
+			}
+		}
+		keys-=KeyboardKeys::Shift;
+	}
 	if (keys == KeyboardKeys::Up) {
 		if (movement != Swim || orientation != Front) {
 			movement=Swim;
@@ -608,8 +674,8 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		velocity_move.y=2 * frame_rate_compensation;
 
 	}
-	printf(", new movement: %s\n", (const char*)getState());
-	fflush(stdout);
+	//printf(", new movement: %s\n", (const char*)getState());
+	//fflush(stdout);
 
 }
 
@@ -693,4 +759,51 @@ void Player::setAutoWalk(bool enabled)
 bool Player::isAutoWalk() const
 {
 	return autoWalk;
+}
+
+
+void Player::splashIntoWater(float gravity)
+{
+	ParticleSystem* ps=GetParticleSystem();
+	int new_particles=ppl7::rand(111, 192);
+	gravity+=4.0f;
+	float min_speed=6.226 * gravity / 18.0f;
+	float max_speed=11.887 * gravity / 18.0f;
+	float direction=0;
+	if (velocity_move.x > 0) direction=15.0f;
+	if (velocity_move.x < 0) direction=-15.0f;
+	float min_dir=-15.283f + direction;
+	float max_dir=+15.283f + direction;
+	//ppl7::PrintDebugTime("SPLASH gravity=%0.3f, velocity.x=%0.3f\n", gravity, velocity_move.x);
+	ppl7::grafix::PointF p(x, y + TILE_HEIGHT / 2);
+	if (gravity > 16.0f) p.y+=TILE_HEIGHT;
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(1.706, 0.387) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(68, 1), 0.000);
+		particle->layer=Particle::Layer::BehindBricks;
+		particle->weight=randf(0.340, 0.821);
+		particle->gravity.setPoint(0.000, 0.415);
+		particle->velocity=calculateVelocity(randf(min_speed, max_speed), 0.000 + randf(min_dir, max_dir));
+		particle->scale=randf(0.300, 1.000);
+		particle->color_mod.set(181, 187, 255, 255);
+		particle->initAnimation(Particle::Type::RotatingParticleTransparent);
+		ps->addParticle(particle);
+	}
+	AudioPool& audio=getAudioPool();
+	AudioClip::Id id=AudioClip::watersplash1;
+	switch (ppl7::rand(0, 4)) {
+	case 0:
+	case 1:
+		id=AudioClip::watersplash1; break;
+	case 2:
+		id=AudioClip::watersplash2; break;
+	case 3:
+		id=AudioClip::watersplash3; break;
+	case 4:
+		id=AudioClip::watersplash4; break;
+
+	}
+	audio.playOnce(id, gravity / 21.0f);
 }
