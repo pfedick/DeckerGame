@@ -74,6 +74,9 @@ public:
 		watersplash4,
 		water_pouring1,
 		water_pouring2,
+		water_bubble1,
+		gas_spray,
+		underwaterloop1,
 		/*
 		birds_in_rain,
 		soft_rain,

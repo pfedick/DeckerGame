@@ -31,6 +31,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Apple, "Apple", 42);
 	addObject(Decker::Objects::Type::Cherry, "Cherry", 45);
 	addObject(Decker::Objects::Type::Key, "Key", 8);
+	addObject(Decker::Objects::Type::Oxygen, "Oxygen", 51);
 	addObject(Decker::Objects::Type::Door, "Door", 23);
 	addObject(Decker::Objects::Type::LevelEnd, "Level End", 43);
 	addObject(Decker::Objects::Type::Arrow, "Arrow", 2);
@@ -64,6 +65,8 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Yeti, "Yeti", 47);
 	addObject(Decker::Objects::Type::AutoGeorge, "AutoGeorge", 48);
 	addObject(Decker::Objects::Type::Ostrich, "Ostrich", 49);
+	addObject(Decker::Objects::Type::Fish, "Fish", 52);
+
 
 	scrollbar->setSize(object_map.size() / 2);
 	scrollbar->setVisibleItems((height - 44) / 160 / 2);

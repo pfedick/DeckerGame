@@ -365,6 +365,8 @@ Representation getRepresentation(int object_type)
 	case Type::LevelEnd: return LevelEnd::representation();
 	case Type::AutoGeorge: return AutoGeorge::representation();
 	case Type::Ostrich: return Ostrich::representation();
+	case Type::Oxygen: return OxygenTank::representation();
+	case Type::Fish: return Fish::representation();
 	default: return Object::representation();
 	}
 }
@@ -439,6 +441,8 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::LevelEnd: return new LevelEnd();
 	case Type::AutoGeorge: return new AutoGeorge();
 	case Type::Ostrich: return new Ostrich();
+	case Type::Oxygen: return new OxygenTank();
+	case Type::Fish: return new Fish();
 	}
 	return NULL;
 }

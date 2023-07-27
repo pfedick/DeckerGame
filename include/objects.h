@@ -55,6 +55,7 @@ public:
 		Apple=24,
 		Cherry=25,
 		ParticleEmitter=26,
+		Oxygen=27,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -74,6 +75,7 @@ public:
 		Yeti=116,
 		AutoGeorge=117,
 		Ostrich=118,
+		Fish=119
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -530,6 +532,20 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 };
 
+class OxygenTank : public Object
+{
+private:
+	double next_birth;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+
+public:
+	OxygenTank();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+};
+
+
 class SavePoint : public Object
 {
 private:
@@ -844,6 +860,24 @@ public:
 	void update_animation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+};
+
+class Fish : public Enemy
+{
+private:
+	double next_state;
+	float speed;
+	int state;
+public:
+	Fish();
+	//~Fish();
+	static Representation representation();
+	//void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
 
 };
 

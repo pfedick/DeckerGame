@@ -113,6 +113,8 @@ OBJECTS=compile/main.o \
 	compile/object_extralife.o \
 	compile/object_levelend.o \
 	compile/object_ostrich.o \
+	compile/object_oxygen.o \
+	compile/object_fish.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -591,6 +593,14 @@ compile/object_levelend.o: src/objects/levelend.cpp Makefile include/objects.h i
 compile/object_ostrich.o: src/objects/ostrich.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_ostrich.o -c src/objects/ostrich.cpp $(CFLAGS)
+
+compile/object_oxygen.o: src/objects/oxygen.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_oxygen.o -c src/objects/oxygen.cpp $(CFLAGS)
+
+compile/object_fish.o: src/objects/fish.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_fish.o -c src/objects/fish.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h
