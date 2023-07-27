@@ -9,14 +9,14 @@ namespace Decker::Objects {
 
 Representation Fish::representation()
 {
-	return Representation(Spriteset::GenericObjects, 293);
+	return Representation(Spriteset::GenericObjects, 399);
 }
 
 Fish::Fish()
 	:Enemy(Type::ObjectType::Fish)
 {
-	sprite_no=293;
-	sprite_no_representation=293;
+	sprite_no=399;
+	sprite_no_representation=399;
 	state=0;
 	collisionDetection=true;
 	scale=ppl7::randf(0.2f, 1.0f);
@@ -25,7 +25,11 @@ Fish::Fish()
 		ppl7::rand(10, 80),
 		ppl7::rand(10, 80),
 		255);
-	next_state=0;
+	next_state=ppl7::rand(0, 1);
+	if (next_state == 0) animation.startSequence(397, 406, true, 397);
+	else animation.startSequence(387, 396, true, 387);
+	sprite_no=animation.getFrame();
+	updateBoundary();
 }
 
 size_t Fish::save(unsigned char* buffer, size_t size) const
@@ -60,6 +64,12 @@ size_t Fish::load(const unsigned char* buffer, size_t size)
 
 void Fish::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	if (time > next_animation) {
+		next_animation=time + 0.047f;
+		animation.update();
+		sprite_no=animation.getFrame();
+		updateBoundary();
+	}
 	if (state == 0) {
 		p.x-=speed * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 12));
@@ -69,6 +79,9 @@ void Fish::update(double time, TileTypePlane& ttplane, Player& player, float fra
 			sprite_no=294;
 			next_state=time + ppl7::randf(1.0f, 10.0f);
 			speed=ppl7::randf(0.8f, 6.0f);
+			animation.startSequence(387, 396, true, 387);
+			sprite_no=animation.getFrame();
+
 		}
 		updateBoundary();
 	} else {
@@ -77,9 +90,10 @@ void Fish::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y + 6));
 		if (t1 != TileType::Water || t2 != TileType::Water || next_state < time) {
 			state=0;
-			sprite_no=293;
 			next_state=time + ppl7::randf(1.0f, 10.0f);
 			speed=ppl7::randf(0.8f, 6.0f);
+			animation.startSequence(397, 406, true, 397);
+			sprite_no=animation.getFrame();
 		}
 		updateBoundary();
 	}

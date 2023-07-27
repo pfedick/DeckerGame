@@ -866,7 +866,8 @@ public:
 class Fish : public Enemy
 {
 private:
-	double next_state;
+	AnimationCycle animation;
+	double next_state, next_animation;
 	float speed;
 	int state;
 public:
