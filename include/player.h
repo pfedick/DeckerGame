@@ -29,9 +29,11 @@ private:
 	double next_keycheck;
 	double next_animation;
 	double idle_timeout;
+	double last_aircheck;
 	Game* game;
 
 	AnimationCycle animation;
+	ppl7::grafix::Color color_modulation;
 
 
 
@@ -45,9 +47,22 @@ private:
 	bool autoWalk;
 	bool waterSplashPlayed;
 
+	enum class ParticleReason
+	{
+		None=0,
+		Drowned,
+		Burning
+	};
+	double particle_end_time, next_particle_birth;
+	ParticleReason particle_reason;
+
+
 
 	void turn(PlayerOrientation target);
 	void splashIntoWater(float gravity);
+	void emmitParticles(double time);
+
+	void moveOutOfWater(float angel, float speed);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects);
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
@@ -58,6 +73,7 @@ public:
 	float x, y;
 	int points, health, lifes;
 	float air;
+	float maxair;
 
 	// is updated every frame
 	ppl7::grafix::Point WorldCoords;
@@ -75,10 +91,11 @@ public:
 	void setVisible(bool flag);
 	void addPoints(int points);
 	void addHealth(int points);
+	void addAir(float seconds);
 	void addLife(int lifes);
 	void countObject(int type);
 	size_t getObjectCount(int type) const;
-	void dropHealth(int points, HealthDropReason reason=HealthDropReason::Unknown);
+	void dropHealth(float points, HealthDropReason reason=HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation& repr);
 	bool isInInventory(int object_id) const;
 	bool isDead() const;
@@ -94,7 +111,7 @@ public:
 	void setStandingOnObject(Decker::Objects::Object* object);
 	void setAutoWalk(bool enabled);
 	bool isAutoWalk() const;
-
+	void startEmittingParticles(double endtime, ParticleReason reason);
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 

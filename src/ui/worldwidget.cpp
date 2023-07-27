@@ -53,6 +53,76 @@ void StatsFrame::setValue(const ppl7::String& value)
 	}
 }
 
+
+OxygenFrame::OxygenFrame(int x, int y, int width, int height, const ppl7::String& label)
+	: ppl7::tk::Widget()
+{
+	create(x, y, width, height);
+	setClientOffset(8, 8, 8, 8);
+	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	font=style.buttonFont;
+	font.setName("NotoSansBlack");
+	font.setBold(false);
+	font.setSize(50);
+	font.setOrientation(ppl7::grafix::Font::TOP);
+	this->label=label;
+	seconds_total=0.0f;
+	seconds_left=0.0f;
+}
+
+ppl7::String OxygenFrame::widgetType() const
+{
+	return "OxygenFrame";
+}
+
+
+void OxygenFrame::paint(ppl7::grafix::Drawable& draw)
+{
+	//ppl7::PrintDebugTime("OxygenFrame::paint width=%d, height=%d\n", draw.width(), draw.height());
+	ppl7::grafix::Color black(0, 0, 0, 255);
+	ppl7::grafix::Color white(255, 255, 255, 255);
+	ppl7::grafix::Color oxygen(128, 128, 255, 192);
+	if (seconds_left < 10) {
+		oxygen.setColor(255, 255, 128, 192);
+	}
+	if (seconds_left < 5) {
+		oxygen.setColor(255, 128, 128, 192);
+	}
+
+	draw.cls(ppl7::grafix::Color(1, 1, 1, 128));
+	draw.drawRect(0, 0, draw.width(), draw.height(), black);
+	draw.drawRect(1, 1, draw.width() - 1, draw.height() - 1, black);
+	draw.drawRect(2, 2, draw.width() - 2, draw.height() - 2, white);
+	draw.drawRect(3, 3, draw.width() - 3, draw.height() - 3, white);
+	font.setColor(ppl7::grafix::Color(255, 255, 255, 255));
+	ppl7::grafix::Size s=font.measure(label);
+	draw.print(font, 10, 5, label);
+	font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
+	//draw.printf(font, 20 + s.width, 0, "%0.0f s", seconds_left);
+	int w=draw.width() - s.width - 30;
+	int p=seconds_left / seconds_total * w;
+	draw.fillRect(20 + s.width, 10, 20 + s.width + p, height() - 10, oxygen);
+	ppl7::WideString value;
+	value.setf("%0.0f s", seconds_left);
+	s=font.measure(value);
+	draw.print(font, draw.width() - s.width - 20, 5, value);
+}
+
+void OxygenFrame::setFontSize(int size)
+{
+	font.setSize(size);
+}
+
+void OxygenFrame::setValue(float seconds_total, float seconds_left)
+{
+	if (seconds_left != this->seconds_left) {
+		this->seconds_total=seconds_total;
+		this->seconds_left=seconds_left;
+		this->needsRedraw();
+	}
+}
+
+
 WorldWidget::WorldWidget()
 	: Widget::Widget()
 {
@@ -60,12 +130,16 @@ WorldWidget::WorldWidget()
 	stats_health=new StatsFrame(0, 0, 400, 70, "Health:");
 	stats_lifes=new StatsFrame(0, 0, 300, 70, "Lifes:");
 	stats_points=new StatsFrame(0, 0, 400, 70, "Points:");
+	stats_oxygen=new OxygenFrame(0, 0, 400, 70, "Oxygen:");
+	stats_oxygen->setVisible(false);
 	this->addChild(stats_health);
 	this->addChild(stats_lifes);
 	this->addChild(stats_points);
+	this->addChild(stats_oxygen);
 	value_health=0;
 	value_lifes=0;
 	value_points=0;
+	oxygen_cooldown=0.0f;
 }
 
 
@@ -82,13 +156,19 @@ void WorldWidget::setViewport(const ppl7::grafix::Rect& viewport)
 		stats_health->setSize(300, 40);
 		stats_points->setSize(300, 40);
 		stats_lifes->setSize(300, 40);
+		stats_oxygen->setSize(viewport.width() / 2 - 20, 40);
 		y=viewport.height() - 50;
 
 	} else {
 		stats_health->setSize(400, 70);
 		stats_points->setSize(400, 70);
 		stats_lifes->setSize(300, 70);
+		stats_oxygen->setSize(viewport.width() / 2 - 20, 40);
 	}
+	stats_oxygen->setPos(20, 10);
+	stats_oxygen->setFontSize(20);
+
+
 	stats_health->setPos(20, y);
 	stats_lifes->setPos((viewport.width() - stats_lifes->width()) / 2, y);
 	stats_points->setPos(viewport.width() - stats_points->width() - 20, y);
@@ -96,6 +176,7 @@ void WorldWidget::setViewport(const ppl7::grafix::Rect& viewport)
 	stats_health->setFontSize(fs);
 	stats_lifes->setFontSize(fs);
 	stats_points->setFontSize(fs);
+
 
 
 	this->needsRedraw();
@@ -124,6 +205,7 @@ static int calculatePointDiff(int display, int player)
 
 void WorldWidget::updatePlayerStats(const Player* player)
 {
+	double now=ppl7::GetMicrotime();
 	if (value_health != player->health) value_health+=calculatePointDiff(value_health, player->health);
 	if (value_points != player->points) value_points+=calculatePointDiff(value_points, player->points);
 	if (value_lifes != player->lifes) value_lifes+=calculatePointDiff(value_lifes, player->lifes);
@@ -131,7 +213,20 @@ void WorldWidget::updatePlayerStats(const Player* player)
 	stats_health->setValue(ppl7::ToString("%d %%", value_health));
 	stats_lifes->setValue(ppl7::ToString("%d", value_lifes));
 	stats_points->setValue(ppl7::ToString("%d", (int)value_points));
-
+	stats_oxygen->setValue(player->maxair, player->air);
+	if (player->air >= player->maxair) {
+		if (oxygen_cooldown < now && stats_oxygen->isVisible()) {
+			//ppl7::PrintDebugTime("invisible\n");
+			stats_oxygen->setVisible(false);
+			needsRedraw();
+		}
+	} else {
+		oxygen_cooldown=now + 3.0f;
+		if (!stats_oxygen->isVisible()) {
+			stats_oxygen->setVisible(true);
+			needsRedraw();
+		}
+	}
 }
 
 void WorldWidget::resetPlayerStats(const Player* player)
@@ -154,6 +249,7 @@ static void drawFrame(ppl7::grafix::Drawable& draw, const ppl7::grafix::Point& p
 void WorldWidget::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf("WorldWidget::paint %d x %d\n", draw.width(), draw.height());
+	draw.cls();
 	ppl7::grafix::Point p0(1, 1);
 	ppl7::grafix::Point p1(0, 0);
 	ppl7::grafix::Point p2(draw.width() - 1, draw.height() - 1);
@@ -170,7 +266,6 @@ void WorldWidget::paint(ppl7::grafix::Drawable& draw)
 	p1+=p0;
 	p2-=p0;
 	drawFrame(draw, p1, p2, ppl7::grafix::Color(192, 192, 196, 60), ppl7::grafix::Color(32, 32, 25, 60));
-
 	//Widget::paint(draw);
 }
 

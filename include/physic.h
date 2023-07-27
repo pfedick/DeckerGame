@@ -68,7 +68,8 @@ public:
 		Unknown,
 		FallingDeep,
 		Smashed,
-		Drowned
+		Drowned,
+		Burned
 	};
 
 	PlayerMovement movement=Stand;

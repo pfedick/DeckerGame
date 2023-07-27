@@ -26,7 +26,6 @@ static int death_animation[]={ 102,103,105,105,105,106,106,105,105,106,106,
 static int death_by_falling[]={ 89,89,106,106,89,89,106,106,89,106,89,106,89,89,
 		106,106,89 };
 
-
 static int swimm_inplace_front[]={ 126,127,128,129,130,131,132,133,134,135 };
 static int swimm_inplace_left[]={ 106,107,108,109,110,111,112,113,114,115 };
 static int swimm_inplace_right[]={ 116,117,118,119,120,121,122,123,124,125 };
@@ -37,6 +36,8 @@ static int swimm_down_left[]={ 156,157,158,159,160,161,162,163,164,165 };
 static int swimm_up_right[]={ 166,167,168,169,170,171,172,173,174,175 };
 static int swimm_straigth_right[]={ 186,187,188,189,190,191,192,193,194,195 };
 static int swimm_down_right[]={ 176,177,178,179,180,181,182,183,184,185 };
+
+
 
 
 
@@ -58,7 +59,12 @@ Player::Player(Game* game)
 	visible=true;
 	autoWalk=false;
 	waterSplashPlayed=false;
-	air=100.0f;
+	air=30.0f;
+	maxair=30.0f;
+	particle_end_time=0.0f;
+	next_particle_birth=0.0f;
+	particle_reason=ParticleReason::None;
+	color_modulation.setColor(255, 255, 255, 255);
 }
 
 Player::~Player()
@@ -74,17 +80,24 @@ void Player::resetState()
 	godmode=false;
 	dead=false;
 	visible=true;
-	air=100.0f;
+	air=maxair;
+	last_aircheck=0;
 	waterSplashPlayed=false;
 	stand();
+	particle_end_time=0.0f;
+	next_particle_birth=0.0f;
+	particle_reason=ParticleReason::None;
 	Inventory.clear();
 	object_counter.clear();
+	color_modulation.setColor(255, 255, 255, 255);
 }
 
 void Player::resetLevelObjects()
 {
 	Inventory.clear();
 	object_counter.clear();
+	air=maxair;
+	last_aircheck=0;
 }
 
 
@@ -135,7 +148,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (!visible) return;
 	ppl7::grafix::Point p(x + viewport.x1 - worldcoords.x, y + viewport.y1 - worldcoords.y);
 	if (movement == Slide) p.y+=35;
-	sprite_resource->draw(renderer, p.x, p.y + 1, animation.getFrame());
+	sprite_resource->draw(renderer, p.x, p.y + 1, animation.getFrame(), color_modulation);
 	/*
 	SDL_SetRenderDrawColor(renderer,255,0,0,255);
 	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
@@ -245,20 +258,27 @@ size_t Player::getObjectCount(int type) const
 	return 0;
 }
 
-void Player::dropHealth(int points, HealthDropReason reason)
+void Player::dropHealth(float points, HealthDropReason reason)
 {
 	if (godmode) return;
 	if (movement == Dead) return;
 	health-=points;
-	if (health <= 0 && movement != Dead) {
+	if (health <= 0.0f && movement != Dead) {
 		health=0;
 		movement=Dead;
 		fallstart=0.0f;
 		// we can play different animations for different reasons
-		if (reason == FallingDeep)
+		if (reason == FallingDeep) {
 			animation.start(death_by_falling, sizeof(death_by_falling) / sizeof(int), false, 106);
-		else
+		} else if (reason == Drowned) {
+			animation.startSequence(260, 281, false, 281);
+		} else if (reason == Burned) {
+			animation.startSequence(208, 216, false, 216);
+			startEmittingParticles(time + 1.0f, ParticleReason::Burning);
+
+		} else {
 			animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 106);
+		}
 	}
 }
 
@@ -297,14 +317,22 @@ void Player::dropLifeAndResetToLastSavePoint()
 {
 	dead=false;
 	lifes--;
-	health=100;
+	health=100.0f;
 	x=lastSavePoint.x;
 	y=lastSavePoint.y;
+	color_modulation.setColor(255, 255, 255, 255);
 	stand();
+}
+
+void Player::addAir(float seconds)
+{
+	air+=seconds;
+	if (air > maxair) air=maxair;
 }
 
 void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
+	if (particle_reason != ParticleReason::None && particle_end_time > time) emmitParticles(time);
 	this->time=time;
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
@@ -316,6 +344,20 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 		return;
 	}
+	if (isDiving()) {
+		if (last_aircheck > 0.0f) {
+			if (air > 0.0f) air-=time - last_aircheck;
+			if (air < 0.0f) air=0.0f;
+			if (air <= 0.0f) {
+				dropHealth(0.5f * frame_rate_compensation, HealthDropReason::Drowned);
+				if (health <= 0) startEmittingParticles(time + 1.0f, ParticleReason::Drowned);
+			}
+		}
+	} else {
+		if (air < maxair) air+=0.08333333 * frame_rate_compensation;
+		if (air > maxair) air=maxair;
+	}
+	last_aircheck=time;
 	if (dead) return;
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);
@@ -552,44 +594,50 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 	//ppl7::PrintDebugTime("Player::handleKeyboardWhileSwimming: old movement: %s, ", (const char*)getState());
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
-	if (keys & KeyboardKeys::Shift) {
-		if (keys & KeyboardKeys::Up) {
-			if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water) {
-				if (keys & KeyboardKeys::Left) {
-					movement=Jump;
-					orientation=Left;
-					if (keys & KeyboardKeys::Shift) {
-						jump_climax=time + 0.3f;
-						acceleration_jump=2.0f * frame_rate_compensation;
-						acceleration_jump_sideways=-6;
 
-					} else {
-						jump_climax=time + 0.2f;
-						acceleration_jump=0.3f * frame_rate_compensation;
-						acceleration_jump_sideways=-2;
-					}
-					velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-					animation.setStaticFrame(38);
-					return;
-				} else if (keys & KeyboardKeys::Right) {
-					movement=Jump;
-					orientation=Right;
-					if (keys & KeyboardKeys::Shift) {
-						jump_climax=time + 0.3f;
-						acceleration_jump=2.0f * frame_rate_compensation;
-						acceleration_jump_sideways=6.0f;
-						velocity_move.x=8 * frame_rate_compensation;
-					} else {
-						jump_climax=time + 0.2f;
-						acceleration_jump=0.3f * frame_rate_compensation;
-						acceleration_jump_sideways=2.0f;
-					}
-					velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-					animation.setStaticFrame(39);
-					return;
+	if (keys & KeyboardKeys::Up) {
+		if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water && movement != Jump) {
+			if (keys & KeyboardKeys::Left) {
+				movement=Jump;
+				orientation=Left;
+				if (keys & KeyboardKeys::Shift) {
+					jump_climax=time + 0.3f;
+					acceleration_jump=2.0f * frame_rate_compensation;
+					acceleration_jump_sideways=-6;
+					moveOutOfWater(160.0f, 1.0f);
+				} else {
+					jump_climax=time + 0.2f;
+					acceleration_jump=0.3f * frame_rate_compensation;
+					acceleration_jump_sideways=-2;
+					moveOutOfWater(160.0f, 0.5f);
 				}
+				velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+				animation.setStaticFrame(38);
+				return;
+			} else if (keys & KeyboardKeys::Right) {
+				movement=Jump;
+				orientation=Right;
+				if (keys & KeyboardKeys::Shift) {
+					jump_climax=time + 0.3f;
+					acceleration_jump=2.0f * frame_rate_compensation;
+					acceleration_jump_sideways=6.0f;
+					velocity_move.x=8 * frame_rate_compensation;
+					moveOutOfWater(200.0f, 1.0f);
+				} else {
+					jump_climax=time + 0.2f;
+					acceleration_jump=0.3f * frame_rate_compensation;
+					acceleration_jump_sideways=2.0f;
+					moveOutOfWater(200.0f, 0.5f);
+				}
+				velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+				animation.setStaticFrame(39);
+				return;
 			}
 		}
+	}
+	float speed=2.0f * frame_rate_compensation;
+	if (keys & KeyboardKeys::Shift) {
+		speed=6.0f * frame_rate_compensation;
 		keys-=KeyboardKeys::Shift;
 	}
 	if (keys == KeyboardKeys::Up) {
@@ -598,7 +646,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Front;
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
 		}
-		velocity_move.y=-2 * frame_rate_compensation;
+		velocity_move.y=-speed;
 		velocity_move.x=0;
 	} else if (keys == KeyboardKeys::Down) {
 		if (movement != Swim || orientation != Front) {
@@ -606,7 +654,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Front;
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 0);
 		}
-		velocity_move.y=2 * frame_rate_compensation;
+		velocity_move.y=speed;
 		velocity_move.x=0;
 	} else if (keys == KeyboardKeys::Right && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Right) {
@@ -614,7 +662,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Right;
 			animation.start(swimm_up_right, sizeof(swimm_up_right) / sizeof(int), true, 0);
 		}
-		velocity_move.x=5 * frame_rate_compensation;
+		velocity_move.x=speed;
 		velocity_move.y=0;
 	} else if (keys == KeyboardKeys::Right) {
 		if (movement != SwimStraight || orientation != Right) {
@@ -622,7 +670,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Right;
 			animation.start(swimm_straigth_right, sizeof(swimm_straigth_right) / sizeof(int), true, 0);
 		}
-		velocity_move.x=5 * frame_rate_compensation;
+		velocity_move.x=speed;
 		velocity_move.y=0;
 	} else if (keys == KeyboardKeys::Left && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Left) {
@@ -630,7 +678,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Left;
 			animation.start(swimm_up_left, sizeof(swimm_up_left) / sizeof(int), true, 0);
 		}
-		velocity_move.x=-5 * frame_rate_compensation;
+		velocity_move.x=-speed;
 		velocity_move.y=0;
 	} else if (keys == KeyboardKeys::Left) {
 		if (movement != SwimStraight || orientation != Left) {
@@ -638,7 +686,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Left;
 			animation.start(swimm_straight_left, sizeof(swimm_straight_left) / sizeof(int), true, 0);
 		}
-		velocity_move.x=-5 * frame_rate_compensation;
+		velocity_move.x=-speed;
 		velocity_move.y=0;
 	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Up)) {
 		if (movement != SwimUp || orientation != Left) {
@@ -646,32 +694,32 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			orientation=Left;
 			animation.start(swimm_up_left, sizeof(swimm_up_left) / sizeof(int), true, 0);
 		}
-		velocity_move.x=-5 * frame_rate_compensation;
-		velocity_move.y=-2 * frame_rate_compensation;
+		velocity_move.x=-speed;
+		velocity_move.y=-speed;
 	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Up)) {
 		if (movement != SwimUp || orientation != Right) {
 			movement=SwimUp;
 			orientation=Right;
 			animation.start(swimm_up_right, sizeof(swimm_up_right) / sizeof(int), true, 0);
 		}
-		velocity_move.x=5 * frame_rate_compensation;
-		velocity_move.y=-2 * frame_rate_compensation;
+		velocity_move.x=speed;
+		velocity_move.y=-speed;
 	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Down)) {
 		if (movement != SwimDown || orientation != Right) {
 			movement=SwimDown;
 			orientation=Right;
 			animation.start(swimm_down_right, sizeof(swimm_down_right) / sizeof(int), true, 0);
 		}
-		velocity_move.x=5 * frame_rate_compensation;
-		velocity_move.y=2 * frame_rate_compensation;
+		velocity_move.x=speed;
+		velocity_move.y=speed;
 	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Down)) {
 		if (movement != SwimDown || orientation != Left) {
 			movement=SwimDown;
 			orientation=Left;
 			animation.start(swimm_down_left, sizeof(swimm_down_left) / sizeof(int), true, 0);
 		}
-		velocity_move.x=-5 * frame_rate_compensation;
-		velocity_move.y=2 * frame_rate_compensation;
+		velocity_move.x=-speed;
+		velocity_move.y=speed;
 
 	}
 	//printf(", new movement: %s\n", (const char*)getState());
@@ -687,7 +735,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane& world)
 		this->dropHealth(10);
 	}
 	if (collision_type_count[TileType::Type::Fire] > 0) {
-		this->dropHealth(10);
+		this->dropHealth(10, Burned);
 	}
 
 }
@@ -806,4 +854,113 @@ void Player::splashIntoWater(float gravity)
 
 	}
 	audio.playOnce(id, gravity / 21.0f);
+}
+
+
+void Player::moveOutOfWater(float angel, float speed)
+{
+	AudioPool& audio=getAudioPool();
+	if (speed < 1.0f) audio.playOnce(AudioClip::water_pouring2, 0.5f);
+	else audio.playOnce(AudioClip::water_pouring1, 0.5f);
+	ppl7::grafix::PointF p(x, y - 2 * TILE_HEIGHT);
+
+	ParticleSystem* ps=GetParticleSystem();
+	ppl7::grafix::Size size(20, 40);
+	if (speed >= 0.8) {
+		p.y-=TILE_HEIGHT * 2;
+		size.height=TILE_HEIGHT * 3;
+	}
+
+	int new_particles=ppl7::rand(130, 250);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.104, 0.670) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, size, 180.000);
+		particle->layer=Particle::Layer::BehindPlayer;
+		particle->weight=randf(0.142, 0.481);
+		particle->gravity.setPoint(0.000, 0.208);
+		particle->velocity=calculateVelocity(randf(1.887, 1.887), angel + randf(-30.0f, 30.0f));
+		particle->scale=randf(0.300, 1.000);
+		particle->color_mod.set(172, 199, 255, 255);
+		particle->initAnimation(Particle::Type::RotatingParticleTransparent);
+		ps->addParticle(particle);
+	}
+}
+
+void Player::startEmittingParticles(double endtime, ParticleReason reason)
+{
+	particle_end_time=endtime;
+	particle_reason=reason;
+	next_particle_birth=0.0f;
+}
+
+
+void Player::emmitParticles(double time)
+{
+	ParticleSystem* ps=GetParticleSystem();
+	if (particle_reason == ParticleReason::Drowned && next_particle_birth < time) {
+		std::list<Particle::ScaleGradientItem>scale_gradient;
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.044));
+		scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+		ppl7::grafix::PointF p(x, y - 2 * TILE_HEIGHT);
+		next_particle_birth=time + randf(0.020, 0.300);
+		int new_particles=ppl7::rand(3, 15);
+		for (int i=0;i < new_particles;i++) {
+			Particle* particle=new Particle();
+			particle->birth_time=time;
+			particle->death_time=randf(0.481, 1.424) + time;
+			particle->p=p;
+			particle->layer=Particle::Layer::BehindPlayer;
+			particle->weight=randf(0.000, 0.000);
+			particle->gravity.setPoint(0.000, 0.000);
+			particle->velocity=calculateVelocity(randf(0.755, 3.208), 0.000 + randf(-11.887, 11.887));
+			particle->scale=randf(0.300, 1.000);
+			particle->color_mod.set(255, 255, 255, 255);
+			particle->initAnimation(Particle::Type::RotatingParticleTransparent);
+			particle->initScaleGradient(scale_gradient, particle->scale);
+			//particle->initColorGradient(color_gradient);
+			ps->addParticle(particle);
+		}
+	} else if (particle_reason == ParticleReason::Burning && next_particle_birth < time) {
+		ppl7::grafix::PointF p(x, y);
+		next_particle_birth=time + randf(0.020, 0.300);
+		int h=color_modulation.red();
+		h-=50;
+		if (h < 0) h=0;
+		color_modulation.setColor(h, h, h, 255);
+
+		std::list<Particle::ScaleGradientItem>scale_gradient;
+		std::list<Particle::ColorGradientItem>color_gradient;
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.063));
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.068, 0.235));
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.320, 0.353));
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.604, 0.241));
+		scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+		color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 255, 0, 220)));
+		color_gradient.push_back(Particle::ColorGradientItem(0.149, ppl7::grafix::Color(255, 99, 0, 101)));
+		color_gradient.push_back(Particle::ColorGradientItem(0.311, ppl7::grafix::Color(40, 41, 43, 101)));
+		color_gradient.push_back(Particle::ColorGradientItem(0.428, ppl7::grafix::Color(11, 14, 12, 69)));
+		color_gradient.push_back(Particle::ColorGradientItem(0.590, ppl7::grafix::Color(126, 127, 130, 0)));
+		color_gradient.push_back(Particle::ColorGradientItem(0.775, ppl7::grafix::Color(255, 255, 255, 16)));
+		color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(114, 116, 116, 0)));
+
+		int new_particles=ppl7::rand(83, 109);
+		for (int i=0;i < new_particles;i++) {
+			Particle* particle=new Particle();
+			particle->birth_time=time;
+			particle->death_time=randf(1.017, 2.649) + time;
+			particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(39, 1), 0.000);
+			particle->layer=Particle::Layer::BeforePlayer;
+			particle->weight=randf(0.000, 0.000);
+			particle->gravity.setPoint(0.000, 0.000);
+			particle->velocity=calculateVelocity(randf(2.462, 5.102), 0.000 + randf(-11.887, 11.887));
+			particle->scale=randf(0.512, 3.211);
+			particle->color_mod.set(226, 126, 69, 41);
+			particle->initAnimation(Particle::Type::RotatingParticleWhite);
+			particle->initScaleGradient(scale_gradient, particle->scale);
+			particle->initColorGradient(color_gradient);
+			ps->addParticle(particle);
+		}
+	}
 }

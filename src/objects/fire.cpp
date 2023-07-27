@@ -32,7 +32,7 @@ void Fire::update(double time, TileTypePlane& ttplane, Player& player, float)
 
 void Fire::handleCollision(Player* player, const Collision& collision)
 {
-	player->dropHealth(2);
+	player->dropHealth(2, Physic::HealthDropReason::Burned);
 }
 
 
