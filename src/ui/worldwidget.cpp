@@ -81,13 +81,21 @@ void OxygenFrame::paint(ppl7::grafix::Drawable& draw)
 	//ppl7::PrintDebugTime("OxygenFrame::paint width=%d, height=%d\n", draw.width(), draw.height());
 	ppl7::grafix::Color black(0, 0, 0, 255);
 	ppl7::grafix::Color white(255, 255, 255, 255);
-	ppl7::grafix::Color oxygen(128, 128, 255, 192);
-	if (seconds_left < 10) {
-		oxygen.setColor(255, 255, 128, 192);
+	ppl7::grafix::Color oxygen(64, 64, 255, 192);
+	if (seconds_left < 15 && seconds_left >= 8) {
+		int blend=(seconds_left - 8.0f) * 255 / 7;
+		oxygen=ppl7::grafix::Color::getBlended(ppl7::grafix::Color(255, 192, 0, 192),
+			oxygen,
+			blend);
+	} else if (seconds_left < 8 && seconds_left >= 3) {
+		int blend=(seconds_left - 3.0f) * 255 / 5;
+		oxygen=ppl7::grafix::Color::getBlended(ppl7::grafix::Color(255, 0, 0, 192),
+			ppl7::grafix::Color(255, 192, 0, 192),
+			blend);
+	} else if (seconds_left < 3) {
+		oxygen.setColor(255, 0, 0, 192);
 	}
-	if (seconds_left < 5) {
-		oxygen.setColor(255, 128, 128, 192);
-	}
+	oxygen.setAlpha(192);
 
 	draw.cls(ppl7::grafix::Color(1, 1, 1, 128));
 	draw.drawRect(0, 0, draw.width(), draw.height(), black);
