@@ -137,6 +137,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Ostrich]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Ostrich]->load(sdl, "res/ostrich.tex");
 
+	spriteset[Spriteset::Piranha]->enableOutlines(true);
+	spriteset[Spriteset::Piranha]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Piranha]->load(sdl, "res/piranha.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -367,6 +371,7 @@ Representation getRepresentation(int object_type)
 	case Type::Ostrich: return Ostrich::representation();
 	case Type::Oxygen: return OxygenTank::representation();
 	case Type::Fish: return Fish::representation();
+	case Type::Piranha: return Piranha::representation();
 	default: return Object::representation();
 	}
 }
@@ -443,6 +448,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Ostrich: return new Ostrich();
 	case Type::Oxygen: return new OxygenTank();
 	case Type::Fish: return new Fish();
+	case Type::Piranha: return new Piranha();
 	}
 	return NULL;
 }

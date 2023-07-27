@@ -75,7 +75,8 @@ public:
 		Yeti=116,
 		AutoGeorge=117,
 		Ostrich=118,
-		Fish=119
+		Fish=119,
+		Piranha=120
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -105,6 +106,7 @@ public:
 		George,
 		Ostrich,
 		ScorpionMetalic,
+		Piranha,
 		MaxSpritesets
 	};
 };
@@ -879,6 +881,22 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
+
+};
+
+class Piranha : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	float speed;
+	int state;
+public:
+	Piranha();
+	//~Fish();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
 

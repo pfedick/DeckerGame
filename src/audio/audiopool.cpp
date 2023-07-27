@@ -139,6 +139,7 @@ void AudioPool::load()
 	sample[AudioClip::water_bubble1].load("res/audio/water_bubble.mp3");
 	sample[AudioClip::gas_spray].load("res/audio/gas_spray.mp3");
 	sample[AudioClip::underwaterloop1].load("res/audio/underwaterloop1.mp3");
+	sample[AudioClip::crunch].load("res/audio/crunch.mp3");
 
 	/*
 	sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.mp3");

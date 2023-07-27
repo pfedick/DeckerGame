@@ -115,6 +115,7 @@ OBJECTS=compile/main.o \
 	compile/object_ostrich.o \
 	compile/object_oxygen.o \
 	compile/object_fish.o \
+	compile/object_piranha.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -211,6 +212,8 @@ bricks_white:
 	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
 	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
 
+enemy_piranha:
+	./texmaker -s lightwave/Render/enemies/piranha/ -t res/piranha.tex -w 512 -h 512 -px 60 -py 100
 
 enemy_ostrich:
 	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
@@ -233,7 +236,7 @@ george:
 	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 
 
-enemies: enemy_ostrich enemy_scorpion
+enemies: enemy_ostrich enemy_scorpion enemy_piranha
 
 sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
@@ -601,6 +604,10 @@ compile/object_oxygen.o: src/objects/oxygen.cpp Makefile include/objects.h inclu
 compile/object_fish.o: src/objects/fish.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_fish.o -c src/objects/fish.cpp $(CFLAGS)
+
+compile/object_piranha.o: src/objects/piranha.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_piranha.o -c src/objects/piranha.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h

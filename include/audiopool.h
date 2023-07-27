@@ -77,6 +77,7 @@ public:
 		water_bubble1,
 		gas_spray,
 		underwaterloop1,
+		crunch,
 		/*
 		birds_in_rain,
 		soft_rain,
