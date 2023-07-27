@@ -574,13 +574,24 @@ class ThreeSpeers : public Trap
 private:
 	double next_state, next_animation;
 	int state;
+
+	//float active_time, inactive_time;
+
 	AnimationCycle animation;
 
+
 public:
+	int speer_type;
+
 	ThreeSpeers();
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+
 };
 
 class LaserBarrier : public Trap
