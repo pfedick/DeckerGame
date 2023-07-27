@@ -637,7 +637,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 	}
 	float speed=2.0f * frame_rate_compensation;
 	if (keys & KeyboardKeys::Shift) {
-		speed=6.0f * frame_rate_compensation;
+		speed=4.0f * frame_rate_compensation;
 		keys-=KeyboardKeys::Shift;
 	}
 	if (keys == KeyboardKeys::Up) {
