@@ -29,7 +29,9 @@ void OxygenTank::update(double time, TileTypePlane&, Player& player, float)
 {
 	if (!enabled) return;
 	if (next_birth < time) {
-		next_birth=time + randf(0.020, 0.300);
+		ppl7::grafix::PointF op=p;
+		op.y-=TILE_HEIGHT;
+		next_birth=time + randf(0.020, 0.500);
 		ParticleSystem* ps=GetParticleSystem();
 		if (!emitterInPlayerRange(p, player)) return;
 		int new_particles=ppl7::rand(3, 15);
@@ -37,7 +39,7 @@ void OxygenTank::update(double time, TileTypePlane&, Player& player, float)
 			Particle* particle=new Particle();
 			particle->birth_time=time;
 			particle->death_time=randf(0.481, 1.424) + time;
-			particle->p=p;
+			particle->p=op;
 			particle->layer=Particle::Layer::BehindPlayer;
 			particle->weight=randf(0.000, 0.000);
 			particle->gravity.setPoint(0.000, 0.000);
