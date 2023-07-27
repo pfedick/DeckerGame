@@ -72,6 +72,8 @@ public:
 		watersplash2,
 		watersplash3,
 		watersplash4,
+		water_pouring1,
+		water_pouring2,
 		/*
 		birds_in_rain,
 		soft_rain,

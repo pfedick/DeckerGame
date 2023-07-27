@@ -134,6 +134,8 @@ void AudioPool::load()
 	sample[AudioClip::watersplash2].load("res/audio/watersplash2.mp3");
 	sample[AudioClip::watersplash3].load("res/audio/watersplash3.mp3");
 	sample[AudioClip::watersplash4].load("res/audio/watersplash4.mp3");
+	sample[AudioClip::water_pouring1].load("res/audio/water_pouring1.mp3");
+	sample[AudioClip::water_pouring2].load("res/audio/water_pouring2.mp3");
 	/*
 	sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.mp3");
 	sample[AudioClip::soft_rain].load("res/audio/rain.mp3");
