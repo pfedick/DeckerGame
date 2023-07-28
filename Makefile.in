@@ -222,6 +222,9 @@ enemy_scorpion:
 	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125
 	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 140 -py 154
 
+trap_three_speers:
+	./texmaker -s lightwave/Render/enemies/3speers/ -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255
+
 objects_ui:
 	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
 
@@ -236,7 +239,7 @@ george:
 	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers
 
 sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
@@ -260,11 +263,8 @@ sprites: george sprites_white sprites_nature sprites_tropical sprites_objects br
 	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid_ui.tex -w 512 -h 512 -px 0 -py 0
 
 
-	./texmaker -s "lightwave/Render/bricks_white_ui/*.png" -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
-	./texmaker -s "lightwave/Render/bricks_white/*.png" -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
 	./texmaker -s "lightwave/Render/particles/*.png" -t res/particles.tex -w 1024 -h 1024 -px 128 -py 128
 
-	./texmaker -s "lightwave/Render/enemies/3speers/*.png" -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255 --pivot_detection lower_middle
 	./texmaker -s "lightwave/Render/mummy/*.png" -t res/mummy.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/skeleton/*.png" -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s "lightwave/Render/objects/vent/*.png" -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
@@ -279,7 +279,6 @@ sprites: george sprites_white sprites_nature sprites_tropical sprites_objects br
 	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
 	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
 	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
-	./texmaker -s "lightwave/Render/objects/doors/*.png" -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	./texmaker -s "lightwave/Render/objects/levelend/*.png" -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 
 

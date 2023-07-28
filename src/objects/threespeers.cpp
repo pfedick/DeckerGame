@@ -13,7 +13,14 @@ namespace Decker::Objects {
 
 Representation ThreeSpeers::representation()
 {
-	return Representation(Spriteset::ThreeSpeers, 22);
+	return Representation(Spriteset::ThreeSpeers, 0);
+}
+
+static int getRealSprite(int sprite_no, int speer_type)
+{
+	if (speer_type == 0) return sprite_no + 18;
+	if (speer_type == 1) return sprite_no + 1;
+	return speer_type * 17 + sprite_no + 1;
 }
 
 ThreeSpeers::ThreeSpeers()
@@ -26,7 +33,7 @@ ThreeSpeers::ThreeSpeers()
 	state=0;
 	next_state=ppl7::GetMicrotime() + ppl7::randf(3.0f, 7.0f);
 	collisionDetection=false;
-	sprite_no_representation=22;
+	sprite_no_representation=0;
 	speer_type=0;
 }
 
@@ -35,9 +42,7 @@ void ThreeSpeers::update(double time, TileTypePlane&, Player&, float)
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
 		animation.update();
-		int new_sprite=animation.getFrame();
-		if (speer_type == 0) new_sprite+=18;
-		else new_sprite+=1;
+		int new_sprite=getRealSprite(animation.getFrame(), speer_type);
 		if (new_sprite != sprite_no) {
 			sprite_no=new_sprite;
 			if (animation.isFinished() == true && collisionDetection == true && state == 0)
@@ -51,9 +56,7 @@ void ThreeSpeers::update(double time, TileTypePlane&, Player&, float)
 		getAudioPool().playOnce(AudioClip::break1, p, 1600, 0.5f);
 		next_state=time + ppl7::rand(2, 5);
 		animation.startSequence(0, 4, false, 4);
-		sprite_no=animation.getFrame();
-		if (speer_type == 0) sprite_no+=18;
-		else sprite_no+=1;
+		sprite_no=getRealSprite(animation.getFrame(), speer_type);
 		state=1;
 		collisionDetection=true;
 		updateBoundary();
@@ -63,9 +66,7 @@ void ThreeSpeers::update(double time, TileTypePlane&, Player&, float)
 		next_state=time + ppl7::rand(3, 6);
 		animation.startSequence(5, 16, false, 0);
 		//animation.start(trap_deactivation, sizeof(trap_deactivation) / sizeof(int), false, 18);
-		sprite_no=animation.getFrame();
-		if (speer_type == 0) sprite_no+=18;
-		else sprite_no+=1;
+		sprite_no=getRealSprite(animation.getFrame(), speer_type);
 		state=0;
 		collisionDetection=false;
 		updateBoundary();
@@ -133,6 +134,9 @@ ThreeSpeersDialog::ThreeSpeersDialog(ThreeSpeers* object)
 	speer_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
 	speer_type->add("Speers with Skeleton", "0");
 	speer_type->add("Speers only", "1");
+	speer_type->add("Speers from ceiling", "2");
+	speer_type->add("Speers from left", "3");
+	speer_type->add("Speers from right", "4");
 	speer_type->setCurrentIdentifier(ppl7::ToString("%d", object->speer_type));
 	speer_type->setEventHandler(this);
 	addChild(speer_type);
