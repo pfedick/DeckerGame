@@ -257,7 +257,7 @@ Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
 		Object* item=it->second;
 		if (p.inside(item->initial_boundary) == true && item->spawned == false) {
 			if (item->texture) {
-				const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
+				const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no_representation);
 				if (draw.width()) {
 					int x=p.x - item->initial_boundary.x1;
 					int y=p.y - item->initial_boundary.y1;
@@ -318,7 +318,7 @@ void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7:
 			item->texture->drawOutlines(renderer,
 				item->initial_p.x + viewport.x1 - worldcoords.x,
 				item->initial_p.y + viewport.y1 - worldcoords.y,
-				item->sprite_no, 1.0f);
+				item->sprite_no_representation, 1.0f);
 		}
 	}
 }

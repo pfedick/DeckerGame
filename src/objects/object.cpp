@@ -175,7 +175,15 @@ void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coo
 	texture->draw(renderer,
 		initial_p.x + coords.x,
 		initial_p.y + coords.y,
-		sprite_no, color_mod);
+		sprite_no_representation, color_mod);
+
+	ppl7::grafix::Color c=color_mod;
+	c.setAlpha(128);
+	texture->draw(renderer,
+		p.x + coords.x,
+		p.y + coords.y,
+		sprite_no, c);
+
 }
 
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
