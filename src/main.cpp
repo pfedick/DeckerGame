@@ -47,9 +47,9 @@ void start()
 
 
 		//game.startLevel("level/desert.lvl");
-		//game.startLevel("level/heaven.lvl");
+		game.startLevel("level/heaven.lvl");
 		//game.startLevel("level/water.lvl");
-		game.startLevel("level/devel.lvl");
+		//game.startLevel("level/devel.lvl");
 		//game.startLevel("level/test.lvl");
 		/*
 		game.startLevel("level/start.lvl");
