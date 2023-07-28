@@ -65,11 +65,16 @@ Player::Player(Game* game)
 	next_particle_birth=0.0f;
 	particle_reason=ParticleReason::None;
 	color_modulation.setColor(255, 255, 255, 255);
+	ambient_sound=NULL;
 }
 
 Player::~Player()
 {
-
+	if (ambient_sound) {
+		getAudioPool().stopInstace(ambient_sound);
+		delete ambient_sound;
+		ambient_sound=NULL;
+	}
 }
 
 void Player::resetState()
@@ -90,6 +95,11 @@ void Player::resetState()
 	Inventory.clear();
 	object_counter.clear();
 	color_modulation.setColor(255, 255, 255, 255);
+	if (ambient_sound) {
+		ambient_sound->setAutoDelete(true);
+		ambient_sound->fadeout(2.0f);
+		ambient_sound=NULL;
+	}
 }
 
 void Player::resetLevelObjects()
@@ -330,6 +340,43 @@ void Player::addAir(float seconds)
 	if (air > maxair) air=maxair;
 }
 
+void Player::handleDiving(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
+{
+	AudioPool& ap=getAudioPool();
+	if (isDiving()) {
+		if (ambient_sound != NULL && ambient_playing != AudioClip::underwaterloop1) {
+			ambient_sound->setAutoDelete(true);
+			ambient_sound->fadeout(1.0f);
+			ambient_sound=NULL;
+		}
+		if (!ambient_sound) {
+			ambient_sound=ap.getInstance(AudioClip::underwaterloop1);
+			ambient_sound->setLoop(true);
+			ambient_sound->setVolume(0.8);
+			ap.playInstance(ambient_sound);
+			ambient_playing=AudioClip::underwaterloop1;
+
+		}
+		if (last_aircheck > 0.0f) {
+			if (air > 0.0f) air-=time - last_aircheck;
+			if (air < 0.0f) air=0.0f;
+			if (air <= 0.0f) {
+				dropHealth(0.5f * frame_rate_compensation, HealthDropReason::Drowned);
+				if (health <= 0) startEmittingParticles(time + 1.0f, ParticleReason::Drowned);
+			}
+		}
+	} else {
+		if (ambient_sound != NULL && ambient_playing == AudioClip::underwaterloop1) {
+			ambient_sound->setAutoDelete(true);
+			ambient_sound->fadeout(2.0f);
+			ambient_sound=NULL;
+		}
+		if (air < maxair) air+=0.08333333 * frame_rate_compensation;
+		if (air > maxair) air=maxair;
+	}
+	last_aircheck=time;
+}
+
 void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	if (particle_reason != ParticleReason::None && particle_end_time > time) emmitParticles(time);
@@ -344,20 +391,8 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 		return;
 	}
-	if (isDiving()) {
-		if (last_aircheck > 0.0f) {
-			if (air > 0.0f) air-=time - last_aircheck;
-			if (air < 0.0f) air=0.0f;
-			if (air <= 0.0f) {
-				dropHealth(0.5f * frame_rate_compensation, HealthDropReason::Drowned);
-				if (health <= 0) startEmittingParticles(time + 1.0f, ParticleReason::Drowned);
-			}
-		}
-	} else {
-		if (air < maxair) air+=0.08333333 * frame_rate_compensation;
-		if (air > maxair) air=maxair;
-	}
-	last_aircheck=time;
+	handleDiving(time, world, objects, frame_rate_compensation);
+
 	if (dead) return;
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);

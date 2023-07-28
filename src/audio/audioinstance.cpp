@@ -23,6 +23,9 @@ AudioInstance::AudioInstance(AudioClass a)
 	loop=false;
 	positional=false;
 	max_distance=1600;
+	fade_start=0.0f;
+	fade_start_volume=1.0f;
+	fade_time=4.0f;
 	setAudioClass(a);
 }
 
@@ -34,6 +37,9 @@ AudioInstance::AudioInstance(const AudioSample& sample, AudioClass a)
 	loop=false;
 	positional=false;
 	max_distance=1600;
+	fade_start=0.0f;
+	fade_start_volume=1.0f;
+	fade_time=4.0f;
 	setAudioClass(a);
 	load(sample);
 }
@@ -54,11 +60,21 @@ void AudioInstance::setVolume(float volume)
 	this->volume=volume;
 	if (this->volume < 0) this->volume=0.0f;
 	if (this->volume > 1.0) this->volume=1.0f;
+	fade_start=0;
+	this->fade_start_volume=this->volume;
 }
 
 void AudioInstance::setLoop(bool loop)
 {
 	this->loop=loop;
+}
+
+void AudioInstance::fadeout(float seconds)
+{
+	fade_start_volume=volume;
+	fade_time=seconds;
+	fade_start=ppl7::GetMicrotime();
+
 }
 
 void AudioInstance::setPositional(const ppl7::grafix::Point& p, int max_distance)
@@ -91,6 +107,16 @@ size_t AudioInstance::skipSamples(size_t num)
 size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume)
 {
 	if (!sample) return 0;
+	if (fade_start > 0.0f) {
+		float in_fade=(ppl7::GetMicrotime() - fade_start) / fade_time;
+		this->volume=fade_start_volume - in_fade * fade_start_volume;
+		if (this->volume <= 0) {
+			fade_start=0;
+			volume=fade_start_volume;
+			position=0;
+			return 0;
+		}
+	}
 	int vol_l=32768 * (volume * this->volume);
 	int vol_r=32768 * (volume * this->volume);
 	if (positional) {

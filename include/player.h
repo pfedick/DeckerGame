@@ -47,6 +47,9 @@ private:
 	bool autoWalk;
 	bool waterSplashPlayed;
 
+	AudioInstance* ambient_sound;
+	AudioClip::Id ambient_playing;
+
 	enum class ParticleReason
 	{
 		None=0,
@@ -65,6 +68,8 @@ private:
 	void moveOutOfWater(float angel, float speed);
 	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects);
 	void checkCollisionWithWorld(const TileTypePlane& world);
+
+	void handleDiving(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);

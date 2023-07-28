@@ -95,6 +95,9 @@ private:
 	int max_distance;
 	bool loop;
 	bool positional;
+	float fade_start_volume;
+	float fade_time;
+	double fade_start;
 	ppl7::grafix::Point p;
 	size_t skipSamples(size_t num);
 
@@ -106,6 +109,7 @@ public:
 	void rewind();
 	void setVolume(float volume);
 	void setLoop(bool loop);
+	void fadeout(float seconds=4.0f);
 	void setPositional(const ppl7::grafix::Point& p, int max_distance=1600);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
 };
