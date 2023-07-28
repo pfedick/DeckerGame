@@ -88,7 +88,7 @@ void SpriteSystem::updateVisibleSpriteList(const ppl7::grafix::Point& worldcoord
 			if (x + item.boundary.width() > 0 && y + item.boundary.height() > 0
 				&& x - item.boundary.width() < width && y - item.boundary.height() < height) {
 				uint64_t id=((uint64_t)item.z << 32 & 0x0000ffff00000000) | (uint64_t)(item.y << 16) | (uint64_t)item.x;
-				visible_sprite_map.insert(std::pair<uint64_t, SpriteSystem::Item>(id, item));
+				visible_sprite_map.insert(std::pair<uint64_t, const SpriteSystem::Item&>(id, item));
 			}
 		}
 	}
@@ -110,7 +110,7 @@ size_t SpriteSystem::countVisible() const
 void SpriteSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
 	if (!bSpritesVisible) return;
-	std::map<uint64_t, SpriteSystem::Item>::const_iterator it;
+	std::map<uint64_t, const SpriteSystem::Item&>::const_iterator it;
 	for (it=visible_sprite_map.begin();it != visible_sprite_map.end();++it) {
 		const SpriteSystem::Item& item=(it->second);
 		if (item.texture) {
@@ -172,7 +172,7 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem
 	sprite.id=-1;
 	if (!bSpritesVisible) return false;
 	//printf ("Try to find sprite\n");
-	std::map<uint64_t, SpriteSystem::Item>::const_iterator it;
+	std::map<uint64_t, const SpriteSystem::Item&>::const_iterator it;
 	for (it=visible_sprite_map.begin();it != visible_sprite_map.end();++it) {
 		const SpriteSystem::Item& item=(it->second);
 		if (p.inside(item.boundary)) {

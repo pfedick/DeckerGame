@@ -247,7 +247,7 @@ private:
 	const ColorPalette& palette;
 	ppl7::Mutex mutex;
 	std::map<int, SpriteSystem::Item> sprite_list;
-	std::map<uint64_t, SpriteSystem::Item> visible_sprite_map;
+	std::map<uint64_t, const SpriteSystem::Item&> visible_sprite_map;
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
 	bool bSpritesVisible;
 
