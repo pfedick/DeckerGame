@@ -38,6 +38,7 @@ Door::Door()
 	can_close_again=false;
 	use_background_color=false;
 	cooldown=0.0f;
+	myLayer=Layer::BehindPlayer;
 	init();
 }
 
@@ -173,10 +174,10 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	if (state != DoorState::open) {
 		if (orientation == DoorOrientation::left) {
 			if (collision.objectLeft() && player->x > p.x - 48) player->x=p.x - 48;
-			if (collision.objectRight() && player->x < p.x + 32) player->x=p.x + 32;
+			if (collision.objectRight() && player->x < p.x + 64) player->x=p.x + 64;
 		} else if (orientation == DoorOrientation::right) {
 			if (collision.objectRight() && player->x < p.x + 48) player->x=p.x + 48;
-			if (collision.objectLeft() && player->x > p.x - 32) player->x=p.x - 32;
+			if (collision.objectLeft() && player->x > p.x - 64) player->x=p.x - 64;
 		}
 		if (state == DoorState::closed) {
 			//int keyboard=player->getKeyboardMatrix();
@@ -319,6 +320,7 @@ void Door::load_v1(const unsigned char* buffer, size_t size)
 size_t Door::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
+	myLayer=Layer::BehindPlayer;
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
 	if (version < 1) return 0;
