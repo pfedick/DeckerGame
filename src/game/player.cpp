@@ -391,6 +391,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (!waterSplashPlayed && gravity > 0.0f) {
 			waterSplashPlayed=true;
 			splashIntoWater(gravity);
+		} else if (!waterSplashPlayed && movement == Slide) {
+			waterSplashPlayed=true;
+			splashIntoWater(16.0f);
 		}
 	} else {
 		waterSplashPlayed=false;
