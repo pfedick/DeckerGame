@@ -944,6 +944,7 @@ void Player::startEmittingParticles(double endtime, ParticleReason reason)
 void Player::jumpExpression()
 {
 	if (isDiving()) return;
+	if (movement != Stand && movement != Turn && movement != Walk && movement != Run) return;
 	expressionJump=true;
 	movement=Jump;
 	orientation=Front;
