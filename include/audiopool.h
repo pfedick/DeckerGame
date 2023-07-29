@@ -78,12 +78,34 @@ public:
 		gas_spray,
 		underwaterloop1,
 		crunch,
-		/*
+		coin3,
+		coin4,
+		coin5,
+		coin6,
+		hackstone,
+		birds2,
+		birds3,
+		rain1,
+		rain2,
+		rain3,
 		birds_in_rain,
 		soft_rain,
 		desert_at_night,
 		wind3,
-		*/
+		crystal2,
+		crystal3,
+		fanfare1,
+		fanfare2,
+		fanfare3,
+		fanfare4,
+		metaldoor,
+		door_open,
+		door_close,
+		treasure_chest,
+		treasure_collect,
+		decker,
+
+
 		// this must always be the last entry!
 		maxClips
 	};
