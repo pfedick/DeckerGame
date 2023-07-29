@@ -81,6 +81,7 @@ private:
 	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 	void playSoundOnAnimationSprite();
+	void checkActivationOfObjectsInRange(Decker::Objects::ObjectSystem* objectsystem);
 
 public:
 	float x, y;

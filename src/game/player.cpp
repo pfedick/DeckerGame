@@ -508,6 +508,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int keys=getKeyboardMatrix(state);
+	if (keys & KeyboardKeys::Action) {
+		checkActivationOfObjectsInRange(objects);
+		if (movement == Hacking) return;
+	}
+
 	if (keys == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
 		if (movement != Walk) {
@@ -1006,9 +1011,11 @@ void Player::startHacking(Decker::Objects::Object* object)
 		if (object->p.x < x) {
 			//left
 			orientation=Left;
+			x=object->p.x + 96;
 			animation.startSequence(218, 238, true, 218);
 		} else {
 			orientation=Right;
+			x=object->p.x - 96;
 			animation.startSequence(239, 259, true, 239);
 		}
 		next_animation=0.0f;
@@ -1041,6 +1048,22 @@ bool Player::hackingInProgress()
 
 	}
 	return false;
+}
+
+void Player::checkActivationOfObjectsInRange(Decker::Objects::ObjectSystem* objectsystem)
+{
+	std::list<Decker::Objects::Object*>object_list;
+
+	if (objectsystem->findObjectsInRange(position(), 200, object_list)) {
+		//ppl7::PrintDebugTime("Found %zd objects in range\n", object_list.size());
+		std::list<Decker::Objects::Object*>::iterator it;
+		for (it=object_list.begin();it != object_list.end();++it) {
+			if ((*it)->type() == Decker::Objects::Type::BreakingWall) {
+				double dist=ppl7::grafix::Distance((*it)->p, position());
+				if (dist < 100)startHacking((*it));
+			}
+		}
+	}
 }
 
 void Player::emmitParticles(double time)

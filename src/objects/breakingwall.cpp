@@ -68,7 +68,6 @@ void BreakingWall::handleCollision(Player* player, const Collision& collision)
 			player->startHacking(this);
 			if (player->x < p.x)player->x=p.x - 96;
 			if (player->x > p.x)player->x=p.x + 96;
-			//breakWall(player);
 		}
 	}
 

@@ -1179,6 +1179,7 @@ public:
 	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);
+	bool findObjectsInRange(const ppl7::grafix::PointF& p, double range, std::list <Object*>& objects);
 	ppl7::grafix::Point findPlayerStart() const;
 	ppl7::grafix::Point nextPlayerStart();
 	SpriteTexture* getTexture(int sprite_set) const;

@@ -586,6 +586,20 @@ void ObjectSystem::getObjectCounter(std::map<int, size_t>& object_counter) const
 }
 
 
+bool ObjectSystem::findObjectsInRange(const ppl7::grafix::PointF& p, double range, std::list <Object*>& objects)
+{
+	objects.clear();
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+		double dist=ppl7::grafix::Distance((*it).second->p, p);
+		if (dist < range) objects.push_back((*it).second);
+	}
+	if (objects.size() > 0) return true;
+	return false;
+}
+
+
+
 
 Collision::Collision()
 {
@@ -678,6 +692,7 @@ bool Collision::objectRight() const
 	}
 	return false;
 }
+
 
 
 }	// EOF namespace Decker::Objects
