@@ -190,6 +190,7 @@ You can find a lot of videos about the game on my channel on YouTube and Twitch:
 
 ## Release History
 
+* [0.10.0](https://github.com/pfedick/DeckerGame/releases/tag/0.10.0) [2023-07-30]: Water update
 * [0.9.0](https://github.com/pfedick/DeckerGame/releases/tag/0.9.0) [2023-07-24]: Tropical update
 * [0.8.2](https://github.com/pfedick/DeckerGame/releases/tag/0.8.2) [2023-07-14]: Bugfix release
 * [0.8.0](https://github.com/pfedick/DeckerGame/releases/tag/0.8.0) [2023-07-13]: Level consistency
