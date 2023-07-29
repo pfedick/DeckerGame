@@ -44,7 +44,9 @@ void ExtraLife::handleCollision(Player* player, const Collision&)
 	player->countObject(type());
 	player->addPoints(100);
 	player->addLife(1);
-	//TODO
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::decker, 0.5f);
+	player->jumpExpression();
 	//AudioPool& audio=getAudioPool();
 	//audio.playOnce(AudioClip::coin1, 0.3f);
 }

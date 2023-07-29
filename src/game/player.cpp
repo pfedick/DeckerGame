@@ -66,6 +66,7 @@ Player::Player(Game* game)
 	particle_reason=ParticleReason::None;
 	color_modulation.setColor(255, 255, 255, 255);
 	ambient_sound=NULL;
+	expressionJump=false;
 }
 
 Player::~Player()
@@ -94,6 +95,7 @@ void Player::resetState()
 	particle_reason=ParticleReason::None;
 	Inventory.clear();
 	object_counter.clear();
+	expressionJump=false;
 	color_modulation.setColor(255, 255, 255, 255);
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
@@ -458,6 +460,10 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	if (movement == Slide || movement == Dead) {
 		return;
 	}
+	if (expressionJump == true) {
+		if (movement != Stand) return;
+		expressionJump=false;
+	}
 	if (movement == Jump || movement == Falling) {
 		handleKeyboardWhileJumpOrFalling(time, world, objects, frame_rate_compensation);
 		return;
@@ -467,6 +473,8 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		//handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 		return;
 	}
+
+
 
 	acceleration_jump_sideways=0;
 	//if (time>next_keycheck) {
@@ -931,6 +939,21 @@ void Player::startEmittingParticles(double endtime, ParticleReason reason)
 	particle_end_time=endtime;
 	particle_reason=reason;
 	next_particle_birth=0.0f;
+}
+
+void Player::jumpExpression()
+{
+	if (isDiving()) return;
+	expressionJump=true;
+	movement=Jump;
+	orientation=Front;
+	turnTarget=Front;
+	animation.setStaticFrame(42);
+	jump_climax=time + 0.2f;
+	acceleration_jump=2.0f;
+	acceleration_jump_sideways=0;
+	velocity_move.x=0;
+	//velocity_move.y=0;
 }
 
 

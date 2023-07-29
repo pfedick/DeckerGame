@@ -46,6 +46,7 @@ private:
 	bool visible;
 	bool autoWalk;
 	bool waterSplashPlayed;
+	bool expressionJump;
 
 	AudioInstance* ambient_sound;
 	AudioClip::Id ambient_playing;
@@ -89,6 +90,7 @@ public:
 	~Player();
 	ppl7::grafix::PointF position() const;
 	void stand();
+	void jumpExpression();
 	int getKeyboardMatrix(const unsigned char* state=NULL);
 	void resetState();
 	void resetLevelObjects();
