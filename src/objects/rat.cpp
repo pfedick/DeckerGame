@@ -40,6 +40,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 		collisionDetection=false;
 		enabled=false;
 		player->addPoints(50);
+		getAudioPool().playOnce(AudioClip::squash1, 0.3f);
 		if (audio) {
 			getAudioPool().stopInstace(audio);
 			delete audio;

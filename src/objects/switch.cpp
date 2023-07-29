@@ -99,6 +99,7 @@ void Switch::handleCollision(Player* player, const Collision& collision)
 		//printf("switch\n");
 		if (current_state == true) current_state=false;
 		else current_state=true;
+		getAudioPool().playOnce(AudioClip::light_switch1, 0.7f);
 		init();
 		notify_targets();
 		cooldown=now + 0.2;

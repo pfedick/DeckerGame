@@ -113,6 +113,8 @@ void TouchEmitter::handleCollision(Player* player, const Collision& collision)
 		if ((touchtype & 0x40) && collision.objectBottom() == true) touched=true;
 		if ((touchtype & 0x80) && collision.objectLeft() == true) touched=true;
 		if (touched) {
+			AudioPool& audio=getAudioPool();
+			audio.playOnce(AudioClip::impact1, 0.2f);
 			next_touch_time=now + 1.0f;
 			toogle_count++;
 			TouchParticle* particle=new TouchParticle(emitted_object);

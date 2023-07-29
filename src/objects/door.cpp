@@ -183,6 +183,8 @@ void Door::handleCollision(Player* player, const Collision& collision)
 			//int keyboard=player->getKeyboardMatrix();
 			if (auto_opens_on_collision && (key_id == 0 || player->isInInventory(key_id))) {
 				state=DoorState::opening;
+				if (door_type == DoorType::lattice_metalic || door_type == DoorType::lattice_opaque) getAudioPool().playOnce(AudioClip::metaldoor, 0.5f);
+				else getAudioPool().playOnce(AudioClip::door_open, 0.5f);
 				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
 			}
 		}
@@ -193,6 +195,9 @@ void Door::handleCollision(Player* player, const Collision& collision)
 		if (state == DoorState::closed) {
 			if (key_id == 0 || player->isInInventory(key_id)) {
 				state=DoorState::opening;
+				if (door_type == DoorType::lattice_metalic || door_type == DoorType::lattice_opaque) getAudioPool().playOnce(AudioClip::metaldoor, 0.5f);
+				else getAudioPool().playOnce(AudioClip::door_open, 0.5f);
+
 				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
 			}
 		} else if (state == DoorState::open && cooldown < now) {
@@ -202,6 +207,7 @@ void Door::handleCollision(Player* player, const Collision& collision)
 				target->state=DoorState::open;
 				target->init();
 				target->state=DoorState::closing;
+				getAudioPool().playOnce(AudioClip::door_close, 0.5f);
 				target->animation.startSequence(target->door_sprite_no, target->door_sprite_no - 14, false, target->door_sprite_no - 14);
 				target->cooldown=now + 2.0f;
 				player->move(target->p.x, target->p.y);
@@ -811,7 +817,7 @@ void DoorDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& te
 	if (event->widget() == key_id) {
 		object->key_id=text.toInt();
 		object->init();
-	}
+}
 }
 
 #endif

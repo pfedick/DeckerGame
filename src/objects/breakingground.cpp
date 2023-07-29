@@ -63,6 +63,14 @@ void BreakingGround::handleCollision(Player* player, const Collision& collision)
 		if (layers > 0) {
 			player->setStandingOnObject(this);
 			if (state == 0) {
+				int r=ppl7::rand(0, 2);
+				switch (r) {
+				case 0: getAudioPool().playOnce(AudioClip::bricks_falling1, 0.3f); break;
+				case 1: getAudioPool().playOnce(AudioClip::bricks_falling2, 0.3f); break;
+				case 2: getAudioPool().playOnce(AudioClip::bricks_falling3, 0.3f); break;
+				}
+
+
 				velocity=0.0f;
 				fragment_y=0;
 				state=1;

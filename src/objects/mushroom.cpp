@@ -101,6 +101,7 @@ void Mushroom::handleCollision(Player* player, const Collision& collision)
 		collisionDetection=false;
 		//enabled=false;
 		player->addPoints(50);
+		getAudioPool().playOnce(AudioClip::squash1, 0.5f);
 		//AudioPool &audio=getAudioPool();
 		//audio.playOnce(AudioClip::skeleton_death);
 

@@ -68,7 +68,7 @@ void KeyReward::handleCollision(Player* player, const Collision&)
 	player->countObject(type());
 	player->addInventory(id, Representation(Spriteset::GenericObjects, sprite_no));
 	AudioPool& audio=getAudioPool();
-	audio.playOnce(AudioClip::coin6, 0.3f);
+	audio.playOnce(AudioClip::key, 0.5f);
 }
 
 
