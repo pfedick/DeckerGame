@@ -47,7 +47,7 @@ void GemReward::handleCollision(Player* player, const Collision&)
 	player->addPoints(50);
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
-	audio.playOnce(AudioClip::coin2, 0.1f);
+	audio.playOnce(AudioClip::coin2, 0.3f);
 }
 
 
@@ -86,7 +86,13 @@ void CrystalReward::handleCollision(Player* player, const Collision&)
 	player->addPoints(100);
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
-	audio.playOnce(AudioClip::crystal, 1.0f);
+	int sample=ppl7::rand(0, 2);
+	switch (sample) {
+	case 0:	audio.playOnce(AudioClip::crystal2, 0.4f); break;
+	case 1: audio.playOnce(AudioClip::crystal3, 0.4f); break;
+	case 2:	audio.playOnce(AudioClip::crystal, 0.4f);
+	}
+
 }
 
 

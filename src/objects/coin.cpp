@@ -45,7 +45,12 @@ void CoinReward::handleCollision(Player* player, const Collision&)
 	player->addPoints(10);
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
-	audio.playOnce(AudioClip::coin1, 0.1f);
+
+	int sample=ppl7::rand(0, 1);
+	switch (sample) {
+	case 1:	audio.playOnce(AudioClip::coin3, 0.4f);break;
+	default: audio.playOnce(AudioClip::coin1, 0.4f);break;
+	}
 }
 
 

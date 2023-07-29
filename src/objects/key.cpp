@@ -67,9 +67,8 @@ void KeyReward::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->countObject(type());
 	player->addInventory(id, Representation(Spriteset::GenericObjects, sprite_no));
-	// TODO: audio sound
-	//AudioPool &audio=getAudioPool();
-	//audio.playOnce(AudioClip::crystal, 1.0f);
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::coin6, 0.3f);
 }
 
 

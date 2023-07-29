@@ -27,6 +27,9 @@ void Medikit::handleCollision(Player* player, const Collision&)
 	player->countObject(type());
 	enabled=false;
 	collisionDetection=false;
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::fanfare2, 0.7f);
+
 }
 
 }	// EOF namespace Decker::Objects

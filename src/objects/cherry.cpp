@@ -15,7 +15,7 @@ Representation CherryReward::representation()
 }
 
 CherryReward::CherryReward()
-	: Object(Type::ObjectType::Apple)
+	: Object(Type::ObjectType::Cherry)
 {
 	sprite_set=Spriteset::GenericObjects;
 	animation.startRandom(cherry_rotate, sizeof(cherry_rotate) / sizeof(int), true, 0);
@@ -43,8 +43,8 @@ void CherryReward::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->addHealth(1);
 	player->countObject(type());
-	//AudioPool& audio=getAudioPool();
-	//audio.playOnce(AudioClip::coin1, 0.3f);
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::coin4, 0.3f);
 }
 
 

@@ -44,7 +44,11 @@ void SavePoint::handleCollision(Player* player, const Collision&)
 	player->setSavePoint(p);
 	enabled=false;
 	collisionDetection=false;
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::fanfare1, 0.7f);
+
 }
+
 
 
 }	// EOF namespace Decker::Objects

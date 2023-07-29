@@ -43,8 +43,8 @@ void AppleReward::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->addHealth(10);
 	player->countObject(type());
-	//AudioPool& audio=getAudioPool();
-	//audio.playOnce(AudioClip::coin1, 0.3f);
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::coin5, 0.3f);
 }
 
 

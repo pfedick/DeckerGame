@@ -36,6 +36,7 @@ void TreasureChest::update(double time, TileTypePlane& ttplane, Player& player, 
 		if (distance < 200) {
 			state=1;
 			animation.startSequence(0, 32, false, 32);
+			getAudioPool().playOnce(AudioClip::treasure_chest, 0.5f);
 		}
 	}
 	if (state > 0 && time > next_animation) {
@@ -59,6 +60,7 @@ void TreasureChest::handleCollision(Player* player, const Collision& collision)
 	player->countObject(type());
 	collisionDetection=false;
 	enabled=false;
+	getAudioPool().playOnce(AudioClip::treasure_collect, 0.8f);
 }
 
 
