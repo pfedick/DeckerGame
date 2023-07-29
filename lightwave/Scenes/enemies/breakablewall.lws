@@ -1,0 +1,12624 @@
+LWSC
+8
+
+RenderRangeType 0
+FirstFrame 30
+LastFrame 60
+FrameStep 1
+RenderRangeObject 0
+RenderRangeArbitrary 0-120
+PreviewFirstFrame 0
+PreviewLastFrame 60
+PreviewFrameStep 1
+CurrentFrame 60
+FramesPerSecond 30
+AutoKeyFixedFrame 0
+ChangeScene 0
+Plugin MasterHandler 1 .SceneEditorStandardBanks
+EndPlugin
+Plugin MasterHandler 2 SceneEditor
+VERS 2
+{ CurrentWorkspace
+  Name "<default>"
+  Divider1 0.5
+  LayoutItemFilterEnabled 0
+  { LayoutListItemFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowObjects 1
+    AllowBones 1
+    AllowLights 1
+    AllowCameras 1
+    AllowLocked 1
+    AllowUnlocked 1
+  }
+  LayoutItemChannelFilterEnabled 0
+  { LayoutListChannelFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowPosition 1
+    AllowRotation 1
+    AllowScale 1
+    AllowOther 1
+  }
+  ChannelFilterEnabled 0
+  { ChannelListFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+  }
+  { Bank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  { ChannelListBank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  BackgroundColorOdd 78 78 78 ff
+  BackgroundColorEven 6f 6f 6f ff
+  HierarchyIndent c
+  HighlightColor b5 b0 a5 ff
+  DefaultObjectColor b0 b0 b0 ff
+  DefaultBoneColor 60 e0 f0 ff
+  DefaultLightColor f0 c0 20 ff
+  DefaultCameraColor f0 f0 f0 ff
+  AutoApplyToViewPorts 1
+  MultiselectSimilarTypes 1
+  LimitColorRange 1
+  ColorsAsHSV 0
+  ShowSelectionOrder 1
+  EnvelopeButtonOpensGraphEditor 1
+  ShowRenderExtents 1
+  BlockPeriod 0.033333335
+  BlockWidthMin 3
+  BlockWidthMax c8
+  ShowKeyTicks 1
+  OverrideBlockColors 0
+  BlockKeyColor 99 ae cf ff
+  BlockGroupColor 64 85 b6 ff
+  DSAllowChannelGroupSelection 1
+  LayoutItemListSortMode 6
+  ChannelListSortMode 0
+}
+EndPlugin
+Plugin MasterHandler 3 SceneEditor
+VERS 2
+{ CurrentWorkspace
+  Name "<default>"
+  Divider1 0.5
+  LayoutItemFilterEnabled 0
+  { LayoutListItemFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowObjects 1
+    AllowBones 1
+    AllowLights 1
+    AllowCameras 1
+    AllowLocked 1
+    AllowUnlocked 1
+  }
+  LayoutItemChannelFilterEnabled 0
+  { LayoutListChannelFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowPosition 1
+    AllowRotation 1
+    AllowScale 1
+    AllowOther 1
+  }
+  ChannelFilterEnabled 0
+  { ChannelListFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+  }
+  { Bank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  { ChannelListBank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  BackgroundColorOdd 78 78 78 ff
+  BackgroundColorEven 6f 6f 6f ff
+  HierarchyIndent c
+  HighlightColor b5 b0 a5 ff
+  DefaultObjectColor b0 b0 b0 ff
+  DefaultBoneColor 60 e0 f0 ff
+  DefaultLightColor f0 c0 20 ff
+  DefaultCameraColor f0 f0 f0 ff
+  AutoApplyToViewPorts 1
+  MultiselectSimilarTypes 1
+  LimitColorRange 1
+  ColorsAsHSV 0
+  ShowSelectionOrder 1
+  EnvelopeButtonOpensGraphEditor 1
+  ShowRenderExtents 1
+  BlockPeriod 0.033333335
+  BlockWidthMin 3
+  BlockWidthMax c8
+  ShowKeyTicks 1
+  OverrideBlockColors 0
+  BlockKeyColor 99 ae cf ff
+  BlockGroupColor 64 85 b6 ff
+  DSAllowChannelGroupSelection 1
+  LayoutItemListSortMode 6
+  ChannelListSortMode 0
+}
+EndPlugin
+Plugin MasterHandler 4 SceneEditor
+VERS 2
+{ CurrentWorkspace
+  Name "<default>"
+  Divider1 0.5
+  LayoutItemFilterEnabled 0
+  { LayoutListItemFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowObjects 1
+    AllowBones 1
+    AllowLights 1
+    AllowCameras 1
+    AllowLocked 1
+    AllowUnlocked 1
+  }
+  LayoutItemChannelFilterEnabled 0
+  { LayoutListChannelFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowPosition 1
+    AllowRotation 1
+    AllowScale 1
+    AllowOther 1
+  }
+  ChannelFilterEnabled 0
+  { ChannelListFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+  }
+  { Bank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  { ChannelListBank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  BackgroundColorOdd 78 78 78 ff
+  BackgroundColorEven 6f 6f 6f ff
+  HierarchyIndent c
+  HighlightColor b5 b0 a5 ff
+  DefaultObjectColor b0 b0 b0 ff
+  DefaultBoneColor 60 e0 f0 ff
+  DefaultLightColor f0 c0 20 ff
+  DefaultCameraColor f0 f0 f0 ff
+  AutoApplyToViewPorts 1
+  MultiselectSimilarTypes 1
+  LimitColorRange 1
+  ColorsAsHSV 0
+  ShowSelectionOrder 1
+  EnvelopeButtonOpensGraphEditor 1
+  ShowRenderExtents 1
+  BlockPeriod 0.033333335
+  BlockWidthMin 3
+  BlockWidthMax c8
+  ShowKeyTicks 1
+  OverrideBlockColors 0
+  BlockKeyColor 99 ae cf ff
+  BlockGroupColor 64 85 b6 ff
+  DSAllowChannelGroupSelection 1
+  LayoutItemListSortMode 6
+  ChannelListSortMode 0
+}
+EndPlugin
+Plugin MasterHandler 5 SceneEditor
+VERS 2
+{ CurrentWorkspace
+  Name "<default>"
+  Divider1 0.5
+  LayoutItemFilterEnabled 0
+  { LayoutListItemFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowObjects 1
+    AllowBones 1
+    AllowLights 1
+    AllowCameras 1
+    AllowLocked 1
+    AllowUnlocked 1
+  }
+  LayoutItemChannelFilterEnabled 0
+  { LayoutListChannelFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+    AllowPosition 1
+    AllowRotation 1
+    AllowScale 1
+    AllowOther 1
+  }
+  ChannelFilterEnabled 0
+  { ChannelListFilter
+    Name ""
+    CompareName ""
+    Operator "CONTAINS"
+    CaseSensative 0
+  }
+  { Bank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  { ChannelListBank
+    PresetID 5f434856
+    Column 5f434856 0 90
+    Column 5f434856 1 90
+    Column 5f434856 2 101
+    Column 5f434856 3 90
+    Column 5f434856 4 96
+  }
+  BackgroundColorOdd 78 78 78 ff
+  BackgroundColorEven 6f 6f 6f ff
+  HierarchyIndent c
+  HighlightColor b5 b0 a5 ff
+  DefaultObjectColor b0 b0 b0 ff
+  DefaultBoneColor 60 e0 f0 ff
+  DefaultLightColor f0 c0 20 ff
+  DefaultCameraColor f0 f0 f0 ff
+  AutoApplyToViewPorts 1
+  MultiselectSimilarTypes 1
+  LimitColorRange 1
+  ColorsAsHSV 0
+  ShowSelectionOrder 1
+  EnvelopeButtonOpensGraphEditor 1
+  ShowRenderExtents 1
+  BlockPeriod 0.033333335
+  BlockWidthMin 3
+  BlockWidthMax c8
+  ShowKeyTicks 1
+  OverrideBlockColors 0
+  BlockKeyColor 99 ae cf ff
+  BlockGroupColor 64 85 b6 ff
+  DSAllowChannelGroupSelection 1
+  LayoutItemListSortMode 6
+  ChannelListSortMode 0
+}
+EndPlugin
+Plugin MasterHandler 6 .DynamicsMaster
+{ DynamicsMaster
+  Version 2
+  DrawShapesBodies 3
+  DrawShapesConstraints 3
+  DrawShapesForceFields 3
+  ShowDynamics 15
+  { Enabled
+    1
+  }
+  { StepsPerSecond
+    180
+  }
+  { StartTime
+    0
+  }
+  { TimeScale
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { Gravity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 -9.8000002 0
+        0
+      }
+    }
+  }
+}
+EndPlugin
+Plugin ViewportObjectHandler 1 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 2 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 3 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+Plugin ViewportObjectHandler 4 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+PluginEnabled 0
+ColorSpaceViewer "Linear" "none"
+ColorSpaceSurfaceColor "Linear" "none"
+ColorSpaceLightColor "Linear" "none"
+ColorSpacePaletteFiles "Linear" "none"
+ColorSpace8BitFiles "Linear" "none"
+ColorSpaceFloatFiles "Linear" "none"
+ColorSpaceAlpha "Linear" "none"
+ColorSpaceOutput "Linear" "none"
+ColorSpaceOutputAlpha "Linear" "none"
+ColorSpaceOutputVPR "Linear" "none"
+ColorSpaceOutputVPRAlpha "Linear" "none"
+ColorSpaceAutoSense 0
+ColorSpace8BitToFloat 0
+ColorSpaceCorrectOpenGL 0
+ColorSpaceAffectPicker 0
+FirstBackgroundImageSyncFrame 0
+BufferList
+{ BufferList
+  { Group
+    "root"
+    { List
+      "Final_Render"
+      ""
+      "LW_PNG32(.png)"
+      ""
+      "C:\\git\\DeckerGame\\lightwave\\Render\\enemies\\breakingwall"
+      "frame_%####%"
+      35
+      3
+    }
+    { List
+      "Alpha"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      1
+      3
+    }
+    { List
+      "Backdrop"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Camera_Tangent_Space_XYZ"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Coverage"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Depth"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Edges"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Geometry"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Lens_Flare"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Motion"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Normals"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Object_ID"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Object_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Pre_Effect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Surface_ID"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Texture_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "UV"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "World_Position"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "dPdu"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "dPdv"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Clearcoat_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Diffuse_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Fog"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Legacy_Volumetric"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Luminosity"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Raw_RGB"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Reflection_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Refraction_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "SSS_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "SSS_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Shadow"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Sheen_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Specular_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Rho"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Translucency_Weight"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Transparency"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Direct"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Emission"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Indirect"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Light"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+    { List
+      "Volumetric_Transmittance"
+      ""
+      ""
+      ""
+      ""
+      "%buffername%_%###%"
+      0
+      3
+    }
+  }
+}
+EndAttribute
+NoiseFilter
+{ NoiseFilter
+  Filtersize 3
+  PixelTolerance 0.10000000000000000555
+  GeometricTolerance 0.050000000000000002776
+  NormalTolerance 0.020000000000000000416
+  GeometricToleranceSwitch 0
+  NormalToleranceSwitch 0
+}
+EndAttribute
+NoiseFilterGlobal 0
+NavigationDesiredDevice Keyboard
+Plugin GlobalIlluminationHandler 1 MonteCarlo
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Rays"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Caustics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Sample Backdrop"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "ISBG Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "ISBG Samples"
+        Flags 0
+        { Value
+          "int"
+          512
+        }
+      }
+      { Attr
+        Name "Affected By Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolated"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Primary Rays"
+        Flags 0
+        { Value
+          "int"
+          128
+        }
+      }
+      { Attr
+        Name "Secondary Rays"
+        Flags 0
+        { Value
+          "int"
+          64
+        }
+      }
+      { Attr
+        Name "Enable Caching"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Save After Each Frame"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Animation"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Frame Step"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Cache File"
+        Flags 0
+        { Value
+          "text"
+          "InterpolatedGI.cache"
+        }
+      }
+      { Attr
+        Name "Use Bumps"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Behind Test"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Show Octree"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Color Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Samples"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Render"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Second Bounce"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Behind Test"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Minimum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          2
+        }
+      }
+      { Attr
+        Name "Maximum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          64
+        }
+      }
+      { Attr
+        Name "Angular Tolerance"
+        Flags 0
+        Tag "FORMAT" "Angle"
+        { Value
+          "double"
+          0.3490658503988658401
+        }
+      }
+      { Attr
+        Name "Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolation Softness"
+        Flags 0
+        Tag "FORMAT" "Percent"
+        { Value
+          "double"
+          0.5
+        }
+      }
+    }
+  }
+}
+EndPlugin
+Plugin GlobalIlluminationHandler 2 MonteCarlo
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Rays"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Caustics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Sample Backdrop"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "ISBG Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "ISBG Samples"
+        Flags 0
+        { Value
+          "int"
+          512
+        }
+      }
+      { Attr
+        Name "Affected By Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolated"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Primary Rays"
+        Flags 0
+        { Value
+          "int"
+          128
+        }
+      }
+      { Attr
+        Name "Secondary Rays"
+        Flags 0
+        { Value
+          "int"
+          64
+        }
+      }
+      { Attr
+        Name "Enable Caching"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Save After Each Frame"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Animation"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Frame Step"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Cache File"
+        Flags 0
+        { Value
+          "text"
+          "InterpolatedGI.cache"
+        }
+      }
+      { Attr
+        Name "Use Bumps"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Behind Test"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Show Octree"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Color Cells"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Samples"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Missing Render"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Second Bounce"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Show Behind Test"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Minimum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          2
+        }
+      }
+      { Attr
+        Name "Maximum Pixel Spacing"
+        Flags 0
+        { Value
+          "double"
+          64
+        }
+      }
+      { Attr
+        Name "Angular Tolerance"
+        Flags 0
+        Tag "FORMAT" "Angle"
+        { Value
+          "double"
+          0.3490658503988658401
+        }
+      }
+      { Attr
+        Name "Preprocess"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Interpolation Softness"
+        Flags 0
+        Tag "FORMAT" "Percent"
+        { Value
+          "double"
+          0.5
+        }
+      }
+    }
+  }
+}
+EndPlugin
+Plugin VolumeIntegratorHandler 1 VolumeIntegrator
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Indirect Sampling"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Indirect Samples"
+        Flags 0
+        { Value
+          "int"
+          16
+        }
+      }
+      { Attr
+        Name "Indirect Intensity"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Primitives Unseen By Camera"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Fog Type"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Min Distance"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Distance"
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Max Distance"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Distance"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Min Amount"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Max Amount"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Fog Color"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Color"
+        { Value
+          "vparam3"
+          { Value
+            3
+            1 1 1
+          }
+        }
+      }
+      { Attr
+        Name "Use Backdrop Color"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Use Legacy Volumetrics"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Use Nodes"
+        Flags 0
+        { Value
+          "int"
+          1
+        }
+      }
+      { Attr
+        Name "Use Volumetric Scattering"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Scattering Color"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Color"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam3"
+          { Value
+            3
+            1 1 1
+          }
+        }
+      }
+      { Attr
+        Name "Scattering Weight"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Percent"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam"
+          { Value
+            1
+            1
+          }
+        }
+      }
+      { Attr
+        Name "Scattering Asymmetry"
+        Flags 0
+        Tag "ENVELOPE" "On"
+        Tag "FORMAT" "Float"
+        Tag "NodeInputID" ""
+        { Value
+          "vparam"
+          { Value
+            1
+            0
+          }
+        }
+      }
+      { Attr
+        Name "Lights Unseen By Camera"
+        Flags 0
+        { Value
+          "int"
+          0
+        }
+      }
+    }
+  }
+}
+{ NodeEditor
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "VolumeIntegrator"
+    { Tag
+      RealName "VolumeIntegrator"
+      Name "VolumeIntegrator"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+  }
+  { Connections
+  }
+}
+EndPlugin
+
+LoadObjectLayer 1 10000000 Objects/BackDome.lwo
+ChangeObject 0
+ShowObject 0 7
+Group 0
+ItemLock 1
+SchematicPosition -0.500000 -0.250000
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+MatteObject 1
+MatteColor 0.619608 0.619608 0.619608
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000001 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0.00079221447231248021126 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshDeformerHandler 3 DynamicsMeshDeformer
+{ DynamicsItem
+  Version 2
+  Type 3
+  { Enabled
+    1
+  }
+  { Shape
+    0
+  }
+  { ShapeAxis
+    1
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.036481112
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.001
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+Plugin MeshModifierHandler 4 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 5 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 7 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 2 10000002 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.83333333333333325932 0 0 0 0 -4.4444443321683308227e-05 -5.5555554152104228457e-05 0
+  Key -9.9999997473787529908e-05 1 0 0 0 0 -9.9833608126909348271e-05 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 -0.00071295746602117896027 -0.00071295746602118167078 0
+  Key -0.0014259149320423605226 0.69999999999999995559 0 0 0 0 -0.00096962228417396935723 -0.0038784891366958587806 0
+  Key -0.0048481114208698281379 0.83333333333333325932 0 0 0 0 -0.014596023286382344558 -0.01824502910797796279 0
+  Key -0.034266967326402664185 1 0 0 0 0 -0.029369906062096010069 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.83333333333333325932 0 0 0 0 -0.0015111110276646070281 -0.0018888887845807621462 0
+  Key -0.0033999998122453689575 1 0 0 0 0 -0.0033943425746210008007 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.83333333333333325932 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 2
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    0
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.98375404
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 0
+ObjGISecondaryBounceRays 0
+ObjGIRadiosityTolerance 0.000000
+ObjGIMinPixelSpacing 0.000000
+ObjGIMaxPixelSpacing 0.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+AddNullObject 10000003 Null
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  16
+  Key 0.028319604694843288767 0 0 0 0 0 0 -0.022016942254767926657 0
+  Key 0.0061191879212856292725 0.033333333333333325932 0 0 0 0 -0.011030348716303704434 -0.011030348716303704434 0
+  Key 0.0062589072622358790307 0.066666666666666651864 0 0 0 0 -0.0010500762145966291428 -0.0010500762145966300101 0
+  Key 0.0040190354920923701196 0.10000000000000000555 0 0 0 0 0.00036233058199286525929 0.00036233058199286482561 0
+  Key 0.0069835684262216091156 0.13333333333333330373 0 0 0 0 0.0014487265143543479658 0.0014487265143543492669 0
+  Key 0.0069164885208010673523 0.16666666666666662966 0 0 0 0 -3.35399527102708681e-05 -3.3539952710270895205e-05 0
+  Key 0.0069164885208010673523 0.2000000000000000111 0 0 0 0 -0.0018458691547098384552 -0.040609121403616409152 0
+  Key -0.035538502037525177002 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.0069164885208010673523 0.96666666666666667407 0 0 0 0 0.50832918658852577209 0.50832918658852577209 0
+  Key 0.98111987113952636719 1 0 0 0 0 0.49227510625496412322 0.49227510625496606611 0
+  Key 0.99146670103073120117 1.033333333333333437 0 0 0 0 0.0069336295127868912552 0.0069336295127868392135 0
+  Key 0.99498713016510009766 1.0666666666666666519 0 0 0 0 0.0045872628688812082387 0.0045872628688812429332 0
+  Key 1.0006412267684936523 1.1000000000000000888 0 0 0 0 0.0049074292182922545427 0.0049074292182922181135 0
+  Key 1.0048019886016845703 1.1333333333333333037 0 0 0 0 0.0060801506042480355993 0.0060801506042480590181 0
+  Key 1.0128015279769897461 1.1666666666666667407 0 0 0 0 0.014986455440521240234 0.014986455440521240234 0
+  Key 1.0347748994827270508 1.1999999999999999556 0 0 0 0 0.021791773394119640095 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  16
+  Key 0.022201256826519966125 0 0 0 0 0 0 0.0062221873643969706144 0
+  Key 0.028475295752286911011 0.033333333333333325932 0 0 0 0 0.0013038786128163372402 0.0013038786128163372402 0
+  Key 0.024809014052152640606 0.066666666666666651864 0 0 0 0 -0.0056052142754197103319 -0.0056052142754197146687 0
+  Key 0.017264867201447486877 0.10000000000000000555 0 0 0 0 -0.0081679294817149725866 -0.0081679294817149621782 0
+  Key 0.0084731550887227075758 0.13333333333333330373 0 0 0 0 0.0116217480972409231 0.011621748097240933509 0
+  Key 0.040508363395929343487 0.16666666666666662966 0 0 0 0 0.016017604153603308414 0.016017604153603322292 0
+  Key 0.040508363395929336548 0.2000000000000000111 0 0 0 0 1.6365200281142900485e-05 0.00036003440618514353285 0
+  Key 0.040884763002395629883 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.040508363395929336548 0.96666666666666667407 0 0 0 0 -0.004484524950385093689 -0.004484524950385093689 0
+  Key 0.031915713101625442505 1 0 0 0 0 -0.0042963251471519392152 -0.0042963251471519556951 0
+  Key 0.031915713101625442505 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0.031915713101625442505 1.0666666666666666519 0 0 0 0 -0.0029251575469970594705 -0.0029251575469970811545 0
+  Key 0.02606539800763130188 1.1000000000000000888 0 0 0 0 -0.0031993910670280577974 -0.0031993910670280335112 0
+  Key 0.025516930967569351196 1.1333333333333333037 0 0 0 0 0.0035650357604026725045 0.0035650357604026863823 0
+  Key 0.033195469528436660767 1.1666666666666667407 0 0 0 0 0.0083184167742729187012 0.0083184167742729187012 0
+  Key 0.042153764516115188599 1.1999999999999999556 0 0 0 0 0.0088842594919125890407 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  16
+  Key 0.025657452642917636526 0 0 0 0 0 0 0 0
+  Key 0.025657452642917636526 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0.025657452642917636526 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.025657452642917636526 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0.025657452642917636526 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.025657452642917636526 0.16666666666666662966 0 0 0 0 -1.734723475976806324e-18 -1.7347234759768078648e-18 0
+  Key 0.025657452642917633057 0.2000000000000000111 0 0 0 0 -1.508455196501572789e-19 -3.3186014323034571507e-18 0
+  Key 0.025657452642917633057 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.0666666666666666519 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0.025657452642917633057 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  16
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.16666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.2000000000000000111 0 0 0 0 0 0 0
+  Key 0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0 1.0666666666666666519 0 0 0 0 0 0 0
+  Key 0 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  16
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key -0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key -0 0.16666666666666662966 0 0 0 0 0 0 0
+  Key -0 0.2000000000000000111 0 0 0 0 0 0 0
+  Key -0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key -0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.0666666666666666519 0 0 0 0 0 0 0
+  Key -0 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key -0 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  16
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key -0 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0 0.13333333333333330373 0 0 0 0 0 0 0
+  Key -0 0.16666666666666662966 0 0 0 0 0 0 0
+  Key -0 0.2000000000000000111 0 0 0 0 0 0 0
+  Key -0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key -0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.0666666666666666519 0 0 0 0 0 0 0
+  Key -0 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0 1.1666666666666667407 0 0 0 0 0 0 0
+  Key -0 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  16
+  Key 0.99199998378753651007 0 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.16666666666666662966 0 0 0 0 5.5511151231257802369e-17 5.5511151231257851673e-17 0
+  Key 0.99199998378753662109 0.2000000000000000111 0 0 0 0 4.8270566288050329249e-18 1.0619524583371062882e-16 0
+  Key 0.99199998378753662109 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.0666666666666666519 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  16
+  Key 0.99199998378753651007 0 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.16666666666666662966 0 0 0 0 5.5511151231257802369e-17 5.5511151231257851673e-17 0
+  Key 0.99199998378753662109 0.2000000000000000111 0 0 0 0 4.8270566288050329249e-18 1.0619524583371062882e-16 0
+  Key 0.99199998378753662109 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.0666666666666666519 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  16
+  Key 0.99199998378753651007 0 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.066666666666666651864 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.10000000000000000555 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.13333333333333330373 0 0 0 0 0 0 0
+  Key 0.99199998378753651007 0.16666666666666662966 0 0 0 0 5.5511151231257802369e-17 5.5511151231257851673e-17 0
+  Key 0.99199998378753662109 0.2000000000000000111 0 0 0 0 4.8270566288050329249e-18 1.0619524583371062882e-16 0
+  Key 0.99199998378753662109 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.0666666666666666519 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1000000000000000888 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1333333333333333037 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1666666666666667407 0 0 0 0 0 0 0
+  Key 0.99199998378753662109 1.1999999999999999556 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 2
+  { Enabled
+    1
+  }
+  { Shape
+    1
+  }
+  { ShapeAxis
+    1
+  }
+  { Size
+    0.0099999998 0.0099999998 0.0099999998
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 3 10000004 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 0 0.33333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 -0.0073553740046918385243 -0.00081726377829909166352 0
+  Key -0.0081726377829909307299 0.33333333333333325932 0 0 0 0 -0.0085007649447236613427 -0.051004589668342058262 0
+  Key -0.059505354613065719604 0.53333333333333321491 0 0 0 0 -0.029643275868147595659 -0.06916764369234443266 0
+  Key -0.10698355734348295731 1 0 0 0 0 -0.047449958707377136446 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 0 0.33333333333333325932 0 0 0 0 -8.10067036322183984e-05 -0.00048604022179331117645 0
+  Key -0.0005670469254255295884 0.53333333333333321491 0 0 0 0 -0.00017011407762765879521 -0.0003969328477978708203 0
+  Key -0.0005670469254255295884 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 0 0.33333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 0 0 0
+  Key -0 0.33333333333333325932 0 0 0 0 0 0 0
+  Key -0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  5
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.2999999999999999889 0 0 0 0 0 0 0
+  Key -0 0.33333333333333325932 0 0 0 0 0 0 0
+  Key -0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 1 0.33333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 1 0.33333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  5
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.2999999999999999889 0 0 0 0 0 0 0
+  Key 1 0.33333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 2
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    2
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.51318401
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UnaffectedByFog 1
+UnseenByRadiosity 1
+UnseenByRays 1
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 0
+ObjGISecondaryBounceRays 0
+ObjGIRadiosityTolerance 0.000000
+ObjGIMinPixelSpacing 0.000000
+ObjGIMaxPixelSpacing 0.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 4 10000005 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 1
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    2
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.0049999999
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.32599202
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UnaffectedByFog 1
+UnseenByRadiosity 1
+UnseenByRays 1
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 0
+ObjGIRadiosityRays 0
+ObjGISecondaryBounceRays 0
+ObjGIRadiosityTolerance 0.000000
+ObjGIMinPixelSpacing 0.000000
+ObjGIMaxPixelSpacing 0.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000006 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+ParentItem 10000007
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshDeformerHandler 3 DynamicsMeshDeformer
+{ DynamicsItem
+  Version 2
+  Type 3
+  { Enabled
+    1
+  }
+  { Shape
+    0
+  }
+  { ShapeAxis
+    1
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    3
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.037760619
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.001
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+Plugin MeshModifierHandler 4 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 5 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 7 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 2 10000007 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.7666666666666666075 0 0 0 0 0 0 0
+  Key 1 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 -0.0023430237038569016496 -0.0013388706879182297928 0
+  Key -0.0036818943917751312256 1.7666666666666666075 0 0 0 0 -0.014763581752777098915 -0.012918134033679962852 0
+  Key -0.027681715786457061768 2 0 0 0 0 -0.023971284151644258603 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  6
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0 1.5 0 0 0 0 0 0 0
+  Key 0 1.7666666666666666075 0 0 0 0 -1.2417634328206380036e-10 -1.0865430037180582855e-10 0
+  Key -2.3283064365386962891e-10 2 0 0 0 0 -2.3255379389922768171e-10 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  6
+  Key 3.1415927410125732422 0 0 0 0 0 0 0 0
+  Key 3.1415927410125732422 1 0 0 0 0 0 0 0
+  Key 3.1415927410125732422 1.033333333333333437 0 0 0 0 0 0 0
+  Key 3.1415927410125732422 1.5 3 0 0 0 -3.9983907612887295002 -3.1786390247196496674e-08 0
+  Key 3.1415926536000000624 1.7666666666666666075 3 0 0 0 -3.351032257080078125 0 0
+  Key 3.1415927410125732422 2 0 0 0 0 8.7308634329398196216e-08 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  6
+  Key -0 0 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.5 0 0 0 0 0 0 0
+  Key -0 1.7666666666666666075 0 0 0 0 0 0 0
+  Key -0 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  6
+  Key -0 0 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.5 0 0 0 0 0 0 0
+  Key -0 1.7666666666666666075 0 0 0 0 0 0 0
+  Key -0 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.7666666666666666075 0 0 0 0 0 0 0
+  Key 1 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.7666666666666666075 0 0 0 0 0 0 0
+  Key 1 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  6
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.5 0 0 0 0 0 0 0
+  Key 1 1.7666666666666666075 0 0 0 0 0 0 0
+  Key 1 2 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 2
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    2
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.69396591
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 3 10000008 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  7
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 0 1.3333333333333332593 0 0 0 0 0 0 0
+  Key 0 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  7
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 -5.1740143034193448329e-11 -4.1392114427354582887e-10 0
+  Key -4.6566128730773925781e-10 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 0 1.3333333333333332593 0 0 0 0 2.3283064365386962891e-10 2.3283064365386962891e-10 0
+  Key 0 1.3666666666666666963 0 0 0 0 0.006073763387070761112 0.048590107096566088896 0
+  Key 0.054663870483636856079 1.6333333333333333037 0 0 0 0 0.054606988204257418673 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  7
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Key 0 1.033333333333333437 0 0 0 0 0 0 0
+  Key 0 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 0 1.3333333333333332593 0 0 0 0 0 0 0
+  Key 0 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 0 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  7
+  Key 0 0 0 0 0 0 0 -6.3555371684698366388e-08 0
+  Key -6.3573025954610784538e-08 1 0 0 0 0 -1.2304456636376278744e-07 -4.1014855454587750219e-09 0
+  Key -1.2714605190922156908e-07 1.033333333333333437 0 0 0 0 -1.4246197110878765695e-08 -1.1396957688702963587e-07 0
+  Key -1.9178879995251918444e-07 1.3000000000000000444 0 0 0 0 0 0 0
+  Key -1.2714605190922156908e-07 1.3333333333333332593 0 0 0 0 3.2321374021648807684e-08 3.2321374021648807684e-08 0
+  Key -1.2714605190922156908e-07 1.3666666666666666963 0 0 0 0 0 0 0
+  Key -1.2714605190922156908e-07 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  7
+  Key -0 0 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.3000000000000000444 0 0 0 0 0 0 0
+  Key -0 1.3333333333333332593 0 0 0 0 0 0 0
+  Key -0 1.3666666666666666963 0 0 0 0 0 0 0
+  Key -0 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  7
+  Key -0 0 0 0 0 0 0 0 0
+  Key -0 1 0 0 0 0 0 0 0
+  Key -0 1.033333333333333437 0 0 0 0 0 0 0
+  Key -0 1.3000000000000000444 0 0 0 0 0 0 0
+  Key -0 1.3333333333333332593 0 0 0 0 0 0 0
+  Key -0 1.3666666666666666963 0 0 0 0 0 0 0
+  Key -0 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  7
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 1 1.3333333333333332593 0 0 0 0 0 0 0
+  Key 1 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  7
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 1 1.3333333333333332593 0 0 0 0 0 0 0
+  Key 1 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  7
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 1 0 0 0 0 0 0 0
+  Key 1 1.033333333333333437 0 0 0 0 0 0 0
+  Key 1 1.3000000000000000444 0 0 0 0 0 0 0
+  Key 1 1.3333333333333332593 0 0 0 0 0 0 0
+  Key 1 1.3666666666666666963 0 0 0 0 0 0 0
+  Key 1 1.6333333333333333037 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+ParentItem 10000007
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 2
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    2
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.10206
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UnaffectedByFog 1
+UnseenByRadiosity 1
+UnseenByRays 1
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 4 10000009 Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key -0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key -0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+ParentItem 10000007
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+Plugin ItemMotionHandler 1 DynamicsMotion
+{ DynamicsItem
+  Version 2
+  Type 1
+  { Enabled
+    1
+  }
+  { Shape
+    5
+  }
+  { ShapeAxis
+    2
+  }
+  { Size
+    1 1 1
+  }
+  { Offset
+    0 0 0
+  }
+  { Rotation
+    0 0 0
+  }
+  { MeshFilter
+    ""
+  }
+  { InitialActivation
+    0
+  }
+  { ManualActivation
+    0
+  }
+  { DeactivationTime
+    1
+  }
+  { DeactivationLinearSpeed
+    0.1
+  }
+  { DeactivationAngularSpeed
+    0.08726646
+  }
+  { CollisionMargin
+    0.001
+  }
+  { MassSpecification
+    1
+  }
+  { GivenMass
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.95718008
+        0
+      }
+    }
+  }
+  { Density
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1000
+        0
+      }
+    }
+  }
+  { MassDistribution
+    0
+  }
+  { Friction
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Bounciness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.30000001
+        0
+      }
+    }
+  }
+  { LinearDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { AngularDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { GlueStrength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { BreakingAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.08726646
+        0
+      }
+    }
+  }
+  { EnableBreakingAngle
+    1
+  }
+  { BreakingDistance
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0099999998
+        0
+      }
+    }
+  }
+  { EnableBreakingDistance
+    1
+  }
+  { MergePoints
+    1
+  }
+  { JoinedPartsCollision
+    0
+  }
+  { LinearStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { AngularStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.1
+        0
+      }
+    }
+  }
+  { ShapeRetention
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { ShapeRetentionLock
+    0
+  }
+  { DampingCoefficient
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { VolumeScaling
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { VolumeConservation
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SelfCollision
+    0
+  }
+  { SelfCollisionMargin
+    0.003
+  }
+  { PositionSolverIterations
+    6
+  }
+  { FieldType
+    1
+  }
+  { Strength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { FieldDensity
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.5
+        0
+      }
+    }
+  }
+  { Vector
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 1 0
+        0
+      }
+    }
+  }
+  { Normalize
+    0
+  }
+  { Axis
+    1
+  }
+  { Direction
+    3
+  }
+  { EnableCollision
+    0
+  }
+  { EnableBreaking
+    0
+  }
+  { BreakingForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10
+        0
+      }
+    }
+  }
+  { EnableLimits
+    0
+  }
+  { LowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableMotor
+    0
+  }
+  { MotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { MotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableLinearLimits
+    0
+  }
+  { LowerLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -1
+        0
+      }
+    }
+  }
+  { UpperLinearLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableSpinLimits
+    0
+  }
+  { LowerSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -3.1415927
+        0
+      }
+    }
+  }
+  { UpperSpinLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        3.1415927
+        0
+      }
+    }
+  }
+  { EnableLinearMotor
+    0
+  }
+  { LinearMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { LinearMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSpinMotor
+    0
+  }
+  { SpinMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { SpinMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableSwingLimits
+    0
+  }
+  { SwingZLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { SwingYLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1.5707964
+        0
+      }
+    }
+  }
+  { EnableTwistLimits
+    0
+  }
+  { TwistLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableTwistMotor
+    0
+  }
+  { TwistMotorTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { TwistMotorMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpring
+    1
+  }
+  { PositionSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { PositionSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringRestLength
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnablePositionSpringLimit
+    0
+  }
+  { PositionSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { PositionSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        1
+        0
+      }
+    }
+  }
+  { EnableRotationSpring
+    0
+  }
+  { RotationSpringStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        10000
+        0
+      }
+    }
+  }
+  { RotationSpringDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { RotationSpringRestAngle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0
+        0
+      }
+    }
+  }
+  { EnableRotationSpringLimit
+    0
+  }
+  { RotationSpringLowerLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        -0.78539819
+        0
+      }
+    }
+  }
+  { RotationSpringUpperLimit
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.78539819
+        0
+      }
+    }
+  }
+  { EnablePositionLimits
+    1
+  }
+  { PositionLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationLimits
+    0
+  }
+  { RotationLowerLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationUpperLimits
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionMotors
+    0
+  }
+  { PositionMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationMotors
+    0
+  }
+  { RotationMotorsTargetSpeed
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationMotorsMaxForce
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnablePositionSprings
+    0
+  }
+  { PositionSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { PositionSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { EnableRotationSprings
+    0
+  }
+  { RotationSpringsStiffness
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { RotationSpringsDamping
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0 0 0
+        0
+      }
+    }
+  }
+  { ParentRigidBody
+    0
+  }
+  { ChildRigidBody
+    0
+  }
+}
+EndPlugin
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UnaffectedByFog 1
+UnseenByRadiosity 1
+UnseenByRays 1
+UnseenByCamera 1
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 0
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 5 1000000a Objects/enemies/breakablewall2.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key -0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key -0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+ParentItem 10000007
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+      }
+    }
+    { Connections
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+GlobalMipmapMultiplier 1.000000
+GlobalEdgeMultiplier 1
+EdgeVerticalPoints 0
+DiffuseLimit 5.000000
+ReflectionLimit 5.000000
+RefractionLimit 5.000000
+EnableDespike 0
+DespikeTolerance 0.800000
+EnableMipMapping 0
+EnableVolumetric 1
+EnableRadiosity 1
+RadiosityType 1
+RadiosityInterpolated 0
+RadiosityTransparency 0
+RadiosityIntensity 1
+DiffuseBounces 2
+VolumetricRadiosity 1
+RadiosityUseAmbient 1
+RadiosityDirectionalRays 0
+RadiosityUseGradients 0
+RadiosityUseBehindTest 0
+BlurRadiosity 0
+RadiosityEnable0 1
+RadiosityFlags 0
+RadiosityCacheModulus 1
+RadiositySaveEachFrame 0
+RadiosityCacheFilePath Radiosity/radiosity.cache
+PixelFilterForceMT 0
+ExternalRenderer .VPR
+Plugin ExtRendererHandler 1 .VPR
+0
+20
+1
+0
+0
+1
+0
+1
+0
+0
+0.25 0.25 0.25
+0
+"Sphere"
+""
+0
+EndPlugin
+UseZminMax 1
+ZMinimum 0
+ZMaximum 1000000
+
+AddLight 20000000
+LightName Light
+ShowLight 1 6
+SchematicPosition -0.500000 0.250000
+LightMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key -1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key -1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0.78539818525314331055 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0.61086523532867431641 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+LightColor 1 1 1
+LightIntensity 3.14
+AffectCaustics 1
+VolumetricLighting 1
+VolumetricSamples 2
+VolumetricIntensity 1
+LightUseNodes 1
+LightShader 1
+{ LightShader_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Light Shader"
+    { Tag
+      RealName "Light Shader"
+      Name "Light Shader"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Direction"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+LightType 1
+LightFalloffType 0
+LensFlare 0
+FlareIntensity 0.5
+FlareDissolve 0
+LensFlareFade 4
+LensFlareOptions 11
+FlareRingColor 0.3137 0.0784 0.0392
+FlareRingSize 0.22
+FlareRandStreakInt 0.03
+FlareRandStreakDens 50
+FlareRandStreakSharp 6
+ShadowType 1
+ShadowColor 0 0 0
+Plugin LightHandler 1 PointLight
+{ PointLight
+  Version 1
+}
+EndPlugin
+
+AddLight 20000001
+LightName Fill
+ShowLight 1 6
+SchematicPosition 0.600000 -0.400000
+LightMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key -2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key -2 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key -1.4049900770187375709 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0.49043709039688088147 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+LightColor 1 1 1
+LightIntensity 0
+AffectCaustics 1
+VolumetricLighting 1
+VolumetricSamples 2
+VolumetricIntensity 1
+LightUseNodes 1
+LightShader 1
+{ LightShader_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Light Shader"
+    { Tag
+      RealName "Light Shader"
+      Name "Light Shader"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Direction"
+      Placement 1
+    }
+  }
+  { Connections
+  }
+}
+LightType 0
+LensFlare 0
+FlareIntensity 0.5
+FlareDissolve 0
+LensFlareFade 4
+LensFlareOptions 11
+FlareRingColor 0.3137 0.0784 0.0392
+FlareRingSize 0.22
+FlareRandStreakInt 0.03
+FlareRandStreakDens 50
+FlareRandStreakSharp 6
+ShadowType 1
+ShadowColor 0 0 0
+Plugin LightHandler 1 DistantLight
+{ DistantLight
+  Version 1
+  Samples 4
+  { Angle
+    { VariantParameter
+      3
+      0
+      { ParameterValue
+        0.0090757096
+        0
+      }
+    }
+  }
+  Normalize 1
+  VolumetricDistance 1
+}
+EndPlugin
+
+AddCamera 30000000
+CameraName Camera
+ShowCamera 1 14
+SchematicPosition -0.500000 0.750000
+CameraMotion
+NumChannels 6
+Channel 0
+{ Envelope
+  4
+  Key 1.0344665497541427612e-05 0 0 0 0 0 0 0 0
+  Key 1.0344665497541427612e-05 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 1.0344665497541427612e-05 0.96666666666666667407 0 0 0 0 0.49999482766725122929 0.49999482766725122929 0
+  Key 1 1 0 0 0 0 0.99172527801768839417 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key 0.032109845429658875893 0 0 0 0 0 0 1.3873658742712458371e-17 0
+  Key 0.032109845429658889771 0.93333333333333334814 0 0 0 0 1.339924340064844159e-17 4.7854440716601574354e-19 0
+  Key 0.032109845429658889771 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0.032109845429658889771 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key -0.12014472484588624435 0 0 0 0 0 0 1.3873658742712458371e-17 0
+  Key -0.12014472484588623047 0.93333333333333334814 0 0 0 0 1.339924340064844159e-17 4.7854440716601574354e-19 0
+  Key -0.12014472484588623047 0.96666666666666667407 0 0 0 0 0 0 0
+  Key -0.12014472484588623047 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.93333333333333334814 0 0 0 0 0 0 0
+  Key 0 0.96666666666666667407 0 0 0 0 0 0 0
+  Key 0 1 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+ZoomFactor 3.2
+ZoomType 1
+ResolutionMultiplier 1.0
+FrameSize 768 256
+OverscanMode 0
+OverscanSize 0 0 0 0
+PixelAspect 1
+MotionBlur 0
+MotionBlurSubFrames 20
+ShutterEfficiency 1
+RollingShutter 0
+ShutterOpen 0
+Oversampling 0.5
+UndockPreview 0
+FieldRendering 0
+ApertureHeight 0.015
+EyeSeparation 0.07
+ConvergencePoint 1
+UseConvergence 0
+StereoTrackedEye 0
+StereoOpenGL 1
+ConvergenceToeIn 1
+DepthOfField 0
+FocalDistance 1
+LensFStop 4
+DiaphragmSides 0
+DiaphragmRotation 0
+AASamples 1
+Sampler 0
+AdaptiveThreshold 0.01
+MinimumSamples 16
+MaximumSamples 64
+Plugin CameraHandler 1 Orthographic
+{ ACT
+  Version 1
+  { VParm
+    { Size
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          0.192
+          0
+        }
+      }
+    }
+  }
+}
+EndPlugin
+
+AddCamera 30000001
+CameraName PreviewCamera
+ShowCamera 1 14
+SchematicPosition 0.600000 -0.400000
+CameraMotion
+NumChannels 6
+Channel 0
+{ Envelope
+  1
+  Key 0.00074774923268705606461 0 0 0 0 0 0 -0.012321879656038717266 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0.033909983932971954346 0 0 0 0 0 0 -0.0077985356710857526089 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key -0.045176725834608078003 0 0 0 0 0 0 0.0034102399451374663594 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key -0.010471963323652742558 0 0 0 0 0 0 0.28967564513495408507 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0.46251225471496587582 0 0 0 0 0 0 0.0087253215503091518385 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+ZoomFactor 3.2
+ZoomType 1
+ResolutionMultiplier 1.0
+FrameSize 64 64
+OverscanMode 0
+OverscanSize 0 0 0 0
+PixelAspect 1
+MotionBlur 0
+MotionBlurSubFrames 20
+ShutterEfficiency 1
+RollingShutter 0
+ShutterOpen 0
+Oversampling 0.5
+UndockPreview 0
+FieldRendering 0
+ApertureHeight 0.015
+EyeSeparation 0.07
+ConvergencePoint 1
+UseConvergence 0
+StereoTrackedEye 0
+StereoOpenGL 1
+ConvergenceToeIn 1
+DepthOfField 0
+FocalDistance 1
+LensFStop 4
+DiaphragmSides 0
+DiaphragmRotation 0
+AASamples 1
+Sampler 0
+AdaptiveThreshold 0.01
+MinimumSamples 16
+MaximumSamples 64
+Plugin CameraHandler 1 Perspective
+EndPlugin
+
+AdaptiveSampling 1
+
+UseBackgroundColor 0
+BackgroundColor 0 0 0
+SolidBackdrop 1
+BackdropColor 0.2 0.2 0.2
+ZenithColor 0.6167 0.7238 0.9647
+SkyColor 0.9155 0.9191 0.9647
+GroundColor 0.9155 0.9191 0.9647
+NadirColor 0.4706 0.4667 0.4667
+SkySqueezeAmount 6
+GroundSqueezeAmount 6
+FogType 0
+FogMinDistance 0
+FogMaxDistance 1
+FogMinAmount 0
+FogMaxAmount 1
+FogColor 0.5098 0.5098 0.549
+BackdropFog 0
+CopyToPerspective 0
+VolumeClipDiscance 0.1
+DynamicRangeMin 0
+DynamicRangeLimit 1
+
+RenderMode 2
+RayTraceEffects 15
+DepthBufferAA 0
+RenderLines 1
+RenderInstances 1
+RenderTileSize 0
+RenderAlgorithm 1
+RayRecursionLimit 6
+TransparencyRecursionLimit 6
+ReflectionRecursionLimit 4
+RefractionRecursionLimit 4
+RayPrecision 6
+RayCutoff 0.01
+ReflectionSamples 1
+RefractionSamples 1
+SubsurfaceScatteringSamples 1
+LightSamples 1
+DataOverlayLabel  
+OutputFilenameFormat 3
+SaveRGB 1
+SaveRGBImagesPrefix C:\git\DeckerGame\lightwave\Render\enemies\breakingwall\frame_
+RGBImageSaver LW_PNG32(.png)
+SaveAlpha 0
+SaveAlphaImagesPrefix C:\git\DeckerGame\lightwave\Renders\Alpha_
+AlphaImageSaver LW_PNG24(.png)
+MultiLayerEnabled 0
+MultiLayerUseOutputPath 1
+MultiLayerPath 
+MultiLayerFilename 
+
+ViewConfiguration 0
+DefineView 0
+ViewType 9
+ViewLevel 2
+ViewAimpoint 0.006119188 0.02448273 0.02565745
+ViewZoomFactor 2.66444
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 148 78 500 300
+ViewFOVZoom 4
+DefineView 1
+ViewType 1
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 148 78 500 300
+ViewFOVZoom 4
+DefineView 2
+ViewType 5
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 148 78 500 300
+ViewFOVZoom 4
+DefineView 3
+ViewType 3
+ViewLevel 5
+ViewAimpoint 0 0 0
+ViewZoomFactor 4
+ViewXRay 1
+ViewMBDofPreview 0
+ViewHeadlight 0
+ViewXYWidthHeight 148 78 500 300
+ViewFOVZoom 4
+
+GridNumber 80
+GridSize 0.02
+CameraViewBG 0
+ShowMotionPath 0
+ShowFogRadius 0
+ShowFogEffect 0
+ShowFieldChart 0
+OverlayColor_fv 0 0 0
+MeshBackgroundGroup 1
+Plugin VirtualStudio 1 VirtualStudio
+{ Version
+  2
+  Active 1
+  LIVE 0
+  LIVE_FPS 30
+  Play 0
+  Arm 0
+  PunchIn 0
+  PunchOut 0
+}
+EndPlugin
+
+CurrentObject 9
+CurrentLight 1
+CurrentCamera 0
+GraphEditorData
+{ GraphEd_Favorites
+}
+{ GE_Expression_Lib
+  1
+}
+ImageEditorData
+NumberOfClips 1
+Clip 0
+{ ClipObject
+  "scratches2.png"
+  128
+  0
+}
+
+ContentDir C:git/DeckerGame/lightwave

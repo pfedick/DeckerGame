@@ -1,9 +1,9 @@
 #include "decker.h"
 #include "physic.h"
 
-static const char* movement_string[17]={ "Unchanged", "Stand",
+static const char* movement_string[18]={ "Unchanged", "Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide", "Floating", "Dead", "Swim", "SwimStraight", "SwimUp", "SwimDown" };
+		"Jump","Falling", "Slide", "Floating", "Dead", "Swim", "SwimStraight", "SwimUp", "SwimDown", "Hacking" };
 
 static const char* orientation_string[4]={ "Left",
 		"Right", "Front", "Back" };

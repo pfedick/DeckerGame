@@ -116,6 +116,8 @@ OBJECTS=compile/main.o \
 	compile/object_oxygen.o \
 	compile/object_fish.o \
 	compile/object_piranha.o \
+	compile/object_breakingwall.o \
+	compile/object_hammer.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -235,11 +237,14 @@ doors:
 	#./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	./texmaker -s lightwave/Render/objects/door_v2/ -t res/doors.tex -w 2048 -h 2048 -px 144 -py 242
 
+breakingwall:
+	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254
+
 george:
 	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall
 
 sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
@@ -607,6 +612,14 @@ compile/object_fish.o: src/objects/fish.cpp Makefile include/objects.h include/a
 compile/object_piranha.o: src/objects/piranha.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_piranha.o -c src/objects/piranha.cpp $(CFLAGS)
+
+compile/object_breakingwall.o: src/objects/breakingwall.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_breakingwall.o -c src/objects/breakingwall.cpp $(CFLAGS)
+
+compile/object_hammer.o: src/objects/hammer.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_hammer.o -c src/objects/hammer.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h

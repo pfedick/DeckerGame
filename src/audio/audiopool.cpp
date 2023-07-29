@@ -175,6 +175,8 @@ void AudioPool::load()
 		sample[AudioClip::bricks_falling1].load("res/audio/bricks_falling1.mp3");
 		sample[AudioClip::bricks_falling2].load("res/audio/bricks_falling2.mp3");
 		sample[AudioClip::bricks_falling3].load("res/audio/bricks_falling3.mp3");
+		sample[AudioClip::hammer].load("res/audio/hammer.mp3");
+		sample[AudioClip::breakingwall].load("res/audio/breakingwall.mp3");
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

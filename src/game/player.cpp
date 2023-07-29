@@ -67,6 +67,9 @@ Player::Player(Game* game)
 	color_modulation.setColor(255, 255, 255, 255);
 	ambient_sound=NULL;
 	expressionJump=false;
+	hackingObject=NULL;
+	hacking_end=0.0f;
+	animation_speed=0.056f;
 }
 
 Player::~Player()
@@ -80,6 +83,7 @@ Player::~Player()
 
 void Player::resetState()
 {
+	animation_speed=0.056f;
 	points=0;
 	health=100;
 	lifes=3;
@@ -95,7 +99,10 @@ void Player::resetState()
 	particle_reason=ParticleReason::None;
 	Inventory.clear();
 	object_counter.clear();
+	SpecialObjects.clear();
 	expressionJump=false;
+	hackingObject=NULL;
+	hacking_end=0.0f;
 	color_modulation.setColor(255, 255, 255, 255);
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
@@ -106,10 +113,14 @@ void Player::resetState()
 
 void Player::resetLevelObjects()
 {
+	animation_speed=0.056f;
 	Inventory.clear();
 	object_counter.clear();
 	air=maxair;
 	last_aircheck=0;
+	SpecialObjects.clear();
+	hackingObject=NULL;
+	hacking_end=0.0f;
 }
 
 
@@ -379,13 +390,23 @@ void Player::handleDiving(double time, const TileTypePlane& world, Decker::Objec
 	last_aircheck=time;
 }
 
+void Player::playSoundOnAnimationSprite()
+{
+	int sprite=animation.getFrame();
+	AudioPool& ap=getAudioPool();
+
+	if (sprite == 245 || sprite == 224)  ap.playOnce(AudioClip::hackstone, 1.0f);
+
+}
+
 void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	if (particle_reason != ParticleReason::None && particle_end_time > time) emmitParticles(time);
 	this->time=time;
 	if (time > next_animation) {
-		next_animation=time + 0.056f;
+		next_animation=time + animation_speed;
 		animation.update();
+		playSoundOnAnimationSprite();
 	}
 	if (movement == Dead) {
 		if (animation.isFinished()) {
@@ -396,10 +417,28 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	handleDiving(time, world, objects, frame_rate_compensation);
 
 	if (dead) return;
+	if (hackingObject != NULL) {
+		movement=Hacking;
+		animation_speed=0.03f;
+		if (time > hacking_end) {
+			stand();
+			if (hackingObject) {
+				Decker::Objects::BreakingWall* wall=static_cast<Decker::Objects::BreakingWall*>(hackingObject);
+				wall->breakWall(this);
+				hackingObject=NULL;
+			}
+			animation_speed=0.056f;
+		} else {
+			return;
+		}
+
+
+	}
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects);
+	if (movement == Hacking) return;
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
 	if (autoWalk) return;
@@ -957,6 +996,36 @@ void Player::jumpExpression()
 	//velocity_move.y=0;
 }
 
+void Player::addSpecialObject(int type)
+{
+	SpecialObjects.insert(type);
+}
+
+bool Player::hasSpecialObject(int type) const
+{
+	std::set<int>::const_iterator it;
+	it=SpecialObjects.find(type);
+	if (it != SpecialObjects.end()) return true;
+	return false;
+}
+
+void Player::startHacking(Decker::Objects::Object* object)
+{
+	if (hasSpecialObject(Decker::Objects::Type::Hammer) && hackingObject == NULL) {
+		movement=Hacking;
+		hackingObject=object;
+		hacking_end=ppl7::GetMicrotime() + 2.0f;
+		if (object->p.x < x) {
+			//left
+			orientation=Left;
+			animation.startSequence(218, 238, true, 218);
+		} else {
+			orientation=Right;
+			animation.startSequence(239, 259, true, 239);
+		}
+		next_animation=0.0f;
+	}
+}
 
 void Player::emmitParticles(double time)
 {

@@ -67,6 +67,8 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Ostrich, "Ostrich", 49);
 	addObject(Decker::Objects::Type::Fish, "Fish", 52);
 	addObject(Decker::Objects::Type::Piranha, "Piranha", 53);
+	addObject(Decker::Objects::Type::BreakingWall, "Breaking Wall", 54);
+	addObject(Decker::Objects::Type::Hammer, "Hammer", 55);
 
 
 	scrollbar->setSize(object_map.size() / 2);

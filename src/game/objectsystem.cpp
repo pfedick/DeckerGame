@@ -141,6 +141,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Piranha]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Piranha]->load(sdl, "res/piranha.tex");
 
+	spriteset[Spriteset::BreakingWall]->enableOutlines(true);
+	spriteset[Spriteset::BreakingWall]->enableMemoryBuffer(true);
+	spriteset[Spriteset::BreakingWall]->load(sdl, "res/breakingwall.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -372,6 +376,8 @@ Representation getRepresentation(int object_type)
 	case Type::Oxygen: return OxygenTank::representation();
 	case Type::Fish: return Fish::representation();
 	case Type::Piranha: return Piranha::representation();
+	case Type::BreakingWall: return BreakingWall::representation();
+	case Type::Hammer: return Hammer::representation();
 	default: return Object::representation();
 	}
 }
@@ -449,6 +455,8 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Oxygen: return new OxygenTank();
 	case Type::Fish: return new Fish();
 	case Type::Piranha: return new Piranha();
+	case Type::BreakingWall: return new BreakingWall();
+	case Type::Hammer: return new Hammer();
 	}
 	return NULL;
 }

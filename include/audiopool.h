@@ -110,6 +110,8 @@ public:
 		bricks_falling1,
 		bricks_falling2,
 		bricks_falling3,
+		hammer,
+		breakingwall,
 
 
 		// this must always be the last entry!

@@ -56,6 +56,8 @@ public:
 		Cherry=25,
 		ParticleEmitter=26,
 		Oxygen=27,
+		BreakingWall=28,
+		Hammer=29,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -107,6 +109,7 @@ public:
 		Ostrich,
 		ScorpionMetalic,
 		Piranha,
+		BreakingWall,
 		MaxSpritesets
 	};
 };
@@ -942,6 +945,39 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
+
+class BreakingWall : public Object
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+	int state;
+public:
+	int wall_color;
+
+	BreakingWall();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	void breakWall(Player* player);
+};
+
+class Hammer : public Object
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+public:
+	Hammer();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+};
+
 
 class Floater : public Object
 {

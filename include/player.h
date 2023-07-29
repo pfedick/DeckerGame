@@ -18,8 +18,6 @@ class Representation;
 }
 } // EOF namespace Decker::Objects
 
-
-
 class Player : public Physic
 {
 private:
@@ -28,6 +26,7 @@ private:
 
 	double next_keycheck;
 	double next_animation;
+	float animation_speed;
 	double idle_timeout;
 	double last_aircheck;
 	Game* game;
@@ -41,6 +40,7 @@ private:
 
 	std::map<int, Decker::Objects::Representation> Inventory;
 	std::map<int, size_t>object_counter;
+	std::set<int>SpecialObjects;
 	bool godmode;
 	bool dead;
 	bool visible;
@@ -60,6 +60,9 @@ private:
 	double particle_end_time, next_particle_birth;
 	ParticleReason particle_reason;
 
+	Decker::Objects::Object* hackingObject;
+	double hacking_end;
+
 
 
 	void turn(PlayerOrientation target);
@@ -74,6 +77,8 @@ private:
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
+
+	void playSoundOnAnimationSprite();
 
 public:
 	float x, y;
@@ -100,6 +105,8 @@ public:
 	void addHealth(int points);
 	void addAir(float seconds);
 	void addLife(int lifes);
+	void addSpecialObject(int type);
+	bool hasSpecialObject(int type) const;
 	void countObject(int type);
 	size_t getObjectCount(int type) const;
 	void dropHealth(float points, HealthDropReason reason=HealthDropReason::Unknown);
@@ -119,6 +126,7 @@ public:
 	void setAutoWalk(bool enabled);
 	bool isAutoWalk() const;
 	void startEmittingParticles(double endtime, ParticleReason reason);
+	void startHacking(Decker::Objects::Object* object);
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 

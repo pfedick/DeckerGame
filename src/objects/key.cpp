@@ -115,8 +115,6 @@ private:
 
 	KeyReward* object;
 
-	void setValuesToUi(const Scorpion* object);
-
 public:
 	KeyRewardDialog(KeyReward* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);

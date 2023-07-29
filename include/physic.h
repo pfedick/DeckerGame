@@ -55,7 +55,8 @@ public:
 		Swim,
 		SwimStraight,
 		SwimUp,
-		SwimDown
+		SwimDown,
+		Hacking
 	};
 	enum PlayerOrientation {
 		Left,
