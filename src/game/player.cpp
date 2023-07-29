@@ -70,6 +70,7 @@ Player::Player(Game* game)
 	hackingObject=NULL;
 	hacking_end=0.0f;
 	animation_speed=0.056f;
+	hackingState=0;
 }
 
 Player::~Player()
@@ -103,6 +104,7 @@ void Player::resetState()
 	expressionJump=false;
 	hackingObject=NULL;
 	hacking_end=0.0f;
+	hackingState=0;
 	color_modulation.setColor(255, 255, 255, 255);
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
@@ -121,6 +123,7 @@ void Player::resetLevelObjects()
 	SpecialObjects.clear();
 	hackingObject=NULL;
 	hacking_end=0.0f;
+	hackingState=0;
 }
 
 
@@ -414,26 +417,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 		return;
 	}
+	if (hackingInProgress()) return;
 	handleDiving(time, world, objects, frame_rate_compensation);
 
 	if (dead) return;
-	if (hackingObject != NULL) {
-		movement=Hacking;
-		animation_speed=0.03f;
-		if (time > hacking_end) {
-			stand();
-			if (hackingObject) {
-				Decker::Objects::BreakingWall* wall=static_cast<Decker::Objects::BreakingWall*>(hackingObject);
-				wall->breakWall(this);
-				hackingObject=NULL;
-			}
-			animation_speed=0.056f;
-		} else {
-			return;
-		}
 
-
-	}
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
@@ -1024,7 +1012,35 @@ void Player::startHacking(Decker::Objects::Object* object)
 			animation.startSequence(239, 259, true, 239);
 		}
 		next_animation=0.0f;
+		hackingState=1;
 	}
+}
+
+bool Player::hackingInProgress()
+{
+	if (hackingObject != NULL) {
+		movement=Hacking;
+		animation_speed=0.03f;
+		if (time > hacking_end) {
+			if (hackingState == 1) {
+				Decker::Objects::BreakingWall* wall=static_cast<Decker::Objects::BreakingWall*>(hackingObject);
+				wall->breakWall(this);
+				hackingState=2;
+				hacking_end=time + 0.8f;
+				return true;
+			} else if (hackingState == 2) {
+				stand();
+				hackingObject=NULL;
+				hackingState=0;
+				animation_speed=0.056f;
+			}
+		} else {
+			return true;
+		}
+
+
+	}
+	return false;
 }
 
 void Player::emmitParticles(double time)

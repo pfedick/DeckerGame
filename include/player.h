@@ -61,6 +61,7 @@ private:
 	ParticleReason particle_reason;
 
 	Decker::Objects::Object* hackingObject;
+	int hackingState;
 	double hacking_end;
 
 
@@ -74,6 +75,7 @@ private:
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
 	void handleDiving(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
+	bool hackingInProgress();
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
