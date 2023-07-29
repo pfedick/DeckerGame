@@ -22,6 +22,7 @@ BreakingWall::BreakingWall()
 	sprite_no_representation=0;
 	collisionDetection=true;
 	pixelExactCollision=false;
+	myLayer=Layer::BeforePlayer;
 	color_mod=GetColorPalette().getColor(wall_color);
 }
 
@@ -65,6 +66,8 @@ void BreakingWall::handleCollision(Player* player, const Collision& collision)
 		int keyboard=player->getKeyboardMatrix();
 		if (keyboard & KeyboardKeys::Action) {
 			player->startHacking(this);
+			if (player->x < p.x)player->x=p.x - 96;
+			if (player->x > p.x)player->x=p.x + 96;
 			//breakWall(player);
 		}
 	}
@@ -90,6 +93,7 @@ size_t BreakingWall::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
+	myLayer=Layer::BeforePlayer;
 	int version=ppl7::Peek8(buffer + bytes);
 	if (version != 1) return 0;
 	wall_color=ppl7::Peek8(buffer + bytes + 1);
