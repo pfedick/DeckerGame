@@ -104,6 +104,12 @@ public:
 		treasure_chest,
 		treasure_collect,
 		decker,
+		key,
+		impact1,
+		squash1,
+		bricks_falling1,
+		bricks_falling2,
+		bricks_falling3,
 
 
 		// this must always be the last entry!

@@ -169,6 +169,13 @@ void AudioPool::load()
 		sample[AudioClip::treasure_chest].load("res/audio/treasure_chest.mp3");
 		sample[AudioClip::treasure_collect].load("res/audio/treasure_collect.mp3");
 		sample[AudioClip::decker].load("res/audio/decker_theme_chiptune.mp3");
+		sample[AudioClip::key].load("res/audio/key.mp3");
+		sample[AudioClip::impact1].load("res/audio/impact1.mp3");
+		sample[AudioClip::squash1].load("res/audio/squash1.mp3");
+		sample[AudioClip::bricks_falling1].load("res/audio/bricks_falling1.mp3");
+		sample[AudioClip::bricks_falling2].load("res/audio/bricks_falling2.mp3");
+		sample[AudioClip::bricks_falling3].load("res/audio/bricks_falling3.mp3");
+
 	} catch (const ppl7::Exception& exp) {
 		exp.print();
 		throw;
