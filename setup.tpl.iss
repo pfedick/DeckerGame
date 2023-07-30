@@ -47,7 +47,6 @@ Source: "res/*.tex"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.fnt6"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.png"; DestDir: "{app}/res"; Flags: ignoreversion nocompression;
 Source: "res/backgrounds/*.*"; DestDir: "{app}/res/backgrounds"; Flags: ignoreversion nocompression;
-Source: "res/audio/*.wav"; DestDir: "{app}/res/audio"; Flags: ignoreversion;
 Source: "res/audio/*.mp3"; DestDir: "{app}/res/audio"; Flags: ignoreversion nocompression;
 Source: "res/video/*"; DestDir: "{app}/res/video"; Flags: ignoreversion nocompression;
 Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
