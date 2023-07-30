@@ -1412,6 +1412,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 	if (event->key == ppl7::tk::KeyEvent::KEY_F4 && showui == true) {
 		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
 		player->move(pos.x, pos.y);
+		player->stand();
 		player->setSavePoint(pos);
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3 && showui == true) {
 		level.load(LevelFile);
