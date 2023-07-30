@@ -31,6 +31,16 @@ Bird::Bird()
 	next_animation=0.0f;
 	next_state_change=0.0f;
 	velocity=3;
+	audio=NULL;
+}
+
+Bird::~Bird()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 void Bird::changeState(BirdState state)
@@ -77,11 +87,14 @@ void Bird::changeState(BirdState state)
 
 void Bird::handleCollision(Player* player, const Collision& collision)
 {
-	player->dropHealth(10);
+	if (state == BirdState::WaitThenFlyUp || state == BirdState::FlyUp) return;
+	player->dropHealth(100);
 }
 
 void Bird::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& audiopool=getAudioPool();
+
 	if (time > next_animation) {
 		next_animation=time + 0.03f;
 		animation.update();
@@ -125,12 +138,20 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		p.y+=velocity * frame_rate_compensation;
 	} else if (state == BirdState::WaitThenFlyUp && time > next_state_change) {
 		changeState(BirdState::FlyUp);
+		if (audio) {
+			audiopool.playInstance(audio);
+		}
+
 	}
 	if (state == BirdState::AttackRight || state == BirdState::AttackLeft) {
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
 		if (t1 != TileType::NonBlocking && p.y > player.position().y - 10) {
 			changeState(BirdState::WaitThenFlyUp);
 			next_state_change=time + randf(1.0, 5.0f);
+			audiopool.playOnce(AudioClip::crow_impact, 1.0f);
+			if (audio) {
+				audiopool.stopInstace(audio);
+			}
 		}
 	}
 	if ((state == BirdState::FlyLeft || state == BirdState::FlyRight) && time > next_state_change) {
@@ -141,11 +162,15 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player, float fra
 				if (p.x < player.position().x && state == BirdState::FlyRight) {
 					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackRight);
+						audiopool.playOnce(AudioClip::crow_scream, p, 1600, 0.6f);
+						audiopool.playOnce(AudioClip::arrow_swoosh, p, 1600, 0.6f);
 					}
 					next_state_change=time + 2.0;
 				} else if (p.x > player.position().x && state == BirdState::FlyLeft) {
 					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackLeft);
+						audiopool.playOnce(AudioClip::crow_scream, p, 1600, 0.6f);
+						audiopool.playOnce(AudioClip::arrow_swoosh, p, 1600, 0.6f);
 					}
 					next_state_change=time + 2.0;
 				}
@@ -155,6 +180,20 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player, float fra
 
 	}
 	updateBoundary();
+
+	if (!audio) {
+		audio=audiopool.getInstance(AudioClip::crow_flying);
+		if (audio) {
+			audio->setVolume(1.0f);
+			audio->setAutoDelete(false);
+			audio->setLoop(true);
+			audio->setPositional(p, 1600);
+			audiopool.playInstance(audio);
+		}
+	} else if (audio) {
+		audio->setPositional(p, 1600);
+	}
+
 }
 
 
