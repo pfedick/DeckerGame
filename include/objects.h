@@ -758,6 +758,7 @@ private:
 	AudioInstance* audio;
 public:
 	Bat();
+	~Bat();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
@@ -789,6 +790,7 @@ private:
 	void changeState(BirdState state);
 public:
 	Bird();
+	~Bird();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
