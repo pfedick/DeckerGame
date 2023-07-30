@@ -23,6 +23,16 @@ Bat::Bat()
 	animation.startSequence(0, 9, true, 0);
 	next_animation=0.0f;
 	velocity=-3;
+	audio=NULL;
+}
+
+Bat::~Bat()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 void Bat::handleCollision(Player* player, const Collision& collision)
@@ -58,6 +68,19 @@ void Bat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			state=0;
 		}
 		updateBoundary();
+	}
+	if (!audio) {
+		AudioPool& audiopool=getAudioPool();
+		audio=audiopool.getInstance(AudioClip::bat_wings);
+		if (audio) {
+			audio->setVolume(0.6f);
+			audio->setAutoDelete(false);
+			audio->setLoop(true);
+			audio->setPositional(p, 1200);
+			audiopool.playInstance(audio);
+		}
+	} else if (audio) {
+		audio->setPositional(p, 1600);
 	}
 }
 
