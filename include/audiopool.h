@@ -123,6 +123,12 @@ public:
 		crow_scream,
 		crow_impact,
 		bat_wings,
+		george_step1,
+		george_step2,
+		george_step3,
+		george_step4,
+		george_step5,
+		george_jump_land,
 
 		// this must always be the last entry!
 		maxClips

@@ -185,6 +185,12 @@ void AudioPool::load()
 		sample[AudioClip::crow_scream].load("res/audio/crow_scream.mp3");
 		sample[AudioClip::crow_impact].load("res/audio/crow_impact.mp3");
 		sample[AudioClip::bat_wings].load("res/audio/bat.mp3");
+		sample[AudioClip::george_step1].load("res/audio/george_step1.mp3");
+		sample[AudioClip::george_step2].load("res/audio/george_step2.mp3");
+		sample[AudioClip::george_step3].load("res/audio/george_step3.mp3");
+		sample[AudioClip::george_step4].load("res/audio/george_step4.mp3");
+		sample[AudioClip::george_step5].load("res/audio/george_step5.mp3");
+		sample[AudioClip::george_jump_land].load("res/audio/george_jump_land.mp3");
 
 
 	} catch (const ppl7::Exception& exp) {

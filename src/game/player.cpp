@@ -71,6 +71,7 @@ Player::Player(Game* game)
 	hacking_end=0.0f;
 	animation_speed=0.056f;
 	hackingState=0;
+	airStart=0.0f;
 }
 
 Player::~Player()
@@ -106,6 +107,7 @@ void Player::resetState()
 	hacking_end=0.0f;
 	hackingState=0;
 	color_modulation.setColor(255, 255, 255, 255);
+	airStart=0.0f;
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
 		ambient_sound->fadeout(2.0f);
@@ -393,12 +395,28 @@ void Player::handleDiving(double time, const TileTypePlane& world, Decker::Objec
 	last_aircheck=time;
 }
 
+static void play_step(AudioPool& ap)
+{
+	int r=ppl7::rand(1, 5);
+	switch (r) {
+	case 1: ap.playOnce(AudioClip::george_step1, 0.5f); break;
+	case 2: ap.playOnce(AudioClip::george_step2, 0.5f); break;
+	case 3: ap.playOnce(AudioClip::george_step3, 0.5f); break;
+	case 4: ap.playOnce(AudioClip::george_step4, 0.5f); break;
+	case 5: ap.playOnce(AudioClip::george_step5, 0.5f); break;
+	default: ap.playOnce(AudioClip::george_step1, 0.5f); break;
+	}
+}
+
 void Player::playSoundOnAnimationSprite()
 {
 	int sprite=animation.getFrame();
 	AudioPool& ap=getAudioPool();
 
 	if (sprite == 245 || sprite == 224)  ap.playOnce(AudioClip::hackstone, 1.0f);
+	if (sprite == 3 || sprite == 7 || sprite == 12 || sprite == 16 || sprite == 64 || sprite == 68
+		|| sprite == 73 || sprite == 77) play_step(ap);
+
 
 }
 
@@ -421,6 +439,18 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	handleDiving(time, world, objects, frame_rate_compensation);
 
 	if (dead) return;
+
+	AudioPool& ap=getAudioPool();
+	if (movement == Jump || movement == Falling || movement == Slide) {
+		if (airStart == 0) {
+			airStart=time;
+		}
+	} else if (airStart > 0.0f) {
+		double volume=(time - airStart);
+		if (volume > 1.0f) volume=1.0f;
+		airStart=0.0f;
+		ap.playOnce(AudioClip::george_jump_land, volume);
+	}
 
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);

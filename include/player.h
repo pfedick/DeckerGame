@@ -47,6 +47,7 @@ private:
 	bool autoWalk;
 	bool waterSplashPlayed;
 	bool expressionJump;
+	double airStart;
 
 	AudioInstance* ambient_sound;
 	AudioClip::Id ambient_playing;
