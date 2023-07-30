@@ -28,7 +28,7 @@ Switch::Switch()
 	sprite_no=1;
 	collisionDetection=true;
 	visibleAtPlaytime=true;
-	sprite_no_representation=215;
+	sprite_no_representation=1;
 	initial_state=false;
 	one_time_switch=false;
 	auto_toggle_on_collision=false;
