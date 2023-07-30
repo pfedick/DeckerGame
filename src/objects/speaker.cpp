@@ -168,24 +168,41 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name=new ppl7::tk::ComboBox(120, y, client.width() - 120, 30);
 	sample_name->add("no sound", ppl7::ToString("%d", AudioClip::none));
 	sample_name->add("Birds 1", ppl7::ToString("%d", AudioClip::birds1));
+	sample_name->add("Birds 2", ppl7::ToString("%d", AudioClip::birds2));
+	sample_name->add("Birds 3", ppl7::ToString("%d", AudioClip::birds3));
+	sample_name->add("Birds in the rain", ppl7::ToString("%d", AudioClip::birds_in_rain));
+	sample_name->add("Cave 1", ppl7::ToString("%d", AudioClip::cave1));
+	sample_name->add("Cave 2", ppl7::ToString("%d", AudioClip::cave2));
+	sample_name->add("Cave 3", ppl7::ToString("%d", AudioClip::cave3));
+	sample_name->add("Desert at Night", ppl7::ToString("%d", AudioClip::desert_at_night));
 	sample_name->add("Electric", ppl7::ToString("%d", AudioClip::electric));
-	sample_name->add("Vent 1", ppl7::ToString("%d", AudioClip::vent1));
-	sample_name->add("Vent 2", ppl7::ToString("%d", AudioClip::vent2));
-	sample_name->add("Howling Wind 1", ppl7::ToString("%d", AudioClip::wind1));
-	sample_name->add("Desert Wind", ppl7::ToString("%d", AudioClip::wind2));
 	sample_name->add("Fire 1", ppl7::ToString("%d", AudioClip::fire1));
 	sample_name->add("Fire 2", ppl7::ToString("%d", AudioClip::fire2));
 	sample_name->add("Jungle 1", ppl7::ToString("%d", AudioClip::jungle1));
 	sample_name->add("Jungle 2", ppl7::ToString("%d", AudioClip::jungle2));
+
+	sample_name->add("Rain 1", ppl7::ToString("%d", AudioClip::rain1));
+	sample_name->add("Rain 2", ppl7::ToString("%d", AudioClip::rain2));
+	sample_name->add("Rain 3", ppl7::ToString("%d", AudioClip::rain3));
+
+	sample_name->add("Underwater", ppl7::ToString("%d", AudioClip::underwaterloop1));
+	sample_name->add("Vent 1", ppl7::ToString("%d", AudioClip::vent1));
+	sample_name->add("Vent 2", ppl7::ToString("%d", AudioClip::vent2));
+
 	sample_name->add("Waterflow 1", ppl7::ToString("%d", AudioClip::waterflow1));
 	sample_name->add("Waterflow 2", ppl7::ToString("%d", AudioClip::waterflow2));
 	sample_name->add("Waterflow 3", ppl7::ToString("%d", AudioClip::waterflow3));
-	/*
-	sample_name->add("Birds in the Rain", ppl7::ToString("%d", AudioClip::birds_in_rain));
-	sample_name->add("Soft Rain", ppl7::ToString("%d", AudioClip::soft_rain));
-	sample_name->add("Desert at Night", ppl7::ToString("%d", AudioClip::desert_at_night));
-	sample_name->add("More Wind", ppl7::ToString("%d", AudioClip::wind3));
-	*/
+	sample_name->add("Waterdrips in a cave", ppl7::ToString("%d", AudioClip::waterdrips));
+	sample_name->add("Waves 1", ppl7::ToString("%d", AudioClip::waves1));
+
+	sample_name->add("Wind and grills", ppl7::ToString("%d", AudioClip::wind3));
+	sample_name->add("Wind strong", ppl7::ToString("%d", AudioClip::wind_strong));
+	sample_name->add("Wind Howling", ppl7::ToString("%d", AudioClip::wind1));
+	sample_name->add("Wind Desert", ppl7::ToString("%d", AudioClip::wind2));
+
+
+
+
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
 	sample_name->setEventHandler(this);
 	addChild(sample_name);
