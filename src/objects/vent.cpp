@@ -48,8 +48,8 @@ void Vent::update(double time, TileTypePlane&, Player&, float)
 		audio=pool.getInstance(AudioClip::vent1);
 		if (audio) {
 			audio->setLoop(true);
-			audio->setPositional(p, 1600);
-			audio->setVolume(0.5f);
+			audio->setPositional(p, 800);
+			audio->setVolume(0.2f);
 			pool.playInstance(audio);
 		}
 	} else {
