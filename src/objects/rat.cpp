@@ -47,7 +47,6 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 			getAudioPool().stopInstace(audio);
 			delete audio;
 			audio=NULL;
-			ppl7::PrintDebugTime("audio aus\n");
 		}
 	} else {
 		player->dropHealth(2);
