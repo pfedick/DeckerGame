@@ -78,7 +78,7 @@ void AudioPool::load()
 		musictracks.push_back(MusicTrack("Patrick F. - Spring", "res/audio/PatrickF-Spring.mp3"));
 
 		sample[AudioClip::coin1].load("res/audio/coin1.mp3");
-		sample[AudioClip::coin2].load("res/audio/402766__matrixxx__retro-coin-04.wav");
+		sample[AudioClip::coin2].load("res/audio/coin2.mp3");
 		sample[AudioClip::coin3].load("res/audio/coin3.mp3");
 		sample[AudioClip::coin4].load("res/audio/coin4.mp3");
 		sample[AudioClip::coin5].load("res/audio/coin5.mp3");
@@ -151,12 +151,10 @@ void AudioPool::load()
 		sample[AudioClip::rain1].load("res/audio/rain1.mp3");
 		sample[AudioClip::rain2].load("res/audio/rain2.mp3");
 		sample[AudioClip::rain3].load("res/audio/rain3.mp3");
-		/*
 		sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.mp3");
-		sample[AudioClip::soft_rain].load("res/audio/rain.mp3");
 		sample[AudioClip::desert_at_night].load("res/audio/desert_at_night.mp3");
 		sample[AudioClip::wind3].load("res/audio/wind_grillen.mp3");
-		*/
+
 		sample[AudioClip::crystal2].load("res/audio/crystal2.mp3");
 		sample[AudioClip::crystal3].load("res/audio/crystal3.mp3");
 		sample[AudioClip::fanfare1].load("res/audio/fanfare1.mp3");
@@ -176,7 +174,18 @@ void AudioPool::load()
 		sample[AudioClip::bricks_falling2].load("res/audio/bricks_falling2.mp3");
 		sample[AudioClip::bricks_falling3].load("res/audio/bricks_falling3.mp3");
 		sample[AudioClip::hammer].load("res/audio/hammer.mp3");
+		sample[AudioClip::waves1].load("res/audio/waves1.mp3");
+		sample[AudioClip::waterdrips].load("res/audio/waterdrips.mp3");
+		sample[AudioClip::wind_strong].load("res/audio/wind_strong.mp3");
+		sample[AudioClip::cave1].load("res/audio/cave1.mp3");
+		sample[AudioClip::cave2].load("res/audio/cave2.mp3");
+		sample[AudioClip::cave3].load("res/audio/cave3.mp3");
 		sample[AudioClip::breakingwall].load("res/audio/breakingwall.mp3");
+		sample[AudioClip::crow_flying].load("res/audio/crow_flying.mp3");
+		sample[AudioClip::crow_scream].load("res/audio/crow_scream.mp3");
+		sample[AudioClip::crow_impact].load("res/audio/crow_impact.mp3");
+		sample[AudioClip::bat_wings].load("res/audio/bat.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

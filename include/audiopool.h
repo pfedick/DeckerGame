@@ -12,6 +12,8 @@
 class AudioClip
 {
 public:
+	// DO NOT CHANGE THE ORDER OF THE IDs!!!
+	// They are stored in the level files, e.g. for the speaker
 	enum Id {
 		none=0,
 		coin1=1,
@@ -89,7 +91,7 @@ public:
 		rain2,
 		rain3,
 		birds_in_rain,
-		soft_rain,
+		cave1,
 		desert_at_night,
 		wind3,
 		crystal2,
@@ -112,7 +114,15 @@ public:
 		bricks_falling3,
 		hammer,
 		breakingwall,
-
+		waves1,
+		waterdrips,
+		wind_strong,
+		cave2,
+		cave3,
+		crow_flying,
+		crow_scream,
+		crow_impact,
+		bat_wings,
 
 		// this must always be the last entry!
 		maxClips
