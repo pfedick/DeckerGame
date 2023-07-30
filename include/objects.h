@@ -110,6 +110,7 @@ public:
 		ScorpionMetalic,
 		Piranha,
 		BreakingWall,
+		Rat,
 		MaxSpritesets
 	};
 };
@@ -707,8 +708,24 @@ public:
 class Rat : public Enemy
 {
 private:
+	AnimationCycle animation;
+	double next_animation;
+	double next_state;
+
 	AudioInstance* audio;
-	int state;
+
+	enum class RatState {
+		idle=0,
+		walk_left,
+		wait_left,
+		turn_left_to_right,
+		walk_right,
+		wait_right,
+		turn_right_to_left,
+		dead
+	};
+	RatState state;
+
 public:
 	Rat();
 	~Rat();

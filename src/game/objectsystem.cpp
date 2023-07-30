@@ -145,6 +145,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::BreakingWall]->enableMemoryBuffer(true);
 	spriteset[Spriteset::BreakingWall]->load(sdl, "res/breakingwall.tex");
 
+	spriteset[Spriteset::Rat]->enableOutlines(true);
+	spriteset[Spriteset::Rat]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Rat]->load(sdl, "res/rat.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)

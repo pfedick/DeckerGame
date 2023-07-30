@@ -217,6 +217,9 @@ bricks_white:
 enemy_piranha:
 	./texmaker -s lightwave/Render/enemies/piranha/ -t res/piranha.tex -w 512 -h 512 -px 60 -py 100
 
+enemy_rat:
+	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 512 -px 128 -py 114
+
 enemy_ostrich:
 	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
 
@@ -244,7 +247,7 @@ george:
 	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
 
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_rat
 
 sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
 	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
