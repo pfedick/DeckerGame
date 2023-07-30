@@ -82,7 +82,7 @@ void start()
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
 			game.resetPlayer();
-			game.startLevel("level/desert.lvl");
+			game.startLevel("level/heaven.lvl");
 			game.enableControls(true);
 			game.run();
 		} else if (state == GameState::StartEditor) {
