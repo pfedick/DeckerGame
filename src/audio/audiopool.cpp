@@ -191,6 +191,7 @@ void AudioPool::load()
 		sample[AudioClip::george_step4].load("res/audio/george_step4.mp3");
 		sample[AudioClip::george_step5].load("res/audio/george_step5.mp3");
 		sample[AudioClip::george_jump_land].load("res/audio/george_jump_land.mp3");
+		sample[AudioClip::fire3].load("res/audio/fire3.mp3");
 
 
 	} catch (const ppl7::Exception& exp) {

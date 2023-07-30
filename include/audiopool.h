@@ -129,6 +129,7 @@ public:
 		george_step4,
 		george_step5,
 		george_jump_land,
+		fire3,
 
 		// this must always be the last entry!
 		maxClips
