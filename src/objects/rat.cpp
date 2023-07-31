@@ -12,6 +12,11 @@ Representation Rat::representation()
 	return Representation(Spriteset::Rat, 0);
 }
 
+static inline int clip(int value) {
+	if (value > 255) return 255;
+	return value;
+}
+
 Rat::Rat()
 	:Enemy(Type::ObjectType::Rat)
 {
@@ -24,10 +29,15 @@ Rat::Rat()
 	next_state=0.0f;
 	speed=0.0f;
 	next_animation=0.0f;
-	int r=ppl7::rand(128, 255);
-	int r2=ppl7::rand(r, 255);
-	color_mod.setColor(r2, r, r, 255);
+	min_speed=4.0f;
+	max_speed=10.0f;
+	min_idle=0.5f;
+	max_idle=5.0f;
+	int base=ppl7::rand(128, 255);
+	color_mod.setColor(clip(ppl7::rand(base - 16, base + 16)), clip(ppl7::rand(base - 16, base + 16)),
+		clip(ppl7::rand(base - 16, base + 16)), 255);
 	look_ahead=ppl7::rand(32, 96);
+	scale=ppl7::randf(0.8f, 1.2f);
 
 }
 
@@ -81,7 +91,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 	if (player->velocity_move.y > 0.0f || player->gravity > 0.0f) {
 		if (ppl7::rand(0, 1) == 0) {
 			// run away
-			speed=12.0f;
+			speed=max_speed + 2.0f;
 			next_state=player->time + 10.0f;
 			if (state == RatState::walk_left || state == RatState::wait_left || state == RatState::turn_right_to_left) {
 				state=RatState::walk_right;
@@ -121,7 +131,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 {
 	//ppl7::PrintDebugTime("rat %d: state=%d, next_state=%0.3f, time=%0.3f, sprite: %d, animation: %d\n", id, (int)state, next_state, time, sprite_no, animation.isFinished());
 	if (time > next_animation && state != RatState::dead) {
-		next_animation=time + 0.03f;
+		next_animation=time + 0.033f;
 		animation.update();
 		int new_sprite=animation.getFrame();
 		if (new_sprite != sprite_no) {
@@ -129,7 +139,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			updateBoundary();
 		}
 	}
-	if (ppl7::rand(0, 20) == 0)speed=ppl7::randf(4.0f, 10.0f);
+	if (ppl7::rand(0, 20) == 0) speed=ppl7::randf(min_speed, max_speed);
 	if (state == RatState::idle) {
 		// Fix initial position from older savegames
 		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::NonBlocking) p.y--;
@@ -140,12 +150,12 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		if (r == 0) {
 			state=RatState::walk_left;
 			animation.startSequence(0, 14, true, 0);
-			speed=ppl7::randf(4.0f, 10.0f);
+			speed=ppl7::randf(min_speed, max_speed);
 			next_state=time + ppl7::randf(1.0f, 10.0f);
 		} else {
 			state=RatState::walk_right;
 			animation.startSequence(15, 29, true, 15);
-			speed=ppl7::randf(4.0f, 10.0f);
+			speed=ppl7::randf(min_speed, max_speed);
 			next_state=time + ppl7::randf(1.0f, 10.0f);
 		}
 	} else if (state == RatState::walk_left) {
@@ -158,7 +168,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 				static_cast<int>(RatState::turn_left_to_right)));
 			if (state == RatState::wait_left) {
 				animation.startSequence(30, 39, true, 30);
-				next_state=time + ppl7::randf(0.5f, 5.0f);
+				next_state=time + ppl7::randf(min_idle, max_idle);
 			} else animation.startSequence(55, 59, false, 60);
 			look_ahead=ppl7::rand(32, 96);
 		}
@@ -167,7 +177,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		state=RatState::turn_left_to_right;
 	} else if (state == RatState::turn_left_to_right && animation.isFinished()) {
 		state=RatState::walk_right;
-		speed=ppl7::randf(4.0f, 10.0f);
+		speed=ppl7::randf(min_speed, max_speed);
 		next_state=time + ppl7::randf(1.0f, 10.0f);
 		animation.startSequence(15, 29, true, 15);
 	} else if (state == RatState::walk_right) {
@@ -180,7 +190,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 				static_cast<int>(RatState::turn_right_to_left)));
 			if (state == RatState::wait_right) {
 				animation.startSequence(40, 49, true, 40);
-				next_state=time + ppl7::randf(1.5f, 5.0f);
+				next_state=time + ppl7::randf(min_idle, max_idle);
 			} else animation.startSequence(50, 54, false, 0);
 			look_ahead=ppl7::rand(32, 96);
 		}
@@ -190,7 +200,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 	} else if (state == RatState::turn_right_to_left && animation.isFinished()) {
 		state=RatState::walk_left;
 		next_state=time + ppl7::randf(1.0f, 10.0f);
-		speed=ppl7::randf(4.0f, 10.0f);
+		speed=ppl7::randf(min_speed, max_speed);
 		animation.startSequence(0, 14, true, 0);
 	}
 	if (!audio && state != RatState::dead) {
@@ -210,7 +220,50 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 }
 
 
+size_t Rat::save(unsigned char* buffer, size_t size) const
+{
+	size_t bytes=Object::save(buffer, size);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke32(buffer + bytes + 1, color_mod.color());
+	ppl7::PokeFloat(buffer + bytes + 5, scale);
+	ppl7::PokeFloat(buffer + bytes + 9, min_speed);
+	ppl7::PokeFloat(buffer + bytes + 13, max_speed);
+	ppl7::PokeFloat(buffer + bytes + 17, min_idle);
+	ppl7::PokeFloat(buffer + bytes + 21, max_idle);
+	return bytes + 25;
+}
 
+size_t Rat::saveSize() const
+{
+	return Object::saveSize() + 25;
+}
+
+size_t Rat::load(const unsigned char* buffer, size_t size)
+{
+	size_t bytes=Object::load(buffer, size);
+	if (bytes == 0) return 0;
+	if (size < bytes + 1) {
+		// Version 0
+		color_mod.setColor(255, 255, 255, 255);
+		scale=1.0f;
+		return size;
+	}
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 1) return 0;
+	color_mod.setColor(ppl7::Peek32(buffer + bytes + 1));
+	scale=ppl7::PeekFloat(buffer + bytes + 5);
+	min_speed=ppl7::PeekFloat(buffer + bytes + 9);
+	max_speed=ppl7::PeekFloat(buffer + bytes + 13);
+	min_idle=ppl7::PeekFloat(buffer + bytes + 17);
+	max_idle=ppl7::PeekFloat(buffer + bytes + 21);
+	return size;
+}
+
+void Rat::openUi()
+{
+
+}
 
 
 

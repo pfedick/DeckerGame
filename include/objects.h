@@ -730,12 +730,20 @@ private:
 	float speed;
 
 public:
+	float min_speed;
+	float max_speed;
+	float min_idle;
+	float max_idle;
+
 	Rat();
 	~Rat();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 };
 
 class Scorpion : public Enemy
