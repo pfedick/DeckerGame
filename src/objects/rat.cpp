@@ -76,7 +76,6 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 	//ppl7::PrintDebugTime("player v: %0.3f, gravity: %0.3f\n", player->velocity_move.y, player->gravity,
 	//		(int)movement);
 	if (player->x<p.x - 48 || player->x>p.x + 48) return;
-	if (player->hasSpecialObject(Type::ObjectType::Cheese)) return;
 	if (player->velocity_move.y > 0.0f || player->gravity > 0.0f) {
 		collisionDetection=false;
 		splatterBlood(player->time, p);
@@ -94,6 +93,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 			audio=NULL;
 		}
 	} else {
+		if (player->hasSpecialObject(Type::ObjectType::Cheese)) return;
 		player->dropHealth(2);
 	}
 }
