@@ -382,6 +382,7 @@ Representation getRepresentation(int object_type)
 	case Type::Piranha: return Piranha::representation();
 	case Type::BreakingWall: return BreakingWall::representation();
 	case Type::Hammer: return Hammer::representation();
+	case Type::Cheese: return Cheese::representation();
 	default: return Object::representation();
 	}
 }
@@ -461,6 +462,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Piranha: return new Piranha();
 	case Type::BreakingWall: return new BreakingWall();
 	case Type::Hammer: return new Hammer();
+	case Type::Cheese: return new Cheese();
 	}
 	return NULL;
 }

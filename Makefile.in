@@ -119,6 +119,7 @@ OBJECTS=compile/main.o \
 	compile/object_piranha.o \
 	compile/object_breakingwall.o \
 	compile/object_hammer.o \
+	compile/object_cheese.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -624,6 +625,10 @@ compile/object_breakingwall.o: src/objects/breakingwall.cpp Makefile include/obj
 compile/object_hammer.o: src/objects/hammer.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_hammer.o -c src/objects/hammer.cpp $(CFLAGS)
+
+compile/object_cheese.o: src/objects/cheese.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_cheese.o -c src/objects/cheese.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h

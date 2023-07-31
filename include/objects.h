@@ -999,6 +999,19 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
+class Cheese : public Object
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+public:
+	Cheese();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+};
+
+
 
 class Floater : public Object
 {
