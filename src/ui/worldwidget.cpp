@@ -226,13 +226,13 @@ void WorldWidget::updatePlayerStats(const Player* player)
 		if (oxygen_cooldown < now && stats_oxygen->isVisible()) {
 			//ppl7::PrintDebugTime("invisible\n");
 			stats_oxygen->setVisible(false);
-			needsRedraw();
+			parentMustRedraw();
 		}
 	} else {
 		oxygen_cooldown=now + 3.0f;
 		if (!stats_oxygen->isVisible()) {
 			stats_oxygen->setVisible(true);
-			needsRedraw();
+			parentMustRedraw();
 		}
 	}
 }
