@@ -85,11 +85,12 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	y+=line * 2;
 
 	drawMillisecondMetric(draw, c1, c2, y, "main thread:", metrics.time_total.get());
-	draw.line(194, y + 8, 214, y + 8, line_color);
-	draw.line(210, y + 4, 214, y + 8, line_color);
-	draw.line(210, y + 12, 214, y + 8, line_color);
+	draw.line(194, y + 8, 210, y + 8, line_color);
+	draw.line(210, y + 8, 214, y + 4, line_color);
+	draw.line(210, y + 8, 214, y + 12, line_color);
 
-	draw.line(214, y - 2, 214, draw.height() - 11, line_color);
+	draw.line(214, y - 2, 214, y + 4, line_color);
+	draw.line(214, y + 12, 214, draw.height() - 11, line_color);
 	draw.line(214, y - 2, 224, y - 2, line_color);
 	draw.line(214, draw.height() - 10, 224, draw.height() - 10, line_color);
 
@@ -99,14 +100,15 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawMillisecondMetric(draw, c1, c2, y, "audio engine thread:", metrics.time_audioengine.get());
 
 
-	y+=line * 2;
+	y+=(line * 1.5f);
 	drawIntMetric(draw, c1, c2, y, "FPS:", metrics.fps);
 	y+=line;
 	drawDoubleMetric(draw, c1, c2, y, "FPS comp:", metrics.frame_rate_compensation);
 	y+=line;
-	drawDoubleMetric(draw, c1, c2, y, "Frametime:", metrics.frametime);
+	drawMillisecondMetric(draw, c1, c2, y, "Frametime:", metrics.frametime);
+	y+=(line * 1.5f);
+	draw.print(font, c1, y, "Counter:");
 	y+=line;
-
 	drawCountMetric(draw, c1, 120, 190, y, "Sprites:", metrics.total_sprites, metrics.visible_sprites);
 	y+=line;
 	drawCountMetric(draw, c1, 120, 190, y, "Objects:", metrics.total_objects, metrics.visible_objects);

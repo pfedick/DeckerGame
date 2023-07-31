@@ -257,7 +257,7 @@ static void drawFrame(ppl7::grafix::Drawable& draw, const ppl7::grafix::Point& p
 void WorldWidget::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf("WorldWidget::paint %d x %d\n", draw.width(), draw.height());
-	draw.cls();
+	//draw.cls();
 	ppl7::grafix::Point p0(1, 1);
 	ppl7::grafix::Point p1(0, 0);
 	ppl7::grafix::Point p2(draw.width() - 1, draw.height() - 1);
