@@ -712,6 +712,7 @@ private:
 	AnimationCycle animation;
 	double next_animation;
 	double next_state;
+	int look_ahead;
 
 	AudioInstance* audio;
 

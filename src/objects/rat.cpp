@@ -27,6 +27,7 @@ Rat::Rat()
 	int r=ppl7::rand(128, 255);
 	int r2=ppl7::rand(r, 255);
 	color_mod.setColor(r2, r, r, 255);
+	look_ahead=ppl7::rand(32, 96);
 
 }
 
@@ -149,8 +150,8 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		}
 	} else if (state == RatState::walk_left) {
 		p.x-=speed * frame_rate_compensation;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y + 6));
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - look_ahead, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - look_ahead, p.y + 6));
 		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking || next_state < time) {
 			collisionDetection=true;
 			state=static_cast<RatState>(ppl7::rand(static_cast<int>(RatState::wait_left),
@@ -159,6 +160,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 				animation.startSequence(30, 39, true, 30);
 				next_state=time + ppl7::randf(0.5f, 5.0f);
 			} else animation.startSequence(55, 59, false, 60);
+			look_ahead=ppl7::rand(32, 96);
 		}
 	} else if (state == RatState::wait_left && time > next_state) {
 		animation.startSequence(55, 59, false, 15);
@@ -170,8 +172,8 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		animation.startSequence(15, 29, true, 15);
 	} else if (state == RatState::walk_right) {
 		p.x+=speed * frame_rate_compensation;
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y - 12));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y + 6));
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + look_ahead, p.y - 12));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + look_ahead, p.y + 6));
 		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking || next_state < time) {
 			collisionDetection=true;
 			state=static_cast<RatState>(ppl7::rand(static_cast<int>(RatState::wait_right),
@@ -180,6 +182,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 				animation.startSequence(40, 49, true, 40);
 				next_state=time + ppl7::randf(1.5f, 5.0f);
 			} else animation.startSequence(50, 54, false, 0);
+			look_ahead=ppl7::rand(32, 96);
 		}
 	} else if (state == RatState::wait_right && time > next_state) {
 		animation.startSequence(50, 54, false, 0);
