@@ -114,7 +114,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 	if (state == RatState::idle) {
 		// Fix initial position from older savegames
 		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::NonBlocking) p.y--;
-		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::NonBlocking) p.y++;
+		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::Blocking) p.y++;
 
 
 		int r=ppl7::rand(0, 1);
