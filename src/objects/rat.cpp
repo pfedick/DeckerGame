@@ -260,12 +260,130 @@ size_t Rat::load(const unsigned char* buffer, size_t size)
 	return size;
 }
 
+class RatDialog : public Decker::ui::Dialog
+{
+private:
+	Decker::ui::ColorSliderWidget* color;
+	ppl7::tk::DoubleHorizontalSlider* scale;
+	ppl7::tk::DoubleHorizontalSlider* min_speed;
+	ppl7::tk::DoubleHorizontalSlider* max_speed;
+	ppl7::tk::DoubleHorizontalSlider* min_idle;
+	ppl7::tk::DoubleHorizontalSlider* max_idle;
+
+	Rat* object;
+
+public:
+	RatDialog(Rat* object);
+
+	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
+};
+
+
+
 void Rat::openUi()
 {
+	RatDialog* dialog=new RatDialog(this);
+	GetGameWindow()->addChild(dialog);
+}
+
+RatDialog::RatDialog(Rat* object)
+	: Decker::ui::Dialog(600, 400, Dialog::Buttons::OK)
+{
+	ppl7::grafix::Rect client=clientRect();
+	this->object=object;
+	setWindowTitle("Rat");
+	int col1=120;
+	int col2=(client.width()) / 2 + 40;
+
+	int sw=col2 - col1;
+	int y=0;
+
+	// Color
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Color:"));
+
+	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, false);
+	color->setEventHandler(this);
+	addChild(color);
+	y+=4 * 35;
+
+	// Scale
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
+	scale=new ppl7::tk::DoubleHorizontalSlider(col1, y, client.width() - col1, 30);
+	scale->setEventHandler(this);
+	scale->setLimits(0.5f, 1.5f);
+	scale->enableSpinBox(true, 0.01f, 3, 80);
+	addChild(scale);
+	y+=35;
+
+	// Speed
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Speed min:"));
+	min_speed=new ppl7::tk::DoubleHorizontalSlider(col1, y, sw, 30);
+	min_speed->setEventHandler(this);
+	min_speed->setLimits(2.0f, 16.0f);
+	min_speed->enableSpinBox(true, 0.01f, 3, 80);
+	addChild(min_speed);
+	addChild(new ppl7::tk::Label(col2, y, 40, 30, "max:"));
+	max_speed=new ppl7::tk::DoubleHorizontalSlider(col2 + 40, y, sw, 30);
+	max_speed->setEventHandler(this);
+	max_speed->setLimits(2.0f, 16.0f);
+	max_speed->enableSpinBox(true, 0.01f, 3, 80);
+	addChild(max_speed);
+	y+=35;
+
+	// Idle
+	addChild(new ppl7::tk::Label(0, y, col1, 30, "Idle min:"));
+	min_idle=new ppl7::tk::DoubleHorizontalSlider(col1, y, sw, 30);
+	min_idle->setEventHandler(this);
+	min_idle->setLimits(0.0f, 10.0f);
+	min_idle->enableSpinBox(true, 0.01f, 3, 80);
+	addChild(min_idle);
+	addChild(new ppl7::tk::Label(col2, y, 40, 30, "max:"));
+	max_idle=new ppl7::tk::DoubleHorizontalSlider(col2 + 40, y, sw, 30);
+	max_idle->setEventHandler(this);
+	max_idle->setLimits(0.0f, 10.0f);
+	max_idle->enableSpinBox(true, 0.01f, 3, 80);
+	addChild(max_idle);
+	y+=35;
+
+
+	color->setColor(object->color_mod);
+	scale->setValue(object->scale);
+	min_speed->setValue(object->min_speed);
+	max_speed->setValue(object->max_speed);
+	min_idle->setValue(object->min_idle);
+	max_idle->setValue(object->max_idle);
 
 }
 
 
+void RatDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+{
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == color) {
+		object->color_mod=color->color();
+	}
+
+}
+void RatDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+{
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == min_speed) {
+		object->min_speed=value;
+		if (value > max_speed->value()) max_speed->setValue(value);
+	} else if (widget == max_speed) {
+		object->max_speed=value;
+		if (value < min_speed->value()) min_speed->setValue(value);
+	} else if (widget == min_idle) {
+		object->min_idle=value;
+		if (value > max_idle->value()) max_idle->setValue(value);
+	} else if (widget == max_idle) {
+		object->max_idle=value;
+		if (value < min_idle->value()) min_idle->setValue(value);
+	} else if (widget == scale) {
+		object->scale=(float)value;
+	}
+}
 
 
 
