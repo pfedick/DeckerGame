@@ -119,7 +119,7 @@ void AudioPool::load()
 		sample[AudioClip::scarabeus_death3].load("res/audio/scarab_death3.mp3");
 		sample[AudioClip::scarabeus_death4].load("res/audio/scarab_death4.mp3");
 		sample[AudioClip::scarabeus_death5].load("res/audio/scarab_death5.mp3");
-		sample[AudioClip::rat_squeek].load("res/audio/rat.mp3");
+		sample[AudioClip::rat_noise].load("res/audio/rat.mp3");
 		sample[AudioClip::turkey_sound].load("res/audio/turkey-sound.mp3");
 		sample[AudioClip::turkey_gobble].load("res/audio/turkey-gobble.mp3");
 		sample[AudioClip::digging].load("res/audio/digging.mp3");
@@ -193,6 +193,7 @@ void AudioPool::load()
 		sample[AudioClip::george_jump_land].load("res/audio/george_jump_land.mp3");
 		sample[AudioClip::fire3].load("res/audio/fire3.mp3");
 		sample[AudioClip::cheese].load("res/audio/cheese.mp3");
+		sample[AudioClip::rat_squeek].load("res/audio/rat_squeek.mp3");
 
 
 	} catch (const ppl7::Exception& exp) {

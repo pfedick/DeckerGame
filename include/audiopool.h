@@ -54,7 +54,7 @@ public:
 		scarabeus_death3,
 		scarabeus_death4,
 		scarabeus_death5,
-		rat_squeek,
+		rat_noise,
 		turkey_sound,
 		turkey_gobble,
 		digging,
@@ -131,6 +131,7 @@ public:
 		george_jump_land,
 		fire3,
 		cheese,
+		rat_squeek,
 
 		// this must always be the last entry!
 		maxClips

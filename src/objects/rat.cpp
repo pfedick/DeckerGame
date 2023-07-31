@@ -92,6 +92,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 			}
 			player->dropHealth(2);
 			collisionDetection=false;
+			getAudioPool().playOnce(AudioClip::rat_squeek, 0.5f);
 			return;
 		}
 		collisionDetection=false;
@@ -191,11 +192,12 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 	}
 	if (!audio && state != RatState::dead) {
 		AudioPool& pool=getAudioPool();
-		audio=pool.getInstance(AudioClip::rat_squeek);
+		audio=pool.getInstance(AudioClip::rat_noise);
 		if (audio) {
-			audio->setVolume(0.4f);
+			audio->setVolume(0.2f);
 			audio->setAutoDelete(false);
 			audio->setLoop(true);
+			audio->startRandom();
 			audio->setPositional(p, 960);
 			pool.playInstance(audio);
 		}
