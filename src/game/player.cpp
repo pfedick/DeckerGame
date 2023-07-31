@@ -729,7 +729,6 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 					jump_climax=time + 0.3f;
 					acceleration_jump=2.0f * frame_rate_compensation;
 					acceleration_jump_sideways=6.0f;
-					velocity_move.x=8 * frame_rate_compensation;
 					moveOutOfWater(200.0f, 1.0f);
 				} else {
 					jump_climax=time + 0.2f;
@@ -740,6 +739,24 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 				velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 				animation.setStaticFrame(39);
 				return;
+			} else {
+				movement=Jump;
+				orientation=Back;
+				if (keys & KeyboardKeys::Shift) {
+					jump_climax=time + 0.3f;
+					acceleration_jump=2.0f * frame_rate_compensation;
+					acceleration_jump_sideways=0.0f;
+					moveOutOfWater(180.0f, 1.0f);
+				} else {
+					jump_climax=time + 0.2f;
+					acceleration_jump=0.3f * frame_rate_compensation;
+					acceleration_jump_sideways=0.0f;
+					moveOutOfWater(180.0f, 0.5f);
+				}
+				velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
+				animation.setStaticFrame(42);
+				return;
+
 			}
 		}
 	}
