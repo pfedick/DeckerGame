@@ -204,6 +204,16 @@ void SettingsScreen::initPageAudio()
     audio_effects_slider->setValue(game.config.volumeEffects * 255.0f);
     page_audio->addChild(audio_effects_slider);
 
+    label=new ppl7::tk::Label(100, 250, 200, 40, translate("ambience:"));
+    label->setFont(style_label.font);
+    page_audio->addChild(label);
+
+    audio_ambience_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 250, input_widget.width, input_widget.height);
+    audio_ambience_slider->setEventHandler(this);
+    audio_ambience_slider->setLimits(0, 255);
+    audio_ambience_slider->setValue(game.config.volumeAmbience * 255.0f);
+    page_audio->addChild(audio_ambience_slider);
+
 }
 
 void SettingsScreen::initPageVideo()
@@ -405,8 +415,7 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
             game.config.ScreenRefreshRate=dmode.refresh_rate;
             game.config.windowMode=mode;
             game.config.save();
-        }
-        catch (const ppl7::Exception& exp) {
+        } catch (const ppl7::Exception& exp) {
             exp.print();
         }
     }
@@ -428,7 +437,10 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         game.config.volumeEffects=(float)audio_effects_slider->value() / 255.0f;
         game.audiosystem.setVolume(AudioClass::Effect, game.config.volumeEffects);
         game.config.save();
-
+    } else if (event->widget() == audio_ambience_slider) {
+        game.config.volumeAmbience=(float)audio_ambience_slider->value() / 255.0f;
+        game.audiosystem.setVolume(AudioClass::Ambience, game.config.volumeAmbience);
+        game.config.save();
     }
 
 }

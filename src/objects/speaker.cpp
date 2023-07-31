@@ -131,7 +131,7 @@ void Speaker::setSample(int id, float volume, int max_distance)
 		sample_id=0;
 	}
 	if (id > 0) {
-		audio=pool.getInstance((AudioClip::Id)id);
+		audio=pool.getInstance((AudioClip::Id)id, AudioClass::Ambience);
 		if (audio) {
 			audio->setVolume(volume);
 			audio->setAutoDelete(false);

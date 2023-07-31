@@ -79,6 +79,7 @@ public:
 	float				volumeTotal;
 	float				volumeMusic;
 	float				volumeEffects;
+	float				volumeAmbience;
 
 	// Misc
 	ppl7::String		CustomLevelPath;

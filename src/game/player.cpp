@@ -368,7 +368,7 @@ void Player::handleDiving(double time, const TileTypePlane& world, Decker::Objec
 			ambient_sound=NULL;
 		}
 		if (!ambient_sound) {
-			ambient_sound=ap.getInstance(AudioClip::underwaterloop1);
+			ambient_sound=ap.getInstance(AudioClip::underwaterloop1, AudioClass::Ambience);
 			ambient_sound->setLoop(true);
 			ambient_sound->setVolume(0.8);
 			ap.playInstance(ambient_sound);
