@@ -85,6 +85,7 @@ public:
 	~AudioSample();
 	void load(const ppl7::String& filename);
 	size_t size() const;
+	size_t bufferSize() const;
 	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32* buffer, int vol_left=32768, int vol_right=32768) const;
 	size_t skipSamples(size_t position, size_t num) const;
 };

@@ -23,7 +23,7 @@ AudioPool::~AudioPool()
 size_t AudioPool::size() const
 {
 	size_t s=0;
-	for (int i=1;i < AudioClip::maxClips;i++) s+=sample[i].size();
+	for (int i=1;i < AudioClip::maxClips;i++) s+=sample[i].bufferSize();
 	return s;
 }
 

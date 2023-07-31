@@ -33,14 +33,19 @@ void AudioSample::load(const ppl7::String& filename)
 	decoder->open(ff, &info);
 	ppl7::STEREOSAMPLE16* b=(ppl7::STEREOSAMPLE16*)buffer.malloc(info.Samples * sizeof(ppl7::STEREOSAMPLE16));
 	size_t read_samples=decoder->getSamples(info.Samples, b);
-	//printf ("info.Samples=%d, read=%zd\n",info.Samples, read_samples);
 	buffer.truncate(read_samples * sizeof(ppl7::STEREOSAMPLE16));
+	//ppl7::PrintDebugTime("%-40s: %10zd KB, memory: %10zd KB\n", (const char*)filename, ff.size() / 1024, buffer.size() / 1024);
 	delete decoder;
 }
 
 size_t AudioSample::size() const
 {
 	return buffer.size() / sizeof(ppl7::STEREOSAMPLE16);
+}
+
+size_t AudioSample::bufferSize() const
+{
+	return buffer.size();
 }
 
 size_t AudioSample::addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32* buffer, int vol_left, int vol_right) const

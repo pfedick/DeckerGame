@@ -407,7 +407,12 @@ void Game::init_grafix()
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
-	ppl7::PrintDebugTime("Startup time: %0.3f s\n", ppl7::GetMicrotime() - game_start);
+	//ppl7::PrintDebugTime("Size of audio pool: %zd MB\n", audiopool.size() / 1024 / 1024);
+
+	ppl7::PrintDebugTime("Startup time: %0.3f s, size of Audio pool: %zd MB\n",
+		ppl7::GetMicrotime() - game_start,
+		audiopool.size() / 1024 / 1024
+	);
 
 }
 
@@ -418,7 +423,6 @@ void Game::initAudio()
 	audiosystem.setVolume(AudioClass::Effect, config.volumeEffects);
 	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 	audiopool.load();
-	//ppl7::PrintDebugTime("Size of audio pool: %zd MB\n", audiopool.size() / 1024 / 1024);
 	audiopool.setAudioSystem(&audiosystem);
 }
 
