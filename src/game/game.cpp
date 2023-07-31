@@ -691,6 +691,7 @@ void Game::run()
 		ppl7::ppl_time_t current_second=ppl7::GetTime();
 		if (current_second > last_second) {
 			last_second=current_second;
+			//metrics.print();
 			if (current_second >= start_total_metrics) {
 				total_metrics+=metrics;
 				if (current_second >= end_total_metrics) {
@@ -700,6 +701,7 @@ void Game::run()
 				}
 			}
 			last_metrics=metrics.getAverage();
+			//last_metrics.print();
 			mainmenue->updateMetrics(last_metrics);
 			metrics.clear();
 		}
@@ -733,7 +735,10 @@ void Game::run()
 		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
 
 		metrics.time_draw_ui.stop();
-
+		AudioSystem::Metrics audio_metrics=audiosystem.getMetrics();
+		metrics.time_audioengine.addDuration(audio_metrics.time);
+		metrics.total_audiotracks+=audio_metrics.tracks_total;
+		metrics.hearable_audiotracks+=audio_metrics.tracks_played;
 		metrics.time_total.stop();
 		presentScreen();
 		metrics.time_frame.stop();

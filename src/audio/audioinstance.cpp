@@ -104,6 +104,21 @@ size_t AudioInstance::skipSamples(size_t num)
 	return samples_read;
 }
 
+bool AudioInstance::isHearable() const
+{
+	if (!sample) return false;
+	if (positional) {
+		ppl7::grafix::Point v=GetViewPos();
+		float d=ppl7::grafix::Distance(p, v);
+		if ((int)d > max_distance || d <= 0.0f) {
+			return false;
+		}
+	}
+	if (this->volume == 0) return false;
+	return true;
+}
+
+
 size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume)
 {
 	if (!sample) return 0;
@@ -116,6 +131,9 @@ size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float
 			position=0;
 			return 0;
 		}
+	}
+	if (this->volume == 0) {
+		return skipSamples(num);
 	}
 	int vol_l=32768 * (volume * this->volume);
 	int vol_r=32768 * (volume * this->volume);

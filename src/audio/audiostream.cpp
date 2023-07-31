@@ -86,6 +86,13 @@ void AudioStream::fadeout(float seconds)
 
 }
 
+bool AudioStream::isHearable() const
+{
+	if (!decoder) return false;
+	return true;
+
+}
+
 size_t AudioStream::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float v)
 {
 	if (!decoder) {

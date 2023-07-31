@@ -30,7 +30,8 @@ enum class AudioClass
 	Unknown=0,
 	Effect,
 	Music,
-	Speech
+	Speech,
+	Ambience
 };
 
 
@@ -47,6 +48,7 @@ public:
 	AudioClass audioclass() const;
 	bool autoDelete() const;
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume)=0;
+	virtual bool isHearable() const=0;
 };
 
 class AudioStream : public Audio
@@ -69,7 +71,8 @@ public:
 	void rewind();
 	void setVolume(float volume);
 	void fadeout(float seconds=4.0f);
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
+	size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume) override;
+	bool isHearable() const override;
 };
 
 class AudioSample
@@ -112,20 +115,34 @@ public:
 	void fadeout(float seconds=4.0f);
 	void setPositional(const ppl7::grafix::Point& p, int max_distance=1600);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
+	bool isHearable() const override;
 };
 
 class AudioSystem
 {
+public:
+	class Metrics
+	{
+	public:
+		double time=0.0f;
+		size_t tracks_total=0;
+		size_t tracks_played=0;
+	};
+
 private:
 	int device_id;
 	ppl7::Mutex mutex;
 	std::set<Audio*> tracks;
 	ppl7::STEREOSAMPLE32* mixbuffer;
 	float globalVolume;
-	float a_class_volume[4];
+	float a_class_volume[5];
+
+	ppl7::Mutex metrics_mutex;
+	Metrics metrics;
 
 
 public:
+
 	AudioSystem();
 	~AudioSystem();
 
@@ -141,6 +158,7 @@ public:
 
 	void setGlobalVolume(float volume);
 	void setVolume(AudioClass a_class, float volume);
+	Metrics getMetrics(bool reset=true);
 
 	void callback(Uint8* stream, int len);
 

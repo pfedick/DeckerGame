@@ -1,5 +1,5 @@
-VERSION ?= 0.10.0
-PREVIOUS_TAG = 0.9.0
+VERSION ?= 0.10.1
+PREVIOUS_TAG = 0.10.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
@@ -41,6 +41,7 @@ OBJECTS=compile/main.o \
 	compile/metrics.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
+	compile/ui_metrics.o \
 	compile/ui_tileselection.o \
 	compile/ui_spriteselection.o \
 	compile/ui_tiletypeselection.o \
@@ -632,6 +633,10 @@ compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/versi
 compile/ui_menue.o: src/ui/menue.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_menue.o -c src/ui/menue.cpp $(CFLAGS)
+
+compile/ui_metrics.o: src/ui/metrics.cpp Makefile include/ui.h include/metrics.h
+	- @mkdir -p compile
+	$(CXX) -o compile/ui_metrics.o -c src/ui/metrics.cpp $(CFLAGS)
 
 compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 	- @mkdir -p compile

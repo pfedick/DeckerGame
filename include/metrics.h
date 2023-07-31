@@ -51,6 +51,7 @@ public:
     Timer time_draw_particles;
     Timer time_plane;
     Timer time_misc;
+    Timer time_audioengine;
 
 
     int fps;
@@ -60,6 +61,8 @@ public:
     size_t visible_objects;
     size_t total_particles;
     size_t visible_particles;
+    size_t total_audiotracks;
+    size_t hearable_audiotracks;
     double frame_rate_compensation;
     float frametime;
 

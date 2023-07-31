@@ -47,6 +47,7 @@ AudioSystem::AudioSystem()
 	a_class_volume[static_cast<int>(AudioClass::Effect)]=1.0;
 	a_class_volume[static_cast<int>(AudioClass::Music)]=1.0;
 	a_class_volume[static_cast<int>(AudioClass::Speech)]=1.0;
+	a_class_volume[static_cast<int>(AudioClass::Ambience)]=1.0;
 }
 
 AudioSystem::~AudioSystem()
@@ -144,6 +145,8 @@ static inline int clamp(int value)
 
 void AudioSystem::callback(Uint8* stream, int len)
 {
+	double start_time=ppl7::GetMicrotime();
+	size_t tracks_hearable=0;
 	size_t samples=len / sizeof(ppl7::STEREOSAMPLE16);
 	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE32));
 	//ppl7::PrintDebugTime("callback called, len=%d\n", len);
@@ -155,6 +158,7 @@ void AudioSystem::callback(Uint8* stream, int len)
 		//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks\n", num_tracks);
 		for (it=tracks.begin();it != tracks.end();++it) {
 			Audio* audio=(*it);
+			if (audio->isHearable()) tracks_hearable++;
 			float volume=globalVolume * a_class_volume[static_cast<int>(audio->audioclass())];
 			if (audio->addSamples(samples, mixbuffer, volume) != samples) {
 				to_remove.insert(audio);
@@ -181,7 +185,16 @@ void AudioSystem::callback(Uint8* stream, int len)
 	} else {
 		memset(stream, 0, len);
 	}
+	metrics_mutex.lock();
+	metrics.tracks_total=num_tracks;
+	metrics.tracks_played=tracks_hearable;
+
 	mutex.unlock();
+	double total_time=ppl7::GetMicrotime() - start_time;
+	//ppl7::PrintDebugTime("Audio Time=%0.3f ms, total: %zd, hearable: %zd\n", total_time * 1000.0f, num_tracks, tracks_hearable);
+	metrics.time+=total_time;
+	metrics_mutex.unlock();
+
 }
 
 void AudioSystem::play(Audio* audio)
@@ -219,6 +232,16 @@ void AudioSystem::setGlobalVolume(float volume)
 void AudioSystem::setVolume(AudioClass a_class, float volume)
 {
 	a_class_volume[static_cast<int>(a_class)]=volume;
+}
+
+AudioSystem::Metrics AudioSystem::getMetrics(bool reset)
+{
+	metrics_mutex.lock();
+	Metrics m=metrics;
+	if (reset) metrics.time=0.0f;
+	metrics_mutex.unlock();
+	//ppl7::PrintDebugTime("AudioSystem::getMetrics Time=%0.3f ms, total: %zd, hearable: %zd\n", m.time * 1000.0f, m.tracks_total, m.tracks_played);
+	return m;
 }
 
 void AudioSystem::test()
