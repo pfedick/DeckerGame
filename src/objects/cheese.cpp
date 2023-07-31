@@ -41,7 +41,7 @@ void Cheese::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
-	audio.playOnce(AudioClip::hammer, 0.7f);
+	audio.playOnce(AudioClip::cheese, 0.4f);
 	player->addSpecialObject(static_cast<int>(Type::ObjectType::Cheese));
 }
 
