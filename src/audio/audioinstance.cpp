@@ -84,6 +84,14 @@ void AudioInstance::setPositional(const ppl7::grafix::Point& p, int max_distance
 	this->max_distance=max_distance;
 }
 
+void AudioInstance::startRandom()
+{
+	if (sample) {
+		size_t skip=ppl7::rand(0, sample->size());
+		if (skip > 0)	skipSamples(skip);
+	}
+}
+
 size_t AudioInstance::skipSamples(size_t num)
 {
 	size_t samples_read=0;

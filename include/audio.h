@@ -111,6 +111,7 @@ public:
 	AudioInstance(const AudioSample& sample, AudioClass a=AudioClass::Effect);
 	void load(const AudioSample& sample);
 	void rewind();
+	void startRandom();
 	void setVolume(float volume);
 	void setLoop(bool loop);
 	void fadeout(float seconds=4.0f);
