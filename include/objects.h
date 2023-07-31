@@ -58,6 +58,7 @@ public:
 		Oxygen=27,
 		BreakingWall=28,
 		Hammer=29,
+		Cheese=30,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -725,6 +726,7 @@ private:
 		dead
 	};
 	RatState state;
+	float speed;
 
 public:
 	Rat();

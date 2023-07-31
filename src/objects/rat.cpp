@@ -22,6 +22,9 @@ Rat::Rat()
 	collisionDetection=true;
 	audio=NULL;
 	next_state=0.0f;
+	speed=0.0f;
+	int r=ppl7::rand(128, 255);
+	color_mod.setColor(r, r, r, 255);
 
 }
 
@@ -34,13 +37,54 @@ Rat::~Rat()
 	}
 }
 
+static void splatterBlood(double time, const ppl7::grafix::PointF& p)
+{
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.314));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.455, 1.000));
+	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 0.010));
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.342, ppl7::grafix::Color(137, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(157, 0, 0, 0)));
+	ParticleSystem* ps=GetParticleSystem();
+	int new_particles=ppl7::rand(107, 135);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.293, 0.764) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(49, 20), 0.000);
+		particle->layer=Particle::Layer::BeforePlayer;
+		particle->weight=randf(0.406, 0.642);
+		particle->gravity.setPoint(0.000, 0.377);
+		particle->velocity=calculateVelocity(randf(2.642, 5.849), 0.000 + randf(-54.340, 54.340));
+		particle->scale=randf(0.300, 0.622);
+		particle->color_mod.set(230, 0, 0, 255);
+		particle->initAnimation(Particle::Type::StaticParticle);
+		particle->initScaleGradient(scale_gradient, particle->scale);
+		particle->initColorGradient(color_gradient);
+		ps->addParticle(particle);
+	}
+}
+
+
 void Rat::handleCollision(Player* player, const Collision& collision)
 {
-	Player::PlayerMovement movement=player->getMovement();
-	if (collision.onFoot() == true && movement == Player::Falling) {
+	if (state == RatState::dead) return;
+	//Player::PlayerMovement movement=player->getMovement();
+	//ppl7::PrintDebugTime("player v: %0.3f, gravity: %0.3f\n", player->velocity_move.y, player->gravity,
+	//		(int)movement);
+	if (player->x<p.x - 48 || player->x>p.x + 48) return;
+	if (player->hasSpecialObject(Type::ObjectType::Cheese)) return;
+	if (player->velocity_move.y > 0.0f || player->gravity > 0.0f) {
 		collisionDetection=false;
-		enabled=false;
+		splatterBlood(player->time, p);
+		//enabled=false;
+		if (state == RatState::walk_left || state == RatState::wait_left || state == RatState::turn_right_to_left)
+			sprite_no=61;
+		else sprite_no=62;
 		state=RatState::dead;
+
 		player->addPoints(50);
 		getAudioPool().playOnce(AudioClip::squash1, 0.3f);
 		if (audio) {
@@ -56,7 +100,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 void Rat::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	//ppl7::PrintDebugTime("state=%d, next_state=%0.3f, time=%0.3f\n", (int)state, next_state, time);
-	if (time > next_animation) {
+	if (time > next_animation && state != RatState::dead) {
 		next_animation=time + 0.03f;
 		animation.update();
 		int new_sprite=animation.getFrame();
@@ -65,6 +109,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			updateBoundary();
 		}
 	}
+	if (ppl7::rand(0, 10) == 0)speed=ppl7::randf(4.0f, 10.0f);
 	if (state == RatState::idle) {
 		// Fix initial position from older savegames
 		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::NonBlocking) p.y--;
@@ -75,15 +120,19 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		if (r == 0) {
 			state=RatState::walk_left;
 			animation.startSequence(0, 14, true, 0);
+			speed=ppl7::randf(4.0f, 10.0f);
+			next_state=time + ppl7::randf(1.0f, 10.0f);
 		} else {
 			state=RatState::walk_right;
 			animation.startSequence(15, 29, true, 15);
+			speed=ppl7::randf(4.0f, 10.0f);
+			next_state=time + ppl7::randf(1.0f, 10.0f);
 		}
 	} else if (state == RatState::walk_left) {
-		p.x-=2 * frame_rate_compensation;
+		p.x-=speed * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y + 6));
-		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking || next_state < time) {
 			state=static_cast<RatState>(ppl7::rand(static_cast<int>(RatState::wait_left),
 				static_cast<int>(RatState::turn_left_to_right)));
 			if (state == RatState::wait_left) {
@@ -96,17 +145,19 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		state=RatState::turn_left_to_right;
 	} else if (state == RatState::turn_left_to_right && animation.isFinished()) {
 		state=RatState::walk_right;
+		speed=ppl7::randf(4.0f, 10.0f);
+		next_state=time + ppl7::randf(1.0f, 10.0f);
 		animation.startSequence(15, 29, true, 15);
 	} else if (state == RatState::walk_right) {
-		p.x+=2 * frame_rate_compensation;
+		p.x+=speed * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y - 12));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y + 6));
-		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking || next_state < time) {
 			state=static_cast<RatState>(ppl7::rand(static_cast<int>(RatState::wait_right),
 				static_cast<int>(RatState::turn_right_to_left)));
 			if (state == RatState::wait_right) {
 				animation.startSequence(40, 49, true, 40);
-				next_state=time + ppl7::randf(0.5f, 5.0f);
+				next_state=time + ppl7::randf(1.5f, 5.0f);
 			} else animation.startSequence(50, 54, false, 0);
 		}
 	} else if (state == RatState::wait_right && time > next_state) {
@@ -114,6 +165,8 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		state=RatState::turn_right_to_left;
 	} else if (state == RatState::turn_right_to_left && animation.isFinished()) {
 		state=RatState::walk_left;
+		next_state=time + ppl7::randf(1.0f, 10.0f);
+		speed=ppl7::randf(4.0f, 10.0f);
 		animation.startSequence(0, 14, true, 0);
 	}
 	if (!audio && state != RatState::dead) {
@@ -130,6 +183,10 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		audio->setPositional(p, 960);
 	}
 }
+
+
+
+
 
 
 
