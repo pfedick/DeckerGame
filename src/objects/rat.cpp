@@ -24,7 +24,8 @@ Rat::Rat()
 	next_state=0.0f;
 	speed=0.0f;
 	int r=ppl7::rand(128, 255);
-	color_mod.setColor(r, r, r, 255);
+	int r2=ppl7::rand(r, 255);
+	color_mod.setColor(r2, r, r, 255);
 
 }
 
@@ -109,7 +110,7 @@ void Rat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 			updateBoundary();
 		}
 	}
-	if (ppl7::rand(0, 10) == 0)speed=ppl7::randf(4.0f, 10.0f);
+	if (ppl7::rand(0, 20) == 0)speed=ppl7::randf(4.0f, 10.0f);
 	if (state == RatState::idle) {
 		// Fix initial position from older savegames
 		while (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) != TileType::NonBlocking) p.y--;

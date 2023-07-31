@@ -220,7 +220,7 @@ enemy_piranha:
 	./texmaker -s lightwave/Render/enemies/piranha/ -t res/piranha.tex -w 512 -h 512 -px 60 -py 100
 
 enemy_rat:
-	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 512 -px 128 -py 114
+	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 768 -px 128 -py 114
 
 enemy_ostrich:
 	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
