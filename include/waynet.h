@@ -51,6 +51,7 @@ class WayPoint : public Position
 {
 public:
 	std::map<uint32_t, Connection> connection_map;
+	uint32_t as;
 
 	WayPoint(uint16_t x, uint16_t y);
 	WayPoint(uint32_t id);
@@ -66,6 +67,7 @@ class Waynet
 {
 private:
 	std::map<uint32_t, WayPoint> waypoints;
+	uint32_t next_as;
 
 	uint32_t selection;
 	WayPoint invalid_waypoint;

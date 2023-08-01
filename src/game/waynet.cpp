@@ -48,16 +48,19 @@ WayPoint::WayPoint(uint16_t x, uint16_t y)
 {
 	this->x=x;
 	this->y=y;
+	as=0;
 }
 
 WayPoint::WayPoint(uint32_t id)
 {
 	this->id=id;
+	as=0;
 }
 
 WayPoint::WayPoint()
 {
 	this->id=0;
+	as=0;
 }
 
 
@@ -113,6 +116,7 @@ const char* Connection::name() const
 Waynet::Waynet()
 {
 	selection=0;
+	next_as=1;
 }
 
 Waynet::~Waynet()
@@ -124,6 +128,7 @@ void Waynet::clear()
 {
 	waypoints.clear();
 	selection=0;
+	next_as=1;
 }
 
 
@@ -268,7 +273,9 @@ void Waynet::load(const ppl7::ByteArrayPtr& ba)
 
 void Waynet::addPoint(const WayPoint& p1)
 {
-	waypoints.insert(std::pair<uint32_t, WayPoint>(p1.id, p1));
+	std::pair<std::map<uint32_t, WayPoint>::iterator, bool>result=waypoints.insert(std::pair<uint32_t, WayPoint>(p1.id, p1));
+	result.first->second.as=next_as;
+	next_as++;
 }
 
 bool Waynet::hasPoint(const WayPoint& p1) const
