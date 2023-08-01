@@ -197,100 +197,99 @@ cleanall:
 	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core
 	cd pplib && $(MAKE) clean
 
+
 sprites_white:
-	./texmaker -s lightwave/Render/sprites_white_x8/ -t res/sprites_white_x8.tex -w 2048 -h 2048 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_white_x8/ -t res/sprites_white_x8.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_white
 	./texmaker -s lightwave/Render/sprites_white_ui/ -t res/sprites_white_ui.tex -w 512 -h 512 -px 0 -py 0
 
 sprites_nature:
-	./texmaker -s lightwave/Render/sprites_nature/ -t res/sprites_nature.tex -w 2048 -h 2048 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_nature/ -t res/sprites_nature.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_nature
 	./texmaker -s lightwave/Render/sprites_nature_ui/ -t res/sprites_nature_ui.tex -w 512 -h 512 -px 0 -py 0
 
 sprites_tropical:
-	./texmaker -s lightwave/Render/sprites_tropical/ -t res/sprites_tropical.tex -w 2048 -h 2048 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_tropical/ -t res/sprites_tropical.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_tropical
 	./texmaker -s lightwave/Render/sprites_tropical_ui/ -t res/sprites_tropical_ui.tex -w 512 -h 512 -px 0 -py 0
 
 sprites_objects:
-	./texmaker -s lightwave/Render/sprites_objects/ -t res/sprites_objects.tex -w 2048 -h 2048 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_objects/ -t res/sprites_objects.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_objects
 	./texmaker -s lightwave/Render/sprites_objects_ui/ -t res/sprites_objects_ui.tex -w 512 -h 512 -px 0 -py 0
 
 bricks_white:
 	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 1024 -h 1024 -px 0 -py 0
-	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
+	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160 -x tmp/bricks_white
 
 enemy_piranha:
-	./texmaker -s lightwave/Render/enemies/piranha/ -t res/piranha.tex -w 512 -h 512 -px 60 -py 100
-
-enemy_rat:
-	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 768 -px 128 -py 114
+	./texmaker -s lightwave/Render/enemies/piranha/ -t res/piranha.tex -w 512 -h 512 -px 60 -py 100 -x tmp/enemy_piranha -x tmp/piranha
 
 enemy_ostrich:
-	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256
+	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256 -x tmp/enemy_ostrich -x tmp/ostrich
+
+enemy_rat:
+	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 768 -px 128 -py 114 -x tmp/rat -x tmp/rat
+
 
 enemy_scorpion:
-	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125
-	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 140 -py 154
+	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125 -x tmp/scorpion
+	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 140 -py 154 -x tmp/scorpion_metalic
 
 trap_three_speers:
-	./texmaker -s lightwave/Render/enemies/3speers/ -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255
+	./texmaker -s lightwave/Render/enemies/3speers/ -t res/enemy_3speers.tex -w 1024 -h 1024 -px 256 -py 255  -x tmp/enemy_3speers
 
 objects_ui:
-	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0
+	./texmaker -s lightwave/Render/objects/ui/ -t res/objects_ui.tex -w 1024 -h 1024 -px 0 -py 0 -x tmp/obects_ui
 
 interactive_objects:
-	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250
+	./texmaker -s lightwave/Render/objects/interactive/ -t res/objects.tex -w 1024 -h 1024 -px 128 -py 250  -x tmp/objects
 
 doors:
-	#./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
-	./texmaker -s lightwave/Render/objects/door_v2/ -t res/doors.tex -w 2048 -h 2048 -px 144 -py 242
-
-breakingwall:
-	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254
+	./texmaker -s lightwave/Render/objects/door_v2/ -t res/doors.tex -w 2048 -h 2048 -px 144 -py 242 -x tmp/doors
 
 george:
-	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
+	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/george_adventure
+	./texmaker -s lightwave/Render/george/ -t res/george.tex -w 1024 -h 1024 -px 128 -py 195  -x tmp/george
 
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_rat
+breakingwall:
+	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
 
-sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects enemies objects_ui doors
-	./texmaker -s "lightwave/Render/george/*.png" -t res/george.tex -w 1024 -h 1024 -px 128 -py 195
-	./texmaker -s "lightwave/Render/george_adventure/" -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195
-	./texmaker -s "res/tiletypes/*.png" -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x res/tiletypes
-	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0
-	./texmaker -s "lightwave/Render/sprites_plants/*.png" -t res/sprites_plants.tex -w 2048 -h 2048 --pivot_detection lower_middle
-	./texmaker -s "lightwave/Render/sprites_plants_ui/*.png" -t res/sprites_plants_ui.tex -w 512 -h 512 -px 0 -py 0
-	./texmaker -s "lightwave/Render/sprites_nature_blury/*.png" -t res/sprites_nature_blury.tex -w 2048 -h 2048 --pivot_detection lower_middle
-	./texmaker -s "lightwave/Render/sprites_nature_blury_ui/*.png" -t res/sprites_nature_blury_ui.tex -w 512 -h 512 -px 0 -py 0
-	./texmaker -s "lightwave/Render/sprites_rocks/*.png" -t res/sprites_rocks.tex -w 2048 -h 2048 --pivot_detection lower_middle
-	./texmaker -s "lightwave/Render/sprites_rocks_ui/*.png" -t res/sprites_rocks_ui.tex -w 512 -h 512 -px 0 -py 0
-	./texmaker -s "lightwave/Render/sprites_flowers/*.png" -t res/sprites_flowers.tex -w 1024 -h 1024 -px 32 -py 32
-	./texmaker -s "lightwave/Render/sprites_flowers/*.png" -t res/sprites_flowers_ui.tex -w 1024 -h 1024 -px 0 -py 0
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall
 
+sprites: george sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies
+	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
+	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
+	./texmaker -s lightwave/Render/sprites_plants/ -t res/sprites_plants.tex -w 1024 -h 1024 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_plants_ui/ -t res/sprites_plants_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/sprites_nature_blury/ -t res/sprites_nature_blury.tex -w 2048 -h 2048 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_nature_blury_ui/ -t res/sprites_nature_blury_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/sprites_rocks/ -t res/sprites_rocks.tex -w 1024 -h 1024 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/sprites_rocks_ui/ -t res/sprites_rocks_ui.tex -w 256 -h 256 -px 0 -py 0
 
-	./texmaker -s "lightwave/Render/objects/treasure/*.png" -t res/sprites_treasure.tex -w 1024 -h 1024 -px 64 -py 110
-	./texmaker -s "lightwave/Render/objects/treasure_ui/*.png" -t res/sprites_treasure_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/sprites_flowers/ -t res/sprites_flowers.tex -w 512 -h 512 -px 32 -py 32
+	./texmaker -s lightwave/Render/sprites_flowers/ -t res/sprites_flowers_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/objects/treasure/ -t res/sprites_treasure.tex -w 512 -h 512 -px 64 -py 110
+	./texmaker -s lightwave/Render/objects/treasure_ui/ -t res/sprites_treasure_ui.tex -w 128 -h 128 -px 0 -py 0
 
-	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid.tex -w 512 -h 512 -px 0 -py 76
-	./texmaker -s "res/solidcolor/*.png" -t res/bricks_solid_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s res/solidcolor/ -t res/bricks_solid.tex -w 512 -h 512 -px 0 -py 76
+	./texmaker -s res/solidcolor/ -t res/bricks_solid_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/bricks_white/ -t res/bricks_white.tex -w 1024 -h 1024 -px 0 -py 160
+	./texmaker -s lightwave/Render/particles/ -t res/particles.tex -w 512 -h 512 -px 128 -py 128
+	./texmaker -s lightwave/Render/mummy/ -t res/mummy.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s lightwave/Render/skeleton/ -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s lightwave/Render/objects/vent/ -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
+	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 1024 -h 1024 -px 52 -py 77
+	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 256 -h 256 -px 32 -py 55
+	./texmaker -s lightwave/Render/enemies/wallenstein/ -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s lightwave/Render/enemies/helena/ -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s lightwave/Render/enemies/yeti/ -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
+	./texmaker -s lightwave/Render/enemies/bat/ -t res/bat.tex -w 256 -h 256 -px 64 -py 120
+	./texmaker -s lightwave/Render/enemies/bird/ -t res/bird.tex -w 512 -h 512 -px 64 -py 120
+	./texmaker -s lightwave/Render/enemies/stamper_vertical/ -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
+	./texmaker -s lightwave/Render/objects/laser/ -t res/laser.tex -w 128 -h 128 -px 16 -py 16
+	./texmaker -s lightwave/Render/objects/treasure_chest/ -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
+	./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
+	./texmaker -s lightwave/Render/objects/levelend/ -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 
-
-	./texmaker -s "lightwave/Render/particles/*.png" -t res/particles.tex -w 1024 -h 1024 -px 128 -py 128
-
-	./texmaker -s "lightwave/Render/mummy/*.png" -t res/mummy.tex -w 1024 -h 1024 -px 128 -py 195
-	./texmaker -s "lightwave/Render/skeleton/*.png" -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
-	./texmaker -s "lightwave/Render/objects/vent/*.png" -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
-	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 512 -h 512 -px 32 -py 49
-	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 512 -h 512 -px 32 -py 55
-	./texmaker -s "lightwave/Render/enemies/wallenstein/*.png" -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
-	./texmaker -s "lightwave/Render/enemies/helena/*.png" -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
-	./texmaker -s "lightwave/Render/enemies/yeti/*.png" -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
-	./texmaker -s "lightwave/Render/enemies/bat/*.png" -t res/bat.tex -w 512 -h 512 -px 64 -py 120
-	./texmaker -s "lightwave/Render/enemies/bird/*.png" -t res/bird.tex -w 512 -h 512 -px 64 -py 120
-
-	./texmaker -s "lightwave/Render/enemies/stamper_vertical/*.png" -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
-	./texmaker -s "lightwave/Render/objects/laser/*.png" -t res/laser.tex -w 256 -h 256 -px 16 -py 16
-	./texmaker -s "lightwave/Render/objects/treasure_chest/*.png" -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
-	./texmaker -s "lightwave/Render/objects/levelend/*.png" -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 
 
 fonts:
