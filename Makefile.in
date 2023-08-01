@@ -135,7 +135,8 @@ OBJECTS=compile/main.o \
 #	compile/intro_screen.o \
 
 
-TEXMAKER_OBJECTS	= compile/texm_main.o compile/texm_texture.o compile/texm_texturefile.o
+TEXMAKER_OBJECTS	= compile/texm_main.o \
+	compile/texm_texture.o compile/texm_texturefile.o compile/texm_cache.o
 
 $(PROGRAM): update_version ppl7 $(OBJECTS)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(LIBS)
@@ -767,6 +768,10 @@ compile/texm_texture.o: tools/texmaker/texture.cpp Makefile tools/texmaker/texma
 compile/texm_texturefile.o: tools/texmaker/texturefile.cpp Makefile tools/texmaker/texmaker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/texm_texturefile.o -c tools/texmaker/texturefile.cpp $(TEXMAKER_CFLAGS)
+
+compile/texm_cache.o: tools/texmaker/cache.cpp Makefile tools/texmaker/texmaker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/texm_cache.o -c tools/texmaker/cache.cpp $(TEXMAKER_CFLAGS)
 
 # fixbricks
 compile/fixbricks_main.o: tools/fixbricks/main.cpp Makefile

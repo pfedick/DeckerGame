@@ -45,9 +45,9 @@ int loadFromDirectory(const char* source, int px, int py, TextureFile& Tex) {
 	Dir.reset(it);
 	ppl7::DirEntry Entry;
 	while (Dir.getNextPattern(Entry, it, Pattern)) {
-		printf("Found: %s, ", (const char*)(Entry.File));
+		//printf("Found: %s, ", (const char*)(Entry.File));
 		if (!Tex.AddFile(Entry.File, id, px, py)) {
-			printf("Debug 2\n");
+			//printf("Debug 2\n");
 			return 1;
 		}
 		id++;
@@ -184,15 +184,15 @@ int main(int argc, char** argv)
 
 	}
 
-	if (savepng.notEmpty()) {
-		printf("Speichere Texturen als PNG...\n");
-		Tex.SaveTextures(savepng);
-	}
 	try {
 		Tex.Save(target);
 	} catch (const ppl7::Exception& ex) {
 		ex.print();
 		return 1;
+	}
+	if (savepng.notEmpty()) {
+		printf("saving texturen...\n");
+		Tex.SaveTextures(savepng);
 	}
 	return 0;
 }
