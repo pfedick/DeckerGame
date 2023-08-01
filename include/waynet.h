@@ -70,7 +70,7 @@ private:
 	uint32_t selection;
 	WayPoint invalid_waypoint;
 
-	bool findBestWay(std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
+	bool findBestWay(const std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
 
 public:
 	Waynet();

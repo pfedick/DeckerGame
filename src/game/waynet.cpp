@@ -378,17 +378,24 @@ static int calcCosts(const std::list<Connection>& conns)
 	return c;
 }
 
-bool Waynet::findBestWay(std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
+bool Waynet::findBestWay(const std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
 {
+	if (visited_nodes.find(start.id) != visited_nodes.end()) return false;
 #ifdef DEBUGWAYNET
-	//ppl7::PrintDebugTime("Waynet::findBestWay %d, we have %d choices\n", maxNodes, (int)start.connection_map.size());
+	ppl7::PrintDebugTime("Waynet::findBestWay, Node=%u, depth: %d, maxnodes: %d, we have %d choices, waylist is %zd nodes long\n",
+		start.id, visited_nodes.size(),
+		maxNodes, (int)start.connection_map.size(), way_list.size());
 #endif
 	if (maxNodes <= 0) return false;
 	std::list<Connection>best;
 	int best_cost=9999999;
+	std::set<uint32_t> loopcheck=visited_nodes;
+	loopcheck.insert(start.id);
+
 	std::map<uint32_t, Connection>::const_iterator it;
 	for (it=start.connection_map.begin();it != start.connection_map.end();++it) {
 		if (it->second.target.id == previous.id) continue;
+		if (loopcheck.find(it->second.target.id) != loopcheck.end()) continue;
 		std::list<Connection>current;
 		current.push_back(it->second);
 		if (it->second.target.id == target.id) {
@@ -401,7 +408,7 @@ bool Waynet::findBestWay(std::list<Connection>& way_list, const WayPoint& previo
 				best=current;
 			}
 		} else {
-			if (findBestWay(current, start, waypoints[it->second.target.id], target, maxNodes - 1)) {
+			if (findBestWay(loopcheck, current, start, waypoints[it->second.target.id], target, maxNodes - 1)) {
 				int cost=calcCosts(current);
 				if (cost < best_cost) {
 					best_cost=cost;
@@ -431,6 +438,15 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 	const WayPoint& wp_source=findNearestWaypoint(pt_source);
 	const WayPoint& wp_target=findNearestWaypoint(pt_target);
 	if (wp_source == invalid_waypoint || wp_target == invalid_waypoint) return false;
-	return findBestWay(way_list, WayPoint(), wp_source, wp_target, 25);
+	std::set<uint32_t> visited_nodes;
+#ifdef DEBUGWAYNET
+	ppl7::PrintDebugTime("\n\n\nstart to find a way form %d:%d (%u) to to %d:%d (%u) =========================================================\n",
+		wp_source.x, wp_source.y, wp_source.id,
+		wp_target.x, wp_target.y, wp_target.id);
+#endif
+	for (int maxchecks=10;maxchecks < 25;maxchecks+=5) {
+		if (findBestWay(visited_nodes, way_list, WayPoint(), wp_source, wp_target, maxchecks)) return true;
+	}
+	return false;
 
 }
