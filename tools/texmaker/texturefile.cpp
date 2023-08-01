@@ -85,10 +85,13 @@ int TextureFile::AddFile(const ppl7::String& filename, int id, int pivotx, int p
 		}
 	}
 	if (empty) {
-		printf("Grafik hat keinen Inhalt!\n");
+		printf("WARNING: image does not have any content: %s\n", (const char*)filename);
+		return 1;
+		/*
 		r.setRect(0, 0, 0, 0);
 		pivotx=0;
 		return AddSurface(surface, &r, id, 0, 0);
+		*/
 	}
 	r.x2++;
 	r.y2++;

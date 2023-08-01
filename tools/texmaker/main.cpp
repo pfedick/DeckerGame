@@ -97,7 +97,7 @@ void loadFromListfile(const char* listfile, TextureFile& Tex)
 			ppl7::String file=basedir + "/" + Token[1];
 			int px=Token[2].toInt();
 			int py=Token[2].toInt();
-			printf("Found: %s, ", (const char*)(file));
+			//printf("Found: %s, ", (const char*)(file));
 			if (!Tex.AddFile(file, id, px, py)) {
 				throw ppl7::Exception("Debug 3");
 			}
