@@ -24,8 +24,8 @@ Helena::Helena()
 	animation.setStaticFrame(27);
 	keys=0;
 	substate=0;
-	speed_walk=2.0f;
-	speed_run=5.5f;
+	speed_walk=1.0f;
+	speed_run=3.0f;
 }
 
 
