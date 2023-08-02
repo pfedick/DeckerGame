@@ -385,24 +385,22 @@ static int calcCosts(const std::list<Connection>& conns)
 	return c;
 }
 
-bool Waynet::findBestWay(const std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
+bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
 {
 	if (visited_nodes.find(start.id) != visited_nodes.end()) return false;
 #ifdef DEBUGWAYNET
-	ppl7::PrintDebugTime("Waynet::findBestWay, Node=%u, depth: %d, maxnodes: %d, we have %d choices, waylist is %zd nodes long\n",
-		start.id, visited_nodes.size(),
+	ppl7::PrintDebugTime("Waynet::findBestWay, Node=%d, depth: %d, maxnodes: %d, we have %d choices, waylist is %zd nodes long\n",
+		start.as, visited_nodes.size(),
 		maxNodes, (int)start.connection_map.size(), way_list.size());
 #endif
 	if (maxNodes <= 0) return false;
 	std::list<Connection>best;
 	int best_cost=9999999;
-	std::set<uint32_t> loopcheck=visited_nodes;
-	loopcheck.insert(start.id);
+	visited_nodes.insert(start.id);
 
 	std::map<uint32_t, Connection>::const_iterator it;
 	for (it=start.connection_map.begin();it != start.connection_map.end();++it) {
 		if (it->second.target.id == previous.id) continue;
-		if (loopcheck.find(it->second.target.id) != loopcheck.end()) continue;
 		std::list<Connection>current;
 		current.push_back(it->second);
 		if (it->second.target.id == target.id) {
@@ -415,7 +413,7 @@ bool Waynet::findBestWay(const std::set<uint32_t>& visited_nodes, std::list<Conn
 				best=current;
 			}
 		} else {
-			if (findBestWay(loopcheck, current, start, waypoints[it->second.target.id], target, maxNodes - 1)) {
+			if (findBestWay(visited_nodes, current, start, waypoints[it->second.target.id], target, maxNodes - 1)) {
 				int cost=calcCosts(current);
 				if (cost < best_cost) {
 					best_cost=cost;
