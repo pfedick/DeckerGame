@@ -71,6 +71,7 @@ private:
 
 	uint32_t selection;
 	WayPoint invalid_waypoint;
+	SpriteTexture* spriteset;
 
 	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
 
@@ -81,6 +82,7 @@ public:
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
+	void setSpriteset(SpriteTexture* spriteset);
 
 	void addPoint(const WayPoint& p1);
 	bool hasPoint(const WayPoint& p1) const;

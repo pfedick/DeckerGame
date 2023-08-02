@@ -443,6 +443,8 @@ public:
 	SpriteTexture Sprites_Tropical;
 	SpriteTexture uiSpritesTropical;
 
+	SpriteTexture Waynet;
+
 	std::list<ppl7::String> background_images;
 
 	class BrickResource

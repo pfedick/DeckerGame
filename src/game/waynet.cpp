@@ -117,6 +117,7 @@ Waynet::Waynet()
 {
 	selection=0;
 	next_as=1;
+	spriteset=NULL;
 }
 
 Waynet::~Waynet()
@@ -131,6 +132,10 @@ void Waynet::clear()
 	next_as=1;
 }
 
+void Waynet::setSpriteset(SpriteTexture* spriteset)
+{
+	this->spriteset=spriteset;
+}
 
 void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list)
 {
@@ -138,6 +143,27 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 	for (it=connection_list.begin();it != connection_list.end();++it) {
 		const Position& p1=(*it).source;
 		const Position& p2=(*it).target;
+
+		int x1, y1, x2, y2;
+		if (p2.x < p1.x || p2.y < p1.y) {
+			x1=coords.x + p1.x * TILE_WIDTH - 22 + 16;
+			y1=coords.y + p1.y * TILE_HEIGHT - 22 + 19;
+		} else {
+			x1=coords.x + p1.x * TILE_WIDTH + 22 + 16;
+			y1=coords.y + p1.y * TILE_HEIGHT + 22 + 19;
+		}
+		if (p1.x > p2.x || p1.y < p2.y) {
+			x2=coords.x + p2.x * TILE_WIDTH + 22 + 16;
+			y2=coords.y + p2.y * TILE_HEIGHT - 22 + 19;
+		} else {
+			x2=coords.x + p2.x * TILE_WIDTH - 22 + 16;
+			y2=coords.y + p2.y * TILE_HEIGHT + 22 + 19;
+
+		}
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_RenderDrawLine(renderer, x1 + 1, y1 + 1, x2 + 1, y2 + 1);
+		SDL_RenderDrawLine(renderer, x1 - 1, y1 - 1, x2 - 1, y2 - 1);
+
 		switch ((*it).type) {
 		case Connection::Walk:
 			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
@@ -160,13 +186,9 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 			break;
 
 		}
+		SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 
-
-		SDL_RenderDrawLine(renderer, coords.x + p1.x * TILE_WIDTH,
-			coords.y + p1.y * TILE_HEIGHT,
-			coords.x + p2.x * TILE_WIDTH + TILE_WIDTH - 1,
-			coords.y + p2.y * TILE_HEIGHT + TILE_HEIGHT - 1);
-
+		/*
 		SDL_Rect rect;
 		rect.x=coords.x + p1.x * TILE_WIDTH;
 		rect.y=coords.y + p1.y * TILE_HEIGHT;
@@ -178,7 +200,24 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 		rect.w=4;
 		rect.h=4;
 		SDL_RenderFillRect(renderer, &rect);
+		*/
+
 	}
+}
+
+void drawAs(SDL_Renderer* renderer, SpriteTexture* spriteset, int x, int y, int as)
+{
+	ppl7::String s;
+	s.setf("%d", as);
+	int w=(int)s.size() * 10;
+	x-=w / 2;
+	for (size_t p=0;p < s.size();p++) {
+		int num=s[p] - 48 + 3;
+		spriteset->draw(renderer, x, y, num);
+		x+=10;
+	}
+
+
 }
 
 void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
@@ -188,20 +227,24 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	int height=viewport.height();
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	std::list<Connection> connection_list;
+	/*
 	SDL_Rect rect;
 	rect.w=TILE_WIDTH;
 	rect.h=TILE_HEIGHT;
+	*/
 	for (it=waypoints.begin();it != waypoints.end();++it) {
 		const WayPoint& wp=it->second;
 		int x=wp.x * TILE_WIDTH - worldcoords.x;
 		int y=wp.y * TILE_HEIGHT - worldcoords.y;
-		if (x > 0 && y > 0 && x < width && y < height) {
+		if (x > -1000 && y > -1000 && x < width + 1000 && y < height + 1000) {
 			std::map<uint32_t, Connection>::const_iterator cit;
 			for (cit=wp.connection_map.begin();cit != wp.connection_map.end();++cit) {
 				connection_list.push_back(cit->second);
 			}
+			/*
 			rect.x=coords.x + wp.x * TILE_WIDTH;
 			rect.y=coords.y + wp.y * TILE_HEIGHT;
+
 			if (wp.id == selection) {
 				SDL_SetRenderDrawColor(renderer, 128, 255, 0, 255);	// green
 			} else {
@@ -210,9 +253,26 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 			SDL_RenderFillRect(renderer, &rect);
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);	// black
 			SDL_RenderDrawRect(renderer, &rect);
+			*/
 		}
 	}
 	drawConnections(renderer, coords, connection_list);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);	// white
+	if (spriteset) {
+		for (it=waypoints.begin();it != waypoints.end();++it) {
+			const WayPoint& wp=it->second;
+			int x=wp.x * TILE_WIDTH - worldcoords.x;
+			int y=wp.y * TILE_HEIGHT - worldcoords.y;
+			if (x > -48 && y > -48 && x < width + 24 && y < height + 24) {
+				int sprite_no=0;
+				if (wp.id == selection) sprite_no=1;
+				x=coords.x + wp.x * TILE_WIDTH + 16;
+				y=coords.y + wp.y * TILE_HEIGHT + 19;
+				spriteset->draw(renderer, x, y, sprite_no);
+				drawAs(renderer, spriteset, x, y, wp.as);
+			}
+		}
+	}
 }
 
 void Waynet::save(ppl7::FileObject& file, unsigned char id) const

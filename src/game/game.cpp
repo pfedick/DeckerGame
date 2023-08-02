@@ -192,8 +192,11 @@ void Game::loadGrafix()
 	resources.uiSpritesTropical.enableMemoryBuffer(true);
 	resources.uiSpritesTropical.load(sdl, "res/sprites_tropical_ui.tex");
 
+	resources.Waynet.load(sdl, "res/waynet.tex");
+
 	level.objects->loadSpritesets(sdl);
 	level.particles->loadSpritesets(sdl);
+	level.waynet.setSpriteset(&resources.Waynet);
 
 }
 

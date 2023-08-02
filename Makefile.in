@@ -289,7 +289,7 @@ sprites: george sprites_white sprites_nature sprites_tropical sprites_objects br
 	./texmaker -s lightwave/Render/objects/treasure_chest/ -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
 	./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	./texmaker -s lightwave/Render/objects/levelend/ -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
-
+	./texmaker -s lightwave/Render/waynet/ -t res/waynet.tex -w 128 -h 128 -px 64 -py 64
 
 
 fonts:

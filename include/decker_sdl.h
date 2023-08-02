@@ -51,4 +51,102 @@ public:
 
 };
 
+
+class SDLFont
+{
+private:
+	enum class FontFlags {
+		bold=1,
+		drawBorder=2,
+		monospace=4
+	};
+
+	class Font6Glyph
+	{
+	public:
+		Font6Glyph();
+		int width;
+		int height;
+		int bearingX;
+		int bearingY;
+		int advance;
+		//const char* bitmap;
+		int sprite_no;
+		std::map<wchar_t, int> Hints;
+		int getHint(wchar_t nextGlyph) const;
+	};
+
+	class Font6Face
+	{
+	public:
+		int	Flags;
+		int Pixelformat;
+		int Size;
+		int MaxBearingY;
+		int MaxHeight;
+		int Underscore;
+		std::map<wchar_t, Font6Glyph> Glyphs;
+		const Font6Glyph* getGlyph(wchar_t code) const;
+	};
+
+	class SpriteIndexItem
+	{
+	public:
+		int id;
+		int textureId;
+		SDL_Texture* tex;
+		SDL_Rect r;
+		ppl7::grafix::Point Pivot;
+		ppl7::grafix::Point Offset;
+
+		SpriteIndexItem()
+		{
+			id=0;
+			textureId=0;
+			tex=NULL;
+		}
+		SpriteIndexItem(const SpriteIndexItem& other)
+			:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
+		{
+			id=other.id;
+			textureId=other.textureId;
+			tex=other.tex;
+		}
+	};
+
+
+	std::map<int, SDL_Texture*> TextureMap;
+	std::map<int, SpriteIndexItem> SpriteMap;
+
+
+	uint8_t				flags;
+	uint16_t			fontSize;
+	ppl7::grafix::Color	cForeground;
+	ppl7::grafix::Color	cBorder;
+	float rotation;
+
+public:
+	SDLFont();
+	~SDLFont();
+	void clear();
+	void load(SDL_Renderer* renderer, const ppl7::String& filename);
+	void load(SDL_Renderer* renderer, ppl7::FileObject& file);
+
+
+	void setBold(bool enable);
+	void setSize(int size);
+	void setDrawBorder(bool enable);
+	void setMonospace(bool enable);
+	void setColor(const ppl7::grafix::Color& color);
+	void setBorderColor(const ppl7::grafix::Color& color);
+	void setRotation(float degrees);
+
+	ppl7::grafix::Size measure(const ppl7::WideString& text) const;
+	ppl7::grafix::Rect boundary(const ppl7::WideString& text, int x=0, int y=0) const;
+
+	void print(SDL_Renderer* renderer, int x, int y, const ppl7::String& text) const;
+	void printf(SDL_Renderer* renderer, int x, int y, const char* fmt, ...) const;
+
+};
+
 #endif
