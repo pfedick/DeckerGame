@@ -40,9 +40,9 @@ public:
 	ConnectionType type;
 	Position source;
 	Position target;
-	uint8_t cost;
+	float cost;
 	Connection();
-	Connection(const Position& source, const Position& target, ConnectionType type, uint8_t cost=1);
+	Connection(const Position& source, const Position& target, ConnectionType type, float cost=1.0f);
 	void clear();
 	const char* name() const;
 };
@@ -58,6 +58,7 @@ public:
 	WayPoint();
 	void addConnection(const Connection& conn);
 	void deleteConnection(uint32_t target);
+	bool operator==(const WayPoint& other) const;
 };
 
 double Distance(const Position& p1, const Position& p2);
@@ -76,6 +77,7 @@ private:
 	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
 
 public:
+
 	Waynet();
 	~Waynet();
 	void clear();
@@ -85,7 +87,10 @@ public:
 	void setSpriteset(SpriteTexture* spriteset);
 
 	void addPoint(const WayPoint& p1);
-	bool hasPoint(const WayPoint& p1) const;
+	const WayPoint& findPoint(const WayPoint& p1) const;
+	const WayPoint& invalidPoint() const;
+	const WayPoint& getPoint(const Position& p1) const;
+	//bool hasPoint(const WayPoint& p1) const;
 	void deletePoint(const WayPoint& p1);
 	void addConnection(const WayPoint& source, const Connection& conn);
 	void deleteConnection(const WayPoint& source, const WayPoint& target);

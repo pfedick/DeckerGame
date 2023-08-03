@@ -6,7 +6,7 @@
 #include "waynet.h"
 #include "objects.h"
 
-//#define DEBUGWAYNET
+#define DEBUGWAYNET
 
 namespace Decker::Objects {
 
@@ -148,16 +148,16 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, floa
 void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 {
 	Waynet& waynet=GetObjectSystem()->getWaynet();
-	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x / TILE_WIDTH, (uint16_t)player.y / TILE_HEIGHT));
-	Position source_p(p.x / TILE_WIDTH, p.y / TILE_HEIGHT);
-	Position target_p(player.x / TILE_WIDTH, player.y / TILE_HEIGHT);
+	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x, (uint16_t)player.y));
+	Position source_p(p.x, p.y);
+	Position target_p(player.x, player.y);
 
 #ifdef DEBUGWAYNET
 
 
 	ppl7::PrintDebugTime("AiEnemy::updateWay, Object: %d:%d, Target: %d:%d, nearest wp=%d:%d, last_pwp=%d:%d\n",
-		(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT,
-		player.x / TILE_WIDTH, player.y / TILE_HEIGHT,
+		(int)p.x, (int)p.y,
+		player.x, player.y,
 		pwp.x, pwp.y, last_pwp.x, last_pwp.y);
 #endif
 	next_wayfind=time + 3.0f;
@@ -191,7 +191,7 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 #ifdef DEBUGWAYNET
 		std::list<Connection>::const_iterator it;
 		for (it=waypoints.begin();it != waypoints.end();++it) {
-			ppl7::PrintDebugTime("source: (%d:%d), target: (%d:%d), type: %9s, cost: %d\n",
+			ppl7::PrintDebugTime("source: (%d:%d), target: (%d:%d), type: %9s, cost: %0.3f\n",
 				(*it).source.x, (*it).source.y,
 				(*it).target.x, (*it).target.y,
 				(*it).name(), (*it).cost);
@@ -246,22 +246,30 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 
 	//const Connection &first=waypoints.front();
 	bool arrived=false;
+	double wp_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(current_way.target.x, current_way.target.y));
+#ifdef DEBUGWAYNET
+	Waynet& waynet=GetObjectSystem()->getWaynet();
+	const WayPoint& wp=waynet.getPoint(current_way.target);
+	ppl7::PrintDebug("Target: %d, distance=%0.0f, ", wp.as, wp_dist);
+
+#endif
+
 	if (current_way.type == Connection::Walk) {
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebug("walk\n");
 #endif
-		if ((uint16_t)(p.x / TILE_WIDTH) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
-		else if ((uint16_t)(p.x / TILE_WIDTH) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
-		else {
+		if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
+		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
+		else if (wp_dist < 20) {
 #ifdef DEBUGWAYNET
 			ppl7::PrintDebug("arrived\n");
 #endif
 			arrived=true;
 		}
 	} else if (current_way.type == Connection::Go) {
-		if ((uint16_t)(p.x / TILE_WIDTH) > current_way.target.x) keys=KeyboardKeys::Left;
-		else if ((uint16_t)(p.x / TILE_WIDTH) < current_way.target.x) keys=KeyboardKeys::Right;
-		else {
+		if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left;
+		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right;
+		else if (wp_dist < 20) {
 			arrived=true;
 		}
 	} else if (current_way.type == Connection::JumpLeft) {
@@ -274,9 +282,9 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Shift | KeyboardKeys::Up;
 	} else if (current_way.type == Connection::Climb) {
-		if ((uint16_t)(p.y / TILE_HEIGHT) > current_way.target.y) keys=KeyboardKeys::Up;
-		else if ((uint16_t)(p.y / TILE_HEIGHT) < current_way.target.y) keys=KeyboardKeys::Down;
-		else arrived=true;
+		if ((uint16_t)(p.y) > current_way.target.y) keys=KeyboardKeys::Up;
+		else if ((uint16_t)(p.y) < current_way.target.y) keys=KeyboardKeys::Down;
+		else if (wp_dist < 20) arrived=true;
 	}
 	if (arrived) {
 		if (movement == Falling) {
@@ -284,8 +292,8 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		}
 		keys=0;
 #ifdef DEBUGWAYNET
-		ppl7::PrintDebugTime("arrived at point: %d:%d, real: %d:%d, movement was: %d\n", current_way.target.x, current_way.target.y,
-			(int)p.x / TILE_WIDTH, (int)p.y / TILE_HEIGHT, movement);
+		ppl7::PrintDebugTime("arrived at point %d: %d:%d, real: %d:%d, movement was: %d\n", wp.as, current_way.target.x, current_way.target.y,
+			(int)p.x, (int)p.y, movement);
 #endif
 		current_way.clear();
 		if (movement == Walk || movement == Run) {

@@ -1322,32 +1322,39 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 	ppl7::PrintDebugTime("Game::mouseDownEventOnWayNet\n");
 #endif
 	ppl7::grafix::Point coords=WorldCoords;
-	int x=(event->p.x + coords.x) / TILE_WIDTH;
-	int y=(event->p.y + coords.y) / TILE_HEIGHT;
+	int x=(event->p.x + coords.x);
+	int y=(event->p.y + coords.y);
 	WayPoint wp(x, y);
 	if (event->buttonMask == ppl7::tk::MouseState::Left) {
-		if (level.waynet.hasPoint(wp)) {
+		const WayPoint& found_wp=level.waynet.findPoint(wp);
+		if (found_wp != level.waynet.invalidPoint()) {
 			//printf ("Point selected\n");
 			if (level.waynet.hasSelection()) {
 				const WayPoint p1=level.waynet.getSelection();
-				level.waynet.deleteConnection(p1, wp);
+				level.waynet.deleteConnection(p1, found_wp);
 				Connection::ConnectionType type=(Connection::ConnectionType)waynet_edit->getSelectedWayType();
 				if (type != Connection::Invalid) {
 					level.waynet.addConnection(p1,
-						Connection(p1, wp, type,
+						Connection(p1, found_wp, type,
 							waynet_edit->getCost()));
 				}
-				level.waynet.setSelection(wp);
+				level.waynet.setSelection(found_wp);
 			} else {
-				level.waynet.setSelection(wp);
+				level.waynet.setSelection(found_wp);
 			}
 		} else {
-			level.waynet.addPoint(wp);
-			level.waynet.clearSelection();
+			const WayPoint& nearest=level.waynet.findNearestWaypoint(wp);
+			if (Distance(wp, nearest) >= 2 * TILE_WIDTH) {
+				level.waynet.addPoint(wp);
+				level.waynet.clearSelection();
+			}
 		}
 	} else if (event->buttonMask == ppl7::tk::MouseState::Right) {
-		level.waynet.deletePoint(wp);
-		level.waynet.clearSelection();
+		const WayPoint& found_wp=level.waynet.findPoint(wp);
+		if (found_wp != level.waynet.invalidPoint()) {
+			level.waynet.deletePoint(found_wp);
+			level.waynet.clearSelection();
+		}
 	}
 }
 

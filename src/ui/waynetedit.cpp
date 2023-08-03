@@ -37,9 +37,15 @@ WayNetEdit::WayNetEdit(int x, int y, int width, int height, Game* game)
 	this->addChild(type_go);
 	y=240;
 
+	ppl7::grafix::Rect client=clientRect();
+
 
 	this->addChild(new ppl7::tk::Label(0, y, 60, 30, "Cost:"));
-	cost=new ppl7::tk::LineInput(60, y, 100, 30, "1");
+	cost=new ppl7::tk::DoubleHorizontalSlider(60, y, client.width() - 70, 30);
+	cost->setEventHandler(this);
+	cost->setLimits(0.0f, 10.0f);
+	cost->enableSpinBox(true, 0.1, 3, 80);
+	cost->setValue(1.0f);
 	this->addChild(cost);
 }
 
@@ -56,11 +62,11 @@ int WayNetEdit::getSelectedWayType() const
 }
 
 
-int WayNetEdit::getCost() const
+float WayNetEdit::getCost() const
 {
-	int value=cost->text().toInt();
-	if (value < 1) value=1;
-	if (value > 255) value=255;
+	float value=cost->value();
+	if (value < 0.0f) value=0.0f;
+	if (value > 10.0f) value=10.0f;
 	return value;
 }
 

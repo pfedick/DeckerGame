@@ -439,14 +439,14 @@ private:
 	ppl7::tk::RadioButton* type_jump_right;
 	ppl7::tk::RadioButton* type_climb;
 	ppl7::tk::RadioButton* type_go;
-	ppl7::tk::LineInput* cost;
+	ppl7::tk::DoubleHorizontalSlider* cost;
 
 
 public:
 	WayNetEdit(int x, int y, int width, int height, Game* game);
 
 	int getSelectedWayType() const;
-	int getCost() const;
+	float getCost() const;
 };
 
 

@@ -33,8 +33,10 @@ Position::operator uint32_t() const
 
 bool Position::isNear(const Position& other) const
 {
+#ifdef DEBUGWAYNET
 	ppl7::PrintDebug("Position::isNear, distance x=%d, distance y=%d\n", abs(x - other.x), abs(y - other.y));
-	if (abs(x - other.x) <= 1 && abs(y - other.y) <= 1) return true;
+#endif
+	if (abs(x - other.x) <= 32 && abs(y - other.y) <= 32) return true;
 
 	return false;
 }
@@ -63,6 +65,11 @@ WayPoint::WayPoint()
 	as=0;
 }
 
+bool WayPoint::operator==(const WayPoint& other) const
+{
+	return (id == other.id);
+}
+
 
 void WayPoint::addConnection(const Connection& conn)
 {
@@ -80,10 +87,10 @@ Connection::Connection()
 	source.id=0;
 	target.id=0;
 	type=Connection::Invalid;
-	cost=0;
+	cost=1.0f;
 }
 
-Connection::Connection(const Position& source, const Position& target, ConnectionType type, uint8_t cost)
+Connection::Connection(const Position& source, const Position& target, ConnectionType type, float cost)
 {
 	this->source=source;
 	this->target=target;
@@ -96,7 +103,7 @@ void Connection::clear()
 	source.id=0;
 	target.id=0;
 	type=Connection::Invalid;
-	cost=0;
+	cost=1.0f;
 }
 
 const char* Connection::name() const
@@ -118,6 +125,7 @@ Waynet::Waynet()
 	selection=0;
 	next_as=1;
 	spriteset=NULL;
+	invalid_waypoint.id=0xffffffff;
 }
 
 Waynet::~Waynet()
@@ -146,18 +154,18 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 
 		int x1, y1, x2, y2;
 		if (p2.x < p1.x || p2.y < p1.y) {
-			x1=coords.x + p1.x * TILE_WIDTH - 22 + 16;
-			y1=coords.y + p1.y * TILE_HEIGHT - 22 + 19;
+			x1=coords.x + p1.x - 22;
+			y1=coords.y + p1.y - 22;
 		} else {
-			x1=coords.x + p1.x * TILE_WIDTH + 22 + 16;
-			y1=coords.y + p1.y * TILE_HEIGHT + 22 + 19;
+			x1=coords.x + p1.x + 22;
+			y1=coords.y + p1.y + 22;
 		}
 		if (p1.x > p2.x || p1.y < p2.y) {
-			x2=coords.x + p2.x * TILE_WIDTH + 22 + 16;
-			y2=coords.y + p2.y * TILE_HEIGHT - 22 + 19;
+			x2=coords.x + p2.x + 22;
+			y2=coords.y + p2.y - 22;
 		} else {
-			x2=coords.x + p2.x * TILE_WIDTH - 22 + 16;
-			y2=coords.y + p2.y * TILE_HEIGHT + 22 + 19;
+			x2=coords.x + p2.x - 22;
+			y2=coords.y + p2.y + 22;
 
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -187,20 +195,6 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 
 		}
 		SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-
-		/*
-		SDL_Rect rect;
-		rect.x=coords.x + p1.x * TILE_WIDTH;
-		rect.y=coords.y + p1.y * TILE_HEIGHT;
-		rect.w=10;
-		rect.h=10;
-		SDL_RenderFillRect(renderer, &rect);
-		rect.x=coords.x + p2.x * TILE_WIDTH + TILE_WIDTH - 1;
-		rect.y=coords.y + p2.y * TILE_HEIGHT + TILE_HEIGHT - 1;
-		rect.w=4;
-		rect.h=4;
-		SDL_RenderFillRect(renderer, &rect);
-		*/
 
 	}
 }
@@ -234,26 +228,13 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	*/
 	for (it=waypoints.begin();it != waypoints.end();++it) {
 		const WayPoint& wp=it->second;
-		int x=wp.x * TILE_WIDTH - worldcoords.x;
-		int y=wp.y * TILE_HEIGHT - worldcoords.y;
+		int x=wp.x - worldcoords.x;
+		int y=wp.y - worldcoords.y;
 		if (x > -1000 && y > -1000 && x < width + 1000 && y < height + 1000) {
 			std::map<uint32_t, Connection>::const_iterator cit;
 			for (cit=wp.connection_map.begin();cit != wp.connection_map.end();++cit) {
 				connection_list.push_back(cit->second);
 			}
-			/*
-			rect.x=coords.x + wp.x * TILE_WIDTH;
-			rect.y=coords.y + wp.y * TILE_HEIGHT;
-
-			if (wp.id == selection) {
-				SDL_SetRenderDrawColor(renderer, 128, 255, 0, 255);	// green
-			} else {
-				SDL_SetRenderDrawColor(renderer, 0, 160, 0, 255);	// green
-			}
-			SDL_RenderFillRect(renderer, &rect);
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);	// black
-			SDL_RenderDrawRect(renderer, &rect);
-			*/
 		}
 	}
 	drawConnections(renderer, coords, connection_list);
@@ -261,13 +242,13 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (spriteset) {
 		for (it=waypoints.begin();it != waypoints.end();++it) {
 			const WayPoint& wp=it->second;
-			int x=wp.x * TILE_WIDTH - worldcoords.x;
-			int y=wp.y * TILE_HEIGHT - worldcoords.y;
+			int x=wp.x - worldcoords.x;
+			int y=wp.y - worldcoords.y;
 			if (x > -48 && y > -48 && x < width + 24 && y < height + 24) {
 				int sprite_no=0;
 				if (wp.id == selection) sprite_no=1;
-				x=coords.x + wp.x * TILE_WIDTH + 16;
-				y=coords.y + wp.y * TILE_HEIGHT + 19;
+				x=coords.x + wp.x;
+				y=coords.y + wp.y;
 				spriteset->draw(renderer, x, y, sprite_no);
 				drawAs(renderer, spriteset, x, y, wp.as);
 			}
@@ -286,20 +267,21 @@ void Waynet::save(ppl7::FileObject& file, unsigned char id) const
 	unsigned char* buffer=(unsigned char*)malloc(buffersize);
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
-	ppl7::Poke8(buffer + 5, 1);		// Version
+	ppl7::Poke8(buffer + 5, 2);		// Version
 	size_t p=6;
 	for (it=waypoints.begin();it != waypoints.end();++it) {
 		const WayPoint& wp=it->second;
 		ppl7::Poke32(buffer + p, it->first);
-		ppl7::Poke8(buffer + p + 4, wp.connection_map.size());
-		p+=5;
+		ppl7::Poke32(buffer + p + 4, wp.as);
+		ppl7::Poke8(buffer + p + 8, wp.connection_map.size());
+		p+=9;
 		std::map<uint32_t, Connection>::const_iterator cit;
 		for (cit=wp.connection_map.begin();cit != wp.connection_map.end();++cit) {
 			const Connection& conn=cit->second;
 			ppl7::Poke32(buffer + p, conn.target.id);
 			ppl7::Poke8(buffer + p + 4, conn.type);
-			ppl7::Poke8(buffer + p + 5, conn.cost);
-			p+=6;
+			ppl7::PokeFloat(buffer + p + 5, conn.cost);
+			p+=9;
 		}
 	}
 	ppl7::Poke32(buffer + 0, p);
@@ -316,13 +298,34 @@ void Waynet::load(const ppl7::ByteArrayPtr& ba)
 	if (version == 1) {
 		while (p < ba.size()) {
 			WayPoint wp(ppl7::Peek32(buffer + p));
+			wp.as=0;
+			wp.x=wp.x * TILE_WIDTH + 16;
+			wp.y=wp.y * TILE_HEIGHT + 19;
 			int count=ppl7::Peek8(buffer + p + 4);
 			p+=5;
 			for (int i=0;i < count;i++) {
+				WayPoint destination(ppl7::Peek32(buffer + p));
+				destination.x=destination.x * TILE_WIDTH + 16;
+				destination.y=destination.y * TILE_HEIGHT + 19;
+				wp.addConnection(Connection(wp.id, destination.id,
+					(Connection::ConnectionType)ppl7::Peek8(buffer + p + 4),
+					1.0f));
+				p+=6;
+			}
+			addPoint(wp);
+		}
+	} else if (version == 2) {
+		while (p < ba.size()) {
+			WayPoint wp(ppl7::Peek32(buffer + p));
+			wp.as=ppl7::Peek32(buffer + p + 4);
+			if (wp.as >= next_as) next_as=wp.as + 1;
+			int count=ppl7::Peek8(buffer + p + 8);
+			p+=9;
+			for (int i=0;i < count;i++) {
 				wp.addConnection(Connection(wp.id, ppl7::Peek32(buffer + p),
 					(Connection::ConnectionType)ppl7::Peek8(buffer + p + 4),
-					ppl7::Peek8(buffer + p + 5)));
-				p+=6;
+					ppl7::PeekFloat(buffer + p + 5)));
+				p+=9;
 			}
 			addPoint(wp);
 		}
@@ -334,16 +337,33 @@ void Waynet::load(const ppl7::ByteArrayPtr& ba)
 void Waynet::addPoint(const WayPoint& p1)
 {
 	std::pair<std::map<uint32_t, WayPoint>::iterator, bool>result=waypoints.insert(std::pair<uint32_t, WayPoint>(p1.id, p1));
-	result.first->second.as=next_as;
-	next_as++;
+	if (result.first->second.as == 0) {
+		result.first->second.as=next_as;
+		next_as++;
+	} else if (result.first->second.as >= next_as) next_as=result.first->second.as + 1;
 }
 
-bool Waynet::hasPoint(const WayPoint& p1) const
+const WayPoint& Waynet::findPoint(const WayPoint& p1) const
 {
 	std::map<uint32_t, WayPoint>::const_iterator it;
-	it=waypoints.find(p1.id);
-	if (it != waypoints.end()) return true;
-	return false;
+	for (it=waypoints.begin();it != waypoints.end();++it) {
+		const WayPoint& wp=it->second;
+		if (wp.isNear(p1)) return wp;
+	}
+	return invalid_waypoint;
+}
+
+const WayPoint& Waynet::getPoint(const Position& p1) const
+{
+	std::map<uint32_t, WayPoint>::const_iterator it;
+	it=waypoints.find(p1);
+	if (it != waypoints.end()) return (*it).second;
+	return invalid_waypoint;
+}
+
+const WayPoint& Waynet::invalidPoint() const
+{
+	return invalid_waypoint;
 }
 
 void Waynet::deletePoint(const WayPoint& p1)
@@ -439,7 +459,7 @@ static int calcCosts(const std::list<Connection>& conns)
 	std::list<Connection>::const_iterator it;
 	int c=0;
 	for (it=conns.begin();it != conns.end();++it) {
-		int d=(int)Distance((*it).source, (*it).target);
+		int d=(int)(Distance((*it).source, (*it).target) * (*it).cost);
 		c+=d;
 	}
 	return c;
@@ -497,8 +517,8 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 		printf("we don't have any waypoints\n");
 		return false;
 	}
-	Position pt_source(source.x / TILE_WIDTH, source.y / TILE_HEIGHT);
-	Position pt_target(target.x / TILE_WIDTH, target.y / TILE_HEIGHT);
+	Position pt_source(source.x, source.y);
+	Position pt_target(target.x, target.y);
 	// find nearest waypoint of source
 	const WayPoint& wp_source=findNearestWaypoint(pt_source);
 	const WayPoint& wp_target=findNearestWaypoint(pt_target);
