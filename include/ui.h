@@ -6,6 +6,7 @@
 #include <ppl7-tk.h>
 #include "widgets.h"
 #include "metrics.h"
+#include "waynet.h"
 
 class Game;
 class SpriteTexture;
@@ -439,14 +440,21 @@ private:
 	ppl7::tk::RadioButton* type_jump_right;
 	ppl7::tk::RadioButton* type_climb;
 	ppl7::tk::RadioButton* type_go;
+	ppl7::tk::Button* debug_mode;
 	ppl7::tk::DoubleHorizontalSlider* cost;
+	WayPoint wp_start, wp_end;
+
+	void debugWaynet();
 
 
 public:
 	WayNetEdit(int x, int y, int width, int height, Game* game);
 
 	int getSelectedWayType() const;
+	bool debugMode() const;
 	float getCost() const;
+	void setDebugStart(const WayPoint& wp);
+	void setDebugEnd(const WayPoint& wp);
 };
 
 
