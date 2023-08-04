@@ -73,6 +73,9 @@ double Distance(const Position& p1, const Position& p2);
 
 class Waynet
 {
+public:
+	typedef std::list<Connection> WayList;
+
 private:
 	std::map<uint32_t, WayPoint> waypoints;
 	uint32_t next_as;
@@ -86,9 +89,36 @@ private:
 	std::set<int> debug_as_part_of_way;
 	bool debug_enabled;
 
-	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
+	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes) const;
 	uint32_t getAs(const Position& wp);
 	void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug=false) const;
+
+
+
+	class BestWay
+	{
+	public:
+		WayList waylist;
+		float total_costs=0.0f;
+	};
+
+	class Way
+	{
+	public:
+		const WayPoint& start;
+		const WayPoint& end;
+		std::list<Connection>& way_list;
+		std::set<uint32_t> visited_nodes;
+		BestWay best;
+		int depth_limit;
+
+		std::map<uint32_t, WayList> check_next;
+
+		Way(const WayPoint& start, const WayPoint& end, std::list<Connection>& way_list);
+
+	};
+
+	bool findBestWay(Way& way) const;
 
 public:
 
@@ -109,8 +139,8 @@ public:
 	void addConnection(const WayPoint& source, const Connection& conn);
 	void deleteConnection(const WayPoint& source, const WayPoint& target);
 
-	const WayPoint& findNearestWaypoint(const Position& p);
-	bool findWay(std::list<Connection>& waypoints, const Position& source, const Position& target);
+	const WayPoint& findNearestWaypoint(const Position& p) const;
+	bool findWay(std::list<Connection>& waypoints, const Position& source, const Position& target) const;
 
 	void enableDebug(bool enable);
 	void setDebugPoints(const Position& start, const Position& end);

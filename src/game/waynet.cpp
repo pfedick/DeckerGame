@@ -487,7 +487,7 @@ double Distance(const Position& p1, const Position& p2)
 	return sqrt((a * a) + (b * b));
 }
 
-const WayPoint& Waynet::findNearestWaypoint(const Position& p)
+const WayPoint& Waynet::findNearestWaypoint(const Position& p) const
 {
 	std::map<uint32_t, WayPoint>::const_iterator it;
 	const WayPoint* best=NULL;
@@ -511,8 +511,7 @@ static int calcCosts(const std::list<Connection>& conns)
 	std::list<Connection>::const_iterator it;
 	int c=0;
 	for (it=conns.begin();it != conns.end();++it) {
-		int d=(int)(Distance((*it).source, (*it).target) * (*it).cost);
-		c+=d;
+		c+=(int)(*it).total_costs;
 	}
 	return c;
 }
@@ -537,9 +536,12 @@ void Waynet::setDebugPoints(const Position& start, const Position& end)
 	ppl7::PrintDebugTime("searching for a way from %d:%d => %d:%d\n", debug_start.x, debug_start.y,
 		debug_end.x, debug_end.y);
 
+	double start_time=ppl7::GetMicrotime();
 	if (!findWay(debug_waypoints, debug_start, debug_end)) {
-		ppl7::PrintDebugTime("Found no way :-(\n");
+		double duration=ppl7::GetMicrotime() - start_time;
+		ppl7::PrintDebugTime("Found no way in %0.3f ms :-(\n", duration * 1000.0f);
 	} else {
+		double duration=ppl7::GetMicrotime() - start_time;
 		std::list<Connection>::const_iterator it;
 		float total=0.0f;
 		for (it=debug_waypoints.begin();it != debug_waypoints.end();++it) {
@@ -553,7 +555,7 @@ void Waynet::setDebugPoints(const Position& start, const Position& end)
 			debug_as_part_of_way.insert((*it).source_as);
 			debug_as_part_of_way.insert((*it).target_as);
 		}
-		ppl7::PrintDebugTime("Total Hops: %zd, Total costs: %0.3f\n", debug_waypoints.size(), total);
+		ppl7::PrintDebugTime("Total Hops: %zd, Total costs: %0.3f, Total Time: %0.3f\n", debug_waypoints.size(), total, duration * 1000.0f);
 	}
 }
 
@@ -570,7 +572,7 @@ void Waynet::setDebugEnd(const Position& end)
 }
 
 
-bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
+bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes) const
 {
 	if (visited_nodes.find(start.id) != visited_nodes.end()) return false;
 #ifdef DEBUGWAYNET
@@ -598,11 +600,15 @@ bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection
 				best=current;
 			}
 		} else {
-			if (findBestWay(visited_nodes, current, start, waypoints[it->second.target.id], target, maxNodes - 1)) {
-				int cost=calcCosts(current);
-				if (cost < best_cost) {
-					best_cost=cost;
-					best=current;
+			std::map<uint32_t, WayPoint>::const_iterator wpit=waypoints.find(it->second.target.id);
+			if (wpit != waypoints.end()) {
+
+				if (findBestWay(visited_nodes, current, start, wpit->second, target, maxNodes - 1)) {
+					int cost=calcCosts(current);
+					if (cost < best_cost) {
+						best_cost=cost;
+						best=current;
+					}
 				}
 			}
 		}
@@ -615,7 +621,7 @@ bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection
 	return true;
 }
 
-bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, const Position& target)
+bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, const Position& target) const
 {
 	way_list.clear();
 	if (waypoints.size() == 0) {
@@ -628,6 +634,10 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 	const WayPoint& wp_source=findNearestWaypoint(pt_source);
 	const WayPoint& wp_target=findNearestWaypoint(pt_target);
 	if (wp_source == invalid_waypoint || wp_target == invalid_waypoint) return false;
+
+	Way way(wp_source, wp_target, way_list);
+	return findBestWay(way);
+
 	std::set<uint32_t> visited_nodes;
 #ifdef DEBUGWAYNET
 	ppl7::PrintDebugTime("\n\n\nstart to find a way form %d:%d (%u) to to %d:%d (%u) =========================================================\n",
@@ -638,5 +648,63 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 		if (findBestWay(visited_nodes, way_list, WayPoint(), wp_source, wp_target, maxchecks)) return true;
 	}
 	return false;
+
+}
+
+
+
+Waynet::Way::Way(const WayPoint& start, const WayPoint& end, std::list<Connection>& way_list)
+	: start(start), end(end), way_list(way_list)
+{
+	check_next.insert(std::pair<uint32_t, WayList>(start.id, WayList()));
+	depth_limit=25;
+}
+
+float getCosts(const Waynet::WayList& list) {
+	float c=0.0f;
+	Waynet::WayList::const_iterator it;
+	for (it=list.begin();it != list.end();++it) {
+		c+=(*it).total_costs;
+	}
+	return c;
+}
+
+bool Waynet::findBestWay(Way& way) const
+{
+	int depth=0;
+	while (depth < way.depth_limit) {
+		if (way.check_next.empty()) break;
+		std::map<uint32_t, WayList>::iterator it;
+		std::map<uint32_t, WayList> check_next;
+		for (it=way.check_next.begin();it != way.check_next.end();++it) {
+			const WayPoint& wp1=getPoint(Position((*it).first));
+			WayList& waylist=(*it).second;
+			way.visited_nodes.insert((*it).first);
+			float cost_so_far=getCosts(waylist);
+			// TODO: special case: first point is also endpoint
+			std::map<uint32_t, Connection>::const_iterator cit;
+			for (cit = wp1.connection_map.begin();cit != wp1.connection_map.end();++cit) {
+				const WayPoint& wp2=getPoint(Position((*cit).second.target));
+				if (way.visited_nodes.find(wp2.id) == way.visited_nodes.end()) {
+					WayList wl=waylist;
+					wl.push_back(cit->second);
+					if (wp2 == way.end) {
+						float cost=cost_so_far + (*cit).second.total_costs;
+						if (way.best.waylist.empty() || cost < way.best.total_costs) {
+							way.best.waylist=wl;
+							way.best.total_costs=cost;
+						}
+					} else {
+						check_next.insert(std::pair<uint32_t, WayList>(wp2.id, wl));
+					}
+				}
+			}
+		}
+		way.check_next=check_next;
+		depth++;
+	}
+	if (way.best.waylist.empty()) return false;
+	way.way_list=way.best.waylist;
+	return true;
 
 }
