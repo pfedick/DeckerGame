@@ -1328,11 +1328,11 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 	if (waynet_edit->debugMode()) {
 		if (event->buttonMask == ppl7::tk::MouseState::Left) {
 			waynet_edit->setDebugStart(wp);
+			level.waynet.setDebugStart(wp);
 		} if (event->buttonMask == ppl7::tk::MouseState::Right) {
 			waynet_edit->setDebugEnd(wp);
+			level.waynet.setDebugEnd(wp);
 		}
-
-
 	} else {
 		if (event->buttonMask == ppl7::tk::MouseState::Left) {
 			const WayPoint& found_wp=level.waynet.findPoint(wp);

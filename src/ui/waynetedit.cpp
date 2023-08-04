@@ -51,6 +51,7 @@ WayNetEdit::WayNetEdit(int x, int y, int width, int height, Game* game)
 
 	debug_mode=new ppl7::tk::Button(0, y, 100, 30, "Debug Mode");
 	debug_mode->setCheckable(true);
+	debug_mode->setEventHandler(this);
 	this->addChild(debug_mode);
 	Waynet& waynet=Decker::Objects::GetObjectSystem()->getWaynet();
 	wp_start=waynet.invalidPoint();
@@ -87,42 +88,25 @@ bool WayNetEdit::debugMode() const
 void WayNetEdit::setDebugStart(const WayPoint& wp)
 {
 	wp_start=wp;
-	debugWaynet();
 }
 
 void WayNetEdit::setDebugEnd(const WayPoint& wp)
 {
 	wp_end=wp;
-	debugWaynet();
 }
 
 void WayNetEdit::debugWaynet()
 {
-	Waynet& waynet=Decker::Objects::GetObjectSystem()->getWaynet();
-	if (wp_start == waynet.invalidPoint() || wp_end == waynet.invalidPoint()) return;
-	ppl7::PrintDebugTime("===========================================================================\n");
-	ppl7::PrintDebugTime("searching for a way from %d:%d => %d:%d\n", wp_start.x, wp_start.y,
-		wp_end.x, wp_end.y);
+	//Waynet& waynet=Decker::Objects::GetObjectSystem()->getWaynet();
+}
 
-	std::list<Connection> waypoints;
-	if (!waynet.findWay(waypoints, wp_start, wp_end)) {
-		ppl7::PrintDebugTime("Found no way :-(\n");
-	} else {
-
-		std::list<Connection>::const_iterator it;
-		for (it=waypoints.begin();it != waypoints.end();++it) {
-			const WayPoint& wp1=waynet.getPoint((*it).source);
-			const WayPoint& wp2=waynet.getPoint((*it).target);
-			ppl7::PrintDebugTime("source: %3d(%5d:%5d), target: %3d(%5d:%5d), type: %-10s, cost: %0.3f\n",
-				wp1.as,
-				(*it).source.x, (*it).source.y,
-				wp2.as,
-				(*it).target.x, (*it).target.y,
-				(*it).name(), (*it).cost);
-		}
+void WayNetEdit::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == debug_mode) {
+		Waynet& waynet=Decker::Objects::GetObjectSystem()->getWaynet();
+		waynet.enableDebug(checked);
 	}
-
-
 }
 
 } //EOF namespace Decker::ui

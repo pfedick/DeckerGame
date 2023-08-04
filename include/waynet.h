@@ -25,6 +25,8 @@ public:
 	bool isNear(const Position& other) const;
 };
 
+class WayPoint;
+
 class Connection
 {
 public:
@@ -39,10 +41,12 @@ public:
 	};
 	ConnectionType type;
 	Position source;
+	uint32_t source_as;
 	Position target;
+	uint32_t target_as;
 	float cost;
 	Connection();
-	Connection(const Position& source, const Position& target, ConnectionType type, float cost=1.0f);
+	Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost=1.0f);
 	void clear();
 	const char* name() const;
 };
@@ -74,7 +78,14 @@ private:
 	WayPoint invalid_waypoint;
 	SpriteTexture* spriteset;
 
+	Position debug_start, debug_end;
+	std::list<Connection> debug_waypoints;
+	std::set<int> debug_as_part_of_way;
+	bool debug_enabled;
+
 	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes);
+	uint32_t getAs(const Position& wp);
+	void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug=false) const;
 
 public:
 
@@ -97,6 +108,11 @@ public:
 
 	const WayPoint& findNearestWaypoint(const Position& p);
 	bool findWay(std::list<Connection>& waypoints, const Position& source, const Position& target);
+
+	void enableDebug(bool enable);
+	void setDebugPoints(const Position& start, const Position& end);
+	void setDebugStart(const Position& start);
+	void setDebugEnd(const Position& end);
 
 
 	void clearSelection();

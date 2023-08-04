@@ -86,14 +86,18 @@ Connection::Connection()
 {
 	source.id=0;
 	target.id=0;
+	source_as=0;
+	target_as=0;
 	type=Connection::Invalid;
 	cost=1.0f;
 }
 
-Connection::Connection(const Position& source, const Position& target, ConnectionType type, float cost)
+Connection::Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost)
 {
 	this->source=source;
 	this->target=target;
+	source_as=source.as;
+	target_as=target.as;
 	this->type=type;
 	this->cost=cost;
 }
@@ -126,6 +130,7 @@ Waynet::Waynet()
 	next_as=1;
 	spriteset=NULL;
 	invalid_waypoint.id=0xffffffff;
+	debug_enabled=false;
 }
 
 Waynet::~Waynet()
@@ -145,7 +150,7 @@ void Waynet::setSpriteset(SpriteTexture* spriteset)
 	this->spriteset=spriteset;
 }
 
-void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list)
+void Waynet::drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug) const
 {
 	std::list<Connection>::const_iterator it;
 	for (it=connection_list.begin();it != connection_list.end();++it) {
@@ -169,7 +174,16 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 
 		}
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderDrawLine(renderer, x1 + 1, y1 + 1, x2 + 1, y2 + 1);
+		int w=1;
+		if (debug) {
+			if (debug_as_part_of_way.find((*it).source_as) != debug_as_part_of_way.end() &&
+				debug_as_part_of_way.find((*it).target_as) != debug_as_part_of_way.end()) {
+				w=4;
+			}
+		}
+
+
+		SDL_RenderDrawLine(renderer, x1 + w, y1 + w, x2 + w, y2 + w);
 		SDL_RenderDrawLine(renderer, x1 - 1, y1 - 1, x2 - 1, y2 - 1);
 
 		switch ((*it).type) {
@@ -194,7 +208,9 @@ void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const s
 			break;
 
 		}
-		SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+		for (int i=0;i < w;i++) {
+			SDL_RenderDrawLine(renderer, x1 + i, y1 + i, x2 + i, y2 + i);
+		}
 
 	}
 }
@@ -238,6 +254,9 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 		}
 	}
 	drawConnections(renderer, coords, connection_list);
+	if (debug_enabled) {
+		drawConnections(renderer, coords, debug_waypoints, true);
+	}
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);	// white
 	if (spriteset) {
 		for (it=waypoints.begin();it != waypoints.end();++it) {
@@ -246,7 +265,10 @@ void Waynet::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 			int y=wp.y - worldcoords.y;
 			if (x > -48 && y > -48 && x < width + 24 && y < height + 24) {
 				int sprite_no=0;
-				if (wp.id == selection) sprite_no=1;
+				if (debug_enabled) {
+					if (debug_as_part_of_way.find(wp.as) != debug_as_part_of_way.end()) sprite_no=2;
+
+				} else if (wp.id == selection) sprite_no=1;
 				x=coords.x + wp.x;
 				y=coords.y + wp.y;
 				spriteset->draw(renderer, x, y, sprite_no);
@@ -298,7 +320,6 @@ void Waynet::load(const ppl7::ByteArrayPtr& ba)
 	if (version == 1) {
 		while (p < ba.size()) {
 			WayPoint wp(ppl7::Peek32(buffer + p));
-			wp.as=0;
 			wp.x=wp.x * TILE_WIDTH + 16;
 			wp.y=wp.y * TILE_HEIGHT + 19;
 			int count=ppl7::Peek8(buffer + p + 4);
@@ -332,6 +353,16 @@ void Waynet::load(const ppl7::ByteArrayPtr& ba)
 	} else {
 		printf("Can't load Waynet, unknown version! [%d]\n", version);
 	}
+	{
+		std::map<uint32_t, WayPoint>::iterator itw;
+		for (itw=waypoints.begin();itw != waypoints.end();++itw) {
+			std::map<uint32_t, Connection>::iterator itc;
+			for (itc=itw->second.connection_map.begin();itc != itw->second.connection_map.end();++itc) {
+				itc->second.source_as=getAs(itc->second.source);
+				itc->second.target_as=getAs(itc->second.target);
+			}
+		}
+	}
 }
 
 void Waynet::addPoint(const WayPoint& p1)
@@ -360,6 +391,16 @@ const WayPoint& Waynet::getPoint(const Position& p1) const
 	if (it != waypoints.end()) return (*it).second;
 	return invalid_waypoint;
 }
+
+uint32_t Waynet::getAs(const Position& wp)
+{
+	std::map<uint32_t, WayPoint>::const_iterator it;
+	it=waypoints.find(wp);
+	if (it != waypoints.end()) return (*it).second.as;
+	return 0;
+}
+
+
 
 const WayPoint& Waynet::invalidPoint() const
 {
@@ -464,6 +505,56 @@ static int calcCosts(const std::list<Connection>& conns)
 	}
 	return c;
 }
+
+void Waynet::enableDebug(bool enable)
+{
+	debug_enabled=enable;
+	debug_start=invalid_waypoint;
+	debug_end=invalid_waypoint;
+	debug_as_part_of_way.clear();
+	debug_waypoints.clear();
+}
+
+void Waynet::setDebugPoints(const Position& start, const Position& end)
+{
+	debug_as_part_of_way.clear();
+	debug_waypoints.clear();
+	debug_start=start;
+	debug_end=end;
+	if (debug_start == invalidPoint() || debug_end == invalidPoint()) return;
+	ppl7::PrintDebugTime("===========================================================================\n");
+	ppl7::PrintDebugTime("searching for a way from %d:%d => %d:%d\n", debug_start.x, debug_start.y,
+		debug_end.x, debug_end.y);
+
+	if (!findWay(debug_waypoints, debug_start, debug_end)) {
+		ppl7::PrintDebugTime("Found no way :-(\n");
+	} else {
+		std::list<Connection>::const_iterator it;
+		for (it=debug_waypoints.begin();it != debug_waypoints.end();++it) {
+			ppl7::PrintDebugTime("source: %3d(%5d:%5d), target: %3d(%5d:%5d), type: %-10s, cost: %0.3f\n",
+				(*it).source_as,
+				(*it).source.x, (*it).source.y,
+				(*it).target_as,
+				(*it).target.x, (*it).target.y,
+				(*it).name(), (*it).cost);
+			debug_as_part_of_way.insert((*it).source_as);
+			debug_as_part_of_way.insert((*it).target_as);
+		}
+	}
+}
+
+void Waynet::setDebugStart(const Position& start)
+{
+	debug_start=start;
+	setDebugPoints(debug_start, debug_end);
+}
+
+void Waynet::setDebugEnd(const Position& end)
+{
+	debug_end=end;
+	setDebugPoints(debug_start, debug_end);
+}
+
 
 bool Waynet::findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes)
 {

@@ -455,6 +455,10 @@ public:
 	float getCost() const;
 	void setDebugStart(const WayPoint& wp);
 	void setDebugEnd(const WayPoint& wp);
+
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
+
+
 };
 
 
