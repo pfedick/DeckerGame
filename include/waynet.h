@@ -29,6 +29,8 @@ class WayPoint;
 
 class Connection
 {
+private:
+	void updateTotalCosts();
 public:
 	enum ConnectionType {
 		Invalid=0,
@@ -45,6 +47,7 @@ public:
 	Position target;
 	uint32_t target_as;
 	float cost;
+	float total_costs;
 	Connection();
 	Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost=1.0f);
 	void clear();

@@ -90,6 +90,7 @@ Connection::Connection()
 	target_as=0;
 	type=Connection::Invalid;
 	cost=1.0f;
+	total_costs=0.0f;
 }
 
 Connection::Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost)
@@ -100,6 +101,15 @@ Connection::Connection(const WayPoint& source, const WayPoint& target, Connectio
 	target_as=target.as;
 	this->type=type;
 	this->cost=cost;
+	updateTotalCosts();
+}
+
+void Connection::updateTotalCosts()
+{
+	total_costs=Distance(source, target) * cost;
+	if (type == ConnectionType::Go) total_costs*=2.0f;
+	if (type == ConnectionType::Climb) total_costs*=1.5;
+
 }
 
 void Connection::clear()
@@ -108,6 +118,7 @@ void Connection::clear()
 	target.id=0;
 	type=Connection::Invalid;
 	cost=1.0f;
+	total_costs=0.0f;
 }
 
 const char* Connection::name() const
@@ -530,16 +541,19 @@ void Waynet::setDebugPoints(const Position& start, const Position& end)
 		ppl7::PrintDebugTime("Found no way :-(\n");
 	} else {
 		std::list<Connection>::const_iterator it;
+		float total=0.0f;
 		for (it=debug_waypoints.begin();it != debug_waypoints.end();++it) {
+			total+=(*it).total_costs;
 			ppl7::PrintDebugTime("source: %3d(%5d:%5d), target: %3d(%5d:%5d), type: %-10s, cost: %0.3f\n",
 				(*it).source_as,
 				(*it).source.x, (*it).source.y,
 				(*it).target_as,
 				(*it).target.x, (*it).target.y,
-				(*it).name(), (*it).cost);
+				(*it).name(), (*it).total_costs);
 			debug_as_part_of_way.insert((*it).source_as);
 			debug_as_part_of_way.insert((*it).target_as);
 		}
+		ppl7::PrintDebugTime("Total Hops: %zd, Total costs: %0.3f\n", debug_waypoints.size(), total);
 	}
 }
 
