@@ -6,7 +6,7 @@
 #include "waynet.h"
 #include "objects.h"
 
-#define DEBUGWAYNET
+//#define DEBUGWAYNET
 
 namespace Decker::Objects {
 
@@ -140,8 +140,6 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, floa
 	p.x+=velocity_move.x;
 	p.y+=velocity_move.y + gravity;
 
-	//p.x+=velocity_move.x * frame_rate_compensation;
-	//p.y+=(velocity_move.y + gravity) * frame_rate_compensation;
 	updateBoundary();
 }
 
@@ -169,19 +167,6 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 		current_way.type=Connection::Walk;
 		current_way.source=0;
 		current_way.target=first.source;
-		/*
-		if (current_way.target.y < p.y / TILE_HEIGHT) {
-			if (current_way.target.x < p.x / TILE_WIDTH) current_way.type=Connection::JumpLeft;
-			if (current_way.target.x > p.x / TILE_WIDTH) current_way.type=Connection::JumpRight;
-		}
-		*/
-	/*
-		if (source_p.isNear(current_way.target)) {
-			ppl7::PrintDebugTime("already near, using next waypoint\n");
-			current_way=waypoints.front();
-			waypoints.pop_front();
-		}
-		*/
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebugTime("found a way, starting at: %d:%d, to get there: %s ==========================\n",
 			first.source.x, first.source.y, current_way.name());
@@ -209,8 +194,8 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 
 void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const ppl7::grafix::Point& player)
 {
-	double dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(player));
-	if (dist > 2048 && (movement == Falling || movement == Dead)) {
+	double player_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(player));
+	if (player_dist > 2048 && (movement == Falling || movement == Dead)) {
 		//printf("something's wrong, back to patrol\n");
 		p=initial_p;
 		current_way.clear();
@@ -247,6 +232,8 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 	//const Connection &first=waypoints.front();
 	bool arrived=false;
 	double wp_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(current_way.target.x, current_way.target.y));
+	ppl7::grafix::Point dist(abs(p.x - current_way.target.x), abs(p.y - current_way.target.y));
+
 #ifdef DEBUGWAYNET
 	Waynet& waynet=GetObjectSystem()->getWaynet();
 	const WayPoint& wp=waynet.getPoint(current_way.target);
@@ -258,20 +245,19 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebug("walk\n");
 #endif
-		if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
-		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
-		else if (wp_dist < 20) {
+		if (wp_dist < 20) {
 #ifdef DEBUGWAYNET
 			ppl7::PrintDebug("arrived\n");
 #endif
 			arrived=true;
-		}
+
+		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
+		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
 	} else if (current_way.type == Connection::Go) {
-		if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left;
-		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right;
-		else if (wp_dist < 20) {
+		if (wp_dist < 20) {
 			arrived=true;
-		}
+		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left;
+		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right;
 	} else if (current_way.type == Connection::JumpLeft) {
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Left | KeyboardKeys::Shift | KeyboardKeys::Up;
@@ -282,9 +268,9 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Shift | KeyboardKeys::Up;
 	} else if (current_way.type == Connection::Climb) {
-		if ((uint16_t)(p.y) > current_way.target.y) keys=KeyboardKeys::Up;
+		if (wp_dist < 20) arrived=true;
+		else if ((uint16_t)(p.y) > current_way.target.y) keys=KeyboardKeys::Up;
 		else if ((uint16_t)(p.y) < current_way.target.y) keys=KeyboardKeys::Down;
-		else if (wp_dist < 20) arrived=true;
 	}
 	if (arrived) {
 		if (movement == Falling) {
