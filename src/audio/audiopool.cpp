@@ -194,6 +194,10 @@ void AudioPool::load()
 		sample[AudioClip::fire3].load("res/audio/fire3.mp3");
 		sample[AudioClip::cheese].load("res/audio/cheese.mp3");
 		sample[AudioClip::rat_squeek].load("res/audio/rat_squeek.mp3");
+		sample[AudioClip::shoot].load("res/audio/shoot.mp3");
+		sample[AudioClip::holster_pistol].load("res/audio/holster-pistol.mp3");
+		sample[AudioClip::fabric].load("res/audio/fabric.mp3");
+		sample[AudioClip::bullet_hits_player].load("res/audio/bullet_hits_player.mp3");
 
 
 	} catch (const ppl7::Exception& exp) {

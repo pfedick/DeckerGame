@@ -17,10 +17,17 @@ private:
 		StateFollowPlayer
 	};
 	double next_state;
+	double shoot_cooldown;
 	int state;
 	int substate;
+	bool attack;
+	int magazine;
 
+	void switchAttackMode(bool enable);
 	void updateStatePatrol(double time, TileTypePlane& ttplane);
+	void shoot(double time, Player& player);
+	void issueFireParticles(const ppl7::grafix::PointF& p, Player& player) const;
+	void issueSmoke(const ppl7::grafix::PointF& p) const;
 
 public:
 	Helena();

@@ -132,6 +132,11 @@ public:
 		fire3,
 		cheese,
 		rat_squeek,
+		shoot,	// Helena
+		holster_pistol,
+		fabric,
+		bullet_hits_player,
+		//bullet_hits_wall,	// TODO
 
 		// this must always be the last entry!
 		maxClips
