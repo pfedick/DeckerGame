@@ -328,6 +328,7 @@ bool Player::isInInventory(int object_id) const
 
 bool Player::isDead() const
 {
+	if (movement == Dead) return true;
 	return dead;
 }
 
@@ -428,6 +429,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		next_animation=time + animation_speed;
 		animation.update();
 		playSoundOnAnimationSprite();
+
 	}
 	if (movement == Dead) {
 		if (animation.isFinished()) {
@@ -879,8 +881,8 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, f
 	ppl7::grafix::Rect boundary=sprite_resource->spriteBoundary(animation.getFrame(), 1.0f, x, y);
 
 	if (draw.width()) {
-		//printf ("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
-		int stepx=boundary.width() / 6;
+		//ppl7::PrintDebugTime("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
+		int stepx=boundary.width() / 8;
 		int stepy=boundary.height() / 12;
 		for (int py=boundary.y1;py < boundary.y2;py+=stepx) {
 			for (int px=boundary.x1;px < boundary.x2;px+=stepy) {
