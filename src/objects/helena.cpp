@@ -122,7 +122,7 @@ Helena::Helena()
 
 void Helena::handleCollision(Player* player, const Collision& collision)
 {
-	player->dropHealth(100);
+	player->dropHealth(1 * collision.frame_rate_compensation);
 }
 
 
