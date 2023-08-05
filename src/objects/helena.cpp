@@ -24,8 +24,8 @@ Helena::Helena()
 	animation.setStaticFrame(27);
 	keys=0;
 	substate=0;
-	speed_walk=1.0f;
-	speed_run=3.0f;
+	speed_walk=2.0f;
+	speed_run=4.5f;
 }
 
 
@@ -102,9 +102,19 @@ void Helena::updateStatePatrol(double time, TileTypePlane& ttplane)
 	}
 	substate=0;
 	if (orientation == Left) {
-		keys=KeyboardKeys::Left;
+		//printf("move left\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 64));
+		if (t1 != TileType::NonBlocking) {
+			stand();
+			next_state=time + ppl7::randf(1.0f, 5.0f);
+		} else keys=KeyboardKeys::Left;
 	} else {
-		keys=KeyboardKeys::Right;
+		//printf("move right\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y - 64));
+		if (t1 != TileType::NonBlocking) {
+			stand();
+			next_state=time + ppl7::randf(1.0f, 5.0f);
+		} else keys=KeyboardKeys::Right;
 	}
 }
 
