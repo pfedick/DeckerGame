@@ -333,7 +333,7 @@ void Waynet::save(ppl7::FileObject& file, unsigned char id) const
 	std::map<uint32_t, WayPoint>::const_iterator it;
 	size_t buffersize=6;
 	for (it=waypoints.begin();it != waypoints.end();++it) {
-		buffersize+=5 + it->second.connection_map.size() * 6;
+		buffersize+=9 + it->second.connection_map.size() * 9;
 	}
 	unsigned char* buffer=(unsigned char*)malloc(buffersize);
 	ppl7::Poke32(buffer + 0, 0);
@@ -684,7 +684,7 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 #endif
 	for (int maxchecks=10;maxchecks < 25;maxchecks+=5) {
 		if (findBestWay(visited_nodes, way_list, WayPoint(), wp_source, wp_target, maxchecks)) return true;
-	}
+}
 	return false;
 
 }
