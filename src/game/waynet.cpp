@@ -710,6 +710,12 @@ float getCosts(const Waynet::WayList& list) {
 bool Waynet::findBestWay(Way& way) const
 {
 	// special case: first point is also endpoint
+	if (way.start == way.end) {
+		way.way_list.clear();
+		way.way_list.push_back(Connection(way.start, way.end, Connection::ConnectionType::Walk, 1.0f));
+		return true;
+	}
+
 	int depth=0;
 	while (depth < way.depth_limit) {
 		if (way.check_next.empty()) break;
