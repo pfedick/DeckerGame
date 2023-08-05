@@ -77,6 +77,14 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		}
 		return;
 	}
+	if (movement == Turn) {
+		if (!animation.isFinished()) return;
+		movement=Stand;
+		orientation=turnTarget;
+		velocity_move.stop();
+		stand();
+	}
+
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
 	if (state != StateFollowPlayer && dist < 600) {
@@ -87,6 +95,19 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		switchAttackMode(true);
 	} else if (dist > 350 && attack == true) {
 		switchAttackMode(false);
+	} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
+		if (orientation == Right && player.x < p.x) {
+			//orientation=Left;
+			//stand();
+			turn(Left);
+			return;
+		} else if (orientation == Left && player.x > p.x) {
+			//orientation=Right;
+			//stand();
+			turn(Right);
+			return;
+		}
+
 	}
 
 
@@ -97,13 +118,7 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		else turn(Right);
 	}
 
-	if (movement == Turn) {
-		if (!animation.isFinished()) return;
-		movement=Stand;
-		orientation=turnTarget;
-		velocity_move.stop();
-		stand();
-	}
+
 
 	updateMovementAndPhysics(time, ttplane, frame_rate_compensation);
 

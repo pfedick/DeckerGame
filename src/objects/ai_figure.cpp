@@ -145,10 +145,12 @@ void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, floa
 
 void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 {
+	//if (next_wayfind > time) return;
 	Waynet& waynet=GetObjectSystem()->getWaynet();
 	WayPoint pwp=waynet.findNearestWaypoint(Position((uint16_t)player.x, (uint16_t)player.y));
 	Position source_p(p.x, p.y);
 	Position target_p(player.x, player.y);
+
 
 #ifdef DEBUGWAYNET
 
@@ -159,27 +161,33 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 		pwp.x, pwp.y, last_pwp.x, last_pwp.y);
 #endif
 	next_wayfind=time + 3.0f;
-	if (pwp.id == last_pwp.id && waypoints.size() > 0) return;
+	//if (pwp.id == last_pwp.id && waypoints.size() > 0) return;
 	last_pwp=pwp;
 	waypoints.clear();
 	if (waynet.findWay(waypoints, Position(p.x, p.y), Position(player.x, player.y))) {
-		const Connection& first=waypoints.front();
 		current_way.type=Connection::Walk;
 		current_way.source=0;
-		current_way.target=first.source;
+		current_way.target.x=player.x;
+		current_way.target.y=player.y;
+		if (waypoints.size()) {
+			const Connection& first=waypoints.front();
+			current_way.target=first.source;
 #ifdef DEBUGWAYNET
-		ppl7::PrintDebugTime("found a way, starting at: %d:%d, to get there: %s ==========================\n",
-			first.source.x, first.source.y, current_way.name());
+			ppl7::PrintDebugTime("found a way, starting at: %d:%d, to get there: %s ==========================\n",
+				first.source.x, first.source.y, current_way.name());
 
 #endif
+		}
 
 #ifdef DEBUGWAYNET
 		std::list<Connection>::const_iterator it;
 		for (it=waypoints.begin();it != waypoints.end();++it) {
-			ppl7::PrintDebugTime("source: (%d:%d), target: (%d:%d), type: %9s, cost: %0.3f\n",
+			ppl7::PrintDebugTime("source: %3d(%5d:%5d), target: %3d(%5d:%5d), type: %-10s, cost: %0.3f\n",
+				(*it).source_as,
 				(*it).source.x, (*it).source.y,
+				(*it).target_as,
 				(*it).target.x, (*it).target.y,
-				(*it).name(), (*it).cost);
+				(*it).name(), (*it).total_costs);
 		}
 #endif
 	} else {
@@ -188,6 +196,7 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 #endif
 		waypoints.clear();
 		current_way.clear();
+		next_wayfind=time + 1.0f;
 	}
 
 }
@@ -195,7 +204,7 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const ppl7::grafix::Point& player)
 {
 	double player_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(player));
-	if (player_dist > 2048 && (movement == Falling || movement == Dead)) {
+	if (player_dist > 4096 && (movement == Falling || movement == Dead)) {
 		//printf("something's wrong, back to patrol\n");
 		p=initial_p;
 		current_way.clear();
@@ -211,6 +220,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 			ppl7::PrintDebug("updateWay Reason 1\n");
 #endif
 			updateWay(time, player);
+			next_wayfind=time + 1.0f;
 		}
 	}
 	/*
@@ -245,16 +255,21 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebug("walk\n");
 #endif
-		if (wp_dist < 20) {
+		if (dist.y < 50 && dist.x < 20) {
 #ifdef DEBUGWAYNET
 			ppl7::PrintDebug("arrived\n");
 #endif
 			arrived=true;
+			/*
+		} else if (dist.x < 20 && wp_dist>100) {
+			current_way.clear();
+			updateWay(time, player);
+		*/
 
 		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
 		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
 	} else if (current_way.type == Connection::Go) {
-		if (wp_dist < 20) {
+		if (dist.y < 50 && dist.x < 20) {
 			arrived=true;
 		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left;
 		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right;
@@ -282,22 +297,38 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 			(int)p.x, (int)p.y, movement);
 #endif
 		current_way.clear();
+		/*
 		if (movement == Walk || movement == Run) {
 			if (player.x < p.x && orientation != Left && y_dist < TILE_HEIGHT) turn(Left);
 			if (player.x > p.x && orientation != Right && y_dist < TILE_HEIGHT) turn(Right);
 		}
+		*/
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebug("updateWay Reason 2\n");
 #endif
 		updateWay(time, player);
 		if (waypoints.size() > 0) {
 			current_way=waypoints.front();
+			if (current_way.type == Connection::Walk) {
+				if (p.x > current_way.source.x && p.x < current_way.target.x) {
+					waypoints.pop_front();
+					current_way=waypoints.front();
+				}
+			}
+
 			if (movement == ClimbUp || movement == ClimbDown) {
 				//printf("movement was climb\n");
 			}
 			//stand();
 			//printf("move to next point: %d:%d, type: %d\n", current_way.target.x, current_way.target.y, current_way.type);
 			waypoints.pop_front();
+
+		}
+		if (waypoints.size() == 0) {
+			if (movement == Walk || movement == Run) {
+				if (player.x < p.x && orientation != Left && y_dist < TILE_HEIGHT) turn(Left);
+				if (player.x > p.x && orientation != Right && y_dist < TILE_HEIGHT) turn(Right);
+			}
 		}
 	}
 
