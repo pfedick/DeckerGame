@@ -1178,6 +1178,7 @@ void Game::load()
 	closeSpriteSelection();
 	closeObjectSelection();
 	closeWayNet();
+	selected_object=NULL;
 	remember.clear();
 	level.load(LevelFile);
 	enableControls(true);
@@ -1192,6 +1193,7 @@ void Game::createNewLevel(const LevelParameter& params)
 	closeSpriteSelection();
 	closeObjectSelection();
 	closeWayNet();
+	selected_object=NULL;
 	remember.clear();
 	enableControls(false);
 	if (mainmenue) mainmenue->setWorldFollowsPlayer(false);
