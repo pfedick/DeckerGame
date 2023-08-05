@@ -36,11 +36,54 @@ Wallenstein::Wallenstein()
 	speed_walk=2.0f;
 	speed_run=4.5f;
 	attack=false;
+	last_collision_frame=0;
 }
+
+static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
+{
+
+	std::list<Particle::ColorGradientItem>color_gradient;
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(156, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.428, ppl7::grafix::Color(156, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(156, 0, 0, 0)));
+
+	ParticleSystem* ps=GetParticleSystem();
+	int new_particles=ppl7::rand(30, 90);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.293, 0.293) + time;
+		particle->p=p;
+		particle->layer=Particle::Layer::BehindPlayer;
+		particle->weight=randf(0.123, 0.774);
+		particle->gravity.setPoint(0.000, 1.000);
+		particle->velocity=calculateVelocity(randf(4.000, 7.300), degree + randf(-18.679, 18.679));
+		particle->scale=randf(0.066, 0.481);
+		particle->color_mod.set(183, 0, 0, 255);
+		particle->initAnimation(Particle::Type::RotatingParticleWhite);
+		ps->addParticle(particle);
+	}
+}
+
 
 void Wallenstein::handleCollision(Player* player, const Collision& collision)
 {
-	if (attack)	player->dropHealth(1);
+	if (last_collision_frame == 0) {
+		//ppl7::PrintDebug("sprite_no=%d\n", sprite_no);
+		if (sprite_no >= 147 && sprite_no <= 150) {
+			last_collision_frame=sprite_no;
+			player->dropHealth(5.0f * collision.frame_rate_compensation);
+			issueBlood(ppl7::grafix::PointF(player->x, player->y - 85), 70, player->time);
+			getAudioPool().playOnce(AudioClip::bullet_hits_player, p, 1600, 0.7f);
+		} else if (sprite_no >= 157 && sprite_no <= 160) {
+			last_collision_frame=sprite_no;
+			player->dropHealth(5.0f * collision.frame_rate_compensation);
+			issueBlood(ppl7::grafix::PointF(player->x, player->y - 85), 290, player->time);
+			getAudioPool().playOnce(AudioClip::bullet_hits_player, p, 1600, 0.7f);
+		} else {
+			player->dropHealth(1.0f * collision.frame_rate_compensation);
+		}
+	}
 }
 
 
@@ -65,12 +108,21 @@ void Wallenstein::switchAttackMode(bool enable)
 	}
 }
 
+void Wallenstein::playSoundOnAnimationSprite()
+{
+	if (sprite_no == 145 || sprite_no == 155) {
+		getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.5f);
+		last_collision_frame=0;
+	}
+}
+
 void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	//printf ("s=%d, state=%s, keys=%d\n", state, (const char*)getState(), keys);
 	this->time=time;
 	if (!enabled) return;
 	updateAnimation(time);
+
 	if (movement == Dead) {
 		if (animation.isFinished()) {
 			enabled=false;
@@ -87,33 +139,41 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
-	if (state != StateFollowPlayer && dist < 600) {
-		state=StateFollowPlayer;
-		clearWaypoints();
-	}
-	if (dist < 300 && attack == false) {
-		switchAttackMode(true);
-	} else if (dist > 350 && attack == true) {
-		switchAttackMode(false);
-	} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
-		if (orientation == Right && player.x < p.x) {
-			//orientation=Left;
-			//stand();
-			turn(Left);
-			return;
-		} else if (orientation == Left && player.x > p.x) {
-			//orientation=Right;
-			//stand();
-			turn(Right);
-			return;
+	if (!player.isDead()) {
+		if (state != StateFollowPlayer && dist < 600) {
+			state=StateFollowPlayer;
+			clearWaypoints();
 		}
+		if (dist < 300 && attack == false) {
+			switchAttackMode(true);
+		} else if (dist > 350 && attack == true) {
+			switchAttackMode(false);
+		} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
+			if (orientation == Right && player.x < p.x) {
+				//orientation=Left;
+				//stand();
+				turn(Left);
+				return;
+			} else if (orientation == Left && player.x > p.x) {
+				//orientation=Right;
+				//stand();
+				turn(Right);
+				return;
+			}
 
+		}
+	} else if (attack) {
+		switchAttackMode(false);
+		state=StateStand;
+		next_state=0.0f;
+		clearWaypoints();
 	}
 
 
 
 	if (time < next_state && state == StateStand) {
 		state=StatePatrol;
+		clearWaypoints();
 		if (ppl7::rand(0, 1) == 0) turn(Left);
 		else turn(Right);
 	}

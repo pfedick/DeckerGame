@@ -67,6 +67,8 @@ public:
 	void updateAnimation(double time);
 	void updateMovementAndPhysics(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 	void clearWaypoints();
+
+	virtual void playSoundOnAnimationSprite();
 };
 
 

@@ -108,6 +108,11 @@ void AiEnemy::stand()
 	else if (orientation == Back) animation.start(anicycleStandBack);
 }
 
+void AiEnemy::playSoundOnAnimationSprite()
+{
+
+}
+
 void AiEnemy::updateAnimation(double time)
 {
 	if (time > next_animation) {
@@ -117,6 +122,7 @@ void AiEnemy::updateAnimation(double time)
 		if (new_sprite != sprite_no) {
 			sprite_no=new_sprite;
 			updateBoundary();
+			playSoundOnAnimationSprite();
 		}
 	}
 }
@@ -188,9 +194,9 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 				(*it).target_as,
 				(*it).target.x, (*it).target.y,
 				(*it).name(), (*it).total_costs);
-		}
+	}
 #endif
-	} else {
+} else {
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebugTime("found no way\n");
 #endif

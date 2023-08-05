@@ -269,31 +269,38 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 	}
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
-	if (state != StateFollowPlayer && dist < 600) {
-		state=StateFollowPlayer;
-		clearWaypoints();
-	}
-	if (state == StateFollowPlayer) {
-		if (dist < 1000 && attack == false) {
-			shoot_cooldown=time + 1.0f;
-			switchAttackMode(true);
-		} else if (dist > 1100 && attack == true) {
-			switchAttackMode(false);
-		} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
-			if (orientation == Right && player.x < p.x) {
-				//orientation=Left;
-				//stand();
-				turn(Left);
-				return;
-			} else if (orientation == Left && player.x > p.x) {
-				//orientation=Right;
-				//stand();
-				turn(Right);
-				return;
-			}
-
+	if (!player.isDead()) {
+		if (state != StateFollowPlayer && dist < 600) {
+			state=StateFollowPlayer;
+			clearWaypoints();
 		}
-		if (attack && abs(player.y - p.y) < 20) shoot(time, player);
+		if (state == StateFollowPlayer) {
+			if (dist < 1000 && attack == false) {
+				shoot_cooldown=time + 1.0f;
+				switchAttackMode(true);
+			} else if (dist > 1100 && attack == true) {
+				switchAttackMode(false);
+			} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
+				if (orientation == Right && player.x < p.x) {
+					//orientation=Left;
+					//stand();
+					turn(Left);
+					return;
+				} else if (orientation == Left && player.x > p.x) {
+					//orientation=Right;
+					//stand();
+					turn(Right);
+					return;
+				}
+
+			}
+			if (attack && abs(player.y - p.y) < 20) shoot(time, player);
+		}
+	} else if (attack) {
+		switchAttackMode(false);
+		state=StateStand;
+		next_state=0.0f;
+		clearWaypoints();
 	}
 
 	if (time < next_state && state == StateStand) {
