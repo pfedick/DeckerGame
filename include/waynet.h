@@ -94,12 +94,20 @@ private:
 	void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug=false) const;
 
 
+	class WaySoFar
+	{
+	public:
+		WayList waylist;
+		std::set<uint32_t> visited_nodes;
+		float cost;
+	};
 
 	class BestWay
 	{
 	public:
 		WayList waylist;
 		float total_costs=0.0f;
+		int depth=0;
 	};
 
 	class Way
@@ -108,11 +116,11 @@ private:
 		const WayPoint& start;
 		const WayPoint& end;
 		std::list<Connection>& way_list;
-		std::set<uint32_t> visited_nodes;
+		//std::set<uint32_t> visited_nodes;
 		BestWay best;
 		int depth_limit;
 
-		std::map<uint32_t, WayList> check_next;
+		std::map<uint32_t, WaySoFar> check_next;
 
 		Way(const WayPoint& start, const WayPoint& end, std::list<Connection>& way_list);
 
