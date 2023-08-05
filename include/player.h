@@ -72,7 +72,7 @@ private:
 	void emmitParticles(double time);
 
 	void moveOutOfWater(float angel, float speed);
-	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects);
+	void checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 	void checkCollisionWithWorld(const TileTypePlane& world);
 
 	void handleDiving(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);

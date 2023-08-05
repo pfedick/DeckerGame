@@ -455,7 +455,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	dropHealth(detectFallingDamage(time, frame_rate_compensation), HealthDropReason::FallingDeep);
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
-	checkCollisionWithObjects(objects);
+	checkCollisionWithObjects(objects, frame_rate_compensation);
 	if (movement == Hacking) return;
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
@@ -866,7 +866,7 @@ void Player::checkCollisionWithWorld(const TileTypePlane& world)
 }
 
 
-void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects)
+void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	// we try to find existing pixels inside the player boundary
 	// to build a list with points we want to check against the
@@ -896,6 +896,7 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects)
 	Decker::Objects::Object* object=objects->detectCollision(checkpoints);
 	if (!object) return;
 	Decker::Objects::Collision col;
+	col.frame_rate_compensation=frame_rate_compensation;
 	col.detect(object, checkpoints, *this);
 	col.bounding_box_player=getBoundingBox();
 	col.bounding_box_object=object->boundary;

@@ -136,6 +136,7 @@ public:
 	ppl7::grafix::Rect bounding_box_object;
 	ppl7::grafix::Rect bounding_box_player;
 	ppl7::grafix::Rect bounding_box_intersection;
+	float frame_rate_compensation;
 	Collision();
 	Collision(const Collision& other);
 	void detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player);
