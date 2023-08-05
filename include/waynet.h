@@ -116,7 +116,7 @@ private:
 		const WayPoint& start;
 		const WayPoint& end;
 		std::list<Connection>& way_list;
-		//std::set<uint32_t> visited_nodes;
+		std::set<uint32_t> analyzed_nodes;
 		BestWay best;
 		int depth_limit;
 

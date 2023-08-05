@@ -700,7 +700,6 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 			if (source.x > c1.source.x && source.x < c1.target.x) way_list.pop_front();
 
 		}
-
 	}
 	return result;
 }
@@ -731,11 +730,13 @@ bool Waynet::findBestWay(Way& way) const
 		way.way_list.push_back(Connection(way.start, way.end, Connection::ConnectionType::Walk, 1.0f));
 		return true;
 	}
-
+	double start_time=ppl7::GetMicrotime();
 	int depth=0;
 	while (depth < way.depth_limit) {
+		depth++;
+		if (ppl7::GetMicrotime() - start_time > 0.004) break;
 		if (way.check_next.empty()) break;
-		if (way.best.depth > 0 && depth > way.best.depth + 5) break;
+		if (way.best.depth > 0 && depth > way.best.depth + 3) break;
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebugTime("next DEPTH %d ###########################################################\n", depth);
 #endif
@@ -755,6 +756,10 @@ bool Waynet::findBestWay(Way& way) const
 			std::map<uint32_t, Connection>::const_iterator cit;
 			for (cit = wp1.connection_map.begin();cit != wp1.connection_map.end();++cit) {
 				const WayPoint& wp2=getPoint(Position((*cit).second.target));
+				if (way.analyzed_nodes.find(wp2.id) != way.analyzed_nodes.end()) {
+					//ppl7::PrintDebugTime("NODE %d IS ALREADY ANALYZED!\n", wp2.as);
+					continue;
+				}
 				if (waysofar.visited_nodes.find(wp2.id) == waysofar.visited_nodes.end()) {
 					WaySoFar new_waysofare;
 					new_waysofare.waylist=waysofar.waylist;
@@ -794,13 +799,17 @@ bool Waynet::findBestWay(Way& way) const
 					}
 				}
 			}
+			way.analyzed_nodes.insert(wp1.id);
+			//ppl7::PrintDebug("adding node %d to analyzed nodes\n", wp1.as);
 		}
 		way.check_next=check_next;
-		depth++;
 	}
 	//ppl7::PrintDebugTime("finished at %d depth\n", depth);
 	if (way.best.waylist.empty()) return false;
 	way.way_list=way.best.waylist;
+	double duration=ppl7::GetMicrotime() - start_time;
+	if (duration > 0.004) ppl7::PrintDebugTime("WARNING: Pathfinding took %0.3f ms, depth=%d!\n", duration * 1000.0f, depth);
+
 	return true;
 
 }
