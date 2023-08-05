@@ -168,7 +168,13 @@ void Waynet::drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords,
 		const Position& p1=(*it).source;
 		const Position& p2=(*it).target;
 
+		ppl7::grafix::Point s1(coords.x + p1.x - 22, coords.y + p1.y - 22);
+		ppl7::grafix::Point s2(coords.x + p1.x + 22, coords.y + p1.y + 22);
+		ppl7::grafix::Point t1(coords.x + p2.x + 22, coords.y + p2.y - 22);
+		ppl7::grafix::Point t2(coords.x + p2.x - 22, coords.y + p2.y + 22);
+
 		int x1, y1, x2, y2;
+		/*
 		if (p2.x < p1.x || p2.y < p1.y) {
 			x1=coords.x + p1.x - 22;
 			y1=coords.y + p1.y - 22;
@@ -182,14 +188,41 @@ void Waynet::drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords,
 		} else {
 			x2=coords.x + p2.x - 22;
 			y2=coords.y + p2.y + 22;
-
 		}
+		*/
+		float d1=ppl7::grafix::Distance(s1, t1);
+		float d2=ppl7::grafix::Distance(s1, t2);
+		float d3=ppl7::grafix::Distance(s2, t1);
+		float d4=ppl7::grafix::Distance(s2, t2);
+		float best=d1;
+		ppl7::grafix::Point source(s1);
+		ppl7::grafix::Point target(t1);
+		if (d2 < best) {
+			source=s1; target=t2;
+			best=d2;
+		}
+		if (d3 < best) {
+			source=s2; target=t1;
+			best=d3;
+		}
+		if (d4 < best) {
+			source=s2; target=t2;
+			best=d4;
+		}
+		x1=source.x;
+		y1=source.y;
+		x2=target.x;
+		y2=target.y;
+
+
+
+
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		int w=1;
 		if (debug) {
 			if (debug_as_part_of_way.find((*it).source_as) != debug_as_part_of_way.end() &&
 				debug_as_part_of_way.find((*it).target_as) != debug_as_part_of_way.end()) {
-				w=4;
+				w=8;
 			}
 		}
 
@@ -221,7 +254,12 @@ void Waynet::drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords,
 		}
 		for (int i=0;i < w;i++) {
 			SDL_RenderDrawLine(renderer, x1 + i, y1 + i, x2 + i, y2 + i);
+			if (w > 1) {
+				SDL_RenderDrawLine(renderer, x1 + i, y1, x2 + i, y2);
+				SDL_RenderDrawLine(renderer, x1, y1 + 1, x2, y2 + 1);
+			}
 		}
+
 
 	}
 }
@@ -671,6 +709,7 @@ float getCosts(const Waynet::WayList& list) {
 
 bool Waynet::findBestWay(Way& way) const
 {
+	// special case: first point is also endpoint
 	int depth=0;
 	while (depth < way.depth_limit) {
 		if (way.check_next.empty()) break;
@@ -681,7 +720,6 @@ bool Waynet::findBestWay(Way& way) const
 			WayList& waylist=(*it).second;
 			way.visited_nodes.insert((*it).first);
 			float cost_so_far=getCosts(waylist);
-			// TODO: special case: first point is also endpoint
 			std::map<uint32_t, Connection>::const_iterator cit;
 			for (cit = wp1.connection_map.begin();cit != wp1.connection_map.end();++cit) {
 				const WayPoint& wp2=getPoint(Position((*cit).second.target));
