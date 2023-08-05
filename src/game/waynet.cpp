@@ -734,7 +734,6 @@ bool Waynet::findBestWay(Way& way) const
 	int depth=0;
 	while (depth < way.depth_limit) {
 		depth++;
-		if (ppl7::GetMicrotime() - start_time > 0.004) break;
 		if (way.check_next.empty()) break;
 		if (way.best.depth > 0 && depth > way.best.depth + 3) break;
 #ifdef DEBUGWAYNET
@@ -751,60 +750,61 @@ bool Waynet::findBestWay(Way& way) const
 			for (wlc=waysofar.waylist.begin();wlc != waysofar.waylist.end();++wlc) ppl7::PrintDebug("%d, ", wlc->target_as);
 			ppl7::PrintDebug("\n");
 #endif
-			waysofar.visited_nodes.insert((*it).first);
+			//waysofar.visited_nodes.insert((*it).first);
 			float cost_so_far=getCosts(waysofar.waylist);
 			std::map<uint32_t, Connection>::const_iterator cit;
 			for (cit = wp1.connection_map.begin();cit != wp1.connection_map.end();++cit) {
 				const WayPoint& wp2=getPoint(Position((*cit).second.target));
-				if (way.analyzed_nodes.find(wp2.id) != way.analyzed_nodes.end()) {
-					//ppl7::PrintDebugTime("NODE %d IS ALREADY ANALYZED!\n", wp2.as);
-					continue;
+				std::map<uint32_t, float>::iterator anal_it=way.analyzed_nodes.find(wp2.id);
+				if (anal_it != way.analyzed_nodes.end()) {
+					if (cost_so_far >= anal_it->second) {
+						//ppl7::PrintDebugTime("NODE %d IS ALREADY ANALYZED!\n", wp2.as);
+						continue;
+					}
+					way.analyzed_nodes.erase(anal_it);
 				}
-				if (waysofar.visited_nodes.find(wp2.id) == waysofar.visited_nodes.end()) {
-					WaySoFar new_waysofare;
-					new_waysofare.waylist=waysofar.waylist;
-					new_waysofare.waylist.push_back(cit->second);
-					new_waysofare.visited_nodes=waysofar.visited_nodes;
-					new_waysofare.cost=cost_so_far + cit->second.total_costs;
-					if (wp2 == way.end) {
-						float cost=cost_so_far + (*cit).second.total_costs;
-						if (way.best.waylist.empty() || cost < way.best.total_costs) {
-							way.best.waylist=new_waysofare.waylist;
-							way.best.total_costs=cost;
-							way.best.depth=depth;
+				WaySoFar new_waysofare;
+				new_waysofare.waylist=waysofar.waylist;
+				new_waysofare.waylist.push_back(cit->second);
+				new_waysofare.cost=cost_so_far + cit->second.total_costs;
+				if (wp2 == way.end) {
+					float cost=cost_so_far + (*cit).second.total_costs;
+					if (way.best.waylist.empty() || cost < way.best.total_costs) {
+						way.best.waylist=new_waysofare.waylist;
+						way.best.total_costs=cost;
+						way.best.depth=depth;
 #ifdef DEBUGWAYNET
-							ppl7::PrintDebugTime("new best way, cost: %0.3f:\n", cost);
-							printWaylist(way.best.waylist);
-						} else {
-							ppl7::PrintDebugTime("REJECTED way, cost: %0.3f:\n", cost);
-							printWaylist(new_waysofare.waylist);
-#endif
-						}
+						ppl7::PrintDebugTime("new best way, cost: %0.3f:\n", cost);
+						printWaylist(way.best.waylist);
 					} else {
-						std::map<uint32_t, WaySoFar>::const_iterator checkit;
-						checkit=check_next.find(wp2.id);
-#ifdef DEBUGWAYNET
-						if (checkit != check_next.end()) {
-							ppl7::PrintDebugTime("   we want to add node, but we already have it: %d, cost: %0.3f, new cost: %0.3f\n",
-								wp2.as, checkit->second.cost, new_waysofare.cost);
-						}
+						ppl7::PrintDebugTime("REJECTED way, cost: %0.3f:\n", cost);
+						printWaylist(new_waysofare.waylist);
 #endif
-						if (checkit == check_next.end() || new_waysofare.cost < checkit->second.cost) {
-							if (checkit != check_next.end()) check_next.erase(checkit);
+					}
+					} else {
+					std::map<uint32_t, WaySoFar>::const_iterator checkit;
+					checkit=check_next.find(wp2.id);
 #ifdef DEBUGWAYNET
-							ppl7::PrintDebugTime("   added next check node: %d\n", wp2.as);
+					if (checkit != check_next.end()) {
+						ppl7::PrintDebugTime("   we want to add node, but we already have it: %d, cost: %0.3f, new cost: %0.3f\n",
+							wp2.as, checkit->second.cost, new_waysofare.cost);
+					}
 #endif
-							check_next.insert(std::pair<uint32_t, WaySoFar>(wp2.id, new_waysofare));
-						}
+					if (checkit == check_next.end() || new_waysofare.cost < checkit->second.cost) {
+						if (checkit != check_next.end()) check_next.erase(checkit);
+#ifdef DEBUGWAYNET
+						ppl7::PrintDebugTime("   added next check node: %d\n", wp2.as);
+#endif
+						check_next.insert(std::pair<uint32_t, WaySoFar>(wp2.id, new_waysofare));
 					}
 				}
-			}
-			way.analyzed_nodes.insert(wp1.id);
+				}
+			way.analyzed_nodes.insert(std::pair<uint32_t, float>(wp1.id, cost_so_far));
 			//ppl7::PrintDebug("adding node %d to analyzed nodes\n", wp1.as);
-		}
+			}
 		way.check_next=check_next;
-	}
-	//ppl7::PrintDebugTime("finished at %d depth\n", depth);
+		}
+		//ppl7::PrintDebugTime("finished at %d depth\n", depth);
 	if (way.best.waylist.empty()) return false;
 	way.way_list=way.best.waylist;
 	double duration=ppl7::GetMicrotime() - start_time;
@@ -812,4 +812,4 @@ bool Waynet::findBestWay(Way& way) const
 
 	return true;
 
-}
+	}

@@ -98,7 +98,6 @@ private:
 	{
 	public:
 		WayList waylist;
-		std::set<uint32_t> visited_nodes;
 		float cost;
 	};
 
@@ -116,7 +115,7 @@ private:
 		const WayPoint& start;
 		const WayPoint& end;
 		std::list<Connection>& way_list;
-		std::set<uint32_t> analyzed_nodes;
+		std::map<uint32_t, float> analyzed_nodes;
 		BestWay best;
 		int depth_limit;
 
