@@ -292,12 +292,12 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 		return;
 	}
 	AudioPool& ap=getAudioPool();
-	if (movement == Jump || movement == Falling || movement == Slide) {
-		if (airStart == 0) {
+	if (movement == Jump || movement == Falling || movement == Slide || gravity >= 1.0f) {
+		if (airStart == 0.0f) {
 			airStart=time;
 		}
 	} else if (airStart > 0.0f) {
-		double volume=(time - airStart) * 2.0f;
+		double volume=(time - airStart) * 1.0f;
 		if (volume > 1.0f) volume=1.0f;
 		airStart=0.0f;
 		ap.playOnce(AudioClip::helena_jump, p, 1600, volume);

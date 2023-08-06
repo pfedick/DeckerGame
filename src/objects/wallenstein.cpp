@@ -37,6 +37,7 @@ Wallenstein::Wallenstein()
 	speed_run=4.5f;
 	attack=false;
 	last_collision_frame=0;
+	airStart=0.0f;
 }
 
 static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
@@ -108,12 +109,33 @@ void Wallenstein::switchAttackMode(bool enable)
 	}
 }
 
+static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
+{
+	//ap.playOnce(AudioClip::wallenstein_jump, position, 1600, 0.5f); return;
+	int r=ppl7::rand(1, 5);
+	switch (r) {
+	case 1: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
+	case 2: ap.playOnce(AudioClip::wallenstein_step2, position, 1600, 0.5f); break;
+	case 3: ap.playOnce(AudioClip::wallenstein_step3, position, 1600, 0.5f); break;
+	case 4: ap.playOnce(AudioClip::wallenstein_step4, position, 1600, 0.5f); break;
+	case 5: ap.playOnce(AudioClip::wallenstein_step5, position, 1600, 0.5f); break;
+	default: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
+	}
+}
+
 void Wallenstein::playSoundOnAnimationSprite()
 {
+	AudioPool& ap=getAudioPool();
 	if (sprite_no == 145 || sprite_no == 155) {
-		getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.5f);
+		ap.playOnce(AudioClip::arrow_swoosh, p, 1600, 0.5f);
 		last_collision_frame=0;
 	}
+	if (sprite_no == 3 || sprite_no == 7 || sprite_no == 12 || sprite_no == 16 || sprite_no == 64 || sprite_no == 68
+		|| sprite_no == 73 || sprite_no == 77) play_step(ap, p);
+	// with weapon
+	if (sprite_no == 110 || sprite_no == 114 || sprite_no == 119 || sprite_no == 123 || sprite_no == 129 || sprite_no == 133
+		|| sprite_no == 138 || sprite_no == 142) play_step(ap, p);
+
 }
 
 void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
@@ -122,6 +144,20 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 	this->time=time;
 	if (!enabled) return;
 	updateAnimation(time);
+	AudioPool& ap=getAudioPool();
+	//ppl7::PrintDebugTime("movement=%s\n", (const char*)getState());
+	if (movement == Jump || movement == Falling || movement == Slide || gravity >= 1.0f) {
+		if (airStart == 0.0f) {
+			//ppl7::PrintDebugTime("air start\n");
+			airStart=time;
+		}
+	} else if (airStart > 0.0f) {
+		double volume=(time - airStart) * 0.5f;
+		if (volume > 0.5f) volume=0.5f;
+		//ppl7::PrintDebugTime("air end aufter %0.3f, voilume=%0.3f\n", (time - airStart) * 1000, volume);
+		airStart=0.0f;
+		ap.playOnce(AudioClip::wallenstein_jump, p, 1600, volume);
+	}
 
 	if (movement == Dead) {
 		if (animation.isFinished()) {
@@ -136,6 +172,7 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 		velocity_move.stop();
 		stand();
 	}
+
 
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
