@@ -292,7 +292,7 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 		return;
 	}
 	AudioPool& ap=getAudioPool();
-	if (movement == Jump || movement == Falling || movement == Slide || gravity >= 1.0f) {
+	if (!isOnGround()) {
 		if (airStart == 0.0f) {
 			airStart=time;
 		}

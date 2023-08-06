@@ -105,6 +105,7 @@ public:
 	bool isCollisionRight() const;
 	bool isSwimming() const;
 	bool isDiving() const;
+	bool isOnGround() const;
 	PlayerMovement getMovement() const;
 	ppl7::String getState() const;
 

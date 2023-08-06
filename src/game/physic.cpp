@@ -466,6 +466,13 @@ bool Physic::isDiving() const
 	return false;
 }
 
+bool Physic::isOnGround() const
+{
+	if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
+		|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) return true;
+	return false;
+}
+
 void Physic::updateMovement(float frame_rate_compensation)
 {
 	if (movement == Slide || movement == Dead) return;

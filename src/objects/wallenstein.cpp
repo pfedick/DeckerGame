@@ -146,18 +146,7 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 	updateAnimation(time);
 	AudioPool& ap=getAudioPool();
 	//ppl7::PrintDebugTime("movement=%s\n", (const char*)getState());
-	if (movement == Jump || movement == Falling || movement == Slide || gravity >= 1.0f) {
-		if (airStart == 0.0f) {
-			//ppl7::PrintDebugTime("air start\n");
-			airStart=time;
-		}
-	} else if (airStart > 0.0f) {
-		double volume=(time - airStart) * 0.5f;
-		if (volume > 0.5f) volume=0.5f;
-		//ppl7::PrintDebugTime("air end aufter %0.3f, voilume=%0.3f\n", (time - airStart) * 1000, volume);
-		airStart=0.0f;
-		ap.playOnce(AudioClip::wallenstein_jump, p, 1600, volume);
-	}
+
 
 	if (movement == Dead) {
 		if (animation.isFinished()) {
@@ -218,6 +207,17 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 
 
 	updateMovementAndPhysics(time, ttplane, frame_rate_compensation);
+
+	if (!isOnGround()) {
+		if (airStart == 0.0f) {
+			airStart=time;
+		}
+	} else if (airStart > 0.0f) {
+		double volume=(time - airStart) * 0.5f;
+		if (volume > 0.5f) volume=0.5f;
+		airStart=0.0f;
+		ap.playOnce(AudioClip::wallenstein_jump, p, 1600, volume);
+	}
 
 	if (movement == Slide || movement == Dead || movement == Jump) {
 		return;
