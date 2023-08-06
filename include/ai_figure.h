@@ -30,6 +30,7 @@ private:
 public:
 	AnimationCycle animation;
 	int keys;
+	double airStart;
 
 	AnimationCycle anicycleWalkLeft;
 	AnimationCycle anicycleWalkRight;

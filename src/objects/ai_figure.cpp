@@ -37,6 +37,7 @@ AiEnemy::AiEnemy(Type::ObjectType type)
 	next_animation=0.0f;
 	keys=0;
 	next_wayfind=0.0f;
+	airStart=0.0f;
 	collisionDetection=true;
 	animation.setStaticFrame(27);
 	anicycleWalkLeft.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
@@ -194,9 +195,9 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 				(*it).target_as,
 				(*it).target.x, (*it).target.y,
 				(*it).name(), (*it).total_costs);
-	}
+		}
 #endif
-} else {
+	} else {
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebugTime("found no way\n");
 #endif

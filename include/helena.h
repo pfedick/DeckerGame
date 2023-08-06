@@ -35,6 +35,7 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void playSoundOnAnimationSprite() override;
 };
 
 }	// EOF Decker::Objects

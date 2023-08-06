@@ -136,7 +136,19 @@ public:
 		holster_pistol,
 		fabric,
 		bullet_hits_player,
-		//bullet_hits_wall,	// TODO
+		bullet_hits_wall,	// TODO
+		helena_step1,
+		helena_step2,
+		helena_step3,
+		helena_step4,
+		helena_step5,
+		helena_jump,
+		wallenstein_step1,
+		wallenstein_step2,
+		wallenstein_step3,
+		wallenstein_step4,
+		wallenstein_step5,
+		wallenstein_jump,
 
 		// this must always be the last entry!
 		maxClips

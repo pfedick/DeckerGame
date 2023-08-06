@@ -198,6 +198,20 @@ void AudioPool::load()
 		sample[AudioClip::holster_pistol].load("res/audio/holster-pistol.mp3");
 		sample[AudioClip::fabric].load("res/audio/fabric.mp3");
 		sample[AudioClip::bullet_hits_player].load("res/audio/bullet_hits_player.mp3");
+		sample[AudioClip::bullet_hits_wall].load("res/audio/bullet_hits_wall.mp3");
+		sample[AudioClip::helena_step1].load("res/audio/helena_step1.mp3");
+		sample[AudioClip::helena_step2].load("res/audio/helena_step2.mp3");
+		sample[AudioClip::helena_step3].load("res/audio/helena_step3.mp3");
+		sample[AudioClip::helena_step4].load("res/audio/helena_step4.mp3");
+		sample[AudioClip::helena_step5].load("res/audio/helena_step5.mp3");
+		sample[AudioClip::helena_jump].load("res/audio/helena_jump.mp3");
+		sample[AudioClip::wallenstein_step1].load("res/audio/wallenstein_step1.mp3");
+		sample[AudioClip::wallenstein_step2].load("res/audio/wallenstein_step2.mp3");
+		sample[AudioClip::wallenstein_step3].load("res/audio/wallenstein_step3.mp3");
+		sample[AudioClip::wallenstein_step4].load("res/audio/wallenstein_step4.mp3");
+		sample[AudioClip::wallenstein_step5].load("res/audio/wallenstein_step5.mp3");
+		sample[AudioClip::wallenstein_jump].load("res/audio/wallenstein_jump.mp3");
+
 
 
 	} catch (const ppl7::Exception& exp) {
