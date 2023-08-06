@@ -83,13 +83,17 @@ private:
 		StatePatrolLeft,
 		StatePatrolRight,
 		StateGoToOrigin,
-		StateFollowPlayer
+		StateFollowPlayer,
+		StateBerserk,
 	};
 	double next_state;
 	int state;
 	int substate;
+	int last_sprite_no;
+	bool attack;
 
 	void updateStatePatrol(double time, TileTypePlane& ttplane);
+	void switchAttackMode(bool enable);
 
 public:
 	Yeti();
@@ -97,6 +101,7 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void playSoundOnAnimationSprite() override;
 };
 
 class AutoGeorge : public AiEnemy

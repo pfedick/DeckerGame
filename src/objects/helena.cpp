@@ -275,8 +275,7 @@ void Helena::playSoundOnAnimationSprite()
 	if (sprite_no == 3 || sprite_no == 7 || sprite_no == 12 || sprite_no == 16 || sprite_no == 64 || sprite_no == 68
 		|| sprite_no == 73 || sprite_no == 77) play_step(ap, p);
 	// with weapon
-	if (sprite_no == 110 || sprite_no == 114 || sprite_no == 119 || sprite_no == 123 || sprite_no == 129 || sprite_no == 133
-		|| sprite_no == 138 || sprite_no == 142) play_step(ap, p);
+	if (sprite_no == 109 || sprite_no == 113 || sprite_no == 119 || sprite_no == 123) play_step(ap, p);
 }
 
 void Helena::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
