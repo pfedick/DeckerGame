@@ -50,6 +50,7 @@ private:
 	double airStart;
 
 	AudioInstance* ambient_sound;
+	AudioInstance* voice;
 	AudioClip::Id ambient_playing;
 
 	enum class ParticleReason
@@ -133,7 +134,7 @@ public:
 	void startHacking(Decker::Objects::Object* object);
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
-
+	void speak(VoiceGeorge::Id id, float volume=0.7f);
 
 };
 #endif /* INCLUDE_PLAYER_H_ */

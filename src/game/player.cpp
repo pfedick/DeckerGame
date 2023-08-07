@@ -72,6 +72,7 @@ Player::Player(Game* game)
 	animation_speed=0.056f;
 	hackingState=0;
 	airStart=0.0f;
+	voice=NULL;
 }
 
 Player::~Player()
@@ -80,6 +81,11 @@ Player::~Player()
 		getAudioPool().stopInstace(ambient_sound);
 		delete ambient_sound;
 		ambient_sound=NULL;
+	}
+	if (voice) {
+		getAudioPool().stopInstace(voice);
+		delete voice;
+		voice=NULL;
 	}
 }
 
@@ -112,6 +118,11 @@ void Player::resetState()
 		ambient_sound->setAutoDelete(true);
 		ambient_sound->fadeout(2.0f);
 		ambient_sound=NULL;
+	}
+	if (voice) {
+		getAudioPool().stopInstace(voice);
+		delete voice;
+		voice=NULL;
 	}
 }
 
@@ -288,8 +299,21 @@ size_t Player::getObjectCount(int type) const
 
 void Player::dropHealth(float points, HealthDropReason reason)
 {
-	if (godmode) return;
+
 	if (movement == Dead) return;
+	if (points == 0.0f) return;
+
+	int r=ppl7::rand(1, 4);
+	switch (r) {
+	case 1: speak(VoiceGeorge::aua1); break;
+	case 2: speak(VoiceGeorge::aua2); break;
+	case 3: speak(VoiceGeorge::aua3); break;
+	default: speak(VoiceGeorge::aua4); break;
+	}
+	if (godmode) return;
+
+
+
 	health-=points;
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
@@ -1182,5 +1206,20 @@ void Player::emmitParticles(double time)
 			particle->initColorGradient(color_gradient);
 			ps->addParticle(particle);
 		}
+	}
+}
+
+
+void Player::speak(VoiceGeorge::Id id, float volume)
+{
+	if (voice && voice->finished() == false) return;
+	delete voice;
+	voice=NULL;
+	AudioPool& ap=getAudioPool();
+	if (id < VoiceGeorge::maxClips) {
+		voice=new AudioInstance(ap.voice_george[id], AudioClass::Speech);
+		voice->setVolume(volume);
+		voice->setAutoDelete(false);
+		ap.playInstance(voice);
 	}
 }
