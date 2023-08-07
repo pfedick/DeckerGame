@@ -89,6 +89,7 @@ private:
     ppl7::tk::HorizontalSlider* audio_music_slider;
     ppl7::tk::HorizontalSlider* audio_effects_slider;
     ppl7::tk::HorizontalSlider* audio_ambience_slider;
+    ppl7::tk::HorizontalSlider* audio_speech_slider;
 
     // Video
     ppl7::tk::ComboBox* video_device_combobox;

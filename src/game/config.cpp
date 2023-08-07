@@ -16,6 +16,7 @@ Config::Config()
     volumeMusic=0.5f;
     volumeEffects=1.0f;
     volumeAmbience=1.0f;
+    volumeSpeech=1.0f;
     videoDevice=0;
     audioDevice="";
     Language="en";
@@ -60,6 +61,7 @@ void Config::load()
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeAmbience=conf.get("volumeAmbience", ppl7::ToString("%0.3f", volumeAmbience)).toFloat();
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
+    volumeEffects=conf.get("volumeSpeech", ppl7::ToString("%0.3f", volumeSpeech)).toFloat();
     //if (volumeMusic > 0.5f) volumeMusic=0.5f;
 }
 
@@ -88,6 +90,7 @@ void Config::save()
     conf.add("volumeMusic", ppl7::ToString("%0.3f", volumeMusic));
     conf.add("volumeEffects", ppl7::ToString("%0.3f", volumeEffects));
     conf.add("volumeAmbience", ppl7::ToString("%0.3f", volumeAmbience));
+    conf.add("volumeSpeech", ppl7::ToString("%0.3f", volumeSpeech));
 
     // Misc
     conf.setSection("misc");
