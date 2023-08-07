@@ -6,7 +6,7 @@
 #include "waynet.h"
 #include "objects.h"
 
-//#define DEBUGWAYNET
+#define DEBUGWAYNET
 
 namespace Decker::Objects {
 
@@ -262,17 +262,11 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 #ifdef DEBUGWAYNET
 		ppl7::PrintDebug("walk\n");
 #endif
-		if (dist.y < 50 && dist.x < 20) {
+		if (dist.y < TILE_HEIGHT && dist.x < 14) {
 #ifdef DEBUGWAYNET
 			ppl7::PrintDebug("arrived\n");
 #endif
 			arrived=true;
-			/*
-		} else if (dist.x < 20 && wp_dist>100) {
-			current_way.clear();
-			updateWay(time, player);
-		*/
-
 		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
 		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
 	} else if (current_way.type == Connection::Go) {
@@ -290,8 +284,12 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Shift | KeyboardKeys::Up;
 	} else if (current_way.type == Connection::Climb) {
-		if (wp_dist < 20) arrived=true;
-		else if ((uint16_t)(p.y) > current_way.target.y) keys=KeyboardKeys::Up;
+		if (dist.y < TILE_HEIGHT && dist.x < 14) {
+#ifdef DEBUGWAYNET
+			ppl7::PrintDebug("arrived\n");
+#endif
+			arrived=true;
+		} else if ((uint16_t)(p.y) > current_way.target.y) keys=KeyboardKeys::Up;
 		else if ((uint16_t)(p.y) < current_way.target.y) keys=KeyboardKeys::Down;
 	}
 	if (arrived) {
@@ -343,7 +341,9 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 
 void AiEnemy::executeKeys(float frame_rate_compensation)
 {
-	//printf ("Wallenstein::executeKeys: %d\n",keys);
+#ifdef DEBUGWAYNET
+	ppl7::PrintDebugTime("AiEnemy::executeKeys: %d\n", keys);
+#endif
 	if (keys == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
 		if (movement != Walk) {
