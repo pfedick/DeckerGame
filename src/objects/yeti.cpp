@@ -61,10 +61,10 @@ static void play_growl(AudioPool& ap, const ppl7::grafix::PointF& position)
 {
 	int r=ppl7::rand(1, 4);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::yeti_growl1, position, 1200, 0.2f); break;
-	case 2: ap.playOnce(AudioClip::yeti_growl2, position, 1200, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::yeti_growl3, position, 1200, 0.5f); break;
-	default: ap.playOnce(AudioClip::yeti_growl4, position, 1200, 0.5f); break;
+	case 1: ap.playOnce(AudioClip::yeti_growl1, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 2: ap.playOnce(AudioClip::yeti_growl2, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 3: ap.playOnce(AudioClip::yeti_growl3, position, 1200, 0.4f, AudioClass::Speech); break;
+	default: ap.playOnce(AudioClip::yeti_growl4, position, 1200, 0.4f, AudioClass::Speech); break;
 	}
 }
 
@@ -72,10 +72,10 @@ static void play_angry_growl(AudioPool& ap, const ppl7::grafix::PointF& position
 {
 	int r=ppl7::rand(1, 4);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::yeti_angry_growl1, position, 1200, 0.2f); break;
-	case 2: ap.playOnce(AudioClip::yeti_angry_growl2, position, 1200, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::yeti_angry_growl3, position, 1200, 0.5f); break;
-	default: ap.playOnce(AudioClip::yeti_angry_growl4, position, 1200, 0.5f); break;
+	case 1: ap.playOnce(AudioClip::yeti_angry_growl1, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 2: ap.playOnce(AudioClip::yeti_angry_growl2, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 3: ap.playOnce(AudioClip::yeti_angry_growl3, position, 1200, 0.4f, AudioClass::Speech); break;
+	default: ap.playOnce(AudioClip::yeti_angry_growl4, position, 1200, 0.4f, AudioClass::Speech); break;
 	}
 }
 
