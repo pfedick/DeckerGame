@@ -211,8 +211,47 @@ void AudioPool::load()
 		sample[AudioClip::wallenstein_step4].load("res/audio/wallenstein_step4.mp3");
 		sample[AudioClip::wallenstein_step5].load("res/audio/wallenstein_step5.mp3");
 		sample[AudioClip::wallenstein_jump].load("res/audio/wallenstein_jump.mp3");
+		sample[AudioClip::yeti_step1].load("res/audio/yeti/yeti_step1.mp3");
+		sample[AudioClip::yeti_step2].load("res/audio/yeti/yeti_step2.mp3");
+		sample[AudioClip::yeti_step3].load("res/audio/yeti/yeti_step3.mp3");
+		sample[AudioClip::yeti_step4].load("res/audio/yeti/yeti_step4.mp3");
+		sample[AudioClip::yeti_step5].load("res/audio/yeti/yeti_step5.mp3");
+		sample[AudioClip::yeti_jump].load("res/audio/yeti/yeti_jump.mp3");
+		sample[AudioClip::yeti_tear1].load("res/audio/yeti/yeti_tear1.mp3");
+		sample[AudioClip::yeti_tear2].load("res/audio/yeti/yeti_tear2.mp3");
+		sample[AudioClip::yeti_tear3].load("res/audio/yeti/yeti_tear3.mp3");
+		sample[AudioClip::yeti_growl1].load("res/audio/yeti/yeti_growl1.mp3");
+		sample[AudioClip::yeti_growl2].load("res/audio/yeti/yeti_growl2.mp3");
+		sample[AudioClip::yeti_growl3].load("res/audio/yeti/yeti_growl3.mp3");
+		sample[AudioClip::yeti_growl4].load("res/audio/yeti/yeti_growl4.mp3");
+		sample[AudioClip::yeti_angry_growl1].load("res/audio/yeti/yeti_angry_growl1.mp3");
+		sample[AudioClip::yeti_angry_growl2].load("res/audio/yeti/yeti_angry_growl2.mp3");
+		sample[AudioClip::yeti_angry_growl3].load("res/audio/yeti/yeti_angry_growl3.mp3");
+		sample[AudioClip::yeti_angry_growl4].load("res/audio/yeti/yeti_angry_growl4.mp3");
 
 
+
+	} catch (const ppl7::Exception& exp) {
+		exp.print();
+		throw;
+	}
+
+}
+
+
+void AudioPool::load_speech(const ppl7::String& lang)
+{
+	try {
+		voice_george[VoiceGeorge::aua1].load("res/audio/george/common/aua1.mp3");
+		voice_george[VoiceGeorge::aua2].load("res/audio/george/common/aua2.mp3");
+		voice_george[VoiceGeorge::aua3].load("res/audio/george/common/aua3.mp3");
+		voice_george[VoiceGeorge::aua4].load("res/audio/george/common/aua4.mp3");
+
+		if (lang == "eng") {
+
+		} else if (lang == "ger") {
+
+		}
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

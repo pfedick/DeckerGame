@@ -188,3 +188,11 @@ size_t AudioInstance::addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float
 	position+=samples_read;
 	return samples_read;
 }
+
+bool AudioInstance::finished() const
+{
+	if (loop) return false;
+	if (!sample) return true;
+	if (position >= sample->size()) return true;
+	return false;
+}

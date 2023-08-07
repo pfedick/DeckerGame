@@ -87,6 +87,7 @@ private:
 		StateBerserk,
 	};
 	double next_state;
+	double next_growl;
 	int state;
 	int substate;
 	int last_sprite_no;
