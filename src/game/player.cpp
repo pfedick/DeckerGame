@@ -73,6 +73,7 @@ Player::Player(Game* game)
 	hackingState=0;
 	airStart=0.0f;
 	voice=NULL;
+	voiceDamageCooldown=0.0f;
 }
 
 Player::~Player()
@@ -303,12 +304,15 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	if (movement == Dead) return;
 	if (points == 0.0f) return;
 
-	int r=ppl7::rand(1, 4);
-	switch (r) {
-	case 1: speak(VoiceGeorge::aua1); break;
-	case 2: speak(VoiceGeorge::aua2); break;
-	case 3: speak(VoiceGeorge::aua3); break;
-	default: speak(VoiceGeorge::aua4); break;
+	if (time > voiceDamageCooldown) {
+		int r=ppl7::rand(1, 4);
+		switch (r) {
+		case 1: speak(VoiceGeorge::aua1); break;
+		case 2: speak(VoiceGeorge::aua2); break;
+		case 3: speak(VoiceGeorge::aua3); break;
+		default: speak(VoiceGeorge::aua4); break;
+		}
+		voiceDamageCooldown=time + ppl7::randf(0.0f, 4.0f);
 	}
 	if (godmode) return;
 

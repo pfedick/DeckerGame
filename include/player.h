@@ -48,6 +48,7 @@ private:
 	bool waterSplashPlayed;
 	bool expressionJump;
 	double airStart;
+	double voiceDamageCooldown;
 
 	AudioInstance* ambient_sound;
 	AudioInstance* voice;
