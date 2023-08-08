@@ -1228,13 +1228,13 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
-} else if (object_selection != NULL && event->widget() == world_widget) {
-	mouseDownEventOnObject(event);
-} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
-	handleMouseDrawInWorld(*event);
-} else if (waynet_edit != NULL && event->widget() == world_widget) {
-	mouseDownEventOnWayNet(event);
-}
+	} else if (object_selection != NULL && event->widget() == world_widget) {
+		mouseDownEventOnObject(event);
+	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
+		handleMouseDrawInWorld(*event);
+	} else if (waynet_edit != NULL && event->widget() == world_widget) {
+		mouseDownEventOnWayNet(event);
+	}
 }
 
 
@@ -1270,12 +1270,12 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			event->p.y + coords.y,
 			0,
 			spriteset, nr, scale, sprite_selection->colorIndex());
-} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
-	sprite_selection->setSelectedSprite(-1);
-	sprite_mode=spriteModeDraw;
-	selected_sprite.id=-1;
-	selected_sprite_system=NULL;
-}
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+		sprite_selection->setSelectedSprite(-1);
+		sprite_mode=spriteModeDraw;
+		selected_sprite.id=-1;
+		selected_sprite_system=NULL;
+	}
 }
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
@@ -1627,7 +1627,13 @@ void Game::openLoadDialog()
 	if (w >= width() - 100) w=width() - 100;
 	if (h >= height() - 100) h=height() - 100;
 	filedialog=new Decker::ui::FileDialog(w, h, Decker::ui::FileDialog::FileMode::ExistingFile);
-	filedialog->setFilename(LevelFile);
+	if (LevelFile.notEmpty())	filedialog->setFilename(LevelFile);
+	else {
+		ppl7::String pwd=ppl7::Dir::currentPath() + "/level";
+		if (ppl7::Dir::exists(pwd)) filedialog->setDirectory(pwd);
+		else filedialog->setDirectory(config.CustomLevelPath);
+	}
+	filedialog->setFilter("*.lvl");
 	filedialog->setWindowTitle("load existing level");
 	filedialog->custom_id=2;
 	this->addChild(filedialog);
