@@ -25,3 +25,4 @@ lightwave/Scenes/making of
 *.tmp
 studio/*.ldr
 lightwave/Dynamics/breakablewall.dynacache
+debug.log
