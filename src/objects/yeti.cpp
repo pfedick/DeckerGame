@@ -212,7 +212,7 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 
 
 	if (!player.isDead()) {
-		if (state != StateFollowPlayer && dist < 800) {
+		if (state != StateFollowPlayer && dist < 800 && state != StateBerserk) {
 			state=StateFollowPlayer;
 			clearWaypoints();
 		}
@@ -222,6 +222,11 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 			} else if (dist > 800 && attack == true) {
 				switchAttackMode(false);
 				stand();
+				state=StateFollowPlayer;
+			} else if (dist > 1600 && attack == true) {
+				switchAttackMode(false);
+				stand();
+				clearWaypoints();
 				state=StatePatrol;
 				if (ppl7::rand(0, 1) == 0) turn(Left);
 				else turn(Right);
@@ -235,7 +240,20 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 					return;
 				}
 			}
+
 			//if (attack && abs(player.y - p.y) < 20) shoot(time, player);
+		} else if (state == StateBerserk) {
+			if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
+				if (orientation == Right && player.x < p.x) {
+					turn(Left);
+					state=StateFollowPlayer;
+					return;
+				} else if (orientation == Left && player.x > p.x) {
+					turn(Right);
+					state=StateFollowPlayer;
+					return;
+				}
+			}
 		}
 	} else if (attack) {
 		switchAttackMode(false);
@@ -267,15 +285,22 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		updateStatePatrol(time, ttplane);
 	}
 	if (state == StateFollowPlayer) {
-		if (abs(player.x - p.x) < 80 && abs(player.y - p.y) < 20) {
+		if (abs(player.x - p.x) < 120 && abs(player.y - p.y) < 20) {
 			if (movement != Stand) {
 				stand();
-				if (orientation == Left)
-					animation.startSequence(128, 131, true, 0);
-				else animation.startSequence(124, 127, true, 0);
-				return;
 			}
+			state=StateBerserk;
+			if (orientation == Left)
+				animation.startSequence(128, 131, true, 0);
+			else animation.startSequence(124, 127, true, 0);
+			return;
 		} else {
+			updateStateFollowPlayer(time, ttplane, ppl7::grafix::Point((int)player.x, (int)player.y));
+		}
+	}
+	if (state == StateBerserk) {
+		if (abs(player.x - p.x) > 120 || abs(player.y - p.y) > 20) {
+			state=StateFollowPlayer;
 			updateStateFollowPlayer(time, ttplane, ppl7::grafix::Point((int)player.x, (int)player.y));
 		}
 	}
