@@ -116,11 +116,14 @@ void MainMenue::setupUi()
 	show_metrics_submenu_button->setEventHandler(this);
 	this->addChild(show_metrics_submenu_button);
 
-	pause_button=new ppl7::tk::Button(1168, 0, 70, s.height, "Pause");
+	pause_button=new ppl7::tk::Button(1178, 0, 70, s.height, "Pause");
+	pause_button->setIcon(gfx->Toolbar.getDrawable(64));
 	pause_button->setEventHandler(this);
 	pause_button->setCheckable(true);
 	this->addChild(pause_button);
-	step_button=new ppl7::tk::Button(1238, 0, 70, s.height, "Step");
+
+	step_button=new ppl7::tk::Button(1248, 0, 70, s.height, "Step");
+	step_button->setIcon(gfx->Toolbar.getDrawable(65));
 	step_button->setEventHandler(this);
 	this->addChild(step_button);
 
