@@ -248,10 +248,10 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 
 	//const Connection &first=waypoints.front();
 	bool arrived=false;
-	double wp_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(current_way.target.x, current_way.target.y));
 	ppl7::grafix::Point dist(abs(p.x - current_way.target.x), abs(p.y - current_way.target.y));
 
 #ifdef DEBUGWAYNET
+	double wp_dist=ppl7::grafix::Distance(p, ppl7::grafix::PointF(current_way.target.x, current_way.target.y));
 	Waynet& waynet=GetObjectSystem()->getWaynet();
 	const WayPoint& wp=waynet.getPoint(current_way.target);
 	ppl7::PrintDebug("Target: %d, distance=%0.0f, ", wp.as, wp_dist);
@@ -326,7 +326,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 			}
 			//stand();
 			//printf("move to next point: %d:%d, type: %d\n", current_way.target.x, current_way.target.y, current_way.type);
-			waypoints.pop_front();
+			if (waypoints.size() > 0) waypoints.pop_front();
 
 		}
 		if (waypoints.size() == 0) {
