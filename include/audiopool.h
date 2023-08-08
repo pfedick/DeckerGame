@@ -149,11 +149,43 @@ public:
 		wallenstein_step4,
 		wallenstein_step5,
 		wallenstein_jump,
+		yeti_step1,
+		yeti_step2,
+		yeti_step3,
+		yeti_step4,
+		yeti_step5,
+		yeti_jump,
+		yeti_tear1,
+		yeti_tear2,
+		yeti_tear3,
+		yeti_growl1,
+		yeti_growl2,
+		yeti_growl3,
+		yeti_growl4,
+		yeti_angry_growl1,
+		yeti_angry_growl2,
+		yeti_angry_growl3,
+		yeti_angry_growl4,
+
 
 		// this must always be the last entry!
 		maxClips
 	};
 };
+
+class VoiceGeorge
+{
+public:
+	enum Id {
+		none=0,
+		aua1,
+		aua2,
+		aua3,
+		aua4,
+		maxClips
+	};
+};
+
 
 class MusicTrack
 {
@@ -174,12 +206,14 @@ private:
 	AudioSystem* audio;
 public:
 	AudioSample sample[AudioClip::maxClips + 1];
+	AudioSample voice_george[VoiceGeorge::maxClips + 1];
 
 	std::list<MusicTrack> musictracks;
 
 	AudioPool();
 	~AudioPool();
 	void load();
+	void load_speech(const ppl7::String& lang);
 	void setAudioSystem(AudioSystem* audio);
 	size_t size() const;
 	AudioInstance* getInstance(AudioClip::Id id, AudioClass a=AudioClass::Effect);
@@ -187,6 +221,7 @@ public:
 	void playOnce(AudioClip::Id id, const ppl7::grafix::Point& p, int max_distance=1600, float volume=1.0f, AudioClass a=AudioClass::Effect);
 	void playInstance(AudioInstance* instance);
 	void stopInstace(AudioInstance* instance);
+
 };
 
 AudioPool& getAudioPool();

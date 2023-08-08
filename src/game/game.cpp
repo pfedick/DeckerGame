@@ -426,6 +426,7 @@ void Game::initAudio()
 	audiosystem.setVolume(AudioClass::Effect, config.volumeEffects);
 	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 	audiopool.load();
+	audiopool.load_speech("ger");
 	audiopool.setAudioSystem(&audiosystem);
 }
 

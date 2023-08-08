@@ -153,12 +153,13 @@ void SettingsScreen::initPageAudio()
     page_audio->setName("SettingsPageAudio");
     page_audio->setBackgroundColor(background);
 
+    int y=0;
     ppl7::tk::Label* label;
-    label=new ppl7::tk::Label(0, 0, input_widget_x, 40, translate("Audio device:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Audio device:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_device_combobox=new ppl7::tk::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
+    audio_device_combobox=new ppl7::tk::ComboBox(input_widget_x, y, input_widget.width, input_widget.height);
     std::list<ppl7::String> device_names;
     game.audiosystem.enumerateDevices(device_names);
     std::list<ppl7::String>::const_iterator it;
@@ -166,53 +167,66 @@ void SettingsScreen::initPageAudio()
         audio_device_combobox->add((*it));
     audio_device_combobox->setEventHandler(this);
     page_audio->addChild(audio_device_combobox);
+    y+=50;
 
-    label=new ppl7::tk::Label(0, 50, 200, 40, translate("Volume:"));
+    label=new ppl7::tk::Label(0, y, 200, 40, translate("Volume:"));
+    label->setFont(style_label.font);
+    page_audio->addChild(label);
+    y+=50;
+
+    label=new ppl7::tk::Label(100, y, 200, 40, translate("all:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-
-    label=new ppl7::tk::Label(100, 100, 200, 40, translate("all:"));
-    label->setFont(style_label.font);
-    page_audio->addChild(label);
-
-    audio_total_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 100, input_widget.width, input_widget.height);
+    audio_total_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
     audio_total_slider->setEventHandler(this);
     audio_total_slider->setLimits(0, 255);
     audio_total_slider->setValue(game.config.volumeTotal * 255.0f);
     page_audio->addChild(audio_total_slider);
+    y+=50;
 
-
-
-    label=new ppl7::tk::Label(100, 150, 200, 40, translate("music:"));
+    label=new ppl7::tk::Label(100, y, 200, 40, translate("music:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_music_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 150, input_widget.width, input_widget.height);
+    audio_music_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
     audio_music_slider->setEventHandler(this);
     audio_music_slider->setLimits(0, 255);
     audio_music_slider->setValue(game.config.volumeMusic * 255.0f * 2.0f);
     page_audio->addChild(audio_music_slider);
+    y+=50;
 
-    label=new ppl7::tk::Label(100, 200, 200, 40, translate("effects:"));
+    label=new ppl7::tk::Label(100, y, 200, 40, translate("effects:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_effects_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 200, input_widget.width, input_widget.height);
+    audio_effects_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
     audio_effects_slider->setEventHandler(this);
     audio_effects_slider->setLimits(0, 255);
     audio_effects_slider->setValue(game.config.volumeEffects * 255.0f);
     page_audio->addChild(audio_effects_slider);
+    y+=50;
 
-    label=new ppl7::tk::Label(100, 250, 200, 40, translate("ambience:"));
+    label=new ppl7::tk::Label(100, y, 200, 40, translate("ambience:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
 
-    audio_ambience_slider=new ppl7::tk::HorizontalSlider(input_widget_x, 250, input_widget.width, input_widget.height);
+    audio_ambience_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
     audio_ambience_slider->setEventHandler(this);
     audio_ambience_slider->setLimits(0, 255);
     audio_ambience_slider->setValue(game.config.volumeAmbience * 255.0f);
     page_audio->addChild(audio_ambience_slider);
+    y+=50;
+
+    label=new ppl7::tk::Label(100, y, 200, 40, translate("speech:"));
+    label->setFont(style_label.font);
+    page_audio->addChild(label);
+
+    audio_speech_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
+    audio_speech_slider->setEventHandler(this);
+    audio_speech_slider->setLimits(0, 255);
+    audio_speech_slider->setValue(game.config.volumeSpeech * 255.0f);
+    page_audio->addChild(audio_speech_slider);
 
 }
 
@@ -440,6 +454,10 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
     } else if (event->widget() == audio_ambience_slider) {
         game.config.volumeAmbience=(float)audio_ambience_slider->value() / 255.0f;
         game.audiosystem.setVolume(AudioClass::Ambience, game.config.volumeAmbience);
+        game.config.save();
+    } else if (event->widget() == audio_speech_slider) {
+        game.config.volumeSpeech=(float)audio_speech_slider->value() / 255.0f;
+        game.audiosystem.setVolume(AudioClass::Speech, game.config.volumeSpeech);
         game.config.save();
     }
 

@@ -118,6 +118,7 @@ public:
 	void setPositional(const ppl7::grafix::Point& p, int max_distance=1600);
 	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
 	bool isHearable() const override;
+	bool finished() const;
 };
 
 class AudioSystem

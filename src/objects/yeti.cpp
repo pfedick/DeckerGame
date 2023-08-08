@@ -29,6 +29,7 @@ Yeti::Yeti()
 	attack=false;
 	myLayer=Layer::BeforePlayer;
 	last_sprite_no=0;
+	next_growl=0.0f;
 }
 
 
@@ -36,14 +37,48 @@ static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
 {
 	int r=ppl7::rand(1, 5);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::helena_step1, position, 1600, 0.5f); break;
-	case 2: ap.playOnce(AudioClip::helena_step2, position, 1600, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::helena_step3, position, 1600, 0.5f); break;
-	case 4: ap.playOnce(AudioClip::helena_step4, position, 1600, 0.5f); break;
-	case 5: ap.playOnce(AudioClip::helena_step5, position, 1600, 0.5f); break;
-	default: ap.playOnce(AudioClip::helena_step1, position, 1600, 0.5f); break;
+	case 1: ap.playOnce(AudioClip::yeti_step1, position, 1600, 0.5f); break;
+	case 2: ap.playOnce(AudioClip::yeti_step2, position, 1600, 0.5f); break;
+	case 3: ap.playOnce(AudioClip::yeti_step3, position, 1600, 0.5f); break;
+	case 4: ap.playOnce(AudioClip::yeti_step4, position, 1600, 0.5f); break;
+	case 5: ap.playOnce(AudioClip::yeti_step5, position, 1600, 0.5f); break;
+	default: ap.playOnce(AudioClip::yeti_step1, position, 1600, 0.5f); break;
 	}
 }
+
+static void play_tear(AudioPool& ap, const ppl7::grafix::PointF& position)
+{
+	int r=ppl7::rand(1, 4);
+	switch (r) {
+	case 1: ap.playOnce(AudioClip::yeti_tear1, position, 1600, 0.2f); break;
+	case 2: ap.playOnce(AudioClip::yeti_tear2, position, 1600, 0.2f); break;
+	case 3: ap.playOnce(AudioClip::yeti_tear3, position, 1600, 0.2f); break;
+	default: ap.playOnce(AudioClip::yeti_tear1, position, 1600, 0.2f); break;
+	}
+}
+
+static void play_growl(AudioPool& ap, const ppl7::grafix::PointF& position)
+{
+	int r=ppl7::rand(1, 4);
+	switch (r) {
+	case 1: ap.playOnce(AudioClip::yeti_growl1, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 2: ap.playOnce(AudioClip::yeti_growl2, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 3: ap.playOnce(AudioClip::yeti_growl3, position, 1200, 0.4f, AudioClass::Speech); break;
+	default: ap.playOnce(AudioClip::yeti_growl4, position, 1200, 0.4f, AudioClass::Speech); break;
+	}
+}
+
+static void play_angry_growl(AudioPool& ap, const ppl7::grafix::PointF& position)
+{
+	int r=ppl7::rand(1, 4);
+	switch (r) {
+	case 1: ap.playOnce(AudioClip::yeti_angry_growl1, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 2: ap.playOnce(AudioClip::yeti_angry_growl2, position, 1200, 0.4f, AudioClass::Speech); break;
+	case 3: ap.playOnce(AudioClip::yeti_angry_growl3, position, 1200, 0.4f, AudioClass::Speech); break;
+	default: ap.playOnce(AudioClip::yeti_angry_growl4, position, 1200, 0.4f, AudioClass::Speech); break;
+	}
+}
+
 
 static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
 {
@@ -123,8 +158,13 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 	this->time=time;
 	if (!enabled) return;
 	updateAnimation(time);
-	//if (sprite_no != last_sprite_no) {
-	last_sprite_no=sprite_no;
+	AudioPool& ap=getAudioPool();
+	if (sprite_no != last_sprite_no) {
+		last_sprite_no=sprite_no;
+		if (sprite_no == 124 || sprite_no == 128) {
+			play_tear(ap, p);
+		}
+	}
 	if (sprite_no == 124 || sprite_no == 126 || sprite_no == 128 || sprite_no == 130) {
 		issueBlood(ppl7::grafix::PointF(player.x, player.y - 100), 0, time);
 	}
@@ -135,7 +175,18 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		issueBlood(ppl7::grafix::PointF(player.x, player.y - 140), 0, time);
 	}
 
-//}
+	if (next_growl < time) {
+		if (attack) {
+			play_angry_growl(ap, p);
+			next_growl=time + ppl7::randf(1.0f, 3.0f);
+		} else {
+			play_growl(ap, p);
+			next_growl=time + ppl7::randf(3.0f, 8.0f);
+
+		}
+	}
+
+
 	if (movement == Dead) {
 		if (animation.isFinished()) {
 			enabled=false;
@@ -143,7 +194,7 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		return;
 	}
 
-	AudioPool& ap=getAudioPool();
+
 	if (!isOnGround()) {
 		if (airStart == 0.0f) {
 			airStart=time;
@@ -152,7 +203,7 @@ void Yeti::update(double time, TileTypePlane& ttplane, Player& player, float fra
 		double volume=(time - airStart) * 1.0f;
 		if (volume > 1.0f) volume=1.0f;
 		airStart=0.0f;
-		ap.playOnce(AudioClip::helena_jump, p, 1600, volume);
+		ap.playOnce(AudioClip::yeti_jump, p, 1600, volume);
 	}
 
 
