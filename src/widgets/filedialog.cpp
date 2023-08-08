@@ -186,7 +186,7 @@ void FileDialog::setFilter(const ppl7::String& filter)
 
 void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
 {
-    //printf("FileDialog::mouseDblClickEvent\n");
+    //ppl7::PrintDebugTime("FileDialog::mouseDblClickEvent\n");
     if (event->widget() == dir_list) {
         ppl7::String new_path=dir_list->currentText();
         if (new_path == ".") return;
