@@ -6,7 +6,7 @@
 #include "waynet.h"
 #include "objects.h"
 
-#define DEBUGWAYNET
+//#define DEBUGWAYNET
 
 namespace Decker::Objects {
 

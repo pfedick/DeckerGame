@@ -199,16 +199,16 @@ void AudioSystem::callback(Uint8* stream, int len)
 
 void AudioSystem::play(Audio* audio)
 {
-	//ppl7::PrintDebugTime("AudioSystem::play\n");
 	mutex.lock();
+	ppl7::PrintDebugTime("AudioSystem::play 0x%tx\n", (ptrdiff_t)audio);
 	tracks.insert(audio);
 	mutex.unlock();
 }
 
 void AudioSystem::stop(Audio* audio)
 {
-	//ppl7::PrintDebugTime("AudioSystem::stop\n");
 	mutex.lock();
+	ppl7::PrintDebugTime("AudioSystem::stop 0x%tx\n", (ptrdiff_t)audio);
 	std::set<Audio*>::iterator it=tracks.find(audio);
 	if (it != tracks.end()) tracks.erase(it);
 	mutex.unlock();
