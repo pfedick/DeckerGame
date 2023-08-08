@@ -87,6 +87,7 @@ Game::Game()
 	gameState=GameState::None;
 	last_frame_time=0.0f;
 	frame_rate_compensation=1.0f;
+	game_speed=GameSpeed::Normal;
 }
 
 Game::~Game()
@@ -562,6 +563,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 		float frametime=now - last_frame_time;
 		frame_rate_compensation=frametime / (1.0f / 60.0f);
+		if (frame_rate_compensation > 2.0f) frame_rate_compensation=2.0f;
 		metrics.frame_rate_compensation+=frame_rate_compensation;
 		metrics.frametime+=frametime;
 		//ppl7::PrintDebugTime("Updated Frametime to: %0.3f, fpscomp=%0.3f\n", frametime, frame_rate_compensation);
@@ -585,7 +587,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	if (this->controlsEnabled || player->isAutoWalk())
 		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
-	level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
+
+	if (game_speed == GameSpeed::Normal || game_speed == GameSpeed::ManualStep) {
+		level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
+	}
 	level.objects->updateVisibleObjectList(WorldCoords, viewport);
 	ppl7::tk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
@@ -596,7 +601,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	metrics.time_update_particles.start();
 	metrics.time_particle_thread.addDuration(level.particles->waitForUpdateThreadFinished());
 	//level.particles->cleanupParticles(now);
-	level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport, frame_rate_compensation);
+	if (game_speed == GameSpeed::Normal || game_speed == GameSpeed::ManualStep) {
+		level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport, frame_rate_compensation);
+	}
 	metrics.time_update_particles.stop();
 
 
@@ -677,6 +684,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	*/
 	metrics.time_misc.stop();
 	metrics.time_draw_world.stop();
+	if (game_speed == GameSpeed::ManualStep) {
+		game_speed = GameSpeed::Paused;
+	}
 }
 
 void Game::run()
@@ -1218,13 +1228,13 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
-	} else if (object_selection != NULL && event->widget() == world_widget) {
-		mouseDownEventOnObject(event);
-	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
-		handleMouseDrawInWorld(*event);
-	} else if (waynet_edit != NULL && event->widget() == world_widget) {
-		mouseDownEventOnWayNet(event);
-	}
+} else if (object_selection != NULL && event->widget() == world_widget) {
+	mouseDownEventOnObject(event);
+} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
+	handleMouseDrawInWorld(*event);
+} else if (waynet_edit != NULL && event->widget() == world_widget) {
+	mouseDownEventOnWayNet(event);
+}
 }
 
 
@@ -1260,12 +1270,12 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			event->p.y + coords.y,
 			0,
 			spriteset, nr, scale, sprite_selection->colorIndex());
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
-		sprite_selection->setSelectedSprite(-1);
-		sprite_mode=spriteModeDraw;
-		selected_sprite.id=-1;
-		selected_sprite_system=NULL;
-	}
+} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+	sprite_selection->setSelectedSprite(-1);
+	sprite_mode=spriteModeDraw;
+	selected_sprite.id=-1;
+	selected_sprite_system=NULL;
+}
 }
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
@@ -1692,4 +1702,16 @@ bool Game::nextLevel(const ppl7::String& filename)
 	//printf("wir sollten hierhin gehen: %s\n", (const char*)nextLevelFile);
 
 	return true;
+}
+
+
+void Game::pauseGame(bool flag)
+{
+	if (flag) game_speed=GameSpeed::Paused;
+	else game_speed=GameSpeed::Normal;
+}
+
+void Game::stepFrame()
+{
+	game_speed=GameSpeed::ManualStep;
 }

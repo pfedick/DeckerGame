@@ -129,6 +129,10 @@ private:
 	ppl7::tk::Button* show_visibility_submenu_button;
 	ppl7::tk::Button* show_metrics_submenu_button;
 
+	ppl7::tk::Button* pause_button;
+	ppl7::tk::Button* step_button;
+
+
 	ppl7::tk::ComboBox* active_plane_combobox;
 
 	ppl7::tk::CheckBox* world_follows_player_checkbox;

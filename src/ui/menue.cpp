@@ -116,6 +116,15 @@ void MainMenue::setupUi()
 	show_metrics_submenu_button->setEventHandler(this);
 	this->addChild(show_metrics_submenu_button);
 
+	pause_button=new ppl7::tk::Button(1168, 0, 70, s.height, "Pause");
+	pause_button->setEventHandler(this);
+	pause_button->setCheckable(true);
+	this->addChild(pause_button);
+	step_button=new ppl7::tk::Button(1238, 0, 70, s.height, "Step");
+	step_button->setEventHandler(this);
+	this->addChild(step_button);
+
+
 
 	godmode_checkbox=new ppl7::tk::CheckBox(width() - 520, 0, 100, s.height, "god mode", false);
 	this->addChild(godmode_checkbox);
@@ -187,6 +196,12 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 		}
 	} else if (event->widget() == show_metrics_submenu_button) {
 		showMetrics();
+	} else if (event->widget() == pause_button) {
+		game->pauseGame(pause_button->isChecked());
+	} else if (event->widget() == step_button) {
+		pause_button->setChecked(true);
+		game->stepFrame();
+
 	}
 }
 

@@ -699,6 +699,14 @@ private:
 		};
 
 	};
+	enum class GameSpeed
+	{
+		Normal,
+		Paused,
+		SlowMo,
+		ExtremeSlowMo,
+		ManualStep
+	};
 public:
 	AudioSystem audiosystem;
 private:
@@ -797,7 +805,7 @@ private:
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
 
-
+	GameSpeed game_speed;
 
 public:
 	Config config;
@@ -854,6 +862,8 @@ public:
 	void openLoadDialog();
 	void openNewLevelDialog();
 	void openSettingsScreen();
+	void pauseGame(bool flag);
+	void stepFrame();
 
 };
 
