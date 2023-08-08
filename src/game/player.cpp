@@ -29,7 +29,7 @@ static int death_by_falling[]={ 89,89,106,106,89,89,106,106,89,106,89,106,89,89,
 static int swimm_inplace_front[]={ 126,127,128,129,130,131,132,133,134,135 };
 static int swimm_inplace_left[]={ 106,107,108,109,110,111,112,113,114,115 };
 static int swimm_inplace_right[]={ 116,117,118,119,120,121,122,123,124,125 };
-static int swimm_inplace_back[]={ 136,137,138,139,140,141,142,143,144,145 };
+//static int swimm_inplace_back[]={ 136,137,138,139,140,141,142,143,144,145 };
 static int swimm_up_left[]={ 146,147,148,149,150,151,152,153,154,155 };
 static int swimm_straight_left[]={ 196,197,198,199,200,201,202,203,204,205 };
 static int swimm_down_left[]={ 156,157,158,159,160,161,162,163,164,165 };
@@ -1212,10 +1212,16 @@ void Player::emmitParticles(double time)
 
 void Player::speak(VoiceGeorge::Id id, float volume)
 {
-	if (voice && voice->finished() == false) return;
-	delete voice;
-	voice=NULL;
 	AudioPool& ap=getAudioPool();
+
+	if (voice && voice->finished() == false) return;
+	if (voice) {
+		if (voice->finished() == false) return;
+		ap.stopInstace(voice);
+		delete voice;
+		voice=NULL;
+	}
+
 	if (id < VoiceGeorge::maxClips) {
 		voice=new AudioInstance(ap.voice_george[id], AudioClass::Speech);
 		voice->setVolume(volume);
