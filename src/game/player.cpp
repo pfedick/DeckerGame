@@ -1267,7 +1267,7 @@ void Player::idleJokes(double time)
 			nextIdleSpeech=time + ppl7::randf(30.0f, 120.0f);
 			//nextIdleSpeech=time + 5;
 			if (!greetingPlayed) {
-				speak(VoiceGeorge::hello_im_george, 0.6f, translate("Hello, I'm George!"), translate("HelloooaaiiemmgoorrSS"));
+				speak(VoiceGeorge::hello_im_george, 0.6f, translate("Hello, I'm George!"), translate("Hellooo    aaiiemmgoorrSS"));
 				greetingPlayed=true;
 			}
 			int r=ppl7::rand(1, 4);
