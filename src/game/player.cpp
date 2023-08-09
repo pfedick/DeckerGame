@@ -74,8 +74,8 @@ Player::Player(Game* game)
 	airStart=0.0f;
 	voice=NULL;
 	voiceDamageCooldown=0.0f;
-	startIdle=ppl7::GetMicrotime() + 5.0f;
-	time=startIdle;
+	time=ppl7::GetMicrotime();
+	startIdle=time + 1.0f;
 	nextIdleSpeech=0.0f;
 	greetingPlayed=false;
 }
@@ -1262,14 +1262,18 @@ void Player::idleJokes(double time)
 	} else if (time > startIdle + 600.0f) {
 		speak(VoiceGeorge::snort, 0.3f);
 		if (animation.getFrame() != 302) animation.setStaticFrame(302);
-	} else if (time > startIdle + 5) {
-		if (nextIdleSpeech == 0.0f || time > nextIdleSpeech) {
+	} else if (time > startIdle) {
+		if (nextIdleSpeech == 0.0f) {
 			nextIdleSpeech=time + ppl7::randf(30.0f, 120.0f);
-			//nextIdleSpeech=time + 5;
 			if (!greetingPlayed) {
-				speak(VoiceGeorge::hello_im_george, 0.6f, translate("Hello, I'm George!"), translate("Hellooo    aaiiemmgoorrSS"));
+				speak(VoiceGeorge::hello_im_george, 0.6f, translate("Hello, I'm George!"), translate("Heeelllooooo     aaiiemmdSoooorrSSSSS  "));
 				greetingPlayed=true;
+				return;
 			}
+		}
+
+		if (nextIdleSpeech != 0.0f && time > nextIdleSpeech) {
+			nextIdleSpeech=time + ppl7::randf(30.0f, 120.0f);
 			int r=ppl7::rand(1, 4);
 			switch (r) {
 			case 1: speak(VoiceGeorge::hello, 0.6f, translate("Hello!"), translate("elooo")); break;
