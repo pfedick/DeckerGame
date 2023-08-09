@@ -55,7 +55,7 @@ static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
 		particle->birth_time=time;
 		particle->death_time=randf(0.293, 0.293) + time;
 		particle->p=p;
-		particle->layer=Particle::Layer::BehindPlayer;
+		particle->layer=Particle::Layer::BeforePlayer;
 		particle->weight=randf(0.123, 0.774);
 		particle->gravity.setPoint(0.000, 1.000);
 		particle->velocity=calculateVelocity(randf(4.000, 7.300), degree + randf(-18.679, 18.679));
