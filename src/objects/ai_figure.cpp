@@ -167,7 +167,7 @@ void AiEnemy::updateWay(double time, const ppl7::grafix::Point& player)
 		player.x, player.y,
 		pwp.x, pwp.y, last_pwp.x, last_pwp.y);
 #endif
-	next_wayfind=time + 3.0f;
+	next_wayfind=time + 1.0f;
 	//if (pwp.id == last_pwp.id && waypoints.size() > 0) return;
 	last_pwp=pwp;
 	waypoints.clear();
@@ -284,7 +284,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		if (movement == Falling) arrived=true;
 		else keys=KeyboardKeys::Shift | KeyboardKeys::Up;
 	} else if (current_way.type == Connection::Climb) {
-		if (dist.y < TILE_HEIGHT && dist.x < 14) {
+		if (dist.y < 10 && dist.x < 50) {
 #ifdef DEBUGWAYNET
 			ppl7::PrintDebug("arrived\n");
 #endif
