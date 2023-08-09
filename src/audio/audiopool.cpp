@@ -241,15 +241,24 @@ void AudioPool::load()
 
 void AudioPool::load_speech(const ppl7::String& lang)
 {
+
 	try {
 		voice_george[VoiceGeorge::aua1].load("res/audio/george/common/aua1.mp3");
 		voice_george[VoiceGeorge::aua2].load("res/audio/george/common/aua2.mp3");
 		voice_george[VoiceGeorge::aua3].load("res/audio/george/common/aua3.mp3");
 		voice_george[VoiceGeorge::aua4].load("res/audio/george/common/aua4.mp3");
+		voice_george[VoiceGeorge::snort].load("res/audio/george/common/snort_loop.mp3");
+
+
+
+		voice_george[VoiceGeorge::hello].load("res/audio/george/ger/hello.mp3");
+		voice_george[VoiceGeorge::hello_questioned].load("res/audio/george/ger/hello_questioned.mp3");
+		voice_george[VoiceGeorge::hello_here_i_am].load("res/audio/george/ger/hello_here_i_am.mp3");
+		voice_george[VoiceGeorge::hello_im_george].load("res/audio/george/ger/hello_im_george.mp3");
+		voice_george[VoiceGeorge::play_with_me].load("res/audio/george/ger/play_with_me.mp3");
+
 
 		if (lang == "eng") {
-
-		} else if (lang == "ger") {
 
 		}
 

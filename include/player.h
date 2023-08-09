@@ -49,6 +49,9 @@ private:
 	bool expressionJump;
 	double airStart;
 	double voiceDamageCooldown;
+	double startIdle;
+	double nextIdleSpeech;
+	bool greetingPlayed;
 
 	AudioInstance* ambient_sound;
 	AudioInstance* voice;
@@ -66,6 +69,7 @@ private:
 	Decker::Objects::Object* hackingObject;
 	int hackingState;
 	double hacking_end;
+	ppl7::String phonetics;
 
 
 
@@ -86,6 +90,8 @@ private:
 	void playSoundOnAnimationSprite();
 	void checkActivationOfObjectsInRange(Decker::Objects::ObjectSystem* objectsystem);
 
+	void idleJokes(double time);
+	void playPhonetics();
 public:
 	float x, y;
 	int points, health, lifes;
@@ -135,7 +141,7 @@ public:
 	void startHacking(Decker::Objects::Object* object);
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
-	void speak(VoiceGeorge::Id id, float volume=0.7f);
+	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
 
 };
 #endif /* INCLUDE_PLAYER_H_ */

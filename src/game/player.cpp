@@ -74,6 +74,10 @@ Player::Player(Game* game)
 	airStart=0.0f;
 	voice=NULL;
 	voiceDamageCooldown=0.0f;
+	startIdle=ppl7::GetMicrotime() + 5.0f;
+	time=startIdle;
+	nextIdleSpeech=0.0f;
+	greetingPlayed=false;
 }
 
 Player::~Player()
@@ -115,6 +119,8 @@ void Player::resetState()
 	hackingState=0;
 	color_modulation.setColor(255, 255, 255, 255);
 	airStart=0.0f;
+	nextIdleSpeech=0.0f;
+	startIdle=ppl7::GetMicrotime() + 5.0f;
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
 		ambient_sound->fadeout(2.0f);
@@ -263,6 +269,7 @@ void Player::stand()
 	else if (orientation == Front) animation.setStaticFrame(27);
 	else if (orientation == Back) animation.setStaticFrame(28);
 	idle_timeout=time + 4.0;
+	startIdle=idle_timeout;
 }
 
 void Player::addPoints(int points)
@@ -313,6 +320,9 @@ void Player::dropHealth(float points, HealthDropReason reason)
 		default: speak(VoiceGeorge::aua4); break;
 		}
 		voiceDamageCooldown=time + ppl7::randf(0.0f, 4.0f);
+	}
+	if (orientation == Front && movement == Stand) {
+		if (animation.getFrame() != 297) animation.setStaticFrame(297);
 	}
 	if (godmode) return;
 
@@ -457,8 +467,10 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		next_animation=time + animation_speed;
 		animation.update();
 		playSoundOnAnimationSprite();
+		if (phonetics.notEmpty()) playPhonetics();
 
 	}
+	if (voice) voice->setPositional(ppl7::grafix::Point(x, y), 1600);
 	if (movement == Dead) {
 		if (animation.isFinished()) {
 			dead=true;
@@ -541,6 +553,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		//printf ("debug 2\n");
 		movement=Stand;
 		orientation=turnTarget;
+		startIdle=time;
 		velocity_move.stop();
 		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
 	}
@@ -681,9 +694,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			stand();
 		} else if (movement == Stand && time > idle_timeout && orientation != Front) {
 			turn(Front);
-
+			//startIdle=time;
 		}
 	}
+	if (movement == Stand && orientation == Front) idleJokes(time);
+	else startIdle=time;
 //}
 }
 
@@ -1214,7 +1229,7 @@ void Player::emmitParticles(double time)
 }
 
 
-void Player::speak(VoiceGeorge::Id id, float volume)
+void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, const ppl7::String& phonetics)
 {
 	AudioPool& ap=getAudioPool();
 
@@ -1231,5 +1246,93 @@ void Player::speak(VoiceGeorge::Id id, float volume)
 		voice->setVolume(volume);
 		voice->setAutoDelete(false);
 		ap.playInstance(voice);
+		this->phonetics=phonetics;
+
 	}
+}
+
+
+void Player::idleJokes(double time)
+{
+	//AudioPool& ap=getAudioPool();
+	if (time > startIdle + 3600.0f) {
+		if (animation.getFrame() != 304) animation.setStaticFrame(304);
+	} else if (time > startIdle + 1200.0f) {
+		if (animation.getFrame() != 303) animation.setStaticFrame(303);
+	} else if (time > startIdle + 600.0f) {
+		speak(VoiceGeorge::snort, 0.3f);
+		if (animation.getFrame() != 302) animation.setStaticFrame(302);
+	} else if (time > startIdle + 5) {
+		if (nextIdleSpeech == 0.0f || time > nextIdleSpeech) {
+			nextIdleSpeech=time + ppl7::randf(30.0f, 120.0f);
+			//nextIdleSpeech=time + 5;
+			if (!greetingPlayed) {
+				speak(VoiceGeorge::hello_im_george, 0.6f, translate("Hello, I'm George!"), translate("HelloooaaiiemmgoorrSS"));
+				greetingPlayed=true;
+			}
+			int r=ppl7::rand(1, 4);
+			switch (r) {
+			case 1: speak(VoiceGeorge::hello, 0.6f, translate("Hello!"), translate("elooo")); break;
+			case 2: speak(VoiceGeorge::hello_questioned, 0.6f, translate("Hello?"), translate("eloooo")); break;
+			case 3: speak(VoiceGeorge::hello_here_i_am, 0.6f, translate("Hello, here I am!"), translate("elloooooeerraiieemmm")); break;
+			default: speak(VoiceGeorge::play_with_me, 0.6f, translate("Play with me!"), translate("pleiiwissme")); break;
+			}
+		}
+	} else {
+		nextIdleSpeech=0.0f;;
+	}
+}
+
+/*
+A   = 0
+B   = 6
+C   = 3
+D   = 3
+E   = 2
+F   = 4
+G   = 3
+H   = -
+I   = 0
+J   = 3
+K   = 3
+L   = 5
+M   = 6
+N   = 3
+O   = 7
+P   = 6
+Q   = 10
+R   = 3
+S   = 3
+T
+U   = 9
+V   = 4
+W   = 10
+X
+Y   = 3
+Z   = 3
+SCH = 18
+
+*/
+void Player::playPhonetics()
+{
+	if (phonetics.isEmpty()) return;
+	ppl7::String p=phonetics.left(1);
+	phonetics.chopLeft();
+	if (phonetics.isEmpty() && p != "-") phonetics="-";
+	if (movement != Stand || orientation != Front) return;
+	int s=284;
+	if (p == "a" || p == "i") s=283 + 0;
+	if (p == "b" || p == "m") s=283 + 6;
+	if (p == "c" || p == "d" || p == "g" || p == "j" || p == "k" || p == "n" || p == "r" || p == "s" || p == "y" || p == "z") s=283 + 3;
+	if (p == "e") s=283 + 2;
+	if (p == "f" || p == "v") s=283 + 4;
+	if (p == "l") s=283 + 5;
+	if (p == "m" || p == "p") s=283 + 6;
+	if (p == "o") s=283 + 7;
+	if (p == "q" || p == "w") s=283 + 10;
+	if (p == "u") s=283 + 9;
+	if (p == "S") s=283 + 18;
+
+	animation.setStaticFrame(s);
+
 }

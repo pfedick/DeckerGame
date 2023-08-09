@@ -182,6 +182,12 @@ public:
 		aua2,
 		aua3,
 		aua4,
+		snort,
+		hello,
+		hello_questioned,
+		hello_here_i_am,
+		hello_im_george,
+		play_with_me,
 		maxClips
 	};
 };
