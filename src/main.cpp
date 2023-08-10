@@ -45,8 +45,8 @@ void start()
 	if (ppl7::File::exists("Makefile")) {
 		//game.playIntroVideo();
 
-		game.startLevel("level/waynet.lvl");
-		//game.startLevel("level/sound.lvl");
+		//game.startLevel("level/waynet.lvl");
+		game.startLevel("level/sound.lvl");
 		//game.startLevel("level/desert.lvl");
 		//game.startLevel("level/heaven.lvl");
 		//game.startLevel("level/water.lvl");
@@ -60,6 +60,7 @@ void start()
 
 		}
 		*/
+
 
 		//game.startLevel("level/levelstats_test.lvl");
 		//game.startLevel("level/particle.lvl");

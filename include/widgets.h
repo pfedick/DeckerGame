@@ -91,9 +91,10 @@ private:
 #ifdef WIN32
 	ppl7::tk::ComboBox* drives_combobox;
 #endif
-
+	bool matchFilter(const ppl7::String& filename) const;
 
 	DialogState my_state;
+	std::list<ppl7::String> filter;
 
 
 
@@ -109,7 +110,7 @@ public:
 
 	void setFilename(const ppl7::String& filename);
 	void setDirectory(const ppl7::String& path);
-	void setFilter(const ppl7::String& filter);
+	void setFilter(const ppl7::String& patternlist);
 
 	void mouseDblClickEvent(ppl7::tk::MouseEvent* event) override;
 	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;

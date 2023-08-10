@@ -1627,13 +1627,14 @@ void Game::openLoadDialog()
 	if (w >= width() - 100) w=width() - 100;
 	if (h >= height() - 100) h=height() - 100;
 	filedialog=new Decker::ui::FileDialog(w, h, Decker::ui::FileDialog::FileMode::ExistingFile);
+	filedialog->setFilter("*.lvl");
 	if (LevelFile.notEmpty())	filedialog->setFilename(LevelFile);
 	else {
 		ppl7::String pwd=ppl7::Dir::currentPath() + "/level";
 		if (ppl7::Dir::exists(pwd)) filedialog->setDirectory(pwd);
 		else filedialog->setDirectory(config.CustomLevelPath);
 	}
-	filedialog->setFilter("*.lvl");
+
 	filedialog->setWindowTitle("load existing level");
 	filedialog->custom_id=2;
 	this->addChild(filedialog);

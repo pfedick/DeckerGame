@@ -174,14 +174,43 @@ void FileDialog::setDirectory(const ppl7::String& path)
         if (entry.isDir() && entry.Filename != ".") {
             dir_list->add(entry.Filename);
         } else if (entry.isFile()) {
-            file_list->add(entry.Filename);
+            if (matchFilter(entry.Filename)) file_list->add(entry.Filename);
         }
     }
 }
 
-void FileDialog::setFilter(const ppl7::String& filter)
+void FileDialog::setFilter(const ppl7::String& patternlist)
 {
+    filter.clear();
+    //ppl7::String list=patternlist;
+    ppl7::Array a(patternlist, ",");
+    //a.list();
+    for (size_t i=0;i < a.size();i++) {
+        ppl7::String pattern=a[i].trimmed();
+        ppl7::String regex="/^";
+        while (pattern.notEmpty()) {
+            ppl7::String letter=pattern.left(1);
+            pattern.chopLeft();
+            if (letter == ".") regex+="\\.";
+            else if (letter == "?") regex+=".";
+            else if (letter == "*") regex+=".*?";
+            else regex+=letter;
+        }
+        regex+="$/i";
 
+        filter.push_back(a[i].trimmed());
+    }
+}
+
+bool FileDialog::matchFilter(const ppl7::String& filename) const
+{
+    if (filter.empty()) return true;
+    std::list<ppl7::String>::const_iterator it;
+    for (it=filter.begin();it != filter.end();++it) {
+        ppl7::PrintDebugTime("Match %s against rule %s\n", (const char*)filename, (const char*)(*it));
+        if (ppl7::PregMatch((*it), filename)) return true;
+    }
+    return false;
 }
 
 void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
