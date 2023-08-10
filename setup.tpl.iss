@@ -48,6 +48,9 @@ Source: "res/*.fnt6"; DestDir: "{app}/res"; Flags: ignoreversion;
 Source: "res/*.png"; DestDir: "{app}/res"; Flags: ignoreversion nocompression;
 Source: "res/backgrounds/*.*"; DestDir: "{app}/res/backgrounds"; Flags: ignoreversion nocompression;
 Source: "res/audio/*.mp3"; DestDir: "{app}/res/audio"; Flags: ignoreversion nocompression;
+Source: "res/audio/yeti/*.mp3"; DestDir: "{app}/res/audio/yeti"; Flags: ignoreversion nocompression;
+Source: "res/audio/george/common/*.mp3"; DestDir: "{app}/res/audio/george/common"; Flags: ignoreversion nocompression;
+Source: "res/audio/george/ger/*.mp3"; DestDir: "{app}/res/audio/george/ger"; Flags: ignoreversion nocompression;
 Source: "res/video/*"; DestDir: "{app}/res/video"; Flags: ignoreversion nocompression;
 Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
 
