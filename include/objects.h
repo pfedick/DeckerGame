@@ -544,6 +544,7 @@ class OxygenTank : public Object
 {
 private:
 	double next_birth;
+	double respawn_time;
 	std::list<Particle::ScaleGradientItem>scale_gradient;
 
 public:

@@ -22,12 +22,16 @@ OxygenTank::OxygenTank()
 	next_birth=0.0f;
 	scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.044));
 	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+	respawn_time=0.0f;
 
 }
 
 void OxygenTank::update(double time, TileTypePlane&, Player& player, float)
 {
-	if (!enabled) return;
+	if (!enabled) {
+		if (respawn_time > time) return;
+		enabled=true;
+	}
 	if (next_birth < time) {
 		ppl7::grafix::PointF op=p;
 		op.y-=TILE_HEIGHT;
@@ -62,6 +66,7 @@ void OxygenTank::handleCollision(Player* player, const Collision&)
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::water_bubble1, 0.3f);
 	audio.playOnce(AudioClip::gas_spray, 0.1f);
+	respawn_time=player->time + 120.0f;
 }
 
 }
