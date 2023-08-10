@@ -584,14 +584,14 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	player->WorldCoords=WorldCoords;
 	player->Viewport=viewport;
 	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
-
+	level.objects->updateVisibleObjectList(WorldCoords, viewport);
 	if (this->controlsEnabled || player->isAutoWalk())
 		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
 
 	if (game_speed == GameSpeed::Normal || game_speed == GameSpeed::ManualStep) {
 		level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
 	}
-	level.objects->updateVisibleObjectList(WorldCoords, viewport);
+
 	ppl7::tk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
 		updateWorldCoords();
