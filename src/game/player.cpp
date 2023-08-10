@@ -310,6 +310,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 
 	if (movement == Dead) return;
 	if (points == 0.0f) return;
+	if (godmode) return;
 
 	if (time > voiceDamageCooldown) {
 		int r=ppl7::rand(1, 4);
@@ -324,7 +325,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	if (orientation == Front && movement == Stand) {
 		if (animation.getFrame() != 297) animation.setStaticFrame(297);
 	}
-	if (godmode) return;
+
 
 
 
