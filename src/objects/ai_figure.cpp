@@ -270,7 +270,7 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left | KeyboardKeys::Shift;
 		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right | KeyboardKeys::Shift;
 	} else if (current_way.type == Connection::Go) {
-		if (dist.y < 50 && dist.x < 20) {
+		if (dist.y < TILE_HEIGHT && dist.x < 14) {
 			arrived=true;
 		} else if ((uint16_t)(p.x) > current_way.target.x) keys=KeyboardKeys::Left;
 		else if ((uint16_t)(p.x) < current_way.target.x) keys=KeyboardKeys::Right;
@@ -314,8 +314,8 @@ void AiEnemy::updateStateFollowPlayer(double time, TileTypePlane& ttplane, const
 		updateWay(time, player);
 		if (waypoints.size() > 0) {
 			current_way=waypoints.front();
-			if (current_way.type == Connection::Walk) {
-				if (p.x > current_way.source.x && p.x < current_way.target.x) {
+			if (current_way.type == Connection::Walk || current_way.type == Connection::Go) {
+				if ((p.x > current_way.source.x && p.x < current_way.target.x) || (p.x < current_way.source.x && p.x > current_way.target.x)) {
 					waypoints.pop_front();
 					current_way=waypoints.front();
 				}

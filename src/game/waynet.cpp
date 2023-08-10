@@ -696,8 +696,9 @@ bool Waynet::findWay(std::list<Connection>& way_list, const Position& source, co
 	bool result=findBestWay(way);
 	if (result && way_list.size() > 0) {
 		const Connection& c1=way_list.front();
-		if (c1.type == Connection::Walk) {
+		if (c1.type == Connection::Walk || c1.type == Connection::Go) {
 			if (source.x > c1.source.x && source.x < c1.target.x) way_list.pop_front();
+			else if (source.x < c1.source.x && source.x > c1.target.x) way_list.pop_front();
 
 		}
 	}
