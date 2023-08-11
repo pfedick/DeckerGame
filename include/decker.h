@@ -224,6 +224,8 @@ public:
 	void enableOutlines(bool enabled);
 	int numTextures() const;
 	int numSprites() const;
+
+	SDL_Rect getSpriteSource(int id) const;
 };
 
 class SpriteSystem
@@ -674,6 +676,41 @@ public:
 	void fadeout(float seconds);
 };
 
+class MessageOverlay
+{
+public:
+	enum class Character {
+		George=0
+	};
+private:
+	SDL& sdl;
+	SDL_Texture* overlay;
+	SpriteTexture spriteset;
+	ppl7::grafix::Font font;
+	double timeout;
+	ppl7::String text, phonetics;
+	Character character;
+	double nextPhonetic;
+	double nextBlink;
+	int mouth, eyes;
+	std::map<int, int>phonetics_map;
+	ppl7::grafix::Size lastSize;
+
+	void updatePhonetics();
+	void render();
+
+public:
+
+	MessageOverlay(SDL& sdl);
+	~MessageOverlay();
+	void loadSprites();
+	void resize(const ppl7::grafix::Size& size);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport);
+	void setText(Character c, const ppl7::String& text, const ppl7::String& phonetics, float timeout=0.0f);
+	bool hasMessage() const;
+	void clear();
+
+};
 
 class Game : private ppl7::tk::Window
 {
@@ -809,6 +846,7 @@ private:
 
 public:
 	Config config;
+	MessageOverlay message_overlay=MessageOverlay(sdl);
 
 	Game();
 	~Game();

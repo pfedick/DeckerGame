@@ -199,6 +199,8 @@ void Game::loadGrafix()
 	level.particles->loadSpritesets(sdl);
 	level.waynet.setSpriteset(&resources.Waynet);
 
+	message_overlay.loadSprites();
+
 }
 
 void Game::createWindow()
@@ -369,7 +371,7 @@ void Game::init()
 	initAudio();
 	desktopSize=clientSize();
 	viewport=clientRect();
-
+	message_overlay.resize(viewport.size());
 
 	gui_font.setName("Default");
 	gui_font.setSize(12);
@@ -746,6 +748,7 @@ void Game::run()
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
+		if (message_overlay.hasMessage()) message_overlay.draw(renderer, viewport);
 		// Widgets
 		drawWidgets();
 		// Mouse
@@ -1189,6 +1192,7 @@ void Game::load()
 	closeSpriteSelection();
 	closeObjectSelection();
 	closeWayNet();
+	message_overlay.clear();
 	selected_object=NULL;
 	remember.clear();
 	level.load(LevelFile);
@@ -1546,6 +1550,7 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 	desktopSize=clientSize();
 	viewport=clientRect();
 	resizeMenueAndStatusbar();
+	message_overlay.resize(desktopSize);
 	showUi(showui);
 	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
 	//if (start_screen) start_screen->resizeEvent(event);

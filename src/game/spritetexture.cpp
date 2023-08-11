@@ -491,6 +491,16 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
+SDL_Rect SpriteTexture::getSpriteSource(int id) const
+{
+	SDL_Rect r;
+	r.x=0;r.y=0;r.w=0;r.h=0;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return r;
+	return (*it).second.r;
+}
+
 SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int id)
 {
 	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;

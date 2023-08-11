@@ -13,7 +13,7 @@ namespace Decker::Objects {
 
 Representation VoiceTrigger::representation()
 {
-	return Representation(Spriteset::GenericObjects, 215);
+	return Representation(Spriteset::GenericObjects, 38);
 }
 
 
@@ -21,11 +21,11 @@ VoiceTrigger::VoiceTrigger()
 	:Object(Type::ObjectType::VoiceTrigger)
 {
 	sprite_set=Spriteset::GenericObjects;
-	sprite_no=215;
+	sprite_no=38;
 	collisionDetection=true;
 	pixelExactCollision=false;
 	visibleAtPlaytime=false;
-	sprite_no_representation=215;
+	sprite_no_representation=38;
 	volume=1.0f;
 	range.setPoint(300, 300);
 	triggeredByCollision=true;

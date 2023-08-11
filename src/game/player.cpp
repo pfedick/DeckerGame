@@ -78,7 +78,7 @@ Player::Player(Game* game)
 	startIdle=time + 1.0f;
 	nextIdleSpeech=0.0f;
 	nextPhonetic=0.0f;
-	greetingPlayed=false;
+	greetingPlayed=true;
 }
 
 Player::~Player()
@@ -1275,8 +1275,10 @@ bool Player::speak(const ppl7::String& filename, const ppl7::String& text, const
 			}
 		}
 	}
-	ppl7::PrintDebugTime("George: %s\n", (const char*)text);
-	ppl7::PrintDebugTime("File: %s\n", (const char*)filepath);
+	game->message_overlay.setText(MessageOverlay::Character::George, text, phonetics);
+
+	//ppl7::PrintDebugTime("George: %s\n", (const char*)text);
+	//ppl7::PrintDebugTime("File: %s\n", (const char*)filepath);
 	if (filepath.notEmpty()) {
 		try {
 			voice_sample.load(filepath);
@@ -1326,36 +1328,7 @@ void Player::idleJokes(double time)
 	}
 }
 
-/*
-A   = 0
-B   = 6
-C   = 3
-D   = 3
-E   = 2
-F   = 4
-G   = 3
-H   = -
-I   = 0
-J   = 3
-K   = 3
-L   = 5
-M   = 6
-N   = 3
-O   = 7
-P   = 6
-Q   = 10
-R   = 3
-S   = 3
-T
-U   = 9
-V   = 4
-W   = 10
-X
-Y   = 3
-Z   = 3
-SCH = 18
 
-*/
 void Player::playPhonetics()
 {
 	if (phonetics.isEmpty()) return;
