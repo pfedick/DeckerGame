@@ -21,7 +21,9 @@ public:
 		OK=1,
 		Copy=2,
 		Paste=4,
-		CopyAndPaste=6
+		CopyAndPaste=6,
+		Test=8,
+		Reset=16
 	};
 private:
 	ppl7::String WindowTitle;
@@ -31,6 +33,8 @@ private:
 	ppl7::tk::Button* ok_button;
 	ppl7::tk::Button* copy_button;
 	ppl7::tk::Button* paste_button;
+	ppl7::tk::Button* test_button;
+	ppl7::tk::Button* reset_button;
 	ppl7::grafix::Point move_start;
 	ppl7::tk::Frame* client_frame;
 

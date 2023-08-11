@@ -1722,3 +1722,8 @@ void Game::stepFrame()
 {
 	game_speed=GameSpeed::ManualStep;
 }
+
+Player* Game::getPlayer()
+{
+	return player;
+}

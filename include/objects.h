@@ -59,6 +59,7 @@ public:
 		BreakingWall=28,
 		Hammer=29,
 		Cheese=30,
+		VoiceTrigger=31,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -1192,6 +1193,37 @@ public:
 
 };
 
+
+class VoiceTrigger : public Object
+{
+private:
+	double cooldown;
+	int trigger_count;
+
+public:
+	ppl7::grafix::Point range;
+	ppl7::String audiofile;
+	ppl7::String context;		// for translation context
+	ppl7::String text;
+	ppl7::String phonetics;
+	bool singleTrigger;
+	bool triggeredByCollision;
+	float cooldownUntilNextTrigger;
+	float volume;
+
+	VoiceTrigger();
+	~VoiceTrigger();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	virtual void toggle(bool enable, Object* source=NULL) override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void openUi() override;
+	void reset();
+};
 
 
 class ObjectSystem

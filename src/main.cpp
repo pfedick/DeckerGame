@@ -8,7 +8,7 @@
 #include <math.h>
 #include "objects.h"
 
-//#define DEBUGTIME
+#define DEBUGTIME
 void help()
 {
 
@@ -44,8 +44,8 @@ void start()
 
 	if (ppl7::File::exists("Makefile")) {
 		//game.playIntroVideo();
-
-		game.startLevel("level/waynet.lvl");
+		game.startLevel("level/tutorial.lvl");
+		//game.startLevel("level/waynet.lvl");
 		//game.startLevel("level/sound.lvl");
 		//game.startLevel("level/desert.lvl");
 		//game.startLevel("level/heaven.lvl");

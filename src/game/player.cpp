@@ -77,6 +77,7 @@ Player::Player(Game* game)
 	time=ppl7::GetMicrotime();
 	startIdle=time + 1.0f;
 	nextIdleSpeech=0.0f;
+	nextPhonetic=0.0f;
 	greetingPlayed=false;
 }
 
@@ -120,6 +121,7 @@ void Player::resetState()
 	color_modulation.setColor(255, 255, 255, 255);
 	airStart=0.0f;
 	nextIdleSpeech=0.0f;
+	nextPhonetic=0.0f;
 	startIdle=ppl7::GetMicrotime() + 5.0f;
 	if (ambient_sound) {
 		ambient_sound->setAutoDelete(true);
@@ -1252,6 +1254,42 @@ void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, c
 	}
 }
 
+bool Player::speak(const ppl7::String& filename, const ppl7::String& text, const ppl7::String& phonetics, float volume)
+{
+	AudioPool& ap=getAudioPool();
+	if (voice && voice->finished() == false) return false;
+	if (voice) {
+		if (voice->finished() == false) return false;
+		ap.stopInstace(voice);
+		delete voice;
+		voice=NULL;
+	}
+	const ppl7::String& lang=game->config.Language;
+	ppl7::String filepath="res/audio/george/" + lang + "/" + filename + ".mp3";
+	if (!ppl7::File::exists(filepath)) {
+		filepath="res/audio/george/eng/" + filename + ".mp3";
+		if (!ppl7::File::exists(filepath)) {
+			filepath="res/audio/george/ger/" + filename + ".mp3";
+			if (!ppl7::File::exists(filepath)) {
+				filepath.clear();
+			}
+		}
+	}
+	ppl7::PrintDebugTime("George: %s\n", (const char*)text);
+	ppl7::PrintDebugTime("File: %s\n", (const char*)filepath);
+	if (filepath.notEmpty()) {
+		try {
+			voice_sample.load(filepath);
+			voice=new AudioInstance(voice_sample, AudioClass::Speech);
+			voice->setVolume(volume);
+			voice->setAutoDelete(false);
+			ap.playInstance(voice);
+			this->phonetics=phonetics;
+		} catch (...) {}
+	}
+	return true;
+}
+
 
 void Player::idleJokes(double time)
 {
@@ -1321,6 +1359,7 @@ SCH = 18
 void Player::playPhonetics()
 {
 	if (phonetics.isEmpty()) return;
+	if (time < nextPhonetic) return;
 	ppl7::String p=phonetics.left(1);
 	phonetics.chopLeft();
 	if (phonetics.isEmpty() && p != "-") phonetics="-";
@@ -1337,7 +1376,7 @@ void Player::playPhonetics()
 	if (p == "q" || p == "w") s=283 + 10;
 	if (p == "u") s=283 + 9;
 	if (p == "S") s=283 + 18;
-
+	nextPhonetic=time + 0.1f;
 	animation.setStaticFrame(s);
 
 }

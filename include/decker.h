@@ -851,6 +851,7 @@ public:
 	//void clearLevel(int width, int height);
 	void playerDied();
 	void resetPlayer();
+	Player* getPlayer();
 
 	const ppl7::String& getLevelFilename() const;
 

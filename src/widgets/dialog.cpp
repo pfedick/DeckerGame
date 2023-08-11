@@ -19,6 +19,8 @@ Dialog::Dialog(int width, int height, int buttons)
 	ok_button=NULL;
 	copy_button=NULL;
 	paste_button=NULL;
+	test_button=NULL;
+	reset_button=NULL;
 	int x=width - 2 - 16;
 	int y=height - 40;
 
@@ -47,6 +49,25 @@ Dialog::Dialog(int width, int height, int buttons)
 		x-=32;
 		client_offset_y2=40 + 8;
 	}
+
+	x=18;
+	if (buttons & Buttons::Reset) {
+		reset_button=new ppl7::tk::Button(x, y, 60, 32, "Reset");
+		//reset_button->setIcon(gfx->Toolbar.getDrawable(37));
+		reset_button->setEventHandler(this);
+		ppl7::tk::Widget::addChild(reset_button);
+		x+=62;
+		client_offset_y2=40 + 8;
+	}
+	if (buttons & Buttons::Test) {
+		test_button=new ppl7::tk::Button(x, y, 60, 32, "Test");
+		//reset_button->setIcon(gfx->Toolbar.getDrawable(37));
+		test_button->setEventHandler(this);
+		ppl7::tk::Widget::addChild(test_button);
+		x+=62;
+		client_offset_y2=40 + 8;
+	}
+
 	client_frame=new ppl7::tk::Frame(8, 40, this->width() - 16, this->height() - 40 - client_offset_y2, ppl7::tk::Frame::BorderStyle::NoBorder);
 	client_frame->setBackgroundColor(myBackground);
 	ppl7::tk::Widget::addChild(client_frame);
@@ -163,6 +184,8 @@ void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 		this->deleteLater();
 	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
 	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);
+	else if (reset_button && widget == reset_button) dialogButtonEvent(Buttons::Reset);
+	else if (test_button && widget == test_button) dialogButtonEvent(Buttons::Test);
 	else if (widget == this && event->p.y < 40) {
 		drag_started=true;
 		drag_start_pos=event->p;

@@ -4,6 +4,7 @@
 
 ppl7::String translate(const char* text);
 const ppl7::String& translate(const ppl7::String& text);
+const ppl7::String& translate(const ppl7::String& text, const ppl7::String& context);
 
 class Translator
 {

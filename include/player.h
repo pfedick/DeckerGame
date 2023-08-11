@@ -51,10 +51,12 @@ private:
 	double voiceDamageCooldown;
 	double startIdle;
 	double nextIdleSpeech;
+	double nextPhonetic;
 	bool greetingPlayed;
 
 	AudioInstance* ambient_sound;
 	AudioInstance* voice;
+	AudioSample voice_sample;
 	AudioClip::Id ambient_playing;
 
 	enum class ParticleReason
@@ -142,6 +144,7 @@ public:
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
+	bool speak(const ppl7::String& filename, const ppl7::String& text, const ppl7::String& phonetics, float volume);
 
 };
 #endif /* INCLUDE_PLAYER_H_ */

@@ -383,6 +383,7 @@ Representation getRepresentation(int object_type)
 	case Type::BreakingWall: return BreakingWall::representation();
 	case Type::Hammer: return Hammer::representation();
 	case Type::Cheese: return Cheese::representation();
+	case Type::VoiceTrigger: return VoiceTrigger::representation();
 	default: return Object::representation();
 	}
 }
@@ -463,6 +464,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::BreakingWall: return new BreakingWall();
 	case Type::Hammer: return new Hammer();
 	case Type::Cheese: return new Cheese();
+	case Type::VoiceTrigger: return new VoiceTrigger();
 	}
 	return NULL;
 }
