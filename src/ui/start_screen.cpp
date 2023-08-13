@@ -244,6 +244,7 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	filedialog->setFilename("C:\\git\\DeckerGame\\level\\test.lvl");
 	this->addChild(filedialog);
 	*/
+	retranslateUi();
 
 	start_game->setSelected(true);
 	resizeEvent(NULL);
@@ -260,6 +261,15 @@ StartScreen::~StartScreen()
 	delete end;
 	this->removeChild(menue);
 	delete menue;
+}
+
+void StartScreen::retranslateUi()
+{
+	start_game->setText(translate("Start Game"));
+	settings->setText(translate("Settings"));
+	editor->setText(translate("Level editor"));
+	end->setText(translate("Exit game"));
+
 }
 
 StartScreen::State StartScreen::getState() const
@@ -375,6 +385,7 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 		settings_screen=NULL;
 		menue->setEnabled(true);
 		menue->setVisible(true);
+		retranslateUi();
 		ppl7::tk::GetWindowManager()->setKeyboardFocus(this);
 		needsRedraw();
 

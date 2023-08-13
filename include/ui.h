@@ -469,17 +469,18 @@ public:
 class StatsFrame : public ppl7::tk::Widget
 {
 private:
-	ppl7::String label;
+	ppl7::String labeltext;
 	ppl7::String value;
 	ppl7::grafix::Font font;
 
-
 public:
 	StatsFrame(int x, int y, int width, int height, const ppl7::String& label);
+	void setLabel(const ppl7::String& label);
 	void setValue(const ppl7::String& value);
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
 	void setFontSize(int size);
+	const ppl7::String& label() const;
 };
 
 class OxygenFrame : public ppl7::tk::Widget
@@ -490,6 +491,7 @@ class OxygenFrame : public ppl7::tk::Widget
 public:
 	OxygenFrame(int x, int y, int width, int height, const ppl7::String& label);
 	void setValue(float seconds_total, float seconds_left);
+	void setLabel(const ppl7::String& label);
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
 	void setFontSize(int size);
@@ -504,6 +506,7 @@ private:
 	double oxygen_cooldown;
 public:
 	WorldWidget();
+	void retranslateUi();
 	void setViewport(const ppl7::grafix::Rect& viewport);
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;

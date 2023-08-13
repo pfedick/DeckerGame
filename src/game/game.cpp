@@ -366,6 +366,8 @@ void Game::presentStartupScreen()
 
 void Game::init()
 {
+	translator.load();
+	translator.setLanguage(config.Language);
 	createWindow();
 	initUi();
 	initAudio();
@@ -781,6 +783,7 @@ void Game::closeEvent(ppl7::tk::Event* e)
 		settings_screen=NULL;
 		enableControls(true);
 		wm->setKeyboardFocus(world_widget);
+		if (world_widget) world_widget->retranslateUi();
 		return;
 	}
 	quitGame=true;

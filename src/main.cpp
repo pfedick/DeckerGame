@@ -11,11 +11,16 @@
 #define DEBUGTIME
 void help()
 {
-
+	printf("Usage:\n\n");
+	printf("  -l LEVEL   load a level without presenting the start screen\n");
+#ifdef DEBUGTIME
+	printf("  -d         Starts the level compiled for debug\n");
+#endif
+	fflush(stdout);
 }
 
 
-void start()
+void start(int argc, char** argv)
 {
 #ifdef WIN32
 	ppl7::String::setGlobalEncoding("UTF-8");
@@ -29,6 +34,13 @@ void start()
 		printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
 		throw std::exception();
 	}
+
+	if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
+		help();
+		return;
+	}
+
+
 	SDL_Init(SDL_INIT_VIDEO);
 
 	ppl7::grafix::Grafix gfx;
@@ -41,8 +53,7 @@ void start()
 
 
 #ifdef DEBUGTIME
-
-	if (ppl7::File::exists("Makefile")) {
+	if (ppl7::HaveArgv(argc, argv, "-d") && ppl7::File::exists("Makefile")) {
 		//game.playIntroVideo();
 		game.startLevel("level/tutorial.lvl");
 		//game.startLevel("level/waynet.lvl");
@@ -60,19 +71,29 @@ void start()
 
 		}
 		*/
-
-
 		//game.startLevel("level/levelstats_test.lvl");
 		//game.startLevel("level/particle.lvl");
 		game.showUi(true);
 		game.run();
 
-
-
-
 		return;
 	}
 #endif
+	if (ppl7::HaveArgv(argc, argv, "-l")) {
+		ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
+		if (!ppl7::File::exists(level)) {
+			level="level/" + level;
+		}
+		if (ppl7::File::exists(level)) {
+			game.startLevel(level);
+			game.showUi(true);
+			game.run();
+			return;
+		}
+		printf("ERROR: Level not found [%s]\n", (const char*)ppl7::GetArgv(argc, argv, "-l"));
+		return;
+
+	}
 
 	//game.playIntroVideo();
 
@@ -102,10 +123,10 @@ void start()
 
 int WinMain()
 {
-	start();
+	start(__argc, __argv);
 	return 0;
 	try {
-		start();
+		start(__argc, __argv);
 		return 0;
 	} catch (const ppl7::Exception& ex) {
 		ex.print();
@@ -115,7 +136,9 @@ int WinMain()
 	return 0;
 }
 
-int main()
+int main(int argc, char** argv)
 {
-	return WinMain();
+
+	start(argc, argv);
+	return 0;
 }

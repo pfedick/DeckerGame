@@ -108,6 +108,7 @@ private:
     void initPageMisc();
 
     void updateVideoModes();
+    void retranslateUi();
 
 
 public:
@@ -120,6 +121,7 @@ public:
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
 
     virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
+    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
 
 };
@@ -155,6 +157,7 @@ private:
     State state;
 
     void resizeSettingsScreen();
+    void retranslateUi();
 
 public:
 

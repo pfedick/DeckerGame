@@ -96,6 +96,7 @@ void SettingsScreen::setupUi()
     label->setFont(style_heading.font);
     ppl7::grafix::Size size=style_heading.font.measure(text);
     label->setPos((width() - size.width) / 2, 10);
+    label->setWidth(size.width + 20);
     this->addChild(label);
 
     ppl7::grafix::Color background(20, 10, 0, 192);
@@ -275,7 +276,7 @@ void SettingsScreen::initPageVideo()
     windowmode_combobox->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(game.config.windowMode)));
     page_video->addChild(windowmode_combobox);
 
-    save_video_settings_button=new ppl7::tk::Button(input_widget_x, 200, 250, 50,
+    save_video_settings_button=new ppl7::tk::Button(input_widget_x, 200, 450, 50,
         translate("use video settings"),
         gfx->Toolbar.getDrawable(24));
     save_video_settings_button->setFont(style_label.font);
@@ -309,6 +310,11 @@ void SettingsScreen::initPageMisc()
 
 
 SettingsScreen::~SettingsScreen()
+{
+
+}
+
+void SettingsScreen::retranslateUi()
 {
 
 }
@@ -460,7 +466,16 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         game.audiosystem.setVolume(AudioClass::Speech, game.config.volumeSpeech);
         game.config.save();
     }
+}
 
+void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
+{
+    if (event->widget() == language_combobox) {
+        game.config.Language=language_combobox->currentIdentifier();
+        game.config.save();
+        GetTranslator().setLanguage(game.config.Language);
+        retranslateUi();
+    }
 }
 
 void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)

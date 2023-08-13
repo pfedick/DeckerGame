@@ -15,7 +15,17 @@ StatsFrame::StatsFrame(int x, int y, int width, int height, const ppl7::String& 
 	font.setBold(false);
 	font.setSize(50);
 	font.setOrientation(ppl7::grafix::Font::TOP);
-	this->label=label;
+}
+
+void StatsFrame::setLabel(const ppl7::String& label)
+{
+	this->labeltext=label;
+	this->needsRedraw();
+}
+
+const ppl7::String& StatsFrame::label() const
+{
+	return labeltext;
 }
 
 ppl7::String StatsFrame::widgetType() const
@@ -34,8 +44,8 @@ void StatsFrame::paint(ppl7::grafix::Drawable& draw)
 	draw.drawRect(2, 2, draw.width() - 2, draw.height() - 2, white);
 	draw.drawRect(3, 3, draw.width() - 3, draw.height() - 3, white);
 	font.setColor(ppl7::grafix::Color(255, 255, 255, 255));
-	ppl7::grafix::Size s=font.measure(label);
-	draw.print(font, 10, 0, label);
+	ppl7::grafix::Size s=font.measure(labeltext);
+	draw.print(font, 10, 0, labeltext);
 	font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
 	draw.print(font, 20 + s.width, 0, value);
 }
@@ -75,6 +85,11 @@ ppl7::String OxygenFrame::widgetType() const
 	return "OxygenFrame";
 }
 
+void OxygenFrame::setLabel(const ppl7::String& label)
+{
+	this->label=label;
+	needsRedraw();
+}
 
 void OxygenFrame::paint(ppl7::grafix::Drawable& draw)
 {
@@ -135,10 +150,10 @@ WorldWidget::WorldWidget()
 	: Widget::Widget()
 {
 	setClientOffset(0, 0, 0, 0);
-	stats_health=new StatsFrame(0, 0, 400, 70, "Health:");
-	stats_lifes=new StatsFrame(0, 0, 300, 70, "Lifes:");
-	stats_points=new StatsFrame(0, 0, 400, 70, "Points:");
-	stats_oxygen=new OxygenFrame(0, 0, 400, 70, "Oxygen:");
+	stats_health=new StatsFrame(0, 0, 400, 70, translate("Health:"));
+	stats_lifes=new StatsFrame(0, 0, 300, 70, translate("Lifes:"));
+	stats_points=new StatsFrame(0, 0, 400, 70, translate("Points:"));
+	stats_oxygen=new OxygenFrame(0, 0, 400, 70, translate("Oxygen:"));
 	stats_oxygen->setVisible(false);
 	this->addChild(stats_health);
 	this->addChild(stats_lifes);
@@ -148,6 +163,17 @@ WorldWidget::WorldWidget()
 	value_lifes=0;
 	value_points=0;
 	oxygen_cooldown=0.0f;
+	retranslateUi();
+	ppl7::tk::Label l;
+
+}
+
+void WorldWidget::retranslateUi()
+{
+	stats_health->setLabel(translate("Health:"));
+	stats_lifes->setLabel(translate("Lifes:"));
+	stats_points->setLabel(translate("Points:"));
+	stats_oxygen->setLabel(translate("Oxygen:"));
 }
 
 
@@ -168,7 +194,7 @@ void WorldWidget::setViewport(const ppl7::grafix::Rect& viewport)
 		y=viewport.height() - 50;
 
 	} else {
-		stats_health->setSize(400, 70);
+		stats_health->setSize(520, 70);
 		stats_points->setSize(400, 70);
 		stats_lifes->setSize(300, 70);
 		stats_oxygen->setSize(viewport.width() / 2 - 20, 40);
