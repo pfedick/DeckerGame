@@ -1,0 +1,111 @@
+---
+ui:
+  Game over:
+    en: Game over
+    de: Game over
+  Level completed:
+    en: Level completed
+    de: Level beendet
+  Press space to continue:
+    de: Drücke die Leertaste zum Fortfahren
+  'Bonus:':
+    de: 'Bonus:'
+  Points:
+    de: Punkte
+  'Points so far:':
+    de: 'Punkte bisher:'
+  'Coins:':
+    de: 'Münzen:'
+  'You collected:':
+    de: 'Du hast folgendes gesammelt:'
+  'Diamonds:':
+    de: 'Diamanten:'
+  'Chrystals:':
+    de: 'Kristalle:'
+  'Treasure Chests:':
+    de: Schatztruhen
+  Extra Lives:
+    de: Extraleben
+  'Bonus Points:':
+    de: 'Bonuspunkte:'
+  Final Points:
+    de: 'Endpunktestand:'
+  OK:
+    de: OK
+  Cancel:
+    de: Abbrechen
+  Settings:
+    de: Einstellungen
+  Audio:
+    de: Audio
+  Video:
+    de: Video
+  Misc:
+    de: Verschiedenes
+  back (ESC):
+    de: zurück (ESC)
+  'Audio device:':
+    de: Soundkarte
+  'Volume:':
+    de: 'Lautstärke:'
+  'all:':
+    de: 'Gesamt:'
+  'music:':
+    de: 'Musik:'
+  'effects:':
+    de: 'Effekte:'
+  'ambience:':
+    de: 'Umgebung:'
+  'speech:':
+    de: 'Sprache:'
+  'Video device:':
+    de: 'Grafikkarte:'
+  'Screen resolution:':
+    de: 'Bildschirmauflösung:'
+  'Window mode:':
+    de: 'Fenster Modus:'
+  Window:
+    de: Fenster
+  Fullscreen:
+    de: Vollbild
+  Fullscreen Desktop:
+    de: Vollbild Fenster
+  use video settings:
+    de: Video Einstellungen übernehmen
+  'Text language:':
+    en: 'Language:'
+    de: 'Sprache:'
+  english:
+    de: englisch
+  german:
+    de: deutsch
+  Start Game:
+    de: Spiel starten
+  Level editor:
+    de: Level Editor
+  Exit game:
+    de: Spiel beenden
+  "%Y-%m-%d":
+    de: "%d.%m.%Y"
+  Version:
+    de: Version
+  Builddate:
+    de: gebaut am
+  save file:
+    de: Datei speichern
+  load file:
+    de: Datei laden
+  'Path:':
+    de: 'Pfad:'
+  'Drives:':
+    de: 'Laufwerke:'
+  'Filename:':
+    de: 'Dateiname:'
+  'Lifes:':
+    de: 'Leben:'
+  'Health:':
+    de: 'Gesundheit:'
+  'Points:':
+    de: 'Punkte:'
+  'Oxygen:':
+    de: 'Sauerstoff:'

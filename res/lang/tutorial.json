@@ -1,0 +1,28 @@
+{
+    "speech": {
+        "1000": {
+            "context": "Tutorial Greeting",
+            "character": "george",
+            "audiofile": "hello_im_george",
+            "en": {
+                "text": "Hello! I'm George! Welcome to the tutorial!",
+                "phonetics": "elloo  aiiem dSorS  welcomm tu se tutorial"
+            },
+            "de": {
+                "text": "Hallo, ich bin George! Willkommen zum Tutorial!",
+                "phonetics": "alloo ich bin dSorS  willkommen zum tutorial"
+            }
+        },
+        "1001": {
+            "context": "Tutorial start",
+            "character": "george",
+            "audiofile": "1002",
+            "en": {
+                "text": "Hello! I'm George! Welcome to the tutorial!",
+            },
+            "de": {
+                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur",
+            }
+        }
+    }
+}

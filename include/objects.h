@@ -1202,14 +1202,25 @@ private:
 
 public:
 	ppl7::grafix::Point range;
-	ppl7::String audiofile;
 	ppl7::String context;		// for translation context
-	ppl7::String text;
-	ppl7::String phonetics;
+	uint16_t speechId;
 	bool singleTrigger;
 	bool triggeredByCollision;
+	bool requireKeypress;
+	bool pauseWorld;
 	float cooldownUntilNextTrigger;
 	float volume;
+	float initialDelay;
+	float triggerDeleay;
+
+	class TargetObject
+	{
+	public:
+		uint16_t object_id=0;
+		bool enable=true;
+	};
+	TargetObject triggerObjects[5];
+
 
 	VoiceTrigger();
 	~VoiceTrigger();
