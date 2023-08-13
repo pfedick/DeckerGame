@@ -35,7 +35,7 @@ void LevelDialog::setupUi()
 
     ok_button=new ppl7::tk::Button(20, clientarea.height - 30, 70, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppl7::tk::Button(clientarea.width - 110, clientarea.height - 30, 90, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppl7::tk::Button(clientarea.width - 130, clientarea.height - 30, 120, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);
