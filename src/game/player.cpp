@@ -1256,6 +1256,7 @@ void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, c
 
 bool Player::speak(uint16_t id, float volume)
 {
+	if (id < 1) return false;
 	AudioPool& ap=getAudioPool();
 	if (voice && voice->finished() == false) return false;
 	if (voice) {
@@ -1286,6 +1287,8 @@ bool Player::speak(uint16_t id, float volume)
 	if (speech.text.notEmpty()) {
 		game->message_overlay.setText(MessageOverlay::Character::George, speech.text, speech.phonetics);
 	}
+	this->phonetics=speech.phonetics;
+	if (speech.phonetics.isEmpty()) this->phonetics=speech.text;
 
 	//ppl7::PrintDebugTime("George: %s\n", (const char*)text);
 	//ppl7::PrintDebugTime("File: %s\n", (const char*)filepath);
@@ -1296,7 +1299,6 @@ bool Player::speak(uint16_t id, float volume)
 			voice->setVolume(volume);
 			voice->setAutoDelete(false);
 			ap.playInstance(voice);
-			this->phonetics=speech.phonetics;
 		} catch (...) {}
 	}
 	return true;
