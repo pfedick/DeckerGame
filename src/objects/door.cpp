@@ -38,7 +38,9 @@ Door::Door()
 	can_close_again=false;
 	use_background_color=false;
 	cooldown=0.0f;
+	cooldown_for_locked_door_text=0.0f;
 	myLayer=Layer::BehindPlayer;
+	text_for_closed_door_said=false;
 	init();
 }
 
@@ -48,6 +50,7 @@ void Door::reset()
 	state=DoorState::closed;
 	collisionDetection=true;
 	next_animation=0.0f;
+	text_for_closed_door_said=false;
 	init();
 }
 
@@ -187,6 +190,16 @@ void Door::handleCollision(Player* player, const Collision& collision)
 				else getAudioPool().playOnce(AudioClip::door_open, 0.5f);
 				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
 			}
+		}
+		if (state == DoorState::closed) {
+			if (!text_for_closed_door_said) {
+				if (key_id != 0 && player->isInInventory(key_id))  player->speak(20);
+				else if (key_id != 0) player->speak(6);
+				text_for_closed_door_said=true;
+			} else if (key_id != 0 && player->isInInventory(key_id) && player->time < cooldown_for_locked_door_text) {
+				player->speak(7);
+			}
+			cooldown_for_locked_door_text=player->time + 20.0f;
 		}
 	}
 
@@ -817,7 +830,7 @@ void DoorDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& te
 	if (event->widget() == key_id) {
 		object->key_id=text.toInt();
 		object->init();
-}
+	}
 }
 
 #endif
