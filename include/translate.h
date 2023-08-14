@@ -7,19 +7,6 @@ const ppl7::String& translate(const ppl7::String& text);
 const ppl7::String& translate(const ppl7::String& text, const ppl7::String& context);
 
 
-class Speech
-{
-public:
-    ppl7::String audiofile;
-    ppl7::String text;
-    ppl7::String phonetics;
-    float timeout=0.0f;
-    int id;
-    Speech(int id) : id(id) {};
-};
-
-Speech translate(int id);
-
 class Translator
 {
 private:
@@ -27,6 +14,17 @@ private:
     ppl7::AssocArray data;
 
 public:
+    class Speech
+    {
+    public:
+        ppl7::String audiofile;
+        ppl7::String text;
+        ppl7::String phonetics;
+        float timeout=0.0f;
+        int id;
+        Speech(int id) : id(id) {};
+    };
+
     Translator();
     ~Translator();
     void load();
@@ -37,6 +35,6 @@ public:
 };
 
 Translator& GetTranslator();
-
+Translator::Speech translate(int id);
 
 #endif

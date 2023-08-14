@@ -1254,7 +1254,7 @@ void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, c
 	}
 }
 
-bool Player::speak(const ppl7::String& filename, const ppl7::String& text, const ppl7::String& phonetics, float volume)
+bool Player::speak(uint16_t id, float volume)
 {
 	AudioPool& ap=getAudioPool();
 	if (voice && voice->finished() == false) return false;
@@ -1264,18 +1264,28 @@ bool Player::speak(const ppl7::String& filename, const ppl7::String& text, const
 		delete voice;
 		voice=NULL;
 	}
+	Translator::Speech speech=translate(id);
 	const ppl7::String& lang=game->config.Language;
-	ppl7::String filepath="res/audio/george/" + lang + "/" + filename + ".mp3";
-	if (!ppl7::File::exists(filepath)) {
-		filepath="res/audio/george/eng/" + filename + ".mp3";
+	ppl7::String filepath;
+	if (speech.audiofile.notEmpty()) {
+		speech.audiofile=ppl7::File::getFilename(speech.audiofile);
+		if (speech.audiofile.right(4) == ".mp3") speech.audiofile=speech.audiofile.left(speech.audiofile.size() - 4);
+		ppl7::String filepath="res/audio/george/" + lang + "/" + speech.audiofile + ".mp3";
 		if (!ppl7::File::exists(filepath)) {
-			filepath="res/audio/george/ger/" + filename + ".mp3";
+			filepath="res/audio/george/en/" + speech.audiofile + ".mp3";
 			if (!ppl7::File::exists(filepath)) {
-				filepath.clear();
+				filepath="res/audio/george/de/" + speech.audiofile + ".mp3";
+				if (!ppl7::File::exists(filepath)) {
+					filepath.clear();
+				}
 			}
 		}
 	}
-	game->message_overlay.setText(MessageOverlay::Character::George, text, phonetics);
+	ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s\n", id, (const char*)speech.text, (const char*)speech.audiofile);
+
+	if (speech.text.notEmpty()) {
+		game->message_overlay.setText(MessageOverlay::Character::George, speech.text, speech.phonetics);
+	}
 
 	//ppl7::PrintDebugTime("George: %s\n", (const char*)text);
 	//ppl7::PrintDebugTime("File: %s\n", (const char*)filepath);

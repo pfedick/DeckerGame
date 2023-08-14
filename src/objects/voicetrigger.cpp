@@ -76,12 +76,11 @@ void VoiceTrigger::handleCollision(Player* player, const Collision& collision)
 	if (singleTrigger == true && trigger_count > 0) return;
 	else if (singleTrigger == false && cooldown > player->time) return;
 
-	/*
-	if (player->speak(audiofile, text, phonetics, volume)) {
+	if (player->speak(speechId, volume)) {
 		trigger_count++;
 		cooldown=player->time + cooldownUntilNextTrigger;
 	}
-	*/
+
 }
 
 void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, float)
@@ -179,7 +178,7 @@ void VoiceTrigger::reset()
 void VoiceTrigger::toggle(bool enable, Object* source)
 {
 	//current_state=enable;
-	ppl7::PrintDebugTime("TODO:  VoiceTrigger::toggle\n");
+	ppl7::PrintDebugTime("TODO:  VoiceTrigger::toggle, id=%d\n", id);
 }
 
 
@@ -415,7 +414,7 @@ void VoiceTriggerDialog::dialogButtonEvent(Dialog::Buttons button)
 	if (button & Buttons::Reset) {
 		object->reset();
 	} else if (button & Buttons::Test) {
-		//GetGame().getPlayer()->speak(object->audiofile, object->text, object->phonetics, object->volume);
+		GetGame().getPlayer()->speak(object->speechId, object->volume);
 	}
 
 }

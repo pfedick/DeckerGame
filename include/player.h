@@ -7,6 +7,7 @@ class SpriteTexture;
 
 #include "animation.h"
 #include "physic.h"
+#include "translate.h"
 
 class TileTypePlane;
 class Game;
@@ -144,7 +145,7 @@ public:
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
-	bool speak(const ppl7::String& filename, const ppl7::String& text, const ppl7::String& phonetics, float volume);
+	bool speak(uint16_t id, float volume);
 
 };
 #endif /* INCLUDE_PLAYER_H_ */
