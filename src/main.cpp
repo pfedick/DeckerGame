@@ -121,6 +121,7 @@ void start(int argc, char** argv)
 	fflush(stdout);
 }
 
+#ifdef WIN32
 int WinMain()
 {
 	start(__argc, __argv);
@@ -135,6 +136,7 @@ int WinMain()
 	}
 	return 0;
 }
+#endif
 
 int main(int argc, char** argv)
 {
