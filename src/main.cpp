@@ -81,6 +81,7 @@ void start(int argc, char** argv)
 #endif
 	if (ppl7::HaveArgv(argc, argv, "-l")) {
 		ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
+		if (level.right(4) != ".lvl") level+=".lvl";
 		if (!ppl7::File::exists(level)) {
 			level="level/" + level;
 		}
