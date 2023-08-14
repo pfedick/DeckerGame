@@ -199,6 +199,7 @@ public:
 	virtual void openUi();
 	virtual void reset();
 	virtual void toggle(bool enable, Object* source=NULL);
+	virtual void trigger(Object* source=NULL);
 	static Representation representation();
 };
 
@@ -1090,6 +1091,8 @@ private:
 	double next_animation;
 	int door_sprite_no;
 	double cooldown;
+	bool text_for_closed_door_said;
+	double cooldown_for_locked_door_text;
 
 	void load_v1(const unsigned char* buffer, size_t size);
 
@@ -1203,7 +1206,8 @@ private:
 		waiting_for_initial_delay,
 		speaking,
 		waiting_for_trigger_delay,
-		finished
+		finished,
+		disabled
 	};
 	double cooldown;
 	int trigger_count;
@@ -1220,6 +1224,7 @@ public:
 	bool triggeredByCollision;
 	bool requireKeypress;
 	bool pauseWorld;
+	bool initialStateEnabled;
 	float cooldownUntilNextTrigger;
 	float volume;
 	float initialDelay;
@@ -1243,6 +1248,8 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	virtual void toggle(bool enable, Object* source=NULL) override;
+	virtual void trigger(Object* source=NULL) override;
+
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 	void reset();

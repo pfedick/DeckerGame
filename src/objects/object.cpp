@@ -228,6 +228,11 @@ void Object::toggle(bool, Object*)
 
 }
 
+void Object::trigger(Object*)
+{
+
+}
+
 void Object::updateSpriteset(int spriteset)
 {
 	if (spriteset != this->sprite_set) {

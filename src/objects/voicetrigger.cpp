@@ -42,6 +42,7 @@ VoiceTrigger::VoiceTrigger()
 	}
 	requireKeypress=false;
 	pauseWorld=false;
+	initialStateEnabled=true;
 	state=State::waiting_for_activation;
 	activeInitialDeleay=0.0f;
 }
@@ -76,14 +77,11 @@ void VoiceTrigger::handleCollision(Player* player, const Collision& collision)
 {
 	if (!triggeredByCollision) return;
 	if (singleTrigger == true && trigger_count > 0) return;
-	else if (singleTrigger == false && cooldown > player->time) return;
-
+	if (singleTrigger == false && cooldown > player->time) return;
 	if (state == State::waiting_for_activation) {
 		state=State::activated;
+		enabled=false;
 	}
-
-
-
 }
 
 
@@ -94,7 +92,7 @@ void VoiceTrigger::notifyTargets() const
 		if (triggerObjects[i].object_id > 0) {
 			Object* target=objs->getObject(triggerObjects[i].object_id);
 			if (target) {
-				target->toggle(triggerObjects[i].enable);
+				target->trigger();
 			}
 		}
 	}
@@ -105,6 +103,7 @@ void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, f
 {
 	boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
 	if (state == State::activated) {
+		//ppl7::PrintDebugTime("VoiceTrigger::update activated\n");
 		activeInitialDeleay=time + initialDelay;
 		state=State::waiting_for_initial_delay;
 	}
@@ -123,6 +122,10 @@ void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, f
 	if (state == State::waiting_for_trigger_delay && time >= activeInitialDeleay) {
 		state=State::finished;
 		notifyTargets();
+	}
+	if (state == State::finished && singleTrigger == false) {
+		state=State::waiting_for_activation;
+		enabled=true;
 	}
 
 }
@@ -145,6 +148,7 @@ size_t VoiceTrigger::save(unsigned char* buffer, size_t size) const
 	if (triggeredByCollision) flags|=2;
 	if (requireKeypress) flags|=4;
 	if (pauseWorld) flags|=8;
+	if (initialStateEnabled) flags|=16;
 
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::PokeFloat(buffer + bytes + 2, cooldownUntilNextTrigger);
@@ -157,7 +161,7 @@ size_t VoiceTrigger::save(unsigned char* buffer, size_t size) const
 	int p=24;
 	for (int i=0;i < 5;i++) {
 		ppl7::Poke16(buffer + bytes + p, triggerObjects[i].object_id);
-		ppl7::Poke8(buffer + bytes + p + 2, (int)triggerObjects[i].enable);
+		ppl7::Poke8(buffer + bytes + p + 2, (int)triggerObjects[i].enable);	 // not used
 		p+=3;
 	}
 	ppl7::Poke16(buffer + bytes + p, context.size());		// context
@@ -181,10 +185,14 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	triggeredByCollision=false;
 	requireKeypress=false;
 	pauseWorld=false;
+	initialStateEnabled=false;
 	if (flags & 1) singleTrigger=true;
 	if (flags & 2) triggeredByCollision=true;
 	if (flags & 4) requireKeypress=true;
 	if (flags & 8) pauseWorld=true;
+	if (flags & 16) initialStateEnabled=true;
+	if (!initialStateEnabled) enabled=false;
+	if (!triggeredByCollision) collisionDetection=false;
 	cooldownUntilNextTrigger=ppl7::PeekFloat(buffer + bytes + 2);
 	volume=ppl7::PeekFloat(buffer + bytes + 6);
 	range.x=ppl7::Peek16(buffer + bytes + 10);
@@ -195,7 +203,7 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	int p=24;
 	for (int i=0;i < 5;i++) {
 		triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
-		triggerObjects[i].enable=ppl7::Peek8(buffer + bytes + p + 2);
+		triggerObjects[i].enable=ppl7::Peek8(buffer + bytes + p + 2);	// not used
 		p+=3;
 	}
 	size_t s=ppl7::Peek16(buffer + bytes + p);
@@ -213,14 +221,20 @@ void VoiceTrigger::reset()
 
 void VoiceTrigger::toggle(bool enable, Object* source)
 {
-	//current_state=enable;
-	//ppl7::PrintDebugTime("TODO:  VoiceTrigger::toggle, id=%d\n", id);
+	enabled=enable;
+	if (!enable) state=State::disabled;
+	else state=State::waiting_for_activation;
+}
 
+void VoiceTrigger::trigger(Object* source)
+{
+	if (state == State::disabled) return;
 	if (state == State::waiting_for_activation) {
 		state=State::activated;
 	}
 
 }
+
 
 
 class VoiceTriggerDialog : public Decker::ui::Dialog
@@ -235,6 +249,7 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* cooldownUntilNextTrigger;
 	ppl7::tk::DoubleHorizontalSlider* initialDelay;
 	ppl7::tk::DoubleHorizontalSlider* triggerDeleay;
+	ppl7::tk::CheckBox* initialStateEnabled, * currentState;
 	ppl7::tk::CheckBox* singleTrigger, * triggeredByCollision;
 	ppl7::tk::CheckBox* requireKeypress, * pauseWorld;
 	ppl7::tk::SpinBox* target_id[5];
@@ -285,6 +300,16 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 
 	// State
 	int sw=width() / 2;
+	initialStateEnabled=new ppl7::tk::CheckBox(0, y, sw, 30, "initial state");
+	initialStateEnabled->setEventHandler(this);
+	initialStateEnabled->setChecked(object->initialStateEnabled);
+	addChild(initialStateEnabled);
+	currentState=new ppl7::tk::CheckBox(sw, y, sw, 30, "current state");
+	currentState->setEventHandler(this);
+	currentState->setChecked(object->enabled);
+	addChild(currentState);
+	y+=35;
+
 	singleTrigger=new ppl7::tk::CheckBox(0, y, sw, 30, "singleTrigger");
 	singleTrigger->setEventHandler(this);
 	singleTrigger->setChecked(object->singleTrigger);
@@ -368,9 +393,11 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
+		/*
 		target_state[i]=new ppl7::tk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
 		target_state[i]->setEventHandler(this);
 		addChild(target_state[i]);
+		*/
 		y+=35;
 	}
 	//current_state_checkbox->setChecked(object->current_state);
@@ -390,14 +417,15 @@ void VoiceTriggerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 		object->singleTrigger=checked;
 	} else if (event->widget() == triggeredByCollision) {
 		object->triggeredByCollision=checked;
+		object->collisionDetection=checked;
 	} else if (event->widget() == requireKeypress) {
 		object->requireKeypress=checked;
 	} else if (event->widget() == pauseWorld) {
 		object->pauseWorld=checked;
-	} else {
-		for (int i=0;i < 5;i++) {
-			if (event->widget() == target_state[i]) object->triggerObjects[i].enable=checked;
-		}
+	} else if (event->widget() == initialStateEnabled) {
+		object->initialStateEnabled=checked;
+	} else if (event->widget() == currentState) {
+		object->enabled=checked;
 	}
 }
 
