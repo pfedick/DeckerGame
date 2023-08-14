@@ -146,6 +146,7 @@ public:
 
 	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
 	bool speak(uint16_t id, float volume);
+	bool isSpeaking() const;
 
 };
 #endif /* INCLUDE_PLAYER_H_ */

@@ -1281,7 +1281,7 @@ bool Player::speak(uint16_t id, float volume)
 			}
 		}
 	}
-	ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s\n", id, (const char*)speech.text, (const char*)speech.audiofile);
+	//ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s\n", id, (const char*)speech.text, (const char*)speech.audiofile);
 
 	if (speech.text.notEmpty()) {
 		game->message_overlay.setText(MessageOverlay::Character::George, speech.text, speech.phonetics);
@@ -1296,10 +1296,21 @@ bool Player::speak(uint16_t id, float volume)
 			voice->setVolume(volume);
 			voice->setAutoDelete(false);
 			ap.playInstance(voice);
-			this->phonetics=phonetics;
+			this->phonetics=speech.phonetics;
 		} catch (...) {}
 	}
 	return true;
+}
+
+bool Player::isSpeaking() const
+{
+	return game->message_overlay.hasMessage();
+	/*
+	ppl7::PrintDebugTime("phonetics: %zd, voice=%zd\n", phonetics.size(), voice);
+	if (phonetics.size() > 0) return true;
+	if (voice && voice->finished() == false) return true;
+	return false;
+	*/
 }
 
 

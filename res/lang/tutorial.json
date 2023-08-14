@@ -16,12 +16,45 @@
         "1001": {
             "context": "Tutorial start",
             "character": "george",
+            "audiofile": "1001",
+            "en": {
+                "text": "Hello! I'm George! Welcome to the tutorial!"
+            },
+            "de": {
+                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur"
+            }
+        },
+        "1002": {
+            "context": "explain fast run",
+            "character": "george",
             "audiofile": "1002",
+            "en": {
+                "text": "Hello! I'm George! Welcome to the tutorial!"
+            },
+            "de": {
+                "text": "Drücke gleichzeitig \"Shift\", um schneller zu laufen."
+            }
+        },
+        "1003": {
+            "context": "Explain jump",
+            "character": "george",
+            "audiofile": "1003",
             "en": {
                 "text": "Hello! I'm George! Welcome to the tutorial!",
             },
             "de": {
-                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur",
+                "text": "Hier geht es nicht weiter, ich muss springen. Drücke dazu die Taste für hoch und rechts. Drücke gleichzeitig \"Shift\", um höher und weiter zu springen."
+            }
+        },
+        "1004": {
+            "context": "Lob",
+            "character": "george",
+            "audiofile": "1004",
+            "en": {
+                "text": "Hello! I'm George! Welcome to the tutorial!",
+            },
+            "de": {
+                "text": "Sehr gut!"
             }
         }
     }

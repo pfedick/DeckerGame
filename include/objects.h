@@ -1197,8 +1197,20 @@ public:
 class VoiceTrigger : public Object
 {
 private:
+	enum class State {
+		waiting_for_activation,
+		activated,
+		waiting_for_initial_delay,
+		speaking,
+		waiting_for_trigger_delay,
+		finished
+	};
 	double cooldown;
 	int trigger_count;
+	State state;
+	double activeInitialDeleay;
+
+	void notifyTargets() const;
 
 public:
 	ppl7::grafix::Point range;

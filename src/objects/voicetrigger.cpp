@@ -42,6 +42,8 @@ VoiceTrigger::VoiceTrigger()
 	}
 	requireKeypress=false;
 	pauseWorld=false;
+	state=State::waiting_for_activation;
+	activeInitialDeleay=0.0f;
 }
 
 VoiceTrigger::~VoiceTrigger()
@@ -76,9 +78,25 @@ void VoiceTrigger::handleCollision(Player* player, const Collision& collision)
 	if (singleTrigger == true && trigger_count > 0) return;
 	else if (singleTrigger == false && cooldown > player->time) return;
 
-	if (player->speak(speechId, volume)) {
-		trigger_count++;
-		cooldown=player->time + cooldownUntilNextTrigger;
+	if (state == State::waiting_for_activation) {
+		state=State::activated;
+	}
+
+
+
+}
+
+
+void VoiceTrigger::notifyTargets() const
+{
+	ObjectSystem* objs=GetObjectSystem();
+	for (int i=0;i < 5;i++) {
+		if (triggerObjects[i].object_id > 0) {
+			Object* target=objs->getObject(triggerObjects[i].object_id);
+			if (target) {
+				target->toggle(triggerObjects[i].enable);
+			}
+		}
 	}
 
 }
@@ -86,7 +104,26 @@ void VoiceTrigger::handleCollision(Player* player, const Collision& collision)
 void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
-	//initial_boundary=boundary;
+	if (state == State::activated) {
+		activeInitialDeleay=time + initialDelay;
+		state=State::waiting_for_initial_delay;
+	}
+	if (state == State::waiting_for_initial_delay && time >= activeInitialDeleay) {
+		if (player.speak(speechId, volume)) {
+			state = State::speaking;
+			trigger_count++;
+			cooldown=time + cooldownUntilNextTrigger;
+		}
+	}
+
+	if (state == State::speaking && !player.isSpeaking()) {
+		activeInitialDeleay=time + triggerDeleay;
+		state=State::waiting_for_trigger_delay;
+	}
+	if (state == State::waiting_for_trigger_delay && time >= activeInitialDeleay) {
+		state=State::finished;
+		notifyTargets();
+	}
 
 }
 
@@ -120,12 +157,15 @@ size_t VoiceTrigger::save(unsigned char* buffer, size_t size) const
 	int p=24;
 	for (int i=0;i < 5;i++) {
 		ppl7::Poke16(buffer + bytes + p, triggerObjects[i].object_id);
-		ppl7::Poke8(buffer + bytes + 2, (int)triggerObjects[i].enable);
+		ppl7::Poke8(buffer + bytes + p + 2, (int)triggerObjects[i].enable);
 		p+=3;
 	}
 	ppl7::Poke16(buffer + bytes + p, context.size());		// context
 	memcpy(buffer + bytes + p + 2, context.c_str(), context.size());
 	p+=2 + context.size();
+	//printf("expected size: %zd, real: %zd\n", size, bytes + p);
+	//ppl7::HexDump(buffer, bytes + p);
+	fflush(stdout);
 	return bytes + p;
 }
 
@@ -134,7 +174,7 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version>2) return 0;
+	if (version != 2) return 0;
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	singleTrigger=false;
@@ -149,14 +189,8 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	volume=ppl7::PeekFloat(buffer + bytes + 6);
 	range.x=ppl7::Peek16(buffer + bytes + 10);
 	range.y=ppl7::Peek16(buffer + bytes + 12);
-	if (version == 1) {
-		int p=14;
-		size_t s=ppl7::Peek16(buffer + bytes + p);
-		context.set((const char*)(buffer + bytes + p + 2), s);
-		return size;
-	}
-	initialDelay=ppl7::PeekFloat(buffer + 14);
-	triggerDeleay=ppl7::PeekFloat(buffer + 18);
+	initialDelay=ppl7::PeekFloat(buffer + bytes + 14);
+	triggerDeleay=ppl7::PeekFloat(buffer + bytes + 18);
 	speechId=ppl7::Peek16(buffer + bytes + 22);
 	int p=24;
 	for (int i=0;i < 5;i++) {
@@ -166,6 +200,7 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	}
 	size_t s=ppl7::Peek16(buffer + bytes + p);
 	context.set((const char*)(buffer + bytes + p + 2), s);
+	//ppl7::PrintDebugTime("load done\n");
 	return size;
 }
 
@@ -173,12 +208,18 @@ void VoiceTrigger::reset()
 {
 	cooldown=0.0f;
 	trigger_count=0;
+	state=State::waiting_for_activation;
 }
 
 void VoiceTrigger::toggle(bool enable, Object* source)
 {
 	//current_state=enable;
-	ppl7::PrintDebugTime("TODO:  VoiceTrigger::toggle, id=%d\n", id);
+	//ppl7::PrintDebugTime("TODO:  VoiceTrigger::toggle, id=%d\n", id);
+
+	if (state == State::waiting_for_activation) {
+		state=State::activated;
+	}
+
 }
 
 
@@ -378,7 +419,7 @@ void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 
 void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
-	ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int64_t\n");
+	//ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int64_t\n");
 	if (event->widget() == range_x) {
 		object->range.x=(int)value;
 	} else if (event->widget() == range_y) {
@@ -394,7 +435,7 @@ void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value
 
 void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-	ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
+	//ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
 	if (event->widget() == speechId) {
 
 		object->speechId=(int)value;
