@@ -41,7 +41,7 @@ Translator::~Translator()
 void Translator::load()
 {
     ppl7::Dir dir;
-    if (!dir.tryOpen("res/lang")) {
+    if (!dir.tryOpen("lang")) {
         return;
     };
     ppl7::Dir::Iterator it;
@@ -49,7 +49,7 @@ void Translator::load()
     ppl7::DirEntry e;
     while (dir.getNextPattern(e, it, "*.json")) {
         //ppl7::PrintDebug("loading language file: %s\n", (const char*)e.Filename);
-        ppl7::String filename="res/lang/" + e.Filename;
+        ppl7::String filename=e.Path + "/" + e.Filename;
         ppl7::AssocArray a;
         try {
             ppl7::File file(filename);

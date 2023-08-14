@@ -53,7 +53,7 @@ Source: "res/audio/george/common/*.mp3"; DestDir: "{app}/res/audio/george/common
 Source: "res/audio/george/ger/*.mp3"; DestDir: "{app}/res/audio/george/ger"; Flags: ignoreversion nocompression;
 Source: "res/video/*"; DestDir: "{app}/res/video"; Flags: ignoreversion nocompression;
 Source: "level/*.lvl"; DestDir: "{app}/level"; Flags: ignoreversion;
-Source: "res/text/*.json"; DestDir: "{app}/res/text"; Flags: ignoreversion;
+Source: "lang/*.json"; DestDir: "{app}/lang"; Flags: ignoreversion;
 
 Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
