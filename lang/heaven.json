@@ -1,0 +1,59 @@
+{
+    "speech": {
+        "2000": {
+            "context": "George slides down the ramp down to the water caves",
+            "character": "george",
+            "audiofile": "2000",
+            "en": {
+                "text": "Oh! I won't come back there!"
+            },
+            "de": {
+                "text": "Oh! Da komme ich nicht mehr zurück!"
+            }
+        },
+        "2001": {
+            "context": "George comes out of the long water section",
+            "character": "george",
+            "audiofile": "2001",
+            "en": {
+                "text": "Good thing there was this oxygen bottle!"
+            },
+            "de": {
+                "text": "Gut, dass da diese Sauerstofflasche war!"
+            }
+        },
+        "2002": {
+            "context": "George sees the Tardis",
+            "character": "george",
+            "audiofile": "2002",
+            "en": {
+                "text": "Was there a TARDIS?"
+            },
+            "de": {
+                "text": "War da grad ne TARDIS!"
+            }
+        },
+        "2003": {
+            "context": "George is in the treasure chamber",
+            "character": "george",
+            "audiofile": "2003",
+            "en": {
+                "text": "Hui, there's a lot of loot here! Glad I found the key!"
+            },
+            "de": {
+                "text": "Hui, hier gibt's ganz schön was zu holen! Gut, dass ich den Schlüssel gefunden habe!"
+            }
+        },
+        "2004": {
+            "context": "George is near the abyss",
+            "character": "george",
+            "audiofile": "2004",
+            "en": {
+                "text": "I better not fall down there!"
+            },
+            "de": {
+                "text": "Da sollte ich besser nicht runterfallen!"
+            }
+        }
+    }
+}

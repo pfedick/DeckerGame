@@ -54,6 +54,171 @@
                 "text": "Hammertime!",
                 "phonetics": "hemmertaiim"
             }
+        },
+        "6": {
+            "context": "George finds a locked door the first time",
+            "character": "george",
+            "audiofile": "0006.mp3",
+            "en": {
+                "text": "Locked! There must be a key somewhere."
+            },
+            "de": {
+                "text": "Abgeschlossen! Irgendwo muss es einen Schlüssel geben."
+            }
+        },
+        "7": {
+            "context": "George finds a locked door again",
+            "character": "george",
+            "audiofile": "0007.mp3",
+            "en": {
+                "text": "Locked!"
+            },
+            "de": {
+                "text": "Abgeschlossen!"
+            }
+        },
+        "8": {
+            "context": "George finds rats",
+            "character": "george",
+            "audiofile": "0008.mp3",
+            "en": {
+                "text": "Oh my god, so many rats!"
+            },
+            "de": {
+                "text": "Oh je, so viele Ratten!"
+            }
+        },
+        "9": {
+            "context": "Collision with rat, when george has cheese",
+            "character": "george",
+            "audiofile": "0009.mp3",
+            "en": {
+                "text": "Oh, the rats are quite peaceful now! Must be the cheese."
+            },
+            "de": {
+                "text": "Oh, die Ratten sind jetzt ganz friedlich! Muss an dem Käse liegen."
+            }
+        },
+        "10": {
+            "context": "Generic",
+            "character": "george",
+            "audiofile": "10",
+            "en": {
+                "text": "Shit!"
+            },
+            "de": {
+                "text": "Mist!"
+            }
+        },
+        "11": {
+            "context": "More rats, but George has cheese",
+            "character": "george",
+            "audiofile": "0011.mp3",
+            "en": {
+                "text": "Good thing I have the cheese."
+            },
+            "de": {
+                "text": "Gut, dass ich den Käse habe."
+            }
+        },
+        "12": {
+            "context": "George finds a key",
+            "character": "george",
+            "audiofile": "0012.mp3",
+            "en": {
+                "text": "Where does it fit?"
+            },
+            "de": {
+                "text": "Wo der wohl passt?"
+            }
+        },
+        "13": {
+            "context": "George finds a levelend, but it's not active",
+            "character": "george",
+            "audiofile": "0013.mp3",
+            "en": {
+                "text": "This seems to be a gate."
+            },
+            "de": {
+                "text": "Das scheint ein Tor zu sein."
+            }
+        },
+        "14": {
+            "context": "George finds a blocked area, which can be opened by a switch",
+            "character": "george",
+            "audiofile": "0014.mp3",
+            "en": {
+                "text": "The passage is blocked. Maybe there is a mechanism to open it?"
+            },
+            "de": {
+                "text": "Der Durchgang ist blockiert. Vielleicht gibt es einen Mechanismus, um ihn zu öffnen?"
+            }
+        },
+        "15": {
+            "context": "George drückt einen Schalter, der einen entfernten Mechanismus in Gang setzt",
+            "character": "george",
+            "audiofile": "0015.mp3",
+            "en": {
+                "text": "Something happened!"
+            },
+            "de": {
+                "text": "Irgendwas ist passiert!"
+            }
+        },
+        "16": {
+            "context": "George finds a switch the first time",
+            "character": "george",
+            "audiofile": "0016.mp3",
+            "en": {
+                "text": "Looks like a switch! I should press it."
+            },
+            "de": {
+                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken."
+            }
+        },
+        "17": {
+            "context": "A blocked area is now open",
+            "character": "george",
+            "audiofile": "0017.mp3",
+            "en": {
+                "text": "Ah, the passage is open now!"
+            },
+            "de": {
+                "text": "Ah, der Durchgang ist jetzt offen!"
+            }
+        },
+        "18": {
+            "context": "george hates spiders",
+            "character": "george",
+            "audiofile": "0018.mp3",
+            "en": {
+                "text": "I hate spiders!"
+            },
+            "de": {
+                "text": "Ich hasse Spinnen!"
+            }
+        },
+        "19": {
+            "context": "George finds an unlocked door. Text is not spoken automatically, but can be triggerd in special cases",
+            "character": "george",
+            "audiofile": "0019.mp3",
+            "en": {
+                "text": "A door, and it doesn't even seem to be locked..."
+            },
+            "de": {
+                "text": "Eine Tür, und sie scheint noch nicht mal abgeschlossen zu sein..."
+            }
+        },
+        "20": {
+            "context": "a closed door, which can be opened with a key in the inventory",
+            "character": "george",
+            "audiofile": "0020.mp3",
+            "en": {
+                "text": "It's locked, but I have the key. I could just open it..."
+            },
+            "de": {
+                "text": "Sie ist abgeschlossen, aber ich habe den Schlüssel. Ich könnte sie einfach öffnen..."
+            }
         }
     }
 }
