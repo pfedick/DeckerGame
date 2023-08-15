@@ -661,6 +661,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 
 };
@@ -1145,6 +1146,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset() override;
 	void openUi() override;
+	void trigger(Object* source) override;
 
 };
 
@@ -1259,7 +1261,7 @@ public:
 class ObjectWatcher : public Object
 {
 private:
-	void notifyTargets() const;
+
 
 public:
 	class WatchObject
@@ -1284,6 +1286,8 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
+	void reset();
+	void notifyTargets() const;
 	//virtual void toggle(bool enable, Object* source=NULL) override;
 	//virtual void trigger(Object* source=NULL) override;
 	void openUi() override;

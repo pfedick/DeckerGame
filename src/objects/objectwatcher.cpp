@@ -56,9 +56,35 @@ void ObjectWatcher::notifyTargets() const
 
 void ObjectWatcher::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
+	if (!enabled) return;
+	ObjectSystem* objs=GetObjectSystem();
+	int maxcount=0;
+	int state_achived=0;
 	for (int i=0;i < 10;i++) {
+		if (watchObjects[i].object_id > 0) {
+			Object* obj=objs->getObject(watchObjects[i].object_id);
+			if (obj) {
+				//ppl7::PrintDebugTime("   Object %d has state: %d\n", obj->id, obj->enabled);
+				maxcount++;
+				if (obj->enabled == watchObjects[i].expectedState) {
+					state_achived++;
+				}
+			}
+
+		}
+	}
+	//ppl7::PrintDebugTime("ObjectWatcher::update: max: %d, current: %d\n", maxcount, state_achived);
+	if (maxcount > 0 && state_achived == maxcount) {
+		enabled=false;
+		notifyTargets();
+		ppl7::PrintDebugTime("notify targets\n");
 	}
 
+}
+
+void ObjectWatcher::reset()
+{
+	enabled=true;
 }
 
 size_t ObjectWatcher::saveSize() const
@@ -80,7 +106,7 @@ size_t ObjectWatcher::save(unsigned char* buffer, size_t size) const
 	}
 	for (int i=0;i < 10;i++) {
 		ppl7::Poke16(buffer + bytes + p, watchObjects[i].object_id);
-		ppl7::Poke8(buffer + bytes + p, watchObjects[i].expectedState);
+		ppl7::Poke8(buffer + bytes + p + 2, watchObjects[i].expectedState);
 		p+=3;
 	}
 	return bytes + p;
@@ -92,6 +118,9 @@ size_t ObjectWatcher::load(const unsigned char* buffer, size_t size)
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
 	if (version != 1) return 0;
+	//ppl7::HexDump(buffer, size);
+	//ppl7::PrintDebugTime("load\n");
+
 	int p=1;
 	for (int i=0;i < 5;i++) {
 		triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
@@ -99,7 +128,7 @@ size_t ObjectWatcher::load(const unsigned char* buffer, size_t size)
 	}
 	for (int i=0;i < 10;i++) {
 		watchObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
-		watchObjects[i].expectedState=ppl7::Peek8(buffer + bytes + p + 2);	// not used
+		watchObjects[i].expectedState=ppl7::Peek8(buffer + bytes + p + 2);
 		p+=3;
 	}
 	return size;
@@ -124,7 +153,7 @@ public:
 	//virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
-	//virtual void dialogButtonEvent(Dialog::Buttons button) override;
+	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
 
@@ -135,7 +164,7 @@ void ObjectWatcher::openUi()
 }
 
 ObjectWatcherDialog::ObjectWatcherDialog(ObjectWatcher* object)
-	: Decker::ui::Dialog(700, 650, Buttons::OK)
+	: Decker::ui::Dialog(700, 650, Buttons::OK | Buttons::Reset | Buttons::Test)
 {
 	//ppl7::grafix::Rect client=clientRect();
 	this->object=object;
@@ -215,7 +244,11 @@ void ObjectWatcherDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t valu
 	}
 }
 
-
+void ObjectWatcherDialog::dialogButtonEvent(Dialog::Buttons button)
+{
+	if (button == Buttons::Reset) object->reset();
+	if (button == Buttons::Reset) object->notifyTargets();
+}
 
 
 }	// EOF namespace Decker::Objects
