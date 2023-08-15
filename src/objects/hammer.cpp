@@ -43,6 +43,7 @@ void Hammer::handleCollision(Player* player, const Collision&)
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::hammer, 0.4f);
 	player->addSpecialObject(static_cast<int>(Type::ObjectType::Hammer));
+	if (!player->hasSpoken(3)) player->speak(3);
 }
 
 
