@@ -79,6 +79,7 @@ Player::Player(Game* game)
 	nextIdleSpeech=0.0f;
 	nextPhonetic=0.0f;
 	greetingPlayed=true;
+	talkie=true;
 }
 
 Player::~Player()
