@@ -18,10 +18,10 @@
             "character": "george",
             "audiofile": "1001",
             "en": {
-                "text": "Hello! I'm George! Welcome to the tutorial!"
+                "text": "You control me with the cursor keys or the \"WASD\" keys on your keyboard."
             },
             "de": {
-                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur"
+                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur."
             }
         },
         "1002": {
@@ -29,10 +29,10 @@
             "character": "george",
             "audiofile": "1002",
             "en": {
-                "text": "Hello! I'm George! Welcome to the tutorial!"
+                "text": "Press \"Shift\" at the same time to make me run faster."
             },
             "de": {
-                "text": "Drücke gleichzeitig \"Shift\", um schneller zu laufen."
+                "text": "Drücke gleichzeitig \"Shift\", damit ich schneller laufe."
             }
         },
         "1003": {
@@ -40,10 +40,10 @@
             "character": "george",
             "audiofile": "1003",
             "en": {
-                "text": "Hello! I'm George! Welcome to the tutorial!",
+                "text": "I can't go any further here, I have to jump."
             },
             "de": {
-                "text": "Hier geht es nicht weiter, ich muss springen. Drücke dazu die Taste für hoch und rechts. Drücke gleichzeitig \"Shift\", um höher und weiter zu springen."
+                "text": "Hier geht es nicht weiter, ich muss springen."
             }
         },
         "1004": {
@@ -51,10 +51,187 @@
             "character": "george",
             "audiofile": "1004",
             "en": {
-                "text": "Hello! I'm George! Welcome to the tutorial!",
+                "text": "Very good!"
             },
             "de": {
                 "text": "Sehr gut!"
+            }
+        },
+        "1005": {
+            "context": "Collectable objects",
+            "character": "george",
+            "audiofile": "1005",
+            "followup": "1020",
+            "en": {
+                "text": "In the game there are many things that you can pick up to earn points."
+            },
+            "de": {
+                "text": "Im Spiel gibt es viele Dinge, die man aufsammeln kann um Punkte zu erlangen."
+            }
+        },
+        "1006": {
+            "context": "Lob",
+            "character": "george",
+            "audiofile": "1006",
+            "en": {
+                "text": "Well done! Look, a passage has opened back there!"
+            },
+            "de": {
+                "text": "Gut gemacht! Schau mal, da hinten hat sich ein Durchgang geöffnet!"
+            }
+        },
+        "1007": {
+            "context": "Hidden Objects Part 1",
+            "character": "george",
+            "audiofile": "1007",
+            "en": {
+                "text": "Objects are not always placed so openly! Look at that block of stone over there."
+            },
+            "de": {
+                "text": "Nicht immer sind Gegenstände so offen plaziert! Schau Dir mal den Steinblock da vorne an."
+            }
+        },
+        "1008": {
+            "context": "Hidden Objects Part 2",
+            "character": "george",
+            "audiofile": "1008",
+            "en": {
+                "text": "He's floating around suspiciously. Jump against it from below with your head."
+            },
+            "de": {
+                "text": "Der schwebt da so verdächtig rum. Spring mal doch mal mit Deinem Kopf von unten dagegen..."
+            }
+        },
+        "1009": {
+            "context": "Lob",
+            "character": "george",
+            "audiofile": "1009",
+            "en": {
+                "text": "That was worth it. There could be more in there. Jump a few more times until nothing comes out."
+            },
+            "de": {
+                "text": "Das hat sich gelohnt. Da könnte noch mehr drin sein. Spring noch ein paar mal dagagen, bis nichts mehr raus kommt."
+            }
+        },
+        "1010": {
+            "context": "Easy",
+            "character": "george",
+            "audiofile": "1010",
+            "en": {
+                "text": "That was easy!"
+            },
+            "de": {
+                "text": "Das war einfach!"
+            }
+        },
+        "1011": {
+            "context": "Danger part 1",
+            "character": "george",
+            "audiofile": "1011",
+            "en": {
+                "text": "Of course there are dangers too! If you fall too far, for example, it can quickly cost you your life."
+            },
+            "de": {
+                "text": "Natürlich gibt es auch Gefahren! Wenn Du zum Beispiel zu tief fällst, kann Dich das schnell ein Leben kosten."
+            }
+        },
+        "1012": {
+            "context": "Danger part 2",
+            "character": "george",
+            "audiofile": "1012",
+            "en": {
+                "text": "There are also traps and enemies to avoid."
+            },
+            "de": {
+                "text": "Außerdem gibt es Fallen und Gegner, denen man ausweichen sollte."
+            }
+        },
+        "1013": {
+            "context": "Danger part 3 speers",
+            "character": "george",
+            "audiofile": "1013",
+            "en": {
+                "text": "Try to get past those spears without touching them."
+            },
+            "de": {
+                "text": "Versuch doch mal an den Speeren da vorbei zu kommen, ohne sie zu berühren."
+            }
+        },
+        "1014": {
+            "context": "Danger part 4 spider",
+            "character": "george",
+            "audiofile": "1014",
+            "en": {
+                "text": "Do you see that spider over there? It's poisonous! Try to come over."
+            },
+            "de": {
+                "text": "Siehst Du die Spinne da vorne? Die ist giftig! Versuche vorbei zu kommen."
+            }
+        },
+        "1015": {
+            "context": "George hates Spiders",
+            "character": "george",
+            "audiofile": "1015",
+            "en": {
+                "text": "Phew! Did I mention I hate spiders?"
+            },
+            "de": {
+                "text": "Puh! Hab ich erwähnt, dass ich Spinnen hasse?"
+            }
+        },
+        "1016": {
+            "context": "Dangers part 5 skeleton",
+            "character": "george",
+            "audiofile": "1016",
+            "en": {
+                "text": "Some enemies can be eliminated by jumping on them from above. Try that on the skeleton."
+            },
+            "de": {
+                "text": "Manche Gegner kann man ausschalten, indem man von oben auf sie drauf springt. Versuch das mal bei dem Skelett."
+            }
+        },
+        "1017": {
+            "context": "Lob",
+            "character": "george",
+            "audiofile": "1017",
+            "en": {
+                "text": "Very good! Just keep playing, I'll get back to you when there's something new."
+            },
+            "de": {
+                "text": "Sehr gut! Spiel einfach mal weiter, ich melde mich wieder, wenn es etwas neues gibt."
+            }
+        },
+        "1018": {
+            "context": "Ladder",
+            "character": "george",
+            "audiofile": "1018",
+            "en": {
+                "text": "Okay, that's a ladder. I think you know what it's good for ;-)"
+            },
+            "de": {
+                "text": "Okay, das ist eine Leiter. Ich denke, Du weisst, wofür die gut ist ;-)"
+            }
+        },
+        "1019": {
+            "context": "Explain jump",
+            "character": "george",
+            "audiofile": "1019",
+            "en": {
+                "text": "To jump, press the up and right keys. Press \"Shift\" at the same time to jump higher and further."
+            },
+            "de": {
+                "text": "Um zu springen, drücke die Taste für hoch und rechts. Drücke gleichzeitig \"Shift\", um höher und weiter zu springen."
+            }
+        },
+        "1020": {
+            "context": "Collectable objects 2",
+            "character": "george",
+            "audiofile": "1020",
+            "en": {
+                "text": "Please collect the coins here. You can also practice jumping a bit."
+            },
+            "de": {
+                "text": "Sammel doch mal die Münzen hier auf. Dabei kannst Du auch gleich ein bischen das Springen üben."
             }
         }
     }

@@ -40,10 +40,10 @@
             "character": "george",
             "audiofile": "0004.mp3",
             "en": {
-                "text": "That looks pretty fragile"
+                "text": "Looks pretty fragile"
             },
             "de": {
-                "text": "Das sieht ziemlich zerbrechlich aus"
+                "text": "Sieht ziemlich zerbrechlich aus"
             }
         },
         "5": {
@@ -218,6 +218,17 @@
             },
             "de": {
                 "text": "Sie ist abgeschlossen, aber ich habe den Schlüssel. Ich könnte sie einfach öffnen..."
+            }
+        },
+        "21": {
+            "context": "George finds another key",
+            "character": "george",
+            "audiofile": "0021.mp3",
+            "en": {
+                "text": "Another key."
+            },
+            "de": {
+                "text": "Noch ein Schlüssel."
             }
         }
     }
