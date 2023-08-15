@@ -231,6 +231,16 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
+void Door::trigger(Object* source)
+{
+	if (state == DoorState::closed) {
+		state=DoorState::opening;
+		if (door_type == DoorType::lattice_metalic || door_type == DoorType::lattice_opaque) getAudioPool().playOnce(AudioClip::metaldoor, 0.5f);
+		else getAudioPool().playOnce(AudioClip::door_open, 0.5f);
+		animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
+	}
+}
+
 size_t Door::saveSize() const
 {
 	return Object::saveSize() + 15;
