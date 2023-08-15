@@ -109,6 +109,8 @@ void StamperVertical::handleCollision(Player* player, const Collision& collision
 		return;
 	}
 	player->setZeroVelocity();
+	if (player->x < p.x) player->x--;
+	if (player->x > p.x) player->x++;
 }
 
 void StamperVertical::toggle(bool enabled, Object* source)
@@ -121,6 +123,11 @@ void StamperVertical::toggle(bool enabled, Object* source)
 		animation.startSequence(start_sprite_no + 6, start_sprite_no + 19, false, start_sprite_no + 19);
 		state=0;
 	}
+}
+
+void StamperVertical::trigger(Object* source)
+{
+	toggle(!enabled, source);
 }
 
 size_t StamperVertical::saveSize() const
