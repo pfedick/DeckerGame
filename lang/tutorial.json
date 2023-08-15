@@ -118,10 +118,10 @@
             "character": "george",
             "audiofile": "1010",
             "en": {
-                "text": "That was easy!"
+                "text": "That was easy! Go on, collect the crystals, that gives you a lot of points!"
             },
             "de": {
-                "text": "Das war einfach!"
+                "text": "Das war einfach! Los, sammel die Kristalle auf, das gibt ordentlich Punkte!"
             }
         },
         "1011": {
@@ -232,6 +232,39 @@
             },
             "de": {
                 "text": "Sammel doch mal die Münzen hier auf. Dabei kannst Du auch gleich ein bischen das Springen üben."
+            }
+        },
+        "1030": {
+            "context": "Savepoint",
+            "character": "george",
+            "audiofile": "1030",
+            "en": {
+                "text": "Before we continue, let's create a save point. Get that disk over there!"
+            },
+            "de": {
+                "text": "Bevor wir weiter machen, legen wir erstmal einen Speicherpunkt an. Hol mal die Diskette da vorne!"
+            }
+        },
+        "1031": {
+            "context": "Savepoint",
+            "character": "george",
+            "audiofile": "1031",
+            "en": {
+                "text": "Very good. If you die now and have any life left, you will reappear at this point."
+            },
+            "de": {
+                "text": "Sehr gut. Wenn Du jetzt stirbst, und noch Leben rest hast, wirst Du an dieser Stelle wieder erscheinen."
+            }
+        },
+        "1032": {
+            "context": "Savepoint",
+            "character": "george",
+            "audiofile": "1032",
+            "en": {
+                "text": "You get a few extra lives just to be on the safe side..."
+            },
+            "de": {
+                "text": "Zur Sicherheit bekommst Du noch ein paar zusätzliche Leben..."
             }
         }
     }
