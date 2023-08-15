@@ -60,6 +60,7 @@ public:
 		Hammer=29,
 		Cheese=30,
 		VoiceTrigger=31,
+		ObjectWatcher=32,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -1254,6 +1255,41 @@ public:
 	void openUi() override;
 	void reset();
 };
+
+class ObjectWatcher : public Object
+{
+private:
+	void notifyTargets() const;
+
+public:
+	class WatchObject
+	{
+	public:
+		uint16_t object_id=0;
+		bool expectedState=false;
+	};
+
+	class TriggerObject
+	{
+	public:
+		uint16_t object_id=0;
+	};
+	WatchObject watchObjects[10];
+	TriggerObject triggerObjects[5];
+
+	ObjectWatcher();
+	~ObjectWatcher();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	//virtual void toggle(bool enable, Object* source=NULL) override;
+	//virtual void trigger(Object* source=NULL) override;
+	void openUi() override;
+
+};
+
 
 
 class ObjectSystem
