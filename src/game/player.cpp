@@ -99,6 +99,7 @@ void Player::resetState()
 {
 	animation_speed=0.056f;
 	points=0;
+	talkie=true;
 	health=100;
 	lifes=3;
 	godmode=false;
@@ -114,6 +115,7 @@ void Player::resetState()
 	Inventory.clear();
 	object_counter.clear();
 	SpecialObjects.clear();
+	spokenText.clear();
 	expressionJump=false;
 	hackingObject=NULL;
 	hacking_end=0.0f;
@@ -140,6 +142,7 @@ void Player::resetLevelObjects()
 	animation_speed=0.056f;
 	Inventory.clear();
 	object_counter.clear();
+	spokenText.clear();
 	air=maxair;
 	last_aircheck=0;
 	SpecialObjects.clear();
@@ -1232,6 +1235,11 @@ void Player::emmitParticles(double time)
 }
 
 
+void Player::enableTalkie(bool flag)
+{
+	talkie=flag;
+}
+
 void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, const ppl7::String& phonetics)
 {
 	AudioPool& ap=getAudioPool();
@@ -1265,6 +1273,8 @@ bool Player::speak(uint16_t id, float volume)
 		delete voice;
 		voice=NULL;
 	}
+	spokenText.insert(id);
+	if (!talkie) return true;
 	Translator::Speech speech=translate(id);
 	const ppl7::String& lang=game->config.Language;
 	ppl7::String filepath;
@@ -1302,6 +1312,14 @@ bool Player::speak(uint16_t id, float volume)
 		} catch (...) {}
 	}
 	return true;
+}
+
+bool Player::hasSpoken(uint16_t id) const
+{
+	std::set<uint16_t>::const_iterator it;
+	it=spokenText.find(id);
+	if (it != spokenText.end()) return true;
+	return false;
 }
 
 bool Player::isSpeaking() const

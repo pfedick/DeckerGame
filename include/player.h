@@ -42,12 +42,14 @@ private:
 	std::map<int, Decker::Objects::Representation> Inventory;
 	std::map<int, size_t>object_counter;
 	std::set<int>SpecialObjects;
+	std::set<uint16_t> spokenText;
 	bool godmode;
 	bool dead;
 	bool visible;
 	bool autoWalk;
 	bool waterSplashPlayed;
 	bool expressionJump;
+	bool talkie;
 	double airStart;
 	double voiceDamageCooldown;
 	double startIdle;
@@ -116,6 +118,7 @@ public:
 	void resetLevelObjects();
 	void setZeroVelocity();
 	void setVisible(bool flag);
+	void enableTalkie(bool flag);
 	void addPoints(int points);
 	void addHealth(int points);
 	void addAir(float seconds);
@@ -147,6 +150,7 @@ public:
 	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
 	bool speak(uint16_t id, float volume=0.7f);
 	bool isSpeaking() const;
+	bool hasSpoken(uint16_t id) const;
 
 };
 #endif /* INCLUDE_PLAYER_H_ */
