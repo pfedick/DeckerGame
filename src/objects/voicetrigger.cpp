@@ -167,9 +167,6 @@ size_t VoiceTrigger::save(unsigned char* buffer, size_t size) const
 	ppl7::Poke16(buffer + bytes + p, context.size());		// context
 	memcpy(buffer + bytes + p + 2, context.c_str(), context.size());
 	p+=2 + context.size();
-	//printf("expected size: %zd, real: %zd\n", size, bytes + p);
-	//ppl7::HexDump(buffer, bytes + p);
-	fflush(stdout);
 	return bytes + p;
 }
 
@@ -208,7 +205,6 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	}
 	size_t s=ppl7::Peek16(buffer + bytes + p);
 	context.set((const char*)(buffer + bytes + p + 2), s);
-	//ppl7::PrintDebugTime("load done\n");
 	return size;
 }
 
@@ -388,7 +384,7 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 	y+=35;
 
 	for (int i=0;i < 5;i++) {
-		addChild(new ppl7::tk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i * 1)));
+		addChild(new ppl7::tk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
 		target_id[i]=new ppl7::tk::SpinBox(220, y, 100, 30, object->triggerObjects[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
