@@ -177,6 +177,12 @@ void RainEmitter::toggle(bool enable, Object* source)
 
 }
 
+void RainEmitter::trigger(Object* source)
+{
+	current_state=!current_state;
+
+}
+
 
 
 /****************************************************************

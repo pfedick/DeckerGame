@@ -230,6 +230,12 @@ void ParticleEmitter::toggle(bool enable, Object* source)
 
 }
 
+void ParticleEmitter::trigger(Object* source)
+{
+	current_state=!current_state;
+
+}
+
 
 ppl7::String ParticleEmitter::generateCode() const
 {
