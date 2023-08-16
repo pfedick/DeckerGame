@@ -96,10 +96,10 @@
             "character": "george",
             "audiofile": "1008",
             "en": {
-                "text": "He's floating around suspiciously. Jump against it from below with your head."
+                "text": "He's floating around suspiciously. Jump against it from below with my head."
             },
             "de": {
-                "text": "Der schwebt da so verdächtig rum. Spring mal doch mal mit Deinem Kopf von unten dagegen..."
+                "text": "Der schwebt da so verdächtig rum. Spring mal doch mal mit meinem Kopf von unten dagegen..."
             }
         },
         "1009": {
@@ -261,10 +261,10 @@
             "character": "george",
             "audiofile": "1032",
             "en": {
-                "text": "You get a few extra lives just to be on the safe side..."
+                "text": "You get an extra live, just to be on the safe side..."
             },
             "de": {
-                "text": "Zur Sicherheit bekommst Du noch ein paar zusätzliche Leben..."
+                "text": "Zur Sicherheit bekommst Du noch ein zusätzliche Leben..."
             }
         }
     }
