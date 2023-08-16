@@ -184,18 +184,18 @@ ObjectWatcherDialog::ObjectWatcherDialog(ObjectWatcher* object)
 		watch_id[i]->setEventHandler(this);
 		addChild(watch_id[i]);
 
-		watch_state[i]=new ppl7::tk::CheckBox(x + 215, y, 70, 30, "enable", object->watchObjects[i].expectedState);
+		watch_state[i]=new ppl7::tk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[i].expectedState);
 		watch_state[i]->setEventHandler(this);
 		addChild(watch_state[i]);
 
-		x=300;
+		x=330;
 		addChild(new ppl7::tk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", 5 + i + 1)));
 		watch_id[5 + i]=new ppl7::tk::SpinBox(x + 110, y, 100, 30, object->watchObjects[5 + i].object_id);
 		watch_id[5 + i]->setLimits(0, 65535);
 		watch_id[5 + i]->setEventHandler(this);
 		addChild(watch_id[5 + i]);
 
-		watch_state[5 + i]=new ppl7::tk::CheckBox(x + 215, y, 70, 30, "enable", object->watchObjects[5 + i].expectedState);
+		watch_state[5 + i]=new ppl7::tk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[5 + i].expectedState);
 		watch_state[5 + i]->setEventHandler(this);
 		addChild(watch_state[5 + i]);
 
