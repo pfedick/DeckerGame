@@ -77,7 +77,7 @@ void ObjectWatcher::update(double time, TileTypePlane& ttplane, Player& player, 
 	if (maxcount > 0 && state_achived == maxcount) {
 		enabled=false;
 		notifyTargets();
-		ppl7::PrintDebugTime("notify targets\n");
+		//ppl7::PrintDebugTime("notify targets\n");
 	}
 
 }
