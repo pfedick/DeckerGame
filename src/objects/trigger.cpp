@@ -12,19 +12,19 @@ namespace Decker::Objects {
 
 Representation Trigger::representation()
 {
-    return Representation(Spriteset::GenericObjects, 38);
+    return Representation(Spriteset::GenericObjects, 296);
 }
 
 Trigger::Trigger()
     :Object(Type::ObjectType::Trigger)
 {
     sprite_set=Spriteset::GenericObjects;
-    sprite_no=38;
+    sprite_no=296;
     collisionDetection=true;
     pixelExactCollision=false;
     visibleAtPlaytime=false;
     initialStateEnabled=true;
-    sprite_no_representation=38;
+    sprite_no_representation=296;
     range.setPoint(TILE_WIDTH * 6, TILE_HEIGHT * 6);
     state=State::waiting_for_activation;
     triggeredByCollision=true;
@@ -68,6 +68,8 @@ void Trigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 void Trigger::handleCollision(Player* player, const Collision& collision)
 {
     if (!triggeredByCollision) return;
+    last_collision_time=player->time;
+    //ppl7::PrintDebugTime("set last_collision_time %d\n", id);
 
     if (multiTrigger == false && trigger_count > 0) return;
     if (multiTrigger == true && cooldown > player->time) return;
@@ -110,10 +112,11 @@ void Trigger::update(double time, TileTypePlane& ttplane, Player& player, float)
         state=State::finished;
         notifyTargets();
     }
-    if (state == State::finished && multiTrigger == true) {
+    if (state == State::finished && multiTrigger == true && last_collision_time + cooldownUntilNextTrigger < time) {
+        //ppl7::PrintDebugTime("von vorne %d\n", id);
         state=State::waiting_for_activation;
         enabled=true;
-        cooldown=time + cooldownUntilNextTrigger;
+        cooldown=0.0f;
     }
 
 }
@@ -197,6 +200,15 @@ void Trigger::toggle(bool enable, Object* source)
 
 void Trigger::trigger(Object* source)
 {
+    if (!enabled) {
+        enabled=true;
+        state=State::waiting_for_activation;
+        trigger_count=0;
+        cooldown=0.0f;
+        triggerDeleayTime=0.0f;
+        last_collision_time=0.0f;
+        return;
+    }
     if (state == State::disabled) return;
     if (state == State::waiting_for_activation) {
         state=State::activated;
@@ -380,6 +392,8 @@ void TriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         object->range.x=(int)value;
     } else if (event->widget() == range_y) {
         object->range.y=(int)value;
+    } else if (event->widget() == maxTriggerCount) {
+        object->maxTriggerCount=(uint16_t)value;
     } else {
         for (int i=0;i < 10;i++) {
             if (event->widget() == target_id[i]) object->triggerObjects[i].object_id=(uint16_t)value;
@@ -389,7 +403,7 @@ void TriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 
 void TriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-    //ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
+    ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
     if (event->widget() == maxTriggerCount) {
 
         object->maxTriggerCount=(uint16_t)value;
