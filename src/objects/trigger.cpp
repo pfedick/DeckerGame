@@ -85,7 +85,7 @@ void Trigger::test()
 
 void Trigger::notifyTargets() const
 {
-    ppl7::PrintDebugTime("Trigger::notifyTargets\n");
+    //ppl7::PrintDebugTime("Trigger::notifyTargets\n");
     ObjectSystem* objs=GetObjectSystem();
     for (int i=0;i < 10;i++) {
         if (triggerObjects[i].object_id > 0) {
@@ -102,7 +102,7 @@ void Trigger::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
     boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
     if (state == State::activated) {
-        ppl7::PrintDebugTime("Trigger::update activated\n");
+        //ppl7::PrintDebugTime("Trigger::update activated\n");
         triggerDeleayTime=time + triggerDeleay;
         state=State::waiting_for_trigger_delay;
     }
