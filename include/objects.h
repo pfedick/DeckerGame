@@ -331,11 +331,18 @@ class TouchEmitter : public Object
 private:
 	unsigned char toogle_count;
 	double next_touch_time;
+	enum class State {
+		waiting,
+		triggered
+	};
+
+	void emmitObject(double time);
 
 public:
+	State state;
 	unsigned char max_toggles;
 	unsigned char direction;	// 0=up, 1=right, 2=down, 3=left
-	unsigned char touchtype;	// Bit 0-3: Type, Bit 4-7: actication
+	unsigned char touchtype;	// Bit 0-3: Type, Bit 4-7: activation
 								// Bit 4: top, Bit 5: right, Bit 6: bottom, Bit 7: left
 	Type::ObjectType emitted_object;
 
@@ -344,6 +351,8 @@ public:
 	static Representation representation();
 	void init();
 	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void trigger(Object* source=NULL);
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -1311,6 +1320,7 @@ private:
 	double cooldown;
 	double triggerDeleayTime;
 	int trigger_count;
+	double last_collision_time;
 	void notifyTargets() const;
 public:
 	ppl7::grafix::Point range;

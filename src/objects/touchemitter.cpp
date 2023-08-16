@@ -4,6 +4,7 @@
 #include "objects.h"
 #include "decker.h"
 #include "widgets.h"
+#include "player.h"
 
 namespace Decker::Objects {
 
@@ -69,6 +70,7 @@ TouchEmitter::TouchEmitter()
 	pixelExactCollision=false;
 	collisionDetection=true;
 	next_touch_time=0.0f;
+	state=State::waiting;
 }
 
 TouchEmitter::~TouchEmitter()
@@ -82,6 +84,7 @@ void TouchEmitter::reset()
 	toogle_count=0;
 	collisionDetection=true;
 	next_touch_time=0.0f;
+	state=State::waiting;
 }
 
 void TouchEmitter::init()
@@ -94,18 +97,46 @@ void TouchEmitter::init()
 		sprite_no_representation=237;
 	} else if ((touchtype & 15) == 2) {
 		visibleAtPlaytime=false;
+	} else if ((touchtype & 15) == 3 || (touchtype & 15) == 4) {
+		visibleAtPlaytime=false;
+		state=State::waiting;
 	}
 }
 
 
+void TouchEmitter::emmitObject(double time)
+{
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::impact1, 0.2f);
+	next_touch_time=time + ppl7::randf(0.1f, 1.0f);
+	toogle_count++;
+	TouchParticle* particle=new TouchParticle(emitted_object);
+	particle->p.x=ppl7::randf(p.x - 16.0f, p.x + 16.0f);
+	particle->p.y=ppl7::randf(p.y - 16.0f, p.y + 16.0f);
+	particle->initial_p=p;
+	particle->spawned=true;
+	particle->max_distance=ppl7::randf(90.0f, 120.0f);
+	float v0=ppl7::randf(-0.4, 0.4);
+	float v1=ppl7::randf(3.5, 6.5);
+	//printf ("v0=%0.3f, v1=%0.3f\n",v0,v1);
+	switch (direction) {
+	case 0: particle->velocity.setPoint(v0, -v1); break;
+	case 1: particle->velocity.setPoint(v1, v0); break;
+	case 2: particle->velocity.setPoint(v0, v1); break;
+	case 3: particle->velocity.setPoint(-v1, v0); break;
+	default: particle->velocity.setPoint(v0, -v1); break;
+	}
+	GetObjectSystem()->addObject(particle);
+}
+
 void TouchEmitter::handleCollision(Player* player, const Collision& collision)
 {
+	if ((touchtype & 15) == 3 || (touchtype & 15) == 4) return; // emitted by trigger
 	// emit particle, which moves in direction 2 free tiles and then emits the final
 	// object
 	//printf ("TouchEmitter::handleCollision %d:%d\n", toogle_count,max_toggles);
-	double now=ppl7::GetMicrotime();
 	//printf ("next_touch_time=%0.3f, now=%0.3f\n",next_touch_time,now);
-	if (toogle_count < max_toggles && next_touch_time < now) {
+	if (toogle_count < max_toggles && next_touch_time < player->time) {
 		bool touched=false;
 		if ((touchtype & 0xf0) == 0xf0) touched=true;
 		if ((touchtype & 0x10) && collision.objectTop() == true) touched=true;
@@ -113,27 +144,7 @@ void TouchEmitter::handleCollision(Player* player, const Collision& collision)
 		if ((touchtype & 0x40) && collision.objectBottom() == true) touched=true;
 		if ((touchtype & 0x80) && collision.objectLeft() == true) touched=true;
 		if (touched) {
-			AudioPool& audio=getAudioPool();
-			audio.playOnce(AudioClip::impact1, 0.2f);
-			next_touch_time=now + 1.0f;
-			toogle_count++;
-			TouchParticle* particle=new TouchParticle(emitted_object);
-			particle->p.x=ppl7::randf(p.x - 16.0f, p.x + 16.0f);
-			particle->p.y=ppl7::randf(p.y - 16.0f, p.y + 16.0f);
-			particle->initial_p=p;
-			particle->spawned=true;
-			particle->max_distance=ppl7::randf(90.0f, 120.0f);
-			float v0=ppl7::randf(-0.4, 0.4);
-			float v1=ppl7::randf(3.5, 6.5);
-			//printf ("v0=%0.3f, v1=%0.3f\n",v0,v1);
-			switch (direction) {
-			case 0: particle->velocity.setPoint(v0, -v1); break;
-			case 1: particle->velocity.setPoint(v1, v0); break;
-			case 2: particle->velocity.setPoint(v0, v1); break;
-			case 3: particle->velocity.setPoint(-v1, v0); break;
-			default: particle->velocity.setPoint(v0, -v1); break;
-			}
-			GetObjectSystem()->addObject(particle);
+			emmitObject(player->time);
 		}
 	}
 	if (toogle_count >= max_toggles) {
@@ -141,6 +152,24 @@ void TouchEmitter::handleCollision(Player* player, const Collision& collision)
 		enabled=false;
 	}
 }
+
+void TouchEmitter::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	if (((touchtype & 15) == 3 || (touchtype & 15) == 4) && state == State::triggered) {
+		if (toogle_count < max_toggles && next_touch_time < time) {
+			emmitObject(time);
+		} else if (toogle_count >= max_toggles && (touchtype & 15) == 4) {
+			toogle_count=0;
+			state=State::waiting;
+		}
+	}
+}
+
+void TouchEmitter::trigger(Object*)
+{
+	state=State::triggered;
+}
+
 
 size_t TouchEmitter::saveSize() const
 {
@@ -228,7 +257,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	this->object=object;
 	setWindowTitle("TouchEmitter");
 	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Touch-Type: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Actication: "));
+	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Activation: "));
 	addChild(new ppl7::tk::Label(0, 120, 120, 30, "Emitted object: "));
 	addChild(new ppl7::tk::Label(0, 160, 120, 30, "direction: "));
 	addChild(new ppl7::tk::Label(0, 200, 120, 30, "max toggles: "));
@@ -237,6 +266,8 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	touch_type->add("2 x 4", "0");
 	touch_type->add("2 x 2", "1");
 	touch_type->add("invisible", "2");
+	touch_type->add("triggered", "3");
+	touch_type->add("retriggerable", "4");
 	touch_type->setCurrentIdentifier(ppl7::ToString("%d", object->touchtype & 15));
 	touch_type->setEventHandler(this);
 	addChild(touch_type);
@@ -244,7 +275,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	activator_top=new ppl7::tk::CheckBox(180, 40, 60, 30, "top", object->touchtype & 16);
 	activator_top->setEventHandler(this);
 	addChild(activator_top);
-	activator_right=new ppl7::tk::CheckBox(240, 60, 65, 30, "right", object->touchtype & 32);
+	activator_right=new ppl7::tk::CheckBox(240, 60, 70, 30, "right", object->touchtype & 32);
 	activator_right->setEventHandler(this);
 	addChild(activator_right);
 	activator_bottom=new ppl7::tk::CheckBox(180, 80, 84, 30, "bottom", object->touchtype & 64);
@@ -261,6 +292,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
+	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
 	//object_type->add("ExtraLife",ppl7::ToString("%d",Type::ExtraLife));
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
