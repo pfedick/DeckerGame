@@ -223,14 +223,14 @@ void Object::reset()
 	if (!spawned) enabled=true;
 }
 
-void Object::toggle(bool, Object*)
+void Object::toggle(bool enabled, Object*)
 {
-
+	this->enabled=enabled;
 }
 
 void Object::trigger(Object*)
 {
-
+	enabled=!enabled;
 }
 
 void Object::updateSpriteset(int spriteset)

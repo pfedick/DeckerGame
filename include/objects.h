@@ -61,6 +61,7 @@ public:
 		Cheese=30,
 		VoiceTrigger=31,
 		ObjectWatcher=32,
+		Trigger=33,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -271,6 +272,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL);
 
 };
 
@@ -317,6 +319,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL);
 
 	ppl7::String generateCode() const;
 
@@ -1292,6 +1295,55 @@ public:
 	//virtual void trigger(Object* source=NULL) override;
 	void openUi() override;
 
+};
+
+class Trigger : public Object
+{
+private:
+	enum class State {
+		waiting_for_activation,
+		activated,
+		waiting_for_trigger_delay,
+		finished,
+		disabled
+	};
+	State state;
+	double cooldown;
+	double triggerDeleayTime;
+	int trigger_count;
+	void notifyTargets() const;
+public:
+	ppl7::grafix::Point range;
+	bool multiTrigger;
+	bool triggeredByCollision;
+	bool initialStateEnabled;
+	float cooldownUntilNextTrigger;
+	float triggerDeleay;
+	uint16_t maxTriggerCount;
+
+
+	class TargetObject
+	{
+	public:
+		uint16_t object_id=0;
+	};
+	TargetObject triggerObjects[10];
+
+	Trigger();
+	~Trigger();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void reset();
+	virtual void toggle(bool enable, Object* source=NULL) override;
+	virtual void trigger(Object* source=NULL) override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void openUi() override;
+
+	void test();
 };
 
 

@@ -123,6 +123,7 @@ OBJECTS=compile/main.o \
 	compile/object_cheese.o \
 	compile/object_voicetrigger.o \
 	compile/object_objectwatcher.o \
+	compile/object_trigger.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -646,6 +647,10 @@ compile/object_voicetrigger.o: src/objects/voicetrigger.cpp Makefile include/obj
 compile/object_objectwatcher.o: src/objects/objectwatcher.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_objectwatcher.o -c src/objects/objectwatcher.cpp $(CFLAGS)
+
+compile/object_trigger.o: src/objects/trigger.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_trigger.o -c src/objects/trigger.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h

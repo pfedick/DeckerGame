@@ -385,6 +385,7 @@ Representation getRepresentation(int object_type)
 	case Type::Cheese: return Cheese::representation();
 	case Type::VoiceTrigger: return VoiceTrigger::representation();
 	case Type::ObjectWatcher: return ObjectWatcher::representation();
+	case Type::Trigger: return Trigger::representation();
 	default: return Object::representation();
 	}
 }
@@ -467,6 +468,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Cheese: return new Cheese();
 	case Type::VoiceTrigger: return new VoiceTrigger();
 	case Type::ObjectWatcher: return new ObjectWatcher();
+	case Type::Trigger: return new Trigger();
 	}
 	return NULL;
 }
