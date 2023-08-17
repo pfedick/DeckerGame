@@ -41,6 +41,7 @@ void BreakingGround::update(double time, TileTypePlane& ttplane, Player& player,
 		fragment_y+=velocity;
 		if (fragment_y > 200) {
 			state=0;
+			if (layers < 1) enabled=false;
 		}
 	}
 }
