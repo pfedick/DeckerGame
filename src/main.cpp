@@ -109,6 +109,12 @@ void start(int argc, char** argv)
 			game.startLevel("level/heaven.lvl");
 			game.enableControls(true);
 			game.run();
+		} else if (state == GameState::StartTutorial) {
+			game.showUi(false);
+			game.resetPlayer();
+			game.startLevel("level/tutorial.lvl");
+			game.enableControls(true);
+			game.run();
 		} else if (state == GameState::StartEditor) {
 			game.showUi(true);
 			LevelParameter default_params;

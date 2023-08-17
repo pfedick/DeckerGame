@@ -644,7 +644,8 @@ enum class GameState {
 	LevelEndTriggerd,
 	ShowStats,
 	TransferPlayer,
-	BlendOut
+	BlendOut,
+	StartTutorial
 };
 
 enum class StatsScreenReason {

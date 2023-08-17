@@ -18,10 +18,10 @@
             "character": "george",
             "audiofile": "1001",
             "en": {
-                "text": "You control me with the cursor keys or the \"WASD\" keys on your keyboard."
+                "text": "You control me with the cursor keys or the \"WASD\" keys on your keyboard. \"IJKL\" works, too."
             },
             "de": {
-                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur."
+                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur. \"IJKL\" geht auch."
             }
         },
         "1002": {
@@ -294,10 +294,10 @@
             "character": "george",
             "audiofile": "0060.mp3",
             "en": {
-                "text": "Looks like a switch! I should press him. Press the action key \"E\" to activate a switch."
+                "text": "Looks like a switch! I should press him. Press the action key \"E\" or \"O\" to activate a switch."
             },
             "de": {
-                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\", um einen Schalter zu betätigen."
+                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\" oder \"O\", um einen Schalter zu betätigen."
             }
         },
         "1061": {

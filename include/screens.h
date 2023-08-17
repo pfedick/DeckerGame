@@ -136,13 +136,14 @@ public:
         None=0,
         QuitGame,
         StartGame,
+        StartTutorial,
         ShowSettings,
         StartEditor
     };
 
 private:
     Game& game;
-
+    GameMenuArea* start_tutorial;
     GameMenuArea* start_game;
     GameMenuArea* settings;
     GameMenuArea* editor;

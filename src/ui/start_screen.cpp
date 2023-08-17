@@ -109,6 +109,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	switch (state) {
 	case StartScreen::State::QuitGame: return GameState::QuitGame;
 	case StartScreen::State::StartGame: return GameState::StartGame;
+	case StartScreen::State::StartTutorial: return GameState::StartTutorial;
 	case StartScreen::State::ShowSettings: return GameState::ShowSettings;
 	case StartScreen::State::StartEditor: return GameState::StartEditor;
 	default: return GameState::QuitGame;
@@ -203,19 +204,31 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	menue->setBackgroundColor(background);
 	this->addChild(menue);
 
+	int yy=10;
+	start_tutorial=new GameMenuArea(10, yy, 520, 90, translate("Start Tutorial"));
+	start_tutorial->setEventHandler(this);
+	menue->addChild(start_tutorial);
+	yy+=100;
 
-	start_game=new GameMenuArea(10, 10, 520, 90, translate("Start Game"));
+	start_game=new GameMenuArea(10, yy, 520, 90, translate("Start Game"));
 	start_game->setEventHandler(this);
 	menue->addChild(start_game);
-	settings=new GameMenuArea(10, 110, 520, 90, translate("Settings"));
+	yy+=100;
+
+	settings=new GameMenuArea(10, yy, 520, 90, translate("Settings"));
 	settings->setEventHandler(this);
 	menue->addChild(settings);
-	editor=new GameMenuArea(10, 210, 520, 90, translate("Level editor"));
+	yy+=100;
+
+	editor=new GameMenuArea(10, yy, 520, 90, translate("Level editor"));
 	editor->setEventHandler(this);
 	menue->addChild(editor);
-	end=new GameMenuArea(10, 310, 520, 90, translate("Exit game"));
+	yy+=100;
+
+	end=new GameMenuArea(10, yy, 520, 90, translate("Exit game"));
 	end->setEventHandler(this);
 	menue->addChild(end);
+	yy+=100;
 
 	version=new ppl7::tk::Label(10, menue->height() - 50, 520, 50);
 	version->setBorderStyle(ppl7::tk::Frame::BorderStyle::NoBorder);
@@ -246,7 +259,7 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	*/
 	retranslateUi();
 
-	start_game->setSelected(true);
+	start_tutorial->setSelected(true);
 	resizeEvent(NULL);
 }
 
@@ -255,6 +268,7 @@ StartScreen::~StartScreen()
 	//if (filedialog) delete filedialog;
 	if (settings_screen) delete settings_screen;
 	delete version;
+	delete start_tutorial;
 	delete start_game;
 	delete settings;
 	delete editor;
@@ -265,6 +279,7 @@ StartScreen::~StartScreen()
 
 void StartScreen::retranslateUi()
 {
+	start_tutorial->setText(translate("Start Tutorial"));
 	start_game->setText(translate("Start Game"));
 	settings->setText(translate("Settings"));
 	editor->setText(translate("Level editor"));
@@ -305,22 +320,32 @@ void StartScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 {
 	//printf("StartScreen::mouseEnterEvent\n");
 
-	if (event->widget() == start_game) {
+	if (event->widget() == start_tutorial) {
+		start_tutorial->setSelected(true);
+		start_game->setSelected(false);
+		settings->setSelected(false);
+		editor->setSelected(false);
+		end->setSelected(false);
+	} else if (event->widget() == start_game) {
+		start_tutorial->setSelected(false);
 		start_game->setSelected(true);
 		settings->setSelected(false);
 		editor->setSelected(false);
 		end->setSelected(false);
 	} else if (event->widget() == settings) {
+		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
 		settings->setSelected(true);
 		editor->setSelected(false);
 		end->setSelected(false);
 	} else if (event->widget() == editor) {
+		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
 		settings->setSelected(false);
 		editor->setSelected(true);
 		end->setSelected(false);
 	} else if (event->widget() == end) {
+		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
 		settings->setSelected(false);
 		editor->setSelected(false);
@@ -335,6 +360,8 @@ void StartScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 		state=State::QuitGame;
 	} else if (event->widget() == start_game) {
 		state=State::StartGame;
+	} else if (event->widget() == start_tutorial) {
+		state=State::StartTutorial;
 	} else if (event->widget() == settings) {
 		showSettings();
 		//state=State::ShowSettings;
@@ -347,7 +374,10 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
 	//printf("StartScreen::keyDownEvent\n");
 	if (event->key == ppl7::tk::KeyEvent::KEY_DOWN) {
-		if (start_game->isSelected()) {
+		if (start_tutorial->isSelected()) {
+			start_tutorial->setSelected(false);
+			start_game->setSelected(true);
+		} else if (start_game->isSelected()) {
 			start_game->setSelected(false);
 			settings->setSelected(true);
 		} else if (settings->isSelected()) {
@@ -367,12 +397,16 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 		} else if (settings->isSelected()) {
 			settings->setSelected(false);
 			start_game->setSelected(true);
+		} else if (start_game->isSelected()) {
+			start_game->setSelected(false);
+			start_tutorial->setSelected(true);
 		}
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
 		if (start_game->isSelected()) state=State::StartGame;
 		else if (settings->isSelected()) showSettings();
 		else if (editor->isSelected()) state=State::StartEditor;
 		else if (end->isSelected()) state=State::QuitGame;
+		else if (start_tutorial->isSelected()) state=State::StartTutorial;
 	}
 }
 
@@ -434,10 +468,17 @@ void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 		font_size_version=12;
 	}
 	menue->setSize(menue_w, menue_h);
-	start_game->setPos(10, 10);				start_game->setSize(element_w, element_h);
-	settings->setPos(10, 20 + element_h);	settings->setSize(element_w, element_h);
-	editor->setPos(10, 30 + 2 * element_h);	editor->setSize(element_w, element_h);
-	end->setPos(10, 40 + 3 * element_h);	end->setSize(element_w, element_h);
+	int yy=10;
+	start_tutorial->setPos(10, yy);			start_tutorial->setSize(element_w, element_h);
+	yy+=element_h + 10;
+	start_game->setPos(10, yy);				start_game->setSize(element_w, element_h);
+	yy+=element_h + 10;
+	settings->setPos(10, yy);	settings->setSize(element_w, element_h);
+	yy+=element_h + 10;
+	editor->setPos(10, yy);	editor->setSize(element_w, element_h);
+	yy+=element_h + 10;
+	end->setPos(10, yy);	end->setSize(element_w, element_h);
+	yy+=element_h + 10;
 
 	start_game->setFontSize(font_size);
 	settings->setFontSize(font_size);
