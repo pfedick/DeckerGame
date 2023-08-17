@@ -84,7 +84,7 @@ void Skeleton::update(double time, TileTypePlane& ttplane, Player& player, float
 	} else if (state == 6) {
 		if (animation.isFinished()) {
 			state=7;
-			next_state=time + 5.0f;
+			next_state=time + 0.3f;
 		}
 	} else if (state == 7 && time > next_state) {
 		enabled=false;
