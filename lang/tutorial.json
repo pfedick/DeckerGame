@@ -266,6 +266,105 @@
             "de": {
                 "text": "Zur Sicherheit bekommst Du noch ein zusätzliche Leben..."
             }
+        },
+        "1040": {
+            "context": "Medikit",
+            "character": "george",
+            "audiofile": "1040",
+            "en": {
+                "text": "todo"
+            },
+            "de": {
+                "text": "Manchmal findest Du Gegenstände, die Deine Gesundheit verbessern. Ein Medizinkoffer stellt Deine Gesundheit vollständig wieder her."
+            }
+        },
+        "1050": {
+            "context": "Treasure",
+            "character": "george",
+            "audiofile": "1050",
+            "en": {
+                "text": "todo"
+            },
+            "de": {
+                "text": "Cool, ich habe einen Schatz gefunden!"
+            }
+        },
+        "1060": {
+            "context": "George finds a switch the first time",
+            "character": "george",
+            "audiofile": "0060.mp3",
+            "en": {
+                "text": "Looks like a switch! I should press it."
+            },
+            "de": {
+                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\", um einen Schalter zu betätigen."
+            }
+        },
+        "1061": {
+            "context": "George found the hidden Gems",
+            "character": "george",
+            "audiofile": "0061.mp3",
+            "en": {
+                "text": "Looks like a switch! I should press it."
+            },
+            "de": {
+                "text": "Cool, dass Du daran gedacht hast!"
+            }
+        },
+        "1070": {
+            "context": "George slides a ramp down",
+            "character": "george",
+            "audiofile": "0070.mp3",
+            "en": {
+                "text": "Yippie!"
+            },
+            "de": {
+                "text": "Yippie!"
+            }
+        },
+        "1080": {
+            "context": "George slides a ramp down",
+            "character": "george",
+            "audiofile": "0080.mp3",
+            "en": {
+                "text": "Yippie!"
+            },
+            "de": {
+                "text": "Ich glaube, die Grundlagen hast Du jetzt verstanden."
+            }
+        },
+        "1090": {
+            "context": "George finds a stamper",
+            "character": "george",
+            "audiofile": "0090.mp3",
+            "en": {
+                "text": ""
+            },
+            "de": {
+                "text": "Oh, da sollte ich wohl besser im richtigen Moment durchrennen!"
+            }
+        },
+        "1100": {
+            "context": "Breaking Ground",
+            "character": "george",
+            "audiofile": "1100.mp3",
+            "en": {
+                "text": ""
+            },
+            "de": {
+                "text": "Mit dem Boden da stimmt was nicht!"
+            }
+        },
+        "1101": {
+            "context": "George felt through the breaking ground",
+            "character": "george",
+            "audiofile": "1101.mp3",
+            "en": {
+                "text": ""
+            },
+            "de": {
+                "text": "Gut, dass es nicht so tief war!"
+            }
         }
     }
 }
