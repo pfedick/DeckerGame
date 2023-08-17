@@ -40,6 +40,7 @@ Translator::~Translator()
 
 void Translator::load()
 {
+    data.clear();
     ppl7::Dir dir;
     if (!dir.tryOpen("lang")) {
         return;
