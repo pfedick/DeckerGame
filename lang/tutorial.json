@@ -173,10 +173,10 @@
             "character": "george",
             "audiofile": "1015",
             "en": {
-                "text": "Phew! Did I mention I hate spiders?"
+                "text": "Phew, done! Did I mention I hate spiders?"
             },
             "de": {
-                "text": "Puh! Hab ich erwähnt, dass ich Spinnen hasse?"
+                "text": "Puh, geschafft! Hab ich erwähnt, dass ich Spinnen hasse?"
             }
         },
         "1016": {
@@ -272,7 +272,7 @@
             "character": "george",
             "audiofile": "1040",
             "en": {
-                "text": "todo"
+                "text": "Sometimes you will find items that improve your health. A Medicine Kit fully restores your health."
             },
             "de": {
                 "text": "Manchmal findest Du Gegenstände, die Deine Gesundheit verbessern. Ein Medizinkoffer stellt Deine Gesundheit vollständig wieder her."
@@ -283,7 +283,7 @@
             "character": "george",
             "audiofile": "1050",
             "en": {
-                "text": "todo"
+                "text": "Cool, I found a treasure!"
             },
             "de": {
                 "text": "Cool, ich habe einen Schatz gefunden!"
@@ -294,7 +294,7 @@
             "character": "george",
             "audiofile": "0060.mp3",
             "en": {
-                "text": "Looks like a switch! I should press it."
+                "text": "Looks like a switch! I should press him. Press the action key \"E\" to activate a switch."
             },
             "de": {
                 "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\", um einen Schalter zu betätigen."
@@ -305,7 +305,7 @@
             "character": "george",
             "audiofile": "0061.mp3",
             "en": {
-                "text": "Looks like a switch! I should press it."
+                "text": "Cool that you thought of that!"
             },
             "de": {
                 "text": "Cool, dass Du daran gedacht hast!"
@@ -316,7 +316,7 @@
             "character": "george",
             "audiofile": "0070.mp3",
             "en": {
-                "text": "Yippie!"
+                "text": "Yippee!"
             },
             "de": {
                 "text": "Yippie!"
@@ -327,7 +327,7 @@
             "character": "george",
             "audiofile": "0080.mp3",
             "en": {
-                "text": "Yippie!"
+                "text": "I think you got the basics now."
             },
             "de": {
                 "text": "Ich glaube, die Grundlagen hast Du jetzt verstanden."
@@ -338,7 +338,7 @@
             "character": "george",
             "audiofile": "0090.mp3",
             "en": {
-                "text": ""
+                "text": "Oh, I should probably run through it at the right moment!"
             },
             "de": {
                 "text": "Oh, da sollte ich wohl besser im richtigen Moment durchrennen!"
@@ -349,7 +349,7 @@
             "character": "george",
             "audiofile": "1100.mp3",
             "en": {
-                "text": ""
+                "text": "Something's wrong with that floor!"
             },
             "de": {
                 "text": "Mit dem Boden da stimmt was nicht!"
@@ -360,7 +360,7 @@
             "character": "george",
             "audiofile": "1101.mp3",
             "en": {
-                "text": ""
+                "text": "Good thing it wasn't that deep!"
             },
             "de": {
                 "text": "Gut, dass es nicht so tief war!"
