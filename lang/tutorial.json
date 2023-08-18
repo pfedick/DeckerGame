@@ -323,7 +323,7 @@
             }
         },
         "1080": {
-            "context": "George slides a ramp down",
+            "context": "George got the basics",
             "character": "george",
             "audiofile": "0080.mp3",
             "en": {
@@ -364,6 +364,39 @@
             },
             "de": {
                 "text": "Gut, dass es nicht so tief war!"
+            }
+        },
+        "1200": {
+            "context": "Explain level end",
+            "character": "george",
+            "audiofile": "1200.mp3",
+            "en": {
+                "text": "I think you got the basics now."
+            },
+            "de": {
+                "text": "In jedem Level gibt es am Ende ein Tor. Manchmal muss man es noch mit einem Schalter aktivieren."
+            }
+        },
+        "1201": {
+            "context": "Explain level end",
+            "character": "george",
+            "audiofile": "1200.mp3",
+            "en": {
+                "text": "I think you got the basics now."
+            },
+            "de": {
+                "text": "Jetzt ist das Tor aktiviert, und Du kannst durchgehen. Gehe dazu auf das Tor und drücke den Aktions-Knopf \"E\" oder \"O\"."
+            }
+        },
+        "1202": {
+            "context": "Explain level end",
+            "character": "george",
+            "audiofile": "1200.mp3",
+            "en": {
+                "text": "I think you got the basics now."
+            },
+            "de": {
+                "text": "Viel Spass beim Spielen!"
             }
         }
     }
