@@ -99,6 +99,10 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 			GeorgeDeckerTheme.rewind();
 			audiosystem.play(&GeorgeDeckerTheme);
 		}
+		if (gameState == GameState::StartNextLevel) {
+			player->resetLevelObjects();
+			startLevel(nextLevelFile);
+		}
 
 	}
 	gameState=GameState::Running;
@@ -258,8 +262,8 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	this->addChild(filedialog);
 	*/
 	retranslateUi();
-
-	start_tutorial->setSelected(true);
+	if (game.config.tutorialPlayed == false) start_tutorial->setSelected(true);
+	else start_game->setSelected(true);
 	resizeEvent(NULL);
 }
 

@@ -85,7 +85,9 @@ public:
 	// Misc
 	ppl7::String		CustomLevelPath;
 	ppl7::String		LastEditorLevel;
-	ppl7::String		Language;
+	ppl7::String		TextLanguage;
+	ppl7::String		SpeechLanguage;
+	bool				tutorialPlayed;
 
 
 
@@ -645,7 +647,8 @@ enum class GameState {
 	ShowStats,
 	TransferPlayer,
 	BlendOut,
-	StartTutorial
+	StartTutorial,
+	StartNextLevel
 };
 
 enum class StatsScreenReason {
@@ -883,6 +886,7 @@ public:
 	Level& getLevel();
 
 	void startLevel(const ppl7::String& filename);
+	void unloadLevel();
 	bool nextLevel(const ppl7::String& filename);
 	void save(const ppl7::String& filename);
 	void load();

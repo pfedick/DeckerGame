@@ -258,7 +258,7 @@ void AudioPool::load_speech(const ppl7::String& lang)
 		voice_george[VoiceGeorge::play_with_me].load("res/audio/george/de/play_with_me.mp3");
 
 
-		if (lang == "eng") {
+		if (lang == "en") {
 
 		}
 

@@ -98,7 +98,8 @@ private:
     ppl7::tk::Button* save_video_settings_button;
 
     // Misc
-    ppl7::tk::ComboBox* language_combobox;
+    ppl7::tk::ComboBox* text_language_combobox;
+    ppl7::tk::ComboBox* speech_language_combobox;
 
     void selectSettingsPage(SettingsMenue page);
     void setupUi();

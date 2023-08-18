@@ -1277,7 +1277,7 @@ bool Player::speak(uint16_t id, float volume)
 	spokenText.insert(id);
 	if (!talkie) return true;
 	Translator::Speech speech=translate(id);
-	const ppl7::String& lang=game->config.Language;
+	const ppl7::String& lang=game->config.SpeechLanguage;
 	ppl7::String filepath;
 	if (speech.audiofile.notEmpty()) {
 		speech.audiofile=ppl7::File::getFilename(speech.audiofile);

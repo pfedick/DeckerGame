@@ -115,6 +115,8 @@ void start(int argc, char** argv)
 			game.startLevel("level/tutorial.lvl");
 			game.enableControls(true);
 			game.run();
+			game.config.tutorialPlayed=true;
+			game.config.save();
 		} else if (state == GameState::StartEditor) {
 			game.showUi(true);
 			LevelParameter default_params;
@@ -125,7 +127,6 @@ void start(int argc, char** argv)
 		} else if (state == GameState::ShowSettings) {
 		}
 	}
-	fflush(stdout);
 }
 
 #ifdef WIN32

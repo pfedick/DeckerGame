@@ -19,7 +19,9 @@ Config::Config()
     volumeSpeech=1.0f;
     videoDevice=0;
     audioDevice="";
-    Language="en";
+    TextLanguage="en";
+    SpeechLanguage="en";
+    tutorialPlayed=false;
     try {
         load();
     } catch (...) {}
@@ -43,7 +45,9 @@ void Config::load()
         CustomLevelPath=conf.get("CustomLevelPath", CustomLevelPath);
     }
     LastEditorLevel=conf.get("LastEditorLevel", LastEditorLevel);
-    Language=conf.get("Language", Language);
+    TextLanguage=conf.get("TextLanguage", TextLanguage);
+    SpeechLanguage=conf.get("SpeechLanguage", SpeechLanguage);
+    tutorialPlayed=conf.getBool("tutorialPlayed", false);
 
 
     // Video
@@ -96,8 +100,10 @@ void Config::save()
     conf.setSection("misc");
     conf.add("CustomLevelPath", CustomLevelPath);
     conf.add("LastEditorLevel", LastEditorLevel);
-    conf.add("Language", Language);
+    conf.add("TextLanguage", TextLanguage);
+    conf.add("SpeechLanguage", SpeechLanguage);
     conf.add("ConfigVersion", CONFIG_VERSION);
+    conf.add("tutorialPlayed", tutorialPlayed);
 
     conf.save(ConfigFile);
 }

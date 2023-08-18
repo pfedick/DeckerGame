@@ -367,7 +367,7 @@ void Game::presentStartupScreen()
 void Game::init()
 {
 	translator.load();
-	translator.setLanguage(config.Language);
+	translator.setLanguage(config.TextLanguage);
 	createWindow();
 	initUi();
 	initAudio();
@@ -431,7 +431,7 @@ void Game::initAudio()
 	audiosystem.setVolume(AudioClass::Effect, config.volumeEffects);
 	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 	audiopool.load();
-	audiopool.load_speech("ger");
+	audiopool.load_speech(config.SpeechLanguage);
 	audiopool.setAudioSystem(&audiosystem);
 }
 
@@ -654,7 +654,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		if (death_state) handleDeath(renderer, frame_rate_compensation);
 		else if (fade_to_black > 0) {
 			fade_to_black-=(5.0f * frame_rate_compensation);
-			if (fade_to_black < 0) fade_to_black=0;
+			if (fade_to_black < 0.0f) fade_to_black=0.0f;
 		}
 	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver) {
 		if (fade_to_black < 255) {
@@ -666,8 +666,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 					gameState=GameState::ShowStats;
 					showStatsScreen(StatsScreenReason::LevelEnd);
 				}
-				player->resetLevelObjects();
-				startLevel(nextLevelFile);
+				gameState=GameState::StartNextLevel;
 			} else if (gameState == GameState::GameOver) {
 				if (LevelFile != "level/start.lvl") {
 					gameState=GameState::ShowStats;
@@ -676,16 +675,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 				player->resetState();
 				world_widget->resetPlayerStats(player);
 				startLevel(LevelFile);
-				//ppl7::PrintDebugTime("fade_to_black=%d\n", fade_to_black);
 			}
 		}
 	}
-	/* Hä, wozu soll das gut sein?
-	if (gameState == GameState::ShowStatsThenRestartLevel) {
-		// TODO
-		gameState = GameState::GameOver;
-	}
-	*/
 	metrics.time_misc.stop();
 	metrics.time_draw_world.stop();
 	if (game_speed == GameSpeed::ManualStep) {
@@ -766,6 +758,15 @@ void Game::run()
 		presentScreen();
 		metrics.time_frame.stop();
 
+		if (gameState == GameState::StartNextLevel) {
+			player->resetLevelObjects();
+			if (nextLevelFile == "MENU") break;
+			if (!ppl7::File::exists(nextLevelFile)) {
+				break;
+			}
+			startLevel(nextLevelFile);
+
+		}
 	}
 	soundtrack.fadeout(4.0f);
 }
@@ -1107,6 +1108,18 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 	}
 }
 
+void Game::unloadLevel()
+{
+	soundtrack.fadeout(2.0f);
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	closeObjectSelection();
+	closeWayNet();
+	remember.clear();
+	LevelFile.clear();
+	level.clear();
+}
 
 void Game::startLevel(const ppl7::String& filename)
 {
@@ -1706,6 +1719,13 @@ bool Game::nextLevel(const ppl7::String& filename)
  */
 {
 	nextLevelFile.clear();
+	if (filename == "MENU") {
+		nextLevelFile="MENU";
+		gameState=GameState::LevelEndTriggerd;
+		fade_to_black=0;
+		enableControls(false);
+		return true;
+	}
 	if (ppl7::File::exists(filename)) {
 		nextLevelFile=filename;
 	} else if (ppl7::File::exists("level/" + filename)) {

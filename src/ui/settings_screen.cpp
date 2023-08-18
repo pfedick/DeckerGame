@@ -293,16 +293,34 @@ void SettingsScreen::initPageMisc()
     page_misc->setBackgroundColor(background);
 
     ppl7::tk::Label* label;
-    label=new ppl7::tk::Label(0, 0, 200, 40, translate("Text language:"));
+    int y=0;
+    label=new ppl7::tk::Label(0, 0, 300, 40, translate("Language Settings:"));
+    label->setFont(style_label.font);
+    page_misc->addChild(label);
+    y+=50;
+
+    label=new ppl7::tk::Label(50, y, 150, 40, translate("Text:"));
     label->setFont(style_label.font);
     page_misc->addChild(label);
 
-    language_combobox=new ppl7::tk::ComboBox(input_widget_x, 0, input_widget.width, input_widget.height);
-    language_combobox->add(translate("english"), "en");
-    language_combobox->add(translate("german"), "de");
-    language_combobox->setCurrentIdentifier(game.config.Language);
-    language_combobox->setEventHandler(this);
-    page_misc->addChild(language_combobox);
+    text_language_combobox=new ppl7::tk::ComboBox(input_widget_x, y, input_widget.width, input_widget.height);
+    text_language_combobox->add(translate("english"), "en");
+    text_language_combobox->add(translate("german"), "de");
+    text_language_combobox->setCurrentIdentifier(game.config.TextLanguage);
+    text_language_combobox->setEventHandler(this);
+    page_misc->addChild(text_language_combobox);
+    y+=50;
+
+    label=new ppl7::tk::Label(50, y, 150, 40, translate("Speech:"));
+    label->setFont(style_label.font);
+    page_misc->addChild(label);
+
+    speech_language_combobox=new ppl7::tk::ComboBox(input_widget_x, y, input_widget.width, input_widget.height);
+    speech_language_combobox->add(translate("english"), "en");
+    speech_language_combobox->add(translate("german"), "de");
+    speech_language_combobox->setCurrentIdentifier(game.config.SpeechLanguage);
+    speech_language_combobox->setEventHandler(this);
+    page_misc->addChild(speech_language_combobox);
 
 
 
@@ -470,12 +488,17 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 
 void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-    if (event->widget() == language_combobox) {
-        game.config.Language=language_combobox->currentIdentifier();
+    if (event->widget() == text_language_combobox) {
+        game.config.TextLanguage=text_language_combobox->currentIdentifier();
         game.config.save();
-        GetTranslator().setLanguage(game.config.Language);
+        GetTranslator().setLanguage(game.config.TextLanguage);
         retranslateUi();
     }
+    if (event->widget() == speech_language_combobox) {
+        game.config.SpeechLanguage=speech_language_combobox->currentIdentifier();
+        game.config.save();
+    }
+
 }
 
 void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
