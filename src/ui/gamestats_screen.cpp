@@ -129,6 +129,7 @@ bool GameStatsScreen::continueSignaled() const
 void GameStatsScreen::addResult(const ppl7::String& caption, int object_type, size_t max, size_t achived, size_t bonus)
 {
     ppl7::grafix::Size size=style_label.font.measure(caption);
+    if (max < achived) achived=max;
 
     Resources& res=getResources();
     int sprite_no=0;
@@ -270,7 +271,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
 
             } else if (line == 0 && stats.getObjectCount(Decker::Objects::Type::Coin) > 0) {
                 bonus=0;
-                if (stats.getObjectCount(Decker::Objects::Type::Coin) == player->getObjectCount(Decker::Objects::Type::Coin)) {
+                if (stats.getObjectCount(Decker::Objects::Type::Coin) <= player->getObjectCount(Decker::Objects::Type::Coin)) {
                     bonus=stats.getObjectCount(Decker::Objects::Type::Coin) * 10;
                     total_bonus+=bonus;
                 }
@@ -279,7 +280,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
                     player->getObjectCount(Decker::Objects::Type::Coin), bonus);
             } else if (line == 1 && stats.getObjectCount(Decker::Objects::Type::Diamond) > 0) {
                 bonus=0;
-                if (stats.getObjectCount(Decker::Objects::Type::Diamond) == player->getObjectCount(Decker::Objects::Type::Diamond)) {
+                if (stats.getObjectCount(Decker::Objects::Type::Diamond) <= player->getObjectCount(Decker::Objects::Type::Diamond)) {
                     bonus=stats.getObjectCount(Decker::Objects::Type::Diamond) * 50;
                     total_bonus+=bonus;
                 }
@@ -288,7 +289,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
                     player->getObjectCount(Decker::Objects::Type::Diamond), bonus);
             } else if (line == 2 && stats.getObjectCount(Decker::Objects::Type::Crystal) > 0) {
                 bonus=0;
-                if (stats.getObjectCount(Decker::Objects::Type::Crystal) == player->getObjectCount(Decker::Objects::Type::Crystal)) {
+                if (stats.getObjectCount(Decker::Objects::Type::Crystal) <= player->getObjectCount(Decker::Objects::Type::Crystal)) {
                     bonus=stats.getObjectCount(Decker::Objects::Type::Crystal) * 100;
                     total_bonus+=bonus;
                 }
@@ -297,7 +298,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
                     player->getObjectCount(Decker::Objects::Type::Crystal), bonus);
             } else if (line == 3 && stats.getObjectCount(Decker::Objects::Type::TreasureChest) > 0) {
                 bonus=0;
-                if (stats.getObjectCount(Decker::Objects::Type::TreasureChest) == player->getObjectCount(Decker::Objects::Type::TreasureChest)) {
+                if (stats.getObjectCount(Decker::Objects::Type::TreasureChest) <= player->getObjectCount(Decker::Objects::Type::TreasureChest)) {
                     bonus=stats.getObjectCount(Decker::Objects::Type::TreasureChest) * 1000;
                     total_bonus+=bonus;
                 }
@@ -306,7 +307,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
                     player->getObjectCount(Decker::Objects::Type::TreasureChest), bonus);
             } else if (line == 4 && stats.getObjectCount(Decker::Objects::Type::ExtraLife) > 0) {
                 bonus=0;
-                if (stats.getObjectCount(Decker::Objects::Type::ExtraLife) == player->getObjectCount(Decker::Objects::Type::ExtraLife)) {
+                if (stats.getObjectCount(Decker::Objects::Type::ExtraLife) <= player->getObjectCount(Decker::Objects::Type::ExtraLife)) {
                     bonus=stats.getObjectCount(Decker::Objects::Type::ExtraLife) * 100;
                     total_bonus+=bonus;
                 }
