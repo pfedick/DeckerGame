@@ -54,6 +54,39 @@
             "de": {
                 "text": "Da sollte ich besser nicht runterfallen!"
             }
+        },
+        "2005": {
+            "context": "George crossed the abyss after he opened the door",
+            "character": "george",
+            "audiofile": "2005",
+            "en": {
+                "text": "I hope I don't have to jump that abyss again!"
+            },
+            "de": {
+                "text": "Ich hoffe, ich muss nicht nochmal über diesen Abgrund springen!"
+            }
+        },
+        "2010": {
+            "context": "George felt into the abyss",
+            "character": "george",
+            "audiofile": "2010",
+            "en": {
+                "text": "NOOOOO!"
+            },
+            "de": {
+                "text": "NEIIIN!"
+            }
+        },
+        "2011": {
+            "context": "George felt into the abyss",
+            "character": "george",
+            "audiofile": "2011",
+            "en": {
+                "text": "Thank god! I'm alive!"
+            },
+            "de": {
+                "text": "Oh Gott sei dank! Ich lebe!"
+            }
         }
     }
 }
