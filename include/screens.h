@@ -61,7 +61,9 @@ private:
         Audio=0,
         Video=1,
         Misc=2,
-        Back=3
+        Menue=3,
+        Exit=4,
+        Back=5,
     };
     Game& game;
     bool ingame;
@@ -82,6 +84,10 @@ private:
     GameMenuArea* select_video;
     GameMenuArea* select_misc;
     GameMenuArea* select_back;
+
+    GameMenuArea* select_menue;
+    GameMenuArea* select_game_exit;
+
 
     // Audio
     ppl7::tk::ComboBox* audio_device_combobox;

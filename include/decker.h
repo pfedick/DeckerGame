@@ -648,7 +648,9 @@ enum class GameState {
 	TransferPlayer,
 	BlendOut,
 	StartTutorial,
-	StartNextLevel
+	StartNextLevel,
+	BackToMenue
+
 };
 
 enum class StatsScreenReason {
@@ -833,7 +835,6 @@ private:
 	float fade_to_black;
 	int death_state;
 
-	GameState gameState;
 
 	enum spriteMode {
 		spriteModeDraw,
@@ -850,6 +851,7 @@ private:
 
 public:
 	Config config;
+	GameState gameState;
 	MessageOverlay message_overlay=MessageOverlay(sdl);
 
 	Game();

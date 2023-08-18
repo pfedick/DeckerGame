@@ -109,6 +109,7 @@ void start(int argc, char** argv)
 			game.startLevel("level/heaven.lvl");
 			game.enableControls(true);
 			game.run();
+			if (game.gameState == GameState::QuitGame) break;
 		} else if (state == GameState::StartTutorial) {
 			game.showUi(false);
 			game.resetPlayer();

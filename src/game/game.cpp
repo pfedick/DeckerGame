@@ -656,7 +656,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 			fade_to_black-=(5.0f * frame_rate_compensation);
 			if (fade_to_black < 0.0f) fade_to_black=0.0f;
 		}
-	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver) {
+	} else if (gameState == GameState::LevelEndTriggerd || gameState == GameState::GameOver || gameState == GameState::BackToMenue || gameState == GameState::QuitGame) {
 		if (fade_to_black < 255) {
 			fade_to_black+=(5.0f * frame_rate_compensation);
 			if (fade_to_black > 255.0f) fade_to_black=255.0f;
@@ -675,6 +675,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 				player->resetState();
 				world_widget->resetPlayerStats(player);
 				startLevel(LevelFile);
+			} else if (gameState == GameState::BackToMenue || gameState == GameState::QuitGame) {
+				quitGame=true;
 			}
 		}
 	}
@@ -765,7 +767,6 @@ void Game::run()
 				break;
 			}
 			startLevel(nextLevelFile);
-
 		}
 	}
 	soundtrack.fadeout(4.0f);
@@ -785,6 +786,15 @@ void Game::closeEvent(ppl7::tk::Event* e)
 		enableControls(true);
 		wm->setKeyboardFocus(world_widget);
 		if (world_widget) world_widget->retranslateUi();
+		if (e->customId() == 1) {
+			gameState = GameState::BackToMenue;
+			fade_to_black=0.0f;
+			//quitGame=true;
+		} else if (e->customId() == 2) {
+			gameState = GameState::QuitGame;
+			fade_to_black=0.0f;
+			//quitGame=true;
+		}
 		return;
 	}
 	quitGame=true;
@@ -1248,13 +1258,13 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
-	} else if (object_selection != NULL && event->widget() == world_widget) {
-		mouseDownEventOnObject(event);
-	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
-		handleMouseDrawInWorld(*event);
-	} else if (waynet_edit != NULL && event->widget() == world_widget) {
-		mouseDownEventOnWayNet(event);
-	}
+} else if (object_selection != NULL && event->widget() == world_widget) {
+	mouseDownEventOnObject(event);
+} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
+	handleMouseDrawInWorld(*event);
+} else if (waynet_edit != NULL && event->widget() == world_widget) {
+	mouseDownEventOnWayNet(event);
+}
 }
 
 
@@ -1290,12 +1300,12 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			event->p.y + coords.y,
 			0,
 			spriteset, nr, scale, sprite_selection->colorIndex());
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
-		sprite_selection->setSelectedSprite(-1);
-		sprite_mode=spriteModeDraw;
-		selected_sprite.id=-1;
-		selected_sprite_system=NULL;
-	}
+} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+	sprite_selection->setSelectedSprite(-1);
+	sprite_mode=spriteModeDraw;
+	selected_sprite.id=-1;
+	selected_sprite_system=NULL;
+}
 }
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
@@ -1706,7 +1716,7 @@ void Game::openSettingsScreen()
 	if (settings_screen) delete settings_screen;
 	settings_screen=NULL;
 	settings_screen=new SettingsScreen(*this,
-		100, 100, this->width() - 200, this->height() - 200);
+		100, 100, this->width() - 200, this->height() - 200, true);
 	this->addChild(settings_screen);
 	this->needsRedraw();
 	enableControls(false);

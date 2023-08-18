@@ -9,6 +9,8 @@ SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height, boo
     : game(g)
 {
     create(x, y, width, height);
+    select_menue=NULL;
+    select_game_exit=NULL;
     this->ingame=ingame;
     this->setName("SettingsScreen");
     setupUi();
@@ -106,27 +108,49 @@ void SettingsScreen::setupUi()
     menue->setEventHandler(this);
     this->addChild(menue);
 
-
-    select_audio=new GameMenuArea(10, 0, style_menue.size.width, style_menue.size.height, translate("Audio"));
+    int y=0;
+    select_audio=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Audio"));
     select_audio->setName("Settings Selection Audio");
     select_audio->setFontSize(style_menue.font.size());
     select_audio->setBorderWidth(style_menue.border_width);
     select_audio->setEventHandler(this);
     menue->addChild(select_audio);
+    y+=style_menue.total.height;
 
-    select_video=new GameMenuArea(10, style_menue.total.height * 1, style_menue.size.width, style_menue.size.height, translate("Video"));
+    select_video=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Video"));
     select_video->setName("Settings Selection Video");
     select_video->setFontSize(style_menue.font.size());
     select_video->setBorderWidth(style_menue.border_width);
     select_video->setEventHandler(this);
     menue->addChild(select_video);
+    y+=style_menue.total.height;
 
-    select_misc=new GameMenuArea(10, style_menue.total.height * 2, style_menue.size.width, style_menue.size.height, translate("Misc"));
+    select_misc=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Misc"));
     select_misc->setName("Settings Selection Misc");
     select_misc->setFontSize(style_menue.font.size());
     select_misc->setBorderWidth(style_menue.border_width);
     select_misc->setEventHandler(this);
     menue->addChild(select_misc);
+    y+=style_menue.total.height;
+
+
+    if (ingame) {
+        select_menue=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Menue"));
+        select_menue->setName("Settings Back to Menue");
+        select_menue->setFontSize(style_menue.font.size());
+        select_menue->setBorderWidth(style_menue.border_width);
+        select_menue->setEventHandler(this);
+        menue->addChild(select_menue);
+        y+=style_menue.total.height;
+
+        select_game_exit=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Exit Game"));
+        select_game_exit->setName("Settings Exit Game");
+        select_game_exit->setFontSize(style_menue.font.size());
+        select_game_exit->setBorderWidth(style_menue.border_width);
+        select_game_exit->setEventHandler(this);
+        menue->addChild(select_game_exit);
+        y+=style_menue.total.height;
+    }
 
     select_back=new GameMenuArea(10, menue->height() - style_menue.total.height, style_menue.size.width, style_menue.size.height, translate("back (ESC)"));
     select_back->setName("Settings Selection Back");
@@ -343,6 +367,8 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
     select_video->setSelected(false);
     select_misc->setSelected(false);
     select_back->setSelected(false);
+    if (select_menue) select_menue->setSelected(false);
+    if (select_game_exit) select_game_exit->setSelected(false);
     this->removeChild(page_audio);
     this->removeChild(page_video);
     this->removeChild(page_misc);
@@ -361,6 +387,12 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
         break;
     case SettingsMenue::Back:
         select_back->setSelected(true);
+        break;
+    case SettingsMenue::Menue:
+        if (select_menue) select_menue->setSelected(true);
+        break;
+    case SettingsMenue::Exit:
+        if (select_game_exit) select_game_exit->setSelected(true);
         break;
     }
     currentMenueSelection=page;
@@ -402,20 +434,39 @@ void SettingsScreen::paint(ppl7::grafix::Drawable& draw)
 
 void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
-    //printf("SettingsScreen::keyDownEvent\n");
+    //ppl7::PrintDebugTime("SettingsScreen::keyDownEvent: key=%d, %s\n", event->key, (const  char*)event->widget()->name());
     if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
         ppl7::tk::Event event(ppl7::tk::Event::Close);
         event.setWidget(this);
         this->getParent()->closeEvent(&event);
     }
-    //printf("%s\n", (const  char*)event->widget()->name());
-    if (event->widget() == menue) {
-        if (event->key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
-            selectSettingsPage(static_cast<SettingsMenue>(static_cast<int>(currentMenueSelection) + 1));
-        } else if (event->key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
-            selectSettingsPage(static_cast<SettingsMenue>(static_cast<int>(currentMenueSelection) - 1));
-        }
 
+    if (event->widget() == menue) {
+        int m=static_cast<int>(currentMenueSelection);
+        if (event->key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
+            if (!ingame && m == 2) m=4;
+            selectSettingsPage(static_cast<SettingsMenue>(m + 1));
+        } else if (event->key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
+            if (!ingame && m == 5) m = 3;
+            selectSettingsPage(static_cast<SettingsMenue>(m - 1));
+        } else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN || event->key == ppl7::tk::KeyEvent::KEY_ENTER) {
+            if (select_back->isSelected()) {
+                ppl7::tk::Event event(ppl7::tk::Event::Close);
+                event.setWidget(this);
+                event.setCustomId(0);
+                this->getParent()->closeEvent(&event);
+            } else if (select_menue != NULL && select_menue->isSelected()) {
+                ppl7::tk::Event event(ppl7::tk::Event::Close);
+                event.setWidget(this);
+                event.setCustomId(1);
+                this->getParent()->closeEvent(&event);
+            } else if (select_game_exit != NULL && select_game_exit->isSelected()) {
+                ppl7::tk::Event event(ppl7::tk::Event::Close);
+                event.setWidget(this);
+                event.setCustomId(2);
+                this->getParent()->closeEvent(&event);
+            }
+        }
     }
 }
 
@@ -425,6 +476,8 @@ void SettingsScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
     else if (event->widget() == select_video) selectSettingsPage(SettingsMenue::Video);
     else if (event->widget() == select_misc) selectSettingsPage(SettingsMenue::Misc);
     else if (event->widget() == select_back) selectSettingsPage(SettingsMenue::Back);
+    else if (select_menue != NULL && event->widget() == select_menue) selectSettingsPage(SettingsMenue::Menue);
+    else if (select_game_exit != NULL && event->widget() == select_game_exit) selectSettingsPage(SettingsMenue::Exit);
 }
 
 
@@ -433,6 +486,17 @@ void SettingsScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
     if (event->widget() == select_back) {
         ppl7::tk::Event event(ppl7::tk::Event::Close);
         event.setWidget(this);
+        event.setCustomId(0);
+        this->getParent()->closeEvent(&event);
+    } else if (select_menue != NULL && event->widget() == select_menue) {
+        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        event.setWidget(this);
+        event.setCustomId(1);
+        this->getParent()->closeEvent(&event);
+    } else if (select_game_exit != NULL && event->widget() == select_game_exit) {
+        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        event.setWidget(this);
+        event.setCustomId(2);
         this->getParent()->closeEvent(&event);
     } else if (event->widget() == save_video_settings_button) {
         Config::WindowMode mode=static_cast<Config::WindowMode>(windowmode_combobox->currentIdentifier().toInt());
