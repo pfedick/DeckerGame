@@ -224,6 +224,10 @@ void VoiceTrigger::toggle(bool enable, Object* source)
 
 void VoiceTrigger::trigger(Object* source)
 {
+	if (!enabled) {
+		enabled=true;
+		return;
+	}
 	if (state == State::disabled) return;
 	if (state == State::waiting_for_activation) {
 		state=State::activated;
