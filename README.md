@@ -25,11 +25,9 @@ I created a [project board](https://github.com/users/pfedick/projects/3) on gith
 
 ### Things I still have in mind
 - create more interactive objects / enemies:
+    - ghost
     - huge vent
-    - give Helena (enemy from my movie) a weappon
     - side wind
-    - swimming
-    - underwater sections with limited air
 - create more sound effects
 - build more levels
 - story?
@@ -190,6 +188,8 @@ You can find a lot of videos about the game on my channel on YouTube and Twitch:
 
 ## Release History
 
+* [0.12.0](https://github.com/pfedick/DeckerGame/releases/tag/0.12.0) [2023-08-19]: Tutorial and Speech
+* [0.11.0](https://github.com/pfedick/DeckerGame/releases/tag/0.11.0) [2023-08-10]: Pathfinding and Blood Update
 * [0.10.0](https://github.com/pfedick/DeckerGame/releases/tag/0.10.0) [2023-07-30]: Water update
 * [0.9.0](https://github.com/pfedick/DeckerGame/releases/tag/0.9.0) [2023-07-24]: Tropical update
 * [0.8.2](https://github.com/pfedick/DeckerGame/releases/tag/0.8.2) [2023-07-14]: Bugfix release
