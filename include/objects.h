@@ -865,6 +865,7 @@ class Ghost : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
+	double change_height;
 	enum class State {
 		Stand,
 		TurnToLeft,
@@ -873,20 +874,21 @@ private:
 		FlyLeftToRight,
 		FlyRight,
 		FlyRightToLeft,
+		LandLeft,
+		LandRight,
+		TurnToMid,
 		Dead,
 	};
-	enum class Orientation {
-		Front,
-		Left,
-		Right
-	};
 	State state;
-	Orientation orientation;
 	float glow;
 	float glowtarget;
 	float glowspeed;
+	float height;
+	float target_height;
+	bool land;
 	//double next_glowtime;
 	void update_glow(double time, float frame_rate_compensation);
+	void update_animation(double time);
 public:
 	Ghost();
 	static Representation representation();
