@@ -65,7 +65,7 @@ void Config::load()
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeAmbience=conf.get("volumeAmbience", ppl7::ToString("%0.3f", volumeAmbience)).toFloat();
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
-    volumeEffects=conf.get("volumeSpeech", ppl7::ToString("%0.3f", volumeSpeech)).toFloat();
+    volumeSpeech=conf.get("volumeSpeech", ppl7::ToString("%0.3f", volumeSpeech)).toFloat();
     //if (volumeMusic > 0.5f) volumeMusic=0.5f;
 }
 
