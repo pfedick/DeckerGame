@@ -105,7 +105,7 @@ void MessageOverlay::updatePhonetics()
 		if (it != phonetics_map.end() && (*it).second >= 0) mouth=(*it).second;
 
 	}
-	nextPhonetic=time + 0.1f;
+	nextPhonetic=time + 0.08f;
 }
 
 void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport)
@@ -188,8 +188,8 @@ void MessageOverlay::render()
 void MessageOverlay::setText(Character c, const ppl7::String& text, const ppl7::String& phonetics, float timeout)
 {
 	if (timeout == 0.0f) {
-		timeout=((float)text.size()) * 0.08f;
-		if (timeout < 3.0f) timeout=3.0f;
+		timeout=((float)text.size()) * 0.07f;
+		if (timeout < 2.0f) timeout=2.0f;
 	}
 	this->timeout=ppl7::GetMicrotime() + timeout;
 	this->text=text;
