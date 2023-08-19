@@ -1295,7 +1295,7 @@ bool Player::speak(uint16_t id, float volume)
 			}
 		}
 	}
-	ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s, real: %s\n", id, (const char*)speech.text, (const char*)speech.audiofile, (const char*)filepath);
+	//ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s, real: %s\n", id, (const char*)speech.text, (const char*)speech.audiofile, (const char*)filepath);
 
 	if (speech.text.notEmpty()) {
 		game->message_overlay.setText(MessageOverlay::Character::George, speech.text, speech.phonetics);
