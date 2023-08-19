@@ -188,6 +188,11 @@ public:
 		hello_here_i_am,
 		hello_im_george,
 		play_with_me,
+		hepp1,
+		hepp2,
+		hepp3,
+		hepp4,
+		hepp5,
 		maxClips
 	};
 };

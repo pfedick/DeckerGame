@@ -493,6 +493,8 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	if (movement == Jump || movement == Falling || movement == Slide) {
 		if (airStart == 0) {
 			airStart=time;
+			if (ppl7::rand(0, 2) == 0)	speak(static_cast<VoiceGeorge::Id>(ppl7::rand(0, 4) + static_cast<int>(VoiceGeorge::hepp1)), 0.1f);
+
 		}
 	} else if (airStart > 0.0f) {
 		double volume=(time - airStart);

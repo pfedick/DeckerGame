@@ -248,7 +248,11 @@ void AudioPool::load_speech(const ppl7::String& lang)
 		voice_george[VoiceGeorge::aua3].load("res/audio/george/common/aua3.mp3");
 		voice_george[VoiceGeorge::aua4].load("res/audio/george/common/aua4.mp3");
 		voice_george[VoiceGeorge::snort].load("res/audio/george/common/snort_loop.mp3");
-
+		voice_george[VoiceGeorge::hepp1].load("res/audio/george/common/hepp1.mp3");
+		voice_george[VoiceGeorge::hepp2].load("res/audio/george/common/hepp2.mp3");
+		voice_george[VoiceGeorge::hepp3].load("res/audio/george/common/hepp3.mp3");
+		voice_george[VoiceGeorge::hepp4].load("res/audio/george/common/hepp4.mp3");
+		voice_george[VoiceGeorge::hepp5].load("res/audio/george/common/hepp5.mp3");
 
 
 		voice_george[VoiceGeorge::hello].load("res/audio/george/de/hello.mp3");
