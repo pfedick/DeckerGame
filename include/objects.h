@@ -82,7 +82,8 @@ public:
 		AutoGeorge=117,
 		Ostrich=118,
 		Fish=119,
-		Piranha=120
+		Piranha=120,
+		Ghost=121
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -115,6 +116,7 @@ public:
 		Piranha,
 		BreakingWall,
 		Rat,
+		Ghost,
 		MaxSpritesets
 	};
 };
@@ -857,6 +859,42 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
+
+class Ghost : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	enum class State {
+		Stand,
+		TurnToLeft,
+		TurnToRight,
+		FlyLeft,
+		FlyLeftToRight,
+		FlyRight,
+		FlyRightToLeft,
+		Dead,
+	};
+	enum class Orientation {
+		Front,
+		Left,
+		Right
+	};
+	State state;
+	Orientation orientation;
+	float glow;
+	float glowtarget;
+	float glowspeed;
+	//double next_glowtime;
+	void update_glow(double time, float frame_rate_compensation);
+public:
+	Ghost();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+};
+
+
 
 class Mummy : public Enemy
 {

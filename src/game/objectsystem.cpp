@@ -149,6 +149,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Rat]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Rat]->load(sdl, "res/rat.tex");
 
+	spriteset[Spriteset::Ghost]->enableOutlines(true);
+	spriteset[Spriteset::Ghost]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Ghost]->load(sdl, "res/ghost.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -351,6 +355,7 @@ Representation getRepresentation(int object_type)
 	case Type::FloaterHorizontal: return FloaterHorizontal::representation();
 	case Type::FloaterVertical: return FloaterVertical::representation();
 	case Type::Skeleton: return Skeleton::representation();
+	case Type::Ghost: return Ghost::representation();
 	case Type::Mummy: return Mummy::representation();
 	case Type::Fire: return Fire::representation();
 	case Type::BreakingGround: return BreakingGround::representation();
@@ -433,6 +438,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Arrow: return new Arrow();
 	case Type::Rat: return new Rat();
 	case Type::Skeleton: return new Skeleton();
+	case Type::Ghost: return new Ghost();
 	case Type::Mummy: return new Mummy();
 	case Type::HangingSpider: return new HangingSpider();
 	case Type::Fire: return new Fire();

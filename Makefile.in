@@ -124,6 +124,7 @@ OBJECTS=compile/main.o \
 	compile/object_voicetrigger.o \
 	compile/object_objectwatcher.o \
 	compile/object_trigger.o \
+	compile/object_ghost.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -228,6 +229,9 @@ enemy_piranha:
 enemy_ostrich:
 	./texmaker -s lightwave/Render/enemies/ostrich/ -t res/ostrich.tex -w 2048 -h 1536 -px 128 -py 256 -x tmp/enemy_ostrich -x tmp/ostrich
 
+enemy_ghost:
+	./texmaker -s lightwave/Render/enemies/ghost/ -t res/ghost.tex -w 2048 -h 2048 -px 128 -py 195
+
 enemy_rat:
 	./texmaker -s lightwave/Render/enemies/rat/ -t res/rat.tex -w 1024 -h 768 -px 128 -py 114 -x tmp/rat -x tmp/rat
 
@@ -258,7 +262,7 @@ phonetics:
 breakingwall:
 	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_ghost
 
 sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies
 	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
@@ -651,6 +655,10 @@ compile/object_objectwatcher.o: src/objects/objectwatcher.cpp Makefile include/o
 compile/object_trigger.o: src/objects/trigger.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_trigger.o -c src/objects/trigger.cpp $(CFLAGS)
+
+compile/object_ghost.o: src/objects/ghost.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_ghost.o -c src/objects/ghost.cpp $(CFLAGS)
 
 # Userinterface
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h
