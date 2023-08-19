@@ -13,9 +13,9 @@ Config::Config()
     ScreenResolution.setSize(mode.width, mode.height);
     ScreenRefreshRate=mode.refresh_rate;
     volumeTotal=1.0f;
-    volumeMusic=0.5f;
-    volumeEffects=1.0f;
-    volumeAmbience=1.0f;
+    volumeMusic=0.3f;
+    volumeEffects=0.5f;
+    volumeAmbience=0.7f;
     volumeSpeech=1.0f;
     videoDevice=0;
     audioDevice="";
