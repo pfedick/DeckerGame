@@ -3,14 +3,14 @@
         "1000": {
             "context": "Tutorial Greeting",
             "character": "george",
-            "audiofile": "hello_im_george",
+            "audiofile": "1000",
             "en": {
                 "text": "Hello! I'm George! Welcome to the tutorial!",
                 "phonetics": "elloo  aiiem dSorS  welcomm tu se tutorial"
             },
             "de": {
                 "text": "Hallo, ich bin George! Willkommen zum Tutorial!",
-                "phonetics": "alloo ich bin dSorS  willkommen zum tutorial"
+                "phonetics": "alloo ich bin dSorS  willkommen zum Tutorial"
             }
         },
         "1001": {
@@ -121,7 +121,7 @@
                 "text": "That was easy! Go on, collect the crystals, that gives you a lot of points!"
             },
             "de": {
-                "text": "Das war einfach! Los, sammel die Kristalle auf, das gibt ordentlich Punkte!"
+                "text": "Das war einfach! Los, sammel die Kristalle auf, das bringt ordentlich Punkte!"
             }
         },
         "1011": {
@@ -187,7 +187,7 @@
                 "text": "Some enemies can be eliminated by jumping on them from above. Try that on the skeleton."
             },
             "de": {
-                "text": "Manche Gegner kann man ausschalten, indem man von oben auf sie drauf springt. Versuch das mal bei dem Skelett."
+                "text": "Manche Gegner kann man ausschalten, indem man von oben auf sie drauf springt. Versuch das mal mit dem Skelett."
             }
         },
         "1017": {
@@ -242,7 +242,7 @@
                 "text": "Before we continue, let's create a save point. Get that disk over there!"
             },
             "de": {
-                "text": "Bevor wir weiter machen, legen wir erstmal einen Speicherpunkt an. Hol mal die Diskette da vorne!"
+                "text": "Bevor wir weiter machen, legen wir erstmal einen Speicherpunkt an. Hol doch mal die Diskette da vorne!"
             }
         },
         "1031": {
@@ -292,29 +292,26 @@
         "1060": {
             "context": "George finds a switch the first time",
             "character": "george",
-            "audiofile": "0060.mp3",
             "en": {
                 "text": "Looks like a switch! I should press him. Press the action key \"E\" or \"O\" to activate a switch."
             },
             "de": {
-                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\" oder \"O\", um einen Schalter zu betätigen."
+                "text": "Sieht aus wie ein Schalter! Ich sollte ihn drücken. Drücke die Aktions-Taste \"E\" oder \"O\", um den Schalter zu betätigen."
             }
         },
         "1061": {
             "context": "George found the hidden Gems",
             "character": "george",
-            "audiofile": "0061.mp3",
             "en": {
-                "text": "Cool that you thought of that!"
+                "text": "Great that you thought of that!"
             },
             "de": {
-                "text": "Cool, dass Du daran gedacht hast!"
+                "text": "Klasse, dass Du daran gedacht hast!"
             }
         },
         "1070": {
             "context": "George slides a ramp down",
             "character": "george",
-            "audiofile": "0070.mp3",
             "en": {
                 "text": "Yippee!"
             },
@@ -325,7 +322,6 @@
         "1080": {
             "context": "George got the basics",
             "character": "george",
-            "audiofile": "0080.mp3",
             "en": {
                 "text": "I think you got the basics now."
             },
@@ -336,18 +332,16 @@
         "1090": {
             "context": "George finds a stamper",
             "character": "george",
-            "audiofile": "0090.mp3",
             "en": {
                 "text": "Oh, I should probably run through it at the right moment!"
             },
             "de": {
-                "text": "Oh, da sollte ich wohl besser im richtigen Moment durchrennen!"
+                "text": "Oh, da sollte ich wohl besser im richtigen Moment durchlaufen!"
             }
         },
         "1100": {
             "context": "Breaking Ground",
             "character": "george",
-            "audiofile": "1100.mp3",
             "en": {
                 "text": "Something's wrong with that floor!"
             },
@@ -358,7 +352,6 @@
         "1101": {
             "context": "George felt through the breaking ground",
             "character": "george",
-            "audiofile": "1101.mp3",
             "en": {
                 "text": "Good thing it wasn't that deep!"
             },
@@ -369,7 +362,6 @@
         "1200": {
             "context": "Explain level end",
             "character": "george",
-            "audiofile": "1200.mp3",
             "en": {
                 "text": "I think you got the basics now."
             },
@@ -380,23 +372,31 @@
         "1201": {
             "context": "Explain level end",
             "character": "george",
-            "audiofile": "1200.mp3",
             "en": {
                 "text": "I think you got the basics now."
             },
             "de": {
-                "text": "Jetzt ist das Tor aktiviert, und Du kannst durchgehen. Gehe dazu auf das Tor und drücke den Aktions-Knopf \"E\" oder \"O\"."
+                "text": "Ahh, jetzt ist das Tor aktiviert, und Du kannst durchgehen. Gehe dazu auf das Tor und drücke den Aktions-Knopf \"E\" oder \"O\"."
             }
         },
         "1202": {
             "context": "Explain level end",
             "character": "george",
-            "audiofile": "1200.mp3",
             "en": {
                 "text": "I think you got the basics now."
             },
             "de": {
-                "text": "Viel Spass beim Spielen!"
+                "text": "Danke, dass Du das Tutorial gespielt hast! Viel Spass noch beim Spielen!"
+            }
+        },
+        "1300": {
+            "context": "Tutorial Greeting",
+            "character": "george",
+            "en": {
+                "text": ""
+            },
+            "de": {
+                "text": "Ich werde Dir jetzt die grundlegenden Dinge erklären!"
             }
         }
     }

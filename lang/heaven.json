@@ -27,10 +27,10 @@
             "character": "george",
             "audiofile": "2002",
             "en": {
-                "text": "Was there a TARDIS?"
+                "text": "Was there a TARDIS? Doctor!"
             },
             "de": {
-                "text": "War da grad ne TARDIS!"
+                "text": "War da grad ne TARDIS? Doktor!"
             }
         },
         "2003": {

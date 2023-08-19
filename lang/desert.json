@@ -1,0 +1,24 @@
+{
+    "speech": {
+        "2100": {
+            "context": "George arrives at the door in the oasis",
+            "character": "george",
+            "en": {
+                "text": "A door!"
+            },
+            "de": {
+                "text": "Eine Tür!"
+            }
+        },
+        "2101": {
+            "context": "George has to jump down",
+            "character": "george",
+            "en": {
+                "text": "No, really now? down there?"
+            },
+            "de": {
+                "text": "Nee, echt jetzt? Da runter?"
+            }
+        }
+    }
+}
