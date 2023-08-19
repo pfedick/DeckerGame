@@ -66,10 +66,13 @@ void BreakingWall::handleCollision(Player* player, const Collision& collision)
 		int keyboard=player->getKeyboardMatrix();
 		if (keyboard & KeyboardKeys::Action) {
 			player->startHacking(this);
-			player->speak(5);
 			if (player->x < p.x)player->x=p.x - 96;
 			if (player->x > p.x)player->x=p.x + 96;
 		}
+		if (!player->hasSpoken(4)) {
+			player->speak(4);
+		}
+
 	}
 
 }

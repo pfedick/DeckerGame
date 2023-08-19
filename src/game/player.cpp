@@ -1120,6 +1120,7 @@ void Player::startHacking(Decker::Objects::Object* object)
 		}
 		next_animation=0.0f;
 		hackingState=1;
+		speak(5);
 	}
 }
 
@@ -1279,10 +1280,11 @@ bool Player::speak(uint16_t id, float volume)
 	Translator::Speech speech=translate(id);
 	const ppl7::String& lang=game->config.SpeechLanguage;
 	ppl7::String filepath;
+	if (speech.audiofile.isEmpty()) speech.audiofile.setf("%04d", id);
 	if (speech.audiofile.notEmpty()) {
 		speech.audiofile=ppl7::File::getFilename(speech.audiofile);
 		if (speech.audiofile.right(4) == ".mp3") speech.audiofile=speech.audiofile.left(speech.audiofile.size() - 4);
-		ppl7::String filepath="res/audio/george/" + lang + "/" + speech.audiofile + ".mp3";
+		filepath="res/audio/george/" + lang + "/" + speech.audiofile + ".mp3";
 		if (!ppl7::File::exists(filepath)) {
 			filepath="res/audio/george/en/" + speech.audiofile + ".mp3";
 			if (!ppl7::File::exists(filepath)) {
@@ -1293,7 +1295,7 @@ bool Player::speak(uint16_t id, float volume)
 			}
 		}
 	}
-	//ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s\n", id, (const char*)speech.text, (const char*)speech.audiofile);
+	ppl7::PrintDebugTime("speak called with id %d, text=>>%s<<, file=%s, real: %s\n", id, (const char*)speech.text, (const char*)speech.audiofile, (const char*)filepath);
 
 	if (speech.text.notEmpty()) {
 		game->message_overlay.setText(MessageOverlay::Character::George, speech.text, speech.phonetics);
@@ -1307,10 +1309,13 @@ bool Player::speak(uint16_t id, float volume)
 		try {
 			voice_sample.load(filepath);
 			voice=new AudioInstance(voice_sample, AudioClass::Speech);
-			voice->setVolume(volume);
+			voice->setVolume(volume * 0.7f);
 			voice->setAutoDelete(false);
 			ap.playInstance(voice);
-		} catch (...) {}
+		} catch (const ppl7::Exception& exp) {
+			exp.print();
+			ppl7::PrintDebugTime("\n");
+		}
 	}
 	return true;
 }
@@ -1325,7 +1330,9 @@ bool Player::hasSpoken(uint16_t id) const
 
 bool Player::isSpeaking() const
 {
-	return game->message_overlay.hasMessage();
+	if (game->message_overlay.hasMessage()) return true;
+	if (voice && voice->finished() == false) return true;
+	return false;
 	/*
 	ppl7::PrintDebugTime("phonetics: %zd, voice=%zd\n", phonetics.size(), voice);
 	if (phonetics.size() > 0) return true;
@@ -1391,7 +1398,7 @@ void Player::playPhonetics()
 	if (p == "q" || p == "w") s=283 + 10;
 	if (p == "u") s=283 + 9;
 	if (p == "S") s=283 + 18;
-	nextPhonetic=time + 0.1f;
+	nextPhonetic=time + 0.08f;
 	animation.setStaticFrame(s);
 
 }
