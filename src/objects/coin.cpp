@@ -48,8 +48,8 @@ void CoinReward::handleCollision(Player* player, const Collision&)
 
 	int sample=ppl7::rand(0, 1);
 	switch (sample) {
-	case 1:	audio.playOnce(AudioClip::coin3, 0.4f);break;
-	default: audio.playOnce(AudioClip::coin1, 0.4f);break;
+	case 1:	audio.playOnce(AudioClip::coin3, 0.3f);break;
+	default: audio.playOnce(AudioClip::coin1, 0.3f);break;
 	}
 }
 
