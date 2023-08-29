@@ -96,7 +96,7 @@ void start(int argc, char** argv)
 
 	}
 
-	//game.playIntroVideo();
+	game.playIntroVideo();
 
 	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
 

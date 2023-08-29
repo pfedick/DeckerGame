@@ -1,7 +1,7 @@
 #ifndef INCLUDE_AUDIO_H_
 #define INCLUDE_AUDIO_H_
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppl7-audio.h>
