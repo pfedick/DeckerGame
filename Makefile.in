@@ -132,7 +132,7 @@ OBJECTS=compile/main.o \
 	compile/settings_screen.o \
 	compile/level_screen.o \
 	compile/ingame_menue_screen.o \
-	compile/gamestats_screen.o
+	compile/gamestats_screen.o \
 	compile/video_videoplayer.o \
 	compile/video_ivfdemuxer.o \
 	compile/intro_screen.o \

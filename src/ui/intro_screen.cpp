@@ -57,6 +57,7 @@ void Game::playIntroVideo()
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3", AudioClass::Music);
 	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
 
+
 	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
 	SDL_Rect title_rect;
 	getDestinationRect(title_size, *this, title_rect);
@@ -67,6 +68,8 @@ void Game::playIntroVideo()
 		wm->setKeyboardFocus(intro_widget);
 		showUi(false);
 		audiosystem.play(&IntroSequence);
+
+		audiosystem.setVolume(AudioClass::Music, 0.8f);
 		int frame=0;
 		float fade_to_black=255;
 		int fade_state=0;
@@ -75,8 +78,12 @@ void Game::playIntroVideo()
 		double next_video_frame=0.0f;
 		double video_frametime=1.0f / (double)video.framerate();
 
-		while (!intro_widget->stopSignal()) {
-
+		while (1) {
+			if ((quitGame || intro_widget->stopSignal()) && fade_state != 3) {
+				fade_state=3;
+				IntroSequence.fadeout(2.0f);
+				if (quitGame) gameState = GameState::QuitGame;
+			}
 			double now=ppl7::GetMicrotime();
 			frame_rate_compensation=1.0f;
 			if (last_frame_time > 0.0f) {
@@ -112,7 +119,7 @@ void Game::playIntroVideo()
 
 			if (frame > 1700) {
 				if (title_blend < 255.0f) title_blend+=8 * frame_rate_compensation;
-				else title_blend=255.0f;
+				if (title_blend > 255.0f) title_blend=255.0f;
 				SDL_SetTextureAlphaMod(title_tex, title_blend);
 				getDestinationRect(title_size, *this, title_rect);
 				title_rect.y=0;
@@ -120,6 +127,13 @@ void Game::playIntroVideo()
 			}
 			if (frame > 1800 && fade_to_black < 255.0f) {
 				fade_to_black+=4 * frame_rate_compensation;
+				if (fade_to_black > 255.0f) fade_to_black=255.0f;
+			} else if (fade_state == 3) {
+				fade_to_black+=4 * frame_rate_compensation;
+				if (fade_to_black > 255.0f) {
+					fade_to_black=255.0f;
+					break;
+				}
 			}
 
 			resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
@@ -132,6 +146,7 @@ void Game::playIntroVideo()
 	audiosystem.stop(&IntroSequence);
 	sdl.destroyTexture(title_tex);
 	delete intro_widget;
+	audiosystem.setVolume(AudioClass::Music, config.volumeMusic);
 }
 
 
