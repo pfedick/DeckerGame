@@ -173,6 +173,9 @@
         },
         "Menue": {
             "de": "Menü"
+        },
+        "skip intro": {
+            "de": "Intro überspringen"
         }
     }
 }

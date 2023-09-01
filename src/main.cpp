@@ -96,8 +96,10 @@ void start(int argc, char** argv)
 
 	}
 
-	game.playIntroVideo();
-	if (game.gameState == GameState::QuitGame) return;
+	if (!game.config.skipIntro) {
+		game.playIntroVideo();
+		if (game.gameState == GameState::QuitGame) return;
+	}
 
 	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
 

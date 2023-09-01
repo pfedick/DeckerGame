@@ -22,6 +22,7 @@ Config::Config()
     TextLanguage="en";
     SpeechLanguage="en";
     tutorialPlayed=false;
+    skipIntro=false;
     try {
         load();
     } catch (...) {}
@@ -48,6 +49,7 @@ void Config::load()
     TextLanguage=conf.get("TextLanguage", TextLanguage);
     SpeechLanguage=conf.get("SpeechLanguage", SpeechLanguage);
     tutorialPlayed=conf.getBool("tutorialPlayed", false);
+    skipIntro=conf.getBool("skipIntro", false);
 
 
     // Video
@@ -104,6 +106,7 @@ void Config::save()
     conf.add("SpeechLanguage", SpeechLanguage);
     conf.add("ConfigVersion", CONFIG_VERSION);
     conf.add("tutorialPlayed", tutorialPlayed);
+    conf.add("skipIntro", skipIntro);
 
     conf.save(ConfigFile);
 }

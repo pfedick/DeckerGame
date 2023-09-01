@@ -106,6 +106,7 @@ private:
     // Misc
     ppl7::tk::ComboBox* text_language_combobox;
     ppl7::tk::ComboBox* speech_language_combobox;
+    ppl7::tk::CheckBox* skipIntro_checkbox;
 
     void selectSettingsPage(SettingsMenue page);
     void setupUi();
@@ -130,6 +131,7 @@ public:
     virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
     virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
+    virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
 
 };
 

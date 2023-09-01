@@ -88,6 +88,7 @@ public:
 	ppl7::String		TextLanguage;
 	ppl7::String		SpeechLanguage;
 	bool				tutorialPlayed;
+	bool				skipIntro;
 
 
 

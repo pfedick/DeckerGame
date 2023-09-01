@@ -346,6 +346,11 @@ void SettingsScreen::initPageMisc()
     speech_language_combobox->setEventHandler(this);
     page_misc->addChild(speech_language_combobox);
 
+    y+=50;
+    skipIntro_checkbox=new ppl7::tk::CheckBox(0, y, 400, 40, translate("skip intro"), game.config.skipIntro);
+    skipIntro_checkbox->setFont(style_label.font);
+    skipIntro_checkbox->setEventHandler(this);
+    page_misc->addChild(skipIntro_checkbox);
 
 
 }
@@ -358,7 +363,7 @@ SettingsScreen::~SettingsScreen()
 
 void SettingsScreen::retranslateUi()
 {
-
+    setupUi();
 }
 
 void SettingsScreen::selectSettingsPage(SettingsMenue page)
@@ -573,4 +578,13 @@ void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 
     needsRedraw();
 
+}
+
+void SettingsScreen::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+    if (event->widget() == skipIntro_checkbox) {
+        ppl7::PrintDebugTime("toggle\n");
+        game.config.skipIntro=checked;
+        game.config.save();
+    }
 }
