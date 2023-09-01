@@ -108,6 +108,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	gameState=GameState::Running;
 	StartScreen::State state=start_screen->getState();
 	this->removeChild(start_screen);
+	sdl.destroyTexture(title_tex);
 	delete start_screen;
 	start_screen=NULL;
 	switch (state) {
