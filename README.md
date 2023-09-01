@@ -1,6 +1,6 @@
 [![C/C++ CI](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml)
 
-# Decker - The Game
+# George Decker - The Game
 
 <p align="center">
   <img src="https://github.com/pfedick/DeckerGame/raw/main/res/screenshots/Screenshot_20210724_193500.jpg" />
@@ -11,12 +11,14 @@ This is my attempt of writing a Jump'n'Run game in C++. It uses the [Simple Dire
 
 It features George Decker, one of the main characters of my Lego(tm) stopmotion film [The Adventures Of Charlie and George Decker](https://youtu.be/-aJDTe_obKI), which I made a few years ago and is available on YouTube.
 
+It is a classic Jump'n'Run game like Super Mario Brothers. You have to collect coins and other things,
+avoid enemies and traps, find keys to open doors and solve other small puzzles.
 
 ## What's the status of the game?
-The game is in development and I already implemented a lot of the features I
-had in mind, when I started this project. The graphics and sound engine is complete,
-we have physics and a particle system, where we can generate smoke, fire, rain and water.
-A test level is complete and fully playable and I'm working on more levels with different themes.
+The game is in development since summer 2021 and all game mechanics are implemented. This includes
+the graphic and sound engine, physics and particles, which can be used to generate smoke, fire, rain and water.
+And of course, next to the playable character, there are a lot of enemies and traps.
+There is a tutorial and several other playable levels, and it got a nice little render intro, too.
 
 ### Things which are ongoing
 
@@ -60,13 +62,16 @@ There is probably more, which I'm not aware of, yet ;-)
     - floater
     - lasers
     - arrows from wall
-    - locked door
+    - locked doors
     - key (used to unlock a locked door)
     - mushroom (white minifig with big red hat and white dots)
     - scorpion
+    - bat
+    - bird
     - ostrich
     - Wallenstein
-    - Helena (but she make no damage yet)
+    - Helena
+    - Yeti
 - how does sound work with SDL?
 - write the audio engine
 - how to integrate sound track and sound effects into the game
@@ -79,6 +84,7 @@ There is probably more, which I'm not aware of, yet ;-)
 - ui for special objects
 - refine physics for jumping & falling
 - particle effects
+- pathfinding for ai enemies
 
 ## How to control the player
 
@@ -88,7 +94,8 @@ The player can be controlled by the arrow keys or alternatively with "wasd" or "
 - cursor left / a / j: walk to the left
 - cursor right / d / l: walk to the right
 - shift left / shift right: walk faster, jump higher
-- e: action key, it activates switches or open doors
+- e / o: action key, it activates switches or open doors
+- space: skip the intro video
 
 When walking an pressing the key for up, the player will jump in the direction of walking.
 
@@ -96,7 +103,7 @@ When walking an pressing the key for up, the player will jump in the direction o
 ## On what platforms will the game be available
 My target platforms are:
 
-- Linux (development is done on Fedora)
+- Linux (development is done on Fedora 38)
 - Windows 10
 
 The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/)
@@ -185,10 +192,12 @@ You can find a lot of videos about the game on my channel on YouTube and Twitch:
 * YouTube: https://www.youtube.com/@PatrickFedick
 * Twitch: https://www.twitch.tv/pfedick
 * Mastodon: https://mastodon.de/@patrickf
+* Discord: https://discord.gg/QZXPNFKNKP
 
 
 ## Release History
 
+* [0.13.0](https://github.com/pfedick/DeckerGame/releases/tag/0.13.0) [2023-09-01]: Intro
 * [0.12.0](https://github.com/pfedick/DeckerGame/releases/tag/0.12.0) [2023-08-19]: Tutorial and Speech
 * [0.11.0](https://github.com/pfedick/DeckerGame/releases/tag/0.11.0) [2023-08-10]: Pathfinding and Blood Update
 * [0.10.0](https://github.com/pfedick/DeckerGame/releases/tag/0.10.0) [2023-07-30]: Water update
