@@ -532,6 +532,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
 		}
 	}
+	//ppl7::PrintDebugTime("updatePhysics, gravity: %0.3f, acc y: %0.3f, velo y: %0.3f\n", gravity, acceleration.y, velocity_move.y);
 	if (collision_matrix[1][4] == TileType::Water || collision_matrix[2][4] == TileType::Water) {
 		if (!waterSplashPlayed && gravity > 0.0f) {
 			waterSplashPlayed=true;

@@ -60,7 +60,7 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 			if (!player_stands_on_object) {
 				//printf ("gravity\n");
 				if (acceleration_gravity < 6.0f) acceleration_gravity+=0.05f * frame_rate_compensation;
-				if (acceleration_gravity > 6.0f) acceleration_gravity=6.0f * frame_rate_compensation;
+				if (acceleration_gravity > 6.0f) acceleration_gravity=6.0f;
 				match=true;
 			}
 		}
@@ -68,7 +68,8 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 	if (collision_matrix[1][5] == TileType::Water && collision_matrix[2][5] == TileType::Water) {
 		if (!player_stands_on_object) {
 			if (acceleration_gravity < 6.0f) acceleration_gravity+=0.2f * frame_rate_compensation;
-			if (acceleration_gravity > 6.0f) acceleration_gravity=6.0f * frame_rate_compensation;
+			if (acceleration_gravity > 6.0f) acceleration_gravity=6.0f;
+			//match=true;
 		}
 	}
 
@@ -87,11 +88,11 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 
 	if (acceleration_gravity > 0.0f) {
 		if (!match) {
-			acceleration_gravity-=(acceleration_gravity / 2.0f) * frame_rate_compensation;
+			acceleration_gravity-=(acceleration_gravity / (2.0f * frame_rate_compensation));
 			if (acceleration_gravity < 0.0f) acceleration_gravity=0.0f;
 		}
 		if (inWater) {
-			if (gravity > 0.0f) gravity-=(gravity / 8.0f);
+			if (gravity > 0.0f) gravity-=((gravity / 8.0f) * frame_rate_compensation);
 			if (gravity > 0.0f && gravity < 0.5) gravity=0.0f;
 		} else {
 			gravity+=(acceleration_gravity * frame_rate_compensation);
