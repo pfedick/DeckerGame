@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: install packages
       run: sudo apt-get update && sudo apt-get install -y libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev
     - name: checkout submodules
