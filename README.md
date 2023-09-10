@@ -6,13 +6,33 @@
   <img src="https://github.com/pfedick/DeckerGame/raw/main/res/screenshots/Screenshot_20210724_193500.jpg" />
 </p>
 
+## What is the game about?
+I always wanted to program a game, but never got very far with it. But I didn't give up and this is the result!
 
-This is my attempt of writing a Jump'n'Run game in C++. It uses the [Simple DirectMedia Layer](https://www.libsdl.org/) library for graphics and my own library [pplib](https://github.com/pfedick/pplib) for graphics and ui. And it is open source!
+"George Decker" is a classic Jump'n'Run game like Super Mario Brothers. You have to collect coins and other things,
+avoid enemies and traps, find keys to open doors and solve other small puzzles.
 
 It features George Decker, one of the main characters of my Lego(tm) stopmotion film [The Adventures Of Charlie and George Decker](https://youtu.be/-aJDTe_obKI), which I made a few years ago and is available on YouTube.
 
-It is a classic Jump'n'Run game like Super Mario Brothers. You have to collect coins and other things,
-avoid enemies and traps, find keys to open doors and solve other small puzzles.
+
+## What does it cost?
+Nothing!
+
+This game is completely free and open source! I provide finished binaries for Windows for download on my [github page](https://github.com/pfedick/DeckerGame/releases), but you can always download the sources and compile them on your favorite operating system, including Linux and FreeBSD! (see below on [how to compile](#How-to-compile))
+
+You can even fork the sourcecode and make your own modifications!
+
+## Where can I download it?
+I provide finished binaries for Windows for download on my [github page](https://github.com/pfedick/DeckerGame/releases).
+
+
+## Where can I find more information about the game?
+You can find a lot of videos about the game on my channel on YouTube and Twitch, I'm also on mastodon and discord:
+
+* YouTube: https://www.youtube.com/@PatrickFedick
+* Twitch: https://www.twitch.tv/pfedick
+* Mastodon: https://mastodon.de/@patrickf
+* Discord: https://discord.gg/QZXPNFKNKP
 
 ## What's the status of the game?
 The game is in development since summer 2021 and all game mechanics are implemented. This includes
@@ -20,6 +40,65 @@ the graphic and sound engine, physics and particles, which can be used to genera
 And of course, next to the playable character, there are a lot of enemies and traps.
 There is a tutorial and several other playable levels, and it got a nice little render intro, too.
 
+## How to control the player
+
+The player can be controlled by the arrow keys or alternatively with "wasd" or "ijkl"
+- cursor up / w / i: climb up a ladder or jump up in the air
+- cursor down / s / k: climb down a ladder
+- cursor left / a / j: walk to the left
+- cursor right / d / l: walk to the right
+- shift left / shift right: walk faster, jump higher
+- e / o: action key, it activates switches or open doors
+- space: skip the intro video
+
+When walking an pressing the key for up, the player will jump in the direction of walking.
+
+
+## On what platforms will the game be available
+My target platforms are:
+
+- Linux (development is done on Fedora 38)
+- Windows 10 and 11
+- it is known that the Windows version also runs on the Steamdeck!
+
+The game depends on the [Simple DirectMedia Layer](https://www.libsdl.org/)
+library, which is available on many platforms. So in theory it should be possible to
+compile it on any platform with a c++ compiler and the SDL library available.
+See belwo on [how to compile](#How-to-compile).
+
+## In which language is the game written?
+
+It is written in my favorite language: C++
+
+I use  the [Simple DirectMedia Layer](https://www.libsdl.org/) library for low level grafix and sound output, but everything else is written by me, including the game engine.
+
+
+## When will it come out?
+I don't know. This is one of my hobbies, but I have others, too :-)
+Maybe I will never finish it or decide to do something else. We will see...
+
+But hey, you can already play the game! See below, how to compile it your
+own, or download a preview version on [GitHub](https://github.com/pfedick/DeckerGame/releases).
+
+## Known issues and limitations
+I have three different systems available for developing and testing, but they all have in common, that display resoltion is
+around 1920 x 1080 pixel with a framerate of 60. I give my best to support other resoltions and frame rates, but I have limited possibilities to test.
+- on systems with framerate other than 60, strange things can happen
+- on systems with framerates lower than 30, everything will get slower and the physics engine will fail
+- on monitors smaller than 1920 x 1080, the viewpoint will get smaller and the different layers of the game (parallax) won't fit together
+- on monitors bigger than 1920 x 1080 evereything will get smaller and you see much more of the "world" than it was intended. Especially
+  you will see gaps and areas in the world, which I have not layed out. Also the parallax layers won't fit together and it is possible, that the front layer will hide the player layer
+
+How to avoid issues with different resolutions:
+- when playing in a window, resize the window to a size of 1920 x 1080 pixel
+- play in fullscreen (not window mode) with a fixed resolution of 1920 x 1080 pixel
+- if framerate is higher than 60 and you run into issues, please report to me and try to configure your grafic card to limit the
+  game at 60 Hz
+
+## Bugreport
+You can open an issue in my [github project](https://github.com/pfedick/DeckerGame/issues) or contact me on [discord](https://discord.gg/QZXPNFKNKP).
+
+## What's missing, what's done?
 ### Things which are ongoing
 
 I created a [project board](https://github.com/users/pfedick/projects/3) on github to track all things I'm working on and which are in my backlog.
@@ -34,6 +113,9 @@ I created a [project board](https://github.com/users/pfedick/projects/3) on gith
 - build more levels
 - story?
 - save and load of progress in a level?
+- difficulty levels
+- how to handle different screen sizes?
+- game controller support
 
 There is probably more, which I'm not aware of, yet ;-)
 
@@ -85,43 +167,6 @@ There is probably more, which I'm not aware of, yet ;-)
 - refine physics for jumping & falling
 - particle effects
 - pathfinding for ai enemies
-
-## How to control the player
-
-The player can be controlled by the arrow keys or alternatively with "wasd" or "ijkl"
-- cursor up / w / i: climb up a ladder or jump up in the air
-- cursor down / s / k: climb down a ladder
-- cursor left / a / j: walk to the left
-- cursor right / d / l: walk to the right
-- shift left / shift right: walk faster, jump higher
-- e / o: action key, it activates switches or open doors
-- space: skip the intro video
-
-When walking an pressing the key for up, the player will jump in the direction of walking.
-
-
-## On what platforms will the game be available
-My target platforms are:
-
-- Linux (development is done on Fedora 38)
-- Windows 10
-
-The game will be open source and uses the [Simple DirectMedia Layer](https://www.libsdl.org/)
-library, which is available on many platforms. So in theory it should be possible to
-compile it on any platform with a c++ compiler and the SDL library available.
-
-## In which language is the game written?
-
-It is written in my favorite language: C++
-
-
-## When will it come out?
-I don't know. This is one of my hobbies, but I have others, too :-)
-Maybe I will never finish it or decide to do something else. We will see...
-
-But hey, you can already play the game! See below, how to compile it your
-own, or download a preview version on [GitHub](https://github.com/pfedick/DeckerGame/releases).
-
 
 
 ## How to compile
@@ -185,14 +230,6 @@ git submodule update --init --recursive
 ./configure
 make
 ```
-
-## Social media
-You can find a lot of videos about the game on my channel on YouTube and Twitch:
-
-* YouTube: https://www.youtube.com/@PatrickFedick
-* Twitch: https://www.twitch.tv/pfedick
-* Mastodon: https://mastodon.de/@patrickf
-* Discord: https://discord.gg/QZXPNFKNKP
 
 
 ## Release History
