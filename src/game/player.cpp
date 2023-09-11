@@ -263,6 +263,16 @@ int Player::getKeyboardMatrix(const Uint8* state)
 	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) matrix|=KeyboardKeys::Down;
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) matrix|=KeyboardKeys::Shift;
 	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) matrix|=KeyboardKeys::Action;
+
+	if (game->controller.isOpen()) {
+		if (game->controller.left()) matrix|=KeyboardKeys::Left;
+		if (game->controller.right()) matrix|=KeyboardKeys::Right;
+		if (game->controller.up()) matrix|=KeyboardKeys::Up;
+		if (game->controller.down()) matrix|=KeyboardKeys::Down;
+		if (game->controller.shift()) matrix|=KeyboardKeys::Shift;
+		if (game->controller.action()) matrix|=KeyboardKeys::Action;
+	}
+
 	return matrix;
 }
 

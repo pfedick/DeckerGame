@@ -17,6 +17,7 @@
 #include "translate.h"
 #include "metrics.h"
 #include "particle.h"
+#include "gamecontroller.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -753,6 +754,7 @@ private:
 	};
 public:
 	AudioSystem audiosystem;
+	GameController controller;
 private:
 	AudioPool audiopool;
 	Resources resources;
@@ -807,6 +809,7 @@ private:
 	void deleteUi();
 	void resizeMenueAndStatusbar();
 	void initAudio();
+	void initGameController();
 	void updateUi(const ppl7::tk::MouseState& mouse, const Metrics& metrics);
 	void drawWorld(SDL_Renderer* renderer);
 	void drawGrid();
@@ -870,6 +873,10 @@ public:
 	void keyDownEvent(ppl7::tk::KeyEvent* event);
 	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
 	void resizeEvent(ppl7::tk::ResizeEvent* event);
+	void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
+	void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+	void gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event);
+
 
 	void showTilesSelection();
 	void showTileTypeSelection();

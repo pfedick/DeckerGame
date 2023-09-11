@@ -66,6 +66,7 @@ OBJECTS=compile/main.o \
 	compile/animation.o \
 	compile/resources.o \
 	compile/waynet.o \
+	compile/gamecontroller.o \
 	compile/messageoverlay.o \
 	compile/objectsystem.o \
 	compile/object.o \
@@ -200,6 +201,10 @@ fixbricks: compile/fixbricks_main.o
 	$(CXX) -o fixbricks compile/fixbricks_main.o $(TEXMAKER_LIBS)
 	-chmod 755 fixbricks
 	./fixbricks
+
+controllertest: compile/controllertest_main.o compile/gamecontroller.o
+	$(CXX) -o controllertest compile/controllertest_main.o compile/gamecontroller.o $(LIBS)
+	-chmod 755 controllertest
 
 mergeintro: compile/mergeintro_main.o
 	$(CXX) -o mergeintro compile/mergeintro_main.o $(TEXMAKER_LIBS)
@@ -347,7 +352,7 @@ compile/metrics.o: src/game/metrics.cpp Makefile include/decker.h
 	$(CXX) -o compile/metrics.o -c src/game/metrics.cpp $(CFLAGS)
 
 compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h \
-	include/translate.h include/particle.h include/screens.h
+	include/translate.h include/particle.h include/screens.h include/gamecontroller.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
 
@@ -407,6 +412,10 @@ compile/particlesystem.o: src/game/particlesystem.cpp Makefile include/decker.h 
 compile/particle.o: src/game/particle.cpp Makefile include/particle.h
 	- @mkdir -p compile
 	$(CXX) -o compile/particle.o -c src/game/particle.cpp $(CFLAGS)
+
+compile/gamecontroller.o: src/game/gamecontroller.cpp Makefile include/gamecontroller.h
+	- @mkdir -p compile
+	$(CXX) -o compile/gamecontroller.o -c src/game/gamecontroller.cpp $(CFLAGS)
 
 compile/objectsystem.o: src/game/objectsystem.cpp Makefile include/objects.h include/decker.h include/wallenstein.h include/player.h
 	- @mkdir -p compile
@@ -837,3 +846,8 @@ compile/mergeintro_main.o: tools/mergeintro/main.cpp Makefile
 compile/vplay_main.o: tools/videoplayback/main.cpp Makefile include/videoplayer.h include/decker_sdl.h include/audio.h
 	- @mkdir -p compile
 	$(CXX) -o compile/vplay_main.o -c tools/videoplayback/main.cpp $(CFLAGS)
+
+# controllertest
+compile/controllertest_main.o: tools/controllertest/main.cpp Makefile
+	- @mkdir -p compile
+	$(CXX) -o compile/controllertest_main.o -c tools/controllertest/main.cpp $(CFLAGS)

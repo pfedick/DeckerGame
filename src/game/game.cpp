@@ -225,6 +225,7 @@ void Game::createWindow()
 	SDL_Renderer* renderer=(SDL_Renderer*)getRenderer();
 	sdl.setRenderer(renderer);
 	//SDL_RenderSetLogicalSize(renderer, 1920, 1080);
+	wm->setGameControllerFocus(this);
 
 	SDL_ShowCursor(SDL_DISABLE);
 }
@@ -371,6 +372,8 @@ void Game::init()
 	createWindow();
 	initUi();
 	initAudio();
+	initGameController();
+
 	desktopSize=clientSize();
 	viewport=clientRect();
 	message_overlay.resize(viewport.size());
@@ -383,6 +386,14 @@ void Game::init()
 	gui_font.setShadowColor(ppl7::grafix::Color(0, 0, 0, 0));
 	gui_font.setOrientation(ppl7::grafix::Font::TOP);
 	gui_font.setAntialias(true);
+}
+
+void Game::initGameController()
+{
+	std::list<GameController::Device>device_list=GameController::enumerate();
+	if (device_list.size() > 0) {
+		controller.open(device_list.front());
+	}
 }
 
 void Game::init_grafix()
@@ -1258,13 +1269,13 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		mouseDownEventOnSprite(event);
-} else if (object_selection != NULL && event->widget() == world_widget) {
-	mouseDownEventOnObject(event);
-} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
-	handleMouseDrawInWorld(*event);
-} else if (waynet_edit != NULL && event->widget() == world_widget) {
-	mouseDownEventOnWayNet(event);
-}
+	} else if (object_selection != NULL && event->widget() == world_widget) {
+		mouseDownEventOnObject(event);
+	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
+		handleMouseDrawInWorld(*event);
+	} else if (waynet_edit != NULL && event->widget() == world_widget) {
+		mouseDownEventOnWayNet(event);
+	}
 }
 
 
@@ -1300,12 +1311,12 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			event->p.y + coords.y,
 			0,
 			spriteset, nr, scale, sprite_selection->colorIndex());
-} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
-	sprite_selection->setSelectedSprite(-1);
-	sprite_mode=spriteModeDraw;
-	selected_sprite.id=-1;
-	selected_sprite_system=NULL;
-}
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+		sprite_selection->setSelectedSprite(-1);
+		sprite_mode=spriteModeDraw;
+		selected_sprite.id=-1;
+		selected_sprite_system=NULL;
+	}
 }
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
@@ -1765,4 +1776,21 @@ void Game::stepFrame()
 Player* Game::getPlayer()
 {
 	return player;
+}
+
+
+void Game::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event)
+{
+	controller.processEvent(event);
+
+}
+
+void Game::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+	controller.processEvent(event);
+}
+
+void Game::gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+	controller.processEvent(event);
 }

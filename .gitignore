@@ -27,3 +27,4 @@ studio/*.ldr
 lightwave/Dynamics/breakablewall.dynacache
 debug.log
 vplay.exe
+controllertest
