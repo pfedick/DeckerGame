@@ -6,6 +6,57 @@
 #include <ppl7-tk.h>
 
 #include <SDL.h>
+#include <map>
+
+class GameControllerMapping
+{
+public:
+    enum class Button {
+        Unknown=0,
+        MenuUp=1,
+        MenuDown,
+        MenuLeft,
+        MenuRight,
+        Menu,
+        Action,
+        Jump,
+        Back
+    };
+    enum class Axis {
+        Unknown=0,
+        Walk=1,
+        Jump
+    };
+
+private:
+    int player_axis_x;
+    int player_axis_y;
+
+    int menu_button_up;
+    int menu_button_down;
+    int menu_button_left;
+    int menu_button_right;
+    int menu_button;
+    int action_button;
+    int back_button;
+    int jump_button;
+    std::map<int, Button> button_mapping;
+    std::map<int, Axis> axis_mapping;
+
+    std::map<Button, int> button_mapping_rev;
+    std::map<Axis, int> axis_mapping_rev;
+
+public:
+
+    GameControllerMapping();
+    void updateMapping();
+
+    Button getButton(const ppl7::tk::GameControllerButtonEvent* event) const;
+    Axis getAxis(const ppl7::tk::GameControllerAxisEvent* event) const;
+    int getSDLAxis(const Axis a);
+    int getSDLButton(const Button b);
+
+};
 
 class GameController {
 private:
@@ -22,6 +73,7 @@ private:
     bool has_led=false;
     bool has_rumble=false;
     bool has_rumble_triggers=false;
+    int deadzone;
 
 
 
@@ -62,6 +114,9 @@ public:
         paddle3			= 0x00040000,
         paddle4			= 0x00080000
     };
+
+    GameControllerMapping mapping;
+
     GameController();
     GameController(const Device& dev);
     ~GameController();
@@ -70,15 +125,8 @@ public:
     void close();
 
     bool isOpen() const;
-    void processEvent(ppl7::tk::GameControllerAxisEvent* event);
-    void processEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void update();
-    bool left() const;
-    bool right() const;
-    bool up() const;
-    bool down() const;
-    bool shift() const;
-    bool action() const;
+    int getButtonState(int button) const;
+    int getAxisState(int axis) const;
 
 
     static std::list<Device> enumerate();

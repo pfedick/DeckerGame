@@ -796,6 +796,7 @@ void Game::closeEvent(ppl7::tk::Event* e)
 		settings_screen=NULL;
 		enableControls(true);
 		wm->setKeyboardFocus(world_widget);
+		wm->setGameControllerFocus(this);
 		if (world_widget) world_widget->retranslateUi();
 		if (e->customId() == 1) {
 			gameState = GameState::BackToMenue;
@@ -1781,16 +1782,16 @@ Player* Game::getPlayer()
 
 void Game::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event)
 {
-	controller.processEvent(event);
+
 
 }
 
 void Game::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
 {
-	controller.processEvent(event);
+
 }
 
 void Game::gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event)
 {
-	controller.processEvent(event);
+
 }

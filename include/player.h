@@ -19,6 +19,8 @@ class Representation;
 }
 } // EOF namespace Decker::Objects
 
+
+
 class Player : public Physic
 {
 private:
@@ -98,6 +100,12 @@ private:
 	void idleJokes(double time);
 	void playPhonetics();
 public:
+	class Keys {
+	public:
+		int matrix;
+		int velocity_x;
+		int velocity_y;
+	};
 	float x, y;
 	int points, health, lifes;
 	float air;
@@ -113,7 +121,7 @@ public:
 	ppl7::grafix::PointF position() const;
 	void stand();
 	void jumpExpression();
-	int getKeyboardMatrix(const unsigned char* state=NULL);
+	Keys getKeyboardMatrix(const unsigned char* state=NULL);
 	void resetState();
 	void resetLevelObjects();
 	void setZeroVelocity();

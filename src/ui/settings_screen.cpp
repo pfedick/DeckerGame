@@ -15,6 +15,7 @@ SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height, boo
     this->setName("SettingsScreen");
     setupUi();
     selectSettingsPage(SettingsMenue::Audio);
+    ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
 }
 
 void SettingsScreen::updateStyles()
@@ -436,6 +437,34 @@ void SettingsScreen::paint(ppl7::grafix::Drawable& draw)
     }
 }
 
+void SettingsScreen::handleMenuKeyDownEvent(int key)
+{
+    int m=static_cast<int>(currentMenueSelection);
+    if (key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
+        if (!ingame && m == 2) m=4;
+        selectSettingsPage(static_cast<SettingsMenue>(m + 1));
+    } else if (key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
+        if (!ingame && m == 5) m = 3;
+        selectSettingsPage(static_cast<SettingsMenue>(m - 1));
+    } else if (key == ppl7::tk::KeyEvent::KEY_RETURN || key == ppl7::tk::KeyEvent::KEY_ENTER) {
+        if (select_back->isSelected()) {
+            ppl7::tk::Event event(ppl7::tk::Event::Close);
+            event.setWidget(this);
+            event.setCustomId(0);
+            this->getParent()->closeEvent(&event);
+        } else if (select_menue != NULL && select_menue->isSelected()) {
+            ppl7::tk::Event event(ppl7::tk::Event::Close);
+            event.setWidget(this);
+            event.setCustomId(1);
+            this->getParent()->closeEvent(&event);
+        } else if (select_game_exit != NULL && select_game_exit->isSelected()) {
+            ppl7::tk::Event event(ppl7::tk::Event::Close);
+            event.setWidget(this);
+            event.setCustomId(2);
+            this->getParent()->closeEvent(&event);
+        }
+    }
+}
 
 void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
@@ -447,33 +476,26 @@ void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
     }
 
     if (event->widget() == menue) {
-        int m=static_cast<int>(currentMenueSelection);
-        if (event->key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
-            if (!ingame && m == 2) m=4;
-            selectSettingsPage(static_cast<SettingsMenue>(m + 1));
-        } else if (event->key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
-            if (!ingame && m == 5) m = 3;
-            selectSettingsPage(static_cast<SettingsMenue>(m - 1));
-        } else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN || event->key == ppl7::tk::KeyEvent::KEY_ENTER) {
-            if (select_back->isSelected()) {
-                ppl7::tk::Event event(ppl7::tk::Event::Close);
-                event.setWidget(this);
-                event.setCustomId(0);
-                this->getParent()->closeEvent(&event);
-            } else if (select_menue != NULL && select_menue->isSelected()) {
-                ppl7::tk::Event event(ppl7::tk::Event::Close);
-                event.setWidget(this);
-                event.setCustomId(1);
-                this->getParent()->closeEvent(&event);
-            } else if (select_game_exit != NULL && select_game_exit->isSelected()) {
-                ppl7::tk::Event event(ppl7::tk::Event::Close);
-                event.setWidget(this);
-                event.setCustomId(2);
-                this->getParent()->closeEvent(&event);
-            }
-        }
+        handleMenuKeyDownEvent(event->key);
     }
 }
+
+void SettingsScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+    GameControllerMapping::Button b=game.controller.mapping.getButton(event);
+    if (b == GameControllerMapping::Button::Menu) {
+        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        event.setWidget(this);
+        this->getParent()->closeEvent(&event);
+    }
+
+    if (b == GameControllerMapping::Button::MenuDown) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
+    else if (b == GameControllerMapping::Button::MenuUp) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
+    else if (b == GameControllerMapping::Button::Action) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
+
+
+}
+
 
 void SettingsScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 {

@@ -80,9 +80,9 @@ void LevelEnd::handleCollision(Player* player, const Collision& collision)
                 cooldown=now + 20000;
             }
         }
-        int keyboard=player->getKeyboardMatrix();
+        Player::Keys keyboard=player->getKeyboardMatrix();
 
-        if (cooldown < now && (keyboard & KeyboardKeys::Action)) {
+        if (cooldown < now && (keyboard.matrix & KeyboardKeys::Action)) {
             cooldown=now + 0.2;
             if (!GetGame().nextLevel(next_level)) {
                 toggle(false);

@@ -66,6 +66,7 @@ void Game::playIntroVideo()
 	if (video.load(filename)) {
 		this->addChild(intro_widget);
 		wm->setKeyboardFocus(intro_widget);
+		wm->setGameControllerFocus(intro_widget);
 		showUi(false);
 		audiosystem.play(&IntroSequence);
 
@@ -175,4 +176,14 @@ void IntroScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 		stop_playback=true;
 
 	}
+}
+
+void IntroScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+	GameControllerMapping::Button b=GetGame().controller.mapping.getButton(event);
+	if (b != GameControllerMapping::Button::Unknown) {
+		stop_playback=true;
+	}
+
+
 }

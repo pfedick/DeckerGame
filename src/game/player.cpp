@@ -249,31 +249,46 @@ void Player::turn(PlayerOrientation target)
 	}
 }
 
-int Player::getKeyboardMatrix(const Uint8* state)
+Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 {
 	if (state == NULL) state=SDL_GetKeyboardState(NULL);
-	int matrix=0;
-	if (state[SDL_SCANCODE_LEFT]) matrix|=KeyboardKeys::Left;
-	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) matrix|=KeyboardKeys::Left;
-	if (state[SDL_SCANCODE_RIGHT]) matrix|=KeyboardKeys::Right;
-	if (state[SDL_SCANCODE_L] || state[SDL_SCANCODE_D]) matrix|=KeyboardKeys::Right;
-	if (state[SDL_SCANCODE_UP]) matrix|=KeyboardKeys::Up;
-	if (state[SDL_SCANCODE_I] || state[SDL_SCANCODE_W]) matrix|=KeyboardKeys::Up;
-	if (state[SDL_SCANCODE_DOWN]) matrix|=KeyboardKeys::Down;
-	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) matrix|=KeyboardKeys::Down;
-	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) matrix|=KeyboardKeys::Shift;
-	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) matrix|=KeyboardKeys::Action;
+	Keys k;
+	k.matrix=0;
+	k.velocity_x=0;
+	k.velocity_y=0;
+	if (state[SDL_SCANCODE_LEFT]) k.matrix|=KeyboardKeys::Left;
+	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) k.matrix|=KeyboardKeys::Left;
+	if (state[SDL_SCANCODE_RIGHT]) k.matrix|=KeyboardKeys::Right;
+	if (state[SDL_SCANCODE_L] || state[SDL_SCANCODE_D]) k.matrix|=KeyboardKeys::Right;
+	if (state[SDL_SCANCODE_UP]) k.matrix|=KeyboardKeys::Up;
+	if (state[SDL_SCANCODE_I] || state[SDL_SCANCODE_W]) k.matrix|=KeyboardKeys::Up;
+	if (state[SDL_SCANCODE_DOWN]) k.matrix|=KeyboardKeys::Down;
+	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) k.matrix|=KeyboardKeys::Down;
+	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) k.matrix|=KeyboardKeys::Shift;
+	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) k.matrix|=KeyboardKeys::Action;
 
 	if (game->controller.isOpen()) {
-		if (game->controller.left()) matrix|=KeyboardKeys::Left;
-		if (game->controller.right()) matrix|=KeyboardKeys::Right;
-		if (game->controller.up()) matrix|=KeyboardKeys::Up;
-		if (game->controller.down()) matrix|=KeyboardKeys::Down;
-		if (game->controller.shift()) matrix|=KeyboardKeys::Shift;
-		if (game->controller.action()) matrix|=KeyboardKeys::Action;
-	}
+		GameController& gc=game->controller;
+		k.velocity_x=gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Walk));
+		if (k.velocity_x > 0) k.matrix|=KeyboardKeys::Right;
+		if (k.velocity_x > 16384) k.matrix|=KeyboardKeys::Shift;
+		if (k.velocity_x < 0) k.matrix|=KeyboardKeys::Left;
+		if (k.velocity_x < -16384) k.matrix|=KeyboardKeys::Shift;
 
-	return matrix;
+
+		k.velocity_y=gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Jump));
+		if (k.velocity_y > 0) k.matrix|=KeyboardKeys::Down;
+		if (k.velocity_y > 16384) k.matrix|=KeyboardKeys::Shift;
+		if (k.velocity_y < 0) k.matrix|=KeyboardKeys::Up;
+		if (k.velocity_y < -16384) k.matrix|=KeyboardKeys::Shift;
+
+
+		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Action))) k.matrix|=KeyboardKeys::Action;
+		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Jump))) k.matrix|=KeyboardKeys::Up;
+
+	}
+	//ppl7::PrintDebugTime("keys: %d, velocity x: %d, velocity y: %d\n", k.matrix, k.velocity_x, k.velocity_y);
+	return k;
 }
 
 void Player::stand()
@@ -600,37 +615,37 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	//if (time>next_keycheck) {
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	int keys=getKeyboardMatrix(state);
-	if (keys & KeyboardKeys::Action) {
+	Player::Keys keys=getKeyboardMatrix(state);
+	if (keys.matrix & KeyboardKeys::Action) {
 		checkActivationOfObjectsInRange(objects);
 		if (movement == Hacking) return;
 	}
 
-	if (keys == KeyboardKeys::Left) {
+	if (keys.matrix == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
 		if (movement != Walk) {
 			movement=Walk;
 			animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
 		}
-	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Shift)) {
+	} else if (keys.matrix == (KeyboardKeys::Left | KeyboardKeys::Shift)) {
 		if (movement != Run || orientation != Left) {
 			movement=Run;
 			orientation=Left;
 			animation.start(run_cycle_left, sizeof(run_cycle_left) / sizeof(int), true, 0);
 		}
-	} else if (keys == KeyboardKeys::Right) {
+	} else if (keys.matrix == KeyboardKeys::Right) {
 		if (orientation != Right) { turn(Right); return; }
 		if (movement != Walk) {
 			movement=Walk;
 			animation.start(walk_cycle_right, sizeof(walk_cycle_right) / sizeof(int), true, 0);
 		}
-	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Shift)) {
+	} else if (keys.matrix == (KeyboardKeys::Right | KeyboardKeys::Shift)) {
 		if (movement != Run || orientation != Right) {
 			movement=Run;
 			orientation=Right;
 			animation.start(run_cycle_right, sizeof(run_cycle_right) / sizeof(int), true, 0);
 		}
-	} else if ((keys == KeyboardKeys::Up || keys == (KeyboardKeys::Up | KeyboardKeys::Shift)) && movement != Falling && movement != Jump) {
+	} else if ((keys.matrix == KeyboardKeys::Up || keys.matrix == (KeyboardKeys::Up | KeyboardKeys::Shift)) && movement != Falling && movement != Jump) {
 		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder) {
 			if (movement != ClimbUp) {
 				movement=ClimbUp;
@@ -640,7 +655,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		} else {
 			if (movement != Jump) {
 				movement=Jump;
-				if (keys & KeyboardKeys::Shift) {
+				if (keys.matrix & KeyboardKeys::Shift) {
 					jump_climax=time + 0.45f;
 					acceleration_jump=2.0f * frame_rate_compensation;
 					acceleration_jump_sideways=0;
@@ -656,10 +671,10 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 				else animation.setStaticFrame(28);
 			}
 		}
-	} else if ((keys & KeyboardKeys::JumpLeft) == KeyboardKeys::JumpLeft) {
+	} else if ((keys.matrix & KeyboardKeys::JumpLeft) == KeyboardKeys::JumpLeft) {
 		movement=Jump;
 		orientation=Left;
-		if (keys & KeyboardKeys::Shift) {
+		if (keys.matrix & KeyboardKeys::Shift) {
 			jump_climax=time + 0.45f;
 			acceleration_jump=2.0f * frame_rate_compensation;
 			acceleration_jump_sideways=-6;
@@ -671,10 +686,10 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.setStaticFrame(38);
-	} else if ((keys & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
+	} else if ((keys.matrix & KeyboardKeys::JumpRight) == KeyboardKeys::JumpRight) {
 		movement=Jump;
 		orientation=Right;
-		if (keys & KeyboardKeys::Shift) {
+		if (keys.matrix & KeyboardKeys::Shift) {
 			jump_climax=time + 0.45f;
 			acceleration_jump=2.0f * frame_rate_compensation;
 			acceleration_jump_sideways=6.0f;
@@ -686,7 +701,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.setStaticFrame(39);
-	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
+	} else if (keys.matrix == KeyboardKeys::Down || keys.matrix == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
 		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
 			|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
 			if (collision_matrix[1][5] != TileType::Blocking && collision_matrix[2][5] != TileType::Blocking) {
@@ -699,13 +714,13 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			}
 		}
 
-	} else if (keys == (KeyboardKeys::Left) && movement == Jump) {
+	} else if (keys.matrix == (KeyboardKeys::Left) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=-2 * frame_rate_compensation;
-	} else if (keys == (KeyboardKeys::Right) && movement == Jump) {
+	} else if (keys.matrix == (KeyboardKeys::Right) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=2 * frame_rate_compensation;
-	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Shift) && movement == Jump) {
+	} else if (keys.matrix == (KeyboardKeys::Left | KeyboardKeys::Shift) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=-8 * frame_rate_compensation;
-	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Shift) && movement == Jump) {
+	} else if (keys.matrix == (KeyboardKeys::Right | KeyboardKeys::Shift) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=8 * frame_rate_compensation;
 
 	} else {
@@ -725,36 +740,36 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	int keys=getKeyboardMatrix(state);
+	Player::Keys keys=getKeyboardMatrix(state);
 	if (movement == Jump) {
-		if (!(keys & KeyboardKeys::Up)) {
+		if (!(keys.matrix & KeyboardKeys::Up)) {
 			movement=Falling;
 			return;
 		}
-		if ((keys & KeyboardKeys::Left) && velocity_move.x == 0) {
+		if ((keys.matrix & KeyboardKeys::Left) && velocity_move.x == 0) {
 			if (acceleration_jump_sideways > -6.0f) acceleration_jump_sideways=-6.0f;
 			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
+			if (keys.matrix & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
 			orientation=Left;
 			animation.setStaticFrame(38);
-		} else if ((keys & KeyboardKeys::Right) && velocity_move.x == 0) {
+		} else if ((keys.matrix & KeyboardKeys::Right) && velocity_move.x == 0) {
 			if (acceleration_jump_sideways < 6.0f) acceleration_jump_sideways=6.0f;
 			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
+			if (keys.matrix & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
 			orientation=Right;
 			animation.setStaticFrame(39);
 		}
 	} else {
-		if (keys & KeyboardKeys::Left) {
+		if (keys.matrix & KeyboardKeys::Left) {
 			if (acceleration_jump_sideways > -6.0f) acceleration_jump_sideways=-6.0f;
 			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
+			if (keys.matrix & KeyboardKeys::Shift && acceleration_jump_sideways > -9.0f) acceleration_jump_sideways-=(0.2f * frame_rate_compensation);
 			orientation=Left;
 			animation.setStaticFrame(38);
-		} else if (keys & KeyboardKeys::Right) {
+		} else if (keys.matrix & KeyboardKeys::Right) {
 			if (acceleration_jump_sideways < 6.0f) acceleration_jump_sideways=6.0f;
 			velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
-			if (keys & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
+			if (keys.matrix & KeyboardKeys::Shift && acceleration_jump_sideways < 9.0f) acceleration_jump_sideways+=(0.2f * frame_rate_compensation);
 			orientation=Right;
 			animation.setStaticFrame(39);
 		}
@@ -766,14 +781,14 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 {
 	//ppl7::PrintDebugTime("Player::handleKeyboardWhileSwimming: old movement: %s, ", (const char*)getState());
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	int keys=getKeyboardMatrix(state);
+	Player::Keys keys=getKeyboardMatrix(state);
 
-	if (keys & KeyboardKeys::Up) {
+	if (keys.matrix & KeyboardKeys::Up) {
 		if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water && movement != Jump) {
-			if (keys & KeyboardKeys::Left) {
+			if (keys.matrix & KeyboardKeys::Left) {
 				movement=Jump;
 				orientation=Left;
-				if (keys & KeyboardKeys::Shift) {
+				if (keys.matrix & KeyboardKeys::Shift) {
 					jump_climax=time + 0.3f;
 					acceleration_jump=2.0f * frame_rate_compensation;
 					acceleration_jump_sideways=-6;
@@ -787,10 +802,10 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 				velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 				animation.setStaticFrame(38);
 				return;
-			} else if (keys & KeyboardKeys::Right) {
+			} else if (keys.matrix & KeyboardKeys::Right) {
 				movement=Jump;
 				orientation=Right;
-				if (keys & KeyboardKeys::Shift) {
+				if (keys.matrix & KeyboardKeys::Shift) {
 					jump_climax=time + 0.3f;
 					acceleration_jump=2.0f * frame_rate_compensation;
 					acceleration_jump_sideways=6.0f;
@@ -807,7 +822,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 			} else {
 				movement=Jump;
 				orientation=Back;
-				if (keys & KeyboardKeys::Shift) {
+				if (keys.matrix & KeyboardKeys::Shift) {
 					jump_climax=time + 0.3f;
 					acceleration_jump=2.0f * frame_rate_compensation;
 					acceleration_jump_sideways=0.0f;
@@ -826,11 +841,11 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 	}
 	float speed=2.0f * frame_rate_compensation;
-	if (keys & KeyboardKeys::Shift) {
+	if (keys.matrix & KeyboardKeys::Shift) {
 		speed=4.0f * frame_rate_compensation;
-		keys-=KeyboardKeys::Shift;
+		keys.matrix-=KeyboardKeys::Shift;
 	}
-	if (keys == KeyboardKeys::Up) {
+	if (keys.matrix == KeyboardKeys::Up) {
 		if (movement != Swim || orientation != Front) {
 			movement=Swim;
 			orientation=Front;
@@ -838,7 +853,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.y=-speed;
 		velocity_move.x=0;
-	} else if (keys == KeyboardKeys::Down) {
+	} else if (keys.matrix == KeyboardKeys::Down) {
 		if (movement != Swim || orientation != Front) {
 			movement=Swim;
 			orientation=Front;
@@ -846,7 +861,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.y=speed;
 		velocity_move.x=0;
-	} else if (keys == KeyboardKeys::Right && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+	} else if (keys.matrix == KeyboardKeys::Right && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Right) {
 			movement=Swim;
 			orientation=Right;
@@ -854,7 +869,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=speed;
 		velocity_move.y=0;
-	} else if (keys == KeyboardKeys::Right) {
+	} else if (keys.matrix == KeyboardKeys::Right) {
 		if (movement != SwimStraight || orientation != Right) {
 			movement=SwimStraight;
 			orientation=Right;
@@ -862,7 +877,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=speed;
 		velocity_move.y=0;
-	} else if (keys == KeyboardKeys::Left && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+	} else if (keys.matrix == KeyboardKeys::Left && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Left) {
 			movement=Swim;
 			orientation=Left;
@@ -870,7 +885,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=-speed;
 		velocity_move.y=0;
-	} else if (keys == KeyboardKeys::Left) {
+	} else if (keys.matrix == KeyboardKeys::Left) {
 		if (movement != SwimStraight || orientation != Left) {
 			movement=SwimStraight;
 			orientation=Left;
@@ -878,7 +893,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=-speed;
 		velocity_move.y=0;
-	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Up)) {
+	} else if (keys.matrix == (KeyboardKeys::Left | KeyboardKeys::Up)) {
 		if (movement != SwimUp || orientation != Left) {
 			movement=SwimUp;
 			orientation=Left;
@@ -886,7 +901,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=-speed;
 		velocity_move.y=-speed;
-	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Up)) {
+	} else if (keys.matrix == (KeyboardKeys::Right | KeyboardKeys::Up)) {
 		if (movement != SwimUp || orientation != Right) {
 			movement=SwimUp;
 			orientation=Right;
@@ -894,7 +909,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=speed;
 		velocity_move.y=-speed;
-	} else if (keys == (KeyboardKeys::Right | KeyboardKeys::Down)) {
+	} else if (keys.matrix == (KeyboardKeys::Right | KeyboardKeys::Down)) {
 		if (movement != SwimDown || orientation != Right) {
 			movement=SwimDown;
 			orientation=Right;
@@ -902,7 +917,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=speed;
 		velocity_move.y=speed;
-	} else if (keys == (KeyboardKeys::Left | KeyboardKeys::Down)) {
+	} else if (keys.matrix == (KeyboardKeys::Left | KeyboardKeys::Down)) {
 		if (movement != SwimDown || orientation != Left) {
 			movement=SwimDown;
 			orientation=Left;

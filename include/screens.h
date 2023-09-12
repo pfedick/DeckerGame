@@ -19,6 +19,7 @@ public:
     bool stopSignal() const;
     // EventHandler
     void keyDownEvent(ppl7::tk::KeyEvent* event);
+    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
 
 };
 
@@ -118,6 +119,8 @@ private:
     void updateVideoModes();
     void retranslateUi();
 
+    void handleMenuKeyDownEvent(int key);
+
 
 public:
     SettingsScreen(Game& game, int x, int y, int width, int height, bool ingame=false);
@@ -132,6 +135,7 @@ public:
     virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
     virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
 
 };
 
@@ -168,6 +172,7 @@ private:
 
     void resizeSettingsScreen();
     void retranslateUi();
+    void handleKeyDownEvent(int key);
 
 public:
 
@@ -184,6 +189,7 @@ public:
     virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
     virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
+    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
 
     virtual void closeEvent(ppl7::tk::Event* event);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);

@@ -3,7 +3,7 @@
 GameController::GameController()
 {
     gc=NULL;
-
+    deadzone=4000;
 
 }
 
@@ -64,15 +64,6 @@ void GameController::open(const Device& dev)
 
 }
 
-void GameController::processEvent(ppl7::tk::GameControllerAxisEvent* event)
-{
-    //if (event->axis==0)
-}
-
-void GameController::processEvent(ppl7::tk::GameControllerButtonEvent* event)
-{
-
-}
 
 
 bool GameController::isOpen() const
@@ -81,40 +72,22 @@ bool GameController::isOpen() const
     return false;
 }
 
-void GameController::update()
+int GameController::getButtonState(int button) const
 {
-
+    if (gc) return SDL_GameControllerGetButton(gc, (SDL_GameControllerButton)button);
+    return 0;
 }
 
-bool GameController::left() const
+int GameController::getAxisState(int axis) const
 {
-    return false;
+    if (gc) {
+        int value=SDL_GameControllerGetAxis(gc, (SDL_GameControllerAxis)axis);
+        if (value > -deadzone && value < deadzone) value=0;
+        return value;
+    }
+    return 0;
 }
 
-bool GameController::right() const
-{
-    return false;
-}
-
-bool GameController::up() const
-{
-    return false;
-}
-
-bool GameController::down() const
-{
-    return false;
-}
-
-bool GameController::shift() const
-{
-    return false;
-}
-
-bool GameController::action() const
-{
-    return false;
-}
 
 
 std::list<GameController::Device> GameController::enumerate()
@@ -133,4 +106,87 @@ std::list<GameController::Device> GameController::enumerate()
         }
     }
     return device_list;
+}
+
+
+GameControllerMapping::GameControllerMapping()
+{
+    player_axis_x=SDL_CONTROLLER_AXIS_LEFTX;
+    player_axis_y=SDL_CONTROLLER_AXIS_RIGHTY;
+
+    menu_button_up=SDL_CONTROLLER_BUTTON_DPAD_UP;
+    menu_button_down=SDL_CONTROLLER_BUTTON_DPAD_DOWN;
+    menu_button_left=SDL_CONTROLLER_BUTTON_DPAD_LEFT;
+    menu_button_right=SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
+
+    menu_button=SDL_CONTROLLER_BUTTON_START;
+    action_button=SDL_CONTROLLER_BUTTON_START;
+
+    action_button=SDL_CONTROLLER_BUTTON_A;
+    back_button=SDL_CONTROLLER_BUTTON_B;
+    jump_button=SDL_CONTROLLER_BUTTON_X;
+    updateMapping();
+}
+
+void GameControllerMapping::updateMapping()
+{
+    button_mapping.clear();
+    axis_mapping.clear();
+    button_mapping_rev.clear();
+    axis_mapping_rev.clear();
+
+    axis_mapping.insert(std::pair<int, Axis>(player_axis_x, Axis::Walk));
+    axis_mapping.insert(std::pair<int, Axis>(player_axis_y, Axis::Jump));
+    button_mapping.insert(std::pair<int, Button>(menu_button_up, Button::MenuUp));
+    button_mapping.insert(std::pair<int, Button>(menu_button_down, Button::MenuDown));
+    button_mapping.insert(std::pair<int, Button>(menu_button_left, Button::MenuLeft));
+    button_mapping.insert(std::pair<int, Button>(menu_button_right, Button::MenuRight));
+    button_mapping.insert(std::pair<int, Button>(menu_button, Button::Menu));
+    button_mapping.insert(std::pair<int, Button>(action_button, Button::Action));
+    button_mapping.insert(std::pair<int, Button>(jump_button, Button::Jump));
+    button_mapping.insert(std::pair<int, Button>(back_button, Button::Back));
+
+    axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Walk, player_axis_x));
+    axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Jump, player_axis_y));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::MenuUp, menu_button_up));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::MenuDown, menu_button_down));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::MenuLeft, menu_button_left));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::MenuRight, menu_button_right));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Menu, menu_button));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Action, action_button));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Jump, back_button));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Back, jump_button));
+
+}
+
+GameControllerMapping::Button GameControllerMapping::getButton(const ppl7::tk::GameControllerButtonEvent* event) const
+{
+    std::map<int, Button>::const_iterator it;
+    it=button_mapping.find(event->button);
+    if (it != button_mapping.end()) return it->second;
+    return Button::Unknown;
+}
+
+GameControllerMapping::Axis GameControllerMapping::getAxis(const ppl7::tk::GameControllerAxisEvent* event) const
+{
+    std::map<int, Axis>::const_iterator it;
+    it=axis_mapping.find(event->axis);
+    if (it != axis_mapping.end()) return it->second;
+    return Axis::Unknown;
+}
+
+int GameControllerMapping::getSDLAxis(const Axis a)
+{
+    std::map<Axis, int>::const_iterator it;
+    it=axis_mapping_rev.find(a);
+    if (it != axis_mapping_rev.end()) return it->second;
+    return SDL_CONTROLLER_AXIS_INVALID;
+}
+
+int GameControllerMapping::getSDLButton(const Button b)
+{
+    std::map<Button, int>::const_iterator it;
+    it=button_mapping_rev.find(b);
+    if (it != button_mapping_rev.end()) return it->second;
+    return SDL_CONTROLLER_BUTTON_INVALID;
 }

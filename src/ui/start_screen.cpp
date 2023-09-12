@@ -42,6 +42,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	StartScreen* start_screen=new StartScreen(*this, 0, title_rect.h, this->width(), this->height() - title_rect.h);
 	this->addChild(start_screen);
 	wm->setKeyboardFocus(start_screen);
+	wm->setGameControllerFocus(start_screen);
 	showUi(false);
 	//int fade_to_black=255;
 	int fade_state=0;
@@ -375,10 +376,9 @@ void StartScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
+void StartScreen::handleKeyDownEvent(int key)
 {
-	//printf("StartScreen::keyDownEvent\n");
-	if (event->key == ppl7::tk::KeyEvent::KEY_DOWN) {
+	if (key == ppl7::tk::KeyEvent::KEY_DOWN) {
 		if (start_tutorial->isSelected()) {
 			start_tutorial->setSelected(false);
 			start_game->setSelected(true);
@@ -392,7 +392,7 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 			editor->setSelected(false);
 			end->setSelected(true);
 		}
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_UP) {
+	} else if (key == ppl7::tk::KeyEvent::KEY_UP) {
 		if (end->isSelected()) {
 			end->setSelected(false);
 			editor->setSelected(true);
@@ -406,13 +406,29 @@ void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 			start_game->setSelected(false);
 			start_tutorial->setSelected(true);
 		}
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
+	} else if (key == ppl7::tk::KeyEvent::KEY_RETURN) {
 		if (start_game->isSelected()) state=State::StartGame;
 		else if (settings->isSelected()) showSettings();
 		else if (editor->isSelected()) state=State::StartEditor;
 		else if (end->isSelected()) state=State::QuitGame;
 		else if (start_tutorial->isSelected()) state=State::StartTutorial;
 	}
+}
+
+void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
+{
+	//printf("StartScreen::keyDownEvent\n");
+	handleKeyDownEvent(event->key);
+}
+
+void StartScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+	GameControllerMapping::Button b=game.controller.mapping.getButton(event);
+	if (b == GameControllerMapping::Button::MenuDown) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
+	else if (b == GameControllerMapping::Button::MenuUp) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
+	else if (b == GameControllerMapping::Button::Action || b == GameControllerMapping::Button::MenuRight) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
+
+
 }
 
 
@@ -426,6 +442,7 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 		menue->setVisible(true);
 		retranslateUi();
 		ppl7::tk::GetWindowManager()->setKeyboardFocus(this);
+		ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
 		needsRedraw();
 
 	}

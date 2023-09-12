@@ -93,9 +93,9 @@ void Switch::handleCollision(Player* player, const Collision& collision)
 		state=1;
 		return;
 	}
-	int keyboard=player->getKeyboardMatrix();
+	Player::Keys keyboard=player->getKeyboardMatrix();
 	double now=ppl7::GetMicrotime();
-	if (cooldown < now && (keyboard & KeyboardKeys::Action)) {
+	if (cooldown < now && (keyboard.matrix & KeyboardKeys::Action)) {
 		//printf("switch\n");
 		if (current_state == true) current_state=false;
 		else current_state=true;

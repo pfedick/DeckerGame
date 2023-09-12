@@ -63,8 +63,8 @@ void BreakingWall::handleCollision(Player* player, const Collision& collision)
 	if (state == 0) {
 		if (player->x < p.x)player->x=p.x - 64;
 		if (player->x > p.x)player->x=p.x + 64;
-		int keyboard=player->getKeyboardMatrix();
-		if (keyboard & KeyboardKeys::Action) {
+		Player::Keys keyboard=player->getKeyboardMatrix();
+		if (keyboard.matrix & KeyboardKeys::Action) {
 			player->startHacking(this);
 			if (player->x < p.x)player->x=p.x - 96;
 			if (player->x > p.x)player->x=p.x + 96;

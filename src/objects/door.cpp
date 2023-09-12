@@ -173,7 +173,7 @@ void Door::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 
 void Door::handleCollision(Player* player, const Collision& collision)
 {
-	int keyboard=player->getKeyboardMatrix();
+	Player::Keys keyboard=player->getKeyboardMatrix();
 	if (state != DoorState::open) {
 		if (orientation == DoorOrientation::left) {
 			if (collision.objectLeft() && player->x > p.x - 48) player->x=p.x - 48;
@@ -204,7 +204,7 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	}
 
 	double now=ppl7::GetMicrotime();
-	if (warp_to_id > 0 && (keyboard & KeyboardKeys::Action)) {
+	if (warp_to_id > 0 && (keyboard.matrix & KeyboardKeys::Action)) {
 		if (state == DoorState::closed) {
 			if (key_id == 0 || player->isInInventory(key_id)) {
 				state=DoorState::opening;
