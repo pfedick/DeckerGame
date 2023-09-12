@@ -112,7 +112,7 @@ std::list<GameController::Device> GameController::enumerate()
 GameControllerMapping::GameControllerMapping()
 {
     player_axis_x=SDL_CONTROLLER_AXIS_LEFTX;
-    player_axis_y=SDL_CONTROLLER_AXIS_RIGHTY;
+    player_axis_y=SDL_CONTROLLER_AXIS_LEFTY;
 
     menu_button_up=SDL_CONTROLLER_BUTTON_DPAD_UP;
     menu_button_down=SDL_CONTROLLER_BUTTON_DPAD_DOWN;

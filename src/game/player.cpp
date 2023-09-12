@@ -256,6 +256,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	k.matrix=0;
 	k.velocity_x=0;
 	k.velocity_y=0;
+
 	if (state[SDL_SCANCODE_LEFT]) k.matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) k.matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_RIGHT]) k.matrix|=KeyboardKeys::Right;
@@ -267,27 +268,30 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) k.matrix|=KeyboardKeys::Shift;
 	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) k.matrix|=KeyboardKeys::Action;
 
+	//ppl7::PrintDebugTime("keys: %4d, velocity x: %5d, velocity y: %5d --- ", k.matrix, k.velocity_x, k.velocity_y);
+
+
 	if (game->controller.isOpen()) {
 		GameController& gc=game->controller;
 		k.velocity_x=gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Walk));
 		if (k.velocity_x > 0) k.matrix|=KeyboardKeys::Right;
-		if (k.velocity_x > 16384) k.matrix|=KeyboardKeys::Shift;
+		if (k.velocity_x > 25000) k.matrix|=KeyboardKeys::Shift;
 		if (k.velocity_x < 0) k.matrix|=KeyboardKeys::Left;
-		if (k.velocity_x < -16384) k.matrix|=KeyboardKeys::Shift;
+		if (k.velocity_x < -25000) k.matrix|=KeyboardKeys::Shift;
 
 
 		k.velocity_y=gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Jump));
-		if (k.velocity_y > 0) k.matrix|=KeyboardKeys::Down;
-		if (k.velocity_y > 16384) k.matrix|=KeyboardKeys::Shift;
-		if (k.velocity_y < 0) k.matrix|=KeyboardKeys::Up;
-		if (k.velocity_y < -16384) k.matrix|=KeyboardKeys::Shift;
+		//if (k.velocity_y > 0) k.matrix|=KeyboardKeys::Down;
+		if (k.velocity_y > 16384) k.matrix|=KeyboardKeys::Down | KeyboardKeys::Shift;
+		//if (k.velocity_y < 0) k.matrix|=KeyboardKeys::Up;
+		if (k.velocity_y < -16384) k.matrix|=KeyboardKeys::Up | KeyboardKeys::Shift;
 
 
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Action))) k.matrix|=KeyboardKeys::Action;
-		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Jump))) k.matrix|=KeyboardKeys::Up;
+		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Jump))) k.matrix|=KeyboardKeys::Up | KeyboardKeys::Shift;
 
 	}
-	//ppl7::PrintDebugTime("keys: %d, velocity x: %d, velocity y: %d\n", k.matrix, k.velocity_x, k.velocity_y);
+	//ppl7::PrintDebugTime("keys: %4d, velocity x: %5d, velocity y: %5d\n", k.matrix, k.velocity_x, k.velocity_y);
 	return k;
 }
 
