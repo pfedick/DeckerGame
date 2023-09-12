@@ -54,13 +54,14 @@ void GameController::open(const Device& dev)
     if (SDL_GameControllerHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE3)) has_button|=static_cast<uint32_t>(Button::paddle3);
     if (SDL_GameControllerHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE4)) has_button|=static_cast<uint32_t>(Button::paddle4);
 
+
     has_led=SDL_GameControllerHasLED(gc);
     has_rumble=SDL_GameControllerHasRumble(gc);
     has_rumble_triggers=SDL_GameControllerHasRumbleTriggers(gc);
 
     SDL_GameControllerEventState(SDL_ENABLE);
 
-    printf("has_axis: %x, has_button: %x\n", has_axis, has_button);
+    printf("has_axis: %x, has_button: %x, has_led: %d, has_rumble: %d, has_rumble_triggers: %d\n", has_axis, has_button, has_led, has_rumble, has_rumble_triggers);
 
 }
 
@@ -107,6 +108,17 @@ std::list<GameController::Device> GameController::enumerate()
     }
     return device_list;
 }
+
+void GameController::rumbleTrigger(uint16_t left, uint16_t right, uint32_t duration_ms)
+{
+    if (has_rumble_triggers == true && gc != NULL)  SDL_GameControllerRumbleTriggers(gc, left, right, duration_ms);
+}
+
+void GameController::rumble(uint16_t low, uint16_t high, uint32_t duration_ms)
+{
+    if (has_rumble == true && gc != NULL)  SDL_GameControllerRumble(gc, low, high, duration_ms);
+}
+
 
 
 GameControllerMapping::GameControllerMapping()

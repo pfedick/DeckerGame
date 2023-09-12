@@ -128,6 +128,8 @@ public:
     int getButtonState(int button) const;
     int getAxisState(int axis) const;
 
+    void rumbleTrigger(uint16_t left, uint16_t right, uint32_t duration_ms);
+    void rumble(uint16_t low, uint16_t high, uint32_t duration_ms);
 
     static std::list<Device> enumerate();
 };

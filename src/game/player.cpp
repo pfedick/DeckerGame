@@ -361,9 +361,8 @@ void Player::dropHealth(float points, HealthDropReason reason)
 		if (animation.getFrame() != 297) animation.setStaticFrame(297);
 	}
 
-
-
-
+	//game->controller.rumbleTrigger(0xffff, 0xffff, 16);
+	game->controller.rumble(0xffff, 0xffff, 16);
 	health-=points;
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
