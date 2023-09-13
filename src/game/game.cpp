@@ -707,6 +707,7 @@ void Game::run()
 	world_widget->setVisible(true);
 	world_widget->setEnabled(true);
 	wm->setKeyboardFocus(world_widget);
+	wm->setGameControllerFocus(this);
 	SDL_Renderer* renderer=sdl.getRenderer();
 	quitGame=false;
 	Metrics last_metrics, total_metrics;
@@ -1788,6 +1789,17 @@ void Game::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* even
 
 void Game::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
 {
+	GameControllerMapping::Button b=controller.mapping.getButton(event);
+	//ppl7::PrintDebugTime("gameControllerButtonDownEvent b=%d\n", (int)b);
+	if (b == GameControllerMapping::Button::Menu) {
+		if (settings_screen) {
+			delete settings_screen;
+			settings_screen=NULL;
+			enableControls(true);
+			wm->setKeyboardFocus(world_widget);
+			wm->setGameControllerFocus(this);
+		} else openSettingsScreen();
+	}
 
 }
 
