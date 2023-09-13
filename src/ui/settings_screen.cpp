@@ -533,12 +533,18 @@ void SettingsScreen::handleAudioKeyDownEvent(int key)
         ppl7::tk::HorizontalSlider* slider=getCurrentAudioSlider();
         if (slider) {
             slider->setValue(slider->value() - 10);
+            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ev.setWidget(slider);
+            valueChangedEvent(&ev, slider->value());
 
         }
     } else  if (key == ppl7::tk::KeyEvent::KEY_RIGHT) {
         ppl7::tk::HorizontalSlider* slider=getCurrentAudioSlider();
         if (slider) {
             slider->setValue(slider->value() + 10);
+            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ev.setWidget(slider);
+            valueChangedEvent(&ev, slider->value());
         }
 
     }
@@ -546,12 +552,17 @@ void SettingsScreen::handleAudioKeyDownEvent(int key)
 
 void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
+    handleKeyDownEvent(event->key);
+}
+
+void SettingsScreen::handleKeyDownEvent(int key)
+{
     //ppl7::PrintDebugTime("SettingsScreen::keyDownEvent: key=%d, %s\n", event->key, (const  char*)event->widget()->name());
 
     if (keyfocus == KeyFocusArea::Menu) {
-        handleMenuKeyDownEvent(event->key);
+        handleMenuKeyDownEvent(key);
     } else if (keyfocus == KeyFocusArea::Audio) {
-        handleAudioKeyDownEvent(event->key);
+        handleAudioKeyDownEvent(key);
     }
 }
 
@@ -564,18 +575,30 @@ void SettingsScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButto
         this->getParent()->closeEvent(&event);
     }
 
-    if (b == GameControllerMapping::Button::MenuDown) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
-    else if (b == GameControllerMapping::Button::MenuUp) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
-    else if (b == GameControllerMapping::Button::MenuLeft) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_LEFT);
-    else if (b == GameControllerMapping::Button::MenuRight) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_RIGHT);
-    else if (b == GameControllerMapping::Button::Action) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
-    else if (b == GameControllerMapping::Button::Back) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_ESCAPE);
+    if (b == GameControllerMapping::Button::MenuDown) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
+    else if (b == GameControllerMapping::Button::MenuUp) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
+    else if (b == GameControllerMapping::Button::MenuLeft) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_LEFT);
+    else if (b == GameControllerMapping::Button::MenuRight) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_RIGHT);
+    else if (b == GameControllerMapping::Button::Action) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
+    else if (b == GameControllerMapping::Button::Back) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_ESCAPE);
 
 
 }
 
-void SettingsScreen::gameControllerAxisEvent(ppl7::tk::GameControllerAxisEvent* event)
+void SettingsScreen::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event)
 {
+    GameControllerMapping::Axis axis=game.controller.mapping.getAxis(event);
+    if (axis == GameControllerMapping::Axis::Walk && currentMenueSelection == SettingsMenue::Audio) {
+        ppl7::tk::HorizontalSlider* slider=getCurrentAudioSlider();
+        if (slider) {
+            if (event->value < -10000) slider->setValue(slider->value() - 10);
+            if (event->value > 10000) slider->setValue(slider->value() + 10);
+            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ev.setWidget(slider);
+            valueChangedEvent(&ev, slider->value());
+        }
+
+    }
 
 }
 

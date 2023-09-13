@@ -135,8 +135,8 @@ private:
     void updateVideoModes();
     void retranslateUi();
 
+    void handleKeyDownEvent(int key);
     void handleMenuKeyDownEvent(int key);
-
     void handleAudioKeyDownEvent(int key);
 
     ppl7::tk::HorizontalSlider* getCurrentAudioSlider();
@@ -155,7 +155,7 @@ public:
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
     virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
     void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void gameControllerAxisEvent(ppl7::tk::GameControllerAxisEvent* event);
+    void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
     void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
     void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 
