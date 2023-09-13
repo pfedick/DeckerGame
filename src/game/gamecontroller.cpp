@@ -3,7 +3,7 @@
 GameController::GameController()
 {
     gc=NULL;
-    deadzone=4000;
+    deadzone=10000;
 
 }
 
