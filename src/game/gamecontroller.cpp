@@ -19,8 +19,13 @@ void GameController::close()
 
 void GameController::open(const Device& dev)
 {
+    open(dev.id);
+}
+
+void GameController::open(int sdl_id)
+{
     close();
-    gc=SDL_GameControllerOpen(dev.id);
+    gc=SDL_GameControllerOpen(sdl_id);
     if (!gc) {
         return;
     }

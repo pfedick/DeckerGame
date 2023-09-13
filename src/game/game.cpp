@@ -1795,3 +1795,16 @@ void Game::gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* even
 {
 
 }
+
+
+void Game::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+{
+	ppl7::PrintDebugTime("gameControllerDeviceAdded: %d\n", event->which);
+	controller.open(event->which);
+}
+
+void Game::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+{
+	ppl7::PrintDebugTime("gameControllerDeviceRemoved: %d\n", event->which);
+	controller.close();
+}

@@ -431,6 +431,16 @@ void StartScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEv
 
 }
 
+void StartScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+{
+	GetGame().gameControllerDeviceAdded(event);
+}
+
+void StartScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+{
+	GetGame().gameControllerDeviceRemoved(event);
+}
+
 
 void StartScreen::closeEvent(ppl7::tk::Event* event)
 {

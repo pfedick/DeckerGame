@@ -121,6 +121,7 @@ public:
     GameController(const Device& dev);
     ~GameController();
     void open(const Device& dev);
+    void open(int sdl_id);
 
     void close();
 

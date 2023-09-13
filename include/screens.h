@@ -20,6 +20,8 @@ public:
     // EventHandler
     void keyDownEvent(ppl7::tk::KeyEvent* event);
     void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 
 };
 
@@ -136,6 +138,8 @@ public:
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
     virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
     void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 
 };
 
@@ -190,6 +194,8 @@ public:
     virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
     virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
     void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 
     virtual void closeEvent(ppl7::tk::Event* event);
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
@@ -255,6 +261,11 @@ public:
     void addResult(const ppl7::String& caption, int object_type, size_t max, size_t achived, size_t bonus =0);
     void addTotal(const ppl7::String& caption, int points);
     void addLine(const ppl7::String& caption);
+
+    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+
 };
 
 

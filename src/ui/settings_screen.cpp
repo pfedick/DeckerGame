@@ -496,6 +496,17 @@ void SettingsScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButto
 
 }
 
+void SettingsScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+{
+    GetGame().gameControllerDeviceAdded(event);
+}
+
+void SettingsScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+{
+    GetGame().gameControllerDeviceRemoved(event);
+}
+
+
 
 void SettingsScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 {

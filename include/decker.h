@@ -876,6 +876,8 @@ public:
 	void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
 	void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
 	void gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event);
+	void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
+	void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 
 
 	void showTilesSelection();

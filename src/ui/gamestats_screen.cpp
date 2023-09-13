@@ -221,6 +221,29 @@ void GameStatsScreen::addLine(const ppl7::String& caption)
 
 }
 
+void GameStatsScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+{
+    GameControllerMapping::Button b=GetGame().controller.mapping.getButton(event);
+    if (b != GameControllerMapping::Button::Unknown) {
+        closeWindow=true;
+    }
+
+
+}
+
+
+void GameStatsScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+{
+    GetGame().gameControllerDeviceAdded(event);
+}
+
+void GameStatsScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+{
+    GetGame().gameControllerDeviceRemoved(event);
+}
+
+
+
 
 void Game::showStatsScreen(StatsScreenReason reason)
 {
@@ -255,6 +278,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     int line=-2;
     int bonus=0;
     int total_bonus =0;
+    wm->setGameControllerFocus(game_stats_screen);
     while (1) {
         double now=ppl7::GetMicrotime();
         float frame_rate_compensation=1.0f;
@@ -362,6 +386,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     }
     delete game_stats_screen;
     game_stats_screen=NULL;
+    wm->setGameControllerFocus(this);
     world_widget->setVisible(true);
     world_widget->setEnabled(true);
     showUi(save_ui_state);

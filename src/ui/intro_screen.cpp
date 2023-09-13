@@ -187,3 +187,14 @@ void IntroScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEv
 
 
 }
+
+
+void IntroScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+{
+	GetGame().gameControllerDeviceAdded(event);
+}
+
+void IntroScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+{
+	GetGame().gameControllerDeviceRemoved(event);
+}
