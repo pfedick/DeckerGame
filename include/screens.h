@@ -68,10 +68,24 @@ private:
         Exit=4,
         Back=5,
     };
+    enum class SettingsAudio {
+        Total,
+        Music,
+        Effects,
+        Ambience,
+        Speech
+    };
+    enum class KeyFocusArea {
+        Menu=0,
+        Audio
+    };
+    KeyFocusArea keyfocus;
+
     Game& game;
     bool ingame;
     //SDL& sdl;
     SettingsMenue currentMenueSelection;
+    SettingsAudio currentAudioSelection;
     StyleElement style_heading, style_label, style_menue;
     ppl7::grafix::Point settings_page;
     int input_widget_x;
@@ -93,7 +107,7 @@ private:
 
 
     // Audio
-    ppl7::tk::ComboBox* audio_device_combobox;
+    //ppl7::tk::ComboBox* audio_device_combobox;
     ppl7::tk::HorizontalSlider* audio_total_slider;
     ppl7::tk::HorizontalSlider* audio_music_slider;
     ppl7::tk::HorizontalSlider* audio_effects_slider;
@@ -123,6 +137,9 @@ private:
 
     void handleMenuKeyDownEvent(int key);
 
+    void handleAudioKeyDownEvent(int key);
+
+    ppl7::tk::HorizontalSlider* getCurrentAudioSlider();
 
 public:
     SettingsScreen(Game& game, int x, int y, int width, int height, bool ingame=false);
@@ -138,6 +155,7 @@ public:
     virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
     virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
     void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+    void gameControllerAxisEvent(ppl7::tk::GameControllerAxisEvent* event);
     void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
     void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
 

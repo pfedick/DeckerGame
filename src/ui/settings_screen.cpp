@@ -16,6 +16,7 @@ SettingsScreen::SettingsScreen(Game& g, int x, int y, int width, int height, boo
     setupUi();
     selectSettingsPage(SettingsMenue::Audio);
     ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
+    keyfocus=KeyFocusArea::Menu;
 }
 
 void SettingsScreen::updateStyles()
@@ -181,10 +182,10 @@ void SettingsScreen::initPageAudio()
 
     int y=0;
     ppl7::tk::Label* label;
+    /*
     label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Audio device:"));
     label->setFont(style_label.font);
     page_audio->addChild(label);
-
     audio_device_combobox=new ppl7::tk::ComboBox(input_widget_x, y, input_widget.width, input_widget.height);
     std::list<ppl7::String> device_names;
     game.audiosystem.enumerateDevices(device_names);
@@ -194,6 +195,7 @@ void SettingsScreen::initPageAudio()
     audio_device_combobox->setEventHandler(this);
     page_audio->addChild(audio_device_combobox);
     y+=50;
+    */
 
     label=new ppl7::tk::Label(0, y, 200, 40, translate("Volume:"));
     label->setFont(style_label.font);
@@ -439,6 +441,13 @@ void SettingsScreen::paint(ppl7::grafix::Drawable& draw)
 
 void SettingsScreen::handleMenuKeyDownEvent(int key)
 {
+    if (key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        event.setWidget(this);
+        this->getParent()->closeEvent(&event);
+        return;
+    }
+
     int m=static_cast<int>(currentMenueSelection);
     if (key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
         if (!ingame && m == 2) m=4;
@@ -446,7 +455,7 @@ void SettingsScreen::handleMenuKeyDownEvent(int key)
     } else if (key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
         if (!ingame && m == 5) m = 3;
         selectSettingsPage(static_cast<SettingsMenue>(m - 1));
-    } else if (key == ppl7::tk::KeyEvent::KEY_RETURN || key == ppl7::tk::KeyEvent::KEY_ENTER) {
+    } else if (key == ppl7::tk::KeyEvent::KEY_RETURN || key == ppl7::tk::KeyEvent::KEY_ENTER || key == ppl7::tk::KeyEvent::KEY_RIGHT) {
         if (select_back->isSelected()) {
             ppl7::tk::Event event(ppl7::tk::Event::Close);
             event.setWidget(this);
@@ -462,21 +471,87 @@ void SettingsScreen::handleMenuKeyDownEvent(int key)
             event.setWidget(this);
             event.setCustomId(2);
             this->getParent()->closeEvent(&event);
+        } else if (select_audio != NULL && select_audio->isSelected()) {
+            keyfocus=KeyFocusArea::Audio;
+            //ppl7::tk::GetWindowManager()->setKeyboardFocus(page_audio);
+            //select_audio->setSelected(false);
+            currentAudioSelection=SettingsAudio::Total;
+            audio_total_slider->setFocus();
         }
+    }
+}
+
+ppl7::tk::HorizontalSlider* SettingsScreen::getCurrentAudioSlider()
+{
+    switch (currentAudioSelection) {
+    case SettingsAudio::Total: return audio_total_slider;
+    case SettingsAudio::Music: return audio_music_slider;
+    case SettingsAudio::Effects: return audio_effects_slider;
+    case SettingsAudio::Ambience: return audio_ambience_slider;
+    case SettingsAudio::Speech: return audio_speech_slider;
+    }
+    return NULL;
+}
+
+void SettingsScreen::handleAudioKeyDownEvent(int key)
+{
+    if (key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+        keyfocus=KeyFocusArea::Menu;
+        ppl7::tk::GetWindowManager()->setKeyboardFocus(menue);
+        //select_audio->setSelected(true);
+    }
+    if (key == ppl7::tk::KeyEvent::KEY_DOWN) {
+        if (currentAudioSelection == SettingsAudio::Total) {
+            currentAudioSelection = SettingsAudio::Music;
+            audio_music_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Music) {
+            currentAudioSelection = SettingsAudio::Effects;
+            audio_effects_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Effects) {
+            currentAudioSelection = SettingsAudio::Ambience;
+            audio_ambience_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Ambience) {
+            currentAudioSelection = SettingsAudio::Speech;
+            audio_speech_slider->setFocus();
+        }
+    } else  if (key == ppl7::tk::KeyEvent::KEY_UP) {
+        if (currentAudioSelection == SettingsAudio::Speech) {
+            currentAudioSelection = SettingsAudio::Ambience;
+            audio_ambience_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Ambience) {
+            currentAudioSelection = SettingsAudio::Effects;
+            audio_effects_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Effects) {
+            currentAudioSelection = SettingsAudio::Music;
+            audio_music_slider->setFocus();
+        } else if (currentAudioSelection == SettingsAudio::Music) {
+            currentAudioSelection = SettingsAudio::Total;
+            audio_total_slider->setFocus();
+        }
+
+    } else  if (key == ppl7::tk::KeyEvent::KEY_LEFT) {
+        ppl7::tk::HorizontalSlider* slider=getCurrentAudioSlider();
+        if (slider) {
+            slider->setValue(slider->value() - 10);
+
+        }
+    } else  if (key == ppl7::tk::KeyEvent::KEY_RIGHT) {
+        ppl7::tk::HorizontalSlider* slider=getCurrentAudioSlider();
+        if (slider) {
+            slider->setValue(slider->value() + 10);
+        }
+
     }
 }
 
 void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
     //ppl7::PrintDebugTime("SettingsScreen::keyDownEvent: key=%d, %s\n", event->key, (const  char*)event->widget()->name());
-    if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
-        event.setWidget(this);
-        this->getParent()->closeEvent(&event);
-    }
 
-    if (event->widget() == menue) {
+    if (keyfocus == KeyFocusArea::Menu) {
         handleMenuKeyDownEvent(event->key);
+    } else if (keyfocus == KeyFocusArea::Audio) {
+        handleAudioKeyDownEvent(event->key);
     }
 }
 
@@ -491,8 +566,16 @@ void SettingsScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButto
 
     if (b == GameControllerMapping::Button::MenuDown) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
     else if (b == GameControllerMapping::Button::MenuUp) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
+    else if (b == GameControllerMapping::Button::MenuLeft) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_LEFT);
+    else if (b == GameControllerMapping::Button::MenuRight) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_RIGHT);
     else if (b == GameControllerMapping::Button::Action) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
+    else if (b == GameControllerMapping::Button::Back) handleMenuKeyDownEvent(ppl7::tk::KeyEvent::KEY_ESCAPE);
 
+
+}
+
+void SettingsScreen::gameControllerAxisEvent(ppl7::tk::GameControllerAxisEvent* event)
+{
 
 }
 
@@ -569,22 +652,27 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         game.config.volumeTotal=(float)audio_total_slider->value() / 255.0f;
         game.audiosystem.setGlobalVolume(game.config.volumeTotal);
         game.config.save();
+        currentAudioSelection = SettingsAudio::Total;
     } else if (event->widget() == audio_music_slider) {
         game.config.volumeMusic=(float)audio_music_slider->value() / 512.0f;
         game.audiosystem.setVolume(AudioClass::Music, game.config.volumeMusic);
         game.config.save();
+        currentAudioSelection = SettingsAudio::Music;
     } else if (event->widget() == audio_effects_slider) {
         game.config.volumeEffects=(float)audio_effects_slider->value() / 255.0f;
         game.audiosystem.setVolume(AudioClass::Effect, game.config.volumeEffects);
         game.config.save();
+        currentAudioSelection = SettingsAudio::Effects;
     } else if (event->widget() == audio_ambience_slider) {
         game.config.volumeAmbience=(float)audio_ambience_slider->value() / 255.0f;
         game.audiosystem.setVolume(AudioClass::Ambience, game.config.volumeAmbience);
         game.config.save();
+        currentAudioSelection = SettingsAudio::Ambience;
     } else if (event->widget() == audio_speech_slider) {
         game.config.volumeSpeech=(float)audio_speech_slider->value() / 255.0f;
         game.audiosystem.setVolume(AudioClass::Speech, game.config.volumeSpeech);
         game.config.save();
+        currentAudioSelection = SettingsAudio::Speech;
     }
 }
 
@@ -616,7 +704,7 @@ void SettingsScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 void SettingsScreen::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
     if (event->widget() == skipIntro_checkbox) {
-        ppl7::PrintDebugTime("toggle\n");
+        //ppl7::PrintDebugTime("toggle\n");
         game.config.skipIntro=checked;
         game.config.save();
     }
