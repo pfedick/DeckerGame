@@ -58,6 +58,7 @@ private:
 	double startIdle;
 	double nextIdleSpeech;
 	double nextPhonetic;
+	float frame_rate_compensation;
 	bool greetingPlayed;
 
 	AudioInstance* ambient_sound;

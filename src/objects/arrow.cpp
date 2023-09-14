@@ -71,7 +71,7 @@ void ArrowFired::update(double time, TileTypePlane& ttplane, Player& player, flo
 void ArrowFired::handleCollision(Player* player, const Collision& collision)
 {
 	deleteDefered=true;
-	player->dropHealth(30);
+	player->dropHealth(20);
 }
 
 

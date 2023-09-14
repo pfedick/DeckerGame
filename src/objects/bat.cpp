@@ -37,7 +37,7 @@ Bat::~Bat()
 
 void Bat::handleCollision(Player* player, const Collision& collision)
 {
-	player->dropHealth(10);
+	player->dropHealth(5);
 }
 
 void Bat::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)

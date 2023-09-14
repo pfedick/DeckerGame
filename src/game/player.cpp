@@ -81,6 +81,7 @@ Player::Player(Game* game)
 	greetingPlayed=true;
 	talkie=true;
 	last_fullspeed=0.0f;
+	frame_rate_compensation=0.0f;
 }
 
 Player::~Player()
@@ -374,7 +375,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 
 	//game->controller.rumbleTrigger(0xffff, 0xffff, 16);
 	game->controller.rumble(0xffff, 0xffff, 16);
-	health-=points;
+	health-=(points * frame_rate_compensation);
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
 		movement=Dead;
@@ -509,6 +510,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 {
 	if (particle_reason != ParticleReason::None && particle_end_time > time) emmitParticles(time);
 	this->time=time;
+	this->frame_rate_compensation=frame_rate_compensation;
 	if (time > next_animation) {
 		next_animation=time + animation_speed;
 		animation.update();

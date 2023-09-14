@@ -88,7 +88,7 @@ void Bird::changeState(BirdState state)
 void Bird::handleCollision(Player* player, const Collision& collision)
 {
 	if (state == BirdState::WaitThenFlyUp || state == BirdState::FlyUp) return;
-	player->dropHealth(100);
+	player->dropHealth(5);
 }
 
 void Bird::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
