@@ -29,6 +29,7 @@ private:
 
 	double next_keycheck;
 	double next_animation;
+	double last_fullspeed;
 	float animation_speed;
 	double idle_timeout;
 	double last_aircheck;

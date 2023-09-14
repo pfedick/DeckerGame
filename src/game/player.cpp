@@ -80,6 +80,7 @@ Player::Player(Game* game)
 	nextPhonetic=0.0f;
 	greetingPlayed=true;
 	talkie=true;
+	last_fullspeed=0.0f;
 }
 
 Player::~Player()
@@ -279,7 +280,6 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 		if (k.velocity_x < 0) k.matrix|=KeyboardKeys::Left;
 		if (k.velocity_x < -20000) k.matrix|=KeyboardKeys::Shift;
 
-
 		k.velocity_y=gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Jump));
 		//if (k.velocity_y > 0) k.matrix|=KeyboardKeys::Down;
 		if (k.velocity_y > 16384) k.matrix|=KeyboardKeys::Down | KeyboardKeys::Shift;
@@ -297,6 +297,12 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 
 	}
 	//ppl7::PrintDebugTime("keys: %4d, velocity x: %5d, velocity y: %5d\n", k.matrix, k.velocity_x, k.velocity_y);
+
+	if (k.matrix == KeyboardKeys::Right && k.velocity_x > 0 && last_fullspeed > time - 0.5) k.matrix|=KeyboardKeys::Shift;
+	if (k.matrix == KeyboardKeys::Left && k.velocity_x<0 && last_fullspeed>time - 0.5) k.matrix|=KeyboardKeys::Shift;
+	if (k.matrix & KeyboardKeys::Shift) last_fullspeed=time;
+
+
 	return k;
 }
 
@@ -624,6 +630,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	Player::Keys keys=getKeyboardMatrix(state);
+
 	if (keys.matrix & KeyboardKeys::Action) {
 		checkActivationOfObjectsInRange(objects);
 		if (movement == Hacking) return;
