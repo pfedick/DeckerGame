@@ -24,6 +24,20 @@ Config::Config()
     tutorialPlayed=false;
     skipIntro=false;
     difficulty=DifficultyLevel::normal;
+    GameControllerMapping gm;
+    axis_walk=gm.getSDLAxis(GameControllerMapping::Axis::Walk);
+    axis_jump=gm.getSDLAxis(GameControllerMapping::Axis::Jump);
+    button_up=gm.getSDLButton(GameControllerMapping::Button::MenuUp);
+    button_down=gm.getSDLButton(GameControllerMapping::Button::MenuDown);
+    button_left=gm.getSDLButton(GameControllerMapping::Button::MenuLeft);
+    button_right=gm.getSDLButton(GameControllerMapping::Button::MenuRight);
+    button_action=gm.getSDLButton(GameControllerMapping::Button::Action);
+    button_menu=gm.getSDLButton(GameControllerMapping::Button::Menu);
+    button_back=gm.getSDLButton(GameControllerMapping::Button::Back);
+    button_jump=gm.getSDLButton(GameControllerMapping::Button::Jump);
+    GameController gc;
+    deadzone=gc.deadzone();
+
     try {
         load();
     } catch (...) {}
@@ -71,6 +85,20 @@ void Config::load()
     volumeEffects=conf.get("volumeEffects", ppl7::ToString("%0.3f", volumeEffects)).toFloat();
     volumeSpeech=conf.get("volumeSpeech", ppl7::ToString("%0.3f", volumeSpeech)).toFloat();
     //if (volumeMusic > 0.5f) volumeMusic=0.5f;
+
+    // Controller
+    conf.setSection("controller");
+    deadzone=conf.getInt("deadzone", deadzone);
+    axis_walk=conf.getInt("axis_walk", axis_walk);
+    axis_jump=conf.getInt("axis_jump", axis_jump);
+    button_up=conf.getInt("button_up", button_up);
+    button_down=conf.getInt("button_down", button_down);
+    button_left=conf.getInt("button_left", button_left);
+    button_right=conf.getInt("button_right", button_right);
+    button_menu=conf.getInt("button_menu", button_menu);
+    button_back=conf.getInt("button_back", button_back);
+    button_action=conf.getInt("button_action", button_action);
+    button_jump=conf.getInt("button_jump", button_jump);
 }
 
 void Config::save()
@@ -111,4 +139,19 @@ void Config::save()
     conf.add("skipIntro", skipIntro);
     conf.add("difficulty", static_cast<int>(difficulty));
     conf.save(ConfigFile);
+
+    // Controller
+    conf.add("deadzone", deadzone);
+    conf.add("axis_walk", axis_walk);
+    conf.add("axis_jump", axis_jump);
+    conf.add("button_up", button_up);
+    conf.add("button_down", button_down);
+    conf.add("button_left", button_left);
+    conf.add("button_right", button_right);
+    conf.add("button_menu", button_menu);
+    conf.add("button_back", button_back);
+    conf.add("button_action", button_action);
+    conf.add("button_jump", button_jump);
+
+
 }

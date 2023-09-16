@@ -197,6 +197,123 @@
         "more enemies, more damage": {
             "de": "Mehr Gegner, mehr Schaden",
             "en": "more enemies, more damage"
+        },
+        "Controller": {
+            "de": "Controller"
+        },
+        "Deadzone:": {
+            "de": "Totzone:"
+        },
+        "Difficulty:": {
+            "de": "Schwierigkeitsgrad:"
+        },
+        "Stick walk:": {
+            "de": "Stick laufen:"
+        },
+        "Stick jump:": {
+            "de": "Stick springen:"
+        },
+        "Button up:": {
+            "de": "Knopf hoch:"
+        },
+        "Button down:": {
+            "de": "Knopf runter:"
+        },
+        "Button left:": {
+            "de": "Knopf links:"
+        },
+        "Button right:": {
+            "de": "Knopf rechts:"
+        },
+        "Button Menu:": {
+            "de": "Knopf Menü:"
+        },
+        "Button Action:": {
+            "de": "Knopf Aktion:"
+        },
+        "Button Back:": {
+            "de": "Knopf zurück:"
+        },
+        "Button Jump:": {
+            "de": "Knopf Springen:"
+        },
+        "Stick left horizontal": {
+            "de": "Stick links horizontal"
+        },
+        "Stick left vertical": {
+            "de": "Stick links vertikal"
+        },
+        "Stick right horizontal": {
+            "de": "Stick rechts horizontal"
+        },
+        "Stick right vertical": {
+            "de": "Stick rechts vertikal"
+        },
+        "Trigger left": {
+            "de": "Trigger links"
+        },
+        "Trigger right": {
+            "de": "Trigger rechts"
+        },
+        "Button A": {
+            "de": "Knopf A"
+        },
+        "Button B": {
+            "de": "Knopf B"
+        },
+        "Button X": {
+            "de": "Knopf X"
+        },
+        "Button Y": {
+            "de": "Knopf Y"
+        },
+        "Button back": {
+            "de": "Knopf zurück"
+        },
+        "Button start": {
+            "de": "Knopf start"
+        },
+        "Button guide": {
+            "de": "Knopf guide"
+        },
+        "Stick left": {
+            "de": "Stick links"
+        },
+        "Stick right": {
+            "de": "Stick rechts"
+        },
+        "Shoulder left": {
+            "de": "Shoulder left"
+        },
+        "Shoulder right": {
+            "de": "Shoulder right"
+        },
+        "Pad up": {
+            "de": "Pad hoch"
+        },
+        "Pad down": {
+            "de": "Pad runter"
+        },
+        "Pad left": {
+            "de": "Pad links"
+        },
+        "Pad right": {
+            "de": "Pad rechts"
+        },
+        "Button misc": {
+            "de": "Knopf verschiedenes"
+        },
+        "Paddle 1": {
+            "de": "Paddle 1"
+        },
+        "Paddle 2": {
+            "de": "Paddle 2"
+        },
+        "Paddle 3": {
+            "de": "Paddle 3"
+        },
+        "Paddle 4": {
+            "de": "Paddle 4"
         }
     }
 }

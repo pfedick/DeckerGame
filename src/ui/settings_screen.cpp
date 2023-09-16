@@ -366,7 +366,7 @@ void SettingsScreen::initPageMisc()
     page_misc->addChild(skipIntro_checkbox);
 
     y+=50;
-    label=new ppl7::tk::Label(0, y, 200, 40, translate("Difficulty:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Difficulty:"));
     label->setFont(style_label.font);
     page_misc->addChild(label);
 
@@ -380,7 +380,7 @@ void SettingsScreen::initPageMisc()
     difficulty_name->setFont(style_label.font);
     page_misc->addChild(difficulty_name);
     y+=50;
-    difficulty_description=new ppl7::tk::Label(input_widget_x, y, input_widget.width + 200, 40, translate("--"));
+    difficulty_description=new ppl7::tk::Label(input_widget_x, y, input_widget.width + 200, 40, translate("normal"));
     difficulty_description->setFont(style_label.font);
     page_misc->addChild(difficulty_description);
     updateDifficultyDescription();
@@ -418,7 +418,7 @@ void SettingsScreen::initPageController()
     ppl7::tk::Label* label;
     int y=0;
 
-    label=new ppl7::tk::Label(0, y, 200, 40, translate("Deadzone:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Deadzone:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
 
@@ -428,6 +428,107 @@ void SettingsScreen::initPageController()
     controller_deadzone->setValue(static_cast<int>(game.controller.deadzone()));
     page_controller->addChild(controller_deadzone);
     y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Stick walk:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_axis_walk=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_axis_walk->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Axis);
+    controller_axis_walk->setId(game.controller.mapping.getSDLAxis(GameControllerMapping::Axis::Walk));
+    controller_axis_walk->setEventHandler(this);
+    page_controller->addChild(controller_axis_walk);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Stick jump:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_axis_jump=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_axis_jump->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Axis);
+    controller_axis_jump->setId(game.controller.mapping.getSDLAxis(GameControllerMapping::Axis::Jump));
+    controller_axis_jump->setEventHandler(this);
+    page_controller->addChild(controller_axis_jump);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button up:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_up=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_up->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_up->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::MenuUp));
+    controller_button_up->setEventHandler(this);
+    page_controller->addChild(controller_button_up);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button down:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_down=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_down->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_down->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::MenuDown));
+    controller_button_down->setEventHandler(this);
+    page_controller->addChild(controller_button_down);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button left:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_left=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_left->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_left->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::MenuLeft));
+    controller_button_left->setEventHandler(this);
+    page_controller->addChild(controller_button_left);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button right:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_right=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_right->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_right->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::MenuRight));
+    controller_button_right->setEventHandler(this);
+    page_controller->addChild(controller_button_right);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Menu:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_menu=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_menu->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_menu->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Menu));
+    controller_button_menu->setEventHandler(this);
+    page_controller->addChild(controller_button_menu);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Action:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_action=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_action->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_action->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Action));
+    controller_button_action->setEventHandler(this);
+    page_controller->addChild(controller_button_action);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Back:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_back=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_back->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_back->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Back));
+    controller_button_back->setEventHandler(this);
+    page_controller->addChild(controller_button_back);
+    y+=50;
+
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Jump:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_jump=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_jump->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_jump->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Jump));
+    controller_button_jump->setEventHandler(this);
+    page_controller->addChild(controller_button_jump);
+    y+=50;
+
 
 }
 
@@ -557,6 +658,10 @@ void SettingsScreen::handleMenuKeyDownEvent(int key)
             //select_audio->setSelected(false);
             currentAudioSelection=SettingsAudio::Total;
             audio_total_slider->setFocus();
+        } else if (select_controller != NULL && select_controller->isSelected()) {
+            keyfocus=KeyFocusArea::Controller;
+            currentControllerSelection=SettingsController::Deadzone;
+            controller_deadzone->setFocus();
         }
     }
 }
@@ -572,6 +677,25 @@ ppl7::tk::HorizontalSlider* SettingsScreen::getCurrentAudioSlider()
     }
     return NULL;
 }
+
+Decker::ui::ControllerButtonSelector* SettingsScreen::getCurrentControllerInput()
+{
+    switch (currentControllerSelection) {
+    case SettingsController::AxisWalk: return controller_axis_walk;
+    case SettingsController::AxisJump: return controller_axis_jump;
+    case SettingsController::ButtonUp: return controller_button_up;
+    case SettingsController::ButtonDown: return controller_button_down;
+    case SettingsController::ButtonLeft: return controller_button_left;
+    case SettingsController::ButtonRight: return controller_button_right;
+    case SettingsController::ButtonMenu: return controller_button_menu;
+    case SettingsController::ButtonAction: return controller_button_action;
+    case SettingsController::ButtonBack: return controller_button_back;
+    case SettingsController::ButtonJump: return controller_button_jump;
+    default: return NULL;
+    }
+    return NULL;
+}
+
 
 void SettingsScreen::handleAudioKeyDownEvent(int key)
 {
@@ -629,10 +753,51 @@ void SettingsScreen::handleAudioKeyDownEvent(int key)
 
     }
 }
+void SettingsScreen::handleControllerKeyDownEvent(int key)
+{
+    if (key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+        keyfocus=KeyFocusArea::Menu;
+        ppl7::tk::GetWindowManager()->setKeyboardFocus(menue);
+    }
+    if (key == ppl7::tk::KeyEvent::KEY_DOWN && static_cast<int>(currentControllerSelection) < static_cast<int>(SettingsController::ButtonJump)) {
+        currentControllerSelection=static_cast<SettingsController>(1 + static_cast<int>(currentControllerSelection));
+        setFocusToControllerWidget();
+    } else  if (key == ppl7::tk::KeyEvent::KEY_UP && static_cast<int>(currentControllerSelection) > static_cast<int>(SettingsController::Deadzone)) {
+        currentControllerSelection=static_cast<SettingsController>(static_cast<int>(currentControllerSelection) - 1);
+        setFocusToControllerWidget();
+    } else if (key == ppl7::tk::KeyEvent::KEY_RETURN) {
+        Decker::ui::ControllerButtonSelector* bs=getCurrentControllerInput();
+        if (bs) bs->setInputmode();
+    } else if (currentControllerSelection == SettingsController::Deadzone) {
+        if (key == ppl7::tk::KeyEvent::KEY_LEFT) controller_deadzone->setValue(controller_deadzone->value() - 1000);
+        if (key == ppl7::tk::KeyEvent::KEY_RIGHT)  controller_deadzone->setValue(controller_deadzone->value() + 1000);
+        ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+        ev.setWidget(controller_deadzone);
+        valueChangedEvent(&ev, controller_deadzone->value());
+    }
+}
+
+void SettingsScreen::setFocusToControllerWidget()
+{
+    switch (currentControllerSelection) {
+    case SettingsController::Deadzone: controller_deadzone->setFocus(); break;
+    case SettingsController::AxisWalk: controller_axis_walk->setFocus(); break;
+    case SettingsController::AxisJump: controller_axis_jump->setFocus(); break;
+    case SettingsController::ButtonUp: controller_button_up->setFocus(); break;
+    case SettingsController::ButtonDown: controller_button_down->setFocus(); break;
+    case SettingsController::ButtonLeft: controller_button_left->setFocus(); break;
+    case SettingsController::ButtonRight: controller_button_right->setFocus(); break;
+    case SettingsController::ButtonMenu: controller_button_menu->setFocus(); break;
+    case SettingsController::ButtonAction: controller_button_action->setFocus(); break;
+    case SettingsController::ButtonBack: controller_button_back->setFocus(); break;
+    case SettingsController::ButtonJump: controller_button_jump->setFocus(); break;
+    }
+}
 
 void SettingsScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
     handleKeyDownEvent(event->key);
+
 }
 
 void SettingsScreen::handleKeyDownEvent(int key)
@@ -643,6 +808,8 @@ void SettingsScreen::handleKeyDownEvent(int key)
         handleMenuKeyDownEvent(key);
     } else if (keyfocus == KeyFocusArea::Audio) {
         handleAudioKeyDownEvent(key);
+    } else if (keyfocus == KeyFocusArea::Controller) {
+        handleControllerKeyDownEvent(key);
     }
 }
 
@@ -676,6 +843,16 @@ void SettingsScreen::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisE
             ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
             ev.setWidget(slider);
             valueChangedEvent(&ev, slider->value());
+        }
+
+    }
+    if (axis == GameControllerMapping::Axis::Walk && currentMenueSelection == SettingsMenue::Controller) {
+        if (currentControllerSelection == SettingsController::Deadzone) {
+            if (event->value < -10000) controller_deadzone->setValue(controller_deadzone->value() - 1000);
+            if (event->value > 10000) controller_deadzone->setValue(controller_deadzone->value() + 1000);
+            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ev.setWidget(controller_deadzone);
+            valueChangedEvent(&ev, controller_deadzone->value());
         }
 
     }
@@ -781,6 +958,10 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         game.config.difficulty=static_cast<Config::DifficultyLevel>(difficulty_slider->value());
         updateDifficultyDescription();
         game.config.save();
+    } else if (event->widget() == controller_deadzone) {
+        game.config.deadzone=value;
+        game.controller.setDeadzone(value);
+        game.config.save();
     }
 
 }
@@ -792,11 +973,26 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
         game.config.save();
         GetTranslator().setLanguage(game.config.TextLanguage);
         retranslateUi();
-    }
-    if (event->widget() == speech_language_combobox) {
+    } else if (event->widget() == speech_language_combobox) {
         game.config.SpeechLanguage=speech_language_combobox->currentIdentifier();
         game.config.save();
+    } else if (event->widget() == getCurrentControllerInput()) {
+        ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
+        if (event->widget() == controller_axis_walk) game.config.axis_walk=value;
+        else if (event->widget() == controller_axis_jump) game.config.axis_jump=value;
+        else if (event->widget() == controller_button_up) game.config.button_up=value;
+        else if (event->widget() == controller_button_down) game.config.button_down=value;
+        else if (event->widget() == controller_button_left) game.config.button_left=value;
+        else if (event->widget() == controller_button_right) game.config.button_right=value;
+        else if (event->widget() == controller_button_menu) game.config.button_menu=value;
+        else if (event->widget() == controller_button_back) game.config.button_back=value;
+        else if (event->widget() == controller_button_action) game.config.button_action=value;
+        else if (event->widget() == controller_button_jump) game.config.button_jump=value;
+        game.config.save();
+        game.updateGameControllerMapping();
+        //ppl7::PrintDebugTime("SettingsScreen::valueChangedEvent: %d\n", value);
     }
+
 
 }
 

@@ -394,6 +394,24 @@ void Game::initGameController()
 	if (device_list.size() > 0) {
 		controller.open(device_list.front());
 	}
+	updateGameControllerMapping();
+}
+
+void Game::updateGameControllerMapping()
+{
+	controller.setDeadzone(config.deadzone);
+	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Walk, config.axis_walk);
+	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Jump, config.axis_jump);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuUp, config.button_up);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuDown, config.button_down);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuLeft, config.button_left);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuRight, config.button_right);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Menu, config.button_menu);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Action, config.button_action);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Jump, config.button_jump);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Back, config.button_back);
+	controller.mapping.updateMapping();
+
 }
 
 void Game::init_grafix()

@@ -288,17 +288,23 @@ private:
 	ppl7::String text;
 	ppl7::grafix::Font font;
 	int border_width;
+	int button_id;
 	ControllerType controllertype;
+	bool inputmode;
+
+	void emmitValueChangedEvent();
 public:
 	ControllerButtonSelector(int x, int y, int width, int height, const ppl7::String& text=ppl7::String());
 	void setFontSize(int size);
-	void setControllertype(ControllerType type);
+	void setControllerType(ControllerType type);
 	void setId(int id);
 	int getId() const;
 	void setName(const ppl7::String& name);
+	void setInputmode();
 	virtual void paint(ppl7::grafix::Drawable& draw);
 	virtual void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
 	virtual void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
 };
 
 

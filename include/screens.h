@@ -59,6 +59,19 @@ private:
     enum class SettingsMisc {
 
     };
+    enum class SettingsController {
+        Deadzone=0,
+        AxisWalk,
+        AxisJump,
+        ButtonUp,
+        ButtonDown,
+        ButtonLeft,
+        ButtonRight,
+        ButtonMenu,
+        ButtonAction,
+        ButtonBack,
+        ButtonJump
+    };
     enum class KeyFocusArea {
         Menu=0,
         Audio,
@@ -72,6 +85,7 @@ private:
     //SDL& sdl;
     SettingsMenue currentMenueSelection;
     SettingsAudio currentAudioSelection;
+    SettingsController currentControllerSelection;
     StyleElement style_heading, style_label, style_menue;
     ppl7::grafix::Point settings_page;
     int input_widget_x;
@@ -148,8 +162,12 @@ private:
     void handleKeyDownEvent(int key);
     void handleMenuKeyDownEvent(int key);
     void handleAudioKeyDownEvent(int key);
+    void handleControllerKeyDownEvent(int key);
+    void setFocusToControllerWidget();
 
     ppl7::tk::HorizontalSlider* getCurrentAudioSlider();
+    Decker::ui::ControllerButtonSelector* getCurrentControllerInput();
+
 
 public:
     SettingsScreen(Game& game, int x, int y, int width, int height, bool ingame=false);

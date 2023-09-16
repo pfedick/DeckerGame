@@ -56,6 +56,9 @@ public:
     int getSDLAxis(const Axis a);
     int getSDLButton(const Button b);
 
+    void setMappingAxis(const Axis a, int id);
+    void setMappingButton(const Button a, int id);
+
 };
 
 class GameController {
@@ -132,8 +135,12 @@ public:
     int getButtonState(int button) const;
     int getAxisState(int axis) const;
 
+
     void rumbleTrigger(uint16_t left, uint16_t right, uint32_t duration_ms);
     void rumble(uint16_t low, uint16_t high, uint32_t duration_ms);
 
     static std::list<Device> enumerate();
+    static ppl7::String getAxisName(int axis);
+    static ppl7::String getButtonName(int button);
+
 };

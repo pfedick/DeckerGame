@@ -98,6 +98,21 @@ public:
 	bool				skipIntro;
 	DifficultyLevel		difficulty;
 
+	// Controller
+	int					deadzone;
+	int					axis_walk;
+	int					axis_jump;
+	int					button_up;
+	int					button_down;
+	int					button_left;
+	int					button_right;
+	int					button_menu;
+	int					button_back;
+	int					button_action;
+	int					button_jump;
+
+
+
 
 
 	Config();
@@ -920,6 +935,8 @@ public:
 	void playIntroVideo();
 	GameState showStartScreen(AudioStream& GeorgeDeckerTheme);
 	void showStatsScreen(StatsScreenReason reason);
+
+	void updateGameControllerMapping();
 
 	void openSaveAsDialog();
 	void openLoadDialog();

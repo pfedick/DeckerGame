@@ -143,6 +143,75 @@ void GameController::rumble(uint16_t low, uint16_t high, uint32_t duration_ms)
 }
 
 
+ppl7::String GameController::getAxisName(int axis)
+{
+    switch (axis) {
+    case SDL_CONTROLLER_AXIS_LEFTX: return ppl7::String("Stick left horizontal");
+        break;
+    case SDL_CONTROLLER_AXIS_LEFTY: return ppl7::String("Stick left vertical");
+        break;
+    case SDL_CONTROLLER_AXIS_RIGHTX: return ppl7::String("Stick right horizontal");
+        break;
+    case SDL_CONTROLLER_AXIS_RIGHTY: return ppl7::String("Stick right vertical");
+        break;
+    case SDL_CONTROLLER_AXIS_TRIGGERLEFT: return ppl7::String("Trigger left");
+        break;
+    case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: return ppl7::String("Trigger right");
+        break;
+    }
+    return ppl7::String("unknown");
+
+}
+
+ppl7::String GameController::getButtonName(int button)
+{
+    switch (button) {
+    case SDL_CONTROLLER_BUTTON_A: return ppl7::String("Button A");
+        break;
+    case SDL_CONTROLLER_BUTTON_B: return ppl7::String("Button B");
+        break;
+    case SDL_CONTROLLER_BUTTON_X: return ppl7::String("Button X");
+        break;
+    case SDL_CONTROLLER_BUTTON_Y: return ppl7::String("Button Y");
+        break;
+    case SDL_CONTROLLER_BUTTON_BACK: return ppl7::String("Button back");
+        break;
+    case SDL_CONTROLLER_BUTTON_GUIDE: return ppl7::String("Button guide");
+        break;
+    case SDL_CONTROLLER_BUTTON_START: return ppl7::String("Button start");
+        break;
+    case SDL_CONTROLLER_BUTTON_LEFTSTICK: return ppl7::String("Stick left");
+        break;
+    case SDL_CONTROLLER_BUTTON_RIGHTSTICK: return ppl7::String("Stick right");
+        break;
+    case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: return ppl7::String("Shoulder left");
+        break;
+    case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: return ppl7::String("Shoulder right");
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_UP: return ppl7::String("Pad up");
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_DOWN: return ppl7::String("Pad down");
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_LEFT: return ppl7::String("Pad left");
+        break;
+    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: return ppl7::String("Pad right");
+        break;
+    case SDL_CONTROLLER_BUTTON_MISC1: return ppl7::String("Button misc");
+        break;
+    case SDL_CONTROLLER_BUTTON_PADDLE1: return ppl7::String("Paddle 1");
+        break;
+    case SDL_CONTROLLER_BUTTON_PADDLE2: return ppl7::String("Paddle 2");
+        break;
+    case SDL_CONTROLLER_BUTTON_PADDLE3: return ppl7::String("Paddle 3");
+        break;
+    case SDL_CONTROLLER_BUTTON_PADDLE4: return ppl7::String("Paddle 4");
+        break;
+
+    }
+    return ppl7::String("unknown");
+}
+
+
 
 GameControllerMapping::GameControllerMapping()
 {
@@ -155,8 +224,6 @@ GameControllerMapping::GameControllerMapping()
     menu_button_right=SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
 
     menu_button=SDL_CONTROLLER_BUTTON_START;
-    action_button=SDL_CONTROLLER_BUTTON_START;
-
     action_button=SDL_CONTROLLER_BUTTON_A;
     back_button=SDL_CONTROLLER_BUTTON_B;
     jump_button=SDL_CONTROLLER_BUTTON_X;
@@ -224,4 +291,29 @@ int GameControllerMapping::getSDLButton(const Button b)
     it=button_mapping_rev.find(b);
     if (it != button_mapping_rev.end()) return it->second;
     return SDL_CONTROLLER_BUTTON_INVALID;
+}
+
+void GameControllerMapping::setMappingAxis(const Axis a, int id)
+{
+    switch (a) {
+    case Axis::Walk: player_axis_x=id; break;
+    case Axis::Jump: player_axis_y=id; break;
+    default: break;
+    }
+}
+
+void GameControllerMapping::setMappingButton(const Button a, int id)
+{
+    switch (a) {
+    case Button::MenuUp: menu_button_up=id; break;
+    case Button::MenuDown: menu_button_down=id; break;
+    case Button::MenuLeft: menu_button_left=id; break;
+    case Button::MenuRight: menu_button_right=id; break;
+    case Button::Menu: menu_button=id; break;
+    case Button::Action: action_button=id; break;
+    case Button::Jump: back_button=id; break;
+    case Button::Back: jump_button=id; break;
+    default: break;
+    }
+
 }
