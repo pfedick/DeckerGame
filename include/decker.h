@@ -96,6 +96,7 @@ public:
 	ppl7::String		SpeechLanguage;
 	bool				tutorialPlayed;
 	bool				skipIntro;
+	bool				noBlood;
 	DifficultyLevel		difficulty;
 
 	// Controller

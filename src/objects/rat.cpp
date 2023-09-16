@@ -52,6 +52,7 @@ Rat::~Rat()
 
 static void splatterBlood(double time, const ppl7::grafix::PointF& p)
 {
+	if (GetGame().config.noBlood) return;
 	std::list<Particle::ScaleGradientItem>scale_gradient;
 	std::list<Particle::ColorGradientItem>color_gradient;
 	scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.314));

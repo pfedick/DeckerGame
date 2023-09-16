@@ -22,6 +22,7 @@ Config::Config()
     TextLanguage="en";
     SpeechLanguage="en";
     tutorialPlayed=false;
+    noBlood=false;
     skipIntro=false;
     difficulty=DifficultyLevel::normal;
     GameControllerMapping gm;
@@ -65,6 +66,7 @@ void Config::load()
     SpeechLanguage=conf.get("SpeechLanguage", SpeechLanguage);
     tutorialPlayed=conf.getBool("tutorialPlayed", false);
     skipIntro=conf.getBool("skipIntro", false);
+    noBlood=conf.getBool("noBlood", false);
     difficulty=static_cast<DifficultyLevel>(conf.getInt("difficulty", static_cast<int>(DifficultyLevel::normal)));
 
 
@@ -137,6 +139,7 @@ void Config::save()
     conf.add("ConfigVersion", CONFIG_VERSION);
     conf.add("tutorialPlayed", tutorialPlayed);
     conf.add("skipIntro", skipIntro);
+    conf.add("noBlood", noBlood);
     conf.add("difficulty", static_cast<int>(difficulty));
     conf.save(ConfigFile);
 

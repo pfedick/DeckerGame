@@ -144,6 +144,7 @@ private:
     ppl7::tk::HorizontalSlider* difficulty_slider;
     ppl7::tk::Label* difficulty_name;
     ppl7::tk::Label* difficulty_description;
+    ppl7::tk::CheckBox* noBlood_checkbox;
 
 
 

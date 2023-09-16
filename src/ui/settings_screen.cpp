@@ -386,6 +386,11 @@ void SettingsScreen::initPageMisc()
     updateDifficultyDescription();
     y+=50;
 
+    noBlood_checkbox=new ppl7::tk::CheckBox(0, y, 400, 40, translate("no blood"), game.config.noBlood);
+    noBlood_checkbox->setFont(style_label.font);
+    noBlood_checkbox->setEventHandler(this);
+    page_misc->addChild(noBlood_checkbox);
+    y+=50;
 
 }
 
@@ -1011,6 +1016,10 @@ void SettingsScreen::toggledEvent(ppl7::tk::Event* event, bool checked)
     if (event->widget() == skipIntro_checkbox) {
         //ppl7::PrintDebugTime("toggle\n");
         game.config.skipIntro=checked;
+        game.config.save();
+    } else if (event->widget() == noBlood_checkbox) {
+        //ppl7::PrintDebugTime("toggle\n");
+        game.config.noBlood=checked;
         game.config.save();
     }
 }

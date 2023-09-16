@@ -42,7 +42,7 @@ Wallenstein::Wallenstein()
 
 static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
 {
-
+	if (GetGame().config.noBlood) return;
 	std::list<Particle::ColorGradientItem>color_gradient;
 	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(156, 0, 0, 255)));
 	color_gradient.push_back(Particle::ColorGradientItem(0.428, ppl7::grafix::Color(156, 0, 0, 255)));
