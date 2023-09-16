@@ -111,7 +111,7 @@ void SettingsScreen::setupUi()
     this->addChild(menue);
 
     int y=0;
-    select_audio=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Audio"));
+    select_audio=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Audio"));
     select_audio->setName("Settings Selection Audio");
     select_audio->setFontSize(style_menue.font.size());
     select_audio->setBorderWidth(style_menue.border_width);
@@ -119,7 +119,7 @@ void SettingsScreen::setupUi()
     menue->addChild(select_audio);
     y+=style_menue.total.height;
 
-    select_video=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Video"));
+    select_video=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Video"));
     select_video->setName("Settings Selection Video");
     select_video->setFontSize(style_menue.font.size());
     select_video->setBorderWidth(style_menue.border_width);
@@ -127,7 +127,15 @@ void SettingsScreen::setupUi()
     menue->addChild(select_video);
     y+=style_menue.total.height;
 
-    select_misc=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Misc"));
+    select_controller=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Controller"));
+    select_controller->setName("Settings Selection Controller");
+    select_controller->setFontSize(style_menue.font.size());
+    select_controller->setBorderWidth(style_menue.border_width);
+    select_controller->setEventHandler(this);
+    menue->addChild(select_controller);
+    y+=style_menue.total.height;
+
+    select_misc=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Misc"));
     select_misc->setName("Settings Selection Misc");
     select_misc->setFontSize(style_menue.font.size());
     select_misc->setBorderWidth(style_menue.border_width);
@@ -137,7 +145,7 @@ void SettingsScreen::setupUi()
 
 
     if (ingame) {
-        select_menue=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Menue"));
+        select_menue=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Menue"));
         select_menue->setName("Settings Back to Menue");
         select_menue->setFontSize(style_menue.font.size());
         select_menue->setBorderWidth(style_menue.border_width);
@@ -145,7 +153,7 @@ void SettingsScreen::setupUi()
         menue->addChild(select_menue);
         y+=style_menue.total.height;
 
-        select_game_exit=new GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Exit Game"));
+        select_game_exit=new Decker::ui::GameMenuArea(10, y, style_menue.size.width, style_menue.size.height, translate("Exit Game"));
         select_game_exit->setName("Settings Exit Game");
         select_game_exit->setFontSize(style_menue.font.size());
         select_game_exit->setBorderWidth(style_menue.border_width);
@@ -154,7 +162,7 @@ void SettingsScreen::setupUi()
         y+=style_menue.total.height;
     }
 
-    select_back=new GameMenuArea(10, menue->height() - style_menue.total.height, style_menue.size.width, style_menue.size.height, translate("back (ESC)"));
+    select_back=new Decker::ui::GameMenuArea(10, menue->height() - style_menue.total.height, style_menue.size.width, style_menue.size.height, translate("back (ESC)"));
     select_back->setName("Settings Selection Back");
     select_back->setFontSize(style_menue.font.size());
     select_back->setBorderWidth(style_menue.border_width);
@@ -166,8 +174,10 @@ void SettingsScreen::setupUi()
     page_audio=NULL;
     page_video=NULL;
     page_misc=NULL;
+    page_controller=NULL;
     initPageAudio();
     initPageVideo();
+    initPageController();
     initPageMisc();
 
 
@@ -355,8 +365,72 @@ void SettingsScreen::initPageMisc()
     skipIntro_checkbox->setEventHandler(this);
     page_misc->addChild(skipIntro_checkbox);
 
+    y+=50;
+    label=new ppl7::tk::Label(0, y, 200, 40, translate("Difficulty:"));
+    label->setFont(style_label.font);
+    page_misc->addChild(label);
+
+    difficulty_slider=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
+    difficulty_slider->setEventHandler(this);
+    difficulty_slider->setLimits(1, 3);
+    difficulty_slider->setValue(static_cast<int>(game.config.difficulty));
+    page_misc->addChild(difficulty_slider);
+
+    difficulty_name=new ppl7::tk::Label(input_widget_x + input_widget.width, y, 200, 40, translate("normal"));
+    difficulty_name->setFont(style_label.font);
+    page_misc->addChild(difficulty_name);
+    y+=50;
+    difficulty_description=new ppl7::tk::Label(input_widget_x, y, input_widget.width + 200, 40, translate("--"));
+    difficulty_description->setFont(style_label.font);
+    page_misc->addChild(difficulty_description);
+    updateDifficultyDescription();
+    y+=50;
+
 
 }
+
+void SettingsScreen::updateDifficultyDescription()
+{
+    Config::DifficultyLevel level=static_cast<Config::DifficultyLevel>(difficulty_slider->value());
+    switch (level) {
+    case Config::DifficultyLevel::easy:
+        difficulty_name->setText(translate("easy"));
+        difficulty_description->setText(translate("no falling damage, less enemies, less damage"));
+        break;
+    case Config::DifficultyLevel::normal:
+        difficulty_name->setText(translate("normal"));
+        difficulty_description->setText(translate("all the fun, play how it's meant to be played"));
+        break;
+    case Config::DifficultyLevel::hard:
+        difficulty_name->setText(translate("hard"));
+        difficulty_description->setText(translate("more enemies, more damage"));
+        break;
+    }
+}
+
+void SettingsScreen::initPageController()
+{
+    ppl7::grafix::Color background(20, 10, 0, 192);
+    page_controller=new ppl7::tk::Frame(settings_page.x, settings_page.y, this->width() - settings_page.x - 10, this->height() - settings_page.y - 10, ppl7::tk::Frame::BorderStyle::NoBorder);
+    page_controller->setName("SettingsPageController");
+    page_controller->setBackgroundColor(background);
+
+    ppl7::tk::Label* label;
+    int y=0;
+
+    label=new ppl7::tk::Label(0, y, 200, 40, translate("Deadzone:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+
+    controller_deadzone=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_deadzone->setEventHandler(this);
+    controller_deadzone->setLimits(0, 30000);
+    controller_deadzone->setValue(static_cast<int>(game.controller.deadzone()));
+    page_controller->addChild(controller_deadzone);
+    y+=50;
+
+}
+
 
 
 SettingsScreen::~SettingsScreen()
@@ -374,12 +448,14 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
     select_audio->setSelected(false);
     select_video->setSelected(false);
     select_misc->setSelected(false);
+    select_controller->setSelected(false);
     select_back->setSelected(false);
     if (select_menue) select_menue->setSelected(false);
     if (select_game_exit) select_game_exit->setSelected(false);
     this->removeChild(page_audio);
     this->removeChild(page_video);
     this->removeChild(page_misc);
+    this->removeChild(page_controller);
     switch (page) {
     case SettingsMenue::Audio:
         select_audio->setSelected(true);
@@ -388,6 +464,10 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
     case SettingsMenue::Video:
         select_video->setSelected(true);
         this->addChild(page_video);
+        break;
+    case SettingsMenue::Controller:
+        select_controller->setSelected(true);
+        this->addChild(page_controller);
         break;
     case SettingsMenue::Misc:
         select_misc->setSelected(true);
@@ -450,10 +530,10 @@ void SettingsScreen::handleMenuKeyDownEvent(int key)
 
     int m=static_cast<int>(currentMenueSelection);
     if (key == ppl7::tk::KeyEvent::KEY_DOWN && currentMenueSelection < SettingsMenue::Back) {
-        if (!ingame && m == 2) m=4;
+        if (!ingame && m == 3) m=5;
         selectSettingsPage(static_cast<SettingsMenue>(m + 1));
     } else if (key == ppl7::tk::KeyEvent::KEY_UP && currentMenueSelection > SettingsMenue::Audio) {
-        if (!ingame && m == 5) m = 3;
+        if (!ingame && m == 6) m = 4;
         selectSettingsPage(static_cast<SettingsMenue>(m - 1));
     } else if (key == ppl7::tk::KeyEvent::KEY_RETURN || key == ppl7::tk::KeyEvent::KEY_ENTER || key == ppl7::tk::KeyEvent::KEY_RIGHT) {
         if (select_back->isSelected()) {
@@ -618,6 +698,7 @@ void SettingsScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 {
     if (event->widget() == select_audio) selectSettingsPage(SettingsMenue::Audio);
     else if (event->widget() == select_video) selectSettingsPage(SettingsMenue::Video);
+    else if (event->widget() == select_controller) selectSettingsPage(SettingsMenue::Controller);
     else if (event->widget() == select_misc) selectSettingsPage(SettingsMenue::Misc);
     else if (event->widget() == select_back) selectSettingsPage(SettingsMenue::Back);
     else if (select_menue != NULL && event->widget() == select_menue) selectSettingsPage(SettingsMenue::Menue);
@@ -696,7 +777,12 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         game.audiosystem.setVolume(AudioClass::Speech, game.config.volumeSpeech);
         game.config.save();
         currentAudioSelection = SettingsAudio::Speech;
+    } else if (event->widget() == difficulty_slider) {
+        game.config.difficulty=static_cast<Config::DifficultyLevel>(difficulty_slider->value());
+        updateDifficultyDescription();
+        game.config.save();
     }
+
 }
 
 void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)

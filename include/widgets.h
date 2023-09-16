@@ -259,6 +259,47 @@ public:
 };
 
 
+class GameMenuArea : public ppl7::tk::Widget
+{
+private:
+	ppl7::String text;
+	ppl7::grafix::Font font;
+	int border_width;
+	bool selected;
+public:
+	GameMenuArea(int x, int y, int width, int height, const ppl7::String& text=ppl7::String());
+	void setText(const ppl7::String& text);
+	void setSelected(bool selected);
+	bool isSelected() const;
+	void setFontSize(int size);
+	void setBorderWidth(int width);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+};
+
+class ControllerButtonSelector : public ppl7::tk::Widget
+{
+public:
+	enum class ControllerType {
+		Axis,
+		Trigger,
+		Button
+	};
+private:
+	ppl7::String text;
+	ppl7::grafix::Font font;
+	int border_width;
+	ControllerType controllertype;
+public:
+	ControllerButtonSelector(int x, int y, int width, int height, const ppl7::String& text=ppl7::String());
+	void setFontSize(int size);
+	void setControllertype(ControllerType type);
+	void setId(int id);
+	int getId() const;
+	void setName(const ppl7::String& name);
+	virtual void paint(ppl7::grafix::Drawable& draw);
+	virtual void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
+	virtual void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
+};
 
 
 

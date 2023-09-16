@@ -73,7 +73,7 @@ private:
     bool has_led=false;
     bool has_rumble=false;
     bool has_rumble_triggers=false;
-    int deadzone;
+    int axis_deadzone;
 
 
 
@@ -124,8 +124,11 @@ public:
     void open(int sdl_id);
 
     void close();
+    void setDeadzone(int value);
+    int deadzone() const;
 
     bool isOpen() const;
+    ppl7::String name() const;
     int getButtonState(int button) const;
     int getAxisState(int axis) const;
 

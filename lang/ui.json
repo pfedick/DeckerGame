@@ -176,6 +176,27 @@
         },
         "skip intro": {
             "de": "Intro überspringen"
+        },
+        "easy": {
+            "de": "einfach"
+        },
+        "normal": {
+            "de": "normal"
+        },
+        "hard": {
+            "de": "schwer"
+        },
+        "no falling damage, less enemies, less damage": {
+            "de": "kein Fallschaden, weniger Gegner, weniger Schaden bei Berührungen",
+            "en": "no falling damage, less enemies, less damage on contacts"
+        },
+        "all the fun, play how it's meant to be played": {
+            "de": "Der ganze Spass, spiel es so, wie es gedacht war",
+            "en": "all the fun, play it how it's meant to be played"
+        },
+        "more enemies, more damage": {
+            "de": "Mehr Gegner, mehr Schaden",
+            "en": "more enemies, more damage"
         }
     }
 }

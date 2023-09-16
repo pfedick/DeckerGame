@@ -23,6 +23,7 @@ Config::Config()
     SpeechLanguage="en";
     tutorialPlayed=false;
     skipIntro=false;
+    difficulty=DifficultyLevel::normal;
     try {
         load();
     } catch (...) {}
@@ -50,6 +51,7 @@ void Config::load()
     SpeechLanguage=conf.get("SpeechLanguage", SpeechLanguage);
     tutorialPlayed=conf.getBool("tutorialPlayed", false);
     skipIntro=conf.getBool("skipIntro", false);
+    difficulty=static_cast<DifficultyLevel>(conf.getInt("difficulty", static_cast<int>(DifficultyLevel::normal)));
 
 
     // Video
@@ -107,6 +109,6 @@ void Config::save()
     conf.add("ConfigVersion", CONFIG_VERSION);
     conf.add("tutorialPlayed", tutorialPlayed);
     conf.add("skipIntro", skipIntro);
-
+    conf.add("difficulty", static_cast<int>(difficulty));
     conf.save(ConfigFile);
 }

@@ -123,67 +123,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	return GameState::QuitGame;
 }
 
-GameMenuArea::GameMenuArea(int x, int y, int width, int height, const ppl7::String& text)
-{
-	create(x, y, width, height);
-	this->text=text;
-	selected=false;
-	border_width=10;
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
-	font=style.buttonFont;
-	font.setName("NotoSansBlack");
-	font.setBold(false);
-	font.setSize(30);
-	font.setOrientation(ppl7::grafix::Font::TOP);
-
-}
-
-void GameMenuArea::setText(const ppl7::String& text)
-{
-	this->text=text;
-	redrawRequired();
-}
-
-void GameMenuArea::setBorderWidth(int width)
-{
-	border_width=width;
-}
-
-void GameMenuArea::setFontSize(int size)
-{
-	font.setSize(size);
-}
-
-void GameMenuArea::paint(ppl7::grafix::Drawable& draw)
-{
-	ppl7::grafix::Color bg(20, 10, 0, 192);
-	ppl7::grafix::Color border(128, 96, 0, 255);
-	ppl7::grafix::Color fg(128, 128, 128, 255);
-	if (selected) {
-		bg.setColor(90, 70, 0, 192);
-		border.setColor(255, 200, 0, 255);
-		fg.setColor(255, 255, 255, 255);
-	}
-	draw.fillRect(0, 0, draw.width(), draw.height(), bg);
-	for (int i=0;i < border_width;i++) {
-		draw.drawRect(i, i, draw.width() - i, draw.height() - i, border);
-	}
-	font.setColor(fg);
-	draw.print(font, border_width + 20, border_width + 10, text);
-}
-
-void GameMenuArea::setSelected(bool selected)
-{
-	if (this->selected != selected) {
-		this->selected=selected;
-		needsRedraw();
-	}
-}
-
-bool GameMenuArea::isSelected() const
-{
-	return selected;
-}
 
 
 
@@ -211,27 +150,27 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	this->addChild(menue);
 
 	int yy=10;
-	start_tutorial=new GameMenuArea(10, yy, 520, 90, translate("Start Tutorial"));
+	start_tutorial=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Start Tutorial"));
 	start_tutorial->setEventHandler(this);
 	menue->addChild(start_tutorial);
 	yy+=100;
 
-	start_game=new GameMenuArea(10, yy, 520, 90, translate("Start Game"));
+	start_game=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Start Game"));
 	start_game->setEventHandler(this);
 	menue->addChild(start_game);
 	yy+=100;
 
-	settings=new GameMenuArea(10, yy, 520, 90, translate("Settings"));
+	settings=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Settings"));
 	settings->setEventHandler(this);
 	menue->addChild(settings);
 	yy+=100;
 
-	editor=new GameMenuArea(10, yy, 520, 90, translate("Level editor"));
+	editor=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Level editor"));
 	editor->setEventHandler(this);
 	menue->addChild(editor);
 	yy+=100;
 
-	end=new GameMenuArea(10, yy, 520, 90, translate("Exit game"));
+	end=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Exit game"));
 	end->setEventHandler(this);
 	menue->addChild(end);
 	yy+=100;

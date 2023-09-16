@@ -68,6 +68,12 @@ class Config
 private:
 	ppl7::String		ConfigFile;
 public:
+	enum class DifficultyLevel
+	{
+		easy=1,
+		normal=2,
+		hard=3
+	};
 	typedef ppl7::tk::Window::WindowMode WindowMode;
 		// Video
 	int					videoDevice;
@@ -90,6 +96,7 @@ public:
 	ppl7::String		SpeechLanguage;
 	bool				tutorialPlayed;
 	bool				skipIntro;
+	DifficultyLevel		difficulty;
 
 
 

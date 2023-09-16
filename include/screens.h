@@ -26,26 +26,6 @@ public:
 };
 
 
-class GameMenuArea : public ppl7::tk::Widget
-{
-private:
-    ppl7::String text;
-    ppl7::grafix::Font font;
-    int border_width;
-    bool selected;
-public:
-    GameMenuArea(int x, int y, int width, int height, const ppl7::String& text=ppl7::String());
-    void setText(const ppl7::String& text);
-    void setSelected(bool selected);
-    bool isSelected() const;
-    void setFontSize(int size);
-    void setBorderWidth(int width);
-    virtual void paint(ppl7::grafix::Drawable& draw);
-    //virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
-
-
-};
-
 class StyleElement
 {
 public:
@@ -63,10 +43,11 @@ private:
     enum class SettingsMenue {
         Audio=0,
         Video=1,
-        Misc=2,
-        Menue=3,
-        Exit=4,
-        Back=5,
+        Controller=2,
+        Misc=3,
+        Menue=4,
+        Exit=5,
+        Back=6,
     };
     enum class SettingsAudio {
         Total,
@@ -75,9 +56,14 @@ private:
         Ambience,
         Speech
     };
+    enum class SettingsMisc {
+
+    };
     enum class KeyFocusArea {
         Menu=0,
-        Audio
+        Audio,
+        Controller,
+        Misc
     };
     KeyFocusArea keyfocus;
 
@@ -95,15 +81,18 @@ private:
     ppl7::tk::Frame* menue;
     ppl7::tk::Frame* page_audio;
     ppl7::tk::Frame* page_video;
+    ppl7::tk::Frame* page_controller;
     ppl7::tk::Frame* page_misc;
 
-    GameMenuArea* select_audio;
-    GameMenuArea* select_video;
-    GameMenuArea* select_misc;
-    GameMenuArea* select_back;
 
-    GameMenuArea* select_menue;
-    GameMenuArea* select_game_exit;
+    Decker::ui::GameMenuArea* select_audio;
+    Decker::ui::GameMenuArea* select_video;
+    Decker::ui::GameMenuArea* select_misc;
+    Decker::ui::GameMenuArea* select_controller;
+    Decker::ui::GameMenuArea* select_back;
+
+    Decker::ui::GameMenuArea* select_menue;
+    Decker::ui::GameMenuArea* select_game_exit;
 
 
     // Audio
@@ -120,10 +109,29 @@ private:
     ppl7::tk::ComboBox* windowmode_combobox;
     ppl7::tk::Button* save_video_settings_button;
 
+    // Controller
+    ppl7::tk::Label* controller_name;
+    ppl7::tk::HorizontalSlider* controller_deadzone;
+    Decker::ui::ControllerButtonSelector* controller_axis_walk;
+    Decker::ui::ControllerButtonSelector* controller_axis_jump;
+    Decker::ui::ControllerButtonSelector* controller_button_up;
+    Decker::ui::ControllerButtonSelector* controller_button_down;
+    Decker::ui::ControllerButtonSelector* controller_button_left;
+    Decker::ui::ControllerButtonSelector* controller_button_right;
+    Decker::ui::ControllerButtonSelector* controller_button_menu;
+    Decker::ui::ControllerButtonSelector* controller_button_action;
+    Decker::ui::ControllerButtonSelector* controller_button_back;
+    Decker::ui::ControllerButtonSelector* controller_button_jump;
+
     // Misc
     ppl7::tk::ComboBox* text_language_combobox;
     ppl7::tk::ComboBox* speech_language_combobox;
     ppl7::tk::CheckBox* skipIntro_checkbox;
+    ppl7::tk::HorizontalSlider* difficulty_slider;
+    ppl7::tk::Label* difficulty_name;
+    ppl7::tk::Label* difficulty_description;
+
+
 
     void selectSettingsPage(SettingsMenue page);
     void setupUi();
@@ -131,7 +139,9 @@ private:
     void initPageAudio();
     void initPageVideo();
     void initPageMisc();
+    void initPageController();
 
+    void updateDifficultyDescription();
     void updateVideoModes();
     void retranslateUi();
 
@@ -178,11 +188,11 @@ public:
 
 private:
     Game& game;
-    GameMenuArea* start_tutorial;
-    GameMenuArea* start_game;
-    GameMenuArea* settings;
-    GameMenuArea* editor;
-    GameMenuArea* end;
+    Decker::ui::GameMenuArea* start_tutorial;
+    Decker::ui::GameMenuArea* start_game;
+    Decker::ui::GameMenuArea* settings;
+    Decker::ui::GameMenuArea* editor;
+    Decker::ui::GameMenuArea* end;
     SettingsScreen* settings_screen;
 
     ppl7::tk::Frame* menue;
@@ -234,10 +244,10 @@ public:
         Continue
     };
 private:
-    GameMenuArea* end_game;
-    GameMenuArea* back_to_desktop;
-    GameMenuArea* show_settings;
-    GameMenuArea* continue_game;
+    Decker::ui::GameMenuArea* end_game;
+    Decker::ui::GameMenuArea* back_to_desktop;
+    Decker::ui::GameMenuArea* show_settings;
+    Decker::ui::GameMenuArea* continue_game;
 
     State state;
     void setupUi();

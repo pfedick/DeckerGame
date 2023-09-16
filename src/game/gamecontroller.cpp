@@ -3,7 +3,7 @@
 GameController::GameController()
 {
     gc=NULL;
-    deadzone=10000;
+    axis_deadzone=10000;
 
 }
 
@@ -66,7 +66,7 @@ void GameController::open(int sdl_id)
 
     SDL_GameControllerEventState(SDL_ENABLE);
 
-    printf("has_axis: %x, has_button: %x, has_led: %d, has_rumble: %d, has_rumble_triggers: %d\n", has_axis, has_button, has_led, has_rumble, has_rumble_triggers);
+    //printf("has_axis: %x, has_button: %x, has_led: %d, has_rumble: %d, has_rumble_triggers: %d\n", has_axis, has_button, has_led, has_rumble, has_rumble_triggers);
 
 }
 
@@ -78,6 +78,24 @@ bool GameController::isOpen() const
     return false;
 }
 
+void GameController::setDeadzone(int value)
+{
+    int v=abs(value);
+    if (v < 30000) axis_deadzone=v;
+}
+
+int GameController::deadzone() const
+{
+    return axis_deadzone;
+}
+
+ppl7::String GameController::name() const
+{
+    if (gc) return "";
+    return SDL_GameControllerName(gc);
+}
+
+
 int GameController::getButtonState(int button) const
 {
     if (gc) return SDL_GameControllerGetButton(gc, (SDL_GameControllerButton)button);
@@ -88,7 +106,7 @@ int GameController::getAxisState(int axis) const
 {
     if (gc) {
         int value=SDL_GameControllerGetAxis(gc, (SDL_GameControllerAxis)axis);
-        if (value > -deadzone && value < deadzone) value=0;
+        if (value > -axis_deadzone && value < axis_deadzone) value=0;
         return value;
     }
     return 0;
