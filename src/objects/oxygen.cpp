@@ -61,7 +61,11 @@ void OxygenTank::update(double time, TileTypePlane&, Player& player, float)
 void OxygenTank::handleCollision(Player* player, const Collision&)
 {
 	enabled=false;
-	player->addAir(30.0f);
+	switch (GetGame().config.difficulty) {
+	case Config::DifficultyLevel::easy: player->addAir(40.0f); break;
+	case Config::DifficultyLevel::normal: player->addAir(30.0f); break;
+	case Config::DifficultyLevel::hard: player->addAir(20.0f); break;
+	}
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
 	audio.playOnce(AudioClip::water_bubble1, 0.3f);

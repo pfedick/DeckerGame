@@ -358,6 +358,9 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	if (movement == Dead) return;
 	if (points == 0.0f) return;
 	if (godmode) return;
+	if (reason == HealthDropReason::FallingDeep && game->config.difficulty < Config::DifficultyLevel::normal) return;
+	if (game->config.difficulty == Config::DifficultyLevel::easy) points*=0.5f;
+	else if (game->config.difficulty == Config::DifficultyLevel::hard) points*=2.0f;
 
 	if (time > voiceDamageCooldown) {
 		int r=ppl7::rand(1, 4);
@@ -374,7 +377,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	}
 
 	//game->controller.rumbleTrigger(0xffff, 0xffff, 16);
-	game->controller.rumble(0xffff, 0xffff, 16);
+	game->controller.rumble(0xffff, 0xffff, 100);
 	health-=(points * frame_rate_compensation);
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
@@ -517,6 +520,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		playSoundOnAnimationSprite();
 		if (phonetics.notEmpty()) playPhonetics();
 
+	}
+	switch (game->config.difficulty) {
+	case Config::DifficultyLevel::easy: maxair=45.0f;; break;
+	case Config::DifficultyLevel::normal: maxair=30.0f;; break;
+	case Config::DifficultyLevel::hard: maxair=20.0f;; break;
 	}
 	if (voice) voice->setPositional(ppl7::grafix::Point(x, y), 1600);
 	if (movement == Dead) {
