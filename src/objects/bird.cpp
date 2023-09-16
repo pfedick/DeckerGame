@@ -91,6 +91,16 @@ void Bird::handleCollision(Player* player, const Collision& collision)
 	player->dropHealth(5);
 }
 
+static int getChance()
+{
+	switch (GetGame().config.difficulty) {
+	case Config::DifficultyLevel::easy: return 5;
+	case Config::DifficultyLevel::normal: return 3;
+	case Config::DifficultyLevel::hard: return 2;
+	}
+	return 3;
+}
+
 void Bird::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	AudioPool& audiopool=getAudioPool();
@@ -160,14 +170,14 @@ void Bird::update(double time, TileTypePlane& ttplane, Player& player, float fra
 			ppl7::grafix::PointF d=player.position() - p;
 			if (abs(d.x) > abs(d.y) - 16 && abs(d.x) < abs(d.y) + 16) {
 				if (p.x < player.position().x && state == BirdState::FlyRight) {
-					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
+					if (ppl7::rand(1, getChance()) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackRight);
 						audiopool.playOnce(AudioClip::crow_scream, p, 1600, 0.6f);
 						audiopool.playOnce(AudioClip::arrow_swoosh, p, 1600, 0.6f);
 					}
 					next_state_change=time + 2.0;
 				} else if (p.x > player.position().x && state == BirdState::FlyLeft) {
-					if (ppl7::rand(1, 3) == 1) {	// Decide to attack?
+					if (ppl7::rand(1, getChance()) == 1) {	// Decide to attack?
 						changeState(BirdState::AttackLeft);
 						audiopool.playOnce(AudioClip::crow_scream, p, 1600, 0.6f);
 						audiopool.playOnce(AudioClip::arrow_swoosh, p, 1600, 0.6f);
