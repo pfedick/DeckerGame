@@ -86,6 +86,7 @@ Object::Object(Type::ObjectType type)
 	deleteDefered=false;
 	myLayer=Layer::BehindPlayer;
 	scale=1.0f;
+	difficulty_matrix=255;
 	color_mod.set(255, 255, 255, 255);
 }
 
@@ -126,19 +127,20 @@ void Object::update(double, TileTypePlane&, Player&, float)
 
 size_t Object::save(unsigned char* buffer, size_t size) const
 {
-	if (size < 16) return 0;
+	if (size < 17) return 0;
 	ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
 	ppl7::Poke16(buffer + 1, myType);
 	ppl7::Poke8(buffer + 3, static_cast<int>(myLayer));
 	ppl7::Poke32(buffer + 4, id);
 	ppl7::Poke32(buffer + 8, initial_p.x);
 	ppl7::Poke32(buffer + 12, initial_p.y);
-	return 16;
+	ppl7::Poke8(buffer + 16, difficulty_matrix);
+	return 17;
 }
 
 size_t Object::saveSize() const
 {
-	return 16;
+	return 17;
 }
 
 size_t Object::load(const unsigned char* buffer, size_t size)
@@ -146,29 +148,20 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 
 	if (size < 16) return 0;
 	int version=ppl7::Peek8(buffer + 0);
-	if (version != 1) return 0;
-	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
-	id=ppl7::Peek32(buffer + 4);
-	initial_p.x=ppl7::Peek32(buffer + 8);
-	initial_p.y=ppl7::Peek32(buffer + 12);
-	p=initial_p;
-	return 16;
+	if (version == 1 || version == 2) {
+		myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
+		id=ppl7::Peek32(buffer + 4);
+		initial_p.x=ppl7::Peek32(buffer + 8);
+		initial_p.y=ppl7::Peek32(buffer + 12);
+		p=initial_p;
+		if (version == 2) {
+			difficulty_matrix=ppl7::Peek8(buffer + 16);
+			return 17;
+		}
+		return 16;
+	}
+	return 0;
 }
-/*
-size_t Object::load1(const unsigned char* buffer, size_t size)
-{
-
-	if (size < 14) return 0;
-	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 1));
-	id=ppl7::Peek32(buffer + 2);
-	initial_p.x=ppl7::Peek32(buffer + 6);
-	initial_p.y=ppl7::Peek32(buffer + 10);
-	p=initial_p;
-	return 14;
-
-}
-*/
-
 
 void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {

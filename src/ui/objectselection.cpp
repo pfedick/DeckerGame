@@ -219,17 +219,30 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	selected_object=-1;
 	ppl7::grafix::Rect client=this->clientRect();
 
-	this->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
-	layer_selection=new ppl7::tk::ComboBox(60, 0, width - 70, 30);
+	int yy=0;
+	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "Layer:"));
+	layer_selection=new ppl7::tk::ComboBox(80, yy, width - 80, 30);
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	this->addChild(layer_selection);
+	yy+=30;
+	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "difficulty:"));
+	difficulty_easy=new ppl7::tk::CheckBox(80, yy, 80, 30, "easy", true);
+	difficulty_easy->setEventHandler(this);
+	this->addChild(difficulty_easy);
+	difficulty_normal=new ppl7::tk::CheckBox(145, yy, 100, 30, "normal", true);
+	difficulty_normal->setEventHandler(this);
+	this->addChild(difficulty_normal);
+	difficulty_hard=new ppl7::tk::CheckBox(225, yy, 90, 30, "hard", true);
+	difficulty_hard->setEventHandler(this);
+	this->addChild(difficulty_hard);
+	yy+=30;
+	this->addChild(new ppl7::tk::Label(0, yy, width, 30, "Object selection:"));
+	yy+=30;
 
-	this->addChild(new ppl7::tk::Label(0, 30, width, 60, "Object selection:"));
-
-	objects_frame=new ObjectsFrame(client.left(), 70, client.width(), client.height() - 70);
+	objects_frame=new ObjectsFrame(client.left(), yy, client.width(), client.height() - yy);
 	objects_frame->setEventHandler(this);
 	this->addChild(objects_frame);
 

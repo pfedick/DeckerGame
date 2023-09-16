@@ -405,6 +405,9 @@ private:
 	SpriteTexture* spriteset;
 	ppl7::tk::Scrollbar* scrollbar;
 	ppl7::tk::ComboBox* layer_selection;
+	ppl7::tk::CheckBox* difficulty_easy;
+	ppl7::tk::CheckBox* difficulty_normal;
+	ppl7::tk::CheckBox* difficulty_hard;
 	ObjectsFrame* objects_frame;
 	int selected_object;
 

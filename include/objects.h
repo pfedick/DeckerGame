@@ -179,6 +179,7 @@ public:
 	int sprite_set;
 	int sprite_no;
 	int sprite_no_representation;
+	uint8_t difficulty_matrix;
 	float scale;
 	bool collisionDetection;
 	bool visibleAtPlaytime;
