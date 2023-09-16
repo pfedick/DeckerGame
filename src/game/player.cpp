@@ -38,7 +38,15 @@ static int swimm_straigth_right[]={ 186,187,188,189,190,191,192,193,194,195 };
 static int swimm_down_right[]={ 176,177,178,179,180,181,182,183,184,185 };
 
 
-
+static float getMaxAirFromDifficultyLevel(Config::DifficultyLevel level)
+{
+	switch (level) {
+	case Config::DifficultyLevel::easy: return 45.0f;
+	case Config::DifficultyLevel::normal: return 30.0f;
+	case Config::DifficultyLevel::hard: return 20.0f;
+	}
+	return 30.0f;
+}
 
 
 Player::Player(Game* game)
@@ -59,8 +67,9 @@ Player::Player(Game* game)
 	visible=true;
 	autoWalk=false;
 	waterSplashPlayed=false;
-	air=30.0f;
-	maxair=30.0f;
+	maxair=getMaxAirFromDifficultyLevel(game->config.difficulty);
+	air=maxair;
+
 	particle_end_time=0.0f;
 	next_particle_birth=0.0f;
 	particle_reason=ParticleReason::None;
@@ -509,6 +518,7 @@ void Player::playSoundOnAnimationSprite()
 
 }
 
+
 void Player::update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	if (particle_reason != ParticleReason::None && particle_end_time > time) emmitParticles(time);
@@ -521,11 +531,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 
 	}
-	switch (game->config.difficulty) {
-	case Config::DifficultyLevel::easy: maxair=45.0f;; break;
-	case Config::DifficultyLevel::normal: maxair=30.0f;; break;
-	case Config::DifficultyLevel::hard: maxair=20.0f;; break;
-	}
+	maxair=getMaxAirFromDifficultyLevel(game->config.difficulty);
 	if (voice) voice->setPositional(ppl7::grafix::Point(x, y), 1600);
 	if (movement == Dead) {
 		if (animation.isFinished()) {
