@@ -1351,6 +1351,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
 			object_selection->setObjectType(object->type());
+			object_selection->setObjectDifficulty(object->difficulty_matrix);
 			object_selection->setLayer(static_cast<int>(object->myLayer));
 			sprite_mode=SpriteModeEdit;
 			selected_object=object;
@@ -1370,6 +1371,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 				selected_object=object;
 				sprite_move_start=event->p;
 				object_selection->setObjectType(object->type());
+				object_selection->setObjectDifficulty(object->difficulty_matrix);
 				object_selection->setLayer(static_cast<int>(object->myLayer));
 			}
 			return;
@@ -1837,4 +1839,9 @@ void Game::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
 {
 	ppl7::PrintDebugTime("gameControllerDeviceRemoved: %d\n", event->which);
 	controller.close();
+}
+
+void Game::updateDifficultyForSelectedObject(uint8_t dificulty)
+{
+	if (selected_object) selected_object->difficulty_matrix=dificulty;
 }

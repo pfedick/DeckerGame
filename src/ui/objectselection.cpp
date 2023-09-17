@@ -258,6 +258,13 @@ void ObjectSelection::setObjectType(int type)
 	objects_frame->setObjectType(type);
 }
 
+void ObjectSelection::setObjectDifficulty(uint8_t matrix)
+{
+	difficulty_easy->setChecked(matrix & 1);
+	difficulty_normal->setChecked(matrix & 2);
+	difficulty_hard->setChecked(matrix & 4);
+}
+
 int ObjectSelection::currentLayer() const
 {
 	return layer_selection->currentIdentifier().toInt();
@@ -288,7 +295,18 @@ void ObjectSelection::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	printf("ObjectSelection::mouseDownEvent\n");
 }
 
+void ObjectSelection::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	ppl7::tk::Widget* w=event->widget();
+	if (w == difficulty_easy || w == difficulty_normal || w == difficulty_hard) {
+		uint8_t d=0b11111000;
+		if (difficulty_easy->checked()) d|=1;
+		if (difficulty_normal->checked()) d|=2;
+		if (difficulty_hard->checked()) d|=4;
+		game->updateDifficultyForSelectedObject(d);
 
+	}
+}
 
 
 

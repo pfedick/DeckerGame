@@ -950,6 +950,8 @@ public:
 	void pauseGame(bool flag);
 	void stepFrame();
 
+	void updateDifficultyForSelectedObject(uint8_t dificulty);
+
 };
 
 ppl7::tk::Window* GetGameWindow();

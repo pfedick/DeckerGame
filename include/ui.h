@@ -429,9 +429,11 @@ public:
 	int currentLayer() const;
 	void setLayer(int layer);
 	void setObjectType(int type);
+	void setObjectDifficulty(uint8_t matrix);
 	ppl7::String widgetType() const override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void toggledEvent(ppl7::tk::Event* event, bool checked);
 
 
 };
