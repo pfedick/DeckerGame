@@ -94,6 +94,7 @@ void StamperVertical::update(double time, TileTypePlane& ttplane, Player& player
 		} else if (state == 3 && animation.isFinished() == true) {
 			state=0;
 			next_state=time + time_inactive;
+			if (GetGame().config.difficulty == Config::DifficultyLevel::easy) next_state+=time_inactive;
 		}
 	} else {
 
