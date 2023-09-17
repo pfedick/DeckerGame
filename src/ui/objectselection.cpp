@@ -299,13 +299,19 @@ void ObjectSelection::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
 	ppl7::tk::Widget* w=event->widget();
 	if (w == difficulty_easy || w == difficulty_normal || w == difficulty_hard) {
-		uint8_t d=0b11111000;
-		if (difficulty_easy->checked()) d|=1;
-		if (difficulty_normal->checked()) d|=2;
-		if (difficulty_hard->checked()) d|=4;
+		uint8_t d=getDifficulty();
 		game->updateDifficultyForSelectedObject(d);
 
 	}
+}
+
+uint8_t ObjectSelection::getDifficulty() const
+{
+	uint8_t d=0b11111000;
+	if (difficulty_easy->checked()) d|=1;
+	if (difficulty_normal->checked()) d|=2;
+	if (difficulty_hard->checked()) d|=4;
+	return d;
 }
 
 

@@ -10,6 +10,16 @@ namespace Decker::Objects {
 
 static ObjectSystem* object_system=NULL;
 
+static uint8_t getDifficultyMatrix()
+{
+	switch (GetGame().config.difficulty) {
+	case Config::DifficultyLevel::easy: return 1;
+	case Config::DifficultyLevel::normal: return 2;
+	case Config::DifficultyLevel::hard: return 4;
+	}
+	return 2;
+}
+
 ObjectSystem* GetObjectSystem()
 {
 	return object_system;
@@ -191,6 +201,7 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 	std::list<uint32_t> deleteme;
 	int width=viewport.width();
 	int height=viewport.height();
+
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
 		if (object->deleteDefered) {
@@ -224,9 +235,10 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	std::map<uint32_t, Object*>::iterator it;
+	uint8_t dm=getDifficultyMatrix();
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
-		object->update(time, ttplane, player, frame_rate_compensation);
+		if (object->difficulty_matrix & dm) object->update(time, ttplane, player, frame_rate_compensation);
 	}
 }
 
@@ -234,9 +246,10 @@ void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpo
 {
 	std::map<uint32_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
+	uint8_t dm=getDifficultyMatrix();
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		const Object* object=it->second;
-		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true && object->myLayer == layer) {
+		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true && object->myLayer == layer && (object->difficulty_matrix & dm)) {
 			object->draw(renderer, coords);
 		}
 	}
@@ -288,9 +301,10 @@ Object* ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& play
 {
 	std::map<uint32_t, Object*>::const_iterator it;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
+	uint8_t dm=getDifficultyMatrix();
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		Object* item=it->second;
-		if (item->texture != NULL && item->collisionDetection == true && item->enabled == true) {
+		if (item->texture != NULL && item->collisionDetection == true && item->enabled == true && (item->difficulty_matrix & dm)) {
 			for (p_it=player.begin();p_it != player.end();++p_it) {
 				if ((*p_it).inside(item->boundary)) {
 					//printf ("inside boundary\n");

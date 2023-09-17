@@ -430,6 +430,7 @@ public:
 	void setLayer(int layer);
 	void setObjectType(int type);
 	void setObjectDifficulty(uint8_t matrix);
+	uint8_t getDifficulty() const;
 	ppl7::String widgetType() const override;
 	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
 	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;

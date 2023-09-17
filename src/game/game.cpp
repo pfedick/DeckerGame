@@ -1380,6 +1380,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 		selected_object=level.objects->getInstance(object_type);
 		if (selected_object) {
 			ppl7::grafix::Point coords=WorldCoords;
+			selected_object->difficulty_matrix=object_selection->getDifficulty();
 			selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(object_selection->currentLayer());
 			selected_object->initial_p.setPoint(event->p.x + coords.x, event->p.y + coords.y);
 			selected_object->p=selected_object->initial_p;
