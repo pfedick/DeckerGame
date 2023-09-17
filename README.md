@@ -42,6 +42,7 @@ There is a tutorial and several other playable levels, and it got a nice little 
 
 ## How to control the player
 
+### Keyboard
 The player can be controlled by the arrow keys or alternatively with "wasd" or "ijkl"
 - cursor up / w / i: climb up a ladder or jump up in the air
 - cursor down / s / k: climb down a ladder
@@ -53,6 +54,18 @@ The player can be controlled by the arrow keys or alternatively with "wasd" or "
 
 When walking an pressing the key for up, the player will jump in the direction of walking.
 
+### Game Controller
+Since version 0.14.0 the game supports game controllers. The controller is detected and used automatically (plug it in or switch it on). The mapping of sticks and buttons can be changed in the games settings.
+- left stick left or right: walk or run in the direction of the stick
+- left stick up: jump or climb up a ladder
+- left stick down: climb down a ladder
+- Button "A": action key, it activates switches or open doors. In a Menu it selects the highlighted element
+- Button "B": alternative for jump
+- Button "X": go back in a menu
+- Button "Menu": go to the settings
+- Pad: navigate in a Menu, also alternative for player movement
+
+If possible, the controller rumbles, when the player gets demage. You can disable this in the settings
 
 ## On what platforms will the game be available
 My target platforms are:
@@ -65,6 +78,12 @@ The game depends on the [Simple DirectMedia Layer](https://www.libsdl.org/)
 library, which is available on many platforms. So in theory it should be possible to
 compile it on any platform with a c++ compiler and the SDL library available.
 See belwo on [how to compile](#How-to-compile).
+
+## Can you make a release for iOS, Android, Debian, Ubuntu, Fedora,...
+Sorry, but in this moment, that goes above my knowledge and I don't have the time either.
+
+But, hey! It's open source! If you have the knowledge and time, please feel free to make a port and send me a pull request.
+
 
 ## In which language is the game written?
 
@@ -234,6 +253,7 @@ make
 
 ## Release History
 
+* [0.14.0](https://github.com/pfedick/DeckerGame/releases/tag/0.14.0) [2023-09-17]: Play it with controller
 * [0.13.0](https://github.com/pfedick/DeckerGame/releases/tag/0.13.0) [2023-09-01]: Intro
 * [0.12.0](https://github.com/pfedick/DeckerGame/releases/tag/0.12.0) [2023-08-19]: Tutorial and Speech
 * [0.11.0](https://github.com/pfedick/DeckerGame/releases/tag/0.11.0) [2023-08-10]: Pathfinding and Blood Update
