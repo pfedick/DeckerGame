@@ -116,7 +116,8 @@ void Arrow::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			state++;
 			if (state == 1) {
 				next_state=time + ppl7::rand(min_cooldown_time * 1000, max_cooldown_time * 1000) / 1000;
-				min_cooldown_state=time + (float)ppl7::rand(300, 800) / 1000.0f;
+				if (GetGame().config.difficulty == Config::DifficultyLevel::easy) min_cooldown_state=time + ppl7::randf(0.600, 1.400);
+				else min_cooldown_state=time + ppl7::randf(0.300, 0.800);
 				state=0;
 			}
 			// Emit a new arrow
