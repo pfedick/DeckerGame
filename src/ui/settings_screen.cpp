@@ -1026,5 +1026,9 @@ void SettingsScreen::toggledEvent(ppl7::tk::Event* event, bool checked)
         //ppl7::PrintDebugTime("toggle\n");
         game.config.noBlood=checked;
         game.config.save();
+    } else if (event->widget() == controller_use_rumble) {
+        //ppl7::PrintDebugTime("toggle\n");
+        game.config.controller.use_rumble=checked;
+        game.config.save();
     }
 }
