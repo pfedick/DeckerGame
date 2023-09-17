@@ -90,7 +90,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 	//		(int)movement);
 	if (player->x<p.x - 48 || player->x>p.x + 48) return;
 	if (player->velocity_move.y > 0.0f || player->gravity > 0.0f) {
-		if (ppl7::rand(0, 1) == 0) {
+		if (ppl7::rand(0, 1) == 0 && GetGame().config.difficulty != Config::DifficultyLevel::easy) {
 			// run away
 			speed=max_speed + 2.0f;
 			next_state=player->time + 10.0f;
