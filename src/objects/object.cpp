@@ -128,7 +128,7 @@ void Object::update(double, TileTypePlane&, Player&, float)
 size_t Object::save(unsigned char* buffer, size_t size) const
 {
 	if (size < 17) return 0;
-	ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
+	ppl7::Poke8(buffer + 0, 2);	// Object-Header-Version
 	ppl7::Poke16(buffer + 1, myType);
 	ppl7::Poke8(buffer + 3, static_cast<int>(myLayer));
 	ppl7::Poke32(buffer + 4, id);
