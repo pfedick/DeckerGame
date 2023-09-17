@@ -605,7 +605,8 @@ void SettingsScreen::updateVideoModes()
     SDL::getDisplayModes(display_id, mode_list);
     std::list<SDL::DisplayMode>::const_iterator mit;
     for (mit=mode_list.begin();mit != mode_list.end();++mit) {
-        if ((*mit).format == ppl7::grafix::RGBFormat::X8R8G8B8 && (*mit).width >= 640 && (*mit).height >= 480) {
+        if ((*mit).format == ppl7::grafix::RGBFormat::X8R8G8B8 && (*mit).width >= 640 && (*mit).height >= 480 &&
+            (*mit).width <= 1920 && (*mit).height <= 1200) {
             screen_resolution_combobox->add(
                 ppl7::ToString("%d x %d, %d Hz", (*mit).width, (*mit).height, (*mit).refresh_rate),
                 ppl7::ToString("%d,%d,%d", (*mit).width, (*mit).height, (*mit).refresh_rate));
