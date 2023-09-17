@@ -788,6 +788,7 @@ private:
 	Level level;
 	Background background=Background(sdl);
 	SDL_Texture* tex_level_grid;
+	SDL_Texture* tex_render_target;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
@@ -830,7 +831,9 @@ private:
 	float frame_rate_compensation;
 
 	void createWindow();
+	void createRenderTarget();
 	void presentStartupScreen();
+	void drawRenderTargetToScreen();
 	void loadGrafix();
 	void initUi();
 	void deleteUi();

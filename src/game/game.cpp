@@ -59,6 +59,7 @@ Game::Game()
 	GameWindow=this;
 	GameInstance=this;
 	tex_level_grid=NULL;
+	tex_render_target=NULL;
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
 	Style=s;
@@ -95,6 +96,7 @@ Game::~Game()
 	if (settings_screen) delete  settings_screen;
 	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
+	if (tex_render_target) sdl.destroyTexture(tex_render_target);
 }
 
 void Game::loadGrafix()
@@ -230,6 +232,12 @@ void Game::createWindow()
 	SDL_ShowCursor(SDL_DISABLE);
 }
 
+void Game::createRenderTarget()
+{
+	tex_render_target=sdl.createRenderTargetTexture(1920, 1080);
+	if (tex_render_target) SDL_SetTextureScaleMode(tex_render_target, SDL_ScaleModeBest);
+}
+
 ppl7::tk::Window& Game::window()
 {
 	return *this;
@@ -252,7 +260,8 @@ SDL& Game::getSDL()
 
 void Game::showUi(bool enable)
 {
-	const ppl7::grafix::Size& desktop=clientSize();
+	//const ppl7::grafix::Size& desktop=clientSize();
+	ppl7::grafix::Size desktop(1920, 1080);
 	showui=enable;
 	if (showui) {
 		viewport.y1=32;
@@ -290,7 +299,8 @@ void Game::initUi()
 	Style.inputFont.setName("NotoSans");
 	wm->setWidgetStyle(Style);
 
-	const ppl7::grafix::Size& desktop=clientSize();
+	//const ppl7::grafix::Size& desktop=clientSize();
+	ppl7::grafix::Size desktop(1920, 1080);
 	//ppl7::tk::Label *label;
 
 	resizeMenueAndStatusbar();
@@ -307,7 +317,8 @@ void Game::initUi()
 
 void Game::resizeMenueAndStatusbar()
 {
-	const ppl7::grafix::Size& desktop=clientSize();
+	//const ppl7::grafix::Size& desktop=clientSize();
+	ppl7::grafix::Size desktop(1920, 1080);
 	if (!statusbar) {
 		statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
 		this->addChild(statusbar);
@@ -370,12 +381,15 @@ void Game::init()
 	translator.load();
 	translator.setLanguage(config.TextLanguage);
 	createWindow();
+	createRenderTarget();
 	initUi();
 	initAudio();
 	initGameController();
 
 	desktopSize=clientSize();
 	viewport=clientRect();
+	viewport.setRect(0, 0, 1920, 1080);
+	//ppl7::grafix::Size desktop(1920, 1080);
 	message_overlay.resize(viewport.size());
 
 	gui_font.setName("Default");
@@ -760,6 +774,9 @@ void Game::run()
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		if (filedialog) checkFileDialog();
 		metrics.time_events.stop();
+
+		SDL_SetRenderTarget(renderer, tex_render_target);
+
 		drawWorld(renderer);
 
 		metrics.time_draw_ui.start();
@@ -776,6 +793,9 @@ void Game::run()
 		if (mainmenue->visibility_grid) drawGrid();
 		if (message_overlay.hasMessage()) message_overlay.draw(renderer, viewport);
 		// Widgets
+		SDL_SetRenderTarget(renderer, NULL);
+		drawRenderTargetToScreen();
+
 		drawWidgets();
 		// Mouse
 		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
@@ -787,6 +807,8 @@ void Game::run()
 		metrics.total_audiotracks+=audio_metrics.tracks_total;
 		metrics.hearable_audiotracks+=audio_metrics.tracks_played;
 		metrics.time_total.stop();
+
+
 		presentScreen();
 		metrics.time_frame.stop();
 
@@ -1604,12 +1626,14 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 
 void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 {
+	/*
 	if (tex_level_grid) {
 		sdl.destroyTexture(tex_level_grid);
 		tex_level_grid=NULL;
 	}
+	*/
 	desktopSize=clientSize();
-	viewport=clientRect();
+	//viewport=clientRect();
 	resizeMenueAndStatusbar();
 	message_overlay.resize(desktopSize);
 	showUi(showui);
@@ -1750,7 +1774,7 @@ void Game::openSettingsScreen()
 	if (settings_screen) delete settings_screen;
 	settings_screen=NULL;
 	settings_screen=new SettingsScreen(*this,
-		100, 100, this->width() - 200, this->height() - 200, true);
+		100, 100, 1720, 880, true);
 	this->addChild(settings_screen);
 	this->needsRedraw();
 	enableControls(false);
@@ -1853,4 +1877,19 @@ void Game::updateLayerForSelectedObject(int layer)
 		selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(layer);
 		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
+}
+
+
+void Game::drawRenderTargetToScreen()
+{
+	SDL_Renderer* renderer=sdl.getRenderer();
+
+	ppl7::grafix::Rect vp=clientRect();
+	SDL_Rect target;
+	target.x=0;
+	target.y=0;
+	target.w=vp.width();
+	target.h=vp.height();
+	SDL_RenderCopy(renderer, tex_render_target, NULL, &target);
+
 }
