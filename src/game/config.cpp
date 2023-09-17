@@ -24,6 +24,13 @@ Config::Config()
     noBlood=false;
     skipIntro=false;
     difficulty=DifficultyLevel::normal;
+
+    try {
+        load();
+    } catch (...) {}
+}
+
+Config::Controller::Controller() {
     GameControllerMapping gm;
     axis_walk=gm.getSDLAxis(GameControllerMapping::Axis::Walk);
     axis_jump=gm.getSDLAxis(GameControllerMapping::Axis::Jump);
@@ -37,10 +44,7 @@ Config::Config()
     button_jump=gm.getSDLButton(GameControllerMapping::Button::Jump);
     GameController gc;
     deadzone=gc.deadzone();
-
-    try {
-        load();
-    } catch (...) {}
+    use_rumble=true;
 }
 
 Config::~Config()
@@ -88,17 +92,18 @@ void Config::load()
 
     // Controller
     conf.setSection("controller");
-    deadzone=conf.getInt("deadzone", deadzone);
-    axis_walk=conf.getInt("axis_walk", axis_walk);
-    axis_jump=conf.getInt("axis_jump", axis_jump);
-    button_up=conf.getInt("button_up", button_up);
-    button_down=conf.getInt("button_down", button_down);
-    button_left=conf.getInt("button_left", button_left);
-    button_right=conf.getInt("button_right", button_right);
-    button_menu=conf.getInt("button_menu", button_menu);
-    button_back=conf.getInt("button_back", button_back);
-    button_action=conf.getInt("button_action", button_action);
-    button_jump=conf.getInt("button_jump", button_jump);
+    controller.deadzone=conf.getInt("deadzone", controller.deadzone);
+    controller.use_rumble=conf.getBool("use_rumble", controller.use_rumble);
+    controller.axis_walk=conf.getInt("axis_walk", controller.axis_walk);
+    controller.axis_jump=conf.getInt("axis_jump", controller.axis_jump);
+    controller.button_up=conf.getInt("button_up", controller.button_up);
+    controller.button_down=conf.getInt("button_down", controller.button_down);
+    controller.button_left=conf.getInt("button_left", controller.button_left);
+    controller.button_right=conf.getInt("button_right", controller.button_right);
+    controller.button_menu=conf.getInt("button_menu", controller.button_menu);
+    controller.button_back=conf.getInt("button_back", controller.button_back);
+    controller.button_action=conf.getInt("button_action", controller.button_action);
+    controller.button_jump=conf.getInt("button_jump", controller.button_jump);
 }
 
 void Config::save()
@@ -141,17 +146,18 @@ void Config::save()
     conf.save(ConfigFile);
 
     // Controller
-    conf.add("deadzone", deadzone);
-    conf.add("axis_walk", axis_walk);
-    conf.add("axis_jump", axis_jump);
-    conf.add("button_up", button_up);
-    conf.add("button_down", button_down);
-    conf.add("button_left", button_left);
-    conf.add("button_right", button_right);
-    conf.add("button_menu", button_menu);
-    conf.add("button_back", button_back);
-    conf.add("button_action", button_action);
-    conf.add("button_jump", button_jump);
+    conf.add("deadzone", controller.deadzone);
+    conf.add("use_rumble", controller.use_rumble);
+    conf.add("axis_walk", controller.axis_walk);
+    conf.add("axis_jump", controller.axis_jump);
+    conf.add("button_up", controller.button_up);
+    conf.add("button_down", controller.button_down);
+    conf.add("button_left", controller.button_left);
+    conf.add("button_right", controller.button_right);
+    conf.add("button_menu", controller.button_menu);
+    conf.add("button_back", controller.button_back);
+    conf.add("button_action", controller.button_action);
+    conf.add("button_jump", controller.button_jump);
 
 
 }

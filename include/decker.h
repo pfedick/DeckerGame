@@ -99,18 +99,23 @@ public:
 	DifficultyLevel		difficulty;
 
 	// Controller
-	int					deadzone;
-	int					axis_walk;
-	int					axis_jump;
-	int					button_up;
-	int					button_down;
-	int					button_left;
-	int					button_right;
-	int					button_menu;
-	int					button_back;
-	int					button_action;
-	int					button_jump;
-
+	class Controller {
+	public:
+		int					deadzone;
+		int					axis_walk;
+		int					axis_jump;
+		int					button_up;
+		int					button_down;
+		int					button_left;
+		int					button_right;
+		int					button_menu;
+		int					button_back;
+		int					button_action;
+		int					button_jump;
+		bool				use_rumble;
+		Controller();
+	};
+	Controller controller;
 
 
 

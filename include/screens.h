@@ -136,6 +136,7 @@ private:
     Decker::ui::ControllerButtonSelector* controller_button_action;
     Decker::ui::ControllerButtonSelector* controller_button_back;
     Decker::ui::ControllerButtonSelector* controller_button_jump;
+    ppl7::tk::CheckBox* controller_use_rumble;
 
     // Misc
     ppl7::tk::ComboBox* text_language_combobox;

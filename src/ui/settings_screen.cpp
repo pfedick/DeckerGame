@@ -430,8 +430,13 @@ void SettingsScreen::initPageController()
     controller_deadzone=new ppl7::tk::HorizontalSlider(input_widget_x, y, input_widget.width, input_widget.height);
     controller_deadzone->setEventHandler(this);
     controller_deadzone->setLimits(0, 30000);
-    controller_deadzone->setValue(static_cast<int>(game.controller.deadzone()));
+    controller_deadzone->setValue(static_cast<int>(game.config.controller.deadzone));
     page_controller->addChild(controller_deadzone);
+
+    controller_use_rumble=new ppl7::tk::CheckBox(input_widget_x + input_widget.width + 10, y, 400, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
+    controller_use_rumble->setFont(style_label.font);
+    controller_use_rumble->setEventHandler(this);
+    page_misc->addChild(controller_use_rumble);
     y+=50;
 
     label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Stick walk:"));
@@ -964,7 +969,7 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
         updateDifficultyDescription();
         game.config.save();
     } else if (event->widget() == controller_deadzone) {
-        game.config.deadzone=value;
+        game.config.controller.deadzone=value;
         game.controller.setDeadzone(value);
         game.config.save();
     }
@@ -983,16 +988,16 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
         game.config.save();
     } else if (event->widget() == getCurrentControllerInput()) {
         ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
-        if (event->widget() == controller_axis_walk) game.config.axis_walk=value;
-        else if (event->widget() == controller_axis_jump) game.config.axis_jump=value;
-        else if (event->widget() == controller_button_up) game.config.button_up=value;
-        else if (event->widget() == controller_button_down) game.config.button_down=value;
-        else if (event->widget() == controller_button_left) game.config.button_left=value;
-        else if (event->widget() == controller_button_right) game.config.button_right=value;
-        else if (event->widget() == controller_button_menu) game.config.button_menu=value;
-        else if (event->widget() == controller_button_back) game.config.button_back=value;
-        else if (event->widget() == controller_button_action) game.config.button_action=value;
-        else if (event->widget() == controller_button_jump) game.config.button_jump=value;
+        if (event->widget() == controller_axis_walk) game.config.controller.axis_walk=value;
+        else if (event->widget() == controller_axis_jump) game.config.controller.axis_jump=value;
+        else if (event->widget() == controller_button_up) game.config.controller.button_up=value;
+        else if (event->widget() == controller_button_down) game.config.controller.button_down=value;
+        else if (event->widget() == controller_button_left) game.config.controller.button_left=value;
+        else if (event->widget() == controller_button_right) game.config.controller.button_right=value;
+        else if (event->widget() == controller_button_menu) game.config.controller.button_menu=value;
+        else if (event->widget() == controller_button_back) game.config.controller.button_back=value;
+        else if (event->widget() == controller_button_action) game.config.controller.button_action=value;
+        else if (event->widget() == controller_button_jump) game.config.controller.button_jump=value;
         game.config.save();
         game.updateGameControllerMapping();
         //ppl7::PrintDebugTime("SettingsScreen::valueChangedEvent: %d\n", value);

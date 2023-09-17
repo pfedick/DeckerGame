@@ -399,17 +399,17 @@ void Game::initGameController()
 
 void Game::updateGameControllerMapping()
 {
-	controller.setDeadzone(config.deadzone);
-	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Walk, config.axis_walk);
-	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Jump, config.axis_jump);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuUp, config.button_up);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuDown, config.button_down);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuLeft, config.button_left);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuRight, config.button_right);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::Menu, config.button_menu);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::Action, config.button_action);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::Jump, config.button_jump);
-	controller.mapping.setMappingButton(GameControllerMapping::Button::Back, config.button_back);
+	controller.setDeadzone(config.controller.deadzone);
+	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Walk, config.controller.axis_walk);
+	controller.mapping.setMappingAxis(GameControllerMapping::Axis::Jump, config.controller.axis_jump);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuUp, config.controller.button_up);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuDown, config.controller.button_down);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuLeft, config.controller.button_left);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::MenuRight, config.controller.button_right);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Menu, config.controller.button_menu);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Action, config.controller.button_action);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Jump, config.controller.button_jump);
+	controller.mapping.setMappingButton(GameControllerMapping::Button::Back, config.controller.button_back);
 	controller.mapping.updateMapping();
 
 }
