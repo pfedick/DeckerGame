@@ -432,11 +432,6 @@ void SettingsScreen::initPageController()
     controller_deadzone->setLimits(0, 30000);
     controller_deadzone->setValue(static_cast<int>(game.config.controller.deadzone));
     page_controller->addChild(controller_deadzone);
-
-    controller_use_rumble=new ppl7::tk::CheckBox(input_widget_x + input_widget.width + 10, y, 400, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
-    controller_use_rumble->setFont(style_label.font);
-    controller_use_rumble->setEventHandler(this);
-    page_controller->addChild(controller_use_rumble);
     y+=50;
 
     label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Stick walk:"));
@@ -539,6 +534,11 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_jump);
     y+=50;
 
+    controller_use_rumble=new ppl7::tk::CheckBox(0, y, 700, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
+    controller_use_rumble->setFont(style_label.font);
+    controller_use_rumble->setEventHandler(this);
+    page_controller->addChild(controller_use_rumble);
+    y+=50;
 
 }
 
