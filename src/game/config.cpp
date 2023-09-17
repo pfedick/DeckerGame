@@ -18,7 +18,6 @@ Config::Config()
     volumeAmbience=0.7f;
     volumeSpeech=1.0f;
     videoDevice=0;
-    audioDevice="";
     TextLanguage="en";
     SpeechLanguage="en";
     tutorialPlayed=false;
@@ -80,7 +79,6 @@ void Config::load()
 
     // Audio
     conf.setSection("audio");
-    audioDevice=conf.get("audioDevice", audioDevice);
     volumeTotal=conf.get("volumeTotal", ppl7::ToString("%0.3f", volumeTotal)).toFloat();
     volumeMusic=conf.get("volumeMusic", ppl7::ToString("%0.3f", volumeMusic)).toFloat();
     volumeAmbience=conf.get("volumeAmbience", ppl7::ToString("%0.3f", volumeAmbience)).toFloat();
@@ -123,7 +121,6 @@ void Config::save()
 
     // Audio
     conf.setSection("audio");
-    conf.add("audioDevice", audioDevice);
     conf.add("volumeTotal", ppl7::ToString("%0.3f", volumeTotal));
     conf.add("volumeMusic", ppl7::ToString("%0.3f", volumeMusic));
     conf.add("volumeEffects", ppl7::ToString("%0.3f", volumeEffects));

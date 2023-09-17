@@ -82,7 +82,6 @@ public:
 	ppl7::tk::Window::WindowMode windowMode;
 
 	// Audio
-	ppl7::String		audioDevice;
 	float				volumeTotal;
 	float				volumeMusic;
 	float				volumeEffects;
