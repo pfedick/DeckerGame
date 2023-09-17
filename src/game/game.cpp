@@ -1832,17 +1832,25 @@ void Game::gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* even
 
 void Game::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
 {
-	ppl7::PrintDebugTime("gameControllerDeviceAdded: %d\n", event->which);
+	//ppl7::PrintDebugTime("gameControllerDeviceAdded: %d\n", event->which);
 	controller.open(event->which);
 }
 
 void Game::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
 {
-	ppl7::PrintDebugTime("gameControllerDeviceRemoved: %d\n", event->which);
+	//ppl7::PrintDebugTime("gameControllerDeviceRemoved: %d\n", event->which);
 	controller.close();
 }
 
 void Game::updateDifficultyForSelectedObject(uint8_t dificulty)
 {
 	if (selected_object) selected_object->difficulty_matrix=dificulty;
+}
+
+void Game::updateLayerForSelectedObject(int layer)
+{
+	if (selected_object) {
+		selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(layer);
+		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
+	}
 }

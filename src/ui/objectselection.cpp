@@ -221,11 +221,12 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 
 	int yy=0;
 	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "Layer:"));
-	layer_selection=new ppl7::tk::ComboBox(80, yy, width - 80, 30);
+	layer_selection=new ppl7::tk::ComboBox(80, yy, width - 90, 30);
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
+	layer_selection->setEventHandler(this);
 	this->addChild(layer_selection);
 	yy+=30;
 	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "difficulty:"));
@@ -287,12 +288,16 @@ ppl7::String ObjectSelection::widgetType() const
 
 void ObjectSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-	//printf("ObjectSelection::valueChangedEvent\n");
-	game->setSpriteModeToDraw();
+	if (event->widget() == objects_frame) {
+		game->setSpriteModeToDraw();
+	} else if (event->widget() == layer_selection) {
+		//ppl7::PrintDebugTime("ObjectSelection::valueChangedEvent\n");
+		game->updateLayerForSelectedObject(value);
+	}
 }
 void ObjectSelection::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	printf("ObjectSelection::mouseDownEvent\n");
+	//printf("ObjectSelection::mouseDownEvent\n");
 }
 
 void ObjectSelection::toggledEvent(ppl7::tk::Event* event, bool checked)

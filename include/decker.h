@@ -951,6 +951,7 @@ public:
 	void stepFrame();
 
 	void updateDifficultyForSelectedObject(uint8_t dificulty);
+	void updateLayerForSelectedObject(int layer);
 
 };
 
