@@ -317,6 +317,9 @@
         },
         "no blood": {
             "de": "kein Blut"
+        },
+        "rumble when player gets hurt": {
+            "de": "vibrieren, wenn Spieler Schaden nimmt"
         }
     }
 }
