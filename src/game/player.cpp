@@ -386,7 +386,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	}
 
 	//game->controller.rumbleTrigger(0xffff, 0xffff, 16);
-	game->controller.rumble(0xffff, 0xffff, 100);
+	if (game->config.controller.use_rumble)	game->controller.rumble(0xffff, 0xffff, 100);
 	health-=(points * frame_rate_compensation);
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
