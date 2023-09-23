@@ -455,6 +455,7 @@ private:
 public:
 	SpriteTexture Sprite_George;
 	SpriteTexture Sprite_George_Adventure;
+	SpriteTexture Sprite_Erik;
 	SpriteTexture Cursor;
 	SpriteTexture TileTypes;
 	SpriteTexture Sprites_Nature;

@@ -13,7 +13,7 @@ namespace Decker::Objects {
 AutoGeorge::AutoGeorge()
 	:AiEnemy(Type::ObjectType::AutoGeorge)
 {
-	sprite_set=Spriteset::George;
+	sprite_set=Spriteset::Erik;
 	sprite_no=27;
 	animation.setStaticFrame(27);
 	keys=0;
@@ -23,7 +23,7 @@ AutoGeorge::AutoGeorge()
 
 Representation AutoGeorge::representation()
 {
-	return Representation(Spriteset::George, 27);
+	return Representation(Spriteset::Erik, 27);
 }
 
 

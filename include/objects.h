@@ -117,6 +117,7 @@ public:
 		BreakingWall,
 		Rat,
 		Ghost,
+		Erik,
 		MaxSpritesets
 	};
 };

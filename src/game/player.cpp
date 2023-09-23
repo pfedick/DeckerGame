@@ -1303,6 +1303,7 @@ void Player::enableTalkie(bool flag)
 
 void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, const ppl7::String& phonetics)
 {
+	return;
 	AudioPool& ap=getAudioPool();
 
 	if (voice && voice->finished() == false) return;
@@ -1325,6 +1326,7 @@ void Player::speak(VoiceGeorge::Id id, float volume, const ppl7::String& text, c
 
 bool Player::speak(uint16_t id, float volume)
 {
+	return false;
 	if (id < 1) return false;
 	AudioPool& ap=getAudioPool();
 	if (voice && voice->finished() == false) return false;

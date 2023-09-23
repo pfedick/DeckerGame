@@ -32,7 +32,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	ppl7::grafix::Color black(128, 0, 0, 255);
 	SDL_Renderer* renderer=sdl.getRenderer();
 
-	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
+	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title_erik.png");
 	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
 	SDL_Rect title_rect;
 	getDestinationRect(title_size, *this, title_rect);

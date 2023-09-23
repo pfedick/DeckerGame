@@ -107,6 +107,9 @@ void Game::loadGrafix()
 	resources.Sprite_George_Adventure.enableMemoryBuffer(true);
 	resources.Sprite_George_Adventure.load(sdl, "res/george_adventure.tex");
 
+	resources.Sprite_Erik.enableMemoryBuffer(true);
+	resources.Sprite_Erik.load(sdl, "res/erik.tex");
+
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
 	resources.TileTypes.load(sdl, "res/tiletypes.tex");
@@ -215,7 +218,8 @@ void Game::createWindow()
 		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::FullscreenDesktop | ppl7::tk::Window::Resizeable);
 	}
 	//setFlags(ppl7::tk::Window::DefaultFullscreen);
-	setWindowTitle("George Decker");
+	//setWindowTitle("George Decker");
+	setWindowTitle("Die Abenteuer von Erik Uden");
 	ppl7::grafix::Image icon;
 	icon.load("res/icon_128.png");
 	setWindowIcon(icon);
@@ -352,7 +356,7 @@ void Game::deleteUi()
 
 void Game::presentStartupScreen()
 {
-	SDL_Texture* tex=sdl.createStreamingTexture("res/loading.png");
+	SDL_Texture* tex=sdl.createStreamingTexture("res/loading_erik.png");
 	ppl7::grafix::Size imgsize=sdl.getTextureSize(tex);
 	wm->handleEvents();
 	//ppl7::grafix::Color white(255, 255, 255, 255);
@@ -433,7 +437,8 @@ void Game::init_grafix()
 	player->setSavePoint(ppl7::grafix::Point(3300, 1800));
 	updateWorldCoords();
 
-	player->setSpriteResource(resources.Sprite_George_Adventure);
+	//player->setSpriteResource(resources.Sprite_George_Adventure);
+	player->setSpriteResource(resources.Sprite_Erik);
 	player->setTileTypeResource(resources.TileTypes);
 
 	//level.create(255,255);

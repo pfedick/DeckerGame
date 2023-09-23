@@ -143,6 +143,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::George]->enableMemoryBuffer(true);
 	spriteset[Spriteset::George]->load(sdl, "res/george.tex");
 
+	spriteset[Spriteset::Erik]->enableOutlines(true);
+	spriteset[Spriteset::Erik]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Erik]->load(sdl, "res/erik.tex");
+
 	spriteset[Spriteset::Ostrich]->enableOutlines(true);
 	spriteset[Spriteset::Ostrich]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Ostrich]->load(sdl, "res/ostrich.tex");

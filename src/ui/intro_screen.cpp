@@ -55,7 +55,7 @@ void Game::playIntroVideo()
 
 	ppl7::String filename="res/video/george_decker_game.ivf";
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3", AudioClass::Music);
-	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
+	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title_erik.png");
 
 
 	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
