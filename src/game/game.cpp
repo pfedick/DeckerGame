@@ -260,8 +260,7 @@ SDL& Game::getSDL()
 
 void Game::showUi(bool enable)
 {
-	//const ppl7::grafix::Size& desktop=clientSize();
-	ppl7::grafix::Size desktop(1920, 1080);
+	const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
 	if (showui) {
 		viewport.y1=32;
@@ -299,8 +298,7 @@ void Game::initUi()
 	Style.inputFont.setName("NotoSans");
 	wm->setWidgetStyle(Style);
 
-	//const ppl7::grafix::Size& desktop=clientSize();
-	ppl7::grafix::Size desktop(1920, 1080);
+	const ppl7::grafix::Size& desktop=clientSize();
 	//ppl7::tk::Label *label;
 
 	resizeMenueAndStatusbar();
@@ -317,8 +315,7 @@ void Game::initUi()
 
 void Game::resizeMenueAndStatusbar()
 {
-	//const ppl7::grafix::Size& desktop=clientSize();
-	ppl7::grafix::Size desktop(1920, 1080);
+	const ppl7::grafix::Size& desktop=clientSize();
 	if (!statusbar) {
 		statusbar=new Decker::ui::StatusBar(0, desktop.height - 32, desktop.width, 32);
 		this->addChild(statusbar);
@@ -388,8 +385,6 @@ void Game::init()
 
 	desktopSize=clientSize();
 	viewport=clientRect();
-	viewport.setRect(0, 0, 1920, 1080);
-	//ppl7::grafix::Size desktop(1920, 1080);
 	message_overlay.resize(viewport.size());
 
 	gui_font.setName("Default");
@@ -481,19 +476,19 @@ void Game::initAudio()
 void Game::drawGrid()
 {
 	if (!tex_level_grid) {
-		tex_level_grid=sdl.createStreamingTexture(desktopSize.width, desktopSize.height);
+		tex_level_grid=sdl.createStreamingTexture(game_viewport.width(), game_viewport.height());
 		ppl7::grafix::Drawable draw=sdl.lockTexture(tex_level_grid);
 		ppl7::grafix::Color white(255, 255, 255, 128);
 		ppl7::grafix::Color black(0, 0, 0, 128);
 
 		draw.cls(0);
-		for (int x=0;x < desktopSize.width;x+=TILE_WIDTH) {
-			draw.line(x, 0, x, desktopSize.height, black);
-			draw.line(x + 1, 0, x + 1, desktopSize.height, white);
+		for (int x=0;x < game_viewport.width();x+=TILE_WIDTH) {
+			draw.line(x, 0, x, game_viewport.height(), black);
+			draw.line(x + 1, 0, x + 1, game_viewport.height(), white);
 		}
-		for (int y=0;y < desktopSize.height;y+=TILE_HEIGHT) {
-			draw.line(0, y, desktopSize.width, y, black);
-			draw.line(0, y + 1, desktopSize.width, y + 1, white);
+		for (int y=0;y < game_viewport.height();y+=TILE_HEIGHT) {
+			draw.line(0, y, game_viewport.width(), y, black);
+			draw.line(0, y + 1, game_viewport.width(), y + 1, white);
 		}
 		sdl.unlockTexture(tex_level_grid);
 	}
@@ -502,10 +497,10 @@ void Game::drawGrid()
 
 	SDL_Renderer* renderer=sdl.getRenderer();
 	SDL_Rect target;
-	target.x=viewport.x1 - (c.x % TILE_WIDTH);
-	target.y=viewport.y1 - (c.y % TILE_HEIGHT);
-	target.w=desktopSize.width;
-	target.h=desktopSize.height;
+	target.x=game_viewport.x1 - (c.x % TILE_WIDTH);
+	target.y=game_viewport.y1 - (c.y % TILE_HEIGHT);
+	target.w=game_viewport.width();
+	target.h=game_viewport.height();
 	SDL_RenderCopy(renderer, tex_level_grid, NULL, &target);
 }
 
@@ -585,8 +580,8 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metri
 void Game::updateWorldCoords()
 {
 	if (!player) return;
-	int mx=viewport.width() / 2;
-	int my=viewport.height() / 2 + 192;	//256
+	int mx=game_viewport.width() / 2;
+	int my=game_viewport.height() / 2 + 192;	//256
 	WorldCoords.x=player->x - mx;
 	WorldCoords.y=player->y - my;
 	if (WorldCoords.x < 0) WorldCoords.x=0;
@@ -596,8 +591,8 @@ void Game::updateWorldCoords()
 ppl7::grafix::Point Game::getViewPos() const
 {
 	ppl7::grafix::Point p=WorldCoords;
-	p.x+=viewport.width() / 2;
-	p.y+=viewport.height() / 2;
+	p.x+=game_viewport.width() / 2;
+	p.y+=game_viewport.height() / 2;
 	return p;
 }
 
@@ -624,14 +619,14 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setEditmode(object_selection != NULL);
 
 	metrics.time_update_sprites.start();
-	level.updateVisibleSpriteLists(WorldCoords, viewport);	// => TODO: own Thread
+	level.updateVisibleSpriteLists(WorldCoords, game_viewport);	// => TODO: own Thread
 	metrics.time_update_sprites.stop();
 	metrics.time_update_objects.start();
 	player->setGodMode(mainmenue->godModeEnabled());
 	player->WorldCoords=WorldCoords;
-	player->Viewport=viewport;
-	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", viewport.x1, viewport.y1, viewport.x2, viewport.y2);
-	level.objects->updateVisibleObjectList(WorldCoords, viewport);
+	player->Viewport=game_viewport;
+	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", game_viewport.x1, game_viewport.y1, game_viewport.x2, game_viewport.y2);
+	level.objects->updateVisibleObjectList(WorldCoords, game_viewport);
 	if (this->controlsEnabled || player->isAutoWalk())
 		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
 
@@ -649,18 +644,18 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	metrics.time_particle_thread.addDuration(level.particles->waitForUpdateThreadFinished());
 	//level.particles->cleanupParticles(now);
 	if (game_speed == GameSpeed::Normal || game_speed == GameSpeed::ManualStep) {
-		level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, viewport, frame_rate_compensation);
+		level.particles->update(now, level.TileTypeMatrix, *player, WorldCoords, game_viewport, frame_rate_compensation);
 	}
 	metrics.time_update_particles.stop();
 
 
 	metrics.time_misc.start();
 	// TODO: Refactor into Events: Handle Mouse events inside World
-	if (mouse.p.inside(viewport)) {
+	if (mouse.p.inside(game_viewport)) {
 		moveWorldOnMouseClick(mouse);
 	}
 
-	level.setViewport(viewport);
+	level.setViewport(game_viewport);
 	metrics.time_misc.stop();
 
 
@@ -669,7 +664,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	background.setColor(level.params.BackgroundColor);
 	background.setImage(level.params.BackgroundImage);
 	background.setBackgroundType(level.params.backgroundType);
-	background.draw(renderer, viewport, WorldCoords);
+	background.draw(renderer, game_viewport, WorldCoords);
 	metrics.time_draw_background.stop();
 
 	// Draw Planes and Sprites
@@ -775,6 +770,10 @@ void Game::run()
 		if (filedialog) checkFileDialog();
 		metrics.time_events.stop();
 
+		SDL_SetRenderTarget(renderer, NULL);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
+
 		SDL_SetRenderTarget(renderer, tex_render_target);
 
 		drawWorld(renderer);
@@ -785,13 +784,13 @@ void Game::run()
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
 		if (mainmenue->visibility_plane_player) {
-			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, viewport, WorldCoords);
-			if (mainmenue->visibility_collision) player->drawCollision(renderer, viewport, WorldCoords);
-			if (waynet_edit) level.waynet.draw(renderer, viewport, WorldCoords);
+			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, game_viewport, WorldCoords);
+			if (mainmenue->visibility_collision) player->drawCollision(renderer, game_viewport, WorldCoords);
+			if (waynet_edit) level.waynet.draw(renderer, game_viewport, WorldCoords);
 		}
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
-		if (message_overlay.hasMessage()) message_overlay.draw(renderer, viewport);
+		if (message_overlay.hasMessage()) message_overlay.draw(renderer, game_viewport);
 		// Widgets
 		SDL_SetRenderTarget(renderer, NULL);
 		drawRenderTargetToScreen();
@@ -861,6 +860,7 @@ void Game::closeTileTypeSelection()
 		tiletype_selection=NULL;
 		viewport.x1=0;
 		world_widget->setViewport(viewport);
+		game_viewport.setMenuOffset(0);
 		mainmenue->setShowTileTypes(false);
 	}
 }
@@ -876,6 +876,7 @@ void Game::closeTileSelection()
 		delete(tiles_selection);
 		tiles_selection=NULL;
 		viewport.x1=0;
+		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
 	}
 }
@@ -887,6 +888,7 @@ void Game::closeSpriteSelection()
 		delete(sprite_selection);
 		sprite_selection=NULL;
 		viewport.x1=0;
+		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
 	}
 }
@@ -898,6 +900,7 @@ void Game::closeObjectSelection()
 		delete(object_selection);
 		object_selection=NULL;
 		viewport.x1=0;
+		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
 	}
 }
@@ -909,6 +912,7 @@ void Game::closeWayNet()
 		delete(waynet_edit);
 		waynet_edit=NULL;
 		viewport.x1=0;
+		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
 		mainmenue->setShowTileTypes(false);
 	}
@@ -935,6 +939,7 @@ void Game::showTilesSelection()
 		tiles_selection->setLayer(remember.lastTileLayer);
 		this->addChild(tiles_selection);
 		viewport.x1=300;
+		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
 	}
 }
@@ -953,6 +958,7 @@ void Game::showTileTypeSelection()
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
+		game_viewport.setMenuOffset(300);
 		mainmenue->setShowTileTypes(true);
 		mainmenue->setCurrentPlane(0);
 	}
@@ -979,6 +985,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(9, "Tropical", &resources.uiSpritesTropical, 4);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
+		game_viewport.setMenuOffset(300);
 		sprite_mode=spriteModeDraw;
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
@@ -999,6 +1006,7 @@ void Game::showObjectsSelection()
 		object_selection->setSpriteSet(&resources.uiObjects);
 		this->addChild(object_selection);
 		viewport.x1=300;
+		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
 		sprite_mode=SpriteModeSelect;
 		selected_object=NULL;
@@ -1019,6 +1027,7 @@ void Game::showWayNetEdit()
 		//waynet_edit->setSpriteSet(&resources.uiObjects);
 		this->addChild(waynet_edit);
 		viewport.x1=300;
+		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
 		mainmenue->setShowTileTypes(true);
 	}
@@ -1108,10 +1117,10 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 	}
 	if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
 		int currentPlane=mainmenue->currentPlane();
-		selected_sprite_system->drawSelectedSpriteOutline(renderer, viewport,
+		selected_sprite_system->drawSelectedSpriteOutline(renderer, game_viewport,
 			WorldCoords * planeFactor[currentPlane], selected_sprite.id);
 	} else if (sprite_mode == spriteModeDraw) {
-		if (!mouse.inside(viewport)) return;
+		if (!mouse.inside(game_viewport)) return;
 		int nr=sprite_selection->selectedSprite();
 		if (nr < 0) return;
 		int spriteset=sprite_selection->currentSpriteSet();
@@ -1123,19 +1132,20 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 			//nr=nr * sprite_dimensions + ppl7::rand(0, sprite_dimensions - 1);
 			nr=nr * sprite_dimensions;
 		}
+		ppl7::grafix::Point tmouse=game_viewport.translate(mouse);
 		float scale=sprite_selection->spriteScale();
 		if (!level.spriteset[spriteset]) return;
 		level.spriteset[spriteset]->drawScaled(renderer,
-			mouse.x, mouse.y, nr, scale, level.palette.getColor(sprite_selection->colorIndex()));
+			tmouse.x, tmouse.y, nr, scale, level.palette.getColor(sprite_selection->colorIndex()));
 		level.spriteset[spriteset]->drawOutlines(renderer,
-			mouse.x, mouse.y, nr, scale);
+			tmouse.x, tmouse.y, nr, scale);
 	}
 }
 
 void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
 	if (!tiles_selection) return;
-	if (!mouse.inside(viewport)) return;
+	if (!mouse.inside(game_viewport)) return;
 	int currentPlane=mainmenue->currentPlane();
 	int currentLayer=tiles_selection->currentLayer();
 	int nr=tiles_selection->selectedTile();
@@ -1143,14 +1153,16 @@ void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& m
 	int color_index=tiles_selection->colorIndex();
 	if (nr < 0 || tileset<0 || tileset>MAX_TILESETS) return;
 	if (!level.tileset[tileset]) return;
-	ppl7::grafix::Point wp=mouse - viewport.topLeft() + WorldCoords * planeFactor[currentPlane];
+	ppl7::grafix::Point tmouse=game_viewport.translate(mouse);
+	//ppl7::grafix::Point wp=tmouse - game_viewport.topLeft() + WorldCoords * planeFactor[currentPlane];
+	ppl7::grafix::Point wp=tmouse + WorldCoords * planeFactor[currentPlane];
 	int tx=wp.x / TILE_WIDTH;
 	int ty=wp.y / TILE_HEIGHT;
 	BrickOccupation::Matrix occupation=brick_occupation.get(nr);
 	if (tileset == 1) occupation=brick_occupation_solid;
 	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
-		int x=tx * TILE_WIDTH + viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
-		int y=ty * TILE_HEIGHT + viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
+		int x=tx * TILE_WIDTH + game_viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
+		int y=ty * TILE_HEIGHT + game_viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
 		level.tileset[tileset]->draw(renderer,
 			x, y + TILE_HEIGHT, nr, level.palette.getColor(color_index));
 	}
@@ -1161,13 +1173,14 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 {
 	if (!object_selection) return;
 	if (sprite_mode == SpriteModeEdit && selected_object != NULL) {
-		level.objects->drawSelectedSpriteOutline(renderer, viewport,
+		level.objects->drawSelectedSpriteOutline(renderer, game_viewport,
 			WorldCoords, selected_object->id);
 	} else if (sprite_mode == spriteModeDraw) {
-		if (!mouse.inside(viewport)) return;
+		if (!mouse.inside(game_viewport)) return;
 		int object_type=object_selection->selectedObjectType();
 		if (object_type < 0) return;
-		level.objects->drawPlaceSelection(renderer, mouse, object_type);
+		ppl7::grafix::Point tmouse=game_viewport.translate(mouse);
+		level.objects->drawPlaceSelection(renderer, tmouse, object_type);
 	}
 }
 
@@ -1308,15 +1321,18 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEvent\n");
 #endif
-	if (event->widget() == world_widget) wm->setKeyboardFocus(world_widget);
-	if (sprite_selection != NULL && event->widget() == world_widget) {
-		mouseDownEventOnSprite(event);
-	} else if (object_selection != NULL && event->widget() == world_widget) {
-		mouseDownEventOnObject(event);
-	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
-		handleMouseDrawInWorld(*event);
-	} else if (waynet_edit != NULL && event->widget() == world_widget) {
-		mouseDownEventOnWayNet(event);
+	if (event->widget() == world_widget) {
+		wm->setKeyboardFocus(world_widget);
+		game_viewport.translateMouseEvent(event);
+		if (sprite_selection != NULL) {
+			mouseDownEventOnSprite(event);
+		} else if (object_selection != NULL) {
+			mouseDownEventOnObject(event);
+		} else if ((tiles_selection != NULL || tiletype_selection != NULL)) {
+			handleMouseDrawInWorld(*event);
+		} else if (waynet_edit != NULL) {
+			mouseDownEventOnWayNet(event);
+		}
 	}
 }
 
@@ -1600,6 +1616,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
 			&& sprite_mode == SpriteModeEdit && selected_sprite.id >= 0
 			&& selected_sprite_system != NULL) {
+			game_viewport.translateMouseEvent(event);
 			ppl7::grafix::Point diff=event->p - sprite_move_start;
 			selected_sprite.x+=diff.x;
 			selected_sprite.y+=diff.y;
@@ -1611,6 +1628,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 	} else if (object_selection != NULL) {
 		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
 			&& sprite_mode == SpriteModeEdit && selected_object != NULL) {
+			game_viewport.translateMouseEvent(event);
 			ppl7::grafix::Point diff=event->p - sprite_move_start;
 			selected_object->initial_p.x+=diff.x;
 			selected_object->initial_p.y+=diff.y;
@@ -1619,6 +1637,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 			sprite_move_start=event->p;
 		}
 	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
+		game_viewport.translateMouseEvent(event);
 		handleMouseDrawInWorld(*event);
 	}
 
@@ -1633,7 +1652,8 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 	}
 	*/
 	desktopSize=clientSize();
-	//viewport=clientRect();
+	viewport=clientRect();
+	game_viewport.setRealViewport(clientSize());
 	resizeMenueAndStatusbar();
 	message_overlay.resize(desktopSize);
 	showUi(showui);
@@ -1884,12 +1904,10 @@ void Game::drawRenderTargetToScreen()
 {
 	SDL_Renderer* renderer=sdl.getRenderer();
 
-	ppl7::grafix::Rect vp=clientRect();
-	SDL_Rect target;
-	target.x=0;
-	target.y=0;
-	target.w=vp.width();
-	target.h=vp.height();
-	SDL_RenderCopy(renderer, tex_render_target, NULL, &target);
+	//ppl7::grafix::Rect vp=clientRect();
+
+	game_viewport.setRealViewport(this->clientSize());
+
+	SDL_RenderCopy(renderer, tex_render_target, NULL, &game_viewport.getRenderRect());
 
 }

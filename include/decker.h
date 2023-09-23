@@ -747,23 +747,27 @@ public:
 
 };
 
-class GameViewport
+class GameViewport : public ppl7::grafix::Rect
 {
 private:
 	int menu_offset_x;
 	ppl7::grafix::Size real_viewport;
 	ppl7::grafix::Size render_size;
 	bool scaling_enabled;
+	bool allow_upscale;
 	SDL_Rect render_rect;
 	void update();
 
 public:
 	GameViewport();
-	void setRealViewport(ppl7::grafix::Size& size);
-	void setRenderSize(ppl7::grafix::Size& size);
+	void setRealViewport(const ppl7::grafix::Size& size);
+	void setRenderSize(const ppl7::grafix::Size& size);
 	void setMenuOffset(int x);
 	void setScalingEnabled(bool enable);
+	void setAllowUpscale(bool allow);
 	ppl7::grafix::Point translate(const ppl7::grafix::Point& coords) const;
+
+	void translateMouseEvent(ppl7::tk::MouseEvent* event);
 	void getRenderRect(SDL_Rect& rect) const;
 	const SDL_Rect& getRenderRect() const;
 };
