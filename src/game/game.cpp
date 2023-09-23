@@ -60,6 +60,8 @@ Game::Game()
 	GameInstance=this;
 	tex_level_grid=NULL;
 	tex_render_target=NULL;
+	tex_render_layer=NULL;
+	tex_render_lightmap=NULL;
 	wm=ppl7::tk::GetWindowManager();
 	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
 	Style=s;
@@ -97,6 +99,8 @@ Game::~Game()
 	if (player) delete player;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
 	if (tex_render_target) sdl.destroyTexture(tex_render_target);
+	if (tex_render_lightmap) sdl.destroyTexture(tex_render_lightmap);
+	if (tex_render_layer) sdl.destroyTexture(tex_render_layer);
 }
 
 void Game::loadGrafix()
@@ -236,6 +240,8 @@ void Game::createRenderTarget()
 {
 	tex_render_target=sdl.createRenderTargetTexture(1920, 1080);
 	if (tex_render_target) SDL_SetTextureScaleMode(tex_render_target, SDL_ScaleModeBest);
+	tex_render_layer=sdl.createRenderTargetTexture(1920, 1080);
+	tex_render_lightmap=sdl.createRenderTargetTexture(1920, 1080);
 }
 
 ppl7::tk::Window& Game::window()
@@ -777,7 +783,24 @@ void Game::run()
 		SDL_SetRenderTarget(renderer, tex_render_target);
 
 		drawWorld(renderer);
+		/*
+		SDL_SetRenderTarget(renderer, tex_render_lightmap);
+		SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+		SDL_RenderClear(renderer);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_Rect rr;
+		rr.x=1920 / 2 - 100;rr.y=1080 / 2 - 100;
+		rr.w=200;rr.h=200;
+		SDL_RenderFillRect(renderer, &rr);
 
+		SDL_SetRenderTarget(renderer, tex_render_layer);
+		SDL_SetTextureBlendMode(tex_render_lightmap, SDL_BLENDMODE_MUL);
+		SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
+
+
+		SDL_SetRenderTarget(renderer, tex_render_target);
+		SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+		*/
 		metrics.time_draw_ui.start();
 		updateUi(mouse, last_metrics);
 		drawSelectedSprite(renderer, mouse.p);

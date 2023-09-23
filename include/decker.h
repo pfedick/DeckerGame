@@ -814,6 +814,7 @@ private:
 	Background background=Background(sdl);
 	SDL_Texture* tex_level_grid;
 	SDL_Texture* tex_render_target;
+	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
