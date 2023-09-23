@@ -747,6 +747,27 @@ public:
 
 };
 
+class GameViewport
+{
+private:
+	int menu_offset_x;
+	ppl7::grafix::Size real_viewport;
+	ppl7::grafix::Size render_size;
+	bool scaling_enabled;
+	SDL_Rect render_rect;
+	void update();
+
+public:
+	GameViewport();
+	void setRealViewport(ppl7::grafix::Size& size);
+	void setRenderSize(ppl7::grafix::Size& size);
+	void setMenuOffset(int x);
+	void setScalingEnabled(bool enable);
+	ppl7::grafix::Point translate(const ppl7::grafix::Point& coords) const;
+	void getRenderRect(SDL_Rect& rect) const;
+	const SDL_Rect& getRenderRect() const;
+};
+
 class Game : private ppl7::tk::Window
 {
 private:
@@ -789,9 +810,11 @@ private:
 	Background background=Background(sdl);
 	SDL_Texture* tex_level_grid;
 	SDL_Texture* tex_render_target;
+	SDL_Texture* tex_render_layer;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
+	GameViewport game_viewport;
 	Decker::ui::MainMenue* mainmenue;
 	Decker::ui::StatusBar* statusbar;
 	Decker::ui::TilesSelection* tiles_selection;

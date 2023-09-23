@@ -28,6 +28,7 @@ PROGRAM	= decker
 OBJECTS=compile/main.o \
 	compile/sdl.o \
 	compile/game.o \
+	compile/gameviewport.o \
 	compile/soundtrack.o \
 	compile/background.o \
 	compile/spritetexture.o \
@@ -357,6 +358,10 @@ compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include
 	include/translate.h include/particle.h include/screens.h include/gamecontroller.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
+
+compile/gameviewport.o: src/game/gameviewport.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/gameviewport.o -c src/game/gameviewport.cpp $(CFLAGS)
 
 compile/soundtrack.o: src/game/soundtrack.cpp Makefile include/decker.h
 	- @mkdir -p compile
