@@ -545,6 +545,7 @@ public:
 	Background::Type backgroundType;
 	ppl7::String BackgroundImage;
 	ppl7::grafix::Color BackgroundColor;
+	ppl7::grafix::Color GlobalLighting;
 
 	LevelParameter();
 	void clear();

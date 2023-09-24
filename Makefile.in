@@ -33,6 +33,7 @@ OBJECTS=compile/main.o \
 	compile/background.o \
 	compile/spritetexture.o \
 	compile/level.o \
+	compile/levelparameter.o \
 	compile/fps.o \
 	compile/config.o \
 	compile/translate.o \
@@ -393,6 +394,11 @@ compile/level.o: src/game/level.cpp Makefile include/decker.h include/objects.h 
 	include/waynet.h include/particle.h include/player.h
 	- @mkdir -p compile
 	$(CXX) -o compile/level.o -c src/game/level.cpp $(CFLAGS)
+
+compile/levelparameter.o: src/game/levelparameter.cpp Makefile include/decker.h include/objects.h \
+	include/waynet.h include/particle.h include/player.h
+	- @mkdir -p compile
+	$(CXX) -o compile/levelparameter.o -c src/game/levelparameter.cpp $(CFLAGS)
 
 compile/fps.o: src/game/fps.cpp Makefile include/decker.h
 	- @mkdir -p compile
