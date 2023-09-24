@@ -151,6 +151,10 @@ void Game::loadGrafix()
 	resources.Sprites_Tropical.enableMemoryBuffer(true);
 	resources.Sprites_Tropical.load(sdl, "res/sprites_tropical.tex");
 
+	resources.Lightmaps.enableOutlines(true);
+	resources.Lightmaps.enableMemoryBuffer(true);
+	resources.Lightmaps.load(sdl, "res/lightmaps.tex");
+
 
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
@@ -199,6 +203,10 @@ void Game::loadGrafix()
 	resources.uiSpritesTropical.enableMemoryBuffer(true);
 	resources.uiSpritesTropical.load(sdl, "res/sprites_tropical_ui.tex");
 
+	resources.uiLightmaps.enableSDLBuffer(false);
+	resources.uiLightmaps.enableMemoryBuffer(true);
+	resources.uiLightmaps.load(sdl, "res/lightmaps_ui.tex");
+
 	resources.Waynet.load(sdl, "res/waynet.tex");
 
 	level.objects->loadSpritesets(sdl);
@@ -242,6 +250,11 @@ void Game::createRenderTarget()
 	if (tex_render_target) SDL_SetTextureScaleMode(tex_render_target, SDL_ScaleModeBest);
 	tex_render_layer=sdl.createRenderTargetTexture(1920, 1080);
 	tex_render_lightmap=sdl.createRenderTargetTexture(1920, 1080);
+
+	SDL_SetTextureBlendMode(tex_render_layer, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(tex_render_lightmap, SDL_BLENDMODE_MUL);
+
+
 }
 
 ppl7::tk::Window& Game::window()
@@ -667,6 +680,18 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	// Draw background
 	metrics.time_draw_background.start();
+
+	/*
+	SDL_SetRenderTarget(renderer, tex_render_layer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+
+	SDL_SetRenderTarget(renderer, NULL);
+	*/
+	SDL_SetRenderTarget(renderer, tex_render_target);
 	background.setColor(level.params.BackgroundColor);
 	background.setImage(level.params.BackgroundImage);
 	background.setBackgroundType(level.params.backgroundType);
@@ -724,6 +749,25 @@ void Game::drawWorld(SDL_Renderer* renderer)
 			}
 		}
 	}
+
+	/*
+	SDL_SetRenderTarget(renderer, tex_render_lightmap);
+	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_Rect rr;
+	rr.x=1920 / 2 - 100;rr.y=1080 / 2 - 0;
+	rr.w=200;rr.h=200;
+	SDL_RenderFillRect(renderer, &rr);
+
+	SDL_SetRenderTarget(renderer, tex_render_layer);
+	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
+
+
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+	*/
+
 	metrics.time_misc.stop();
 	metrics.time_draw_world.stop();
 	if (game_speed == GameSpeed::ManualStep) {
@@ -776,31 +820,10 @@ void Game::run()
 		if (filedialog) checkFileDialog();
 		metrics.time_events.stop();
 
-		SDL_SetRenderTarget(renderer, NULL);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-		SDL_RenderClear(renderer);
 
-		SDL_SetRenderTarget(renderer, tex_render_target);
 
 		drawWorld(renderer);
-		/*
-		SDL_SetRenderTarget(renderer, tex_render_lightmap);
-		SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_Rect rr;
-		rr.x=1920 / 2 - 100;rr.y=1080 / 2 - 100;
-		rr.w=200;rr.h=200;
-		SDL_RenderFillRect(renderer, &rr);
 
-		SDL_SetRenderTarget(renderer, tex_render_layer);
-		SDL_SetTextureBlendMode(tex_render_lightmap, SDL_BLENDMODE_MUL);
-		SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
-
-
-		SDL_SetRenderTarget(renderer, tex_render_target);
-		SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
-		*/
 		metrics.time_draw_ui.start();
 		updateUi(mouse, last_metrics);
 		drawSelectedSprite(renderer, mouse.p);

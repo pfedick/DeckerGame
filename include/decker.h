@@ -476,6 +476,8 @@ public:
 	SpriteTexture uiSpritesWhite;
 	SpriteTexture Sprites_Tropical;
 	SpriteTexture uiSpritesTropical;
+	SpriteTexture Lightmaps;
+	SpriteTexture uiLightmaps;
 
 	SpriteTexture Waynet;
 
