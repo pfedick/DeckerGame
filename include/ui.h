@@ -599,6 +599,29 @@ public:
 };
 
 
+class LightSelection : public ppl7::tk::Frame
+{
+private:
+	Game* game;
+	TilesFrame* tilesframe;
+	SpriteTexture* spriteset;
+	float scale;
+	float angle;
+
+public:
+	LightSelection(int x, int y, int width, int height, Game* game);
+	ppl7::String widgetType() const override;
+	void setSpriteSet(SpriteTexture* sprites);
+	void setSelectedSprite(int nr);
+	int selectedSprite() const;
+	void setSpriteScale(float factor);
+	float spriteScale() const;
+	void setSpriteAngle(float factor);
+	float spriteAngle() const;
+	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
+};
+
+
 }	// EOF namespace ui
 }	// EOF namespace Decker
 

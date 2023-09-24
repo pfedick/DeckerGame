@@ -1,0 +1,5 @@
+#ifndef INCLUDE_LIGHTMAP_H_
+#define INCLUDE_LIGHTMAP_H_
+
+
+#endif // INCLUDE_LIGHTMAP_H_

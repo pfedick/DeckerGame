@@ -38,6 +38,7 @@ OBJECTS=compile/main.o \
 	compile/translate.o \
 	compile/color.o \
 	compile/metrics.o \
+	compile/lightmap.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_metrics.o \
@@ -49,6 +50,7 @@ OBJECTS=compile/main.o \
 	compile/ui_objectselection.o \
 	compile/ui_waynetedit.o \
 	compile/ui_leveldialog.o \
+	compile/ui_lightmapselection.o \
 	compile/widgets_groupbox.o \
 	compile/widgets_dialog.o \
 	compile/widgets_filedialog.o \
@@ -460,6 +462,10 @@ compile/messageoverlay.o: src/game/messageoverlay.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/messageoverlay.o -c src/game/messageoverlay.cpp $(CFLAGS)
 
+compile/lightmap.o: src/game/lightmap.cpp Makefile include/decker.h include/lightmap.h
+	- @mkdir -p compile
+	$(CXX) -o compile/lightmap.o -c src/game/lightmap.cpp $(CFLAGS)
+
 
 # Objects
 compile/object.o: src/objects/object.cpp Makefile include/objects.h
@@ -714,6 +720,10 @@ compile/ui_tileselection.o: src/ui/tileselection.cpp Makefile include/ui.h
 compile/ui_spriteselection.o: src/ui/spriteselection.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_spriteselection.o -c src/ui/spriteselection.cpp $(CFLAGS)
+
+compile/ui_lightmapselection.o: src/ui/lightmapselection.cpp Makefile include/ui.h include/lightmap.h
+	- @mkdir -p compile
+	$(CXX) -o compile/ui_lightmapselection.o -c src/ui/lightmapselection.cpp $(CFLAGS)
 
 compile/ui_objectselection.o: src/ui/objectselection.cpp Makefile include/ui.h include/objects.h
 	- @mkdir -p compile
