@@ -125,6 +125,7 @@ private:
 	ppl7::tk::Button* edit_sprites_button;
 	ppl7::tk::Button* edit_objects_button;
 	ppl7::tk::Button* edit_waynet_button;
+	ppl7::tk::Button* edit_lights_button;
 	ppl7::tk::Button* edit_level_button;
 	ppl7::tk::Button* show_visibility_submenu_button;
 	ppl7::tk::Button* show_metrics_submenu_button;

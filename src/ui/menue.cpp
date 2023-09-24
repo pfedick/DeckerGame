@@ -40,6 +40,7 @@ void MainMenue::resize(int x, int y, int width, int height)
 
 void MainMenue::setupUi()
 {
+	int x=0;
 	ppl7::grafix::Size s=this->clientSize();
 	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	exit_button=new ppl7::tk::Button(s.width - 100, 0, 100, s.height, "Exit");
@@ -51,22 +52,26 @@ void MainMenue::setupUi()
 	save_button->setIcon(gfx->Toolbar.getDrawable(33));
 	save_button->setEventHandler(this);
 	this->addChild(save_button);
+	x+=65;
 
-	save_as_button=new ppl7::tk::Button(65, 0, 100, s.height, "Save as...");
+	save_as_button=new ppl7::tk::Button(x, 0, 100, s.height, "Save as...");
 	save_as_button->setIcon(gfx->Toolbar.getDrawable(67));
 	save_as_button->setEventHandler(this);
 	this->addChild(save_as_button);
+	x+=101;
 
-	load_button=new ppl7::tk::Button(166, 0, 64, s.height, "Load");
+	load_button=new ppl7::tk::Button(x, 0, 64, s.height, "Load");
 	load_button->setIcon(gfx->Toolbar.getDrawable(32));
 	load_button->setEventHandler(this);
 	this->addChild(load_button);
+	x+=65;
 
 	new_button=new ppl7::tk::Button(231, 0, 64, s.height, "New");
 	new_button->setIcon(gfx->Toolbar.getDrawable(31));
 	new_button->setEventHandler(this);
 	this->addChild(new_button);
 
+	x=320;
 	edit_level_button=new ppl7::tk::Button(320, 0, 70, s.height, "Level");
 	edit_level_button->setIcon(gfx->Toolbar.getDrawable(73));
 	edit_level_button->setEventHandler(this);
@@ -88,20 +93,26 @@ void MainMenue::setupUi()
 	edit_objects_button->setEventHandler(this);
 	this->addChild(edit_objects_button);
 
-	edit_waynet_button=new ppl7::tk::Button(665, 0, 70, s.height, "WayNet");
+	edit_lights_button=new ppl7::tk::Button(665, 0, 70, s.height, "Lights");
+	edit_lights_button->setEventHandler(this);
+	this->addChild(edit_lights_button);
+
+
+
+	edit_waynet_button=new ppl7::tk::Button(736, 0, 70, s.height, "WayNet");
 	edit_waynet_button->setEventHandler(this);
 	this->addChild(edit_waynet_button);
 
 
-	show_visibility_submenu_button=new ppl7::tk::Button(756, 0, 80, s.height, "Visibility");
+	show_visibility_submenu_button=new ppl7::tk::Button(827, 0, 80, s.height, "Visibility");
 	show_visibility_submenu_button->setEventHandler(this);
 	this->addChild(show_visibility_submenu_button);
 
 
-	ppl7::tk::Label* label=new ppl7::tk::Label(837, 0, 100, s.height, "active Plane: ");
+	ppl7::tk::Label* label=new ppl7::tk::Label(908, 0, 100, s.height, "active Plane: ");
 	this->addChild(label);
 
-	active_plane_combobox=new ppl7::tk::ComboBox(938, 0, 150, s.height);
+	active_plane_combobox=new ppl7::tk::ComboBox(1009, 0, 150, s.height);
 	active_plane_combobox->add("PlayerPlane", "0");
 	active_plane_combobox->add("FrontPlane", "1");
 	active_plane_combobox->add("FarPlane", "2");
@@ -112,17 +123,17 @@ void MainMenue::setupUi()
 
 	this->addChild(active_plane_combobox);
 
-	show_metrics_submenu_button=new ppl7::tk::Button(1098, 0, 70, s.height, "Metrics");
+	show_metrics_submenu_button=new ppl7::tk::Button(1169, 0, 70, s.height, "Metrics");
 	show_metrics_submenu_button->setEventHandler(this);
 	this->addChild(show_metrics_submenu_button);
 
-	pause_button=new ppl7::tk::Button(1178, 0, 70, s.height, "Pause");
+	pause_button=new ppl7::tk::Button(1249, 0, 70, s.height, "Pause");
 	pause_button->setIcon(gfx->Toolbar.getDrawable(64));
 	pause_button->setEventHandler(this);
 	pause_button->setCheckable(true);
 	this->addChild(pause_button);
 
-	step_button=new ppl7::tk::Button(1248, 0, 70, s.height, "Step");
+	step_button=new ppl7::tk::Button(1319, 0, 70, s.height, "Step");
 	step_button->setIcon(gfx->Toolbar.getDrawable(65));
 	step_button->setEventHandler(this);
 	this->addChild(step_button);
@@ -175,6 +186,8 @@ void MainMenue::mouseClickEvent(ppl7::tk::MouseEvent* event)
 		game->showSpriteSelection();
 	} else if (event->widget() == edit_objects_button) {
 		game->showObjectsSelection();
+	} else if (event->widget() == edit_lights_button) {
+		game->showLightsSelection();
 	} else if (event->widget() == edit_waynet_button) {
 		game->showWayNetEdit();
 	} else if (event->widget() == edit_level_button) {

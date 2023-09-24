@@ -62,6 +62,7 @@ class Object;
 
 class SettingsScreen;
 class ParticleSystem;
+class Light;
 
 class Config
 {
@@ -828,6 +829,7 @@ private:
 	Decker::ui::TileTypeSelection* tiletype_selection;
 	Decker::ui::SpriteSelection* sprite_selection;
 	Decker::ui::ObjectSelection* object_selection;
+	Decker::ui::LightSelection* lights_selection;
 	Decker::ui::WorldWidget* world_widget;
 	Decker::ui::WayNetEdit* waynet_edit;
 	//StartScreen* start_screen;
@@ -876,6 +878,7 @@ private:
 	void drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
+	void drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void moveWorld(int offset_x, int offset_y);
 	void moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse);
 	void handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse);
@@ -883,6 +886,7 @@ private:
 	void closeTileSelection();
 	void closeSpriteSelection();
 	void closeObjectSelection();
+	void closeLightsSelection();
 	void closeWayNet();
 	void selectSprite(const ppl7::grafix::Point& mouse);
 	void updateWorldCoords();
@@ -891,6 +895,7 @@ private:
 	void mouseDownEventOnSprite(ppl7::tk::MouseEvent* event);
 	void mouseDownEventOnObject(ppl7::tk::MouseEvent* event);
 	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event);
+	void mouseDownEventOnLight(ppl7::tk::MouseEvent* event);
 
 	void checkFileDialog();
 	void checkSoundtrack();
@@ -910,6 +915,7 @@ private:
 	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
+	Light* selected_light;
 
 	GameSpeed game_speed;
 
@@ -944,6 +950,7 @@ public:
 	void showTileTypeSelection();
 	void showSpriteSelection();
 	void showObjectsSelection();
+	void showLightsSelection();
 	void showWayNetEdit();
 	void setSpriteModeToDraw();
 	void showUi(bool enable);

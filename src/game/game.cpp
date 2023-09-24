@@ -74,12 +74,14 @@ Game::Game()
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
 	object_selection=NULL;
+	lights_selection=NULL;
 	waynet_edit=NULL;
 	world_widget=NULL;
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
 	selected_sprite.id=-1;
 	selected_object=NULL;
+	selected_light=NULL;
 	fade_to_black=0;
 	death_state=0;
 	showui=false;
@@ -951,6 +953,19 @@ void Game::closeObjectSelection()
 	}
 }
 
+void Game::closeLightsSelection()
+{
+	if (lights_selection) {
+		this->removeChild(lights_selection);
+		delete(lights_selection);
+		lights_selection=NULL;
+		viewport.x1=0;
+		game_viewport.setMenuOffset(0);
+		world_widget->setViewport(viewport);
+	}
+}
+
+
 void Game::closeWayNet()
 {
 	if (waynet_edit) {
@@ -972,6 +987,7 @@ void Game::showTilesSelection()
 	closeSpriteSelection();
 	closeObjectSelection();
 	closeWayNet();
+	closeLightsSelection();
 	if (tiles_selection) {
 		closeTileSelection();
 	} else {
@@ -996,6 +1012,7 @@ void Game::showTileTypeSelection()
 	closeTileSelection();
 	closeObjectSelection();
 	closeWayNet();
+	closeLightsSelection();
 	if (tiletype_selection) {
 		closeTileTypeSelection();
 		mainmenue->setShowTileTypes(false);
@@ -1016,6 +1033,7 @@ void Game::showSpriteSelection()
 	closeTileSelection();
 	closeObjectSelection();
 	closeWayNet();
+	closeLightsSelection();
 	if (sprite_selection) {
 		closeSpriteSelection();
 	} else {
@@ -1045,6 +1063,7 @@ void Game::showObjectsSelection()
 	closeTileSelection();
 	closeSpriteSelection();
 	closeWayNet();
+	closeLightsSelection();
 	if (object_selection) {
 		closeObjectSelection();
 	} else {
@@ -1065,6 +1084,7 @@ void Game::showWayNetEdit()
 	closeTileSelection();
 	closeSpriteSelection();
 	closeObjectSelection();
+	closeLightsSelection();
 	if (waynet_edit) {
 		closeWayNet();
 		mainmenue->setShowTileTypes(false);
@@ -1076,6 +1096,25 @@ void Game::showWayNetEdit()
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
 		mainmenue->setShowTileTypes(true);
+	}
+}
+
+void Game::showLightsSelection()
+{
+	closeTileTypeSelection();
+	closeTileSelection();
+	closeSpriteSelection();
+	closeObjectSelection();
+	closeWayNet();
+	if (lights_selection) {
+		closeLightsSelection();
+	} else {
+		lights_selection=new Decker::ui::LightSelection(0, 32, 300, statusbar->y() - 2 - 32, this);
+		//waynet_edit->setSpriteSet(&resources.uiObjects);
+		this->addChild(lights_selection);
+		viewport.x1=300;
+		game_viewport.setMenuOffset(300);
+		world_widget->setViewport(viewport);
 	}
 }
 
