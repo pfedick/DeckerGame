@@ -271,6 +271,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     }
 
     enableControls(false);
+    SDL_SetRenderTarget(renderer, NULL);
 
 
     last_frame_time=0.0f;

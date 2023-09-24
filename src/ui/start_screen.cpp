@@ -55,6 +55,10 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		sdl.startFrame(black);
 		ppl7::tk::MouseState mouse=wm->getMouseState();
 		drawWorld(renderer);
+		SDL_SetRenderTarget(renderer, NULL);
+		drawRenderTargetToScreen();
+
+
 		getDestinationRect(title_size, *this, title_rect);
 		title_rect.y=0;
 		SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
