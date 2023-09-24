@@ -22,6 +22,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_grid=false;
 	visibility_tiletypes=false;
 	visibility_collision=false;
+	visibility_lighting=true;
 	level_dialog=NULL;
 	metrics=NULL;
 	controlsEnabled=game->getControlsEnabled();
@@ -320,12 +321,18 @@ void MainMenue::fitMetrics(const ppl7::grafix::Rect& viewport)
 }
 
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 140, 330)
+	: ppl7::tk::Frame(x, y, 140, 350)
 {
 	this->menue=menue;
 	int y1=0;
 	this->addChild(new ppl7::tk::Label(0, y1, 100, 20, "Misc:"));
 	y1+=20;
+
+	lighting_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Lighting", menue->visibility_lighting);
+	lighting_checkbox->setEventHandler(this);
+	this->addChild(lighting_checkbox);
+	y1+=20;
+
 
 	show_grid_checkbox=new ppl7::tk::CheckBox(20, y1, 100, 20, "Grid", menue->visibility_grid);
 	show_grid_checkbox->setEventHandler(this);
@@ -409,6 +416,8 @@ void VisibilitySubMenu::toggledEvent(ppl7::tk::Event* event, bool checked)
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == visible_plane_player_checkbox) {
 		menue->visibility_plane_player=checked;
+	} else if (widget == lighting_checkbox) {
+		menue->visibility_lighting=checked;
 	} else if (widget == visible_plane_front_checkbox) {
 		menue->visibility_plane_front=checked;
 	} else if (widget == visible_plane_far_checkbox) {

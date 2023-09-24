@@ -39,7 +39,7 @@ OBJECTS=compile/main.o \
 	compile/translate.o \
 	compile/color.o \
 	compile/metrics.o \
-	compile/lightmap.o \
+	compile/lightsystem.o \
 	compile/ui_statusbar.o \
 	compile/ui_menue.o \
 	compile/ui_metrics.o \
@@ -468,9 +468,9 @@ compile/messageoverlay.o: src/game/messageoverlay.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/messageoverlay.o -c src/game/messageoverlay.cpp $(CFLAGS)
 
-compile/lightmap.o: src/game/lightmap.cpp Makefile include/decker.h include/lightmap.h
+compile/lightsystem.o: src/game/lightsystem.cpp Makefile include/decker.h include/light.h
 	- @mkdir -p compile
-	$(CXX) -o compile/lightmap.o -c src/game/lightmap.cpp $(CFLAGS)
+	$(CXX) -o compile/lightsystem.o -c src/game/lightsystem.cpp $(CFLAGS)
 
 
 # Objects
@@ -727,7 +727,7 @@ compile/ui_spriteselection.o: src/ui/spriteselection.cpp Makefile include/ui.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_spriteselection.o -c src/ui/spriteselection.cpp $(CFLAGS)
 
-compile/ui_lightmapselection.o: src/ui/lightmapselection.cpp Makefile include/ui.h include/lightmap.h
+compile/ui_lightmapselection.o: src/ui/lightmapselection.cpp Makefile include/ui.h include/light.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_lightmapselection.o -c src/ui/lightmapselection.cpp $(CFLAGS)
 

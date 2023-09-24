@@ -70,6 +70,7 @@ class VisibilitySubMenu : public ppl7::tk::Frame
 {
 private:
 	MainMenue* menue;
+	ppl7::tk::CheckBox* lighting_checkbox;
 	ppl7::tk::CheckBox* show_grid_checkbox;
 	ppl7::tk::CheckBox* show_tiletypes_checkbox;
 	ppl7::tk::CheckBox* show_collision_checkbox;
@@ -183,6 +184,7 @@ public:
 	bool visibility_grid;
 	bool visibility_tiletypes;
 	bool visibility_collision;
+	bool visibility_lighting;
 
 	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
 	void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text) override;
@@ -605,6 +607,8 @@ class LightSelection : public ppl7::tk::Frame
 private:
 	Game* game;
 	TilesFrame* tilesframe;
+	ColorSliderWidget* global_lighting;
+	ppl7::tk::CheckBox* enable_lighting;
 	SpriteTexture* spriteset;
 	float scale;
 	float angle;

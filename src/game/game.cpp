@@ -255,7 +255,7 @@ void Game::createRenderTarget()
 
 	SDL_SetTextureBlendMode(tex_render_layer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(tex_render_lightmap, SDL_BLENDMODE_MUL);
-
+	level.setRenderTargets(tex_render_target, tex_render_lightmap, tex_render_layer);
 
 }
 
@@ -709,6 +709,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
 	level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
+	level.setEnableLights(mainmenue->visibility_lighting);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
 	level.setShowParticles(mainmenue->visibility_particles);
@@ -1110,7 +1111,7 @@ void Game::showLightsSelection()
 		closeLightsSelection();
 	} else {
 		lights_selection=new Decker::ui::LightSelection(0, 32, 300, statusbar->y() - 2 - 32, this);
-		//waynet_edit->setSpriteSet(&resources.uiObjects);
+		lights_selection->setSpriteSet(&resources.uiLightmaps);
 		this->addChild(lights_selection);
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);

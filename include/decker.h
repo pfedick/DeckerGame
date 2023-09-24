@@ -18,6 +18,7 @@
 #include "metrics.h"
 #include "particle.h"
 #include "gamecontroller.h"
+#include "light.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -567,6 +568,7 @@ public:
 	void print() const;
 };
 
+class LightPlane;
 
 class Level
 {
@@ -591,6 +593,14 @@ private:
 	SpriteSystem PlayerSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+
+	LightSystem HorizonLights;
+	LightSystem FarLights;
+	LightSystem MiddleLights;
+	LightSystem PlayerLights;
+	LightSystem FrontLights;
+	LightSystem NearLights;
+
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;
 	Waynet waynet;
@@ -598,10 +608,15 @@ private:
 	ppl7::grafix::Rect viewport;
 	SpriteTexture* tileset[MAX_TILESETS + 1];
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
+	SDL_Texture* tex_render_target;
+	SDL_Texture* tex_render_lightmap;
+	SDL_Texture* tex_render_layer;
+
 	bool editMode;
 	bool showSprites;
 	bool showObjects;
 	bool showParticles;
+	bool lightsEnabled;
 
 	void clear();
 
@@ -637,7 +652,8 @@ private:
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
-
+	void addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void prepareLayer(SDL_Renderer* renderer);
 public:
 
 
@@ -647,6 +663,7 @@ public:
 	void setShowSprites(bool enabled);
 	void setShowObjects(bool enabled);
 	void setShowParticles(bool enabled);
+	void setEnableLights(bool enabled);
 	void setTileset(int no, SpriteTexture* tileset);
 	void setSpriteset(int no, SpriteTexture* spriteset);
 	void create(int width, int height);
@@ -654,6 +671,7 @@ public:
 	void save(const ppl7::String& Filename);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics);
 	void setViewport(const ppl7::grafix::Rect& r);
+	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);

@@ -7,7 +7,7 @@
 #include "player.h"
 #include "objects.h"
 #include "particle.h"
-
+#include "light.h"
 
 
 static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
@@ -26,6 +26,10 @@ Level::Level()
 	showSprites=true;
 	showObjects=true;
 	showParticles=true;
+	lightsEnabled=true;
+	tex_render_layer=NULL;
+	tex_render_lightmap=NULL;
+	tex_render_target=NULL;
 }
 
 Level::~Level()
@@ -83,6 +87,11 @@ void Level::setShowObjects(bool enabled)
 void Level::setShowParticles(bool enabled)
 {
 	showParticles=enabled;
+}
+
+void Level::setEnableLights(bool enabled)
+{
+	lightsEnabled=enabled;
 }
 
 void Level::setTileset(int no, SpriteTexture* tileset)
@@ -155,6 +164,13 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 	if (plane == 6) return NearSprites[layer];
 
 	return PlayerSprites[layer];
+}
+
+void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer)
+{
+	this->tex_render_target=tex_render_target;
+	this->tex_render_lightmap=tex_render_lightmap;
+	this->tex_render_layer=tex_render_layer;
 }
 
 
@@ -354,11 +370,44 @@ void Level::drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const p
 }
 
 
+void Level::prepareLayer(SDL_Renderer* renderer)
+{
+	if (lightsEnabled) {
+		SDL_SetRenderTarget(renderer, tex_render_lightmap);
+		SDL_SetRenderDrawColor(renderer, params.GlobalLighting.red(), params.GlobalLighting.green(), params.GlobalLighting.blue(), 255);
+		SDL_RenderClear(renderer);
+		SDL_SetRenderTarget(renderer, tex_render_layer);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderClear(renderer);
+	} else {
+		SDL_SetRenderTarget(renderer, tex_render_target);
+	}
+}
+
+void Level::addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
+{
+	if (!lightsEnabled) return;
+	SDL_SetRenderTarget(renderer, tex_render_layer);
+	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+}
+
 void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
 {
+	prepareLayer(renderer);
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
+	addLightmap(renderer, HorizonLights, worldcoords, metrics);
+	prepareLayer(renderer);
+
 	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
+	addLightmap(renderer, FarLights, worldcoords, metrics);
+	prepareLayer(renderer);
+
 	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
+	addLightmap(renderer, MiddleLights, worldcoords, metrics);
+	prepareLayer(renderer);
+
 	drawParticles(renderer, Particle::Layer::BackplaneBack, worldcoords * planeFactor[3], metrics);
 	drawNonePlayerPlane(renderer, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
 	drawParticles(renderer, Particle::Layer::BackplaneFront, worldcoords * planeFactor[3], metrics);
@@ -406,12 +455,18 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		}
 		metrics.time_objects.stop();
 		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
-
 	}
+	addLightmap(renderer, PlayerLights, worldcoords, metrics);
+	prepareLayer(renderer);
+
 	drawParticles(renderer, Particle::Layer::FrontplaneBack, worldcoords * planeFactor[1], metrics);
 	drawNonePlayerPlane(renderer, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
 	drawParticles(renderer, Particle::Layer::FrontplaneFront, worldcoords * planeFactor[1], metrics);
+	addLightmap(renderer, FrontLights, worldcoords, metrics);
+	prepareLayer(renderer);
+
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
+	addLightmap(renderer, NearLights, worldcoords, metrics);
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
