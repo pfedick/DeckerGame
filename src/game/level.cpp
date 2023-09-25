@@ -27,6 +27,7 @@ Level::Level()
 	showObjects=true;
 	showParticles=true;
 	lightsEnabled=true;
+	lightset=NULL;
 	tex_render_layer=NULL;
 	tex_render_lightmap=NULL;
 	tex_render_target=NULL;
@@ -122,6 +123,18 @@ void Level::setSpriteset(int no, SpriteTexture* spriteset)
 
 }
 
+void Level::setLightset(SpriteTexture* lightset)
+{
+	this->lightset=lightset;
+	HorizonLights.setSpriteset(lightset);
+	FarLights.setSpriteset(lightset);
+	MiddleLights.setSpriteset(lightset);
+	PlayerLights.setSpriteset(lightset);
+	FrontLights.setSpriteset(lightset);
+	NearLights.setSpriteset(lightset);
+
+}
+
 void Level::create(int width, int height)
 {
 	clear();
@@ -165,6 +178,20 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 
 	return PlayerSprites[layer];
 }
+
+LightSystem& Level::lightsystem(int plane)
+{
+	if (plane == 0) return PlayerLights;
+	if (plane == 1) return FrontLights;
+	if (plane == 2) return FarLights;
+	if (plane == 3) return PlayerLights;
+	if (plane == 4) return MiddleLights;
+	if (plane == 5) return HorizonLights;
+	if (plane == 6) return NearLights;
+
+	return PlayerLights;
+}
+
 
 void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer)
 {
@@ -408,10 +435,13 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 void Level::addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
 	if (!lightsEnabled) return;
+	metrics.time_lights.start();
+	lightsystem.draw(renderer, viewport, worldcoords);
 	SDL_SetRenderTarget(renderer, tex_render_layer);
 	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
 	SDL_SetRenderTarget(renderer, tex_render_target);
 	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+	metrics.time_lights.stop();
 }
 
 void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
@@ -659,6 +689,61 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	}
 	return false;
 }
+
+bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightSystem::Light& item, int& plane) const
+{
+	if (NearPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[6];
+		if (NearLights.findMatchingLight(coords, item)) {
+			plane=6;
+			return true;
+		}
+	}
+	if (FrontPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[1];
+		if (FrontLights.findMatchingLight(coords, item)) {
+			plane=1;
+			return true;
+		}
+	}
+	if (PlayerPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[0];
+		if (PlayerLights.findMatchingLight(coords, item)) {
+			plane=0;
+			return true;
+		}
+	}
+	if (BackPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[3];
+		if (PlayerLights.findMatchingLight(coords, item)) {
+			plane=0;
+			return true;
+		}
+	}
+	if (MiddlePlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[4];
+		if (MiddleLights.findMatchingLight(coords, item)) {
+			plane=4;
+			return true;
+		}
+	}
+	if (FarPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[2];
+		if (FarLights.findMatchingLight(coords, item)) {
+			plane=2;
+			return true;
+		}
+	}
+	if (HorizonPlane.isVisible()) {
+		ppl7::grafix::Point coords=p + worldcoords * planeFactor[5];
+		if (HorizonLights.findMatchingLight(coords, item)) {
+			plane=5;
+			return true;
+		}
+	}
+	return false;
+}
+
 
 size_t Level::tileCount() const
 {

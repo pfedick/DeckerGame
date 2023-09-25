@@ -17,6 +17,8 @@ LightSystem::Light::Light()
     scale_y=1.0f;
     angle=0.0f;
     color_index=0;
+    intensity=255;
+    lightsystem=NULL;
 }
 
 LightSystem::LightSystem(const ColorPalette& palette)
@@ -53,18 +55,20 @@ void LightSystem::setSpriteset(SpriteTexture* spriteset)
     this->spriteset=spriteset;
 }
 
-void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index)
+void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity)
 {
     //printf ("x=%d, y=%d\n",x,y);
     LightSystem::Light item;
     maxid++;
     item.id=maxid;
+    item.lightsystem=this;
     item.x=x;
     item.y=y;
     item.sprite_no=sprite_no;
     item.scale_x=scale_x;
     item.scale_y=scale_y;
     item.angle=angle;
+    item.intensity=intensity;
     item.color_index=color_index;
     item.boundary=spriteset->spriteBoundary(sprite_no, scale_x, x, y);
     light_list.insert(std::pair<int, LightSystem::Light>(item.id, item));
@@ -153,6 +157,7 @@ void LightSystem::modifyLight(const LightSystem::Light& item)
         intitem.scale_x=item.scale_x;
         intitem.scale_y=item.scale_y;
         intitem.angle=item.angle;
+        intitem.intensity=item.intensity;
         intitem.color_index=item.color_index;
         intitem.boundary=spriteset->spriteBoundary(intitem.sprite_no,
             intitem.scale_x, intitem.x, intitem.y);
@@ -205,7 +210,7 @@ void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
         ppl7::PokeFloat(buffer + p + 12, item.angle);
         ppl7::Poke16(buffer + p + 16, item.sprite_no);
         ppl7::Poke8(buffer + p + 18, item.color_index);
-        ppl7::Poke8(buffer + p + 19, 0);
+        ppl7::Poke8(buffer + p + 19, item.intensity);
         p+=20;
     }
     ppl7::Poke32(buffer + 0, p);
@@ -227,7 +232,8 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
                 ppl7::PeekFloat(buffer + p + 4),
                 ppl7::PeekFloat(buffer + p + 8),
                 ppl7::PeekFloat(buffer + p + 12),
-                ppl7::Peek8(buffer + p + 18));
+                ppl7::Peek8(buffer + p + 18),
+                ppl7::Peek8(buffer + p + 19));
             p+=20;
         }
     } else {

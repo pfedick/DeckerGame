@@ -31,36 +31,16 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(global_lighting);
 	yy+=110;
 
-	/*
 
-	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "Layer:"));
-	layer_selection=new ppl7::tk::ComboBox(80, yy, width - 90, 30);
-	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
-	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
-	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
-	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
-	layer_selection->setEventHandler(this);
-	this->addChild(layer_selection);
-	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "difficulty:"));
-	difficulty_easy=new ppl7::tk::CheckBox(80, yy, 80, 30, "easy", true);
-	difficulty_easy->setEventHandler(this);
-	this->addChild(difficulty_easy);
-	difficulty_normal=new ppl7::tk::CheckBox(145, yy, 100, 30, "normal", true);
-	difficulty_normal->setEventHandler(this);
-	this->addChild(difficulty_normal);
-	difficulty_hard=new ppl7::tk::CheckBox(225, yy, 90, 30, "hard", true);
-	difficulty_hard->setEventHandler(this);
-	this->addChild(difficulty_hard);
-	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, width, 30, "Object selection:"));
-	yy+=30;
-	*/
 
-	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy, game);
+	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 300, game);
 	tilesframe->setEventHandler(this);
 	this->addChild(tilesframe);
 
+	colorframe=new ColorSelectionFrame(client.left(), client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
+	colorframe->setEventHandler(this);
+	this->addChild(colorframe);
+	tilesframe->setColor(colorframe->color());
 }
 
 
@@ -74,6 +54,47 @@ ppl7::String LightSelection::widgetType() const
 	return "LightSelection";
 }
 
+void LightSelection::setSelectedLight(int nr)
+{
+	tilesframe->setSelectedTile(nr);
+}
+
+int LightSelection::selectedLight() const
+{
+	return tilesframe->selectedTile();
+}
+
+void LightSelection::setLightScale(float factor)
+{
+	if (factor >= 0.1f && factor <= 4.0f) scale=factor;
+}
+
+float LightSelection::lightScale() const
+{
+	return scale;
+}
+
+int LightSelection::colorIndex() const
+{
+	return colorframe->colorIndex();
+}
+
+void LightSelection::setColorIndex(int index)
+{
+	colorframe->setColorIndex(index);
+}
+
+float LightSelection::lightAngle() const
+{
+	return angle;
+}
+
+void LightSelection::setLightAngle(float angle)
+{
+	this->angle=angle;
+}
+
+
 void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
 	if (event->widget() == tilesframe) {
@@ -81,6 +102,8 @@ void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 	} else if (event->widget() == global_lighting) {
 		game->updateLayerForSelectedObject(value);
 		game->getLevel().params.GlobalLighting=global_lighting->color();
+	} else if (event->widget() == colorframe) {
+		tilesframe->setColor(colorframe->color());
 	}
 
 }

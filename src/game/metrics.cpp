@@ -59,6 +59,8 @@ Metrics::Metrics()
     total_particles=0;
     visible_particles=0;
     total_audiotracks=0;
+    total_lights=0;
+    visible_lights=0;
     hearable_audiotracks=0;
     framecount=0;
     frame_rate_compensation=0.0f;
@@ -76,6 +78,9 @@ void Metrics::clear()
     total_particles=0;
     visible_particles=0;
     total_audiotracks=0;
+    total_lights=0;
+    visible_lights=0;
+
     hearable_audiotracks=0;
 
     frame_rate_compensation=0.0f;
@@ -86,6 +91,7 @@ void Metrics::clear()
     time_draw_world.clear();
     time_events.clear();
     time_update_sprites.clear();
+    time_update_lights.clear();
     time_update_objects.clear();
     time_update_particles.clear();
     time_particle_thread.clear();
@@ -96,6 +102,7 @@ void Metrics::clear()
     time_draw_particles.clear();
     time_plane.clear();
     time_misc.clear();
+    time_lights.clear();
     time_audioengine.clear();
 }
 
@@ -115,12 +122,14 @@ Metrics Metrics::getAverage() const
         m.time_draw_world.duration=time_draw_world.get() / framecount;
         m.time_events.duration=time_events.get() / framecount;
         m.time_update_sprites.duration=time_update_sprites.get() / framecount;
+        m.time_update_lights.duration=time_update_lights.get() / framecount;
         m.time_update_objects.duration=time_update_objects.get() / framecount;
         m.time_update_particles.duration=time_update_particles.get() / framecount;
         m.time_particle_thread.duration=time_particle_thread.get() / framecount;
         m.time_draw_background.duration=time_draw_background.get() / framecount;
         m.time_draw_tsop.duration=time_draw_tsop.get() / framecount;
         m.time_sprites.duration=time_sprites.get() / framecount;
+        m.time_lights.duration=time_lights.get() / framecount;
         m.time_objects.duration=time_objects.get() / framecount;
         m.time_draw_particles.duration=time_draw_particles.get() / framecount;
         m.time_plane.duration=time_plane.get() / framecount;
@@ -132,6 +141,8 @@ Metrics Metrics::getAverage() const
         m.visible_sprites=visible_sprites / framecount;
         m.total_objects=total_objects / framecount;
         m.visible_objects=visible_objects / framecount;
+        m.total_lights=total_lights / framecount;
+        m.visible_lights=visible_lights / framecount;
         m.total_particles=total_particles / framecount;
         m.visible_particles=visible_particles / framecount;
         m.total_audiotracks=total_audiotracks / framecount;
@@ -162,6 +173,7 @@ Metrics& Metrics::operator+=(const Metrics& other)
     time_draw_world+=other.time_draw_world;
     time_events+=other.time_events;
     time_update_sprites+=other.time_update_sprites;
+    time_update_lights+=other.time_update_lights;
     time_update_objects+=other.time_update_objects;
     time_update_particles+=other.time_update_particles;
     time_particle_thread+=other.time_particle_thread;

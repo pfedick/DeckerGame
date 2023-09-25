@@ -41,12 +41,14 @@ public:
     Timer time_draw_world;
     Timer time_events;
     Timer time_update_sprites;
+    Timer time_update_lights;
     Timer time_update_objects;
     Timer time_update_particles;
     Timer time_particle_thread;
     Timer time_draw_background;
     Timer time_draw_tsop;
     Timer time_sprites;
+    Timer time_lights;
     Timer time_objects;
     Timer time_draw_particles;
     Timer time_plane;
@@ -63,6 +65,8 @@ public:
     size_t visible_particles;
     size_t total_audiotracks;
     size_t hearable_audiotracks;
+    size_t total_lights;
+    size_t visible_lights;
     double frame_rate_compensation;
     float frametime;
 

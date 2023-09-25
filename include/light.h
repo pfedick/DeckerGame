@@ -8,6 +8,7 @@ public:
     class Light {
     public:
         Light();
+        LightSystem* lightsystem;
         int id;
         int x;			// 2 Byte
         int y;			// 2 Byte
@@ -15,8 +16,8 @@ public:
         float scale_y;  // 4 Byte
         float angle;    // 4 Byte
         int sprite_no;	// 2 Byte
-        uint8_t color_index; // 1 Byte      ==> 20 Byte
-        uint8_t reserved;   // 1 Byte
+        uint8_t color_index; // 1 Byte
+        uint8_t intensity;   // 1 Byte  ==> 20 Byte
         ppl7::grafix::Rect boundary;
     };
 private:
@@ -33,7 +34,7 @@ public:
     ~LightSystem();
 
     void clear();
-    void addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index);
+    void addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity);
     void deleteLight(int id);
     void modifyLight(const LightSystem::Light& item);
     void setVisible(bool visible);

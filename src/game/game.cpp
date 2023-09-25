@@ -80,8 +80,10 @@ Game::Game()
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
 	selected_sprite.id=-1;
+	selected_light_system=NULL;
+	selected_light.id=-1;
+
 	selected_object=NULL;
-	selected_light=NULL;
 	fade_to_black=0;
 	death_state=0;
 	showui=false;
@@ -214,6 +216,7 @@ void Game::loadGrafix()
 	level.objects->loadSpritesets(sdl);
 	level.particles->loadSpritesets(sdl);
 	level.waynet.setSpriteset(&resources.Waynet);
+	level.setLightset(&resources.Lightmaps);
 
 	message_overlay.loadSprites();
 
@@ -837,6 +840,7 @@ void Game::run()
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
+		drawSelectedLight(renderer, mouse.p);
 		if (mainmenue->visibility_plane_player) {
 			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, game_viewport, WorldCoords);
 			if (mainmenue->visibility_collision) player->drawCollision(renderer, game_viewport, WorldCoords);
@@ -1121,6 +1125,10 @@ void Game::showLightsSelection()
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
+		sprite_mode=spriteModeDraw;
+		selected_light.id=-1;
+		selected_light_system=NULL;
+
 	}
 }
 
@@ -1232,6 +1240,32 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 			tmouse.x, tmouse.y, nr, scale);
 	}
 }
+
+void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
+{
+	if (!lights_selection) return;
+	if (lights_selection->selectedLight() >= 0 && sprite_mode != spriteModeDraw) {
+		selected_light_system=NULL;
+		sprite_mode=spriteModeDraw;
+	}
+	if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
+		int currentPlane=mainmenue->currentPlane();
+		selected_light_system->drawSelectedLightOutline(renderer, game_viewport,
+			WorldCoords * planeFactor[currentPlane], selected_light.id);
+	} else if (sprite_mode == spriteModeDraw) {
+		if (!mouse.inside(game_viewport)) return;
+		int nr=lights_selection->selectedLight();
+		if (nr < 0) return;
+		ppl7::grafix::Point tmouse=game_viewport.translate(mouse);
+		float scale=lights_selection->lightScale();
+		float angle=lights_selection->lightAngle();
+		resources.Lightmaps.drawScaled(renderer,
+			tmouse.x, tmouse.y, nr, scale, level.palette.getColor(lights_selection->colorIndex()));
+		resources.Lightmaps.drawOutlines(renderer,
+			tmouse.x, tmouse.y, nr, scale);
+	}
+}
+
 
 void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
@@ -1423,6 +1457,9 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 			handleMouseDrawInWorld(*event);
 		} else if (waynet_edit != NULL) {
 			mouseDownEventOnWayNet(event);
+		} else if (lights_selection != NULL) {
+			mouseDownEventOnLight(event);
+
 		}
 	}
 }
@@ -1467,6 +1504,36 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 		selected_sprite_system=NULL;
 	}
 }
+
+void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
+{
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::mouseDownEventOnSprite\n");
+#endif
+
+	if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
+		int nr=lights_selection->selectedLight();
+		if (nr < 0) {
+			selectLight(event->p);
+			return;
+		}
+		if (sprite_mode != spriteModeDraw) return;
+		float scale=lights_selection->lightScale();
+		float angle=lights_selection->lightAngle();
+		int currentPlane=mainmenue->currentPlane();
+		LightSystem& ss=level.lightsystem(currentPlane);
+		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
+		ss.addLight(event->p.x + coords.x,
+			event->p.y + coords.y,
+			nr, scale, scale, angle, lights_selection->colorIndex(), 255);
+	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+		lights_selection->setSelectedLight(-1);
+		sprite_mode=spriteModeDraw;
+		selected_light.id=-1;
+		selected_light_system=NULL;
+	}
+}
+
 
 void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 {
@@ -1610,6 +1677,28 @@ void Game::selectSprite(const ppl7::grafix::Point& mouse)
 	} else {
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
+	}
+}
+
+void Game::selectLight(const ppl7::grafix::Point& mouse)
+{
+#ifdef EVENTTRACKING
+	ppl7::PrintDebugTime("Game::selectSprite\n");
+#endif
+	int plane=0;
+	if (level.findLight(mouse, WorldCoords, selected_light, plane)) {
+		//printf ("found Sprite on plane %d, layer %d\n",plane,layer);
+		mainmenue->setCurrentPlane(plane);
+		lights_selection->setSelectedLight(selected_light.sprite_no);
+		lights_selection->setLightAngle(selected_light.scale_x);
+		lights_selection->setLightScale(selected_light.angle);
+		wm->setKeyboardFocus(world_widget);
+		sprite_mode=SpriteModeEdit;
+		selected_light_system=selected_light.lightsystem;
+		sprite_move_start=mouse;
+	} else {
+		selected_light.id=-1;
+		selected_light_system=NULL;
 	}
 }
 

@@ -63,7 +63,6 @@ class Object;
 
 class SettingsScreen;
 class ParticleSystem;
-class Light;
 
 class Config
 {
@@ -610,6 +609,7 @@ private:
 	ppl7::grafix::Rect viewport;
 	SpriteTexture* tileset[MAX_TILESETS + 1];
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
+	SpriteTexture* lightset;
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
@@ -677,6 +677,7 @@ public:
 	void setEnableLights(bool enabled);
 	void setTileset(int no, SpriteTexture* tileset);
 	void setSpriteset(int no, SpriteTexture* spriteset);
+	void setLightset(SpriteTexture* lightset);
 	void create(int width, int height);
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
@@ -685,8 +686,10 @@ public:
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
+	LightSystem& lightsystem(int plane);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
+	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightSystem::Light& item, int& plane) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
 	void getLevelStats(LevelStats& stats) const;
@@ -919,6 +922,7 @@ private:
 	void closeLightsSelection();
 	void closeWayNet();
 	void selectSprite(const ppl7::grafix::Point& mouse);
+	void selectLight(const ppl7::grafix::Point& mouse);
 	void updateWorldCoords();
 	void handleDeath(SDL_Renderer* renderer, float frame_rate_compensation);
 
@@ -945,7 +949,8 @@ private:
 	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
-	Light* selected_light;
+	LightSystem::Light selected_light;
+	LightSystem* selected_light_system;
 
 	GameSpeed game_speed;
 

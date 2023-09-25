@@ -610,6 +610,7 @@ private:
 	ColorSliderWidget* global_lighting;
 	ppl7::tk::CheckBox* enable_lighting;
 	SpriteTexture* spriteset;
+	ColorSelectionFrame* colorframe;
 	float scale;
 	float angle;
 
@@ -617,12 +618,14 @@ public:
 	LightSelection(int x, int y, int width, int height, Game* game);
 	ppl7::String widgetType() const override;
 	void setSpriteSet(SpriteTexture* sprites);
-	void setSelectedSprite(int nr);
-	int selectedSprite() const;
-	void setSpriteScale(float factor);
-	float spriteScale() const;
-	void setSpriteAngle(float factor);
-	float spriteAngle() const;
+	void setSelectedLight(int nr);
+	int selectedLight() const;
+	void setLightScale(float factor);
+	float lightScale() const;
+	void setLightAngle(float angle);
+	float lightAngle() const;
+	int colorIndex() const;
+	void setColorIndex(int index);
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
 };
 
