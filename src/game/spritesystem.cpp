@@ -15,6 +15,7 @@ SpriteSystem::Item::Item()
 	sprite_set=0;
 	sprite_no=0;
 	scale=1.0f;
+	color_index=0;
 }
 
 SpriteSystem::SpriteSystem(const ColorPalette& palette)

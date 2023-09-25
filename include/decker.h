@@ -648,7 +648,16 @@ private:
 		chunkObjects=30,
 		chunkWayNet=31,
 		chunkLevelParameter=32,
-		chunkColorPalette=33
+		chunkColorPalette=33,
+		chunkLightsHorizon=40,
+		chunkLightsFar=41,
+		chunkLightsMiddle=42,
+		chunkLightsBack=43,
+		chunkLightsPlayer=44,
+		chunkLightsFront=45,
+		chunkLightsNear=46,
+
+
 	};
 
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);

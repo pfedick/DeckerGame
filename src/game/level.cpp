@@ -249,6 +249,18 @@ void Level::load(const ppl7::String& Filename)
 				objects->load(ba);
 			} else if (id == LevelChunkId::chunkWayNet) {
 				waynet.load(ba);
+			} else if (id == LevelChunkId::chunkLightsHorizon) {
+				HorizonLights.load(ba);
+			} else if (id == LevelChunkId::chunkLightsFar) {
+				FarLights.load(ba);
+			} else if (id == LevelChunkId::chunkLightsMiddle) {
+				MiddleLights.load(ba);
+			} else if (id == LevelChunkId::chunkLightsPlayer) {
+				PlayerLights.load(ba);
+			} else if (id == LevelChunkId::chunkLightsFront) {
+				FrontLights.load(ba);
+			} else if (id == LevelChunkId::chunkLightsNear) {
+				NearLights.load(ba);
 			}
 		} catch (const ppl7::EndOfFileException&) {
 			break;
@@ -309,6 +321,15 @@ void Level::save(const ppl7::String& Filename)
 	NearSprites[1].save(ff, LevelChunkId::chunkNearSpritesLayer1);
 	objects->save(ff, LevelChunkId::chunkObjects);
 	waynet.save(ff, LevelChunkId::chunkWayNet);
+
+	HorizonLights.save(ff, LevelChunkId::chunkLightsHorizon);
+	FarLights.save(ff, LevelChunkId::chunkLightsFar);
+	MiddleLights.save(ff, LevelChunkId::chunkLightsMiddle);
+	//BackLights.save(ff, LevelChunkId::chunkLightsBack);
+	PlayerLights.save(ff, LevelChunkId::chunkLightsPlayer);
+	FrontLights.save(ff, LevelChunkId::chunkLightsFront);
+	NearLights.save(ff, LevelChunkId::chunkLightsNear);
+
 	ff.close();
 
 }
