@@ -682,6 +682,11 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	// Draw background
 	metrics.time_draw_background.start();
+	// For unknown reason, the SDL_RenderClear on the screen is extreme expensive on linux with intel grafix card, it takes up to 12 ms!
+	//SDL_SetRenderTarget(renderer, NULL);
+	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	//SDL_RenderFillRect(renderer, NULL);
+
 
 	/*
 	SDL_SetRenderTarget(renderer, tex_render_layer);
@@ -1993,6 +1998,15 @@ void Game::drawRenderTargetToScreen()
 	//ppl7::grafix::Rect vp=clientRect();
 
 	game_viewport.setRealViewport(this->clientSize());
+	// TODO: clear screen outside the viewport
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_Rect rr;
+	rr.x=1920 / 2 - 100;rr.y=1080 / 2 - 0;
+	rr.w=200;rr.h=200;
+	SDL_RenderFillRect(renderer, &rr);
+
+
+
 
 	SDL_RenderCopy(renderer, tex_render_target, NULL, &game_viewport.getRenderRect());
 
