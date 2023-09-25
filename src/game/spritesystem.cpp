@@ -24,6 +24,7 @@ SpriteSystem::SpriteSystem(const ColorPalette& palette)
 	for (int i=0;i <= MAX_SPRITESETS;i++) {
 		spriteset[i]=NULL;
 	}
+	maxid=0;
 }
 
 SpriteSystem::~SpriteSystem()
@@ -44,6 +45,7 @@ bool SpriteSystem::isVisible() const
 void SpriteSystem::clear()
 {
 	sprite_list.clear();
+	maxid=0;
 }
 
 void SpriteSystem::setSpriteset(int no, SpriteTexture* spriteset)
@@ -56,7 +58,8 @@ void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, 
 {
 	//printf ("x=%d, y=%d\n",x,y);
 	SpriteSystem::Item item;
-	item.id=(int)sprite_list.size() + 1;
+	maxid++;
+	item.id=maxid;
 	item.x=x;
 	item.y=y;
 	item.z=z;

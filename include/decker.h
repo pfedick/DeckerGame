@@ -283,6 +283,7 @@ public:
 private:
 	const ColorPalette& palette;
 	ppl7::Mutex mutex;
+	int maxid;
 	std::map<int, SpriteSystem::Item> sprite_list;
 	std::map<uint64_t, const SpriteSystem::Item&> visible_sprite_map;
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
@@ -594,12 +595,13 @@ private:
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 
-	LightSystem HorizonLights;
-	LightSystem FarLights;
-	LightSystem MiddleLights;
-	LightSystem PlayerLights;
-	LightSystem FrontLights;
-	LightSystem NearLights;
+	LightSystem HorizonLights=LightSystem(palette);
+	LightSystem FarLights=LightSystem(palette);
+	LightSystem MiddleLights=LightSystem(palette);
+	//LightSystem BackLights=LightSystem(palette);
+	LightSystem PlayerLights=LightSystem(palette);
+	LightSystem FrontLights=LightSystem(palette);
+	LightSystem NearLights=LightSystem(palette);
 
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;
