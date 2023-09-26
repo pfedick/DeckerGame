@@ -436,6 +436,7 @@ void Level::addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, 
 {
 	if (!lightsEnabled) return;
 	metrics.time_lights.start();
+	SDL_SetRenderTarget(renderer, tex_render_lightmap);
 	lightsystem.draw(renderer, viewport, worldcoords);
 	SDL_SetRenderTarget(renderer, tex_render_layer);
 	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
@@ -539,6 +540,17 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, con
 	//objects->updateVisibleObjectList(worldcoords * planeFactor[0], viewport);
 }
 
+void Level::updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+{
+	HorizonLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	FarLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	MiddleLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	PlayerLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	FrontLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	NearLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+}
+
+
 size_t Level::countSprites() const
 {
 	size_t total=0;
@@ -589,6 +601,46 @@ size_t Level::countVisibleSprites() const
 	if (NearPlane.isVisible()) {
 		total+=NearSprites[0].countVisible();
 		total+=NearSprites[1].countVisible();
+	}
+
+	return total;
+}
+
+size_t Level::countLights() const
+{
+	size_t total=0;
+	total+=HorizonLights.count();
+	total+=FarLights.count();
+	total+=MiddleLights.count();
+	total+=PlayerLights.count();
+	total+=FrontLights.count();
+	total+=NearLights.count();
+	return total;
+}
+
+size_t Level::countVisibleLights() const
+{
+	size_t total=0;
+	if (FarPlane.isVisible()) {
+		total+=FarLights.countVisible();
+	}
+	if (MiddlePlane.isVisible()) {
+		total+=MiddleLights.countVisible();
+	}
+	if (BackPlane.isVisible()) {
+		//total+=BackLights.countVisible();
+	}
+	if (PlayerPlane.isVisible()) {
+		total+=PlayerLights.countVisible();
+	}
+	if (FrontPlane.isVisible()) {
+		total+=FrontLights.countVisible();
+	}
+	if (HorizonPlane.isVisible()) {
+		total+=HorizonLights.countVisible();
+	}
+	if (NearPlane.isVisible()) {
+		total+=NearLights.countVisible();
 	}
 
 	return total;

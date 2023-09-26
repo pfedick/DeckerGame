@@ -688,10 +688,14 @@ public:
 	SpriteSystem& spritesystem(int plane, int layer);
 	LightSystem& lightsystem(int plane);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+	void updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
 	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightSystem::Light& item, int& plane) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
+	size_t countLights() const;
+	size_t countVisibleLights() const;
+
 	void getLevelStats(LevelStats& stats) const;
 
 	size_t tileCount() const;

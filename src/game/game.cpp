@@ -582,6 +582,8 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metri
 	size_t visible_objects=level.objects->countVisible();
 	size_t total_particles=level.particles->count();
 	size_t visible_particles=level.particles->countVisible();
+	size_t total_lights=level.countLights();
+	size_t visible_lights=level.countVisibleLights();
 
 	if (player) statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
@@ -598,7 +600,8 @@ void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metri
 	metrics.visible_objects+=visible_objects;
 	metrics.total_particles+=total_particles;
 	metrics.visible_particles+=visible_particles;
-
+	metrics.total_lights+=total_lights;
+	metrics.visible_lights+=visible_lights;
 }
 
 void Game::updateWorldCoords()
@@ -641,6 +644,9 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 
 	level.setEditmode(object_selection != NULL);
+	metrics.time_update_sprites.start();
+	level.updateVisibleLightsLists(WorldCoords, game_viewport);
+	metrics.time_update_lights.stop();
 
 	metrics.time_update_sprites.start();
 	level.updateVisibleSpriteLists(WorldCoords, game_viewport);	// => TODO: own Thread
@@ -717,6 +723,14 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.MiddlePlane.setVisible(mainmenue->visibility_plane_middle);
 	level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
+
+	level.HorizonLights.setVisible(mainmenue->visibility_plane_horizon);
+	level.FarLights.setVisible(mainmenue->visibility_plane_far);
+	level.MiddleLights.setVisible(mainmenue->visibility_plane_middle);
+	level.PlayerLights.setVisible(mainmenue->visibility_plane_player);
+	level.FrontLights.setVisible(mainmenue->visibility_plane_front);
+	level.NearLights.setVisible(mainmenue->visibility_plane_near);
+
 	level.setEnableLights(mainmenue->visibility_lighting);
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);

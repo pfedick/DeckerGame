@@ -78,6 +78,7 @@ void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float sca
 void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
     if (!bLightsVisible) return;
+    //ppl7::PrintDebugTime("LightSystem::updateVisibleLightList %zd\n", light_list.size());
     visible_lights_map.clear();
     std::map<int, LightSystem::Light>::const_iterator it;
     int width=viewport.width();
@@ -86,11 +87,16 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
         const LightSystem::Light& item=(it->second);
         int x=item.x - worldcoords.x;
         int y=item.y - worldcoords.y;
+        ppl7::PrintDebugTime("found light at %d:%d, ", x, y);
         if (x + item.boundary.width() > 0 && y + item.boundary.height() > 0
             && x - item.boundary.width() < width && y - item.boundary.height() < height) {
             uint64_t id=(uint64_t)(item.y << 16) | (uint64_t)item.x;
             visible_lights_map.insert(std::pair<uint64_t, const LightSystem::Light&>(id, item));
+            ppl7::PrintDebugTime("adding to visible_lights_map\n");
+        } else {
+            ppl7::PrintDebugTime("but we ignore it!\n");
         }
+
 
     }
 
