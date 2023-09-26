@@ -5,7 +5,7 @@ namespace Decker::ui {
 
 
 MetricsSubMenu::MetricsSubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 450, 225)
+	: ppl7::tk::Frame(x, y, 450, 255)
 {
 	this->menue=menue;
 	this->setTransparent(false);
@@ -115,6 +115,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	y+=line;
 	drawCountMetric(draw, c1, 120, 190, y, "Particles:", metrics.total_particles, metrics.visible_particles);
 	y+=line;
+	drawCountMetric(draw, c1, 120, 190, y, "Lights:", metrics.total_lights, metrics.visible_lights);
+	y+=line;
 	drawCountMetric(draw, c1, 120, 190, y, "Audio Tracks:", metrics.total_audiotracks, metrics.hearable_audiotracks);
 
 	y=5 + 2 * line;
@@ -134,6 +136,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	y+=line;
 	drawMillisecondMetric(draw, c1 + 20, c2, y, "update particles:", metrics.time_update_particles.get());
 	y+=line;
+	drawMillisecondMetric(draw, c1 + 20, c2, y, "update lights:", metrics.time_update_lights.get());
+	y+=line;
 	drawMillisecondMetric(draw, c1 + 20, c2, y, "draw background:", metrics.time_draw_background.get());
 	y+=line;
 	//drawDoubleMetric(draw, c1 + 20, c2, y, "time_draw_tsop", metrics.time_draw_tsop.get());
@@ -145,6 +149,8 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawMillisecondMetric(draw, c1 + 20, c2, y, "draw objects:", metrics.time_objects.get());
 	y+=line;
 	drawMillisecondMetric(draw, c1 + 20, c2, y, "draw particles:", metrics.time_draw_particles.get());
+	y+=line;
+	drawMillisecondMetric(draw, c1 + 20, c2, y, "draw lights:", metrics.time_lights.get());
 	y+=line;
 
 }
