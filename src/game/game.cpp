@@ -1329,6 +1329,7 @@ void Game::unloadLevel()
 	closeTileTypeSelection();
 	closeTileSelection();
 	closeSpriteSelection();
+	closeLightsSelection();
 	closeObjectSelection();
 	closeWayNet();
 	remember.clear();
@@ -1669,6 +1670,18 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 			else if (event->wheel.y > 0 && selected_sprite.scale < 2.0) selected_sprite.scale+=0.05;
 			selected_sprite_system->modifySprite(selected_sprite);
 		}
+	} else if (lights_selection != NULL && event->widget() == world_widget) {
+		if (sprite_mode == spriteModeDraw) {
+			float scale=lights_selection->lightScale();
+			if (event->wheel.y < 0 && scale>0.1) scale-=0.05;
+			else if (event->wheel.y > 0 && scale < 2.0) scale+=0.05;
+			lights_selection->setLightScale(scale);
+		} else if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
+			//printf ("wheel\n");
+			if (event->wheel.y < 0 && selected_light.scale_x>0.1) selected_light.scale_x-=0.05;
+			else if (event->wheel.y > 0 && selected_light.scale_x < 5.0) selected_light.scale_x+=0.05;
+			selected_light_system->modifyLight(selected_light);
+		}
 	}
 }
 
@@ -1701,7 +1714,7 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 #endif
 	int plane=0;
 	if (level.findLight(mouse, WorldCoords, selected_light, plane)) {
-		//printf ("found Sprite on plane %d, layer %d\n",plane,layer);
+		printf("found Light on plane %d\n", plane);
 		mainmenue->setCurrentPlane(plane);
 		lights_selection->setSelectedLight(selected_light.sprite_no);
 		lights_selection->setLightAngle(selected_light.scale_x);
@@ -1829,6 +1842,19 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 			selected_object->p=selected_object->initial_p;
 			selected_object->updateBoundary();
 			sprite_move_start=event->p;
+		}
+	} else if (lights_selection != NULL) {
+		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+			&& sprite_mode == SpriteModeEdit && selected_light.id >= 0
+			&& selected_light_system != NULL) {
+			game_viewport.translateMouseEvent(event);
+			ppl7::grafix::Point diff=event->p - sprite_move_start;
+			selected_light.x+=diff.x;
+			selected_light.y+=diff.y;
+			selected_light_system->modifyLight(selected_light);
+			//printf("Move: %d, %d\n", diff.x, diff.y);
+			sprite_move_start=event->p;
+
 		}
 	} else if ((tiles_selection != NULL || tiletype_selection != NULL) && event->widget() == world_widget) {
 		game_viewport.translateMouseEvent(event);

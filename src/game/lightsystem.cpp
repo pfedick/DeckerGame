@@ -87,14 +87,16 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
         const LightSystem::Light& item=(it->second);
         int x=item.x - worldcoords.x;
         int y=item.y - worldcoords.y;
-        ppl7::PrintDebugTime("found light at %d:%d, ", x, y);
+        ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
         if (x + item.boundary.width() > 0 && y + item.boundary.height() > 0
             && x - item.boundary.width() < width && y - item.boundary.height() < height) {
-            uint64_t id=(uint64_t)(item.y << 16) | (uint64_t)item.x;
-            visible_lights_map.insert(std::pair<uint64_t, const LightSystem::Light&>(id, item));
+            uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
+            visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
             ppl7::PrintDebugTime("adding to visible_lights_map\n");
         } else {
-            ppl7::PrintDebugTime("but we ignore it!\n");
+            ppl7::PrintDebugTime("but we ignore it! bw=%d, bh=%d\n", item.boundary.width(), item.boundary.height());
+            uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
+            visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
         }
 
 
@@ -117,7 +119,7 @@ size_t LightSystem::countVisible() const
 void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
     if (!bLightsVisible) return;
-    std::map<uint64_t, const LightSystem::Light&>::const_iterator it;
+    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
         const LightSystem::Light& item=(it->second);
         spriteset->drawScaled(renderer,
@@ -177,7 +179,7 @@ bool LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightSystem::L
     light.id=-1;
     if (!bLightsVisible) return false;
     //printf ("Try to find sprite\n");
-    std::map<uint64_t, const LightSystem::Light&>::const_iterator it;
+    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
         const LightSystem::Light& item=(it->second);
         if (p.inside(item.boundary)) {

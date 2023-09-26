@@ -25,7 +25,7 @@ private:
     const ColorPalette& palette;
     ppl7::Mutex mutex;
     std::map<int, LightSystem::Light> light_list;
-    std::map<uint64_t, const LightSystem::Light&> visible_lights_map;
+    std::map<uint32_t, const LightSystem::Light&> visible_lights_map;
     SpriteTexture* spriteset;
     bool bLightsVisible;
 
