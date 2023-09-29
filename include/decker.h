@@ -244,6 +244,7 @@ public:
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
+	void drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
 	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor);
 
 
@@ -1031,6 +1032,8 @@ public:
 
 	void updateDifficultyForSelectedObject(uint8_t dificulty);
 	void updateLayerForSelectedObject(int layer);
+
+	void updateLightFromUi();
 
 };
 

@@ -491,6 +491,25 @@ void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, flo
 	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
 }
 
+void SpriteTexture::drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const
+{
+	if (!bSDLBufferd) return;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	const SpriteIndexItem& item=it->second;
+	SDL_Rect tr;
+	tr.x=x + (item.Offset.x - item.Pivot.x) * scale_x;
+	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
+	tr.w=(int)((float)item.r.w * scale_x);
+	tr.h=(int)((float)item.r.h * scale_y);
+
+	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
+	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
+	SDL_RenderCopyEx(renderer, item.tex, &item.r, &tr, angle, NULL, SDL_FLIP_NONE);
+}
+
+
 SDL_Rect SpriteTexture::getSpriteSource(int id) const
 {
 	SDL_Rect r;
