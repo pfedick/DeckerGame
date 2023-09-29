@@ -87,14 +87,14 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
         const LightSystem::Light& item=(it->second);
         int x=item.x - worldcoords.x;
         int y=item.y - worldcoords.y;
-        ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
+        //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
         if (x + item.boundary.width() > 0 && y + item.boundary.height() > 0
             && x - item.boundary.width() < width && y - item.boundary.height() < height) {
             uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
             visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
-            ppl7::PrintDebugTime("adding to visible_lights_map\n");
+            //ppl7::PrintDebugTime("adding to visible_lights_map\n");
         } else {
-            ppl7::PrintDebugTime("but we ignore it! bw=%d, bh=%d\n", item.boundary.width(), item.boundary.height());
+            //ppl7::PrintDebugTime("but we ignore it! bw=%d, bh=%d\n", item.boundary.width(), item.boundary.height());
             uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
             visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
         }
@@ -122,11 +122,13 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
         const LightSystem::Light& item=(it->second);
-        spriteset->drawScaled(renderer,
+        ppl7::grafix::Color c=palette.getColor(item.color_index);
+        c.setAlpha(item.intensity);
+        spriteset->drawScaledWithAngle(renderer,
             item.x + viewport.x1 - worldcoords.x,
             item.y + viewport.y1 - worldcoords.y,
-            item.sprite_no, item.scale_x,
-            palette.getColor(item.color_index));
+            item.sprite_no, item.scale_x, item.scale_y, item.angle,
+            c);
     }
 }
 

@@ -611,8 +611,13 @@ private:
 	ppl7::tk::CheckBox* enable_lighting;
 	SpriteTexture* spriteset;
 	ColorSelectionFrame* colorframe;
-	float scale;
-	float angle;
+	ppl7::tk::DoubleHorizontalSlider* scale_x;
+	ppl7::tk::DoubleHorizontalSlider* scale_y;
+	ppl7::tk::DoubleHorizontalSlider* angle;
+	ppl7::tk::HorizontalSlider* intensity;
+
+	//float scale;
+	//float angle;
 
 public:
 	LightSelection(int x, int y, int width, int height, Game* game);
@@ -620,13 +625,20 @@ public:
 	void setSpriteSet(SpriteTexture* sprites);
 	void setSelectedLight(int nr);
 	int selectedLight() const;
-	void setLightScale(float factor);
-	float lightScale() const;
+	void setLightScaleX(float factor_x);
+	float lightScaleX() const;
+	void setLightScaleY(float factor_x);
+	float lightScaleY() const;
 	void setLightAngle(float angle);
 	float lightAngle() const;
 	int colorIndex() const;
 	void setColorIndex(int index);
+	int colorIntensity() const;
+	void setColorIntensity(int index);
+
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
+	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
+	void valueChangedEvent(ppl7::tk::Event* event, double value)  override;
 };
 
 
