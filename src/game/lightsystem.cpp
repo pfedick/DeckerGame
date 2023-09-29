@@ -139,10 +139,10 @@ void LightSystem::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::g
     it=light_list.find(id);
     if (it != light_list.end()) {
         const LightSystem::Light& item=(it->second);
-        spriteset->drawOutlines(renderer,
+        spriteset->drawOutlinesWithAngle(renderer,
             item.x + viewport.x1 - worldcoords.x,
             item.y + viewport.y1 - worldcoords.y,
-            item.sprite_no, item.scale_x);
+            item.sprite_no, item.scale_x, item.scale_y, item.angle);
 
     }
 }

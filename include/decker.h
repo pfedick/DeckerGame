@@ -246,6 +246,7 @@ public:
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
 	void drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
 	void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor);
+	void drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle);
 
 
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;

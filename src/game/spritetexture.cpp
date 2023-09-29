@@ -571,6 +571,30 @@ void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, f
 	SDL_RenderCopy(renderer, tex, &item.r, &tr);
 }
 
+void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle)
+{
+	if (!bOutlinesEnabled) return;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	const SpriteIndexItem& item=it->second;
+
+	SDL_Texture* tex=item.outlines;
+	if (!item.outlines) {
+		//ppl7::PrintDebugTime("no outlines!\n");
+		tex=postGenerateOutlines(renderer, id);
+		if (!tex) return;
+	}
+	SDL_Rect tr;
+	tr.x=x + (item.Offset.x - item.Pivot.x) * scale_x;
+	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
+	tr.w=(int)((float)item.r.w * scale_x);
+	tr.h=(int)((float)item.r.h * scale_y);
+	SDL_RenderCopyEx(renderer, tex, &item.r, &tr, angle, NULL, SDL_FLIP_NONE);
+}
+
+
+
 ppl7::grafix::Size SpriteTexture::spriteSize(int id, float scale_factor) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;

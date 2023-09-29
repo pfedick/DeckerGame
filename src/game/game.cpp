@@ -1259,7 +1259,7 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 {
 	if (!lights_selection) return;
 	if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
-		void updateLightFromUi();
+		updateLightFromUi();
 		int currentPlane=mainmenue->currentPlane();
 		selected_light_system->drawSelectedLightOutline(renderer, game_viewport,
 			WorldCoords * planeFactor[currentPlane], selected_light.id);
@@ -1276,8 +1276,8 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 		c.setAlpha(lights_selection->colorIntensity());
 		resources.Lightmaps.drawScaledWithAngle(renderer,
 			tmouse.x, tmouse.y, nr, scale_x, scale_y, angle, c);
-		//resources.Lightmaps.drawOutlines(renderer,
-		//	tmouse.x, tmouse.y, nr, scale);
+		resources.Lightmaps.drawOutlinesWithAngle(renderer,
+			tmouse.x, tmouse.y, nr, scale_x, scale_y, angle);
 		return;
 	}
 	if (lights_selection->selectedLight() >= 0 && sprite_mode != spriteModeDraw) {
@@ -2185,7 +2185,7 @@ void Game::drawRenderTargetToScreen()
 void Game::updateLightFromUi()
 {
 	if (!lights_selection) return;
-	if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
+	if (selected_light.id >= 0 && selected_light_system != NULL) {
 		//int currentPlane=mainmenue->currentPlane();
 		selected_light.angle=lights_selection->lightAngle();
 		selected_light.scale_x=lights_selection->lightScaleX();
