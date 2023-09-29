@@ -449,15 +449,15 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 {
 	prepareLayer(renderer);
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
-	addLightmap(renderer, HorizonLights, worldcoords, metrics);
+	addLightmap(renderer, HorizonLights, worldcoords * planeFactor[5], metrics);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
-	addLightmap(renderer, FarLights, worldcoords, metrics);
+	addLightmap(renderer, FarLights, worldcoords * planeFactor[2], metrics);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
-	addLightmap(renderer, MiddleLights, worldcoords, metrics);
+	addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::BackplaneBack, worldcoords * planeFactor[3], metrics);
@@ -508,17 +508,17 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		metrics.time_objects.stop();
 		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
 	}
-	addLightmap(renderer, PlayerLights, worldcoords, metrics);
+	addLightmap(renderer, PlayerLights, worldcoords * planeFactor[0], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::FrontplaneBack, worldcoords * planeFactor[1], metrics);
 	drawNonePlayerPlane(renderer, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
 	drawParticles(renderer, Particle::Layer::FrontplaneFront, worldcoords * planeFactor[1], metrics);
-	addLightmap(renderer, FrontLights, worldcoords, metrics);
+	addLightmap(renderer, FrontLights, worldcoords * planeFactor[1], metrics);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
-	addLightmap(renderer, NearLights, worldcoords, metrics);
+	addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
