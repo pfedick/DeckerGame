@@ -1797,6 +1797,16 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 				level.objects->deleteObject(selected_object->id);
 				selected_object=NULL;
 			}
+		} else if (sprite_mode == SpriteModeEdit && lights_selection != NULL && selected_light.id >= 0
+			&& selected_light_system != NULL) {
+			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			//printf ("KeyEvent\n");
+				selected_light_system->deleteLight(selected_light.id);
+				selected_light.id=-1;
+				selected_light_system=NULL;
+				lights_selection->setSelectedLight(-1);
+			}
 		}
 	}
 	//printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
