@@ -13,7 +13,7 @@ PreviewFrameStep 1
 CurrentFrame 11
 FramesPerSecond 30
 AutoKeyFixedFrame 0
-ChangeScene 0
+ChangeScene 1
 Plugin ViewportObjectHandler 1 .VPR
 0
 20
@@ -4865,7 +4865,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 1000000b Objects/lightbeams/beam4.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
