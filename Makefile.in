@@ -329,6 +329,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	./texmaker -s lightwave/Render/objects/levelend/ -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 	./texmaker -s lightwave/Render/waynet/ -t res/waynet.tex -w 128 -h 128 -px 64 -py 64
+	./texmaker -s lightwave/Render/lights/ -t res/lightobjects.tex -w 256 -h 256 -px 64 -py 64
 
 
 fonts:

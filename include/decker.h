@@ -482,6 +482,7 @@ public:
 	SpriteTexture uiSpritesTropical;
 	SpriteTexture Lightmaps;
 	SpriteTexture uiLightmaps;
+	SpriteTexture LightObjects;
 
 	SpriteTexture Waynet;
 
@@ -679,7 +680,7 @@ public:
 	void setEnableLights(bool enabled);
 	void setTileset(int no, SpriteTexture* tileset);
 	void setSpriteset(int no, SpriteTexture* spriteset);
-	void setLightset(SpriteTexture* lightset);
+	void setLightset(SpriteTexture* lightset, SpriteTexture* objects);
 	void create(int width, int height);
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);

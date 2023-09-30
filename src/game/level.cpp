@@ -123,15 +123,15 @@ void Level::setSpriteset(int no, SpriteTexture* spriteset)
 
 }
 
-void Level::setLightset(SpriteTexture* lightset)
+void Level::setLightset(SpriteTexture* lightset, SpriteTexture* objects)
 {
 	this->lightset=lightset;
-	HorizonLights.setSpriteset(lightset);
-	FarLights.setSpriteset(lightset);
-	MiddleLights.setSpriteset(lightset);
-	PlayerLights.setSpriteset(lightset);
-	FrontLights.setSpriteset(lightset);
-	NearLights.setSpriteset(lightset);
+	HorizonLights.setSpriteset(lightset, objects);
+	FarLights.setSpriteset(lightset, objects);
+	MiddleLights.setSpriteset(lightset, objects);
+	PlayerLights.setSpriteset(lightset, objects);
+	FrontLights.setSpriteset(lightset, objects);
+	NearLights.setSpriteset(lightset, objects);
 
 }
 

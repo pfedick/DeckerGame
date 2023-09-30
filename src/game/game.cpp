@@ -159,6 +159,10 @@ void Game::loadGrafix()
 	resources.Lightmaps.enableMemoryBuffer(true);
 	resources.Lightmaps.load(sdl, "res/lightmaps.tex");
 
+	resources.LightObjects.enableOutlines(true);
+	resources.LightObjects.enableMemoryBuffer(true);
+	resources.LightObjects.load(sdl, "res/lightobjects.tex");
+
 
 	resources.loadBricks(sdl);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
@@ -216,7 +220,7 @@ void Game::loadGrafix()
 	level.objects->loadSpritesets(sdl);
 	level.particles->loadSpritesets(sdl);
 	level.waynet.setSpriteset(&resources.Waynet);
-	level.setLightset(&resources.Lightmaps);
+	level.setLightset(&resources.Lightmaps, &resources.LightObjects);
 
 	message_overlay.loadSprites();
 
@@ -854,7 +858,13 @@ void Game::run()
 		drawSelectedSprite(renderer, mouse.p);
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
-		drawSelectedLight(renderer, mouse.p);
+		if (lights_selection != NULL) {
+			LightSystem& ls=level.lightsystem(mainmenue->currentPlane());
+			ls.drawObjects(renderer, game_viewport, WorldCoords);
+			drawSelectedLight(renderer, mouse.p);
+		}
+
+
 		if (mainmenue->visibility_plane_player) {
 			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, game_viewport, WorldCoords);
 			if (mainmenue->visibility_collision) player->drawCollision(renderer, game_viewport, WorldCoords);
@@ -1262,6 +1272,8 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 		updateLightFromUi();
 		int currentPlane=mainmenue->currentPlane();
 		selected_light_system->drawSelectedLightOutline(renderer, game_viewport,
+			WorldCoords * planeFactor[currentPlane], selected_light.id);
+		selected_light_system->drawSelectedLightObject(renderer, game_viewport,
 			WorldCoords * planeFactor[currentPlane], selected_light.id);
 		return;
 	} else if (sprite_mode == spriteModeDraw) {

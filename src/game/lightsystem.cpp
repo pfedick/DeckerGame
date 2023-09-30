@@ -50,9 +50,10 @@ void LightSystem::clear()
     maxid=0;
 }
 
-void LightSystem::setSpriteset(SpriteTexture* spriteset)
+void LightSystem::setSpriteset(SpriteTexture* spriteset, SpriteTexture* objects)
 {
     this->spriteset=spriteset;
+    this->tex_object=objects;
 }
 
 void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity)
@@ -132,6 +133,19 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     }
 }
 
+void LightSystem::drawObjects(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
+{
+    if (!bLightsVisible) return;
+    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
+    for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
+        const LightSystem::Light& item=(it->second);
+        tex_object->draw(renderer,
+            item.x + viewport.x1 - worldcoords.x,
+            item.y + viewport.y1 - worldcoords.y,
+            1);
+    }
+}
+
 void LightSystem::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
     if (!bLightsVisible) return;
@@ -146,6 +160,22 @@ void LightSystem::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::g
 
     }
 }
+
+void LightSystem::drawSelectedLightObject(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
+{
+    if (!bLightsVisible) return;
+    std::map<int, LightSystem::Light>::const_iterator it;
+    it=light_list.find(id);
+    if (it != light_list.end()) {
+        const LightSystem::Light& item=(it->second);
+        tex_object->draw(renderer,
+            item.x + viewport.x1 - worldcoords.x,
+            item.y + viewport.y1 - worldcoords.y,
+            0);
+
+    }
+}
+
 
 void LightSystem::deleteLight(int id)
 {
