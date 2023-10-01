@@ -1704,14 +1704,14 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 				float angle=lights_selection->lightAngle();
 				if (event->wheel.y < 0) angle-=5;
 				if (event->wheel.y > 0) angle+=5;
-				if (angle < 0) angle+=360;
-				if (angle > 360) angle-=360;
+				if (angle <= 0) angle+=360;
+				if (angle >= 360) angle-=360;
 				lights_selection->setLightAngle(angle);
 			} else if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
 				if (event->wheel.y < 0) selected_light.angle-=5;
 				if (event->wheel.y > 0) selected_light.angle+=5;
-				if (selected_light.angle < 0) selected_light.angle+=360;
-				if (selected_light.angle > 360) selected_light.angle-=360;
+				if (selected_light.angle <= 0) selected_light.angle+=360;
+				if (selected_light.angle >= 360) selected_light.angle-=360;
 				selected_light_system->modifyLight(selected_light);
 				lights_selection->setLightAngle(selected_light.angle);
 			}
