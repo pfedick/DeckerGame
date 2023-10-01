@@ -159,11 +159,11 @@ void Game::loadGrafix()
 	resources.Lightmaps.enableMemoryBuffer(true);
 	resources.Lightmaps.setTextureBlendMode(SDL_BLENDMODE_ADD);
 	resources.Lightmaps.load(sdl, "res/lightmaps.tex");
-	resources.Lightmaps.setPivot(8, 256, 0);
-	resources.Lightmaps.setPivot(9, 256, 0);
-	resources.Lightmaps.setPivot(10, 256, 0);
-	resources.Lightmaps.setPivot(11, 256, 0);
-	resources.Lightmaps.setPivot(12, 256, 0);
+	resources.Lightmaps.setPivot(8, 256, 27);
+	resources.Lightmaps.setPivot(9, 256, 27);
+	resources.Lightmaps.setPivot(10, 256, 27);
+	resources.Lightmaps.setPivot(11, 256, 27);
+	resources.Lightmaps.setPivot(12, 256, 27);
 
 
 	resources.LightObjects.enableOutlines(true);

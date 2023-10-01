@@ -506,10 +506,13 @@ void SpriteTexture::drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, in
 	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
 	tr.w=(int)((float)item.r.w * scale_x);
 	tr.h=(int)((float)item.r.h * scale_y);
+	SDL_Point center;
+	center.x=(item.Pivot.x - item.Offset.x) * scale_x;
+	center.y=(item.Pivot.y - item.Offset.y) * scale_y;
 
 	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
-	SDL_RenderCopyEx(renderer, item.tex, &item.r, &tr, angle, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, item.tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
 
@@ -593,7 +596,11 @@ void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, 
 	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
 	tr.w=(int)((float)item.r.w * scale_x);
 	tr.h=(int)((float)item.r.h * scale_y);
-	SDL_RenderCopyEx(renderer, tex, &item.r, &tr, angle, NULL, SDL_FLIP_NONE);
+	SDL_Point center;
+	center.x=(item.Pivot.x - item.Offset.x) * scale_x;
+	center.y=(item.Pivot.y - item.Offset.y) * scale_y;
+
+	SDL_RenderCopyEx(renderer, tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
 
