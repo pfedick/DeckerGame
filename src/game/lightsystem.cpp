@@ -19,6 +19,7 @@ LightSystem::Light::Light()
     color_index=0;
     intensity=255;
     lightsystem=NULL;
+    type=LightType::Static;
 }
 
 LightSystem::LightSystem(const ColorPalette& palette)
@@ -56,7 +57,7 @@ void LightSystem::setSpriteset(SpriteTexture* spriteset, SpriteTexture* objects)
     this->tex_object=objects;
 }
 
-void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity)
+void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity, LightType type)
 {
     //printf ("x=%d, y=%d\n",x,y);
     LightSystem::Light item;
@@ -71,6 +72,7 @@ void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float sca
     item.angle=angle;
     item.intensity=intensity;
     item.color_index=color_index;
+    item.type=type;
     item.boundary=spriteset->spriteBoundary(sprite_no, scale_x, x, y);
     light_list.insert(std::pair<int, LightSystem::Light>(item.id, item));
 
@@ -237,7 +239,7 @@ bool LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightSystem::L
 void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
 {
     if (light_list.size() == 0) return;
-    unsigned char* buffer=(unsigned char*)malloc(light_list.size() * 20 + 6);
+    unsigned char* buffer=(unsigned char*)malloc(light_list.size() * 21 + 6);
     ppl7::Poke32(buffer + 0, 0);
     ppl7::Poke8(buffer + 4, id);
     ppl7::Poke8(buffer + 5, 1);		// Version
@@ -253,7 +255,8 @@ void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
         ppl7::Poke16(buffer + p + 16, item.sprite_no);
         ppl7::Poke8(buffer + p + 18, item.color_index);
         ppl7::Poke8(buffer + p + 19, item.intensity);
-        p+=20;
+        ppl7::Poke8(buffer + p + 20, static_cast<int>(item.type));
+        p+=21;
     }
     ppl7::Poke32(buffer + 0, p);
     file.write(buffer, p);
@@ -275,8 +278,9 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
                 ppl7::PeekFloat(buffer + p + 8),
                 ppl7::PeekFloat(buffer + p + 12),
                 ppl7::Peek8(buffer + p + 18),
-                ppl7::Peek8(buffer + p + 19));
-            p+=20;
+                ppl7::Peek8(buffer + p + 19),
+                static_cast<LightType>(ppl7::Peek8(buffer + p + 20)));
+            p+=21;
         }
     } else {
         printf("Can't load LightSystem, unknown version! [%d]\n", version);

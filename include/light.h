@@ -6,6 +6,10 @@ class SpriteTexture;
 class LightSystem
 {
 public:
+    enum class LightType {
+        Static=0,
+        Fire
+    };
     class Light {
     public:
         Light();
@@ -18,7 +22,8 @@ public:
         float angle;    // 4 Byte
         int sprite_no;	// 2 Byte
         uint8_t color_index; // 1 Byte
-        uint8_t intensity;   // 1 Byte  ==> 20 Byte
+        uint8_t intensity;   // 1 Byte
+        LightType   type;   // 1 Byte ==> 21 Byte
         ppl7::grafix::Rect boundary;
     };
 private:
@@ -36,7 +41,7 @@ public:
 
     void clear();
     void setSpriteTexture(SpriteTexture* texture);
-    void addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity);
+    void addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity, LightType type);
     void deleteLight(int id);
     void modifyLight(const LightSystem::Light& item);
     void setVisible(bool visible);
