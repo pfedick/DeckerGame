@@ -119,6 +119,7 @@ SpriteTexture::SpriteTexture()
 	bOutlinesEnabled=false;
 	bCollisionDetectionEnabled=false;
 	bSDLBufferd=true;
+	defaultBlendMode=SDL_BLENDMODE_BLEND;
 }
 
 SpriteTexture::~SpriteTexture()
@@ -213,6 +214,7 @@ void SpriteTexture::loadIndex(ppl7::PFPChunk* chunk)
 		item.Offset.x=Peek16(p + 18 + 0);
 		item.Offset.y=Peek16(p + 18 + 2);
 		SpriteList.insert(std::pair<int, SpriteIndexItem>(item.id, item));
+		//ppl7::PrintDebugTime("pivot x=%d, y=%d\n", item.Pivot.x, item.Pivot.y);
 		p+=22;
 	}
 }
@@ -278,6 +280,7 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 	}
 	if (bSDLBufferd) {
 		SDL_Texture* tex=sdl.createTexture(surface);
+		SDL_SetTextureBlendMode(tex, defaultBlendMode);
 		TextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
 	}
 }
@@ -630,4 +633,21 @@ int SpriteTexture::numTextures() const
 int SpriteTexture::numSprites() const
 {
 	return (int)SpriteList.size();
+}
+
+void SpriteTexture::setTextureBlendMode(SDL_BlendMode blendMode)
+{
+	std::map<int, SDL_Texture*>::iterator it;
+	for (it=TextureMap.begin();it != TextureMap.end();++it) {
+		SDL_SetTextureBlendMode(it->second, blendMode);
+	}
+	defaultBlendMode=blendMode;
+}
+
+void SpriteTexture::setPivot(int id, int x, int y)
+{
+	std::map<int, SpriteIndexItem>::iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	it->second.Pivot.setPoint(x, y);
 }

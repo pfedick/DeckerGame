@@ -219,6 +219,7 @@ private:
 	bool bMemoryBufferd;
 	bool bOutlinesEnabled;
 	bool bCollisionDetectionEnabled;
+	SDL_BlendMode defaultBlendMode;
 
 	void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
 	void loadIndex(ppl7::PFPChunk* chunk);
@@ -258,6 +259,8 @@ public:
 	void enableOutlines(bool enabled);
 	int numTextures() const;
 	int numSprites() const;
+	void setTextureBlendMode(SDL_BlendMode blendMode);
+	void setPivot(int id, int x, int y);
 
 	SDL_Rect getSpriteSource(int id) const;
 };
