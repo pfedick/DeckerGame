@@ -1766,18 +1766,15 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::selectSprite\n");
 #endif
-	int plane=0;
-	if (level.findLight(mouse, WorldCoords, selected_light, plane)) {
-		//ppl7::PrintDebugTime("found Light on plane %d\n", plane);
-		mainmenue->setCurrentPlane(plane);
-
+	int plane=mainmenue->currentPlane();
+	selected_light_system=&level.lightsystem(plane);
+	if (selected_light_system->findMatchingLight(mouse + WorldCoords * planeFactor[plane], selected_light)) {
 		lights_selection->setSelectedLight(selected_light.sprite_no);
 		lights_selection->setLightAngle(selected_light.angle);
 		lights_selection->setLightScaleX(selected_light.scale_x);
 		lights_selection->setLightScaleY(selected_light.scale_y);
 		lights_selection->setColorIntensity(selected_light.intensity);
 		lights_selection->setColorIndex(selected_light.color_index);
-
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
 		selected_light_system=selected_light.lightsystem;

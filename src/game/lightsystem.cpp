@@ -214,16 +214,18 @@ bool LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightSystem::L
     std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
         const LightSystem::Light& item=(it->second);
-        if (p.inside(item.boundary)) {
-            //printf ("possible match: %d\n", item.id);
-            const ppl7::grafix::Drawable draw=spriteset->getDrawable(item.sprite_no);
+        if (p.x > item.x - 20 && p.x<item.x + 20 && p.y>item.y - 20 && p.y < item.y + 20) {
+            //ppl7::PrintDebug("possible match: %d\n", item.id);
+            ppl7::grafix::Rect objectboundary=tex_object->spriteBoundary(1, 1.0f, item.x, item.y);
+            const ppl7::grafix::Drawable draw=tex_object->getDrawable(1);
             if (draw.width()) {
-                int x=p.x - item.boundary.x1;
-                int y=p.y - item.boundary.y1;
-                ppl7::grafix::Color c=draw.getPixel(x / item.scale_x, y / item.scale_x);
+                int x=p.x - objectboundary.x1;
+                int y=p.y - objectboundary.y1;
+                ppl7::grafix::Color c=draw.getPixel(x, y);
                 if (c.alpha() > 40) {
                     light=item;
                     found_match=true;
+                    //ppl7::PrintDebug("Bingo: %d\n", item.id);
                 }
             }
         }
