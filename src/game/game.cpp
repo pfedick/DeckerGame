@@ -2208,6 +2208,11 @@ void Game::drawRenderTargetToScreen()
 
 }
 
+SDL_Texture* Game::getLightRenderTarget()
+{
+	return tex_render_lightmap;
+}
+
 
 void Game::updateLightFromUi()
 {

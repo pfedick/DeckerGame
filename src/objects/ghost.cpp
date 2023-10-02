@@ -204,6 +204,33 @@ void Ghost::handleCollision(Player* player, const Collision& collision)
     player->dropHealth(4);
 }
 
+void Ghost::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+    ppl7::grafix::Color c(255, 255, 255, 255);
+    c.setAlpha(glow / 2);
+    SpriteTexture& lightmap=getResources().Lightmaps;
+    lightmap.setTextureBlendMode(SDL_BLENDMODE_BLEND);
+    lightmap.drawScaled(renderer, p.x + coords.x,
+        p.y + coords.y - 2 * TILE_HEIGHT, 1, glow / 200.0f, c);
+    lightmap.setTextureBlendMode(SDL_BLENDMODE_ADD);
+    Enemy::draw(renderer, coords);
+    Game& game=GetGame();
+    SDL_Texture* lighttarget=game.getLightRenderTarget();
+    if (!lighttarget) return;
+    SDL_Texture* rendertarget=SDL_GetRenderTarget(renderer);
+    SDL_SetRenderTarget(renderer, lighttarget);
+    texture->setTextureBlendMode(SDL_BLENDMODE_ADD);
+    c.setAlpha(glow * 3);
+    texture->draw(renderer,
+        p.x + coords.x,
+        p.y + coords.y,
+        sprite_no, c);
+    lightmap.drawScaled(renderer, p.x + coords.x,
+        p.y + coords.y - 2 * TILE_HEIGHT, 1, glow / 255.0f, c);
+    SDL_SetRenderTarget(renderer, rendertarget);
+    texture->setTextureBlendMode(SDL_BLENDMODE_BLEND);
+}
+
 
 
 } // EOF namespace

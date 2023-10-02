@@ -895,6 +895,7 @@ public:
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 };
 
 

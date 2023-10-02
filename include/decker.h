@@ -1039,6 +1039,7 @@ public:
 	void updateLayerForSelectedObject(int layer);
 
 	void updateLightFromUi();
+	SDL_Texture* getLightRenderTarget();
 
 };
 
