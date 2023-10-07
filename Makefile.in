@@ -263,6 +263,9 @@ enemy_rat:
 enemy_erik:
 	./texmaker -s lightwave/Render/enemies/erik/ -t res/erik.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/erik
 
+enemy_zombie:
+	./texmaker -s lightwave/Render/enemies/zombie/ -t res/erizombiek.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/zombie
+
 enemy_scorpion:
 	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125 -x tmp/scorpion
 	./texmaker -s lightwave/Render/enemies/scorpion_metalic/ -t res/scorpion_metalic.tex -w 1024 -h 1024 -px 140 -py 154 -x tmp/scorpion_metalic
@@ -289,7 +292,7 @@ phonetics:
 breakingwall:
 	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
 
-enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_ghost enemy_erik
+enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_ghost enemy_erik enemy_zombie
 
 sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies
 	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
