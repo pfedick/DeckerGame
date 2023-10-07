@@ -3,17 +3,17 @@ LWSC
 
 RenderRangeType 0
 FirstFrame 0
-LastFrame 1
+LastFrame 12
 FrameStep 1
 RenderRangeObject 0
 RenderRangeArbitrary 0-120
 PreviewFirstFrame 0
 PreviewLastFrame 12
 PreviewFrameStep 1
-CurrentFrame 1
+CurrentFrame 11
 FramesPerSecond 30
 AutoKeyFixedFrame 0
-ChangeScene 0
+ChangeScene 1
 Plugin MasterHandler 1 .SceneEditorStandardBanks
 EndPlugin
 Plugin MasterHandler 2 SceneEditor
@@ -1022,7 +1022,7 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.3490658503988658401
+          0.34906585039886589561
         }
       }
       { Attr
@@ -1279,7 +1279,7 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
         Tag "FORMAT" "Angle"
         { Value
           "double"
-          0.3490658503988658401
+          0.34906585039886589561
         }
       }
       { Attr
@@ -1823,7 +1823,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 10000002 Objects/misc/waypoint_active.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -2136,7 +2136,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 10000004 Objects/misc/waypoint_number.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -2538,7 +2538,7 @@ Channel 1
 { Envelope
   2
   Key 0 0 0 0 0 0 0 0 0
-  Key -20 0.033333333333333325932 0 0 0 0 -19.834710743801650779 0 0
+  Key -20 0.033333333333333325932 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
 }
 Channel 2
@@ -2824,65 +2824,74 @@ ObjectMotion
 NumChannels 9
 Channel 0
 { Envelope
-  2
+  3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 1
 { Envelope
-  2
+  3
   Key -20 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key -20 0.066666666666666665741 0 0 0 0 -19.834710743801654331 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
-  2
+  3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
 { Envelope
-  2
+  3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
 { Envelope
-  2
+  3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 5
 { Envelope
-  2
+  3
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 0 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 6
 { Envelope
-  2
+  3
   Key 1 0 0 0 0 0 0 0 0
   Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 7
 { Envelope
-  2
+  3
   Key 1 0 0 0 0 0 0 0 0
   Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 8
 { Envelope
-  2
+  3
   Key 1 0 0 0 0 0 0 0 0
   Key 1 0.033333333333333325932 0 0 0 0 0 0 0
+  Key 1 0.066666666666666665741 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 IKInitCustomFrame 0
@@ -3487,7 +3496,7 @@ ViewZoomFactor 16.22335
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 8 31 500 300
 ViewFOVZoom 4
 DefineView 1
 ViewType 1
@@ -3497,7 +3506,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 8 31 500 300
 ViewFOVZoom 4
 DefineView 2
 ViewType 5
@@ -3507,7 +3516,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 8 31 500 300
 ViewFOVZoom 4
 DefineView 3
 ViewType 3
@@ -3517,7 +3526,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 8 31 500 300
 ViewFOVZoom 4
 
 GridNumber 80
@@ -3542,7 +3551,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 3
+CurrentObject 1
 CurrentLight 0
 CurrentCamera 0
 GraphEditorData
