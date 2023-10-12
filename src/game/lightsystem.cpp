@@ -7,7 +7,7 @@
 //#include "light.h"
 
 
-LightSystem::Light::Light()
+LightLayer::Light::Light()
 {
     id=0;
     x=0;
@@ -22,7 +22,7 @@ LightSystem::Light::Light()
     type=LightType::Static;
 }
 
-LightSystem::LightSystem(const ColorPalette& palette)
+LightLayer::LightLayer(const ColorPalette& palette)
     : palette(palette)
 {
     bLightsVisible=true;
@@ -30,37 +30,37 @@ LightSystem::LightSystem(const ColorPalette& palette)
     maxid=0;
 }
 
-LightSystem::~LightSystem()
+LightLayer::~LightLayer()
 {
 
 }
 
-void LightSystem::setVisible(bool visible)
+void LightLayer::setVisible(bool visible)
 {
     bLightsVisible=visible;
 }
 
-bool LightSystem::isVisible() const
+bool LightLayer::isVisible() const
 {
     return bLightsVisible;
 }
 
-void LightSystem::clear()
+void LightLayer::clear()
 {
     light_list.clear();
     maxid=0;
 }
 
-void LightSystem::setSpriteset(SpriteTexture* spriteset, SpriteTexture* objects)
+void LightLayer::setSpriteset(SpriteTexture* spriteset, SpriteTexture* objects)
 {
     this->spriteset=spriteset;
     this->tex_object=objects;
 }
 
-void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity, LightType type)
+void LightLayer::addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity, LightType type)
 {
     //printf ("x=%d, y=%d\n",x,y);
-    LightSystem::Light item;
+    LightLayer::Light item;
     maxid++;
     item.id=maxid;
     item.lightsystem=this;
@@ -74,32 +74,32 @@ void LightSystem::addLight(int x, int y, int sprite_no, float scale_x, float sca
     item.color_index=color_index;
     item.type=type;
     item.boundary=spriteset->spriteBoundary(sprite_no, scale_x, x, y);
-    light_list.insert(std::pair<int, LightSystem::Light>(item.id, item));
+    light_list.insert(std::pair<int, LightLayer::Light>(item.id, item));
 
 }
 
-void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+void LightLayer::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
     if (!bLightsVisible) return;
-    //ppl7::PrintDebugTime("LightSystem::updateVisibleLightList %zd\n", light_list.size());
+    //ppl7::PrintDebugTime("LightLayer::updateVisibleLightList %zd\n", light_list.size());
     visible_lights_map.clear();
-    std::map<int, LightSystem::Light>::const_iterator it;
+    std::map<int, LightLayer::Light>::const_iterator it;
     int width=viewport.width();
     int height=viewport.height();
     for (it=light_list.begin();it != light_list.end();++it) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         int x=item.x - worldcoords.x;
         int y=item.y - worldcoords.y;
         //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
         if (x + item.boundary.width() > 0 && y + item.boundary.height() > 0
             && x - item.boundary.width() < width && y - item.boundary.height() < height) {
             uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
-            visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
+            visible_lights_map.insert(std::pair<uint32_t, const LightLayer::Light&>(id, item));
             //ppl7::PrintDebugTime("adding to visible_lights_map\n");
         } else {
             //ppl7::PrintDebugTime("but we ignore it! bw=%d, bh=%d\n", item.boundary.width(), item.boundary.height());
             uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
-            visible_lights_map.insert(std::pair<uint32_t, const LightSystem::Light&>(id, item));
+            visible_lights_map.insert(std::pair<uint32_t, const LightLayer::Light&>(id, item));
         }
 
 
@@ -107,24 +107,24 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
 
 }
 
-size_t LightSystem::count() const
+size_t LightLayer::count() const
 {
     return light_list.size();
 }
 
-size_t LightSystem::countVisible() const
+size_t LightLayer::countVisible() const
 {
     return visible_lights_map.size();
 }
 
 
 
-void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
+void LightLayer::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
     if (!bLightsVisible) return;
-    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
+    std::map<uint32_t, const LightLayer::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         ppl7::grafix::Color c=palette.getColor(item.color_index);
         c.setAlpha(item.intensity);
         spriteset->drawScaledWithAngle(renderer,
@@ -135,12 +135,12 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     }
 }
 
-void LightSystem::drawObjects(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
+void LightLayer::drawObjects(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
     if (!bLightsVisible) return;
-    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
+    std::map<uint32_t, const LightLayer::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         tex_object->draw(renderer,
             item.x + viewport.x1 - worldcoords.x,
             item.y + viewport.y1 - worldcoords.y,
@@ -148,13 +148,13 @@ void LightSystem::drawObjects(SDL_Renderer* renderer, const ppl7::grafix::Rect& 
     }
 }
 
-void LightSystem::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
+void LightLayer::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
     if (!bLightsVisible) return;
-    std::map<int, LightSystem::Light>::const_iterator it;
+    std::map<int, LightLayer::Light>::const_iterator it;
     it=light_list.find(id);
     if (it != light_list.end()) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         spriteset->drawOutlinesWithAngle(renderer,
             item.x + viewport.x1 - worldcoords.x,
             item.y + viewport.y1 - worldcoords.y,
@@ -163,13 +163,13 @@ void LightSystem::drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::g
     }
 }
 
-void LightSystem::drawSelectedLightObject(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
+void LightLayer::drawSelectedLightObject(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
     if (!bLightsVisible) return;
-    std::map<int, LightSystem::Light>::const_iterator it;
+    std::map<int, LightLayer::Light>::const_iterator it;
     it=light_list.find(id);
     if (it != light_list.end()) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         tex_object->draw(renderer,
             item.x + viewport.x1 - worldcoords.x,
             item.y + viewport.y1 - worldcoords.y,
@@ -179,21 +179,21 @@ void LightSystem::drawSelectedLightObject(SDL_Renderer* renderer, const ppl7::gr
 }
 
 
-void LightSystem::deleteLight(int id)
+void LightLayer::deleteLight(int id)
 {
-    std::map<int, LightSystem::Light>::const_iterator it;
+    std::map<int, LightLayer::Light>::const_iterator it;
     it=light_list.find(id);
     if (it != light_list.end()) {
         light_list.erase(it);
     }
 }
 
-void LightSystem::modifyLight(const LightSystem::Light& item)
+void LightLayer::modifyLight(const LightLayer::Light& item)
 {
-    std::map<int, LightSystem::Light>::iterator it;
+    std::map<int, LightLayer::Light>::iterator it;
     it=light_list.find(item.id);
     if (it != light_list.end()) {
-        LightSystem::Light& intitem=(it->second);
+        LightLayer::Light& intitem=(it->second);
         intitem.x=item.x;
         intitem.y=item.y;
         intitem.scale_x=item.scale_x;
@@ -207,15 +207,15 @@ void LightSystem::modifyLight(const LightSystem::Light& item)
 }
 
 
-bool LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightSystem::Light& light) const
+bool LightLayer::findMatchingLight(const ppl7::grafix::Point& p, LightLayer::Light& light) const
 {
     bool found_match=false;
     light.id=-1;
     if (!bLightsVisible) return false;
     //printf ("Try to find sprite\n");
-    std::map<uint32_t, const LightSystem::Light&>::const_iterator it;
+    std::map<uint32_t, const LightLayer::Light&>::const_iterator it;
     for (it=visible_lights_map.begin();it != visible_lights_map.end();++it) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         if (p.x > item.x - 20 && p.x<item.x + 20 && p.y>item.y - 20 && p.y < item.y + 20) {
             //ppl7::PrintDebug("possible match: %d\n", item.id);
             ppl7::grafix::Rect objectboundary=tex_object->spriteBoundary(1, 1.0f, item.x, item.y);
@@ -236,7 +236,7 @@ bool LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightSystem::L
     return found_match;
 }
 
-void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
+void LightLayer::save(ppl7::FileObject& file, unsigned char id) const
 {
     if (light_list.size() == 0) return;
     unsigned char* buffer=(unsigned char*)malloc(light_list.size() * 21 + 6);
@@ -244,9 +244,9 @@ void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
     ppl7::Poke8(buffer + 4, id);
     ppl7::Poke8(buffer + 5, 1);		// Version
     size_t p=6;
-    std::map<int, LightSystem::Light>::const_iterator it;
+    std::map<int, LightLayer::Light>::const_iterator it;
     for (it=light_list.begin();it != light_list.end();++it) {
-        const LightSystem::Light& item=(it->second);
+        const LightLayer::Light& item=(it->second);
         ppl7::Poke16(buffer + p, item.x);
         ppl7::Poke16(buffer + p + 2, item.y);
         ppl7::PokeFloat(buffer + p + 4, item.scale_x);
@@ -263,7 +263,7 @@ void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
     free(buffer);
 }
 
-void LightSystem::load(const ppl7::ByteArrayPtr& ba)
+void LightLayer::load(const ppl7::ByteArrayPtr& ba)
 {
     clear();
     const char* buffer=ba.toCharPtr();
@@ -283,7 +283,7 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
             p+=21;
         }
     } else {
-        printf("Can't load LightSystem, unknown version! [%d]\n", version);
+        printf("Can't load LightLayer, unknown version! [%d]\n", version);
 
     }
 }

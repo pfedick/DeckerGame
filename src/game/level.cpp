@@ -179,7 +179,7 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 	return PlayerSprites[layer];
 }
 
-LightSystem& Level::lightsystem(int plane)
+LightLayer& Level::lightsystem(int plane)
 {
 	if (plane == 0) return PlayerLights;
 	if (plane == 1) return FrontLights;
@@ -432,7 +432,7 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 	}
 }
 
-void Level::addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
+void Level::addLightmap(SDL_Renderer* renderer, const LightLayer& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
 	if (!lightsEnabled) return;
 	metrics.time_lights.start();
@@ -742,7 +742,7 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	return false;
 }
 
-bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightSystem::Light& item, int& plane) const
+bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightLayer::Light& item, int& plane) const
 {
 	if (NearPlane.isVisible()) {
 		ppl7::grafix::Point coords=p + worldcoords * planeFactor[6];

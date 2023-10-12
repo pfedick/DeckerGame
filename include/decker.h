@@ -600,13 +600,13 @@ private:
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 
-	LightSystem HorizonLights=LightSystem(palette);
-	LightSystem FarLights=LightSystem(palette);
-	LightSystem MiddleLights=LightSystem(palette);
-	//LightSystem BackLights=LightSystem(palette);
-	LightSystem PlayerLights=LightSystem(palette);
-	LightSystem FrontLights=LightSystem(palette);
-	LightSystem NearLights=LightSystem(palette);
+	LightLayer HorizonLights=LightLayer(palette);
+	LightLayer FarLights=LightLayer(palette);
+	LightLayer MiddleLights=LightLayer(palette);
+	//LightLayer BackLights=LightLayer(palette);
+	LightLayer PlayerLights=LightLayer(palette);
+	LightLayer FrontLights=LightLayer(palette);
+	LightLayer NearLights=LightLayer(palette);
 
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;
@@ -669,7 +669,7 @@ private:
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
-	void addLightmap(SDL_Renderer* renderer, const LightSystem& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void addLightmap(SDL_Renderer* renderer, const LightLayer& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void prepareLayer(SDL_Renderer* renderer);
 public:
 
@@ -692,11 +692,11 @@ public:
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
-	LightSystem& lightsystem(int plane);
+	LightLayer& lightsystem(int plane);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	void updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
-	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightSystem::Light& item, int& plane) const;
+	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightLayer::Light& item, int& plane) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
 	size_t countLights() const;
@@ -959,8 +959,8 @@ private:
 	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
-	LightSystem::Light selected_light;
-	LightSystem* selected_light_system;
+	LightLayer::Light selected_light;
+	LightLayer* selected_light_system;
 
 	GameSpeed game_speed;
 

@@ -3,7 +3,7 @@
 
 class SpriteTexture;
 
-class LightSystem
+class LightLayer
 {
 public:
     enum class LightType {
@@ -13,7 +13,7 @@ public:
     class Light {
     public:
         Light();
-        LightSystem* lightsystem;
+        LightLayer* lightsystem;
         int id;
         int x;			// 2 Byte
         int y;			// 2 Byte
@@ -30,20 +30,20 @@ private:
     int maxid;
     const ColorPalette& palette;
     ppl7::Mutex mutex;
-    std::map<int, LightSystem::Light> light_list;
-    std::map<uint32_t, const LightSystem::Light&> visible_lights_map;
+    std::map<int, LightLayer::Light> light_list;
+    std::map<uint32_t, const LightLayer::Light&> visible_lights_map;
     SpriteTexture* spriteset, * tex_object;
     bool bLightsVisible;
 
 public:
-    LightSystem(const ColorPalette& palette);
-    ~LightSystem();
+    LightLayer(const ColorPalette& palette);
+    ~LightLayer();
 
     void clear();
     void setSpriteTexture(SpriteTexture* texture);
     void addLight(int x, int y, int sprite_no, float scale_x, float scale_y, float angle, uint8_t color_index, uint8_t intensity, LightType type);
     void deleteLight(int id);
-    void modifyLight(const LightSystem::Light& item);
+    void modifyLight(const LightLayer::Light& item);
     void setVisible(bool visible);
     bool isVisible() const;
     void setSpriteset(SpriteTexture* spriteset, SpriteTexture* objects);
@@ -52,7 +52,7 @@ public:
     void drawObjects(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
     void save(ppl7::FileObject& file, unsigned char id) const;
     void load(const ppl7::ByteArrayPtr& ba);
-    bool findMatchingLight(const ppl7::grafix::Point& p, LightSystem::Light& light) const;
+    bool findMatchingLight(const ppl7::grafix::Point& p, LightLayer::Light& light) const;
     void drawSelectedLightOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
     void drawSelectedLightObject(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 

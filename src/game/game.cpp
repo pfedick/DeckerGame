@@ -866,7 +866,7 @@ void Game::run()
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
 		if (lights_selection != NULL) {
-			LightSystem& ls=level.lightsystem(mainmenue->currentPlane());
+			LightLayer& ls=level.lightsystem(mainmenue->currentPlane());
 			ls.drawObjects(renderer, game_viewport, WorldCoords * planeFactor[mainmenue->currentPlane()]);
 			drawSelectedLight(renderer, mouse.p);
 		}
@@ -1562,12 +1562,12 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		float scale_y=lights_selection->lightScaleY();
 		float angle=lights_selection->lightAngle();
 		int currentPlane=mainmenue->currentPlane();
-		LightSystem& ss=level.lightsystem(currentPlane);
+		LightLayer& ss=level.lightsystem(currentPlane);
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
 		ss.addLight(event->p.x + coords.x,
 			event->p.y + coords.y,
 			nr, scale_x, scale_y, angle, lights_selection->colorIndex(),
-			lights_selection->colorIntensity(), LightSystem::LightType::Static);
+			lights_selection->colorIntensity(), LightLayer::LightType::Static);
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		lights_selection->setSelectedLight(-1);
 		sprite_mode=spriteModeDraw;
