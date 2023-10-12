@@ -1567,7 +1567,7 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		ss.addLight(event->p.x + coords.x,
 			event->p.y + coords.y,
 			nr, scale_x, scale_y, angle, lights_selection->colorIndex(),
-			lights_selection->colorIntensity(), LightLayer::LightType::Static);
+			lights_selection->colorIntensity(), LightType::Static);
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		lights_selection->setSelectedLight(-1);
 		sprite_mode=spriteModeDraw;

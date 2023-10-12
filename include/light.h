@@ -3,13 +3,15 @@
 
 class SpriteTexture;
 
+
+enum class LightType {
+    Static=0,
+    Fire
+};
+
 class LightLayer
 {
 public:
-    enum class LightType {
-        Static=0,
-        Fire
-    };
     class Light {
     public:
         Light();
