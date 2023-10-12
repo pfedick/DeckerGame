@@ -30,7 +30,7 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	yy+=110;
 
 
-	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "Light:"));
+	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "LightObject:"));
 	yy+=30;
 	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 440, game);
 	tilesframe->setEventHandler(this);

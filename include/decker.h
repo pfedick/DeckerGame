@@ -696,7 +696,7 @@ public:
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	void updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
-	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, Light& item, int& plane) const;
+	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightObject& item, int& plane) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
 	size_t countLights() const;
@@ -959,7 +959,7 @@ private:
 	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
-	Light selected_light;
+	LightObject selected_light;
 	LightLayer* selected_light_system;
 
 	GameSpeed game_speed;
