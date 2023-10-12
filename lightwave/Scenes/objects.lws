@@ -13,7 +13,7 @@ PreviewFrameStep 1
 CurrentFrame 106
 FramesPerSecond 30
 AutoKeyFixedFrame 0
-ChangeScene 0
+ChangeScene 1
 Plugin MasterHandler 1 .SceneEditorStandardBanks
 EndPlugin
 Plugin MasterHandler 2 SceneEditor
@@ -22294,7 +22294,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 10000041 Objects/light/lantern_small_1_off.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -23637,7 +23637,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 10000045 Objects/light/lantern_big_1_off.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
