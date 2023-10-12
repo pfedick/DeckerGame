@@ -742,7 +742,7 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	return false;
 }
 
-bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightLayer::Light& item, int& plane) const
+bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, Light& item, int& plane) const
 {
 	if (NearPlane.isVisible()) {
 		ppl7::grafix::Point coords=p + worldcoords * planeFactor[6];
