@@ -163,6 +163,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Ghost]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Ghost]->load(sdl, "res/ghost.tex");
 
+	spriteset[Spriteset::Zombie]->enableOutlines(true);
+	spriteset[Spriteset::Zombie]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Zombie]->load(sdl, "res/zombie.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -401,6 +405,7 @@ Representation getRepresentation(int object_type)
 	case Type::Piranha: return Piranha::representation();
 	case Type::BreakingWall: return BreakingWall::representation();
 	case Type::Hammer: return Hammer::representation();
+	case Type::Flashlight: return Flashlight::representation();
 	case Type::Cheese: return Cheese::representation();
 	case Type::VoiceTrigger: return VoiceTrigger::representation();
 	case Type::ObjectWatcher: return ObjectWatcher::representation();
@@ -474,6 +479,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Wallenstein: return new Wallenstein();
 	case Type::Helena: return new Helena();
 	case Type::Yeti: return new Yeti();
+	//case Type::Zombie: return new Zombie();
 	case Type::Bat: return new Bat();
 	case Type::Bird: return new Bird();
 	case Type::Scorpion: return new Scorpion();
@@ -485,6 +491,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Piranha: return new Piranha();
 	case Type::BreakingWall: return new BreakingWall();
 	case Type::Hammer: return new Hammer();
+	case Type::Flashlight: return new Flashlight();
 	case Type::Cheese: return new Cheese();
 	case Type::VoiceTrigger: return new VoiceTrigger();
 	case Type::ObjectWatcher: return new ObjectWatcher();

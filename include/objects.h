@@ -62,6 +62,7 @@ public:
 		VoiceTrigger=31,
 		ObjectWatcher=32,
 		Trigger=33,
+		Flashlight=34,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -83,7 +84,8 @@ public:
 		Ostrich=118,
 		Fish=119,
 		Piranha=120,
-		Ghost=121
+		Ghost=121,
+		Zombie=122
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -117,6 +119,7 @@ public:
 		BreakingWall,
 		Rat,
 		Ghost,
+		Zombie,
 		MaxSpritesets
 	};
 };
@@ -1080,7 +1083,17 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
-
+class Flashlight : public Object
+{
+private:
+	AnimationCycle animation;
+	double next_animation;
+public:
+	Flashlight();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+};
 
 class Floater : public Object
 {

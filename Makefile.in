@@ -114,6 +114,7 @@ OBJECTS=compile/main.o \
 	compile/object_stamper.o \
 	compile/object_ai_figure.o \
 	compile/object_wallenstein.o \
+	compile/object_zombie.o \
 	compile/object_helena.o \
 	compile/object_yeti.o \
 	compile/object_autogeorge.o \
@@ -125,6 +126,7 @@ OBJECTS=compile/main.o \
 	compile/object_piranha.o \
 	compile/object_breakingwall.o \
 	compile/object_hammer.o \
+	compile/object_flashlight.o \
 	compile/object_cheese.o \
 	compile/object_voicetrigger.o \
 	compile/object_objectwatcher.o \
@@ -658,6 +660,11 @@ compile/object_autogeorge.o: src/objects/autogeorge.cpp Makefile include/objects
 	- @mkdir -p compile
 	$(CXX) -o compile/object_autogeorge.o -c src/objects/autogeorge.cpp $(CFLAGS)
 
+compile/object_zombie.o: src/objects/zombie.cpp Makefile include/objects.h include/physic.h \
+	include/ai_figure.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_zombie.o -c src/objects/zombie.cpp $(CFLAGS)
+
 compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_extralife.o -c src/objects/extralife.cpp $(CFLAGS)
@@ -689,6 +696,10 @@ compile/object_breakingwall.o: src/objects/breakingwall.cpp Makefile include/obj
 compile/object_hammer.o: src/objects/hammer.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_hammer.o -c src/objects/hammer.cpp $(CFLAGS)
+
+compile/object_flashlight.o: src/objects/flashlight.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_flashlight.o -c src/objects/flashlight.cpp $(CFLAGS)
 
 compile/object_cheese.o: src/objects/cheese.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
