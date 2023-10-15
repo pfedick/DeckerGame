@@ -19,7 +19,9 @@ LightObject::LightObject()
     color_index=0;
     intensity=255;
     lightsystem=NULL;
-    type=LightType::Static;
+    myType=LightType::Static;
+    enabled=true;
+    planes=0;
 }
 
 LightLayer::LightLayer(const ColorPalette& palette)
@@ -72,7 +74,7 @@ void LightLayer::addLight(int x, int y, int sprite_no, float scale_x, float scal
     item.angle=angle;
     item.intensity=intensity;
     item.color_index=color_index;
-    item.type=type;
+    item.myType=type;
     item.boundary=spriteset->spriteBoundary(sprite_no, scale_x, x, y);
     light_list.insert(std::pair<int, LightObject>(item.id, item));
 
@@ -255,7 +257,7 @@ void LightLayer::save(ppl7::FileObject& file, unsigned char id) const
         ppl7::Poke16(buffer + p + 16, item.sprite_no);
         ppl7::Poke8(buffer + p + 18, item.color_index);
         ppl7::Poke8(buffer + p + 19, item.intensity);
-        ppl7::Poke8(buffer + p + 20, static_cast<int>(item.type));
+        ppl7::Poke8(buffer + p + 20, static_cast<int>(item.myType));
         p+=21;
     }
     ppl7::Poke32(buffer + 0, p);

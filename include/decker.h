@@ -574,7 +574,7 @@ public:
 	void print() const;
 };
 
-class LightPlane;
+//class LightPlane;
 
 class Level
 {
