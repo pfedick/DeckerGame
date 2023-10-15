@@ -534,6 +534,16 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_jump);
     y+=50;
 
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Flashlight:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_flashlight=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_flashlight->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_flashlight->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Flashlight));
+    controller_button_flashlight->setEventHandler(this);
+    page_controller->addChild(controller_button_flashlight);
+    y+=50;
+
     controller_use_rumble=new ppl7::tk::CheckBox(0, y, 700, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
     controller_use_rumble->setFont(style_label.font);
     controller_use_rumble->setEventHandler(this);
@@ -702,6 +712,7 @@ Decker::ui::ControllerButtonSelector* SettingsScreen::getCurrentControllerInput(
     case SettingsController::ButtonAction: return controller_button_action;
     case SettingsController::ButtonBack: return controller_button_back;
     case SettingsController::ButtonJump: return controller_button_jump;
+    case SettingsController::ButtonFlashlight: return controller_button_flashlight;
     default: return NULL;
     }
     return NULL;
@@ -770,7 +781,7 @@ void SettingsScreen::handleControllerKeyDownEvent(int key)
         keyfocus=KeyFocusArea::Menu;
         ppl7::tk::GetWindowManager()->setKeyboardFocus(menue);
     }
-    if (key == ppl7::tk::KeyEvent::KEY_DOWN && static_cast<int>(currentControllerSelection) < static_cast<int>(SettingsController::ButtonJump)) {
+    if (key == ppl7::tk::KeyEvent::KEY_DOWN && static_cast<int>(currentControllerSelection) < static_cast<int>(SettingsController::ButtonFlashlight)) {
         currentControllerSelection=static_cast<SettingsController>(1 + static_cast<int>(currentControllerSelection));
         setFocusToControllerWidget();
     } else  if (key == ppl7::tk::KeyEvent::KEY_UP && static_cast<int>(currentControllerSelection) > static_cast<int>(SettingsController::Deadzone)) {
@@ -802,6 +813,7 @@ void SettingsScreen::setFocusToControllerWidget()
     case SettingsController::ButtonAction: controller_button_action->setFocus(); break;
     case SettingsController::ButtonBack: controller_button_back->setFocus(); break;
     case SettingsController::ButtonJump: controller_button_jump->setFocus(); break;
+    case SettingsController::ButtonFlashlight: controller_button_flashlight->setFocus(); break;
     }
 }
 
@@ -999,6 +1011,7 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
         else if (event->widget() == controller_button_back) game.config.controller.button_back=value;
         else if (event->widget() == controller_button_action) game.config.controller.button_action=value;
         else if (event->widget() == controller_button_jump) game.config.controller.button_jump=value;
+        else if (event->widget() == controller_button_flashlight) game.config.controller.button_flashlight=value;
         game.config.save();
         game.updateGameControllerMapping();
         //ppl7::PrintDebugTime("SettingsScreen::valueChangedEvent: %d\n", value);

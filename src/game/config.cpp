@@ -42,6 +42,7 @@ Config::Controller::Controller() {
     button_menu=gm.getSDLButton(GameControllerMapping::Button::Menu);
     button_back=gm.getSDLButton(GameControllerMapping::Button::Back);
     button_jump=gm.getSDLButton(GameControllerMapping::Button::Jump);
+    button_flashlight=gm.getSDLButton(GameControllerMapping::Button::Flashlight);
     GameController gc;
     deadzone=gc.deadzone();
     use_rumble=true;
@@ -104,6 +105,7 @@ void Config::load()
     controller.button_back=conf.getInt("button_back", controller.button_back);
     controller.button_action=conf.getInt("button_action", controller.button_action);
     controller.button_jump=conf.getInt("button_jump", controller.button_jump);
+    controller.button_jump=conf.getInt("button_flashlight", controller.button_flashlight);
 }
 
 void Config::save()
@@ -158,6 +160,7 @@ void Config::save()
     conf.add("button_back", controller.button_back);
     conf.add("button_action", controller.button_action);
     conf.add("button_jump", controller.button_jump);
+    conf.add("button_flashlight", controller.button_flashlight);
 
 
 }

@@ -278,6 +278,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) k.matrix|=KeyboardKeys::Down;
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) k.matrix|=KeyboardKeys::Shift;
 	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) k.matrix|=KeyboardKeys::Action;
+	if (state[SDL_SCANCODE_F]) k.matrix|=KeyboardKeys::Flashlight;
 
 	//ppl7::PrintDebugTime("keys: %4d, velocity x: %5d, velocity y: %5d --- ", k.matrix, k.velocity_x, k.velocity_y);
 
@@ -298,6 +299,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 
 
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Action))) k.matrix|=KeyboardKeys::Action;
+		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Flashlight))) k.matrix|=KeyboardKeys::Flashlight;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Jump))) k.matrix|=KeyboardKeys::Up | KeyboardKeys::Shift;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::MenuLeft))) k.matrix|=KeyboardKeys::Left | KeyboardKeys::Shift;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::MenuRight))) k.matrix|=KeyboardKeys::Right | KeyboardKeys::Shift;

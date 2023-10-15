@@ -70,7 +70,8 @@ private:
         ButtonMenu,
         ButtonAction,
         ButtonBack,
-        ButtonJump
+        ButtonJump,
+        ButtonFlashlight
     };
     enum class KeyFocusArea {
         Menu=0,
@@ -136,6 +137,7 @@ private:
     Decker::ui::ControllerButtonSelector* controller_button_action;
     Decker::ui::ControllerButtonSelector* controller_button_back;
     Decker::ui::ControllerButtonSelector* controller_button_jump;
+    Decker::ui::ControllerButtonSelector* controller_button_flashlight;
     ppl7::tk::CheckBox* controller_use_rumble;
 
     // Misc

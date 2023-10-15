@@ -29,6 +29,7 @@ public:
 		Down=8,
 		Shift=16,
 		Action=32,
+		Flashlight=64,
 		JumpLeft=5,
 		JumpRight=6,
 	};

@@ -227,6 +227,7 @@ GameControllerMapping::GameControllerMapping()
     action_button=SDL_CONTROLLER_BUTTON_A;
     back_button=SDL_CONTROLLER_BUTTON_B;
     jump_button=SDL_CONTROLLER_BUTTON_X;
+    flashlight_button=SDL_CONTROLLER_BUTTON_Y;
     updateMapping();
 }
 
@@ -247,6 +248,7 @@ void GameControllerMapping::updateMapping()
     button_mapping.insert(std::pair<int, Button>(action_button, Button::Action));
     button_mapping.insert(std::pair<int, Button>(jump_button, Button::Jump));
     button_mapping.insert(std::pair<int, Button>(back_button, Button::Back));
+    button_mapping.insert(std::pair<int, Button>(flashlight_button, Button::Flashlight));
 
     axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Walk, player_axis_x));
     axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Jump, player_axis_y));
@@ -258,6 +260,7 @@ void GameControllerMapping::updateMapping()
     button_mapping_rev.insert(std::pair<Button, int>(Button::Action, action_button));
     button_mapping_rev.insert(std::pair<Button, int>(Button::Jump, back_button));
     button_mapping_rev.insert(std::pair<Button, int>(Button::Back, jump_button));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Flashlight, flashlight_button));
 
 }
 
@@ -311,6 +314,7 @@ void GameControllerMapping::setMappingButton(const Button a, int id)
     case Button::MenuRight: menu_button_right=id; break;
     case Button::Menu: menu_button=id; break;
     case Button::Action: action_button=id; break;
+    case Button::Flashlight: flashlight_button=id; break;
     case Button::Jump: back_button=id; break;
     case Button::Back: jump_button=id; break;
     default: break;

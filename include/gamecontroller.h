@@ -19,6 +19,7 @@ public:
         MenuRight,
         Menu,
         Action,
+        Flashlight,
         Jump,
         Back
     };
@@ -40,6 +41,7 @@ private:
     int action_button;
     int back_button;
     int jump_button;
+    int flashlight_button;
     std::map<int, Button> button_mapping;
     std::map<int, Axis> axis_mapping;
 
