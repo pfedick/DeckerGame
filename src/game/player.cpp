@@ -69,6 +69,8 @@ Player::Player(Game* game)
 	waterSplashPlayed=false;
 	maxair=getMaxAirFromDifficultyLevel(game->config.difficulty);
 	air=maxair;
+	flashlightOn=false;
+	actionToggleCooldown=0.0f;
 
 	particle_end_time=0.0f;
 	next_particle_birth=0.0f;
@@ -211,7 +213,13 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (!visible) return;
 	ppl7::grafix::Point p(x + viewport.x1 - worldcoords.x, y + viewport.y1 - worldcoords.y);
 	if (movement == Slide) p.y+=35;
-	sprite_resource->draw(renderer, p.x, p.y + 1, animation.getFrame(), color_modulation);
+	int frame=animation.getFrame();
+	if (flashlightOn) {
+		if (frame >= 0 && frame <= 78) frame+=314;
+		else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
+	}
+
+	sprite_resource->draw(renderer, p.x, p.y + 1, frame, color_modulation);
 	/*
 	SDL_SetRenderDrawColor(renderer,255,0,0,255);
 	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
@@ -652,6 +660,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	if (keys.matrix & KeyboardKeys::Action) {
 		checkActivationOfObjectsInRange(objects);
 		if (movement == Hacking) return;
+	}
+	if (keys.matrix & KeyboardKeys::Flashlight) {
+		toggleFlashlight();
 	}
 
 	if (keys.matrix == KeyboardKeys::Left) {
@@ -1462,4 +1473,17 @@ void Player::playPhonetics()
 	nextPhonetic=time + 0.08f;
 	animation.setStaticFrame(s);
 
+}
+
+void Player::toggleFlashlight()
+{
+	if (this->time > actionToggleCooldown) {
+		if (hasSpecialObject(Decker::Objects::Type::Flashlight)) {
+			flashlightOn=!flashlightOn;
+			actionToggleCooldown=time + 0.2f;
+		} else if (flashlightOn == true) {
+			flashlightOn=false;
+			actionToggleCooldown=time + 0.2f;
+		}
+	}
 }

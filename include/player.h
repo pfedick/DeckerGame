@@ -60,6 +60,8 @@ private:
 	double nextPhonetic;
 	float frame_rate_compensation;
 	bool greetingPlayed;
+	bool flashlightOn;
+	double actionToggleCooldown;
 
 	AudioInstance* ambient_sound;
 	AudioInstance* voice;
@@ -98,7 +100,7 @@ private:
 
 	void playSoundOnAnimationSprite();
 	void checkActivationOfObjectsInRange(Decker::Objects::ObjectSystem* objectsystem);
-
+	void toggleFlashlight();
 	void idleJokes(double time);
 	void playPhonetics();
 public:
