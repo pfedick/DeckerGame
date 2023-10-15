@@ -83,6 +83,18 @@ private:
 	ppl7::String phonetics;
 
 
+	class FlashLightPivot
+	{
+	public:
+		FlashLightPivot(int x, int y, float angle);
+		int x;
+		int y;
+		float angle;
+	};
+	std::map<int, FlashLightPivot> flashlight_pivots;
+	void initFlashLightPivots();
+
+
 
 	void turn(PlayerOrientation target);
 	void splashIntoWater(float gravity);

@@ -164,6 +164,7 @@ void Game::loadGrafix()
 	resources.Lightmaps.setPivot(10, 256, 27);
 	resources.Lightmaps.setPivot(11, 256, 27);
 	resources.Lightmaps.setPivot(12, 256, 27);
+	resources.Lightmaps.setPivot(13, 256, 27);
 
 
 	resources.LightObjects.enableOutlines(true);

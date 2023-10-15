@@ -13,7 +13,7 @@ PreviewFrameStep 1
 CurrentFrame 0
 FramesPerSecond 30
 AutoKeyFixedFrame 0
-ChangeScene 0
+ChangeScene 1
 Plugin MasterHandler 1 .SceneEditorStandardBanks
 EndPlugin
 Plugin MasterHandler 2 SceneEditor
@@ -23581,7 +23581,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 1000000d Objects/objects/Taschenlampe.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -23895,7 +23895,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 2 1000000e Objects/objects/Taschenlampe.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -24183,7 +24183,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 3 1000000f Objects/objects/Taschenlampe.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion
@@ -24477,7 +24477,7 @@ Plugin PrimitiveHandler 1 MeshPrimitive
 EndPlugin
 
 LoadObjectLayer 1 10000010 Objects/lightbeams/beam5.lwo
-ChangeObject 0
+ChangeObject 1
 ShowObject 7 7
 Group 0
 ObjectMotion

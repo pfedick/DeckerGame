@@ -48,6 +48,13 @@ static float getMaxAirFromDifficultyLevel(Config::DifficultyLevel level)
 	return 30.0f;
 }
 
+Player::FlashLightPivot::FlashLightPivot(int x, int y, float angle)
+{
+	this->x=x;
+	this->y=y;
+	this->angle=angle;
+}
+
 
 Player::Player(Game* game)
 {
@@ -93,6 +100,7 @@ Player::Player(Game* game)
 	talkie=true;
 	last_fullspeed=0.0f;
 	frame_rate_compensation=0.0f;
+	initFlashLightPivots();
 }
 
 Player::~Player()
@@ -107,6 +115,46 @@ Player::~Player()
 		delete voice;
 		voice=NULL;
 	}
+}
+
+void Player::initFlashLightPivots()
+{
+	flashlight_pivots.clear();
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(314, FlashLightPivot(212, 133, 95.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(315, FlashLightPivot(209, 132, 96.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(316, FlashLightPivot(204, 129, 100.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(317, FlashLightPivot(208, 128, 105.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(318, FlashLightPivot(211, 131, 95.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(319, FlashLightPivot(210, 131, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(320, FlashLightPivot(213, 137, 85.0f)));
+
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(323, FlashLightPivot(301, 132, 270.0f)));
+
+	// run left
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(375, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(376, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(377, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(378, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(379, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(380, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(381, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(382, FlashLightPivot(212, 134, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(383, FlashLightPivot(212, 134, 90.0f)));
+
+	// run right
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(384, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(385, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(386, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(387, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(388, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(389, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(390, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(391, FlashLightPivot(301, 132, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(392, FlashLightPivot(301, 132, 270.0f)));
+
+	// stand front
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(341, FlashLightPivot(219, 135, -1))); // stand front
+
 }
 
 void Player::resetState()
@@ -217,6 +265,32 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (flashlightOn) {
 		if (frame >= 0 && frame <= 78) frame+=314;
 		else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
+		if (frame >= 314 && frame <= 400) {
+			ppl7::grafix::Color c(255, 255, 255, 255);
+			ppl7::grafix::Color c2(255, 255, 255, 128);
+			SDL_Texture* renderertarget_save=SDL_GetRenderTarget(renderer);
+			SDL_SetRenderTarget(renderer, game->getLightRenderTarget());
+			SpriteTexture& lightmap=getResources().Lightmaps;
+			std::map<int, FlashLightPivot>::const_iterator it;
+			ppl7::grafix::Point pf=p;
+			it=flashlight_pivots.find(frame);
+			if (it != flashlight_pivots.end()) {
+				pf.x-=256 - it->second.x;
+				pf.y-=195 - it->second.y;
+				lightmap.drawScaled(renderer, pf.x,
+					pf.y, 2, 0.2, c);
+				lightmap.drawScaled(renderer, pf.x,
+					pf.y, 0, 0.6, c2);
+
+				if (it->second.angle > 0.0f) {
+					lightmap.drawScaledWithAngle(renderer, pf.x,
+						pf.y, 13, 1.0f, 1.0f, it->second.angle, c);
+				}
+
+			}
+
+			SDL_SetRenderTarget(renderer, renderertarget_save);
+		}
 	}
 
 	sprite_resource->draw(renderer, p.x, p.y + 1, frame, color_modulation);
