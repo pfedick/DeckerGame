@@ -285,7 +285,7 @@ doors:
 	./texmaker -s lightwave/Render/objects/door_v2/ -t res/doors.tex -w 2048 -h 2048 -px 144 -py 242 -x tmp/doors
 
 george:
-	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/george_adventure
+	./texmaker -s lightwave/Render/george_adventure/ -t res/george_adventure.tex -w 2048 -h 2048 -px 256 -py 195 -x tmp/george_adventure
 	./texmaker -s lightwave/Render/george/ -t res/george.tex -w 1024 -h 1024 -px 128 -py 195  -x tmp/george
 
 phonetics:
