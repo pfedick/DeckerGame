@@ -730,13 +730,12 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	//next_keycheck=time+0.1f;
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	Player::Keys keys=getKeyboardMatrix(state);
-
+	if (keys.matrix & KeyboardKeys::Flashlight) {
+		toggleFlashlight();
+	}
 	if (keys.matrix & KeyboardKeys::Action) {
 		checkActivationOfObjectsInRange(objects);
 		if (movement == Hacking) return;
-	}
-	if (keys.matrix & KeyboardKeys::Flashlight) {
-		toggleFlashlight();
 	}
 
 	if (keys.matrix == KeyboardKeys::Left) {
@@ -1559,5 +1558,7 @@ void Player::toggleFlashlight()
 			flashlightOn=false;
 			actionToggleCooldown=time + 0.2f;
 		}
+	} else {
+		actionToggleCooldown=this->time + 0.2f;
 	}
 }
