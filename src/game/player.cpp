@@ -120,41 +120,93 @@ Player::~Player()
 void Player::initFlashLightPivots()
 {
 	flashlight_pivots.clear();
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(314, FlashLightPivot(212, 133, 95.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(315, FlashLightPivot(209, 132, 96.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(316, FlashLightPivot(204, 129, 100.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(317, FlashLightPivot(208, 128, 105.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(318, FlashLightPivot(211, 131, 95.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(319, FlashLightPivot(210, 131, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(320, FlashLightPivot(213, 137, 85.0f)));
-
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(323, FlashLightPivot(301, 132, 270.0f)));
-
-	// run left
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(375, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(376, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(377, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(378, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(379, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(380, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(381, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(382, FlashLightPivot(212, 134, 90.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(383, FlashLightPivot(212, 134, 90.0f)));
-
-	// run right
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(384, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(385, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(386, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(387, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(388, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(389, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(390, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(391, FlashLightPivot(301, 132, 270.0f)));
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(392, FlashLightPivot(301, 132, 270.0f)));
-
-	// stand front
-	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(341, FlashLightPivot(219, 135, -1))); // stand front
-
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(314, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(315, FlashLightPivot(-47, -64, 92.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(316, FlashLightPivot(-53, -66, 95.8f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(317, FlashLightPivot(-50, -68, 96.5f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(318, FlashLightPivot(-46, -65, 93.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(319, FlashLightPivot(-47, -62, 91.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(320, FlashLightPivot(-44, -58, 85.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(321, FlashLightPivot(-43, -59, 86.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(322, FlashLightPivot(-41, -59, 87.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(323, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(324, FlashLightPivot(47, -64, 266.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(325, FlashLightPivot(49, -65, 265.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(326, FlashLightPivot(48, -65, 264.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(327, FlashLightPivot(44, -63, 267.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(328, FlashLightPivot(45, -62, 269.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(329, FlashLightPivot(46, -60, 272.2f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(330, FlashLightPivot(43, -59, 273.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(331, FlashLightPivot(44, -62, 270.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(332, FlashLightPivot(44, -63, 269.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(333, FlashLightPivot(6, -66, 264.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(334, FlashLightPivot(-38, -62, 243.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(335, FlashLightPivot(-58, -62, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(336, FlashLightPivot(-44, -62, 89.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(337, FlashLightPivot(-57, -61, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(338, FlashLightPivot(-38, -61, 296.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(339, FlashLightPivot(3, -61, 271.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(340, FlashLightPivot(42, -61, 270.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(341, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(342, FlashLightPivot(36, -62, 63.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(343, FlashLightPivot(56, -62, 271.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(344, FlashLightPivot(36, -62, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(345, FlashLightPivot(-7, -64, 93.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(346, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(347, FlashLightPivot(-4, -61, 88.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(348, FlashLightPivot(36, -62, 135.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(349, FlashLightPivot(58, -65, 264.8f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(350, FlashLightPivot(43, -63, 269.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(351, FlashLightPivot(-44, -62, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(352, FlashLightPivot(-44, -54, 80.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(353, FlashLightPivot(45, -56, 277.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(354, FlashLightPivot(-48, -67, 95.8f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(355, FlashLightPivot(49, -71, 260.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(356, FlashLightPivot(-37, -76, 187.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(357, FlashLightPivot(-70, -11, 100.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(358, FlashLightPivot(-70, -11, 100.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(359, FlashLightPivot(-69, -11, 97.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(360, FlashLightPivot(-68, -12, 96.5f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(361, FlashLightPivot(-69, -11, 98.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(362, FlashLightPivot(-70, -10, 99.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(363, FlashLightPivot(-70, -12, 98.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(364, FlashLightPivot(-67, -11, 95.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(365, FlashLightPivot(-70, -10, 99.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(366, FlashLightPivot(60, -10, 260.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(367, FlashLightPivot(59, -10, 262.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(368, FlashLightPivot(60, -12, 261.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(369, FlashLightPivot(60, -13, 262.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(370, FlashLightPivot(61, -12, 259.8f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(371, FlashLightPivot(62, -13, 257.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(372, FlashLightPivot(62, -13, 258.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(373, FlashLightPivot(58, -10, 264.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(374, FlashLightPivot(60, -11, 262.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(375, FlashLightPivot(-44, -62, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(376, FlashLightPivot(-44, -58, 85.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(377, FlashLightPivot(-39, -51, 75.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(378, FlashLightPivot(-41, -56, 81.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(379, FlashLightPivot(-43, -61, 89.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(380, FlashLightPivot(-51, -65, 93.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(381, FlashLightPivot(-58, -69, 98.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(382, FlashLightPivot(-52, -66, 95.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(383, FlashLightPivot(-44, -62, 90.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(384, FlashLightPivot(44, -63, 267.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(385, FlashLightPivot(45, -60, 271.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(386, FlashLightPivot(42, -52, 282.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(387, FlashLightPivot(43, -59, 273.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(388, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(389, FlashLightPivot(49, -66, 265.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(390, FlashLightPivot(61, -75, 254.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(391, FlashLightPivot(51, -69, 262.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(392, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(393, FlashLightPivot(-70, -11, 100.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(394, FlashLightPivot(-78, -12, 102.9f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(395, FlashLightPivot(-73, -10, 105.1f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(396, FlashLightPivot(-58, -11, 120.3f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(397, FlashLightPivot(-32, -11, 201.8f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(398, FlashLightPivot(12, -11, 251.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(399, FlashLightPivot(46, -9, 260.4f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(400, FlashLightPivot(60, -10, 260.7f)));
 }
 
 void Player::resetState()
@@ -275,8 +327,8 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 			ppl7::grafix::Point pf=p;
 			it=flashlight_pivots.find(frame);
 			if (it != flashlight_pivots.end()) {
-				pf.x-=256 - it->second.x;
-				pf.y-=195 - it->second.y;
+				pf.x+=it->second.x;
+				pf.y+=it->second.y;
 				lightmap.drawScaled(renderer, pf.x,
 					pf.y, 2, 0.2, c);
 				lightmap.drawScaled(renderer, pf.x,
@@ -284,7 +336,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 
 				if (it->second.angle > 0.0f) {
 					lightmap.drawScaledWithAngle(renderer, pf.x,
-						pf.y, 13, 1.0f, 1.0f, it->second.angle, c);
+						pf.y, 13, 0.8f, 1.0f, it->second.angle, c);
 				}
 
 			}
