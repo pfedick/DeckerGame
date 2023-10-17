@@ -222,11 +222,16 @@ vplay: $(VPLAY_OBJECTS)
 	$(CXX) -o vplay $(VPLAY_OBJECTS) -ldav1d $(LIBS)
 	-chmod 755 vplay
 
+flashlighttracking: compile/flashlighttracking_main.o
+	$(CXX) -o flashlighttracking compile/flashlighttracking_main.o $(LIBS)
+	-chmod 755 flashlighttracking
+
+
 clean:
 	-rm -f compile/*.o $(PROGRAM) *.core
 
 cleanall:
-	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core vplay
+	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core vplay flashlighttracking
 	cd pplib && $(MAKE) clean
 
 
@@ -902,3 +907,8 @@ compile/vplay_main.o: tools/videoplayback/main.cpp Makefile include/videoplayer.
 compile/controllertest_main.o: tools/controllertest/main.cpp Makefile
 	- @mkdir -p compile
 	$(CXX) -o compile/controllertest_main.o -c tools/controllertest/main.cpp $(CFLAGS)
+
+# flashlighttracking
+compile/flashlighttracking_main.o: tools/flashlighttracking/main.cpp Makefile
+	- @mkdir -p compile
+	$(CXX) -o compile/flashlighttracking_main.o -c tools/flashlighttracking/main.cpp $(CFLAGS)
