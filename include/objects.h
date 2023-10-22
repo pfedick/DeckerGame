@@ -727,13 +727,13 @@ class FireCannon : public Trap
 {
 private:
 	double next_state;
-	bool current_state_on;
 	void fire();
 public:
 	float direction;
 	float min_cooldown_time;
 	float max_cooldown_time;
 	float speed;
+	bool current_state_on;
 	bool initial_state_on;
 
 	FireCannon();
@@ -743,6 +743,9 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+
 
 };
 

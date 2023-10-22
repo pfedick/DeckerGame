@@ -141,7 +141,7 @@ void Fireball::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) c
 	rc[2].setColor(255, 255, 0, 255);
 	rc[3].setColor(255, 128, 0, 255);
 	rc[4].setColor(255, 192, 0, 255);
-	rc[5].setColor(255, 255, 255, 255);
+	rc[5].setColor(255, 0, 0, 255);
 	rc[6].setColor(255, 255, 255, 255);
 
 	ppl7::grafix::Color c(255, 200, 60, 255);
@@ -202,6 +202,17 @@ void FireCannon::fire()
 	//getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.4f);
 }
 
+void FireCannon::toggle(bool enable, Object* source)
+{
+	current_state_on=enable;
+}
+
+void FireCannon::trigger(Object* source)
+{
+	current_state_on=!current_state_on;
+}
+
+
 size_t FireCannon::saveSize() const
 {
 	return Object::saveSize() + 18;
@@ -213,7 +224,10 @@ size_t FireCannon::save(unsigned char* buffer, size_t size) const
 	if (!bytes) return 0;
 	ppl7::Poke8(buffer + bytes, 1);		// Object Version
 
-	ppl7::Poke8(buffer + bytes + 1, 0);	// reserved
+	uint8_t flags=0;
+	if (initial_state_on) flags|=1;
+
+	ppl7::Poke8(buffer + bytes + 1, flags);	// reserved
 	ppl7::PokeFloat(buffer + bytes + 2, speed);
 	ppl7::PokeFloat(buffer + bytes + 6, direction);
 	ppl7::PokeFloat(buffer + bytes + 10, min_cooldown_time);
@@ -227,6 +241,10 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
 	if (version != 1) return 0;
+	uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
+	initial_state_on=(flags & 1);
+	current_state_on=initial_state_on;
+
 	speed=ppl7::PeekFloat(buffer + bytes + 2);
 	direction=ppl7::PeekFloat(buffer + bytes + 6);
 	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 10);
@@ -250,6 +268,7 @@ private:
 public:
 	FireCannonDialog(FireCannon* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
 };
 
 
@@ -261,7 +280,7 @@ void FireCannon::openUi()
 
 
 FireCannonDialog::FireCannonDialog(FireCannon* object)
-	: Decker::ui::Dialog(500, 260)
+	: Decker::ui::Dialog(500, 300)
 {
 	this->object=object;
 	setWindowTitle("Fire cannon Trap");
@@ -269,6 +288,18 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	int y=0;
 	int col1=100;
 	int w=client.width() - col1 - 10;
+	int col2=client.width() / 2;
+	int col3=col2 + 100;
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "initial State:"));
+	initial_state=new ppl7::tk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state_on);
+	initial_state->setEventHandler(this);
+	addChild(initial_state);
+	addChild(new ppl7::tk::Label(col2, y, 100, 30, "current State:"));
+	current_state=new ppl7::tk::CheckBox(col3, y, 120, 30, "enabled", object->current_state_on);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+	y+=35;
 
 
 	addChild(new ppl7::tk::Label(0, y, 100, 30, "Direction:"));
@@ -322,6 +353,15 @@ void FireCannonDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 		object->max_cooldown_time=value;
 	}
 
+}
+
+void FireCannonDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	if (event->widget() == initial_state) {
+		object->initial_state_on=checked;
+	} else if (event->widget() == current_state) {
+		object->current_state_on=checked;
+	}
 }
 
 
