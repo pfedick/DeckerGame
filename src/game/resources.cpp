@@ -27,6 +27,7 @@ Resources::Resources()
 	background_images.push_back(ppl7::String("res/backgrounds/sunset-sky-1455125487HWs.jpg"));
 	background_images.push_back(ppl7::String("res/backgrounds/IMG_20220726_125250.jpg"));
 	background_images.push_back(ppl7::String("res/backgrounds/IMG_20220726_125308.jpg"));
+	background_images.push_back(ppl7::String("res/backgrounds/night1.jpg"));
 
 }
 

@@ -30,3 +30,5 @@ vplay.exe
 controllertest
 controllertest.exe
 flashlighttracking.exe
+src/game/resources.cpp
+nightbackground.exe
