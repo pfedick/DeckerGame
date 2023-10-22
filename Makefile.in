@@ -226,12 +226,16 @@ flashlighttracking: compile/flashlighttracking_main.o
 	$(CXX) -o flashlighttracking compile/flashlighttracking_main.o $(LIBS)
 	-chmod 755 flashlighttracking
 
+nightbackground: compile/nightbackground_main.o
+	$(CXX) -o nightbackground compile/nightbackground_main.o $(LIBS)
+	-chmod 755 nightbackground
+
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) *.core
 
 cleanall:
-	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core vplay flashlighttracking
+	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core vplay flashlighttracking nightbackground
 	cd pplib && $(MAKE) clean
 
 
@@ -911,4 +915,9 @@ compile/controllertest_main.o: tools/controllertest/main.cpp Makefile
 # flashlighttracking
 compile/flashlighttracking_main.o: tools/flashlighttracking/main.cpp Makefile
 	- @mkdir -p compile
-	$(CXX) -o compile/flashlighttracking_main.o -c tools/flashlighttracking/main.cpp $(CFLAGS)
+	$(CXX) -o compile/flashlighttracking_main.o -c tools/flashlighttracking/main.cpp $(TEXMAKER_CFLAGS)
+
+# nightbackground
+compile/nightbackground_main.o: tools/nightbackground/main.cpp Makefile
+	- @mkdir -p compile
+	$(CXX) -o compile/nightbackground_main.o -c tools/nightbackground/main.cpp $(TEXMAKER_CFLAGS)
