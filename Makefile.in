@@ -93,6 +93,7 @@ OBJECTS=compile/main.o \
 	compile/object_medikit.o \
 	compile/object_key.o \
 	compile/object_arrow.o \
+	compile/object_firecannon.o \
 	compile/object_door.o \
 	compile/object_floater.o \
 	compile/object_playerstartpoint.o \
@@ -557,6 +558,11 @@ compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include
 	include/player.h include/audiopool.h include/widgets.h include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)
+
+compile/object_firecannon.o: src/objects/firecannon.cpp Makefile include/objects.h include/animation.h \
+	include/player.h include/audiopool.h include/widgets.h include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_firecannon.o -c src/objects/firecannon.cpp $(CFLAGS)
 
 compile/object_treasurechest.o: src/objects/treasurechest.cpp Makefile include/objects.h include/animation.h \
 	include/player.h include/audiopool.h include/widgets.h include/decker.h

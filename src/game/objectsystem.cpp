@@ -66,6 +66,8 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::GenericObjects]->enableOutlines(true);
 	spriteset[Spriteset::GenericObjects]->enableMemoryBuffer(true);
 	spriteset[Spriteset::GenericObjects]->load(sdl, "res/objects.tex");
+	spriteset[Spriteset::GenericObjects]->setPivot(299, 128, 149);
+	spriteset[Spriteset::GenericObjects]->setPivot(300, 128, 236);
 
 	spriteset[Spriteset::ThreeSpeers]->enableOutlines(true);
 	spriteset[Spriteset::ThreeSpeers]->enableMemoryBuffer(true);
@@ -367,6 +369,7 @@ Representation getRepresentation(int object_type)
 	case Type::ExtraLife: return ExtraLife::representation();
 	case Type::Key: return KeyReward::representation();
 	case Type::Arrow: return Arrow::representation();
+	case Type::FireCannon: return FireCannon::representation();
 	case Type::ThreeSpeers: return ThreeSpeers::representation();
 	case Type::Rat: return Rat::representation();
 	case Type::HangingSpider: return HangingSpider::representation();
@@ -455,6 +458,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::FloaterHorizontal: return new FloaterHorizontal();
 	case Type::FloaterVertical: return new FloaterVertical();
 	case Type::Arrow: return new Arrow();
+	case Type::FireCannon: return new FireCannon();
 	case Type::Rat: return new Rat();
 	case Type::Skeleton: return new Skeleton();
 	case Type::Ghost: return new Ghost();

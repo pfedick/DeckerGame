@@ -35,6 +35,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Door, "Door", 23);
 	addObject(Decker::Objects::Type::LevelEnd, "Level End", 43);
 	addObject(Decker::Objects::Type::Arrow, "Arrow", 2);
+	addObject(Decker::Objects::Type::FireCannon, "FireCannon", 63);
 	addObject(Decker::Objects::Type::ThreeSpeers, "3 Speers", 18);
 	addObject(Decker::Objects::Type::Rat, "Rat", 5);
 	addObject(Decker::Objects::Type::Bird, "Bird", 44);
@@ -64,6 +65,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);
 	addObject(Decker::Objects::Type::Yeti, "Yeti", 47);
+	addObject(Decker::Objects::Type::Zombie, "Yeti", 62);
 	addObject(Decker::Objects::Type::AutoGeorge, "AutoGeorge", 48);
 	addObject(Decker::Objects::Type::Ostrich, "Ostrich", 49);
 	addObject(Decker::Objects::Type::Fish, "Fish", 52);

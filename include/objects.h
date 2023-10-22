@@ -85,7 +85,8 @@ public:
 		Fish=119,
 		Piranha=120,
 		Ghost=121,
-		Zombie=122
+		Zombie=122,
+		FireCannon=123
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -721,6 +722,30 @@ public:
 	void openUi() override;
 
 };
+
+class FireCannon : public Trap
+{
+private:
+	double next_state;
+	bool current_state_on;
+	void fire();
+public:
+	float direction;
+	float min_cooldown_time;
+	float max_cooldown_time;
+	float speed;
+	bool initial_state_on;
+
+	FireCannon();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+
+};
+
 
 
 class Enemy : public Object
