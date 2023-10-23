@@ -25,6 +25,61 @@ LightObject::LightObject()
     initial_state=true;
     planes=0;
     has_lensflare=false;
+    save_size=33;
+}
+
+LightObject::~LightObject()
+{
+
+}
+
+size_t LightObject::save(unsigned char* buffer, size_t size) const
+{
+    if (size < save_size) return 0;
+    ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
+    ppl7::Poke8(buffer + 1, static_cast<int>(myType));
+    ppl7::Poke32(buffer + 2, id);
+    ppl7::Poke8(buffer + 6, planes);
+    int flags=0;
+    if (initial_state) flags|=1;
+    if (has_lensflare) flags|=2;
+    ppl7::Poke8(buffer + 7, flags);
+    ppl7::Poke8(buffer + 8, color_index);
+    ppl7::Poke8(buffer + 9, intensity);
+    ppl7::Poke8(buffer + 10, flare_intensity);
+    ppl7::Poke32(buffer + 11, x);
+    ppl7::Poke32(buffer + 15, y);
+    ppl7::PokeFloat(buffer + 19, scale_x);
+    ppl7::PokeFloat(buffer + 23, scale_y);
+    ppl7::PokeFloat(buffer + 27, angle);
+    ppl7::Poke16(buffer + 31, sprite_no);
+    return 33;
+}
+
+size_t LightObject::load(const unsigned char* buffer, size_t size)
+{
+    if (size < 33) return 0;
+    int version=ppl7::Peek8(buffer + 0);
+    if (version == 1) {
+        myType=static_cast<LightType>(ppl7::Peek8(buffer + 1));
+        id=ppl7::Peek32(buffer + 2);
+        planes=ppl7::Peek8(buffer + 6);
+        int flags=ppl7::Peek8(buffer + 7);
+        initial_state=flags & 1;
+        has_lensflare=flags & 2;
+        enabled=initial_state;
+        color_index=ppl7::Peek8(buffer + 8);
+        intensity=ppl7::Peek8(buffer + 9);
+        flare_intensity=ppl7::Peek8(buffer + 10);
+        x=ppl7::Peek32(buffer + 11);
+        y=ppl7::Peek32(buffer + 15);
+        scale_x=ppl7::PeekFloat(buffer + 19);
+        scale_y=ppl7::PeekFloat(buffer + 23);
+        angle=ppl7::PeekFloat(buffer + 27);
+        sprite_no=ppl7::Peek16(buffer + 31);
+        return 33;
+    }
+    return 0;
 }
 
 LightLayer::LightLayer(const ColorPalette& palette)
@@ -366,16 +421,17 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
     visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
 
     std::map<uint32_t, LightObject*>::const_iterator it;
-    int width=viewport.width();
-    int height=viewport.height();
+    //int width=viewport.width();
+    //int height=viewport.height();
     for (it=light_map.begin();it != light_map.end();++it) {
         LightObject* item=(it->second);
+        /* TODO: unsloved Bug!!!
         int x=item->x - worldcoords.x;
         int y=item->y - worldcoords.y;
         //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
-        // TODO: unsloved Bug!!!
-        //if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
-        //    && x - item->boundary.width() < width && y - item->boundary.height() < height) {
+        if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
+            && x - item->boundary.width() < width && y - item->boundary.height() < height) {
+            */
         addObjectLight(item);
         //}
     }
@@ -423,10 +479,64 @@ void LightSystem::deleteLight(uint32_t light_id)
 
 void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
 {
-
+    if (light_map.size() == 0) return;
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    size_t buffersize=0;
+    for (it=light_map.begin();it != light_map.end();++it) {
+        LightObject* object=it->second;
+        buffersize+=object->save_size + 4;
+    }
+    unsigned char* buffer=(unsigned char*)malloc(buffersize + 5);
+    ppl7::Poke32(buffer + 0, 0);
+    ppl7::Poke8(buffer + 4, id);
+    size_t p=5;
+    for (it=light_map.begin();it != light_map.end();++it) {
+        LightObject* object=it->second;
+        ppl7::Poke32(buffer + p, object->save_size + 4);
+        size_t bytes_saved=object->save(buffer + p + 4, object->save_size);
+        if (bytes_saved == object->save_size && bytes_saved > 0) {
+            p+=object->save_size + 4;
+        }
+    }
+    ppl7::Poke32(buffer + 0, p);
+    file.write(buffer, p);
+    free(buffer);
 }
 
 void LightSystem::load(const ppl7::ByteArrayPtr& ba)
 {
     clear();
+    size_t p=0;
+    const unsigned char* buffer=(const unsigned char*)ba.toCharPtr();
+    while (p < ba.size()) {
+        int save_size=ppl7::Peek32(buffer + p);
+        //int type=ppl7::Peek16(buffer + p + 5);
+        LightObject* light=new LightObject();
+        if (light) {
+            if (light->load(buffer + p + 4, save_size - 4)) {
+                if (light->id >= nextid) nextid=light->id + 1;
+                light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
+                light_map.insert(std::pair<uint32_t, LightObject*>(light->id, light));
+            } else {
+                delete light;
+            }
+        }
+        p+=save_size;
+    }
+}
+
+
+void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+{
+
+}
+
+void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+{
+
+}
+
+void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+{
+
 }

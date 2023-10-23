@@ -34,10 +34,12 @@ enum class LightPlaneId {
 class LightObject {
 public:
     LightObject();
+    virtual ~LightObject();
+    size_t save_size;
     LightLayer* lightsystem;
-    uint32_t id;
-    int x;			// 2 Byte
-    int y;			// 2 Byte
+    uint32_t id;    // 4 Byte
+    int x;			// 4 Byte
+    int y;			// 4 Byte
     float scale_x;	// 4 Byte
     float scale_y;  // 4 Byte
     float angle;    // 4 Byte
@@ -45,12 +47,15 @@ public:
     uint8_t color_index; // 1 Byte
     uint8_t intensity;   // 1 Byte
     uint8_t flare_intensity;   // 1 Byte
-    LightType   myType;   // 1 Byte ==> 21 Byte
+    LightType   myType;   // 1 Byte
     uint8_t     planes;   // 1 Byte
     ppl7::grafix::Rect boundary;
     bool enabled;
-    bool initial_state;
-    bool has_lensflare;
+    bool initial_state;     // Flags 1 Byte
+    bool has_lensflare;     // Flags
+
+    virtual size_t save(unsigned char* buffer, size_t size) const;
+    virtual size_t load(const unsigned char* buffer, size_t size);
 };
 
 
