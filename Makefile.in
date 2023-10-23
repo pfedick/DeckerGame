@@ -306,11 +306,15 @@ breakingwall:
 
 enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_ghost enemy_erik enemy_zombie
 
-sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies
-	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
-	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
+lights:
 	./texmaker -s lightwave/Render/lightmaps/ -t res/lightmaps.tex -w 2048 -h 2048 -px 256 -py 256
 	./texmaker -s lightwave/Render/lightmaps_ui/ -t res/lightmaps_ui.tex -w 512 -h 512 -px 0 -py 0
+	./texmaker -s lightwave/Render/lensflares/ -t res/lensflares.tex -w 1024 -h 1024 -px 256 -py 256
+
+
+sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies lights
+	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
+	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
 	./texmaker -s lightwave/Render/sprites_plants/ -t res/sprites_plants.tex -w 1024 -h 1024 --pivot_detection lower_middle
 	./texmaker -s lightwave/Render/sprites_plants_ui/ -t res/sprites_plants_ui.tex -w 512 -h 512 -px 0 -py 0
 	./texmaker -s lightwave/Render/sprites_nature_blury/ -t res/sprites_nature_blury.tex -w 2048 -h 2048 --pivot_detection lower_middle
