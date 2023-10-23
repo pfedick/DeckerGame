@@ -18,10 +18,13 @@ LightObject::LightObject()
     angle=0.0f;
     color_index=0;
     intensity=255;
-    lightsystem=NULL;
+    flare_intensity=0;
+    //lightsystem=NULL;
     myType=LightType::Static;
     enabled=true;
+    initial_state=true;
     planes=0;
+    has_lensflare=false;
 }
 
 LightLayer::LightLayer(const ColorPalette& palette)
@@ -288,4 +291,142 @@ void LightLayer::load(const ppl7::ByteArrayPtr& ba)
         printf("Can't load LightLayer, unknown version! [%d]\n", version);
 
     }
+}
+
+
+LightSystem::LightSystem()
+{
+    lensflares=new SpriteTexture();
+    light_objects=new SpriteTexture();
+    lightmaps=new SpriteTexture();
+    nextid=1;
+}
+
+LightSystem::~LightSystem()
+{
+    clear();
+    delete lensflares;
+    delete light_objects;
+    delete lightmaps;
+}
+
+void LightSystem::loadSpritesets(SDL& sdl)
+{
+    lightmaps->enableOutlines(true);
+    lightmaps->enableMemoryBuffer(true);
+    lightmaps->setTextureBlendMode(SDL_BLENDMODE_ADD);
+    lightmaps->load(sdl, "res/lightmaps.tex");
+    lightmaps->setPivot(8, 256, 27);
+    lightmaps->setPivot(9, 256, 27);
+    lightmaps->setPivot(10, 256, 27);
+    lightmaps->setPivot(11, 256, 27);
+    lightmaps->setPivot(12, 256, 27);
+    lightmaps->setPivot(13, 256, 27);
+
+    light_objects->enableOutlines(true);
+    light_objects->enableMemoryBuffer(true);
+    light_objects->load(sdl, "res/lightobjects.tex");
+
+    lensflares->enableOutlines(false);
+    lensflares->enableMemoryBuffer(true);
+    lensflares->load(sdl, "res/lensflares.tex");
+
+}
+
+
+void LightSystem::clear()
+{
+    light_map.clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Near)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Front)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Player)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Back)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Far)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
+    nextid=1;
+
+}
+
+void LightSystem::addToPlane(LightPlaneBitMatrix plane, LightObject* item, uint32_t id)
+{
+    if (item->planes & static_cast<int>(plane))
+        visible_light_map[static_cast<int>(plane)].insert(std::pair<uint32_t, LightObject*>(id, item));
+
+}
+
+void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+{
+    visible_light_map[static_cast<int>(LightPlaneId::Near)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Front)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Player)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Back)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Far)].clear();
+    visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
+
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    int width=viewport.width();
+    int height=viewport.height();
+    for (it=light_map.begin();it != light_map.end();++it) {
+        LightObject* item=(it->second);
+        int x=item->x - worldcoords.x;
+        int y=item->y - worldcoords.y;
+        //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
+        // TODO: unsloved Bug!!!
+        //if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
+        //    && x - item->boundary.width() < width && y - item->boundary.height() < height) {
+        addObjectLight(item);
+        //}
+    }
+}
+
+
+void LightSystem::addObjectLight(LightObject* light)
+{
+    uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
+    addToPlane(LightPlaneBitMatrix::Near, light, id);
+    addToPlane(LightPlaneBitMatrix::Front, light, id);
+    addToPlane(LightPlaneBitMatrix::Player, light, id);
+    addToPlane(LightPlaneBitMatrix::Back, light, id);
+    addToPlane(LightPlaneBitMatrix::Middle, light, id);
+    addToPlane(LightPlaneBitMatrix::Far, light, id);
+    addToPlane(LightPlaneBitMatrix::Horizon, light, id);
+}
+
+void LightSystem::addLight(LightObject* light)
+{
+    light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
+    light->id=nextid;
+    nextid++;
+    light_map.insert(std::pair<uint32_t, LightObject*>(light->id, light));
+}
+
+LightObject* LightSystem::getLight(uint32_t light_id)
+{
+    std::map<uint32_t, LightObject*>::iterator it;
+    it=light_map.find(light_id);
+    if (it != light_map.end()) return it->second;
+    return NULL;
+}
+
+void LightSystem::deleteLight(uint32_t light_id)
+{
+    std::map<uint32_t, LightObject*>::iterator it;
+    it=light_map.find(light_id);
+    if (it != light_map.end()) {
+        delete it->second;
+        light_map.erase(it);
+    }
+}
+
+
+void LightSystem::save(ppl7::FileObject& file, unsigned char id) const
+{
+
+}
+
+void LightSystem::load(const ppl7::ByteArrayPtr& ba)
+{
+    clear();
 }

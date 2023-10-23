@@ -44,10 +44,13 @@ public:
     int sprite_no;	// 2 Byte
     uint8_t color_index; // 1 Byte
     uint8_t intensity;   // 1 Byte
+    uint8_t flare_intensity;   // 1 Byte
     LightType   myType;   // 1 Byte ==> 21 Byte
     uint8_t     planes;   // 1 Byte
     ppl7::grafix::Rect boundary;
     bool enabled;
+    bool initial_state;
+    bool has_lensflare;
 };
 
 
@@ -95,22 +98,30 @@ class LightSystem
 private:
     uint32_t nextid;
     std::map<uint32_t, LightObject*> light_map;
-    std::map<uint32_t, Object*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
+    std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
+    SpriteTexture* lightmaps, * light_objects, * lensflares;
+
+    void addToPlane(LightPlaneBitMatrix plane, LightObject* item, uint32_t id);
 
 public:
     LightSystem();
     ~LightSystem();
+    void loadSpritesets(SDL& sdl);
     void clear();
-    void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+    //void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
     void updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
     void save(ppl7::FileObject& file, unsigned char id) const;
     void load(const ppl7::ByteArrayPtr& ba);
 
     void addLight(LightObject* light);
+    void addObjectLight(LightObject* light);
     LightObject* getLight(uint32_t light_id);
     void deleteLight(uint32_t light_id);
 
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
+    void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
+    void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
+
 
 
 
