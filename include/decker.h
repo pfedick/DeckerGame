@@ -683,7 +683,6 @@ private:
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
-	void addLightmap(SDL_Renderer* renderer, const LightLayer& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void prepareLayer(SDL_Renderer* renderer);
 public:

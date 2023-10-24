@@ -417,19 +417,6 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 	}
 }
 
-void Level::addLightmap(SDL_Renderer* renderer, const LightLayer& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
-{
-	if (!lightsEnabled) return;
-	metrics.time_lights.start();
-	SDL_SetRenderTarget(renderer, tex_render_lightmap);
-	lightsystem.draw(renderer, viewport, worldcoords);
-	SDL_SetRenderTarget(renderer, tex_render_layer);
-	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
-	SDL_SetRenderTarget(renderer, tex_render_target);
-	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
-	metrics.time_lights.stop();
-}
-
 void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
 	if (!lightsEnabled) return;
