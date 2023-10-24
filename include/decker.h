@@ -620,7 +620,7 @@ private:
 	LightLayer PlayerLights=LightLayer(palette);
 	LightLayer FrontLights=LightLayer(palette);
 	LightLayer NearLights=LightLayer(palette);
-	LightSystem lights;
+	LightSystem lights=LightSystem(palette);
 
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;
@@ -683,6 +683,7 @@ private:
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void addLightmap(SDL_Renderer* renderer, const LightLayer& lightsystem, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void prepareLayer(SDL_Renderer* renderer);
 public:
 

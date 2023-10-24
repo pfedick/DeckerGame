@@ -95,17 +95,19 @@ public:
     size_t countVisible() const;
 };
 
+class ColorPalette;
 
 class LightSystem
 {
 private:
     uint32_t nextid;
+    const ColorPalette& palette;
     std::map<uint32_t, LightObject*> light_map;
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
 
 public:
-    LightSystem();
+    LightSystem(const ColorPalette& palette);
     ~LightSystem();
     void loadSpritesets(SDL& sdl);
     void clear();
@@ -128,6 +130,7 @@ public:
     void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
     void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
 
+    void drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 };
 
 

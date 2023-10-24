@@ -372,7 +372,8 @@ void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneI
 }
 
 
-LightSystem::LightSystem()
+LightSystem::LightSystem(const ColorPalette& palette)
+    : palette(palette)
 {
     lensflares=new SpriteTexture();
     light_objects=new SpriteTexture();
@@ -550,15 +551,43 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
 
 void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
-
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
+        const LightObject* item=(it->second);
+        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+            ppl7::grafix::Color c=palette.getColor(item->color_index);
+            c.setAlpha(item->intensity);
+            lightmaps->drawScaledWithAngle(renderer,
+                item->x + viewport.x1 - worldcoords.x,
+                item->y + viewport.y1 - worldcoords.y,
+                item->sprite_no, item->scale_x, item->scale_y, item->angle,
+                c);
+        }
+    }
 }
 
 void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
+        const LightObject* item=(it->second);
+        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+            light_objects->draw(renderer,
+                item->x + viewport.x1 - worldcoords.x,
+                item->y + viewport.y1 - worldcoords.y,
+                1);
+        }
+    }
 
 }
 
 void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
+{
+
+}
+
+
+void LightSystem::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
 
 }
