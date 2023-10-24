@@ -78,8 +78,7 @@ Game::Game()
 	sprite_mode=spriteModeDraw;
 	selected_sprite_system=NULL;
 	selected_sprite.id=-1;
-	selected_light_system=NULL;
-	selected_light.id=-1;
+	selected_light=NULL;
 
 	selected_object=NULL;
 	fade_to_black=0;
@@ -227,7 +226,7 @@ void Game::loadGrafix()
 	level.particles->loadSpritesets(sdl);
 	level.lights.loadSpritesets(sdl);
 	level.waynet.setSpriteset(&resources.Waynet);
-	level.setLightset(&resources.Lightmaps, &resources.LightObjects);
+	//level.setLightset(&resources.Lightmaps, &resources.LightObjects);
 
 	message_overlay.loadSprites();
 
@@ -735,12 +734,11 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.HorizonPlane.setVisible(mainmenue->visibility_plane_horizon);
 	level.NearPlane.setVisible(mainmenue->visibility_plane_near);
 
-	level.HorizonLights.setVisible(mainmenue->visibility_plane_horizon);
-	level.FarLights.setVisible(mainmenue->visibility_plane_far);
-	level.MiddleLights.setVisible(mainmenue->visibility_plane_middle);
-	level.PlayerLights.setVisible(mainmenue->visibility_plane_player);
-	level.FrontLights.setVisible(mainmenue->visibility_plane_front);
-	level.NearLights.setVisible(mainmenue->visibility_plane_near);
+	level.lights.setVisible(LightPlaneId::Horizon, mainmenue->visibility_plane_horizon);
+	level.lights.setVisible(LightPlaneId::Far, mainmenue->visibility_plane_far);
+	level.lights.setVisible(LightPlaneId::Middle, mainmenue->visibility_plane_middle);
+	level.lights.setVisible(LightPlaneId::Player, mainmenue->visibility_plane_player);
+	level.lights.setVisible(LightPlaneId::Near, mainmenue->visibility_plane_near);
 
 	level.setEnableLights(mainmenue->visibility_lighting);
 	level.setShowSprites(mainmenue->visibility_sprites);
@@ -866,8 +864,11 @@ void Game::run()
 		drawSelectedObject(renderer, mouse.p);
 		drawSelectedTile(renderer, mouse.p);
 		if (lights_selection != NULL) {
-			LightLayer& ls=level.lightsystem(mainmenue->currentPlane());
-			ls.drawObjects(renderer, game_viewport, WorldCoords * planeFactor[mainmenue->currentPlane()]);
+			int plane=mainmenue->currentPlane();
+			if (plane == static_cast<int>(PlaneId::Back) || plane == static_cast<int>(PlaneId::Front)) plane=static_cast<int>(PlaneId::Player);
+			level.lights.drawEditMode(renderer, game_viewport, WorldCoords * planeFactor[mainmenue->currentPlane()], static_cast<LightPlaneId>(plane));
+			//LightLayer& ls=level.lightsystem(mainmenue->currentPlane());
+			//ls.drawObjects(renderer, game_viewport, WorldCoords * planeFactor[mainmenue->currentPlane()]);
 			drawSelectedLight(renderer, mouse.p);
 		}
 
@@ -1157,9 +1158,7 @@ void Game::showLightsSelection()
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
 		sprite_mode=spriteModeDraw;
-		selected_light.id=-1;
-		selected_light_system=NULL;
-
+		selected_light=NULL;
 	}
 }
 
@@ -1275,13 +1274,11 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse)
 {
 	if (!lights_selection) return;
-	if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
+	if (sprite_mode == SpriteModeEdit && selected_light != NULL) {
 		updateLightFromUi();
 		int currentPlane=mainmenue->currentPlane();
-		selected_light_system->drawSelectedLightOutline(renderer, game_viewport,
-			WorldCoords * planeFactor[currentPlane], selected_light.id);
-		selected_light_system->drawSelectedLightObject(renderer, game_viewport,
-			WorldCoords * planeFactor[currentPlane], selected_light.id);
+		level.lights.drawSelectedLight(renderer, game_viewport,
+			WorldCoords * planeFactor[currentPlane], selected_light->id);
 		return;
 	} else if (sprite_mode == spriteModeDraw) {
 		if (!mouse.inside(game_viewport)) return;
@@ -1300,7 +1297,7 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 		return;
 	}
 	if (lights_selection->selectedLight() >= 0 && sprite_mode != spriteModeDraw) {
-		selected_light_system=NULL;
+		selected_light=NULL;
 		sprite_mode=spriteModeDraw;
 	}
 }
@@ -1558,21 +1555,24 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 			return;
 		}
 		if (sprite_mode != spriteModeDraw) return;
-		float scale_x=lights_selection->lightScaleX();
-		float scale_y=lights_selection->lightScaleY();
-		float angle=lights_selection->lightAngle();
 		int currentPlane=mainmenue->currentPlane();
-		LightLayer& ss=level.lightsystem(currentPlane);
+		if (currentPlane == static_cast<int>(PlaneId::Back) || currentPlane == static_cast<int>(PlaneId::Front)) currentPlane=static_cast<int>(PlaneId::Player);
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
-		ss.addLight(event->p.x + coords.x,
-			event->p.y + coords.y,
-			nr, scale_x, scale_y, angle, lights_selection->colorIndex(),
-			lights_selection->colorIntensity(), LightType::Static);
+		LightObject* light=new LightObject();
+		light->plane=currentPlane;
+		light->scale_x=lights_selection->lightScaleX();
+		light->scale_y=lights_selection->lightScaleY();
+		light->angle=lights_selection->lightAngle();
+		light->x=event->p.x + coords.x;
+		light->y=event->p.y + coords.y;
+		light->sprite_no=nr;
+		light->color_index=lights_selection->colorIndex();
+		light->intensity=lights_selection->colorIntensity();
+		level.lights.addLight(light);
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		lights_selection->setSelectedLight(-1);
 		sprite_mode=spriteModeDraw;
-		selected_light.id=-1;
-		selected_light_system=NULL;
+		selected_light=NULL;
 	}
 }
 
@@ -1707,13 +1707,13 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 				if (angle <= 0) angle+=360;
 				if (angle >= 360) angle-=360;
 				lights_selection->setLightAngle(angle);
-			} else if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
-				if (event->wheel.y < 0) selected_light.angle-=5;
-				if (event->wheel.y > 0) selected_light.angle+=5;
-				if (selected_light.angle <= 0) selected_light.angle+=360;
-				if (selected_light.angle >= 360) selected_light.angle-=360;
-				selected_light_system->modifyLight(selected_light);
-				lights_selection->setLightAngle(selected_light.angle);
+			} else if (sprite_mode == SpriteModeEdit && selected_light != NULL) {
+				if (event->wheel.y < 0) selected_light->angle-=5;
+				if (event->wheel.y > 0) selected_light->angle+=5;
+				if (selected_light->angle <= 0) selected_light->angle+=360;
+				if (selected_light->angle >= 360) selected_light->angle-=360;
+				//selected_light_system->modifyLight(selected_light);
+				lights_selection->setLightAngle(selected_light->angle);
 			}
 
 		} else {
@@ -1726,15 +1726,15 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 				if (event->wheel.y > 0 && scale_y < 5.0) scale_y+=0.05;
 				lights_selection->setLightScaleX(scale_x);
 				lights_selection->setLightScaleY(scale_y);
-			} else if (sprite_mode == SpriteModeEdit && selected_light.id >= 0 && selected_light_system != NULL) {
+			} else if (sprite_mode == SpriteModeEdit && selected_light != NULL) {
 				//printf ("wheel\n");
-				if (event->wheel.y < 0 && selected_light.scale_x>0.1) selected_light.scale_x-=0.05;
-				if (event->wheel.y < 0 && selected_light.scale_y>0.1) selected_light.scale_y-=0.05;
-				if (event->wheel.y > 0 && selected_light.scale_x < 5.0) selected_light.scale_x+=0.05;
-				if (event->wheel.y > 0 && selected_light.scale_y < 5.0) selected_light.scale_y+=0.05;
-				selected_light_system->modifyLight(selected_light);
-				lights_selection->setLightScaleX(selected_light.scale_x);
-				lights_selection->setLightScaleY(selected_light.scale_y);
+				if (event->wheel.y < 0 && selected_light->scale_x>0.1) selected_light->scale_x-=0.05;
+				if (event->wheel.y < 0 && selected_light->scale_y>0.1) selected_light->scale_y-=0.05;
+				if (event->wheel.y > 0 && selected_light->scale_x < 5.0) selected_light->scale_x+=0.05;
+				if (event->wheel.y > 0 && selected_light->scale_y < 5.0) selected_light->scale_y+=0.05;
+				//selected_light_system->modifyLight(selected_light);
+				lights_selection->setLightScaleX(selected_light->scale_x);
+				lights_selection->setLightScaleY(selected_light->scale_y);
 			}
 		}
 	}
@@ -1768,21 +1768,22 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 	ppl7::PrintDebugTime("Game::selectSprite\n");
 #endif
 	int plane=mainmenue->currentPlane();
-	selected_light_system=&level.lightsystem(plane);
-	if (selected_light_system->findMatchingLight(mouse + WorldCoords * planeFactor[plane], selected_light)) {
-		lights_selection->setSelectedLight(selected_light.sprite_no);
-		lights_selection->setLightAngle(selected_light.angle);
-		lights_selection->setLightScaleX(selected_light.scale_x);
-		lights_selection->setLightScaleY(selected_light.scale_y);
-		lights_selection->setColorIntensity(selected_light.intensity);
-		lights_selection->setColorIndex(selected_light.color_index);
+	if (plane == static_cast<int>(PlaneId::Back) || plane == static_cast<int>(PlaneId::Front)) plane=static_cast<int>(PlaneId::Player);
+	selected_light=level.lights.findMatchingLight(mouse + WorldCoords * planeFactor[plane], static_cast<LightPlaneId>(plane));
+
+
+	if (selected_light) {
+		lights_selection->setSelectedLight(selected_light->sprite_no);
+		lights_selection->setLightAngle(selected_light->angle);
+		lights_selection->setLightScaleX(selected_light->scale_x);
+		lights_selection->setLightScaleY(selected_light->scale_y);
+		lights_selection->setColorIntensity(selected_light->intensity);
+		lights_selection->setColorIndex(selected_light->color_index);
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
-		selected_light_system=selected_light.lightsystem;
 		sprite_move_start=mouse;
 	} else {
-		selected_light.id=-1;
-		selected_light_system=NULL;
+		selected_light=NULL;
 	}
 }
 
@@ -1814,14 +1815,11 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 				level.objects->deleteObject(selected_object->id);
 				selected_object=NULL;
 			}
-		} else if (sprite_mode == SpriteModeEdit && lights_selection != NULL && selected_light.id >= 0
-			&& selected_light_system != NULL) {
+		} else if (sprite_mode == SpriteModeEdit && lights_selection != NULL && selected_light != NULL) {
 			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
 				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
-			//printf ("KeyEvent\n");
-				selected_light_system->deleteLight(selected_light.id);
-				selected_light.id=-1;
-				selected_light_system=NULL;
+				level.lights.deleteLight(selected_light->id);
+				selected_light=NULL;
 				lights_selection->setSelectedLight(-1);
 			}
 		}
@@ -1912,13 +1910,12 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 		}
 	} else if (lights_selection != NULL) {
 		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
-			&& sprite_mode == SpriteModeEdit && selected_light.id >= 0
-			&& selected_light_system != NULL) {
+			&& sprite_mode == SpriteModeEdit && selected_light != NULL) {
 			game_viewport.translateMouseEvent(event);
 			ppl7::grafix::Point diff=event->p - sprite_move_start;
-			selected_light.x+=diff.x;
-			selected_light.y+=diff.y;
-			selected_light_system->modifyLight(selected_light);
+			selected_light->x+=diff.x;
+			selected_light->y+=diff.y;
+			//selected_light_system->modifyLight(selected_light);
 			//printf("Move: %d, %d\n", diff.x, diff.y);
 			sprite_move_start=event->p;
 
@@ -2217,13 +2214,13 @@ SDL_Texture* Game::getLightRenderTarget()
 void Game::updateLightFromUi()
 {
 	if (!lights_selection) return;
-	if (selected_light.id >= 0 && selected_light_system != NULL) {
+	if (selected_light != NULL) {
 		//int currentPlane=mainmenue->currentPlane();
-		selected_light.angle=lights_selection->lightAngle();
-		selected_light.scale_x=lights_selection->lightScaleX();
-		selected_light.scale_y=lights_selection->lightScaleY();
-		selected_light.color_index=lights_selection->colorIndex();
-		selected_light.intensity=lights_selection->colorIntensity();
-		selected_light_system->modifyLight(selected_light);
+		selected_light->angle=lights_selection->lightAngle();
+		selected_light->scale_x=lights_selection->lightScaleX();
+		selected_light->scale_y=lights_selection->lightScaleY();
+		selected_light->color_index=lights_selection->colorIndex();
+		selected_light->intensity=lights_selection->colorIntensity();
+		//selected_light_system->modifyLight(selected_light);
 	}
 }

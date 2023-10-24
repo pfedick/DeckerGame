@@ -24,7 +24,6 @@ Level::Level()
 	showObjects=true;
 	showParticles=true;
 	lightsEnabled=true;
-	lightset=NULL;
 	tex_render_layer=NULL;
 	tex_render_lightmap=NULL;
 	tex_render_target=NULL;
@@ -121,18 +120,6 @@ void Level::setSpriteset(int no, SpriteTexture* spriteset)
 
 }
 
-void Level::setLightset(SpriteTexture* lightset, SpriteTexture* objects)
-{
-	this->lightset=lightset;
-	HorizonLights.setSpriteset(lightset, objects);
-	FarLights.setSpriteset(lightset, objects);
-	MiddleLights.setSpriteset(lightset, objects);
-	PlayerLights.setSpriteset(lightset, objects);
-	FrontLights.setSpriteset(lightset, objects);
-	NearLights.setSpriteset(lightset, objects);
-
-}
-
 void Level::create(int width, int height)
 {
 	clear();
@@ -176,20 +163,6 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 
 	return PlayerSprites[layer];
 }
-
-LightLayer& Level::lightsystem(int plane)
-{
-	if (plane == 0) return PlayerLights;
-	if (plane == 1) return FrontLights;
-	if (plane == 2) return FarLights;
-	if (plane == 3) return PlayerLights;
-	if (plane == 4) return MiddleLights;
-	if (plane == 5) return HorizonLights;
-	if (plane == 6) return NearLights;
-
-	return PlayerLights;
-}
-
 
 void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer)
 {
@@ -274,24 +247,26 @@ void Level::load(const ppl7::String& Filename)
 				objects->load(ba);
 			} else if (id == LevelChunkId::chunkWayNet) {
 				waynet.load(ba);
+#ifdef OLDCODE
 			} else if (id == LevelChunkId::chunkLightsHorizon) {
-				HorizonLights.load(ba);
+				//HorizonLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsFar) {
-				FarLights.load(ba);
+				//FarLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsMiddle) {
-				MiddleLights.load(ba);
+				//MiddleLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Middle, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsPlayer) {
-				PlayerLights.load(ba);
+				//PlayerLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back));
 			} else if (id == LevelChunkId::chunkLightsFront) {
-				FrontLights.load(ba);
+				//FrontLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Front));
 			} else if (id == LevelChunkId::chunkLightsNear) {
-				NearLights.load(ba);
+				//NearLights.load(ba);
 				lights.loadLegacyLightLayer(ba, LightPlaneId::Near, static_cast<int>(LightPlayerPlaneMatrix::None));
+#endif
 			} else if (id == LevelChunkId::chunkLights) {
 				lights.load(ba);
 			}
@@ -355,6 +330,7 @@ void Level::save(const ppl7::String& Filename)
 	objects->save(ff, LevelChunkId::chunkObjects);
 	waynet.save(ff, LevelChunkId::chunkWayNet);
 
+	/*
 	HorizonLights.save(ff, LevelChunkId::chunkLightsHorizon);
 	FarLights.save(ff, LevelChunkId::chunkLightsFar);
 	MiddleLights.save(ff, LevelChunkId::chunkLightsMiddle);
@@ -362,6 +338,7 @@ void Level::save(const ppl7::String& Filename)
 	PlayerLights.save(ff, LevelChunkId::chunkLightsPlayer);
 	FrontLights.save(ff, LevelChunkId::chunkLightsFront);
 	NearLights.save(ff, LevelChunkId::chunkLightsNear);
+	*/
 
 	lights.save(ff, LevelChunkId::chunkLights);
 
@@ -571,12 +548,6 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, con
 void Level::updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
 	lights.updateVisibleLightList(worldcoords, viewport);
-	HorizonLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], viewport);
-	FarLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], viewport);
-	MiddleLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], viewport);
-	PlayerLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], viewport);
-	FrontLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], viewport);
-	NearLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], viewport);
 }
 
 
@@ -638,43 +609,11 @@ size_t Level::countVisibleSprites() const
 size_t Level::countLights() const
 {
 	return lights.count();
-	size_t total=0;
-	total+=HorizonLights.count();
-	total+=FarLights.count();
-	total+=MiddleLights.count();
-	total+=PlayerLights.count();
-	total+=FrontLights.count();
-	total+=NearLights.count();
-	return total;
 }
 
 size_t Level::countVisibleLights() const
 {
 	return lights.countVisible();
-	size_t total=0;
-	if (FarPlane.isVisible()) {
-		total+=FarLights.countVisible();
-	}
-	if (MiddlePlane.isVisible()) {
-		total+=MiddleLights.countVisible();
-	}
-	if (BackPlane.isVisible()) {
-		//total+=BackLights.countVisible();
-	}
-	if (PlayerPlane.isVisible()) {
-		total+=PlayerLights.countVisible();
-	}
-	if (FrontPlane.isVisible()) {
-		total+=FrontLights.countVisible();
-	}
-	if (HorizonPlane.isVisible()) {
-		total+=HorizonLights.countVisible();
-	}
-	if (NearPlane.isVisible()) {
-		total+=NearLights.countVisible();
-	}
-
-	return total;
 }
 
 bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const
@@ -772,61 +711,6 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	}
 	return false;
 }
-
-bool Level::findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightObject& item, int& plane) const
-{
-	if (NearPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[6];
-		if (NearLights.findMatchingLight(coords, item)) {
-			plane=6;
-			return true;
-		}
-	}
-	if (FrontPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[1];
-		if (FrontLights.findMatchingLight(coords, item)) {
-			plane=1;
-			return true;
-		}
-	}
-	if (PlayerPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[0];
-		if (PlayerLights.findMatchingLight(coords, item)) {
-			plane=0;
-			return true;
-		}
-	}
-	if (BackPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[3];
-		if (PlayerLights.findMatchingLight(coords, item)) {
-			plane=0;
-			return true;
-		}
-	}
-	if (MiddlePlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[4];
-		if (MiddleLights.findMatchingLight(coords, item)) {
-			plane=4;
-			return true;
-		}
-	}
-	if (FarPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[2];
-		if (FarLights.findMatchingLight(coords, item)) {
-			plane=2;
-			return true;
-		}
-	}
-	if (HorizonPlane.isVisible()) {
-		ppl7::grafix::Point coords=p + worldcoords * planeFactor[5];
-		if (HorizonLights.findMatchingLight(coords, item)) {
-			plane=5;
-			return true;
-		}
-	}
-	return false;
-}
-
 
 size_t Level::tileCount() const
 {

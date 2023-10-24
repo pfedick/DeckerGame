@@ -613,6 +613,7 @@ private:
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 
+	/*
 	LightLayer HorizonLights=LightLayer(palette);
 	LightLayer FarLights=LightLayer(palette);
 	LightLayer MiddleLights=LightLayer(palette);
@@ -620,6 +621,7 @@ private:
 	LightLayer PlayerLights=LightLayer(palette);
 	LightLayer FrontLights=LightLayer(palette);
 	LightLayer NearLights=LightLayer(palette);
+	*/
 	LightSystem lights=LightSystem(palette);
 
 	Decker::Objects::ObjectSystem* objects;
@@ -629,7 +631,6 @@ private:
 	ppl7::grafix::Rect viewport;
 	SpriteTexture* tileset[MAX_TILESETS + 1];
 	SpriteTexture* spriteset[MAX_SPRITESETS + 1];
-	SpriteTexture* lightset;
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
@@ -697,7 +698,6 @@ public:
 	void setEnableLights(bool enabled);
 	void setTileset(int no, SpriteTexture* tileset);
 	void setSpriteset(int no, SpriteTexture* spriteset);
-	void setLightset(SpriteTexture* lightset, SpriteTexture* objects);
 	void create(int width, int height);
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
@@ -706,11 +706,10 @@ public:
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
-	LightLayer& lightsystem(int plane);
+	//LightLayer& lightsystem(int plane);
 	void updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	void updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
 	bool findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, SpriteSystem::Item& item, int& plane, int& layer) const;
-	bool findLight(const ppl7::grafix::Point& p, const ppl7::grafix::Point& worldcoords, LightObject& item, int& plane) const;
 	size_t countSprites() const;
 	size_t countVisibleSprites() const;
 	size_t countLights() const;
@@ -973,8 +972,7 @@ private:
 	SpriteSystem* selected_sprite_system;
 	ppl7::grafix::Point sprite_move_start;
 	Decker::Objects::Object* selected_object;
-	LightObject selected_light;
-	LightLayer* selected_light_system;
+	LightObject* selected_light;
 
 	GameSpeed game_speed;
 

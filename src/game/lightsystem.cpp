@@ -26,7 +26,7 @@ LightObject::LightObject()
     plane=static_cast<int>(LightPlaneId::Player);
     playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     has_lensflare=false;
-    save_size=33;
+    save_size=34;
 }
 
 LightObject::~LightObject()
@@ -41,44 +41,46 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     ppl7::Poke8(buffer + 1, static_cast<int>(myType));
     ppl7::Poke32(buffer + 2, id);
     ppl7::Poke8(buffer + 6, plane);
+    ppl7::Poke8(buffer + 7, playerPlane);
     int flags=0;
     if (initial_state) flags|=1;
     if (has_lensflare) flags|=2;
-    ppl7::Poke8(buffer + 7, flags);
-    ppl7::Poke8(buffer + 8, color_index);
-    ppl7::Poke8(buffer + 9, intensity);
-    ppl7::Poke8(buffer + 10, flare_intensity);
-    ppl7::Poke32(buffer + 11, x);
-    ppl7::Poke32(buffer + 15, y);
-    ppl7::PokeFloat(buffer + 19, scale_x);
-    ppl7::PokeFloat(buffer + 23, scale_y);
-    ppl7::PokeFloat(buffer + 27, angle);
-    ppl7::Poke16(buffer + 31, sprite_no);
-    return 33;
+    ppl7::Poke8(buffer + 8, flags);
+    ppl7::Poke8(buffer + 9, color_index);
+    ppl7::Poke8(buffer + 10, intensity);
+    ppl7::Poke8(buffer + 11, flare_intensity);
+    ppl7::Poke32(buffer + 12, x);
+    ppl7::Poke32(buffer + 16, y);
+    ppl7::PokeFloat(buffer + 20, scale_x);
+    ppl7::PokeFloat(buffer + 24, scale_y);
+    ppl7::PokeFloat(buffer + 28, angle);
+    ppl7::Poke16(buffer + 32, sprite_no);
+    return 34;
 }
 
 size_t LightObject::load(const unsigned char* buffer, size_t size)
 {
-    if (size < 33) return 0;
+    if (size < 34) return 0;
     int version=ppl7::Peek8(buffer + 0);
     if (version == 1) {
         myType=static_cast<LightType>(ppl7::Peek8(buffer + 1));
         id=ppl7::Peek32(buffer + 2);
         plane=ppl7::Peek8(buffer + 6);
-        int flags=ppl7::Peek8(buffer + 7);
+        playerPlane=ppl7::Peek8(buffer + 7);
+        int flags=ppl7::Peek8(buffer + 8);
         initial_state=flags & 1;
         has_lensflare=flags & 2;
         enabled=initial_state;
-        color_index=ppl7::Peek8(buffer + 8);
-        intensity=ppl7::Peek8(buffer + 9);
-        flare_intensity=ppl7::Peek8(buffer + 10);
-        x=ppl7::Peek32(buffer + 11);
-        y=ppl7::Peek32(buffer + 15);
-        scale_x=ppl7::PeekFloat(buffer + 19);
-        scale_y=ppl7::PeekFloat(buffer + 23);
-        angle=ppl7::PeekFloat(buffer + 27);
-        sprite_no=ppl7::Peek16(buffer + 31);
-        return 33;
+        color_index=ppl7::Peek8(buffer + 9);
+        intensity=ppl7::Peek8(buffer + 10);
+        flare_intensity=ppl7::Peek8(buffer + 11);
+        x=ppl7::Peek32(buffer + 12);
+        y=ppl7::Peek32(buffer + 16);
+        scale_x=ppl7::PeekFloat(buffer + 20);
+        scale_y=ppl7::PeekFloat(buffer + 24);
+        angle=ppl7::PeekFloat(buffer + 28);
+        sprite_no=ppl7::Peek16(buffer + 32);
+        return 34;
     }
     return 0;
 }
@@ -548,9 +550,14 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
     }
 }
 
+void LightSystem::setVisible(LightPlaneId plane, bool visible)
+{
+    visibility[static_cast<int>(plane)]=visible;
+}
 
 void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
+    if (!visibility[static_cast<int>(plane)]) return;
     std::map<uint32_t, LightObject*>::const_iterator it;
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
@@ -566,12 +573,13 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     }
 }
 
-void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
+void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
 {
+    if (!visibility[static_cast<int>(plane)]) return;
     std::map<uint32_t, LightObject*>::const_iterator it;
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
-        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+        if (static_cast<uint8_t>(plane) == item->plane) {
             light_objects->draw(renderer,
                 item->x + viewport.x1 - worldcoords.x,
                 item->y + viewport.y1 - worldcoords.y,
@@ -583,11 +591,53 @@ void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect&
 
 void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
-
+    if (!visibility[static_cast<int>(plane)]) return;
 }
 
 
 void LightSystem::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    it=light_map.find(id);
+    if (it == light_map.end()) return;
+    const LightObject* item=it->second;
+    if (!visibility[item->plane]) return;
+    lightmaps->drawOutlinesWithAngle(renderer,
+        item->x + viewport.x1 - worldcoords.x,
+        item->y + viewport.y1 - worldcoords.y,
+        item->sprite_no, item->scale_x, item->scale_y, item->angle);
 
+    light_objects->draw(renderer,
+        item->x + viewport.x1 - worldcoords.x,
+        item->y + viewport.y1 - worldcoords.y,
+        2);
+
+}
+
+
+LightObject* LightSystem::findMatchingLight(const ppl7::grafix::Point& p, LightPlaneId plane)
+{
+    if (!visibility[static_cast<int>(plane)]) return NULL;
+    //printf ("Try to find sprite\n");
+    LightObject* found_match=NULL;
+    std::map<uint32_t, LightObject*>::iterator it;
+    for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
+        LightObject* item=(it->second);
+        if (p.x > item->x - 20 && p.x<item->x + 20 && p.y>item->y - 20 && p.y < item->y + 20) {
+            //ppl7::PrintDebug("possible match: %d\n", item.id);
+            ppl7::grafix::Rect objectboundary=light_objects->spriteBoundary(1, 1.0f, item->x, item->y);
+            const ppl7::grafix::Drawable draw=light_objects->getDrawable(1);
+            if (draw.width()) {
+                int x=p.x - objectboundary.x1;
+                int y=p.y - objectboundary.y1;
+                ppl7::grafix::Color c=draw.getPixel(x, y);
+                if (c.alpha() > 40) {
+                    found_match=item;
+                    //ppl7::PrintDebug("Bingo: %d\n", item.id);
+                }
+            }
+        }
+
+    }
+    return found_match;
 }

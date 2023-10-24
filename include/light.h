@@ -105,6 +105,7 @@ private:
     std::map<uint32_t, LightObject*> light_map;
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
+    bool visibility[static_cast<int>(LightPlaneId::Max)];
 
 public:
     LightSystem(const ColorPalette& palette);
@@ -125,12 +126,15 @@ public:
 
     size_t count() const;
     size_t countVisible() const;
+    void setVisible(LightPlaneId plane, bool visible);
 
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
-    void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
+    void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
     void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
 
     void drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
+
+    LightObject* findMatchingLight(const ppl7::grafix::Point& p, LightPlaneId plane);
 };
 
 
