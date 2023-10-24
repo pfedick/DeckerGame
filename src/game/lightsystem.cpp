@@ -166,6 +166,7 @@ size_t LightLayer::count() const
     return light_list.size();
 }
 
+
 size_t LightLayer::countVisible() const
 {
     return visible_lights_map.size();
@@ -342,6 +343,34 @@ void LightLayer::load(const ppl7::ByteArrayPtr& ba)
     }
 }
 
+void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneId plane, int pplane)
+{
+    const char* buffer=ba.toCharPtr();
+    int version=ppl7::Peek8(buffer);
+    size_t p=1;
+    if (version == 1) {
+        while (p < ba.size()) {
+            LightObject* light=new LightObject();
+            light->plane=static_cast<int>(plane);
+            light->playerPlane=static_cast<int>(pplane);
+            light->x=ppl7::Peek16(buffer + p);
+            light->y=ppl7::Peek16(buffer + p + 2);
+            light->sprite_no=ppl7::Peek16(buffer + p + 16);
+            light->scale_x= ppl7::PeekFloat(buffer + p + 4);
+            light->scale_y= ppl7::PeekFloat(buffer + p + 8);
+            light->angle= ppl7::PeekFloat(buffer + p + 12);
+            light->color_index=ppl7::Peek8(buffer + p + 18);
+            light->intensity=ppl7::Peek8(buffer + p + 19);
+            light->myType=static_cast<LightType>(ppl7::Peek8(buffer + p + 20));
+            addLight(light);
+            p+=21;
+        }
+    } else {
+        printf("Can't load LightLayer, unknown version! [%d]\n", version);
+
+    }
+}
+
 
 LightSystem::LightSystem()
 {
@@ -408,19 +437,19 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
     visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
 
     std::map<uint32_t, LightObject*>::const_iterator it;
-    //int width=viewport.width();
-    //int height=viewport.height();
+    int width=viewport.width();
+    int height=viewport.height();
     for (it=light_map.begin();it != light_map.end();++it) {
         LightObject* item=(it->second);
-        /* TODO: unsloved Bug!!!
-        int x=item->x - worldcoords.x;
-        int y=item->y - worldcoords.y;
+
+        int x=item->x - worldcoords.x * planeFactor[item->plane];
+        int y=item->y - worldcoords.y * planeFactor[item->plane];
         //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
         if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
             && x - item->boundary.width() < width && y - item->boundary.height() < height) {
-            */
-        addObjectLight(item);
-        //}
+
+            addObjectLight(item);
+        }
     }
 }
 
@@ -460,6 +489,13 @@ void LightSystem::deleteLight(uint32_t light_id)
 size_t LightSystem::count() const
 {
     return light_map.size();
+}
+
+size_t LightSystem::countVisible() const
+{
+    size_t total=0;
+    for (int i=0;i < static_cast<int>(LightPlaneId::Max);i++) total+=visible_light_map[i].size();
+    return total;
 }
 
 

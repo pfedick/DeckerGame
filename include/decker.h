@@ -64,7 +64,7 @@ enum class PlaneId {
 	Back=3,
 	Middle=4,
 	Far=2,
-	Horizon=5
+	Horizon=5,
 };
 
 namespace Decker::Objects {

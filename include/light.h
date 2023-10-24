@@ -10,23 +10,14 @@ enum class LightType {
     Fire
 };
 
-enum class LightPlaneBitMatrix {
-    Near=1,
-    Front=2,
-    Player=4,
-    Back=8,
-    Middle=16,
-    Far=32,
-    Horizon=64
-};
 
 enum class LightPlaneId {
-    Near=0,
-    Player,
-    Middle,
-    Far,
-    Horizon,
-    Max
+    Near=6,
+    Player=0,
+    Middle=4,
+    Far=2,
+    Horizon=5,
+    Max=7
 };
 
 enum class LightPlayerPlaneMatrix {
@@ -123,12 +114,15 @@ public:
     void save(ppl7::FileObject& file, unsigned char id) const;
     void load(const ppl7::ByteArrayPtr& ba);
 
+    void loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneId plane, int pplane);
+
     void addLight(LightObject* light);
     void addObjectLight(LightObject* light);
     LightObject* getLight(uint32_t light_id);
     void deleteLight(uint32_t light_id);
 
     size_t count() const;
+    size_t countVisible() const;
 
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
     void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;

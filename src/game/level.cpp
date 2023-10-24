@@ -276,16 +276,24 @@ void Level::load(const ppl7::String& Filename)
 				waynet.load(ba);
 			} else if (id == LevelChunkId::chunkLightsHorizon) {
 				HorizonLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsFar) {
 				FarLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsMiddle) {
 				MiddleLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Middle, static_cast<int>(LightPlayerPlaneMatrix::None));
 			} else if (id == LevelChunkId::chunkLightsPlayer) {
 				PlayerLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back));
 			} else if (id == LevelChunkId::chunkLightsFront) {
 				FrontLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Front));
 			} else if (id == LevelChunkId::chunkLightsNear) {
 				NearLights.load(ba);
+				lights.loadLegacyLightLayer(ba, LightPlaneId::Near, static_cast<int>(LightPlayerPlaneMatrix::None));
+			} else if (id == LevelChunkId::chunkLights) {
+				lights.load(ba);
 			}
 		} catch (const ppl7::EndOfFileException&) {
 			break;
@@ -354,6 +362,8 @@ void Level::save(const ppl7::String& Filename)
 	PlayerLights.save(ff, LevelChunkId::chunkLightsPlayer);
 	FrontLights.save(ff, LevelChunkId::chunkLightsFront);
 	NearLights.save(ff, LevelChunkId::chunkLightsNear);
+
+	lights.save(ff, LevelChunkId::chunkLights);
 
 	ff.close();
 
@@ -607,6 +617,7 @@ size_t Level::countVisibleSprites() const
 
 size_t Level::countLights() const
 {
+	return lights.count();
 	size_t total=0;
 	total+=HorizonLights.count();
 	total+=FarLights.count();
@@ -619,6 +630,7 @@ size_t Level::countLights() const
 
 size_t Level::countVisibleLights() const
 {
+	return lights.countVisible();
 	size_t total=0;
 	if (FarPlane.isVisible()) {
 		total+=FarLights.countVisible();
