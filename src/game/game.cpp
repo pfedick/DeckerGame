@@ -10,8 +10,6 @@
 
 //#define EVENTTRACKING 1
 
-static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
-
 static ppl7::tk::Window* GameWindow=NULL;
 static Game* GameInstance=NULL;
 
@@ -227,6 +225,7 @@ void Game::loadGrafix()
 
 	level.objects->loadSpritesets(sdl);
 	level.particles->loadSpritesets(sdl);
+	level.lights.loadSpritesets(sdl);
 	level.waynet.setSpriteset(&resources.Waynet);
 	level.setLightset(&resources.Lightmaps, &resources.LightObjects);
 
@@ -656,7 +655,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 
 	level.setEditmode(object_selection != NULL);
-	metrics.time_update_sprites.start();
+	metrics.time_update_lights.start();
 	level.updateVisibleLightsLists(WorldCoords, game_viewport);
 	metrics.time_update_lights.stop();
 

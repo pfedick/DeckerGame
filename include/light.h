@@ -22,13 +22,18 @@ enum class LightPlaneBitMatrix {
 
 enum class LightPlaneId {
     Near=0,
-    Front,
     Player,
-    Back,
     Middle,
     Far,
     Horizon,
     Max
+};
+
+enum class LightPlayerPlaneMatrix {
+    None=0,
+    Front=1,
+    Player=2,
+    Back=4
 };
 
 class LightObject {
@@ -48,7 +53,9 @@ public:
     uint8_t intensity;   // 1 Byte
     uint8_t flare_intensity;   // 1 Byte
     LightType   myType;   // 1 Byte
-    uint8_t     planes;   // 1 Byte
+    uint8_t     plane;   // 1 Byte
+    uint8_t     playerPlane; // 1 Byte
+
     ppl7::grafix::Rect boundary;
     bool enabled;
     bool initial_state;     // Flags 1 Byte
@@ -106,8 +113,6 @@ private:
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
 
-    void addToPlane(LightPlaneBitMatrix plane, LightObject* item, uint32_t id);
-
 public:
     LightSystem();
     ~LightSystem();
@@ -123,12 +128,11 @@ public:
     LightObject* getLight(uint32_t light_id);
     void deleteLight(uint32_t light_id);
 
-    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
-    void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
-    void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
+    size_t count() const;
 
-
-
+    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
+    void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
+    void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
 
 };
 

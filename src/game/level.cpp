@@ -9,9 +9,6 @@
 #include "particle.h"
 #include "light.h"
 
-
-static double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
-
 Level::Level()
 {
 	for (int i=0;i <= MAX_TILESETS;i++) {
@@ -66,6 +63,7 @@ void Level::clear()
 	NearSprites[1].clear();
 	objects->clear();
 	particles->clear();
+	lights.clear();
 	waynet.clear();
 	params.clear();
 }
@@ -542,12 +540,13 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, con
 
 void Level::updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
-	HorizonLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
-	FarLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
-	MiddleLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
-	PlayerLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
-	FrontLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
-	NearLights.updateVisibleLightList(worldcoords * planeFactor[2], viewport);
+	lights.updateVisibleLightList(worldcoords, viewport);
+	HorizonLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], viewport);
+	FarLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], viewport);
+	MiddleLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], viewport);
+	PlayerLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], viewport);
+	FrontLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], viewport);
+	NearLights.updateVisibleLightList(worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], viewport);
 }
 
 

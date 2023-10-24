@@ -55,6 +55,18 @@ EXCEPTION(SDLException, ppl7::Exception);
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 38
 
+const double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
+
+enum class PlaneId {
+	Near=6,
+	Front=1,
+	Player=0,
+	Back=3,
+	Middle=4,
+	Far=2,
+	Horizon=5
+};
+
 namespace Decker::Objects {
 class ObjectSystem;
 class Object;
@@ -608,6 +620,7 @@ private:
 	LightLayer PlayerLights=LightLayer(palette);
 	LightLayer FrontLights=LightLayer(palette);
 	LightLayer NearLights=LightLayer(palette);
+	LightSystem lights;
 
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;
@@ -663,8 +676,7 @@ private:
 		chunkLightsPlayer=44,
 		chunkLightsFront=45,
 		chunkLightsNear=46,
-
-
+		chunkLights=47,
 	};
 
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);

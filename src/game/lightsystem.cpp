@@ -23,7 +23,8 @@ LightObject::LightObject()
     myType=LightType::Static;
     enabled=true;
     initial_state=true;
-    planes=0;
+    plane=static_cast<int>(LightPlaneId::Player);
+    playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     has_lensflare=false;
     save_size=33;
 }
@@ -39,7 +40,7 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
     ppl7::Poke8(buffer + 1, static_cast<int>(myType));
     ppl7::Poke32(buffer + 2, id);
-    ppl7::Poke8(buffer + 6, planes);
+    ppl7::Poke8(buffer + 6, plane);
     int flags=0;
     if (initial_state) flags|=1;
     if (has_lensflare) flags|=2;
@@ -63,7 +64,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
     if (version == 1) {
         myType=static_cast<LightType>(ppl7::Peek8(buffer + 1));
         id=ppl7::Peek32(buffer + 2);
-        planes=ppl7::Peek8(buffer + 6);
+        plane=ppl7::Peek8(buffer + 6);
         int flags=ppl7::Peek8(buffer + 7);
         initial_state=flags & 1;
         has_lensflare=flags & 2;
@@ -156,15 +157,8 @@ void LightLayer::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, 
             uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
             visible_lights_map.insert(std::pair<uint32_t, const LightObject&>(id, item));
             //ppl7::PrintDebugTime("adding to visible_lights_map\n");
-        } else {
-            //ppl7::PrintDebugTime("but we ignore it! bw=%d, bh=%d\n", item.boundary.width(), item.boundary.height());
-            uint32_t id=(uint32_t)(((uint32_t)item.y & 0xffff) << 16) | (uint32_t)((uint32_t)item.x & 0xffff);
-            visible_lights_map.insert(std::pair<uint32_t, const LightObject&>(id, item));
         }
-
-
     }
-
 }
 
 size_t LightLayer::count() const
@@ -391,11 +385,13 @@ void LightSystem::loadSpritesets(SDL& sdl)
 
 void LightSystem::clear()
 {
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    for (it=light_map.begin();it != light_map.end();++it) {
+        delete it->second;
+    }
     light_map.clear();
     visible_light_map[static_cast<int>(LightPlaneId::Near)].clear();
-    visible_light_map[static_cast<int>(LightPlaneId::Front)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Player)].clear();
-    visible_light_map[static_cast<int>(LightPlaneId::Back)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Far)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
@@ -403,19 +399,10 @@ void LightSystem::clear()
 
 }
 
-void LightSystem::addToPlane(LightPlaneBitMatrix plane, LightObject* item, uint32_t id)
-{
-    if (item->planes & static_cast<int>(plane))
-        visible_light_map[static_cast<int>(plane)].insert(std::pair<uint32_t, LightObject*>(id, item));
-
-}
-
 void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
     visible_light_map[static_cast<int>(LightPlaneId::Near)].clear();
-    visible_light_map[static_cast<int>(LightPlaneId::Front)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Player)].clear();
-    visible_light_map[static_cast<int>(LightPlaneId::Back)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Far)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
@@ -441,13 +428,7 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
 void LightSystem::addObjectLight(LightObject* light)
 {
     uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
-    addToPlane(LightPlaneBitMatrix::Near, light, id);
-    addToPlane(LightPlaneBitMatrix::Front, light, id);
-    addToPlane(LightPlaneBitMatrix::Player, light, id);
-    addToPlane(LightPlaneBitMatrix::Back, light, id);
-    addToPlane(LightPlaneBitMatrix::Middle, light, id);
-    addToPlane(LightPlaneBitMatrix::Far, light, id);
-    addToPlane(LightPlaneBitMatrix::Horizon, light, id);
+    visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
 }
 
 void LightSystem::addLight(LightObject* light)
@@ -474,6 +455,11 @@ void LightSystem::deleteLight(uint32_t light_id)
         delete it->second;
         light_map.erase(it);
     }
+}
+
+size_t LightSystem::count() const
+{
+    return light_map.size();
 }
 
 
@@ -526,17 +512,17 @@ void LightSystem::load(const ppl7::ByteArrayPtr& ba)
 }
 
 
-void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
 
 }
 
-void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
 
 }
 
-void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
+void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
 
 }
