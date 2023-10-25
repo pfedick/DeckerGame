@@ -333,6 +333,32 @@ void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect&
 void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane) const
 {
     if (!visibility[static_cast<int>(plane)]) return;
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
+        const LightObject* item=(it->second);
+        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+            if (item->has_lensflare) {
+            //ppl7::grafix::Color c=palette.getColor(item->color_index);
+                ppl7::grafix::Color c(255, 255, 255, 255);
+                int x=item->x + viewport.x1 - worldcoords.x;
+                int y= item->y + viewport.y1 - worldcoords.y;
+                float dist=ppl7::grafix::Distance(ppl7::grafix::Point(x, y), ppl7::grafix::Point(1920 / 2, 1080 / 2));
+                if (dist < 1300) c.setAlpha(255 - (dist * 200.0f / 1300.0f));
+                //ppl7::PrintDebugTime("distance: %0.3f\n", dist);
+                lensflares->draw(renderer, x, y, 0, c);
+                /*
+                c.setAlpha(55 + (dist * 200.0f / 1300.0f));
+                int xd=1920 / 2 - x;
+                int yd=1080 / 2 - y;
+                for (int reflection=1;reflection < 5;reflection++) {
+                    int x1=x + xd * reflection / 5;
+                    int y1=y + yd * reflection / 5;
+                    lensflares->drawScaled(renderer, x1, y1, 8, 0.2f * reflection, c);
+                }
+                */
+            }
+        }
+    }
 }
 
 

@@ -427,6 +427,7 @@ void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerP
 	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
 	SDL_SetRenderTarget(renderer, tex_render_target);
 	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+	lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	metrics.time_lights.stop();
 }
 
