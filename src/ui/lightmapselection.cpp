@@ -30,13 +30,39 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	yy+=110;
 
 
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "LightId:"));
+	light_id=new ppl7::tk::Label(70, yy, client.width(), 30, "-");
+	light_id->setBorderStyle(ppl7::tk::Frame::BorderStyle::Inset);
+	this->addChild(light_id);
+	yy+=30;
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "States:"));
+	initial_state=new ppl7::tk::CheckBox(70, yy, 100, 30, "initial");
+	initial_state->setEventHandler(this);
+	this->addChild(initial_state);
+	current_state=new ppl7::tk::CheckBox(70 + 90, yy, 100, 30, "current");
+	current_state->setEventHandler(this);
+	this->addChild(current_state);
+
+	yy+=30;
+
 	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "LightObject:"));
 	yy+=30;
-	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 440, game);
+	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 530, game);
 	tilesframe->setEventHandler(this);
 	this->addChild(tilesframe);
 
-	yy=client.height() - 430;
+	yy=client.height() - 520;
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Planes:"));
+	front_plane_checkbox=new ppl7::tk::CheckBox(70, yy, 90, 30, "front");
+	front_plane_checkbox->setEventHandler(this);
+	this->addChild(front_plane_checkbox);
+	player_plane_checkbox=new ppl7::tk::CheckBox(70 + 70, yy, 90, 30, "player", true);
+	player_plane_checkbox->setEventHandler(this);
+	this->addChild(player_plane_checkbox);
+	back_plane_checkbox=new ppl7::tk::CheckBox(70 + 140, yy, 90, 30, "back", true);
+	back_plane_checkbox->setEventHandler(this);
+	this->addChild(back_plane_checkbox);
+	yy+=30;
 
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
 	intensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
@@ -72,7 +98,21 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	angle->enableSpinBox(true, 5, 0, 80);
 	angle->setValue(0.0f);
 	this->addChild(angle);
+	yy+=30;
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Lensflare:"));
+	lensflare=new ppl7::tk::CheckBox(70, yy, 80, 30, "yes", false);
+	lensflare->setEventHandler(this);
+	this->addChild(lensflare);
+	yy+=30;
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
+	lensflareIntensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
+	lensflareIntensity->setEventHandler(this);
+	lensflareIntensity->setLimits(0, 255);
+	lensflareIntensity->enableSpinBox(true, 1, 80);
+	lensflareIntensity->setValue(255);
+	this->addChild(lensflareIntensity);
 	yy+=40;
+
 
 	colorframe=new ColorSelectionFrame(client.left(), client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
 	colorframe->setEventHandler(this);
@@ -153,6 +193,68 @@ void LightSelection::setLightAngle(float angle)
 	this->angle->setValue(angle);
 }
 
+void LightSelection::setPlayerPlaneMatrix(LightPlayerPlaneMatrix matrix)
+{
+	player_plane_checkbox->setChecked(static_cast<int>(matrix) & static_cast<int>(LightPlayerPlaneMatrix::Player));
+	front_plane_checkbox->setChecked(static_cast<int>(matrix) & static_cast<int>(LightPlayerPlaneMatrix::Front));
+	back_plane_checkbox->setChecked(static_cast<int>(matrix) & static_cast<int>(LightPlayerPlaneMatrix::Back));
+}
+
+LightPlayerPlaneMatrix LightSelection::getPlayerPlaneMatrix() const
+{
+	int v=0;
+	if (player_plane_checkbox->checked()) v|=static_cast<int>(LightPlayerPlaneMatrix::Player);
+	if (front_plane_checkbox->checked()) v|=static_cast<int>(LightPlayerPlaneMatrix::Front);
+	if (back_plane_checkbox->checked()) v|=static_cast<int>(LightPlayerPlaneMatrix::Back);
+	return static_cast<LightPlayerPlaneMatrix>(v);
+}
+
+
+
+void LightSelection::setCurrentState(bool enabled)
+{
+	current_state->setChecked(enabled);
+}
+
+void LightSelection::setInitialState(bool enabled)
+{
+	initial_state->setChecked(enabled);
+}
+
+void LightSelection::setLensflare(bool enabled)
+{
+	lensflare->setChecked(enabled);
+}
+
+void LightSelection::setLensflareIntensity(uint8_t intensity)
+{
+	lensflareIntensity->setValue(intensity);
+}
+
+void LightSelection::setLightId(uint32_t id)
+{
+	light_id->setText(ppl7::ToString("%d", id));
+}
+
+bool LightSelection::getCurrentState() const
+{
+	return current_state->checked();
+}
+
+bool LightSelection::getInitialState() const
+{
+	return initial_state->checked();
+}
+
+bool LightSelection::getLensflare() const
+{
+	return lensflare->checked();
+}
+
+uint8_t LightSelection::getLensflareIntensity() const
+{
+	return (uint8_t)lensflareIntensity->value();
+}
 
 void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {

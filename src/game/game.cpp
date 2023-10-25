@@ -1159,6 +1159,7 @@ void Game::showLightsSelection()
 		world_widget->setViewport(viewport);
 		sprite_mode=spriteModeDraw;
 		selected_light=NULL;
+		lights_selection->setLightId(0);
 	}
 }
 
@@ -1298,6 +1299,7 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 	}
 	if (lights_selection->selectedLight() >= 0 && sprite_mode != spriteModeDraw) {
 		selected_light=NULL;
+		lights_selection->setLightId(0);
 		sprite_mode=spriteModeDraw;
 	}
 }
@@ -1568,11 +1570,18 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		light->sprite_no=nr;
 		light->color_index=lights_selection->colorIndex();
 		light->intensity=lights_selection->colorIntensity();
+		light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
+		light->enabled=lights_selection->getCurrentState();
+		light->initial_state=lights_selection->getInitialState();
+		light->has_lensflare=lights_selection->getLensflare();
+		light->flare_intensity=lights_selection->getLensflareIntensity();
+
 		level.lights.addLight(light);
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		lights_selection->setSelectedLight(-1);
 		sprite_mode=spriteModeDraw;
 		selected_light=NULL;
+		lights_selection->setLightId(0);
 	}
 }
 
@@ -1773,17 +1782,25 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 
 
 	if (selected_light) {
+		lights_selection->setLightId(selected_light->id);
 		lights_selection->setSelectedLight(selected_light->sprite_no);
 		lights_selection->setLightAngle(selected_light->angle);
 		lights_selection->setLightScaleX(selected_light->scale_x);
 		lights_selection->setLightScaleY(selected_light->scale_y);
 		lights_selection->setColorIntensity(selected_light->intensity);
 		lights_selection->setColorIndex(selected_light->color_index);
+		lights_selection->setCurrentState(selected_light->enabled);
+		lights_selection->setInitialState(selected_light->initial_state);
+		lights_selection->setPlayerPlaneMatrix(static_cast<LightPlayerPlaneMatrix>(selected_light->playerPlane));
+		lights_selection->setLensflare(selected_light->has_lensflare);
+		lights_selection->setLensflareIntensity(selected_light->flare_intensity);
+
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
 		sprite_move_start=mouse;
 	} else {
 		selected_light=NULL;
+		lights_selection->setLightId(0);
 	}
 }
 
@@ -1820,6 +1837,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
 				level.lights.deleteLight(selected_light->id);
 				selected_light=NULL;
+				lights_selection->setLightId(0);
 				lights_selection->setSelectedLight(-1);
 			}
 		}
@@ -2221,6 +2239,11 @@ void Game::updateLightFromUi()
 		selected_light->scale_y=lights_selection->lightScaleY();
 		selected_light->color_index=lights_selection->colorIndex();
 		selected_light->intensity=lights_selection->colorIntensity();
+		selected_light->enabled=lights_selection->getCurrentState();
+		selected_light->initial_state=lights_selection->getInitialState();
+		selected_light->has_lensflare=lights_selection->getLensflare();
+		selected_light->flare_intensity=lights_selection->getLensflareIntensity();
+		selected_light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
 		//selected_light_system->modifyLight(selected_light);
 	}
 }

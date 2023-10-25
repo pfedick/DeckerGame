@@ -7,6 +7,7 @@
 #include "widgets.h"
 #include "metrics.h"
 #include "waynet.h"
+#include "light.h"
 
 class Game;
 class SpriteTexture;
@@ -615,6 +616,17 @@ private:
 	ppl7::tk::DoubleHorizontalSlider* scale_y;
 	ppl7::tk::DoubleHorizontalSlider* angle;
 	ppl7::tk::HorizontalSlider* intensity;
+	ppl7::tk::CheckBox* player_plane_checkbox;
+	ppl7::tk::CheckBox* front_plane_checkbox;
+	ppl7::tk::CheckBox* back_plane_checkbox;
+
+	ppl7::tk::CheckBox* initial_state;
+	ppl7::tk::CheckBox* current_state;
+	ppl7::tk::CheckBox* lensflare;
+	ppl7::tk::HorizontalSlider* lensflareIntensity;
+
+	ppl7::tk::Label* light_id;
+
 
 	//float scale;
 	//float angle;
@@ -635,6 +647,19 @@ public:
 	void setColorIndex(int index);
 	int colorIntensity() const;
 	void setColorIntensity(int index);
+	void setPlayerPlaneMatrix(LightPlayerPlaneMatrix matrix);
+	LightPlayerPlaneMatrix getPlayerPlaneMatrix() const;
+
+	void setCurrentState(bool enabled);
+	void setInitialState(bool enabled);
+	void setLensflare(bool enabled);
+	void setLensflareIntensity(uint8_t intensity);
+	void setLightId(uint32_t id);
+
+	bool getCurrentState() const;
+	bool getInitialState() const;
+	bool getLensflare() const;
+	uint8_t getLensflareIntensity() const;
 
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
 	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;

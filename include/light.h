@@ -1,6 +1,7 @@
 #ifndef INCLUDE_LIGHTMAP_H_
 #define INCLUDE_LIGHTMAP_H_
 
+#include "decker_sdl.h"
 class SpriteTexture;
 class LightLayer;
 class Object;
