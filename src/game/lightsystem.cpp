@@ -365,16 +365,22 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
                 if (dist < 1300) c.setAlpha(255 - (dist * 200.0f / 1300.0f));
                 //ppl7::PrintDebugTime("distance: %0.3f\n", dist);
                 lensflares->draw(renderer, x, y, 0, c);
-                /*
-                c.setAlpha(55 + (dist * 200.0f / 1300.0f));
-                int xd=1920 / 2 - x;
-                int yd=1080 / 2 - y;
-                for (int reflection=1;reflection < 5;reflection++) {
-                    int x1=x + xd * reflection / 5;
-                    int y1=y + yd * reflection / 5;
-                    lensflares->drawScaled(renderer, x1, y1, 8, 0.2f * reflection, c);
+                if (dist < 700) {
+                    float v=1.0f - dist / 700.0f;
+                    if (dist < 30) v=v * dist / 30;
+                    int xd=1920 / 2 - x;
+                    int yd=1080 / 2 - y;
+                    lensflares->drawScaled(renderer, 960 - xd * 3 / 4, 540 - yd * 3 / 3, 8, 0.2f, ppl7::grafix::Color(128, 128, 0, 30.0f * v));
+                    lensflares->drawScaled(renderer, 960 - xd * 2 / 4, 540 - yd * 2 / 3, 8, 0.3f, ppl7::grafix::Color(128, 128, 0, 40.0f * v));
+                    lensflares->drawScaled(renderer, 960 - xd * 1 / 4, 540 - yd * 1 / 3, 8, 0.4f, ppl7::grafix::Color(128, 0, 0, 60.0f * v));
+                    lensflares->drawScaled(renderer, 960, 540, 8, 0.3f, ppl7::grafix::Color(255, 255, 255, 50.0f * v));
+                    lensflares->drawScaled(renderer, 960 + xd * 1 / 4, 540 + yd * 1 / 4, 8, 0.6f, ppl7::grafix::Color(255, 255, 255, 80.0f * v));
+                    lensflares->drawScaled(renderer, 960 + xd * 2 / 4, 540 + yd * 2 / 4, 8, 0.8f, ppl7::grafix::Color(128, 64, 0, 30.0f * v));
+                    lensflares->drawScaled(renderer, 960 + xd * 3 / 4, 540 + yd * 3 / 4, 8, 0.6f, ppl7::grafix::Color(32, 32, 192, 70.0f * v));
+                    lensflares->drawScaled(renderer, 960 + xd * 4 / 4, 540 + yd * 4 / 4, 8, 1.0f, ppl7::grafix::Color(32, 192, 32, 30.0f * v));
                 }
-                */
+
+
             }
         }
     }
