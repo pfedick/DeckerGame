@@ -314,6 +314,21 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     }
 }
 
+static void drawId(SDL_Renderer* renderer, SpriteTexture* spriteset, int x, int y, uint32_t as)
+{
+    ppl7::String s;
+    s.setf("%d", as);
+    int w=(int)s.size() * 10;
+    x-=w / 2;
+    for (size_t p=0;p < s.size();p++) {
+        int num=s[p] - 48 + 3;
+        spriteset->draw(renderer, x, y, num);
+        x+=10;
+    }
+
+
+}
+
 void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const
 {
     if (!visibility[static_cast<int>(plane)]) return;
@@ -321,10 +336,14 @@ void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect&
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
         if (static_cast<uint8_t>(plane) == item->plane) {
+            int x=item->x + viewport.x1 - worldcoords.x;
+            int y=item->y + viewport.y1 - worldcoords.y;
             light_objects->draw(renderer,
-                item->x + viewport.x1 - worldcoords.x,
-                item->y + viewport.y1 - worldcoords.y,
+                x,
+                y,
                 1);
+            drawId(renderer, light_objects, x, y, item->id);
+
         }
     }
 
