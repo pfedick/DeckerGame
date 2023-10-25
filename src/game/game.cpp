@@ -2234,6 +2234,7 @@ void Game::updateLightFromUi()
 	if (!lights_selection) return;
 	if (selected_light != NULL) {
 		//int currentPlane=mainmenue->currentPlane();
+		selected_light->sprite_no=lights_selection->selectedLight();
 		selected_light->angle=lights_selection->lightAngle();
 		selected_light->scale_x=lights_selection->lightScaleX();
 		selected_light->scale_y=lights_selection->lightScaleY();
