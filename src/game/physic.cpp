@@ -233,11 +233,11 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 	if (movement == Dead) return new_movement;
 	if (movement == Slide) {
 		if (orientation == Left) {
-			if (collision_matrix[1][4] == TileType::Blocking) {
+			if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[1][4] == TileType::BlockFromTop) {
 				new_movement=Stand;
 			}
 		} else {
-			if (collision_matrix[2][4] == TileType::Blocking) {
+			if (collision_matrix[2][4] == TileType::Blocking || collision_matrix[1][4] == TileType::BlockFromTop) {
 				new_movement=Stand;
 			}
 		}
@@ -353,6 +353,7 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 	}
 
 	if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
+		|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop
 		|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
 
 		if (gravity > 0.0f || movement == Falling) {
@@ -410,10 +411,13 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 
 		}
 	} else {
-		if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking) {
-			//ppl7::PrintDebugTime("col 1\n");
+		if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking
+			|| collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop) {
+				//ppl7::PrintDebugTime("col 1\n");
 			while (world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::Blocking
-				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::Blocking) {
+				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::Blocking
+				|| world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop
+				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop) {
 				y--;
 			}
 			velocity_move.x=0;
@@ -470,6 +474,7 @@ bool Physic::isDiving() const
 bool Physic::isOnGround() const
 {
 	if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
+		|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop
 		|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) return true;
 	return false;
 }

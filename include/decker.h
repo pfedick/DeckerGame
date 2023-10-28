@@ -439,6 +439,7 @@ public:
 		Fire,
 		AirStream,
 		EnemyBlocker,
+		BlockFromTop,
 		MaxType			// used for arrays
 	};
 };
