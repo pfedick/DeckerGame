@@ -401,14 +401,16 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 			flashlight1.y=pf.y - 1;
 			flashlight2.x=pf.x;
 			flashlight2.y=pf.y + 1;
-			lights.addObjectLight(&flashlight1);
-			lights.addObjectLight(&flashlight2);
 			if (it->second.angle > 0.0f) {
 				flashlight3.x=pf.x;
 				flashlight3.y=pf.y;
 				flashlight3.angle=it->second.angle;
 				lights.addObjectLight(&flashlight3);
+				if (it->second.angle < 180) flashlight1.x -= 8;
+				if (it->second.angle > 180) flashlight1.x += 8;
 			}
+			lights.addObjectLight(&flashlight1);
+			lights.addObjectLight(&flashlight2);
 
 		}
 
