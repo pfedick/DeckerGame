@@ -67,6 +67,7 @@ private:
 	AudioInstance* voice;
 	AudioSample voice_sample;
 	AudioClip::Id ambient_playing;
+	LightObject flashlight1, flashlight2, flashlight3;
 
 	enum class ParticleReason
 	{
@@ -115,6 +116,7 @@ private:
 	void toggleFlashlight();
 	void idleJokes(double time);
 	void playPhonetics();
+	void initFlashLight();
 public:
 	class Keys {
 	public:
@@ -161,6 +163,7 @@ public:
 	void setSpriteResource(const SpriteTexture& resource);
 	void setTileTypeResource(const SpriteTexture& resource);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void addFlashlightToLightSystem(LightSystem& lights);
 	void drawCollision(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 	void move(int x, int y);
 	ppl7::grafix::Rect getBoundingBox() const;

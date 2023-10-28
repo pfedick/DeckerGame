@@ -101,6 +101,7 @@ Player::Player(Game* game)
 	last_fullspeed=0.0f;
 	frame_rate_compensation=0.0f;
 	initFlashLightPivots();
+	initFlashLight();
 }
 
 Player::~Player()
@@ -317,6 +318,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (flashlightOn) {
 		if (frame >= 0 && frame <= 78) frame+=314;
 		else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
+		/*
 		if (frame >= 314 && frame <= 400) {
 			ppl7::grafix::Color c(255, 255, 255, 255);
 			ppl7::grafix::Color c2(255, 255, 255, 128);
@@ -343,6 +345,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 
 			SDL_SetRenderTarget(renderer, renderertarget_save);
 		}
+		*/
 	}
 
 	sprite_resource->draw(renderer, p.x, p.y + 1, frame, color_modulation);
@@ -350,6 +353,67 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	SDL_SetRenderDrawColor(renderer,255,0,0,255);
 	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
 	*/
+}
+
+void Player::initFlashLight()
+{
+	flashlight1.color_index=2;
+	flashlight1.sprite_no=2;
+	flashlight1.scale_x=0.2f;
+	flashlight1.scale_y=0.2f;
+	flashlight1.plane=static_cast<int>(LightPlaneId::Player);
+	flashlight1.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
+	flashlight1.has_lensflare=true;
+	flashlight1.flare_intensity=255;
+
+	flashlight2.color_index=2;
+	flashlight2.intensity=128;
+	flashlight2.sprite_no=0;
+	flashlight2.scale_x=0.6f;
+	flashlight2.scale_y=0.6f;
+	flashlight2.plane=static_cast<int>(LightPlaneId::Player);
+	flashlight2.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Back) | static_cast<int>(LightPlayerPlaneMatrix::Player);
+
+	flashlight3.color_index=2;
+	flashlight3.sprite_no=13;
+	flashlight3.scale_x=0.8f;
+	flashlight3.scale_y=1.0f;
+	flashlight3.plane=static_cast<int>(LightPlaneId::Player);
+	flashlight3.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Back) | static_cast<int>(LightPlayerPlaneMatrix::Player);
+
+
+}
+
+void Player::addFlashlightToLightSystem(LightSystem& lights)
+{
+	if (!flashlightOn) return;
+	int frame=animation.getFrame();
+	if (frame >= 0 && frame <= 78) frame+=314;
+	else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
+	if (frame >= 314 && frame <= 400) {
+		std::map<int, FlashLightPivot>::const_iterator it;
+		ppl7::grafix::Point pf(x, y);
+		it=flashlight_pivots.find(frame);
+		if (it != flashlight_pivots.end()) {
+			pf.x+=it->second.x;
+			pf.y+=it->second.y;
+			flashlight1.x=pf.x;
+			flashlight1.y=pf.y - 1;
+			flashlight2.x=pf.x;
+			flashlight2.y=pf.y + 1;
+			lights.addObjectLight(&flashlight1);
+			lights.addObjectLight(&flashlight2);
+			if (it->second.angle > 0.0f) {
+				flashlight3.x=pf.x;
+				flashlight3.y=pf.y;
+				flashlight3.angle=it->second.angle;
+				lights.addObjectLight(&flashlight3);
+			}
+
+		}
+
+	}
+
 }
 
 void Player::drawCollision(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const

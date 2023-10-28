@@ -433,6 +433,7 @@ void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerP
 
 void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
 {
+	player->addFlashlightToLightSystem(lights);
 	prepareLayer(renderer);
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);

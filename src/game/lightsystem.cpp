@@ -192,7 +192,10 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
         if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
             && x - item->boundary.width() < width && y - item->boundary.height() < height) {
 
-            addObjectLight(item);
+            //addObjectLight(item);
+            uint32_t id=(uint32_t)(((uint32_t)item->y & 0xffff) << 16) | (uint32_t)((uint32_t)item->x & 0xffff);
+            visible_light_map[static_cast<int>(item->plane)].insert(std::pair<uint32_t, LightObject*>(id, item));
+
         }
     }
 }
@@ -200,6 +203,7 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
 
 void LightSystem::addObjectLight(LightObject* light)
 {
+    light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
     uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
     visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
 }
@@ -357,7 +361,10 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
         const LightObject* item=(it->second);
         if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
             if (item->has_lensflare) {
-            //ppl7::grafix::Color c=palette.getColor(item->color_index);
+                if (plane == LightPlaneId::Player) {
+                    if (pplane == LightPlayerPlaneMatrix::Player && item->playerPlane & 4) continue;
+                }
+                //ppl7::grafix::Color c=palette.getColor(item->color_index);
                 ppl7::grafix::Color c(255, 255, 255, 255);
                 int x=item->x + viewport.x1 - worldcoords.x;
                 int y= item->y + viewport.y1 - worldcoords.y;
