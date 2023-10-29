@@ -1012,7 +1012,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			//startIdle=time;
 		}
 	}
-	if (movement == Stand && orientation == Front) idleJokes(time);
+	if (movement == Stand && orientation == Front && flashlightOn == false) idleJokes(time);
 	else startIdle=time;
 //}
 }
