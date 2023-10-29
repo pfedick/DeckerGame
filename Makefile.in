@@ -276,7 +276,7 @@ enemy_erik:
 	./texmaker -s lightwave/Render/enemies/erik/ -t res/erik.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/erik
 
 enemy_zombie:
-	./texmaker -s lightwave/Render/enemies/zombie/ -t res/erizombiek.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/zombie
+	./texmaker -s lightwave/Render/enemies/zombie/ -t res/zombie.tex -w 2048 -h 2048 -px 128 -py 195 -x tmp/zombie
 
 enemy_scorpion:
 	./texmaker -s lightwave/Render/enemies/scorpion/ -t res/scorpion.tex -w 1024 -h 1024 -px 128 -py 125 -x tmp/scorpion

@@ -105,6 +105,37 @@ public:
 	void playSoundOnAnimationSprite() override;
 };
 
+class Zombie : public AiEnemy
+{
+private:
+	enum State {
+		StateWaitForEnable,
+		StateStand,
+		StatePatrol,
+		StatePatrolLeft,
+		StatePatrolRight,
+		StateGoToOrigin,
+		StateFollowPlayer
+	};
+	double next_state;
+	double next_growl;
+	int state;
+	int substate;
+	int last_sprite_no;
+	bool attack;
+
+	void updateStatePatrol(double time, TileTypePlane& ttplane);
+	void switchAttackMode(bool enable);
+
+public:
+	Zombie();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void playSoundOnAnimationSprite() override;
+};
+
 class AutoGeorge : public AiEnemy
 {
 private:

@@ -399,6 +399,7 @@ Representation getRepresentation(int object_type)
 	case Type::Bat: return Bat::representation();
 	case Type::Bird: return Bird::representation();
 	case Type::Yeti: return Yeti::representation();
+	case Type::Zombie: return Zombie::representation();
 	case Type::Scorpion: return Scorpion::representation();
 	case Type::LevelEnd: return LevelEnd::representation();
 	case Type::AutoGeorge: return AutoGeorge::representation();
@@ -483,7 +484,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Wallenstein: return new Wallenstein();
 	case Type::Helena: return new Helena();
 	case Type::Yeti: return new Yeti();
-	//case Type::Zombie: return new Zombie();
+	case Type::Zombie: return new Zombie();
 	case Type::Bat: return new Bat();
 	case Type::Bird: return new Bird();
 	case Type::Scorpion: return new Scorpion();

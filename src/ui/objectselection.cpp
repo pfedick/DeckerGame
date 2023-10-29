@@ -65,7 +65,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);
 	addObject(Decker::Objects::Type::Yeti, "Yeti", 47);
-	addObject(Decker::Objects::Type::Zombie, "Yeti", 62);
+	addObject(Decker::Objects::Type::Zombie, "Zombie", 62);
 	addObject(Decker::Objects::Type::AutoGeorge, "AutoGeorge", 48);
 	addObject(Decker::Objects::Type::Ostrich, "Ostrich", 49);
 	addObject(Decker::Objects::Type::Fish, "Fish", 52);
