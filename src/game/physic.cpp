@@ -353,7 +353,6 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 	}
 
 	if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
-		|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop
 		|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
 
 		if (gravity > 0.0f || movement == Falling) {
@@ -363,7 +362,15 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 			y=(y / TILE_HEIGHT) * TILE_HEIGHT;
 			if (movement == Falling || movement == Jump || movement == ClimbDown) new_movement=Stand;
 		}
+	} else 	if (collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop) {
+		if ((!(keys.matrix & KeyboardKeys::Down)) && (gravity > 0.0f || movement == Falling)) {
+			acceleration_gravity=0.0f;
+			gravity=0.0f;
+			y=(y / TILE_HEIGHT) * TILE_HEIGHT;
+			if (movement == Falling || movement == Jump || movement == ClimbDown) new_movement=Stand;
+		}
 	}
+
 	if (isSwimming()) {
 		//ppl7::PrintDebugTime("check col swim\n");
 		if (collision_matrix[1][4] == TileType::Blocking && collision_matrix[2][4] == TileType::Blocking) {
@@ -411,13 +418,10 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 
 		}
 	} else if (velocity_move.y > 0 || movement == Falling) {
-		if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking
-			|| collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop) {
+		if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking) {
 				//ppl7::PrintDebugTime("col 1\n");
 			while (world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::Blocking
-				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::Blocking
-				|| world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop
-				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop) {
+				|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::Blocking) {
 				y--;
 			}
 			velocity_move.x=0;
@@ -425,7 +429,20 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 			acceleration_gravity=0.0f;
 			gravity=0.0f;
 			if (movement == ClimbDown) new_movement=Stand;
+		} else 	if (collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop) {
+			if (!(keys.matrix & KeyboardKeys::Down)) {
+				while (world.getType(ppl7::grafix::Point(x - (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop
+					|| world.getType(ppl7::grafix::Point(x + (TILE_WIDTH / 2), y - 1)) == TileType::BlockFromTop) {
+					y--;
+				}
+				velocity_move.x=0;
+				velocity_move.y=0;
+				acceleration_gravity=0.0f;
+				gravity=0.0f;
+				if (movement == ClimbDown) new_movement=Stand;
+			}
 		}
+
 	}
 
 	if (player_stands_on_object) {

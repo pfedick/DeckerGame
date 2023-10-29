@@ -733,6 +733,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 
 	}
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	keys=getKeyboardMatrix(state);
+
 	maxair=getMaxAirFromDifficultyLevel(game->config.difficulty);
 	if (voice) voice->setPositional(ppl7::grafix::Point(x, y), 1600);
 	if (movement == Dead) {
@@ -844,10 +847,6 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 
 
 	acceleration_jump_sideways=0;
-	//if (time>next_keycheck) {
-	//next_keycheck=time+0.1f;
-	const Uint8* state = SDL_GetKeyboardState(NULL);
-	Player::Keys keys=getKeyboardMatrix(state);
 	if (keys.matrix & KeyboardKeys::Flashlight) {
 		toggleFlashlight();
 	}
@@ -947,6 +946,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 					animation.start(climb_down_cycle, sizeof(climb_down_cycle) / sizeof(int), true, 0);
 				}
 			}
+		} else if (collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop
+			|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop) {
+			//movement=Jump;
+			//jump_climax=time;
+			//acceleration_jump=2.0f * frame_rate_compensation;
 		}
 
 	} else if (keys.matrix == (KeyboardKeys::Left) && movement == Jump) {
@@ -974,8 +978,8 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 
 void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
-	const Uint8* state = SDL_GetKeyboardState(NULL);
-	Player::Keys keys=getKeyboardMatrix(state);
+	//const Uint8* state = SDL_GetKeyboardState(NULL);
+	//Player::Keys keys=getKeyboardMatrix(state);
 	if (movement == Jump) {
 		if (!(keys.matrix & KeyboardKeys::Up)) {
 			movement=Falling;

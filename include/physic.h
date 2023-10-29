@@ -57,7 +57,8 @@ public:
 		SwimStraight,
 		SwimUp,
 		SwimDown,
-		Hacking
+		Hacking,
+		Crawling,
 	};
 	enum PlayerOrientation {
 		Left,
@@ -73,6 +74,14 @@ public:
 		Drowned,
 		Burned
 	};
+
+	class Keys {
+	public:
+		int matrix;
+		int velocity_x;
+		int velocity_y;
+	};
+	Keys keys;
 
 	PlayerMovement movement=Stand;
 	PlayerOrientation orientation=Front;

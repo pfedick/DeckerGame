@@ -118,12 +118,6 @@ private:
 	void playPhonetics();
 	void initFlashLight();
 public:
-	class Keys {
-	public:
-		int matrix;
-		int velocity_x;
-		int velocity_y;
-	};
 	float x, y;
 	int points, health, lifes;
 	float air;
