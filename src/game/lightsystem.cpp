@@ -372,11 +372,13 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
                 if (dist < 1300) c.setAlpha(255 - (dist * 200.0f / 1300.0f));
                 //ppl7::PrintDebugTime("distance: %0.3f\n", dist);
                 int sprite=0;
-                if (item->flare_intensity != 255) sprite=item->flare_intensity;
+                //if (item->flare_intensity != 255) sprite=item->flare_intensity;
+                sprite=7 - (item->flare_intensity * 7 / 255);
                 lensflares->draw(renderer, x, y, sprite, c);
                 if (dist < 700) {
                     float v=1.0f - dist / 700.0f;
                     if (dist < 30) v=v * dist / 30;
+                    v=v * item->flare_intensity / 255.0f;
                     int xd=1920 / 2 - x;
                     int yd=1080 / 2 - y;
                     lensflares->drawScaled(renderer, 960 - xd * 3 / 4, 540 - yd * 3 / 3, 8, 0.2f, ppl7::grafix::Color(128, 128, 0, 30.0f * v));
