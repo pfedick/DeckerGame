@@ -101,7 +101,7 @@ public:
 	double time;
 	double fallstart;
 
-	int collision_matrix[4][6];
+	int collision_matrix[6][6];
 	int collision_at_pivoty[3];
 	int collision_type_count[TileType::Type::MaxType];
 	Decker::Objects::Object* player_stands_on_object;

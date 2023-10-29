@@ -369,7 +369,7 @@ void AiEnemy::executeKeys(float frame_rate_compensation)
 			animation.start(anicycleRunRight);
 		}
 	} else if ((keys == KeyboardKeys::Up || keys == (KeyboardKeys::Up | KeyboardKeys::Shift)) && movement != Falling && movement != Jump) {
-		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder) {
+		if (collision_matrix[2][4] == TileType::Ladder || collision_matrix[3][4] == TileType::Ladder) {
 			if (movement != ClimbUp) {
 				movement=ClimbUp;
 				orientation=Back;
@@ -424,9 +424,9 @@ void AiEnemy::executeKeys(float frame_rate_compensation)
 		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.start(anicycleJumpRight);
 	} else if (keys == KeyboardKeys::Down || keys == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
-		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
-			|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
-			if (collision_matrix[1][5] != TileType::Blocking && collision_matrix[2][5] != TileType::Blocking) {
+		if (collision_matrix[2][4] == TileType::Ladder || collision_matrix[3][4] == TileType::Ladder
+			|| collision_matrix[2][5] == TileType::Ladder || collision_matrix[3][5] == TileType::Ladder) {
+			if (collision_matrix[2][5] != TileType::Blocking && collision_matrix[3][5] != TileType::Blocking) {
 				if (movement != ClimbDown) {
 					//printf ("climb down\n");
 					movement=ClimbDown;

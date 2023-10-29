@@ -423,15 +423,15 @@ void Player::drawCollision(SDL_Renderer* renderer, const ppl7::grafix::Rect& vie
 	ppl7::grafix::Point p(x + viewport.x1 - worldcoords.x, y + viewport.y1 - worldcoords.y);
 	if (tiletype_resource) {
 		for (int cy=0;cy < 6;cy++) {
-			for (int cx=0;cx < 4;cx++) {
-				tiletype_resource->draw(renderer, p.x - (TILE_WIDTH * 2) + (cx * TILE_WIDTH), p.y - (5 * TILE_HEIGHT) + (cy * TILE_HEIGHT), collision_matrix[cx][cy]);
+			for (int cx=0;cx < 6;cx++) {
+				tiletype_resource->draw(renderer, p.x - (TILE_WIDTH * 3) + (cx * TILE_WIDTH), p.y - (5 * TILE_HEIGHT) + (cy * TILE_HEIGHT), collision_matrix[cx][cy]);
 				//ppl7::PrintDebugTime("cx:cy %d:%d = %d\n", cx, cy, collision_matrix[cx][cy]);
 			}
 		}
 	}
-	tiletype_resource->draw(renderer, p.x + 80, p.y - 32, collision_at_pivoty[0]);
-	tiletype_resource->draw(renderer, p.x + 80, p.y, collision_at_pivoty[1]);
-	tiletype_resource->draw(renderer, p.x + 80, p.y + 32, collision_at_pivoty[2]);
+	tiletype_resource->draw(renderer, p.x + 100, p.y - 32, collision_at_pivoty[0]);
+	tiletype_resource->draw(renderer, p.x + 100, p.y, collision_at_pivoty[1]);
+	tiletype_resource->draw(renderer, p.x + 100, p.y + 32, collision_at_pivoty[2]);
 }
 
 
@@ -818,7 +818,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		}
 	}
 	//ppl7::PrintDebugTime("updatePhysics, gravity: %0.3f, acc y: %0.3f, velo y: %0.3f\n", gravity, acceleration.y, velocity_move.y);
-	if (collision_matrix[1][4] == TileType::Water || collision_matrix[2][4] == TileType::Water) {
+	if (collision_matrix[2][4] == TileType::Water || collision_matrix[3][4] == TileType::Water) {
 		if (!waterSplashPlayed && gravity > 0.0f) {
 			waterSplashPlayed=true;
 			splashIntoWater(gravity);
@@ -918,7 +918,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			animation.start(run_cycle_right, sizeof(run_cycle_right) / sizeof(int), true, 0);
 		}
 	} else if ((keys.matrix == KeyboardKeys::Up || keys.matrix == (KeyboardKeys::Up | KeyboardKeys::Shift)) && movement != Falling && movement != Jump) {
-		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder) {
+		if (collision_matrix[2][4] == TileType::Ladder || collision_matrix[3][4] == TileType::Ladder) {
 			if (movement != ClimbUp) {
 				movement=ClimbUp;
 				orientation=Back;
@@ -975,9 +975,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		animation.setStaticFrame(39);
 	} else if (keys.matrix == KeyboardKeys::Down || keys.matrix == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
 		//ppl7::PrintDebugTime("down\n");
-		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
-			|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
-			if (collision_matrix[1][5] != TileType::Blocking && collision_matrix[2][5] != TileType::Blocking) {
+		if (collision_matrix[2][4] == TileType::Ladder || collision_matrix[3][4] == TileType::Ladder
+			|| collision_matrix[2][5] == TileType::Ladder || collision_matrix[3][5] == TileType::Ladder) {
+			if (collision_matrix[2][5] != TileType::Blocking && collision_matrix[3][5] != TileType::Blocking) {
 				if (movement != ClimbDown) {
 					//printf ("climb down\n");
 					movement=ClimbDown;
@@ -985,8 +985,8 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 					animation.start(climb_down_cycle, sizeof(climb_down_cycle) / sizeof(int), true, 0);
 				}
 			}
-		} else if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
-			|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop) {
+		} else if (collision_matrix[2][5] == TileType::Blocking || collision_matrix[3][5] == TileType::Blocking
+			|| collision_matrix[2][5] == TileType::BlockFromTop || collision_matrix[3][5] == TileType::BlockFromTop) {
 			movement=Crouch;
 			if (orientation == Left) animation.setStaticFrame(43);
 			else if (orientation == Right) animation.setStaticFrame(52);
@@ -1064,7 +1064,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 	//Player::Keys keys=getKeyboardMatrix(state);
 
 	if (keys.matrix & KeyboardKeys::Up) {
-		if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water && movement != Jump) {
+		if (collision_matrix[2][2] != TileType::Water && collision_matrix[3][2] != TileType::Water && movement != Jump) {
 			if (keys.matrix & KeyboardKeys::Left) {
 				movement=Jump;
 				orientation=Left;
@@ -1141,7 +1141,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.y=speed;
 		velocity_move.x=0;
-	} else if (keys.matrix == KeyboardKeys::Right && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+	} else if (keys.matrix == KeyboardKeys::Right && (collision_matrix[2][1] != TileType::Water && collision_matrix[3][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Right) {
 			movement=Swim;
 			orientation=Right;
@@ -1157,7 +1157,7 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 		}
 		velocity_move.x=speed;
 		velocity_move.y=0;
-	} else if (keys.matrix == KeyboardKeys::Left && (collision_matrix[1][1] != TileType::Water && collision_matrix[2][1] != TileType::Water)) {
+	} else if (keys.matrix == KeyboardKeys::Left && (collision_matrix[2][1] != TileType::Water && collision_matrix[3][1] != TileType::Water)) {
 		if (movement != Swim || orientation != Left) {
 			movement=Swim;
 			orientation=Left;
@@ -1216,9 +1216,9 @@ void Player::handleKeyboardWhileCrawling(double time, const TileTypePlane& world
 {
 	if (movement == CrawlTurn) return;
 	if (keys.matrix & KeyboardKeys::Up) {
-		if (collision_matrix[1][0] != TileType::Blocking && collision_matrix[2][0] != TileType::Blocking
-			&& collision_matrix[1][1] != TileType::Blocking && collision_matrix[2][1] != TileType::Blocking
-			&& collision_matrix[1][2] != TileType::Blocking && collision_matrix[2][2] != TileType::Blocking
+		if (collision_matrix[2][0] != TileType::Blocking && collision_matrix[3][0] != TileType::Blocking
+			&& collision_matrix[2][1] != TileType::Blocking && collision_matrix[3][1] != TileType::Blocking
+			&& collision_matrix[2][2] != TileType::Blocking && collision_matrix[3][2] != TileType::Blocking
 			) {
 			stand();
 			return;
