@@ -24,8 +24,8 @@ Zombie::Zombie()
 	animation.setStaticFrame(27);
 	keys=0;
 	substate=0;
-	speed_walk=3.0f;
-	speed_run=5.0f;
+	speed_walk=1.6f;
+	speed_run=4.0f;
 	attack=false;
 	myLayer=Layer::BeforePlayer;
 	last_sprite_no=0;
@@ -158,18 +158,18 @@ void Zombie::update(double time, TileTypePlane& ttplane, Player& player, float f
 
 
 	if (!player.isDead()) {
-		if (state != StateFollowPlayer && dist < 800) {
+		if (state != StateFollowPlayer && dist < 400) {
 			state=StateFollowPlayer;
 			clearWaypoints();
 		}
 		if (state == StateFollowPlayer) {
-			if (dist < 700 && attack == false) {
+			if (dist < 200 && attack == false) {
 				switchAttackMode(true);
-			} else if (dist > 800 && attack == true) {
+			} else if (dist > 400 && attack == true) {
 				switchAttackMode(false);
 				stand();
 				state=StateFollowPlayer;
-			} else if (dist > 1600 && attack == true) {
+			} else if (dist > 600 && attack == true) {
 				switchAttackMode(false);
 				stand();
 				clearWaypoints();
