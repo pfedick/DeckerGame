@@ -357,7 +357,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 
 void Player::initFlashLight()
 {
-	flashlight1.color_index=2;
+	flashlight1.color.set(255, 255, 255, 255);
 	flashlight1.sprite_no=2;
 	flashlight1.scale_x=0.2f;
 	flashlight1.scale_y=0.2f;
@@ -365,8 +365,9 @@ void Player::initFlashLight()
 	flashlight1.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 	flashlight1.has_lensflare=true;
 	flashlight1.flare_intensity=255;
+	flashlight1.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
 
-	flashlight2.color_index=2;
+	flashlight2.color.set(255, 255, 255, 255);
 	flashlight2.intensity=128;
 	flashlight2.sprite_no=0;
 	flashlight2.scale_x=0.6f;
@@ -374,7 +375,7 @@ void Player::initFlashLight()
 	flashlight2.plane=static_cast<int>(LightPlaneId::Player);
 	flashlight2.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Back) | static_cast<int>(LightPlayerPlaneMatrix::Player);
 
-	flashlight3.color_index=2;
+	flashlight3.color.set(255, 255, 255, 255);
 	flashlight3.sprite_no=13;
 	flashlight3.scale_x=0.8f;
 	flashlight3.scale_y=1.0f;

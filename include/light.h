@@ -41,12 +41,14 @@ public:
     float scale_y;  // 4 Byte
     float angle;    // 4 Byte
     int sprite_no;	// 2 Byte
-    uint8_t color_index; // 1 Byte
+    //uint8_t color_index; // 1 Byte
+    ppl7::grafix::Color color;
     uint8_t intensity;   // 1 Byte
     uint8_t flare_intensity;   // 1 Byte
     LightType   myType;   // 1 Byte
     uint8_t     plane;   // 1 Byte
     uint8_t     playerPlane; // 1 Byte
+    uint8_t     flarePlane; // 1 Byte
 
     ppl7::grafix::Rect boundary;
     bool enabled;

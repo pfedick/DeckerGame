@@ -611,7 +611,9 @@ private:
 	ColorSliderWidget* global_lighting;
 	ppl7::tk::CheckBox* enable_lighting;
 	SpriteTexture* spriteset;
-	ColorSelectionFrame* colorframe;
+	//ColorSelectionFrame* colorframe;
+	ColorSliderWidget* colorframe;
+
 	ppl7::tk::DoubleHorizontalSlider* scale_x;
 	ppl7::tk::DoubleHorizontalSlider* scale_y;
 	ppl7::tk::DoubleHorizontalSlider* angle;
@@ -624,6 +626,7 @@ private:
 	ppl7::tk::CheckBox* current_state;
 	ppl7::tk::CheckBox* lensflare;
 	ppl7::tk::HorizontalSlider* lensflareIntensity;
+	ppl7::tk::ComboBox* flarePlane;
 
 	ppl7::tk::Label* light_id;
 
@@ -643,17 +646,21 @@ public:
 	float lightScaleY() const;
 	void setLightAngle(float angle);
 	float lightAngle() const;
-	int colorIndex() const;
-	void setColorIndex(int index);
+	ppl7::grafix::Color color() const;
+	void setColor(const ppl7::grafix::Color& color);
 	int colorIntensity() const;
 	void setColorIntensity(int index);
 	void setPlayerPlaneMatrix(LightPlayerPlaneMatrix matrix);
 	LightPlayerPlaneMatrix getPlayerPlaneMatrix() const;
 
+	void setLensFlarePlane(uint8_t matrix);
+	uint8_t getLensFlarePlane() const;
+
 	void setCurrentState(bool enabled);
 	void setInitialState(bool enabled);
 	void setLensflare(bool enabled);
 	void setLensflareIntensity(uint8_t intensity);
+
 	void setLightId(uint32_t id);
 
 	bool getCurrentState() const;

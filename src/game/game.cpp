@@ -282,6 +282,11 @@ Level& Game::getLevel()
 	return level;
 }
 
+LightSystem& Game::getLightSystem()
+{
+	return level.lights;
+}
+
 SDL_Renderer* Game::getSDLRenderer()
 {
 	return sdl.getRenderer();
@@ -1289,7 +1294,7 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 		float scale_x=lights_selection->lightScaleX();
 		float scale_y=lights_selection->lightScaleY();
 		float angle=lights_selection->lightAngle();
-		ppl7::grafix::Color c=level.palette.getColor(lights_selection->colorIndex());
+		ppl7::grafix::Color c=lights_selection->color();
 		c.setAlpha(lights_selection->colorIntensity());
 		resources.Lightmaps.drawScaledWithAngle(renderer,
 			tmouse.x, tmouse.y, nr, scale_x, scale_y, angle, c);
@@ -1568,7 +1573,8 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		light->x=event->p.x + coords.x;
 		light->y=event->p.y + coords.y;
 		light->sprite_no=nr;
-		light->color_index=lights_selection->colorIndex();
+		light->color=lights_selection->color();
+		light->flarePlane=lights_selection->getLensFlarePlane();
 		light->intensity=lights_selection->colorIntensity();
 		light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
 		light->enabled=lights_selection->getCurrentState();
@@ -1788,7 +1794,8 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 		lights_selection->setLightScaleX(selected_light->scale_x);
 		lights_selection->setLightScaleY(selected_light->scale_y);
 		lights_selection->setColorIntensity(selected_light->intensity);
-		lights_selection->setColorIndex(selected_light->color_index);
+		lights_selection->setColor(selected_light->color);
+		lights_selection->setLensFlarePlane(selected_light->flarePlane);
 		lights_selection->setCurrentState(selected_light->enabled);
 		lights_selection->setInitialState(selected_light->initial_state);
 		lights_selection->setPlayerPlaneMatrix(static_cast<LightPlayerPlaneMatrix>(selected_light->playerPlane));
@@ -2238,7 +2245,8 @@ void Game::updateLightFromUi()
 		selected_light->angle=lights_selection->lightAngle();
 		selected_light->scale_x=lights_selection->lightScaleX();
 		selected_light->scale_y=lights_selection->lightScaleY();
-		selected_light->color_index=lights_selection->colorIndex();
+		selected_light->color=lights_selection->color();
+		selected_light->flarePlane=lights_selection->getLensFlarePlane();
 		selected_light->intensity=lights_selection->colorIntensity();
 		selected_light->enabled=lights_selection->getCurrentState();
 		selected_light->initial_state=lights_selection->getInitialState();

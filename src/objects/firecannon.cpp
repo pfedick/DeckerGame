@@ -19,6 +19,9 @@ private:
 	std::list<Particle::ColorGradientItem>color_gradient;
 	void emmitParticles(double time, const Player& player);
 
+	LightObject light_ball;
+	LightObject light_shine;
+
 public:
 	Fireball();
 	static Representation representation();
@@ -53,6 +56,23 @@ Fireball::Fireball()
 	color_gradient.push_back(Particle::ColorGradientItem(0.486, ppl7::grafix::Color(120, 118, 116, 27)));
 	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(196, 196, 198, 0)));
 
+	light_ball.color.set(255, 255, 255, 255);
+	light_ball.sprite_no=2;
+	light_ball.scale_x=0.2f;
+	light_ball.scale_y=0.2f;
+	light_ball.plane=static_cast<int>(LightPlaneId::Player);
+	light_ball.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
+
+	light_shine.color.set(255, 200, 0, 255);
+	light_shine.sprite_no=0;
+	light_shine.scale_x=1.0f;
+	light_shine.scale_y=1.0f;
+	light_shine.plane=static_cast<int>(LightPlaneId::Player);
+	light_shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);;
+
+	light_shine.has_lensflare=true;
+	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+	light_shine.flare_intensity=255;
 
 }
 
@@ -100,6 +120,15 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 {
 	p+=velocity * frame_rate_compensation;
 	updateBoundary();
+	light_shine.x=p.x;
+	light_shine.y=p.y;
+	light_ball.x=p.x + 1;
+	light_ball.y=p.y;
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&light_shine);
+	lights.addObjectLight(&light_ball);
+
+
 	emmitParticles(time, player);
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
 	if (t1 == TileType::Blocking) {
@@ -128,6 +157,7 @@ void Fireball::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) c
 		p.x + coords.x,
 		p.y + coords.y,
 		sprite_no, color_mod);
+	return;
 
 	SpriteTexture& lightmap=getResources().Lightmaps;
 	Game& game=GetGame();

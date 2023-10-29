@@ -1020,6 +1020,7 @@ public:
 
 	ppl7::tk::Window& window();
 	Level& getLevel();
+	LightSystem& getLightSystem();
 
 	void startLevel(const ppl7::String& filename);
 	void unloadLevel();

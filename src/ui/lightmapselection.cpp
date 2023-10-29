@@ -47,11 +47,31 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 
 	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "LightObject:"));
 	yy+=30;
-	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 530, game);
+	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 460, game);
 	tilesframe->setEventHandler(this);
 	this->addChild(tilesframe);
 
-	yy=client.height() - 520;
+	yy=client.height() - 460;
+
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Color:"));
+	yy+=30;
+	colorframe=new ColorSliderWidget(0, yy, client.width(), 100, false);
+	colorframe->setEventHandler(this);
+	colorframe->setColor(ppl7::grafix::Color(255, 255, 255, 255));
+	colorframe->setColorPreviewSize(64, 90);
+	this->addChild(colorframe);
+	yy+=110;
+
+	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
+	intensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
+	intensity->setEventHandler(this);
+	intensity->setLimits(0, 255);
+	intensity->enableSpinBox(true, 1, 80);
+	intensity->setValue(255);
+	this->addChild(intensity);
+	yy+=30;
+
+
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Planes:"));
 	front_plane_checkbox=new ppl7::tk::CheckBox(70, yy, 90, 30, "front");
 	front_plane_checkbox->setEventHandler(this);
@@ -62,15 +82,6 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	back_plane_checkbox=new ppl7::tk::CheckBox(70 + 140, yy, 90, 30, "back", true);
 	back_plane_checkbox->setEventHandler(this);
 	this->addChild(back_plane_checkbox);
-	yy+=30;
-
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
-	intensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
-	intensity->setEventHandler(this);
-	intensity->setLimits(0, 255);
-	intensity->enableSpinBox(true, 1, 80);
-	intensity->setValue(255);
-	this->addChild(intensity);
 	yy+=30;
 
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Scale x:"));
@@ -98,11 +109,20 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	angle->enableSpinBox(true, 5, 0, 80);
 	angle->setValue(0.0f);
 	this->addChild(angle);
-	yy+=30;
+	yy+=50;
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Lensflare:"));
-	lensflare=new ppl7::tk::CheckBox(70, yy, 80, 30, "yes", false);
+	lensflare=new ppl7::tk::CheckBox(70, yy, 30, 30, "", false);
 	lensflare->setEventHandler(this);
 	this->addChild(lensflare);
+	this->addChild(new ppl7::tk::Label(100, yy, 70, 30, "Plane:"));
+	flarePlane=new ppl7::tk::ComboBox(160, yy, 120, 30);
+	flarePlane->add("Back", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Back)));
+	flarePlane->add("Player", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Player)));
+	flarePlane->add("Front", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Front)));
+	flarePlane->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Player)));
+	flarePlane->setEventHandler(this);
+	this->addChild(flarePlane);
+
 	yy+=30;
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
 	lensflareIntensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
@@ -114,10 +134,6 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	yy+=40;
 
 
-	colorframe=new ColorSelectionFrame(client.left(), client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
-	colorframe->setEventHandler(this);
-	this->addChild(colorframe);
-	tilesframe->setColor(colorframe->color());
 }
 
 
@@ -161,15 +177,26 @@ float LightSelection::lightScaleY() const
 	return scale_y->value();
 }
 
-int LightSelection::colorIndex() const
+ppl7::grafix::Color LightSelection::color() const
 {
-	return colorframe->colorIndex();
+	return colorframe->color();
 }
 
-void LightSelection::setColorIndex(int index)
+void LightSelection::setColor(const ppl7::grafix::Color& color)
 {
-	colorframe->setColorIndex(index);
+	colorframe->setColor(color);
 }
+
+void LightSelection::setLensFlarePlane(uint8_t matrix)
+{
+	flarePlane->setCurrentIdentifier(ppl7::ToString("%d", matrix));
+}
+
+uint8_t LightSelection::getLensFlarePlane() const
+{
+	return flarePlane->currentIdentifier().toInt();
+}
+
 
 
 int LightSelection::colorIntensity() const

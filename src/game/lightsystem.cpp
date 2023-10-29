@@ -16,7 +16,7 @@ LightObject::LightObject()
     scale_x=1.0f;
     scale_y=1.0f;
     angle=0.0f;
-    color_index=0;
+    color.set(255, 255, 255, 255);
     intensity=255;
     flare_intensity=0;
     //lightsystem=NULL;
@@ -25,8 +25,9 @@ LightObject::LightObject()
     initial_state=true;
     plane=static_cast<int>(LightPlaneId::Player);
     playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+    flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     has_lensflare=false;
-    save_size=34;
+    save_size=37;
 }
 
 LightObject::~LightObject()
@@ -37,7 +38,7 @@ LightObject::~LightObject()
 size_t LightObject::save(unsigned char* buffer, size_t size) const
 {
     if (size < save_size) return 0;
-    ppl7::Poke8(buffer + 0, 1);	// Object-Header-Version
+    ppl7::Poke8(buffer + 0, 2);	// Object-Header-Version
     ppl7::Poke8(buffer + 1, static_cast<int>(myType));
     ppl7::Poke32(buffer + 2, id);
     ppl7::Poke8(buffer + 6, plane);
@@ -46,7 +47,7 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     if (initial_state) flags|=1;
     if (has_lensflare) flags|=2;
     ppl7::Poke8(buffer + 8, flags);
-    ppl7::Poke8(buffer + 9, color_index);
+    ppl7::Poke8(buffer + 9, flarePlane);
     ppl7::Poke8(buffer + 10, intensity);
     ppl7::Poke8(buffer + 11, flare_intensity);
     ppl7::Poke32(buffer + 12, x);
@@ -55,7 +56,10 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     ppl7::PokeFloat(buffer + 24, scale_y);
     ppl7::PokeFloat(buffer + 28, angle);
     ppl7::Poke16(buffer + 32, sprite_no);
-    return 34;
+    ppl7::Poke32(buffer + 34, color.red());
+    ppl7::Poke32(buffer + 35, color.green());
+    ppl7::Poke32(buffer + 36, color.blue());
+    return 37;
 }
 
 size_t LightObject::load(const unsigned char* buffer, size_t size)
@@ -71,7 +75,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         initial_state=flags & 1;
         has_lensflare=flags & 2;
         enabled=initial_state;
-        color_index=ppl7::Peek8(buffer + 9);
+        color=GetColorPalette().getColor(ppl7::Peek8(buffer + 9));
         intensity=ppl7::Peek8(buffer + 10);
         flare_intensity=ppl7::Peek8(buffer + 11);
         x=ppl7::Peek32(buffer + 12);
@@ -81,6 +85,26 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         angle=ppl7::PeekFloat(buffer + 28);
         sprite_no=ppl7::Peek16(buffer + 32);
         return 34;
+    } else if (version == 2) {
+        myType=static_cast<LightType>(ppl7::Peek8(buffer + 1));
+        id=ppl7::Peek32(buffer + 2);
+        plane=ppl7::Peek8(buffer + 6);
+        playerPlane=ppl7::Peek8(buffer + 7);
+        int flags=ppl7::Peek8(buffer + 8);
+        initial_state=flags & 1;
+        has_lensflare=flags & 2;
+        enabled=initial_state;
+        flarePlane=ppl7::Peek8(buffer + 9);
+        intensity=ppl7::Peek8(buffer + 10);
+        flare_intensity=ppl7::Peek8(buffer + 11);
+        x=ppl7::Peek32(buffer + 12);
+        y=ppl7::Peek32(buffer + 16);
+        scale_x=ppl7::PeekFloat(buffer + 20);
+        scale_y=ppl7::PeekFloat(buffer + 24);
+        angle=ppl7::PeekFloat(buffer + 28);
+        sprite_no=ppl7::Peek16(buffer + 32);
+        color.set(ppl7::Peek8(buffer + 34), ppl7::Peek8(buffer + 35), ppl7::Peek8(buffer + 36), 255);
+        return 37;
     }
     return 0;
 }
@@ -102,7 +126,7 @@ void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneI
             light->scale_x= ppl7::PeekFloat(buffer + p + 4);
             light->scale_y= ppl7::PeekFloat(buffer + p + 8);
             light->angle= ppl7::PeekFloat(buffer + p + 12);
-            light->color_index=ppl7::Peek8(buffer + p + 18);
+            light->color=GetColorPalette().getColor(ppl7::Peek8(buffer + p + 18));
             light->intensity=ppl7::Peek8(buffer + p + 19);
             light->myType=static_cast<LightType>(ppl7::Peek8(buffer + p + 20));
             addLight(light);
@@ -307,7 +331,7 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
         if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
-            ppl7::grafix::Color c=palette.getColor(item->color_index);
+            ppl7::grafix::Color c=item->color;
             c.setAlpha(item->intensity);
             lightmaps->drawScaledWithAngle(renderer,
                 item->x + viewport.x1 - worldcoords.x,
@@ -339,7 +363,7 @@ void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect&
     std::map<uint32_t, LightObject*>::const_iterator it;
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
-        if (static_cast<uint8_t>(plane) == item->plane) {
+        if (static_cast<uint8_t>(plane) == item->plane && item->id > 0) {
             int x=item->x + viewport.x1 - worldcoords.x;
             int y=item->y + viewport.y1 - worldcoords.y;
             light_objects->draw(renderer,
@@ -359,41 +383,38 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
     std::map<uint32_t, LightObject*>::const_iterator it;
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
-        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
-            if (item->has_lensflare) {
-                if (plane == LightPlaneId::Player) {
-                    if (pplane == LightPlayerPlaneMatrix::Player && item->playerPlane & 4) continue;
-                }
-                //ppl7::grafix::Color c=palette.getColor(item->color_index);
-                ppl7::grafix::Color c(255, 255, 255, 255);
-                int x=item->x + viewport.x1 - worldcoords.x;
-                int y= item->y + viewport.y1 - worldcoords.y;
-                float dist=ppl7::grafix::Distance(ppl7::grafix::Point(x, y), ppl7::grafix::Point(1920 / 2, 1080 / 2));
-                if (dist < 1300) c.setAlpha(255 - (dist * 200.0f / 1300.0f));
-                //ppl7::PrintDebugTime("distance: %0.3f\n", dist);
-                int sprite=0;
-                //if (item->flare_intensity != 255) sprite=item->flare_intensity;
-                sprite=7 - (item->flare_intensity * 7 / 255);
-                lensflares->draw(renderer, x, y, sprite, c);
-                if (dist < 700) {
-                    float v=1.0f - dist / 700.0f;
-                    if (dist < 30) v=v * dist / 30;
-                    v=v * item->flare_intensity / 255.0f;
-                    int xd=1920 / 2 - x;
-                    int yd=1080 / 2 - y;
-                    lensflares->drawScaled(renderer, 960 - xd * 3 / 4, 540 - yd * 3 / 3, 8, 0.2f, ppl7::grafix::Color(128, 128, 0, 30.0f * v));
-                    lensflares->drawScaled(renderer, 960 - xd * 2 / 4, 540 - yd * 2 / 3, 8, 0.3f, ppl7::grafix::Color(128, 128, 0, 40.0f * v));
-                    lensflares->drawScaled(renderer, 960 - xd * 1 / 4, 540 - yd * 1 / 3, 8, 0.4f, ppl7::grafix::Color(128, 0, 0, 60.0f * v));
-                    lensflares->drawScaled(renderer, 960, 540, 8, 0.3f, ppl7::grafix::Color(255, 255, 255, 50.0f * v));
-                    lensflares->drawScaled(renderer, 960 + xd * 1 / 4, 540 + yd * 1 / 4, 8, 0.6f, ppl7::grafix::Color(255, 255, 255, 80.0f * v));
-                    lensflares->drawScaled(renderer, 960 + xd * 2 / 4, 540 + yd * 2 / 4, 8, 0.8f, ppl7::grafix::Color(128, 64, 0, 30.0f * v));
-                    lensflares->drawScaled(renderer, 960 + xd * 3 / 4, 540 + yd * 3 / 4, 8, 0.6f, ppl7::grafix::Color(32, 32, 192, 70.0f * v));
-                    lensflares->drawScaled(renderer, 960 + xd * 4 / 4, 540 + yd * 4 / 4, 8, 1.0f, ppl7::grafix::Color(32, 192, 32, 30.0f * v));
-                }
-
-
+        //if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+        if (item->has_lensflare) {
+            if (plane == LightPlaneId::Player && static_cast<int>(pplane) != item->flarePlane) continue;
+            ppl7::grafix::Color c=item->color;
+            int x=item->x + viewport.x1 - worldcoords.x;
+            int y= item->y + viewport.y1 - worldcoords.y;
+            float dist=ppl7::grafix::Distance(ppl7::grafix::Point(x, y), ppl7::grafix::Point(1920 / 2, 1080 / 2));
+            if (dist < 1300) c.setAlpha(255 - (dist * 200.0f / 1300.0f));
+            //ppl7::PrintDebugTime("distance: %0.3f\n", dist);
+            int sprite=0;
+            //if (item->flare_intensity != 255) sprite=item->flare_intensity;
+            sprite=7 - (item->flare_intensity * 7 / 255);
+            lensflares->draw(renderer, x, y, sprite, c);
+            if (dist < 700) {
+                float v=1.0f - dist / 700.0f;
+                if (dist < 30) v=v * dist / 30;
+                v=v * item->flare_intensity / 255.0f;
+                int xd=1920 / 2 - x;
+                int yd=1080 / 2 - y;
+                lensflares->drawScaled(renderer, 960 - xd * 3 / 4, 540 - yd * 3 / 3, 8, 0.2f, ppl7::grafix::Color(128, 128, 0, 30.0f * v));
+                lensflares->drawScaled(renderer, 960 - xd * 2 / 4, 540 - yd * 2 / 3, 8, 0.3f, ppl7::grafix::Color(128, 128, 0, 40.0f * v));
+                lensflares->drawScaled(renderer, 960 - xd * 1 / 4, 540 - yd * 1 / 3, 8, 0.4f, ppl7::grafix::Color(128, 0, 0, 60.0f * v));
+                lensflares->drawScaled(renderer, 960, 540, 8, 0.3f, ppl7::grafix::Color(255, 255, 255, 50.0f * v));
+                lensflares->drawScaled(renderer, 960 + xd * 1 / 4, 540 + yd * 1 / 4, 8, 0.6f, ppl7::grafix::Color(255, 255, 255, 80.0f * v));
+                lensflares->drawScaled(renderer, 960 + xd * 2 / 4, 540 + yd * 2 / 4, 8, 0.8f, ppl7::grafix::Color(128, 64, 0, 30.0f * v));
+                lensflares->drawScaled(renderer, 960 + xd * 3 / 4, 540 + yd * 3 / 4, 8, 0.6f, ppl7::grafix::Color(32, 32, 192, 70.0f * v));
+                lensflares->drawScaled(renderer, 960 + xd * 4 / 4, 540 + yd * 4 / 4, 8, 1.0f, ppl7::grafix::Color(32, 192, 32, 30.0f * v));
             }
+
+
         }
+    //}
     }
 }
 
