@@ -410,7 +410,7 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 			velocity_move.x=0;
 
 		}
-	} else {
+	} else if (velocity_move.y > 0 || movement == Falling) {
 		if (collision_matrix[1][4] == TileType::Blocking || collision_matrix[2][4] == TileType::Blocking
 			|| collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop) {
 				//ppl7::PrintDebugTime("col 1\n");
