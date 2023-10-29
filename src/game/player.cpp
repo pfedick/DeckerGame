@@ -460,6 +460,31 @@ void Player::turn(PlayerOrientation target)
 	}
 }
 
+void Player::crawlTurn(PlayerOrientation target)
+{
+	movement=CrawlTurn;
+	turnTarget=target;
+	if (orientation == Front) {
+		if (target == Left) {
+			animation.startSequence(309, 305, false, 43);
+		} else {
+			animation.startSequence(309, 313, false, 52);
+		}
+	} else if (orientation == Left) {
+		if (target == Left) {
+			movement=Crouch;
+		} else {
+			animation.startSequence(305, 313, false, 52);
+		}
+	} else if (orientation == Right) {
+		if (target == Left) {
+			animation.startSequence(313, 305, false, 43);
+		} else {
+			movement=Crouch;
+		}
+	}
+}
+
 Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 {
 	if (state == NULL) state=SDL_GetKeyboardState(NULL);
@@ -808,7 +833,11 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
 		handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 
+	} else if (movement == Crawling || movement == Crouch) {
+		handleKeyboardWhileCrawling(time, world, objects, frame_rate_compensation);
+
 	}
+
 
 
 	//ppl7::PrintDebugTime("gravity: %0.3f, velocity_move x: %0.3f, y: %0.3f, acceleration_jump: %0.3f\n",
@@ -826,6 +855,13 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		startIdle=time;
 		velocity_move.stop();
 		//printf("Turn done, movement=%d, orientation=%d\n", (int)movement, (int)orientation);
+	} else if (movement == CrawlTurn) {
+		if (!animation.isFinished()) return;
+		movement=Crouch;
+		orientation=turnTarget;
+		startIdle=time;
+		velocity_move.stop();
+
 	}
 	if (movement == Slide || movement == Dead) {
 		return;
@@ -839,21 +875,23 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		return;
 	}
 
-	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown) {
+
+	if (keys.matrix & KeyboardKeys::Flashlight) {
+		toggleFlashlight();
+	} else if (keys.matrix & KeyboardKeys::Action) {
+		checkActivationOfObjectsInRange(objects);
+		if (movement == Hacking) return;
+	}
+
+
+	if (movement == Swim || movement == SwimStraight || movement == SwimUp || movement == SwimDown || movement == Crawling || movement == Crouch || movement == CrawlTurn) {
 		//handleKeyboardWhileSwimming(time, world, objects, frame_rate_compensation);
 		return;
 	}
 
-
-
 	acceleration_jump_sideways=0;
-	if (keys.matrix & KeyboardKeys::Flashlight) {
-		toggleFlashlight();
-	}
-	if (keys.matrix & KeyboardKeys::Action) {
-		checkActivationOfObjectsInRange(objects);
-		if (movement == Hacking) return;
-	}
+
+		//ppl7::PrintDebugTime("keys\n");
 
 	if (keys.matrix == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
@@ -936,6 +974,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		velocity_move.x=acceleration_jump_sideways * frame_rate_compensation;
 		animation.setStaticFrame(39);
 	} else if (keys.matrix == KeyboardKeys::Down || keys.matrix == (KeyboardKeys::Down | KeyboardKeys::Shift)) {
+		//ppl7::PrintDebugTime("down\n");
 		if (collision_matrix[1][4] == TileType::Ladder || collision_matrix[2][4] == TileType::Ladder
 			|| collision_matrix[1][5] == TileType::Ladder || collision_matrix[2][5] == TileType::Ladder) {
 			if (collision_matrix[1][5] != TileType::Blocking && collision_matrix[2][5] != TileType::Blocking) {
@@ -946,11 +985,13 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 					animation.start(climb_down_cycle, sizeof(climb_down_cycle) / sizeof(int), true, 0);
 				}
 			}
-		} else if (collision_matrix[1][4] == TileType::BlockFromTop || collision_matrix[2][4] == TileType::BlockFromTop
+		} else if (collision_matrix[1][5] == TileType::Blocking || collision_matrix[2][5] == TileType::Blocking
 			|| collision_matrix[1][5] == TileType::BlockFromTop || collision_matrix[2][5] == TileType::BlockFromTop) {
-			//movement=Jump;
-			//jump_climax=time;
-			//acceleration_jump=2.0f * frame_rate_compensation;
+			movement=Crouch;
+			if (orientation == Left) animation.setStaticFrame(43);
+			else if (orientation == Right) animation.setStaticFrame(52);
+			else animation.setStaticFrame(309);
+			//ppl7::PrintDebugTime("crawling\n");
 		}
 
 	} else if (keys.matrix == (KeyboardKeys::Left) && movement == Jump) {
@@ -1019,8 +1060,8 @@ void Player::handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& 
 void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	//ppl7::PrintDebugTime("Player::handleKeyboardWhileSwimming: old movement: %s, ", (const char*)getState());
-	const Uint8* state = SDL_GetKeyboardState(NULL);
-	Player::Keys keys=getKeyboardMatrix(state);
+	//const Uint8* state = SDL_GetKeyboardState(NULL);
+	//Player::Keys keys=getKeyboardMatrix(state);
 
 	if (keys.matrix & KeyboardKeys::Up) {
 		if (collision_matrix[1][2] != TileType::Water && collision_matrix[2][2] != TileType::Water && movement != Jump) {
@@ -1169,6 +1210,39 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 	//printf(", new movement: %s\n", (const char*)getState());
 	//fflush(stdout);
 
+}
+
+void Player::handleKeyboardWhileCrawling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
+{
+	if (movement == CrawlTurn) return;
+	if (keys.matrix & KeyboardKeys::Up) {
+		if (collision_matrix[1][0] != TileType::Blocking && collision_matrix[2][0] != TileType::Blocking
+			&& collision_matrix[1][1] != TileType::Blocking && collision_matrix[2][1] != TileType::Blocking
+			&& collision_matrix[1][2] != TileType::Blocking && collision_matrix[2][2] != TileType::Blocking
+			) {
+			stand();
+			return;
+		}
+	} else if (keys.matrix & KeyboardKeys::Left) {
+		if (orientation != Left) { crawlTurn(Left); return; }
+		if (movement != Crawling) {
+			movement=Crawling;
+			orientation=Left;
+			animation.startSequence(43, 51, true, 43);
+		}
+	} else if (keys.matrix & KeyboardKeys::Right) {
+		if (orientation != Right) { crawlTurn(Right); return; }
+		if (movement != Crawling) {
+			movement=Crawling;
+			orientation=Right;
+			animation.startSequence(52, 60, true, 52);
+		}
+	} else {
+		movement=Crouch;
+		if (orientation == Left) animation.setStaticFrame(43);
+		else if (orientation == Right) animation.setStaticFrame(52);
+		else animation.setStaticFrame(309);
+	}
 }
 
 void Player::checkCollisionWithWorld(const TileTypePlane& world)

@@ -58,7 +58,9 @@ public:
 		SwimUp,
 		SwimDown,
 		Hacking,
+		Crouch,
 		Crawling,
+		CrawlTurn
 	};
 	enum PlayerOrientation {
 		Left,

@@ -1,9 +1,9 @@
 #include "decker.h"
 #include "physic.h"
 
-static const char* movement_string[18]={ "Unchanged", "Stand",
+static const char* movement_string[21]={ "Unchanged", "Stand",
 		"Turn", "Walk", "Run", "Pickup", "ClimbUp", "ClimbDown",
-		"Jump","Falling", "Slide", "Floating", "Dead", "Swim", "SwimStraight", "SwimUp", "SwimDown", "Hacking" };
+		"Jump","Falling", "Slide", "Floating", "Dead", "Swim", "SwimStraight", "SwimUp", "SwimDown", "Hacking", "Crouch","Crawling", "CrawlTurn" };
 
 static const char* orientation_string[4]={ "Left",
 		"Right", "Front", "Back" };
@@ -173,9 +173,18 @@ int Physic::detectFallingDamage(double time, float frame_rate_compensation)
 
 bool Physic::isCollisionLeft() const
 {
-	for (int cy=1;cy < 5;cy++) {
-		if (collision_matrix[0][cy] == TileType::Blocking) {
-			return true;
+	if (movement == Crawling || movement == Crouch) {
+		for (int cy=3;cy < 5;cy++) {
+			if (collision_matrix[0][cy] == TileType::Blocking) {
+				return true;
+			}
+		}
+
+	} else {
+		for (int cy=1;cy < 5;cy++) {
+			if (collision_matrix[0][cy] == TileType::Blocking) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -183,9 +192,18 @@ bool Physic::isCollisionLeft() const
 
 bool Physic::isCollisionRight() const
 {
-	for (int cy=1;cy < 5;cy++) {
-		if (collision_matrix[3][cy] == TileType::Blocking) {
-			return true;
+	if (movement == Crawling || movement == Crouch) {
+		for (int cy=3;cy < 5;cy++) {
+			if (collision_matrix[3][cy] == TileType::Blocking) {
+				return true;
+			}
+		}
+
+	} else {
+		for (int cy=1;cy < 5;cy++) {
+			if (collision_matrix[3][cy] == TileType::Blocking) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -344,11 +362,14 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 	}
 
 	if (collision_matrix[1][0] == TileType::Blocking || collision_matrix[2][0] == TileType::Blocking) {
-		acceleration_gravity=0.1f;
-		gravity=1.0f;
-		velocity_move.y=1;
-		acceleration_jump=0.0f;
-		movement=Falling;
+		if (movement != Crawling && movement != Crouch && movement != CrawlTurn) {
+			//ppl7::PrintDebugTime("collision\n");
+			acceleration_gravity=0.1f;
+			gravity=1.0f;
+			velocity_move.y=1;
+			acceleration_jump=0.0f;
+			movement=Falling;
+		}
 		//if (movement==Falling || movement==Jump || movement==ClimbDown) stand();
 	}
 
@@ -453,8 +474,21 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 		gravity=0.0f;
 
 	}
+	if (movement == Crawling || movement == Crouch) {
+		//ppl7::PrintDebugTime("check Collision while Crawling\n");
+		if (orientation == Left) {
+			if (isCollisionLeft()) {
+				velocity_move.x=0;
+				new_movement=Crouch;
+			}
+		} else if (orientation == Right) {
+			if (isCollisionRight()) {
+				velocity_move.x=0;
+				new_movement=Crouch;
+			}
+		}
 
-	if (movement == Walk || movement == Run || movement == Jump || movement == Falling) {
+	} else 	if (movement == Walk || movement == Run || movement == Jump || movement == Falling) {
 		if (orientation == Left) {
 			if (isCollisionLeft()) {
 				velocity_move.x=0;
@@ -548,6 +582,12 @@ void Physic::updateMovement(float frame_rate_compensation)
 		if (velocity_move.y < -0.1f) velocity_move.y-=(velocity_move.y / 3.0f) * frame_rate_compensation;
 		if (velocity_move.y > -0.1f) velocity_move.y=0;
 		//printf ("Player::updateMovement, velocity_move.y=%0.3f\n",velocity_move.y);
+	} else if (movement == Crawling) {
+		if (orientation == Left) {
+			velocity_move.x=-speed_walk * frame_rate_compensation;
+		} else if (orientation == Right) {
+			velocity_move.x=speed_walk * frame_rate_compensation;
+		}
 
 	} else {
 		velocity_move.y=0;

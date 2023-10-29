@@ -98,6 +98,7 @@ private:
 
 
 	void turn(PlayerOrientation target);
+	void crawlTurn(PlayerOrientation target);
 	void splashIntoWater(float gravity);
 	void emmitParticles(double time);
 
@@ -110,6 +111,7 @@ private:
 
 	void handleKeyboardWhileJumpOrFalling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 	void handleKeyboardWhileSwimming(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
+	void handleKeyboardWhileCrawling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
 	void playSoundOnAnimationSprite();
 	void checkActivationOfObjectsInRange(Decker::Objects::ObjectSystem* objectsystem);
