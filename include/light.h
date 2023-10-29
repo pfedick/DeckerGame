@@ -54,6 +54,7 @@ public:
     bool enabled;
     bool initial_state;     // Flags 1 Byte
     bool has_lensflare;     // Flags
+    bool flare_useLightColor;
 
     virtual size_t save(unsigned char* buffer, size_t size) const;
     virtual size_t load(const unsigned char* buffer, size_t size);

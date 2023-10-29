@@ -625,6 +625,7 @@ private:
 	ppl7::tk::CheckBox* initial_state;
 	ppl7::tk::CheckBox* current_state;
 	ppl7::tk::CheckBox* lensflare;
+	ppl7::tk::CheckBox* flare_useLightColor;
 	ppl7::tk::HorizontalSlider* lensflareIntensity;
 	ppl7::tk::ComboBox* flarePlane;
 
@@ -667,6 +668,9 @@ public:
 	bool getInitialState() const;
 	bool getLensflare() const;
 	uint8_t getLensflareIntensity() const;
+
+	bool getFlareUseLightColor() const;
+	void setFlareUseLightColor(bool flag);
 
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
 	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;

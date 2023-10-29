@@ -1580,6 +1580,7 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		light->enabled=lights_selection->getCurrentState();
 		light->initial_state=lights_selection->getInitialState();
 		light->has_lensflare=lights_selection->getLensflare();
+		light->flare_useLightColor=lights_selection->getFlareUseLightColor();
 		light->flare_intensity=lights_selection->getLensflareIntensity();
 
 		level.lights.addLight(light);
@@ -1801,6 +1802,7 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 		lights_selection->setPlayerPlaneMatrix(static_cast<LightPlayerPlaneMatrix>(selected_light->playerPlane));
 		lights_selection->setLensflare(selected_light->has_lensflare);
 		lights_selection->setLensflareIntensity(selected_light->flare_intensity);
+		lights_selection->setFlareUseLightColor(selected_light->flare_useLightColor);
 
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
@@ -2252,6 +2254,7 @@ void Game::updateLightFromUi()
 		selected_light->initial_state=lights_selection->getInitialState();
 		selected_light->has_lensflare=lights_selection->getLensflare();
 		selected_light->flare_intensity=lights_selection->getLensflareIntensity();
+		selected_light->flare_useLightColor=lights_selection->getFlareUseLightColor();
 		selected_light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
 		//selected_light_system->modifyLight(selected_light);
 	}

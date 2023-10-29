@@ -73,6 +73,7 @@ Fireball::Fireball()
 	light_shine.has_lensflare=true;
 	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
 	light_shine.flare_intensity=255;
+	light_shine.flare_useLightColor=true;
 
 }
 

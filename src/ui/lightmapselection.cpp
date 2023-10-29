@@ -131,8 +131,10 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	lensflareIntensity->enableSpinBox(true, 1, 80);
 	lensflareIntensity->setValue(255);
 	this->addChild(lensflareIntensity);
-	yy+=40;
-
+	yy+=30;
+	flare_useLightColor=new ppl7::tk::CheckBox(70, yy, 200, 30, "use light color");
+	flare_useLightColor->setEventHandler(this);
+	this->addChild(flare_useLightColor);
 
 }
 
@@ -282,6 +284,18 @@ uint8_t LightSelection::getLensflareIntensity() const
 {
 	return (uint8_t)lensflareIntensity->value();
 }
+
+bool LightSelection::getFlareUseLightColor() const
+{
+	return flare_useLightColor->checked();
+}
+
+void LightSelection::setFlareUseLightColor(bool flag)
+{
+	flare_useLightColor->setChecked(flag);
+}
+
+
 
 void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {

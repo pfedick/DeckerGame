@@ -27,6 +27,7 @@ LightObject::LightObject()
     playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     has_lensflare=false;
+    flare_useLightColor=false;
     save_size=37;
 }
 
@@ -46,6 +47,7 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     int flags=0;
     if (initial_state) flags|=1;
     if (has_lensflare) flags|=2;
+    if (flare_useLightColor) flags|=4;
     ppl7::Poke8(buffer + 8, flags);
     ppl7::Poke8(buffer + 9, flarePlane);
     ppl7::Poke8(buffer + 10, intensity);
@@ -93,6 +95,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         int flags=ppl7::Peek8(buffer + 8);
         initial_state=flags & 1;
         has_lensflare=flags & 2;
+        flare_useLightColor=flags & 4;
         enabled=initial_state;
         flarePlane=ppl7::Peek8(buffer + 9);
         intensity=ppl7::Peek8(buffer + 10);
@@ -386,7 +389,8 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
         //if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
         if (item->has_lensflare) {
             if (plane == LightPlaneId::Player && static_cast<int>(pplane) != item->flarePlane) continue;
-            ppl7::grafix::Color c=item->color;
+            ppl7::grafix::Color c=ppl7::grafix::Color(255, 255, 255, 255);
+            if (item->flare_useLightColor) c=item->color;
             int x=item->x + viewport.x1 - worldcoords.x;
             int y= item->y + viewport.y1 - worldcoords.y;
             float dist=ppl7::grafix::Distance(ppl7::grafix::Point(x, y), ppl7::grafix::Point(1920 / 2, 1080 / 2));
