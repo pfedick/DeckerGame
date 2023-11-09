@@ -3,6 +3,7 @@
 #include "objects.h"
 #include "player.h"
 #include "decker.h"
+#include "light.h"
 #include "audiopool.h"
 
 namespace Decker::Objects {
@@ -48,6 +49,7 @@ LaserBarrier::~LaserBarrier()
 		delete audio;
 		audio=NULL;
 	}
+	clearLights();
 }
 
 void LaserBarrier::init()
@@ -62,6 +64,26 @@ void LaserBarrier::init()
 	}
 	if (always_on) {
 		state=0;
+	}
+
+
+	switch (color_scheme) {
+	case 0:
+		light_color.set(0, 255, 0, 255);
+		break;
+	case 1:
+		light_color.set(0, 0, 255, 255);
+		break;
+	case 2:
+		light_color.set(255, 0, 0, 255);
+		break;
+	case 3:
+		light_color.set(255, 0, 255, 255);
+		break;
+	case 4:
+		light_color.set(255, 255, 0, 255);
+		break;
+
 	}
 
 }
@@ -138,6 +160,11 @@ void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 {
 	if (state == 0) return;
 	if ((flicker & 3) == 0) return;
+	drawEditMode(renderer, coords);
+}
+
+void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
 	if (type() == Type::LaserBeamHorizontal) {
 		for (int i=start.x;i < end.x;i+=32)
 			texture->draw(renderer,
@@ -151,8 +178,8 @@ void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 				i + coords.y + 16,
 				sprite_no);
 	}
-
 }
+
 
 void LaserBarrier::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
@@ -222,6 +249,101 @@ void LaserBarrier::update(double time, TileTypePlane& ttplane, Player& player, f
 			//next_state=time+(double)ppl7::rand(2000,4000)/1000.f;
 			next_state=time + ppl7::randf(time_off_min, time_off_max);
 			collisionDetection=false;
+		}
+	}
+	updateLightMaps();
+
+}
+
+void LaserBarrier::clearLights()
+{
+	std::list<LightObject*>::iterator it;
+	for (it=light_list.begin();it != light_list.end();++it) {
+		delete (*it);
+	}
+	light_list.clear();
+}
+
+void LaserBarrier::updateLightMaps()
+{
+	clearLights();
+	if (state == 0) return;
+	if ((flicker & 3) == 0) return;
+
+	LightSystem& lights=GetGame().getLightSystem();
+	if (type() == Type::LaserBeamHorizontal) {
+		for (int i=start.x;i < end.x;i+=32) {
+			LightObject* light=new LightObject();
+			light->x=i + 16;
+			light->y=start.y;
+			light->sprite_no=17;
+			light->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+			light_list.push_back(light);
+			lights.addObjectLight(light);
+
+			LightObject* shine_up=new LightObject();
+			shine_up->x=light->x;
+			shine_up->y=light->y - 1;
+			shine_up->sprite_no=18;
+			shine_up->angle=180;
+			shine_up->scale_x=0.945;
+			shine_up->scale_y=0.4;
+			shine_up->color=light_color;
+			shine_up->intensity=128;
+			shine_up->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+			light_list.push_back(shine_up);
+			lights.addObjectLight(shine_up);
+
+			LightObject* shine_down=new LightObject();
+			shine_down->x=light->x;
+			shine_down->y=light->y + 1;
+			shine_down->sprite_no=18;
+			shine_down->angle=0;
+			shine_down->scale_x=0.945;
+			shine_down->scale_y=0.4;
+			shine_down->color=light_color;
+			shine_down->intensity=128;
+			shine_down->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+			light_list.push_back(shine_down);
+			lights.addObjectLight(shine_down);
+
+		}
+	} else {
+
+		for (int i=start.y;i < end.y;i+=TILE_HEIGHT) {
+			LightObject* light=new LightObject();
+			light->x=start.x;
+			light->y=i + 19;
+			light->sprite_no=16;
+			light->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+			light_list.push_back(light);
+			lights.addObjectLight(light);
+
+			LightObject* shine_left=new LightObject();
+			shine_left->x=light->x - 1;
+			shine_left->y=light->y;
+			shine_left->sprite_no=19;
+			shine_left->angle=270;
+			shine_left->scale_y=0.4;
+			shine_left->scale_x=1;
+			shine_left->color=light_color;
+			shine_left->intensity=128;
+			shine_left->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+			light_list.push_back(shine_left);
+			lights.addObjectLight(shine_left);
+
+			LightObject* shine_right=new LightObject();
+			shine_right->x=light->x + 1;
+			shine_right->y=light->y;
+			shine_right->sprite_no=19;
+			shine_right->angle=90;
+			shine_right->scale_y=0.4;
+			shine_right->scale_x=1;
+			shine_right->color=light_color;
+			shine_right->intensity=128;
+			shine_right->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+			light_list.push_back(shine_right);
+			lights.addObjectLight(shine_right);
 		}
 	}
 

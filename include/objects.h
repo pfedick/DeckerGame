@@ -8,9 +8,11 @@
 #include "animation.h"
 #include "particle.h"
 
+
 class SDL;
 struct SDL_Renderer;
 class SpriteTexture;
+class LightObject;
 
 class Player;
 class TileTypePlane;
@@ -631,6 +633,10 @@ private:
 	int state;
 	int flicker;
 	AudioInstance* audio;
+	std::list<LightObject*> light_list;
+	ppl7::grafix::Color light_color;
+	void updateLightMaps();
+	void clearLights();
 public:
 	float time_on_min, time_off_min;
 	float time_on_max, time_off_max;
@@ -646,6 +652,7 @@ public:
 	static Representation representation(Type::ObjectType type);
 	void init();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
