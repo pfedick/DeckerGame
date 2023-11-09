@@ -383,13 +383,23 @@ void Player::initFlashLight()
 	flashlight3.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Back) | static_cast<int>(LightPlayerPlaneMatrix::Player);
 
 
+	flashlight2_ladder.color.set(255, 255, 255, 255);
+	flashlight2_ladder.intensity=255;
+	flashlight2_ladder.sprite_no=2;
+	flashlight2_ladder.scale_x=1.0f;
+	flashlight2_ladder.scale_y=1.0f;
+	flashlight2_ladder.plane=static_cast<int>(LightPlaneId::Player);
+	flashlight2_ladder.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Back);
 }
 
 void Player::addFlashlightToLightSystem(LightSystem& lights)
 {
 	if (!flashlightOn) return;
 	int frame=animation.getFrame();
-	if (frame >= 0 && frame <= 78) frame+=314;
+	if (frame == 28 || (frame >= 91 && frame <= 101)) { // stand back or climb animation
+		frame=342;
+
+	} else if (frame >= 0 && frame <= 78) frame+=314;
 	else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
 	if (frame >= 314 && frame <= 400) {
 		std::map<int, FlashLightPivot>::const_iterator it;
@@ -402,7 +412,7 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 			flashlight1.y=pf.y - 1;
 			flashlight2.x=pf.x;
 			flashlight2.y=pf.y + 1;
-			if (it->second.angle > 0.0f) {
+			if (it->second.angle > 0.0f && frame != 342) {
 				flashlight3.x=pf.x;
 				flashlight3.y=pf.y;
 				flashlight3.angle=it->second.angle;
@@ -410,8 +420,18 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 				if (it->second.angle < 180) flashlight1.x -= 8;
 				if (it->second.angle > 180) flashlight1.x += 8;
 			}
+			if (frame == 342) {
+				flashlight2_ladder.x=pf.x;
+				flashlight2_ladder.y=pf.y + 1;
+
+				flashlight1.has_lensflare=false;
+				lights.addObjectLight(&flashlight2_ladder);
+			} else {
+				flashlight1.has_lensflare=true;
+				lights.addObjectLight(&flashlight2);
+			}
 			lights.addObjectLight(&flashlight1);
-			lights.addObjectLight(&flashlight2);
+
 
 		}
 

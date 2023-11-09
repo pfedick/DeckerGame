@@ -67,7 +67,7 @@ private:
 	AudioInstance* voice;
 	AudioSample voice_sample;
 	AudioClip::Id ambient_playing;
-	LightObject flashlight1, flashlight2, flashlight3;
+	LightObject flashlight1, flashlight2, flashlight3, flashlight2_ladder;
 
 	enum class ParticleReason
 	{
