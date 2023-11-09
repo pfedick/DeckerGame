@@ -208,6 +208,7 @@ void Player::initFlashLightPivots()
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(398, FlashLightPivot(12, -11, 251.6f)));
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(399, FlashLightPivot(46, -9, 260.4f)));
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(400, FlashLightPivot(60, -10, 260.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(401, FlashLightPivot(60, -10, 260.7f)));
 }
 
 void Player::resetState()
@@ -317,42 +318,9 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	int frame=animation.getFrame();
 	if (flashlightOn) {
 		if (frame >= 0 && frame <= 78) frame+=314;
-		else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
-		/*
-		if (frame >= 314 && frame <= 400) {
-			ppl7::grafix::Color c(255, 255, 255, 255);
-			ppl7::grafix::Color c2(255, 255, 255, 128);
-			SDL_Texture* renderertarget_save=SDL_GetRenderTarget(renderer);
-			SDL_SetRenderTarget(renderer, game->getLightRenderTarget());
-			SpriteTexture& lightmap=getResources().Lightmaps;
-			std::map<int, FlashLightPivot>::const_iterator it;
-			ppl7::grafix::Point pf=p;
-			it=flashlight_pivots.find(frame);
-			if (it != flashlight_pivots.end()) {
-				pf.x+=it->second.x;
-				pf.y+=it->second.y;
-				lightmap.drawScaled(renderer, pf.x,
-					pf.y, 2, 0.2, c);
-				lightmap.drawScaled(renderer, pf.x,
-					pf.y, 0, 0.6, c2);
-
-				if (it->second.angle > 0.0f) {
-					lightmap.drawScaledWithAngle(renderer, pf.x,
-						pf.y, 13, 0.8f, 1.0f, it->second.angle, c);
-				}
-
-			}
-
-			SDL_SetRenderTarget(renderer, renderertarget_save);
-		}
-		*/
+		else if (frame >= 305 && frame <= 313) frame+=88;
 	}
-
 	sprite_resource->draw(renderer, p.x, p.y + 1, frame, color_modulation);
-	/*
-	SDL_SetRenderDrawColor(renderer,255,0,0,255);
-	sprite_resource->drawBoundingBox(renderer,p.x,p.y+1,animation.getFrame());
-	*/
 }
 
 void Player::initFlashLight()
@@ -400,8 +368,8 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 		frame=342;
 
 	} else if (frame >= 0 && frame <= 78) frame+=314;
-	else if (frame >= 305 && frame <= 313) frame+=(393 - 305);
-	if (frame >= 314 && frame <= 400) {
+	else if (frame >= 305 && frame <= 313) frame+=88;
+	if (frame >= 314 && frame <= 401) {
 		std::map<int, FlashLightPivot>::const_iterator it;
 		ppl7::grafix::Point pf(x, y);
 		it=flashlight_pivots.find(frame);
@@ -433,8 +401,12 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 			lights.addObjectLight(&flashlight1);
 
 
+		} else {
+			ppl7::PrintDebug("tracking for frame not found: %d\n", frame);
 		}
 
+	} else {
+		ppl7::PrintDebug("frame out of range: %d\n", frame);
 	}
 
 }

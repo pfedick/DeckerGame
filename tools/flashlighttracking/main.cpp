@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 	return 0;
 	*/
 	ff.open("tracking.tmp", ppl7::File::WRITE);
-	for (int i=314;i <= 400;i++) {
+	for (int i=314;i <= 401;i++) {
 		ppl7::grafix::Image img;
 		ppl7::String filename;
 		filename.setf("lightwave/Render/george_flashlight_tracking/frame_%04d.png", i);
