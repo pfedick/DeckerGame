@@ -159,12 +159,7 @@ size_t LaserBarrier::load1(const unsigned char* buffer, size_t size)
 void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	if (state == 0) return;
-	if ((flicker & 3) == 0) return;
-	drawEditMode(renderer, coords);
-}
-
-void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
-{
+	if ((flicker & 7) == 0) return;
 	if (type() == Type::LaserBeamHorizontal) {
 		for (int i=start.x;i < end.x;i+=32)
 			texture->draw(renderer,
@@ -178,6 +173,28 @@ void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Poin
 				i + coords.y + 16,
 				sprite_no);
 	}
+}
+
+void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	ppl7::grafix::Color c(255, 255, 255, 192);
+	if (state != 0 && (flicker & 7) != 0) {
+		if (type() == Type::LaserBeamHorizontal) {
+			for (int i=start.x;i < end.x;i+=32)
+				texture->draw(renderer,
+					i + coords.x + 16,
+					start.y + coords.y,
+					sprite_no, c);
+		} else {
+			for (int i=start.y;i < end.y;i+=TILE_HEIGHT)
+				texture->draw(renderer,
+					start.x + coords.x,
+					i + coords.y + 16,
+					sprite_no, c);
+		}
+	}
+	Trap::drawEditMode(renderer, coords);
+
 }
 
 
@@ -268,7 +285,7 @@ void LaserBarrier::updateLightMaps()
 {
 	clearLights();
 	if (state == 0) return;
-	if ((flicker & 3) == 0) return;
+	if ((flicker & 7) == 0) return;
 
 	LightSystem& lights=GetGame().getLightSystem();
 	if (type() == Type::LaserBeamHorizontal) {
