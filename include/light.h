@@ -58,6 +58,7 @@ public:
 
     virtual size_t save(unsigned char* buffer, size_t size) const;
     virtual size_t load(const unsigned char* buffer, size_t size);
+    virtual void trigger();
 };
 
 class ColorPalette;

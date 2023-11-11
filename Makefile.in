@@ -132,6 +132,7 @@ OBJECTS=compile/main.o \
 	compile/object_voicetrigger.o \
 	compile/object_objectwatcher.o \
 	compile/object_trigger.o \
+	compile/object_light_trigger.o \
 	compile/object_ghost.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
@@ -735,6 +736,10 @@ compile/object_objectwatcher.o: src/objects/objectwatcher.cpp Makefile include/o
 compile/object_trigger.o: src/objects/trigger.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_trigger.o -c src/objects/trigger.cpp $(CFLAGS)
+
+compile/object_light_trigger.o: src/objects/light_trigger.cpp Makefile include/objects.h include/light.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_light_trigger.o -c src/objects/light_trigger.cpp $(CFLAGS)
 
 compile/object_ghost.o: src/objects/ghost.cpp Makefile include/objects.h
 	- @mkdir -p compile

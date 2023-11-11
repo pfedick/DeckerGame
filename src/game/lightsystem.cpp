@@ -112,6 +112,10 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
     return 0;
 }
 
+void LightObject::trigger()
+{
+    enabled=!enabled;
+}
 
 void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneId plane, int pplane)
 {
@@ -215,7 +219,6 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
     int height=viewport.height();
     for (it=light_map.begin();it != light_map.end();++it) {
         LightObject* item=(it->second);
-
         int x=item->x - worldcoords.x * planeFactor[item->plane];
         int y=item->y - worldcoords.y * planeFactor[item->plane];
         //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
@@ -336,14 +339,16 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
     std::map<uint32_t, LightObject*>::const_iterator it;
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
-        if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
-            ppl7::grafix::Color c=item->color;
-            c.setAlpha(item->intensity);
-            lightmaps->drawScaledWithAngle(renderer,
-                item->x + viewport.x1 - worldcoords.x,
-                item->y + viewport.y1 - worldcoords.y,
-                item->sprite_no, item->scale_x, item->scale_y, item->angle,
-                c);
+        if (item->enabled) {
+            if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
+                ppl7::grafix::Color c=item->color;
+                c.setAlpha(item->intensity);
+                lightmaps->drawScaledWithAngle(renderer,
+                    item->x + viewport.x1 - worldcoords.x,
+                    item->y + viewport.y1 - worldcoords.y,
+                    item->sprite_no, item->scale_x, item->scale_y, item->angle,
+                    c);
+            }
         }
     }
 }
@@ -372,10 +377,13 @@ void LightSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect&
         if (static_cast<uint8_t>(plane) == item->plane && item->id > 0) {
             int x=item->x + viewport.x1 - worldcoords.x;
             int y=item->y + viewport.y1 - worldcoords.y;
+            int sprite_no=1;
+            if (item->enabled) sprite_no=0;
+
             light_objects->draw(renderer,
                 x,
                 y,
-                1);
+                sprite_no);
             drawId(renderer, light_objects, x, y, item->id);
 
         }
@@ -390,7 +398,7 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
     for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
         const LightObject* item=(it->second);
         //if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
-        if (item->has_lensflare) {
+        if (item->has_lensflare && item->enabled) {
             if (plane == LightPlaneId::Player && static_cast<int>(pplane) != item->flarePlane) continue;
             ppl7::grafix::Color c=ppl7::grafix::Color(255, 255, 255, 255);
             if (item->flare_useLightColor) c=item->color;

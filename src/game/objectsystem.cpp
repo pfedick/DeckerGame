@@ -414,6 +414,7 @@ Representation getRepresentation(int object_type)
 	case Type::VoiceTrigger: return VoiceTrigger::representation();
 	case Type::ObjectWatcher: return ObjectWatcher::representation();
 	case Type::Trigger: return Trigger::representation();
+	case Type::LightTrigger: return LightTrigger::representation();
 	default: return Object::representation();
 	}
 }
@@ -501,6 +502,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::VoiceTrigger: return new VoiceTrigger();
 	case Type::ObjectWatcher: return new ObjectWatcher();
 	case Type::Trigger: return new Trigger();
+	case Type::LightTrigger: return new LightTrigger();
 	}
 	return NULL;
 }

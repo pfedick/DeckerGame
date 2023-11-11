@@ -36,10 +36,10 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(light_id);
 	yy+=30;
 	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "States:"));
-	initial_state=new ppl7::tk::CheckBox(70, yy, 100, 30, "initial");
+	initial_state=new ppl7::tk::CheckBox(70, yy, 100, 30, "initial", true);
 	initial_state->setEventHandler(this);
 	this->addChild(initial_state);
-	current_state=new ppl7::tk::CheckBox(70 + 90, yy, 100, 30, "current");
+	current_state=new ppl7::tk::CheckBox(70 + 90, yy, 100, 30, "current", true);
 	current_state->setEventHandler(this);
 	this->addChild(current_state);
 
