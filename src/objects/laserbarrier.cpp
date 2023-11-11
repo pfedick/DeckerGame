@@ -304,7 +304,7 @@ void LaserBarrier::updateLightMaps()
 			shine_up->sprite_no=18;
 			shine_up->angle=180;
 			shine_up->scale_x=0.945;
-			shine_up->scale_y=0.4;
+			shine_up->scale_y=0.7;
 			shine_up->color=light_color;
 			shine_up->intensity=128;
 			shine_up->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
@@ -317,7 +317,7 @@ void LaserBarrier::updateLightMaps()
 			shine_down->sprite_no=18;
 			shine_down->angle=0;
 			shine_down->scale_x=0.945;
-			shine_down->scale_y=0.4;
+			shine_down->scale_y=0.7;
 			shine_down->color=light_color;
 			shine_down->intensity=128;
 			shine_down->playerPlane=static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
@@ -341,7 +341,7 @@ void LaserBarrier::updateLightMaps()
 			shine_left->y=light->y;
 			shine_left->sprite_no=19;
 			shine_left->angle=270;
-			shine_left->scale_y=0.4;
+			shine_left->scale_y=0.7;
 			shine_left->scale_x=1;
 			shine_left->color=light_color;
 			shine_left->intensity=128;
@@ -354,7 +354,7 @@ void LaserBarrier::updateLightMaps()
 			shine_right->y=light->y;
 			shine_right->sprite_no=19;
 			shine_right->angle=90;
-			shine_right->scale_y=0.4;
+			shine_right->scale_y=0.7;
 			shine_right->scale_x=1;
 			shine_right->color=light_color;
 			shine_right->intensity=128;
