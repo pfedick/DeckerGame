@@ -67,14 +67,13 @@ class LightSystem
 {
 private:
     uint32_t nextid;
-    const ColorPalette& palette;
     std::map<uint32_t, LightObject*> light_map;
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
     bool visibility[static_cast<int>(LightPlaneId::Max)];
 
 public:
-    LightSystem(const ColorPalette& palette);
+    LightSystem();
     ~LightSystem();
     void loadSpritesets(SDL& sdl);
     void clear();

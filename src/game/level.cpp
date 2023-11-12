@@ -387,7 +387,7 @@ void Level::backup(const ppl7::String& Filename)
 			path.chopRight(suffix.len() + 1);
 			ppl7::DateTime date=ppl7::DateTime::currentTime();
 			path+="_" + date.toString("%Y%m%d%H%M%S") + "." + suffix;
-			ppl7::PrintDebugTime("Backup to: >>%s<<\n", (const char*)path);
+			//ppl7::PrintDebugTime("Backup to: >>%s<<\n", (const char*)path);
 			ppl7::File::copy(Filename, path);
 
 		}

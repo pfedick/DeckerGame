@@ -623,7 +623,7 @@ private:
 	LightLayer FrontLights=LightLayer(palette);
 	LightLayer NearLights=LightLayer(palette);
 	*/
-	LightSystem lights=LightSystem(palette);
+	LightSystem lights;
 
 	Decker::Objects::ObjectSystem* objects;
 	ParticleSystem* particles;

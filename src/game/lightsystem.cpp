@@ -146,8 +146,7 @@ void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneI
 }
 
 
-LightSystem::LightSystem(const ColorPalette& palette)
-    : palette(palette)
+LightSystem::LightSystem()
 {
     lensflares=new SpriteTexture();
     light_objects=new SpriteTexture();
