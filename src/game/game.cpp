@@ -1431,6 +1431,7 @@ const ppl7::String& Game::getLevelFilename() const
 void Game::save(const ppl7::String& filename)
 {
 	try {
+		level.backup(filename);
 		level.save(filename);
 		LevelFile=filename;
 	} catch (...) {

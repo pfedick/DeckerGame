@@ -374,6 +374,30 @@ void Level::save(const ppl7::String& Filename)
 
 }
 
+void Level::backup(const ppl7::String& Filename)
+{
+	ppl7::String path=ppl7::File::getPath(Filename);
+	try {
+		if (ppl7::File::exists(Filename)) {
+			if (path.notEmpty()) path+="/backup";
+			else path="backup";
+			if (!ppl7::Dir::exists(path)) ppl7::Dir::mkDir(path, true);
+			path+="/" + ppl7::File::getFilename(Filename);
+			ppl7::String suffix=ppl7::File::getSuffix(path);
+			path.chopRight(suffix.len() + 1);
+			ppl7::DateTime date=ppl7::DateTime::currentTime();
+			path+="_" + date.toString("%Y%m%d%H%M%S") + "." + suffix;
+			ppl7::PrintDebugTime("Backup to: >>%s<<\n", (const char*)path);
+			ppl7::File::copy(Filename, path);
+
+		}
+	} catch (const ppl7::Exception& exp) {
+		ppl7::PrintDebugTime("could not make backup of level file: %s => %s [%s]\n",
+			(const char*)Filename, (const char*)path, (const char*)exp.toString());
+
+	}
+}
+
 void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);

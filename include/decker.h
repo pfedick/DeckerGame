@@ -701,6 +701,7 @@ public:
 	void create(int width, int height);
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
+	void backup(const ppl7::String& Filename);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics);
 	void setViewport(const ppl7::grafix::Rect& r);
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
