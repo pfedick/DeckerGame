@@ -58,9 +58,9 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     ppl7::PokeFloat(buffer + 24, scale_y);
     ppl7::PokeFloat(buffer + 28, angle);
     ppl7::Poke16(buffer + 32, sprite_no);
-    ppl7::Poke32(buffer + 34, color.red());
-    ppl7::Poke32(buffer + 35, color.green());
-    ppl7::Poke32(buffer + 36, color.blue());
+    ppl7::Poke8(buffer + 34, color.red());
+    ppl7::Poke8(buffer + 35, color.green());
+    ppl7::Poke8(buffer + 36, color.blue());
     return 37;
 }
 
