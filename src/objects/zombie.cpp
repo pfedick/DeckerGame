@@ -29,7 +29,6 @@ Zombie::Zombie()
 	attack=false;
 	myLayer=Layer::BeforePlayer;
 	last_sprite_no=0;
-	next_growl=0.0f;
 }
 
 

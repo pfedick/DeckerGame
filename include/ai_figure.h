@@ -115,10 +115,11 @@ private:
 		StatePatrolLeft,
 		StatePatrolRight,
 		StateGoToOrigin,
-		StateFollowPlayer
+		StateFollowPlayer,
+		StateAttack
 	};
 	double next_state;
-	double next_growl;
+	double shoot_cooldown;
 	int state;
 	int substate;
 	int last_sprite_no;
