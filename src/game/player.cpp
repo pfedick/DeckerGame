@@ -1243,10 +1243,11 @@ void Player::checkCollisionWithWorld(const TileTypePlane& world)
 	Physic::PlayerMovement new_movement=Physic::checkCollisionWithWorld(world, x, y);
 	if (new_movement == Stand) stand();
 	if (collision_type_count[TileType::Type::Speer] > 0) {
-		this->dropHealth(10);
+		if (checkCollisionMatrixBody(TileType::Type::Speer)) this->dropHealth(10);
 	}
 	if (collision_type_count[TileType::Type::Fire] > 0) {
-		this->dropHealth(10, Burned);
+		if (checkCollisionMatrixBody(TileType::Type::Fire)) this->dropHealth(10, Burned);
+
 	}
 
 }

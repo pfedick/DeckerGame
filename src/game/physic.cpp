@@ -244,6 +244,16 @@ void Physic::updateCollisionMatrix(const TileTypePlane& world, float& x, float& 
 
 }
 
+bool Physic::checkCollisionMatrixBody(TileType::Type type) const
+{
+	for (int cy=1;cy < 5;cy++) {
+		for (int cx=2;cx < 4;cx++) {
+			if (collision_matrix[cx][cy] == type) return true;
+		}
+	}
+	return false;
+}
+
 Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& world, float& x, float& y)
 {
 	Physic::PlayerMovement new_movement=Unchanged;

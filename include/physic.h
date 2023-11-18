@@ -122,6 +122,7 @@ public:
 	ppl7::String getState() const;
 
 	void updateCollisionMatrix(const TileTypePlane& world, float& x, float& y);
+	bool checkCollisionMatrixBody(TileType::Type type) const;
 
 
 };
