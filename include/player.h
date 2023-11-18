@@ -121,7 +121,8 @@ private:
 	void initFlashLight();
 public:
 	float x, y;
-	int points, health, lifes;
+	int points, lifes;
+	float health;
 	float air;
 	float maxair;
 
