@@ -55,7 +55,7 @@ void KnifeThrown::update(double time, TileTypePlane& ttplane, Player& player, fl
 			updateBoundary();
 		}
 	}
-	if (gravity < 5) gravity+=0.1 * frame_rate_compensation;
+	if (gravity < 5) gravity+=0.2 * frame_rate_compensation;
 
 	float update=velocity.x * frame_rate_compensation;
 	float mul=1.0f;
