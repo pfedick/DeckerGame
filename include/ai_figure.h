@@ -17,6 +17,7 @@ class AiEnemy : public Enemy, public Physic
 {
 private:
 	double next_animation, next_wayfind;
+	float frame_rate_compensation;
 	//int state;
 	//int substate;
 	std::list<Connection> waypoints;
@@ -30,6 +31,7 @@ private:
 public:
 	AnimationCycle animation;
 	int keys;
+	float health;
 	double airStart;
 	float animation_speed;
 
@@ -60,6 +62,7 @@ public:
 	AnimationCycle anicycleStandRight;
 
 	AiEnemy(Type::ObjectType type);
+	void dropHealth(float points, HealthDropReason reason=HealthDropReason::Unknown);
 
 	void turn(PlayerOrientation target);
 	void stand();

@@ -38,6 +38,8 @@ AiEnemy::AiEnemy(Type::ObjectType type)
 	keys=0;
 	next_wayfind=0.0f;
 	airStart=0.0f;
+	frame_rate_compensation=0.0f;
+	health=100.0f;
 	animation_speed=0.07f;
 	collisionDetection=true;
 	animation.setStaticFrame(27);
@@ -66,6 +68,22 @@ AiEnemy::AiEnemy(Type::ObjectType type)
 	anicycleSlideLeft.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
 	anicycleSlideRight.start(slide_right, sizeof(slide_right) / sizeof(int), false, 82);
 	anicycleDeath.start(death_animation, sizeof(death_animation) / sizeof(int), false, 106);
+
+
+}
+
+
+void AiEnemy::dropHealth(float points, HealthDropReason reason)
+{
+	if (movement == Dead) return;
+	if (points == 0.0f) return;
+	health-=(points * frame_rate_compensation);
+	if (health <= 0.0f) {
+		health=0;
+		movement=Dead;
+		animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 106);
+
+	}
 
 
 }
@@ -131,12 +149,19 @@ void AiEnemy::updateAnimation(double time)
 
 void AiEnemy::updateMovementAndPhysics(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
+	this->frame_rate_compensation=frame_rate_compensation;
 	updateMovement(frame_rate_compensation);
 	if (movement == Dead) return;
 	Physic::PlayerMovement new_movement=Physic::checkCollisionWithWorld(ttplane, p.x, p.y);
 	if (new_movement == Stand && movement != Stand) {
 		//printf ("checkCollisionWithWorld sagt: stand\n");
 		stand();
+	}
+	if (collision_type_count[TileType::Type::Speer] > 0) {
+		this->dropHealth(10);
+	}
+	if (collision_type_count[TileType::Type::Fire] > 0) {
+		this->dropHealth(10, Burned);
 	}
 	if (updatePhysics(ttplane, frame_rate_compensation)) {
 		if (movement == Slide && orientation == Left) {

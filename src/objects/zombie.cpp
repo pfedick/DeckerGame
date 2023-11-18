@@ -317,7 +317,7 @@ void Zombie::update(double time, TileTypePlane& ttplane, Player& player, float f
 					}
 
 				}
-				if (attack && abs(player.y - p.y) < 20) shoot(time, player);
+				if (attack && abs(player.y - p.y) < 2 * TILE_HEIGHT) shoot(time, player);
 			}
 		} else if (attack) {
 			switchAttackMode(false);
