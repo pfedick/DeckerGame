@@ -168,7 +168,7 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Zombie]->enableOutlines(true);
 	spriteset[Spriteset::Zombie]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Zombie]->load(sdl, "res/zombie.tex");
-	for (int i=122;i <= 137;i++)spriteset[Spriteset::Zombie]->setPivot(i, 128, 97);
+	for (int i=167;i <= 182;i++)spriteset[Spriteset::Zombie]->setPivot(i, 128, 97);
 }
 
 void ObjectSystem::addObject(Object* object)

@@ -31,6 +31,7 @@ public:
 	AnimationCycle animation;
 	int keys;
 	double airStart;
+	float animation_speed;
 
 	AnimationCycle anicycleWalkLeft;
 	AnimationCycle anicycleWalkRight;
@@ -116,17 +117,20 @@ private:
 		StatePatrolRight,
 		StateGoToOrigin,
 		StateFollowPlayer,
-		StateAttack
+		StateThrowKnife
 	};
 	double next_state;
 	double shoot_cooldown;
 	int state;
 	int substate;
-	int last_sprite_no;
+	//int last_sprite_no;
 	bool attack;
+	bool knifeThrown;
 
 	void updateStatePatrol(double time, TileTypePlane& ttplane);
 	void switchAttackMode(bool enable);
+	void shoot(double time, Player& player);
+	void throwKnife(Player& player);
 
 public:
 	Zombie();

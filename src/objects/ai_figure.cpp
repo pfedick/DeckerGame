@@ -38,6 +38,7 @@ AiEnemy::AiEnemy(Type::ObjectType type)
 	keys=0;
 	next_wayfind=0.0f;
 	airStart=0.0f;
+	animation_speed=0.07f;
 	collisionDetection=true;
 	animation.setStaticFrame(27);
 	anicycleWalkLeft.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
@@ -117,7 +118,7 @@ void AiEnemy::playSoundOnAnimationSprite()
 void AiEnemy::updateAnimation(double time)
 {
 	if (time > next_animation) {
-		next_animation=time + 0.07f;
+		next_animation=time + animation_speed;
 		animation.update();
 		int new_sprite=animation.getFrame();
 		if (new_sprite != sprite_no) {
