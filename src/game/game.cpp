@@ -1532,6 +1532,7 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			nr=nr * sprite_dimensions + ppl7::rand(0, sprite_dimensions - 1);
 		}
 		float scale=sprite_selection->spriteScale();
+		float rotation=sprite_selection->spriteRotation();
 		int layer=sprite_selection->currentLayer();
 		if (layer < 0 || layer>1 || spriteset > MAX_SPRITESETS) return;
 		if (!level.spriteset[spriteset]) return;
@@ -1541,7 +1542,7 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 		ss.addSprite(event->p.x + coords.x,
 			event->p.y + coords.y,
 			0,
-			spriteset, nr, scale, sprite_selection->colorIndex());
+			spriteset, nr, scale, rotation, sprite_selection->colorIndex());
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;
@@ -1703,16 +1704,36 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 {
 	if (sprite_selection != NULL && event->widget() == world_widget) {
-		if (sprite_mode == spriteModeDraw) {
-			float scale=sprite_selection->spriteScale();
-			if (event->wheel.y < 0 && scale>0.1) scale-=0.05;
-			else if (event->wheel.y > 0 && scale < 2.0) scale+=0.05;
-			sprite_selection->setSpriteScale(scale);
-		} else if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
-			//printf ("wheel\n");
-			if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.05;
-			else if (event->wheel.y > 0 && selected_sprite.scale < 2.0) selected_sprite.scale+=0.05;
-			selected_sprite_system->modifySprite(selected_sprite);
+		const Uint8* state = SDL_GetKeyboardState(NULL);
+		if (state[SDL_SCANCODE_LSHIFT]) {
+			if (sprite_mode == spriteModeDraw) {
+				float angle=sprite_selection->spriteRotation();
+				if (event->wheel.y < 0) angle-=5;
+				if (event->wheel.y > 0) angle+=5;
+				if (angle <= 0) angle+=360;
+				if (angle >= 360) angle-=360;
+				sprite_selection->setSpriteRotation(angle);
+			} else if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
+				if (event->wheel.y < 0) selected_sprite.rotation-=5;
+				if (event->wheel.y > 0) selected_sprite.rotation+=5;
+				if (selected_sprite.rotation <= 0) selected_sprite.rotation+=360;
+				if (selected_sprite.rotation >= 360) selected_sprite.rotation-=360;
+				//selected_light_system->modifyLight(selected_light);
+				selected_sprite_system->modifySprite(selected_sprite);
+			}
+
+		} else {
+			if (sprite_mode == spriteModeDraw) {
+				float scale=sprite_selection->spriteScale();
+				if (event->wheel.y < 0 && scale>0.1) scale-=0.05;
+				else if (event->wheel.y > 0 && scale < 2.0) scale+=0.05;
+				sprite_selection->setSpriteScale(scale);
+			} else if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
+				//printf ("wheel\n");
+				if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.05;
+				else if (event->wheel.y > 0 && selected_sprite.scale < 2.0) selected_sprite.scale+=0.05;
+				selected_sprite_system->modifySprite(selected_sprite);
+			}
 		}
 	} else if (lights_selection != NULL && event->widget() == world_widget) {
 		const Uint8* state = SDL_GetKeyboardState(NULL);

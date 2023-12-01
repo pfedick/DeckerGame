@@ -15,6 +15,7 @@ SpriteSystem::Item::Item()
 	sprite_set=0;
 	sprite_no=0;
 	scale=1.0f;
+	rotation=0.0f;
 	color_index=0;
 }
 
@@ -55,7 +56,7 @@ void SpriteSystem::setSpriteset(int no, SpriteTexture* spriteset)
 	this->spriteset[no]=spriteset;
 }
 
-void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, uint32_t color_index)
+void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index)
 {
 	//printf ("x=%d, y=%d\n",x,y);
 	SpriteSystem::Item item;
@@ -69,9 +70,10 @@ void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, 
 	item.scale=sprite_scale;
 	item.spritesystem=this;
 	item.color_index=color_index;
+	item.rotation=sprite_rotation;
 	if (item.sprite_set <= MAX_SPRITESETS && this->spriteset[item.sprite_set] != NULL) {
 		item.texture=this->spriteset[item.sprite_set];
-		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no, sprite_scale, x, y);
+		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no, sprite_scale, sprite_scale, sprite_rotation, x, y);
 	}
 	sprite_list.insert(std::pair<int, SpriteSystem::Item>(item.id, item));
 
@@ -118,12 +120,18 @@ void SpriteSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpo
 	for (it=visible_sprite_map.begin();it != visible_sprite_map.end();++it) {
 		const SpriteSystem::Item& item=(it->second);
 		if (item.texture) {
-			item.texture->drawScaled(renderer,
+			item.texture->drawScaledWithAngle(renderer,
 				item.x + viewport.x1 - worldcoords.x,
 				item.y + viewport.y1 - worldcoords.y,
-				item.sprite_no, item.scale,
+				item.sprite_no, item.scale, item.scale, item.rotation,
 				palette.getColor(item.color_index));
 		}
+		/*
+		item.texture->drawBoundingBoxWithAngle(renderer,
+			item.x + viewport.x1 - worldcoords.x,
+			item.y + viewport.y1 - worldcoords.y,
+			item.sprite_no, item.scale, item.scale, item.rotation);
+			*/
 	}
 }
 
@@ -135,10 +143,10 @@ void SpriteSystem::drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7:
 	if (it != sprite_list.end()) {
 		const SpriteSystem::Item& item=(it->second);
 		if (item.texture) {
-			item.texture->drawOutlines(renderer,
+			item.texture->drawOutlinesWithAngle(renderer,
 				item.x + viewport.x1 - worldcoords.x,
 				item.y + viewport.y1 - worldcoords.y,
-				item.sprite_no, item.scale);
+				item.sprite_no, item.scale, item.scale, item.rotation);
 		}
 	}
 }
@@ -162,13 +170,30 @@ void SpriteSystem::modifySprite(const SpriteSystem::Item& item)
 		intitem.y=item.y;
 		intitem.z=item.z;
 		intitem.scale=item.scale;
+		intitem.rotation=item.rotation;
 		if (intitem.texture) {
 			intitem.boundary=intitem.texture->spriteBoundary(intitem.sprite_no,
-				intitem.scale, intitem.x, intitem.y);
+				intitem.scale, intitem.scale, intitem.rotation, intitem.x, intitem.y);
 		}
 	}
 }
 
+
+static inline ppl7::grafix::Point rotate_point(const ppl7::grafix::Point& p, const SpriteSystem::Item& item)
+{
+	float s = sin(item.rotation * M_PI / 180.0f);
+	float c = cos(item.rotation * M_PI / 180.0f);
+
+	ppl7::grafix::Point pr=p;
+	pr.x-=item.x;
+	pr.y-=item.y;
+	// rotate point
+	float xnew = (float)pr.x * c + (float)pr.y * s;
+	float ynew = (float)-pr.x * s + (float)pr.y * c;
+	pr.x=xnew + item.x;
+	pr.y=ynew + item.y;
+	return pr;
+}
 
 bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem::Item& sprite) const
 {
@@ -184,8 +209,14 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem
 			if (item.texture) {
 				const ppl7::grafix::Drawable draw=item.texture->getDrawable(item.sprite_no);
 				if (draw.width()) {
+					// TODO: rotate
+					//ppl7::grafix::Point rp=rotate_point(p, item);
+					//ppl7::grafix::Point of=item.texture->spriteOffset(item.sprite_no);
+					//int x= item.x - rp.x + of.x;
+					//int y=item.y - rp.y + of.y;
 					int x=p.x - item.boundary.x1;
 					int y=p.y - item.boundary.y1;
+
 					ppl7::grafix::Color c=draw.getPixel(x / item.scale, y / item.scale);
 					if (c.alpha() > 40) {
 						sprite=item;
@@ -201,10 +232,10 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem
 void SpriteSystem::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (sprite_list.size() == 0) return;
-	unsigned char* buffer=(unsigned char*)malloc(sprite_list.size() * 18 + 6);
+	unsigned char* buffer=(unsigned char*)malloc(sprite_list.size() * 22 + 6);
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
-	ppl7::Poke8(buffer + 5, 1);		// Version
+	ppl7::Poke8(buffer + 5, 2);		// Version
 	size_t p=6;
 	std::map<int, SpriteSystem::Item>::const_iterator it;
 	for (it=sprite_list.begin();it != sprite_list.end();++it) {
@@ -216,7 +247,8 @@ void SpriteSystem::save(ppl7::FileObject& file, unsigned char id) const
 		ppl7::Poke16(buffer + p + 10, item.sprite_set);
 		ppl7::Poke16(buffer + p + 12, item.sprite_no);
 		ppl7::PokeFloat(buffer + p + 14, item.scale);
-		p+=18;
+		ppl7::PokeFloat(buffer + p + 18, item.rotation);
+		p+=22;
 	}
 	ppl7::Poke32(buffer + 0, p);
 	file.write(buffer, p);
@@ -237,9 +269,25 @@ void SpriteSystem::load(const ppl7::ByteArrayPtr& ba)
 				ppl7::Peek16(buffer + p + 10),
 				ppl7::Peek16(buffer + p + 12),
 				ppl7::PeekFloat(buffer + p + 14),
+				0.0f,
 				ppl7::Peek8(buffer + p + 9));
 			p+=18;
+
 		}
+	} else if (version == 2) {
+		while (p < ba.size()) {
+			addSprite(ppl7::Peek32(buffer + p),
+				ppl7::Peek32(buffer + p + 4),
+				ppl7::Peek8(buffer + p + 8),
+				ppl7::Peek16(buffer + p + 10),
+				ppl7::Peek16(buffer + p + 12),
+				ppl7::PeekFloat(buffer + p + 14),
+				ppl7::PeekFloat(buffer + p + 18),
+				ppl7::Peek8(buffer + p + 9));
+			p+=22;
+
+		}
+
 	} else {
 		printf("Can't load SpriteSystem, unknown version! [%d]\n", version);
 

@@ -28,6 +28,7 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 360, game);
 	this->addChild(tilesframe);
 	scale=1.0f;
+	rotation=0.0f;
 
 	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
 	colorframe->setEventHandler(this);
@@ -96,6 +97,16 @@ void SpriteSelection::setSpriteScale(float factor)
 float SpriteSelection::spriteScale() const
 {
 	return scale;
+}
+
+void SpriteSelection::setSpriteRotation(float rotation)
+{
+	this->rotation=rotation;
+}
+
+float SpriteSelection::spriteRotation() const
+{
+	return rotation;
 }
 
 int SpriteSelection::colorIndex() const

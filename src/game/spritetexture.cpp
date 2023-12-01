@@ -433,6 +433,26 @@ void SpriteTexture::drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id
 
 }
 
+void SpriteTexture::drawBoundingBoxWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle) const
+{
+	if (!bSDLBufferd) return;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return;
+	//const SpriteIndexItem& item=it->second;
+	ppl7::grafix::Rect rr=spriteBoundary(id, scale_x, scale_y, angle, x, y);
+
+	SDL_Rect tr;
+	tr.x=rr.x1;
+	tr.y=rr.y1;
+	tr.w=rr.width();
+	tr.h=rr.height();
+	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+	SDL_RenderDrawRect(renderer, &tr);
+
+}
+
+
 void SpriteTexture::draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const
 {
 	if (!bSDLBufferd) return;
@@ -629,6 +649,83 @@ ppl7::grafix::Rect SpriteTexture::spriteBoundary(int id, float scale_factor, int
 	r.x2=r.x1 + (int)((float)item.r.w * scale_factor);
 	r.y2=r.y1 + (int)((float)item.r.h * scale_factor);
 	return r;
+}
+
+ppl7::grafix::Point SpriteTexture::spriteOffset(int id) const
+{
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	ppl7::grafix::Point p;
+	if (it == SpriteList.end()) return p;
+	const SpriteIndexItem& item=it->second;
+	p.x=(item.Offset.x - item.Pivot.x);
+	p.y=(item.Offset.y - item.Pivot.y);
+	return p;
+
+}
+
+static inline ppl7::grafix::Point rotate_point(const ppl7::grafix::Point& p, const ppl7::grafix::Point& pivot, float s, float c)
+{
+	ppl7::grafix::Point pr=p;
+	pr.x-=pivot.x;
+	pr.y-=pivot.y;
+	// rotate point
+	float xnew = (float)pr.x * c - (float)pr.y * s;
+	float ynew = (float)pr.x * s + (float)pr.y * c;
+	pr.x=xnew + pivot.x;
+	pr.y=ynew + pivot.y;
+	return pr;
+}
+
+static inline int min_val(int v1, int v2, int v3, int v4)
+{
+	int v=v1;
+	if (v2 < v) v=v2;
+	if (v3 < v) v=v3;
+	if (v4 < v) v=v4;
+	return v;
+}
+static inline int max_val(int v1, int v2, int v3, int v4)
+{
+	int v=v1;
+	if (v2 > v) v=v2;
+	if (v3 > v) v=v3;
+	if (v4 > v) v=v4;
+	return v;
+}
+
+static ppl7::grafix::Rect rotate(const ppl7::grafix::Rect& r, const ppl7::grafix::Point& pivot, float angle)
+{
+	ppl7::grafix::Rect r2;
+	float s = sin(angle * M_PI / 180.0f);
+	float c = cos(angle * M_PI / 180.0f);
+
+	ppl7::grafix::Point p1=rotate_point(r.topLeft(), pivot, s, c);
+	ppl7::grafix::Point p2=rotate_point(r.topRight(), pivot, s, c);
+	ppl7::grafix::Point p3=rotate_point(r.bottomLeft(), pivot, s, c);
+	ppl7::grafix::Point p4=rotate_point(r.bottomRight(), pivot, s, c);
+	r2.x1=min_val(p1.x, p2.x, p3.x, p4.x);
+	r2.y1=min_val(p1.y, p2.y, p3.y, p4.y);
+	r2.x2=max_val(p1.x, p2.x, p3.x, p4.x);
+	r2.y2=max_val(p1.y, p2.y, p3.y, p4.y);
+	return r2;
+}
+
+
+ppl7::grafix::Rect SpriteTexture::spriteBoundary(int id, float scale_factor_x, float scale_factor_y, float rotation, int x, int y) const
+{
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	ppl7::grafix::Rect r;
+	if (it == SpriteList.end()) return r;
+	const SpriteIndexItem& item=it->second;
+	// TODO: add rotation into calculation
+	r.x1= x + (item.Offset.x - item.Pivot.x) * scale_factor_x;
+	r.y1= y + (item.Offset.y - item.Pivot.y) * scale_factor_y;
+	r.x2=r.x1 + (int)((float)item.r.w * scale_factor_x);
+	r.y2=r.y1 + (int)((float)item.r.h * scale_factor_y);
+	ppl7::grafix::Rect r2=rotate(r, ppl7::grafix::Point(x, y), rotation);
+	return r2;
 }
 
 

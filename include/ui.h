@@ -344,6 +344,7 @@ private:
 
 	int tileset;
 	float scale;
+	float rotation;
 
 
 
@@ -359,6 +360,8 @@ public:
 	int spriteSetDimensions() const;
 	void setSpriteScale(float factor);
 	float spriteScale() const;
+	void setSpriteRotation(float rotation);
+	float spriteRotation() const;
 	void setSpriteSet(int id, const ppl7::String& name, SpriteTexture* sprites, int dimensions=1);
 	int currentLayer() const;
 	void setCurrentLayer(int layer);

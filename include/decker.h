@@ -255,6 +255,7 @@ public:
 	void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
 	void draw(SDL_Renderer* renderer, int x, int y, int id, const SDL_Color& color_modulation) const;
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
+	void drawBoundingBoxWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle) const;
 	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
@@ -265,6 +266,7 @@ public:
 
 	ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
 	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
+	ppl7::grafix::Rect spriteBoundary(int id, float scale_factor_x, float scale_factor_y, float rotation, int x, int y) const;
 	const ppl7::grafix::Drawable getDrawable(int id) const;
 	void enableMemoryBuffer(bool enabled);
 	void enableSDLBuffer(bool enabled);
@@ -276,6 +278,7 @@ public:
 	void setPivot(int id, int x, int y);
 
 	SDL_Rect getSpriteSource(int id) const;
+	ppl7::grafix::Point spriteOffset(int id) const;
 };
 
 class SpriteSystem
@@ -295,6 +298,7 @@ public:
 		int sprite_set;	// 2 Byte
 		int sprite_no;	// 2 Byte
 		float scale;	// 4 Byte	==> 18 Byte
+		float rotation;	// 4 Byte   ==> 22 Byte
 		ppl7::grafix::Rect boundary;
 	};
 private:
@@ -310,7 +314,7 @@ public:
 	SpriteSystem(const ColorPalette& palette);
 	~SpriteSystem();
 	void clear();
-	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, uint32_t color_index);
+	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index);
 	void deleteSprite(int id);
 	void modifySprite(const SpriteSystem::Item& item);
 	void setVisible(bool visible);
