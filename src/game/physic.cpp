@@ -369,6 +369,13 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 		y=ty;
 		if (movement == Falling || movement == Jump || movement == ClimbDown) new_movement=Stand;
 		return new_movement;
+	} else if (collision_at_pivoty[1] == TileType::Blocking && filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x, y - 1))) == TileType::Blocking) {
+		// This fixes blocking issues on ramps
+		while (collision_at_pivoty[1] == TileType::Blocking) {
+			y--;
+			collision_at_pivoty[1]=filterRelevantTileTypes(world.getType(ppl7::grafix::Point(x, y)));
+		}
+		y++;
 	}
 
 	if (collision_matrix[2][0] == TileType::Blocking || collision_matrix[3][0] == TileType::Blocking) {
