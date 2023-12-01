@@ -1269,11 +1269,12 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 		}
 		ppl7::grafix::Point tmouse=game_viewport.translate(mouse);
 		float scale=sprite_selection->spriteScale();
+		float rotation=sprite_selection->spriteRotation();
 		if (!level.spriteset[spriteset]) return;
-		level.spriteset[spriteset]->drawScaled(renderer,
-			tmouse.x, tmouse.y, nr, scale, level.palette.getColor(sprite_selection->colorIndex()));
-		level.spriteset[spriteset]->drawOutlines(renderer,
-			tmouse.x, tmouse.y, nr, scale);
+		level.spriteset[spriteset]->drawScaledWithAngle(renderer,
+			tmouse.x, tmouse.y, nr, scale, scale, rotation, level.palette.getColor(sprite_selection->colorIndex()));
+		level.spriteset[spriteset]->drawOutlinesWithAngle(renderer,
+			tmouse.x, tmouse.y, nr, scale, scale, rotation);
 	}
 }
 
