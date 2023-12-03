@@ -126,12 +126,12 @@ void SpriteSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpo
 				item.sprite_no, item.scale, item.scale, item.rotation,
 				palette.getColor(item.color_index));
 		}
-		/*
+
 		item.texture->drawBoundingBoxWithAngle(renderer,
 			item.x + viewport.x1 - worldcoords.x,
 			item.y + viewport.y1 - worldcoords.y,
 			item.sprite_no, item.scale, item.scale, item.rotation);
-			*/
+
 	}
 }
 
@@ -209,13 +209,16 @@ bool SpriteSystem::findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem
 			if (item.texture) {
 				const ppl7::grafix::Drawable draw=item.texture->getDrawable(item.sprite_no);
 				if (draw.width()) {
-					// TODO: rotate
-					//ppl7::grafix::Point rp=rotate_point(p, item);
-					//ppl7::grafix::Point of=item.texture->spriteOffset(item.sprite_no);
-					//int x= item.x - rp.x + of.x;
-					//int y=item.y - rp.y + of.y;
-					int x=p.x - item.boundary.x1;
-					int y=p.y - item.boundary.y1;
+					// rotate and scale selected point
+					ppl7::grafix::Point rp=rotate_point(p, item);
+					ppl7::grafix::Point of=item.texture->spriteOffset(item.sprite_no);
+					int x=rp.x - item.x - ((float)of.x * item.scale);
+					int y=rp.y - item.y - ((float)of.y * item.scale);
+
+					/*ppl7::PrintDebugTime("point: %d:%d, pivot: %d:%d, rotated point: %d:%d, Item: %d:%d\n",
+						p.x, p.y, item.x, item.y, rp.x, rp.y, x, y
+					);
+					*/
 
 					ppl7::grafix::Color c=draw.getPixel(x / item.scale, y / item.scale);
 					if (c.alpha() > 40) {
