@@ -126,12 +126,12 @@ void SpriteSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpo
 				item.sprite_no, item.scale, item.scale, item.rotation,
 				palette.getColor(item.color_index));
 		}
-
+		/*
 		item.texture->drawBoundingBoxWithAngle(renderer,
 			item.x + viewport.x1 - worldcoords.x,
 			item.y + viewport.y1 - worldcoords.y,
 			item.sprite_no, item.scale, item.scale, item.rotation);
-
+		*/
 	}
 }
 
