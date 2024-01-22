@@ -415,6 +415,7 @@ Representation getRepresentation(int object_type)
 	case Type::ObjectWatcher: return ObjectWatcher::representation();
 	case Type::Trigger: return Trigger::representation();
 	case Type::LightTrigger: return LightTrigger::representation();
+	case Type::LevelModificator: return LevelModificator::representation();
 	default: return Object::representation();
 	}
 }
@@ -503,6 +504,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::ObjectWatcher: return new ObjectWatcher();
 	case Type::Trigger: return new Trigger();
 	case Type::LightTrigger: return new LightTrigger();
+	case Type::LevelModificator: return new LevelModificator();
 	}
 	return NULL;
 }

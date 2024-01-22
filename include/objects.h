@@ -66,6 +66,7 @@ public:
 		Trigger=33,
 		Flashlight=34,
 		LightTrigger=35,
+		LevelModificator=36,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -1497,7 +1498,49 @@ public:
 	void test();
 };
 
+class LevelModificator : public Object
+{
+private:
+	enum class State {
+		waiting_for_activation,
+		in_transition,
+		disabled
+	};
+	State state;
+public:
+	enum class BackgroundType {
+		Image,
+		Color
+	};
+	ppl7::grafix::Point range;
+	bool initialStateEnabled;
+	bool loadLevelDefault;
+	bool changeBackground;
+	bool changeGlobalLighting;
+	bool changeSong;
+	BackgroundType backgroundType;
+	ppl7::String BackgroundImage;
+	ppl7::String Song;
+	ppl7::grafix::Color BackgroundColor;
+	ppl7::grafix::Color GlobalLighting;
+	float transitionTime;
 
+
+	LevelModificator();
+	~LevelModificator();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void reset();
+	virtual void toggle(bool enable, Object* source=NULL) override;
+	virtual void trigger(Object* source=NULL) override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void openUi() override;
+	void test();
+};
 
 
 class ObjectSystem

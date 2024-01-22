@@ -78,6 +78,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::ObjectWatcher, "ObjectWatcher", 58);
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
+	addObject(Decker::Objects::Type::LevelModificator, "Level Modificator", 65);
 
 
 
