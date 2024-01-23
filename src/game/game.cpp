@@ -722,10 +722,11 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	SDL_SetRenderTarget(renderer, NULL);
 	*/
+	updateLevelModificator(now);
 	SDL_SetRenderTarget(renderer, tex_render_target);
-	background.setColor(level.params.BackgroundColor);
-	background.setImage(level.params.BackgroundImage);
-	background.setBackgroundType(level.params.backgroundType);
+	background.setColor(level.runtimeParams.BackgroundColor);
+	background.setImage(level.runtimeParams.BackgroundImage);
+	background.setBackgroundType(level.runtimeParams.backgroundType);
 	background.draw(renderer, game_viewport, WorldCoords);
 	metrics.time_draw_background.stop();
 
@@ -2281,4 +2282,57 @@ void Game::updateLightFromUi()
 		selected_light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
 		//selected_light_system->modifyLight(selected_light);
 	}
+}
+
+
+void Game::startLevelModification(double time, void* object)
+{
+	Decker::Objects::LevelModificator* mod=static_cast<Decker::Objects::LevelModificator*>(object);
+	if (mod == NULL || mod == levelModificator.triggerobject) return;
+	levelModificator.start=level.runtimeParams;
+	levelModificator.end=levelModificator.start;
+	if (mod->loadLevelDefault) {
+		levelModificator.end=level.params;
+		levelModificator.end.CurrentSong=level.params.InitialSong;
+	}
+	if (mod->changeGlobalLighting) levelModificator.end.GlobalLighting=mod->GlobalLighting;
+	if (mod->changeBackground) {
+		levelModificator.end.BackgroundColor=mod->BackgroundColor;
+		levelModificator.end.BackgroundImage=mod->BackgroundImage;
+		levelModificator.end.backgroundType=Background::Type::Color;
+		if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) levelModificator.end.backgroundType=Background::Type::Image;
+	}
+	if (levelModificator.start == levelModificator.end) return;
+	levelModificator.starttime=time;
+	levelModificator.triggerobject=object;
+	levelModificator.duration=mod->transitionTime;
+	//ppl7::PrintDebugTime("Game::startLevelModification\n");
+}
+
+void Game::updateLevelModificator(double time)
+{
+	if (levelModificator.triggerobject == NULL) return;
+	float progress=(time - levelModificator.starttime) / levelModificator.duration;
+	if (levelModificator.duration <= 0.0f) progress=1.0f;
+	//ppl7::PrintDebugTime("Game::updateLevelModificator: %0.3f\n", progress);
+
+	if (time >= levelModificator.starttime + levelModificator.duration || progress >= 1.0f) {
+		levelModificator.triggerobject=NULL;
+		level.runtimeParams=levelModificator.end;
+		return;
+	}
+	float revprog=1.0f - progress;
+
+	if (levelModificator.start.GlobalLighting != levelModificator.end.GlobalLighting) {
+		level.runtimeParams.GlobalLighting=levelModificator.start.GlobalLighting * revprog + levelModificator.end.GlobalLighting * progress;
+	}
+
+	if (levelModificator.start.BackgroundColor != levelModificator.end.BackgroundColor) {
+		level.runtimeParams.BackgroundColor=levelModificator.start.BackgroundColor * revprog + levelModificator.end.BackgroundColor * progress;
+	}
+}
+
+void* Game::getLevelModificationObject() const
+{
+	return levelModificator.triggerobject;
 }

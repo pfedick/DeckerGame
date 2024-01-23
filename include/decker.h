@@ -557,7 +557,20 @@ public:
 };
 
 
-class LevelParameter
+class ModifiableParameter
+{
+public:
+	Background::Type backgroundType;
+	ppl7::String BackgroundImage;
+	ppl7::String CurrentSong;
+	ppl7::grafix::Color BackgroundColor;
+	ppl7::grafix::Color GlobalLighting;
+	ModifiableParameter();
+	void clear();
+	bool operator==(const ModifiableParameter& other) const;
+};
+
+class LevelParameter : public ModifiableParameter
 {
 private:
 public:
@@ -567,10 +580,6 @@ public:
 	ppl7::String InitialSong;
 	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
-	Background::Type backgroundType;
-	ppl7::String BackgroundImage;
-	ppl7::grafix::Color BackgroundColor;
-	ppl7::grafix::Color GlobalLighting;
 
 	LevelParameter();
 	void clear();
@@ -599,6 +608,7 @@ class Level
 	friend class Game;
 public:
 	LevelParameter params;
+	ModifiableParameter runtimeParams;
 	ColorPalette palette;
 
 private:
@@ -836,6 +846,23 @@ public:
 	const SDL_Rect& getRenderRect() const;
 };
 
+class LevelModificator
+{
+public:
+	ModifiableParameter start;
+	ModifiableParameter end;
+	float duration;
+	double starttime;
+	void* triggerobject;
+
+	LevelModificator() {
+		duration=0.0f;
+		starttime=0.0f;
+		triggerobject=NULL;
+	}
+
+};
+
 class Game : private ppl7::tk::Window
 {
 private:
@@ -961,6 +988,7 @@ private:
 
 	void checkFileDialog();
 	void checkSoundtrack();
+	void updateLevelModificator(double time);
 
 	Player* player;
 	float fade_to_black;
@@ -980,6 +1008,7 @@ private:
 	LightObject* selected_light;
 
 	GameSpeed game_speed;
+	LevelModificator levelModificator;
 
 public:
 	Config config;
@@ -1058,6 +1087,9 @@ public:
 
 	void updateLightFromUi();
 	SDL_Texture* getLightRenderTarget();
+
+	void startLevelModification(double time, void* object);
+	void* getLevelModificationObject() const;
 
 };
 

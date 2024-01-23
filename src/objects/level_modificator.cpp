@@ -63,8 +63,7 @@ void LevelModificator::handleCollision(Player* player, const Collision& collisio
 {
     if (state != State::waiting_for_activation) return;
     state=State::in_transition;
-
-    // TODO
+    GetGame().startLevelModification(player->time, this);
 }
 
 void LevelModificator::test()
@@ -79,7 +78,7 @@ void LevelModificator::update(double time, TileTypePlane& ttplane, Player& playe
 {
     boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
     if (state == State::in_transition) {
-
+        if (GetGame().getLevelModificationObject() != this) state=State::waiting_for_activation;
     }
 
 
@@ -207,6 +206,22 @@ private:
     ppl7::tk::CheckBox* initialStateEnabled, * currentState;
     LevelModificator* object;
 
+    ppl7::tk::CheckBox* loadLevelDefault;
+    ppl7::tk::CheckBox* changeBackground;
+    ppl7::tk::CheckBox* changeGlobalLighting;
+    ppl7::tk::CheckBox* changeSong;
+    ppl7::tk::Frame* globalLightingFrame;
+    ppl7::tk::Frame* backgroundFrame;
+    ppl7::tk::RadioButton* backgroundTypeImage;
+    ppl7::tk::RadioButton* backgroundTypeColor;
+    Decker::ui::ColorSliderWidget* GlobalLighting;
+    Decker::ui::ColorSliderWidget* BackgroundColor;
+    ppl7::tk::ComboBox* backgroundImage;
+    ppl7::tk::Button* CopyGlobalLightingFromLevel;
+    ppl7::tk::Button* CopyBackgroundFromLevel;
+
+
+
 public:
     LevelModificatorDialog(LevelModificator* object);
     ~LevelModificatorDialog();
@@ -217,6 +232,7 @@ public:
     virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
     virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
     virtual void dialogButtonEvent(Dialog::Buttons button) override;
+    virtual void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
 };
 
 
@@ -260,6 +276,77 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     range_y->enableSpinBox(true, 1, 80);
     range_y->setEventHandler(this);
     addChild(range_y);
+    y+=35;
+
+    loadLevelDefault=new ppl7::tk::CheckBox(0, y, client.width(), 30, "load level default", object->loadLevelDefault);
+    loadLevelDefault->setEventHandler(this);
+    addChild(loadLevelDefault);
+    y+=35;
+
+    changeBackground=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change Background", object->changeBackground);
+    changeBackground->setEventHandler(this);
+    addChild(changeBackground);
+    y+=35;
+    backgroundFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 170);
+
+    int y1=0;
+    CopyBackgroundFromLevel=new ppl7::tk::Button(backgroundFrame->width() - 195, 0, 195, 30, "copy from level");
+    CopyBackgroundFromLevel->setEventHandler(this);
+    backgroundFrame->addChild(CopyBackgroundFromLevel);
+
+
+    backgroundTypeImage=new ppl7::tk::RadioButton(0, y1, 80, 30, "Image:");
+    backgroundTypeImage->setEventHandler(this);
+    backgroundFrame->addChild(backgroundTypeImage);
+    backgroundImage=new ppl7::tk::ComboBox(100, y1, backgroundFrame->width() - 310, 30);
+    backgroundImage->setEventHandler(this);
+    Resources& res=getResources();
+    std::list<ppl7::String>::const_iterator it;
+    backgroundImage->add("no image", "");
+    for (it=res.background_images.begin();it != res.background_images.end();++it) {
+        backgroundImage->add((*it), (*it));
+    }
+    backgroundFrame->addChild(backgroundImage);
+    y1+=35;
+
+    backgroundTypeColor=new ppl7::tk::RadioButton(0, y1, 80, 30, "Color:");
+    backgroundTypeColor->setEventHandler(this);
+    backgroundFrame->addChild(backgroundTypeColor);
+    y1+=35;
+    BackgroundColor=new Decker::ui::ColorSliderWidget(0, y1, backgroundFrame->width() - 200, 100);
+    BackgroundColor->setEventHandler(this);
+    BackgroundColor->setColor(object->BackgroundColor);
+    backgroundFrame->addChild(BackgroundColor);
+
+    if (object->backgroundType == LevelModificator::BackgroundType::Image) backgroundTypeImage->setChecked(true);
+    else backgroundTypeColor->setChecked(true);
+
+    addChild(backgroundFrame);
+    backgroundFrame->setEnabled(changeBackground->checked());
+    y+=175;
+
+
+    changeGlobalLighting=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change global lighting", object->changeGlobalLighting);
+    changeGlobalLighting->setEventHandler(this);
+    addChild(changeGlobalLighting);
+    y+=35;
+    globalLightingFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 110);
+    GlobalLighting=new Decker::ui::ColorSliderWidget(0, 0, globalLightingFrame->width() - 200, 100);
+    GlobalLighting->setEventHandler(this);
+    GlobalLighting->setColor(object->GlobalLighting);
+    globalLightingFrame->addChild(GlobalLighting);
+    CopyGlobalLightingFromLevel=new ppl7::tk::Button(globalLightingFrame->width() - 195, 0, 195, 30, "copy from level");
+    CopyGlobalLightingFromLevel->setEventHandler(this);
+    globalLightingFrame->addChild(CopyGlobalLightingFromLevel);
+    addChild(globalLightingFrame);
+    globalLightingFrame->setEnabled(changeGlobalLighting->checked());
+    y+=115;
+
+
+
+    changeSong=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change song", object->changeSong);
+    changeSong->setEventHandler(this);
+    addChild(changeSong);
     y+=35;
 
     /*
@@ -310,10 +397,25 @@ LevelModificatorDialog::~LevelModificatorDialog()
 
 void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
+    ppl7::PrintDebugTime("LevelModificatorDialog::toggledEvent\n");
     if (event->widget() == initialStateEnabled) {
         object->initialStateEnabled=checked;
     } else if (event->widget() == currentState) {
         object->enabled=checked;
+    } else if (event->widget() == loadLevelDefault) {
+        object->loadLevelDefault=checked;
+    } else if (event->widget() == changeBackground) {
+        object->changeBackground=checked;
+    } else if (event->widget() == changeGlobalLighting) {
+        object->changeGlobalLighting=checked;
+        globalLightingFrame->setEnabled(checked);
+    } else if (event->widget() == changeSong) {
+        object->changeSong=checked;
+    } else if (event->widget() == backgroundTypeColor) {
+        object->backgroundType = LevelModificator::BackgroundType::Color;
+    } else if (event->widget() == backgroundTypeImage) {
+        object->backgroundType = LevelModificator::BackgroundType::Image;
+
     }
 }
 
@@ -329,7 +431,7 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, double va
 
 void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
-    //ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int64_t\n");
+    ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int64_t\n");
     if (event->widget() == range_x) {
         object->range.x=(int)value;
     } else if (event->widget() == range_y) {
@@ -339,8 +441,39 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t v
 
 void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-    //ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
+    ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int\n");
+    if (event->widget() == GlobalLighting) {
+        object->GlobalLighting=GlobalLighting->color();
+    } else if (event->widget() == BackgroundColor) {
+        object->BackgroundColor=BackgroundColor->color();
+    } else Decker::ui::Dialog::valueChangedEvent(event, value);
 
+}
+
+void LevelModificatorDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+{
+    ppl7::PrintDebugTime("LevelModificatorDialog::mouseDownEvent\n");
+    if (event->widget() == CopyGlobalLightingFromLevel) {
+        ppl7::grafix::Color c=GetGame().getLevel().params.GlobalLighting;
+        GlobalLighting->setColor(c);
+        object->GlobalLighting.setColor(c);
+    } else if (event->widget() == CopyBackgroundFromLevel) {
+        ppl7::grafix::Color c=GetGame().getLevel().params.BackgroundColor;
+        BackgroundColor->setColor(c);
+        object->BackgroundColor.setColor(c);
+        object->BackgroundImage=GetGame().getLevel().params.BackgroundImage;
+        if (GetGame().getLevel().params.backgroundType == Background::Type::Color) {
+            object->backgroundType=LevelModificator::BackgroundType::Color;
+            backgroundTypeColor->setChecked(true);
+            backgroundTypeImage->setChecked(false);
+        } else {
+            object->backgroundType=LevelModificator::BackgroundType::Image;
+            backgroundTypeImage->setChecked(true);
+            backgroundTypeColor->setChecked(false);
+        }
+
+
+    } else Decker::ui::Dialog::mouseDownEvent(event);
 }
 
 void LevelModificatorDialog::dialogButtonEvent(Dialog::Buttons button)

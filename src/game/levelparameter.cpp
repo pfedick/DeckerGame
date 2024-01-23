@@ -8,6 +8,30 @@
 #include "objects.h"
 #include "particle.h"
 
+ModifiableParameter::ModifiableParameter()
+{
+	backgroundType=Background::Type::Color;
+}
+
+void ModifiableParameter::clear()
+{
+	backgroundType=Background::Type::Color;
+	BackgroundColor.setColor(32, 32, 64, 255);
+	CurrentSong.clear();
+	BackgroundImage.clear();
+	GlobalLighting.setColor(255, 255, 255, 255);
+}
+
+bool ModifiableParameter::operator==(const ModifiableParameter& other) const
+{
+	if (backgroundType != other.backgroundType) return false;
+	if (BackgroundColor != other.BackgroundColor) return false;
+	if (BackgroundImage != other.BackgroundImage) return false;
+	if (CurrentSong != other.CurrentSong) return false;
+	if (GlobalLighting != other.GlobalLighting) return false;
+	return true;
+
+}
 
 LevelParameter::LevelParameter()
 {

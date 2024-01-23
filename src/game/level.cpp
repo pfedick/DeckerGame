@@ -65,6 +65,8 @@ void Level::clear()
 	lights.clear();
 	waynet.clear();
 	params.clear();
+	runtimeParams.clear();
+
 }
 
 void Level::setEditmode(bool enabled)
@@ -197,6 +199,8 @@ void Level::load(const ppl7::String& Filename)
 			if (bytes_read != size - 5) break;
 			if (id == LevelChunkId::chunkLevelParameter) {
 				params.load(ba);
+				runtimeParams=params;
+				runtimeParams.CurrentSong=params.InitialSong;
 			} else if (id == LevelChunkId::chunkColorPalette) {
 				palette.load(ba);
 			} else if (id == LevelChunkId::chunkPlayerPlane) {
@@ -448,7 +452,7 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 {
 	if (lightsEnabled) {
 		SDL_SetRenderTarget(renderer, tex_render_lightmap);
-		SDL_SetRenderDrawColor(renderer, params.GlobalLighting.red(), params.GlobalLighting.green(), params.GlobalLighting.blue(), 255);
+		SDL_SetRenderDrawColor(renderer, runtimeParams.GlobalLighting.red(), runtimeParams.GlobalLighting.green(), runtimeParams.GlobalLighting.blue(), 255);
 		SDL_RenderClear(renderer);
 		SDL_SetRenderTarget(renderer, tex_render_layer);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
