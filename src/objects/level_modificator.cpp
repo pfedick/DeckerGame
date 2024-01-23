@@ -406,6 +406,7 @@ void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
         object->loadLevelDefault=checked;
     } else if (event->widget() == changeBackground) {
         object->changeBackground=checked;
+        backgroundFrame->setEnabled(checked);
     } else if (event->widget() == changeGlobalLighting) {
         object->changeGlobalLighting=checked;
         globalLightingFrame->setEnabled(checked);
