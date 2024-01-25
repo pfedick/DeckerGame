@@ -2303,7 +2303,7 @@ void Game::startLevelModification(double time, void* object)
 		if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) levelModificator.end.backgroundType=Background::Type::Image;
 	}
 	if (levelModificator.start == levelModificator.end) return;
-	if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) {
+	if (levelModificator.end.backgroundType == Background::Type::Image) {
 		background.setFadeTargetImage(levelModificator.end.BackgroundImage);
 	} else {
 		background.setFadeTargetColor(levelModificator.end.BackgroundColor);

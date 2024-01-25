@@ -134,6 +134,7 @@ void Background::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport
         source.y=c.y;
         source.w=viewport.width();
         source.h=viewport.height();
+        SDL_SetTextureAlphaMod(tex_sky, 255);
         SDL_RenderCopy(renderer, tex_sky, &source, &target);
     } else {
         SDL_SetRenderDrawColor(renderer, 47, 47, 47, 255);
@@ -152,6 +153,7 @@ void Background::drawFade(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
         SDL_RenderFillRect(renderer, NULL);
         //SDL_RenderClear(renderer);
     } else if (fade_target_tex) {
+        //ppl7::PrintDebugTime("progress: %0.3f, type=%d\n", fade_progress, static_cast<int>(fade_target_type));
         SDL_Rect target;
         target.x=viewport.x1;
         target.y=viewport.y1;
@@ -172,6 +174,7 @@ void Background::drawFade(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
         source.y=c.y;
         source.w=viewport.width();
         source.h=viewport.height();
+        //SDL_SetTextureBlendMode(fade_target_tex, SDL_BLENDMODE_BLEND);
         SDL_SetTextureAlphaMod(fade_target_tex, (Uint8)(255.0f * fade_progress));
         SDL_RenderCopy(renderer, fade_target_tex, &source, &target);
     } else {
