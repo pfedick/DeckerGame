@@ -212,11 +212,13 @@ private:
     ppl7::tk::CheckBox* changeSong;
     ppl7::tk::Frame* globalLightingFrame;
     ppl7::tk::Frame* backgroundFrame;
+    ppl7::tk::Frame* songFrame;
     ppl7::tk::RadioButton* backgroundTypeImage;
     ppl7::tk::RadioButton* backgroundTypeColor;
     Decker::ui::ColorSliderWidget* GlobalLighting;
     Decker::ui::ColorSliderWidget* BackgroundColor;
     ppl7::tk::ComboBox* backgroundImage;
+    ppl7::tk::ComboBox* songComboBox;
     ppl7::tk::Button* CopyGlobalLightingFromLevel;
     ppl7::tk::Button* CopyBackgroundFromLevel;
 
@@ -244,7 +246,7 @@ void LevelModificator::openUi()
 
 
 LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
-    : Decker::ui::Dialog(1000, 800, Buttons::OK | Buttons::Test | Buttons::Reset)
+    : Decker::ui::Dialog(800, 700, Buttons::OK | Buttons::Test | Buttons::Reset)
 {
     ppl7::grafix::Rect client=clientRect();
     this->object=object;
@@ -287,7 +289,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     changeBackground->setEventHandler(this);
     addChild(changeBackground);
     y+=35;
-    backgroundFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 170);
+    backgroundFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 175);
 
     int y1=0;
     CopyBackgroundFromLevel=new ppl7::tk::Button(backgroundFrame->width() - 195, 0, 195, 30, "copy from level");
@@ -324,7 +326,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
 
     addChild(backgroundFrame);
     backgroundFrame->setEnabled(changeBackground->checked());
-    y+=175;
+    y+=180;
 
 
     changeGlobalLighting=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change global lighting", object->changeGlobalLighting);
@@ -349,6 +351,23 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     changeSong->setEventHandler(this);
     addChild(changeSong);
     y+=35;
+    songFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 50);
+    songFrame->addChild(new ppl7::tk::Label(0, 0, 100, 30, "Song:"));
+    songComboBox=new ppl7::tk::ComboBox(100, 0, 300, 30);
+    songComboBox->add("no song", "");
+    AudioPool& pool=getAudioPool();
+    {
+        std::list<MusicTrack>::const_iterator it;
+        for (it=pool.musictracks.begin();it != pool.musictracks.end();++it) {
+            songComboBox->add((*it).Name, (*it).Filename);
+        }
+    }
+    songComboBox->setEventHandler(this);
+    if (object->Song.notEmpty()) songComboBox->setCurrentText(object->Song);
+    songFrame->addChild(songComboBox);
+    songFrame->setEnabled(changeSong->checked());
+    addChild(songFrame);
+    y+=55;
 
     /*
 
@@ -398,7 +417,7 @@ LevelModificatorDialog::~LevelModificatorDialog()
 
 void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
-    ppl7::PrintDebugTime("LevelModificatorDialog::toggledEvent\n");
+    //ppl7::PrintDebugTime("LevelModificatorDialog::toggledEvent\n");
     if (event->widget() == initialStateEnabled) {
         object->initialStateEnabled=checked;
     } else if (event->widget() == currentState) {
@@ -413,6 +432,7 @@ void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
         globalLightingFrame->setEnabled(checked);
     } else if (event->widget() == changeSong) {
         object->changeSong=checked;
+        songFrame->setEnabled(checked);
     } else if (event->widget() == backgroundTypeColor) {
         object->backgroundType = LevelModificator::BackgroundType::Color;
     } else if (event->widget() == backgroundTypeImage) {
@@ -433,7 +453,7 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, double va
 
 void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
-    ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int64_t\n");
+    //ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int64_t\n");
     if (event->widget() == range_x) {
         object->range.x=(int)value;
     } else if (event->widget() == range_y) {
@@ -443,20 +463,24 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t v
 
 void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-    ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int\n");
+    //ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int\n");
     if (event->widget() == GlobalLighting) {
         object->GlobalLighting=GlobalLighting->color();
     } else if (event->widget() == BackgroundColor) {
         object->BackgroundColor=BackgroundColor->color();
     } else if (event->widget() == backgroundImage) {
         object->BackgroundImage=backgroundImage->currentText();
+        if (backgroundImage->currentIndex() == 0) object->BackgroundImage.clear();
+    } else if (event->widget() == songComboBox) {
+        object->Song=songComboBox->currentText();
+        if (songComboBox->currentIndex() == 0) object->Song.clear();
     } else Decker::ui::Dialog::valueChangedEvent(event, value);
 
 }
 
 void LevelModificatorDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-    ppl7::PrintDebugTime("LevelModificatorDialog::mouseDownEvent\n");
+    //ppl7::PrintDebugTime("LevelModificatorDialog::mouseDownEvent\n");
     if (event->widget() == CopyGlobalLightingFromLevel) {
         ppl7::grafix::Color c=GetGame().getLevel().params.GlobalLighting;
         GlobalLighting->setColor(c);
