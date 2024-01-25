@@ -306,6 +306,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     for (it=res.background_images.begin();it != res.background_images.end();++it) {
         backgroundImage->add((*it), (*it));
     }
+    if (object->BackgroundImage.notEmpty()) backgroundImage->setCurrentText(object->BackgroundImage);
     backgroundFrame->addChild(backgroundImage);
     y1+=35;
 
@@ -447,6 +448,8 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int value
         object->GlobalLighting=GlobalLighting->color();
     } else if (event->widget() == BackgroundColor) {
         object->BackgroundColor=BackgroundColor->color();
+    } else if (event->widget() == backgroundImage) {
+        object->BackgroundImage=backgroundImage->currentText();
     } else Decker::ui::Dialog::valueChangedEvent(event, value);
 
 }

@@ -2297,19 +2297,18 @@ void Game::startLevelModification(double time, void* object)
 	}
 	if (mod->changeGlobalLighting) levelModificator.end.GlobalLighting=mod->GlobalLighting;
 	if (mod->changeBackground) {
-		if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) {
-			background.setFadeTargetImage(mod->BackgroundImage);
-		} else {
-			background.setFadeTargetColor(mod->BackgroundColor);
-		}
-
 		levelModificator.end.BackgroundColor=mod->BackgroundColor;
 		levelModificator.end.BackgroundImage=mod->BackgroundImage;
 		levelModificator.end.backgroundType=Background::Type::Color;
 		if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) levelModificator.end.backgroundType=Background::Type::Image;
-
 	}
 	if (levelModificator.start == levelModificator.end) return;
+	if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) {
+		background.setFadeTargetImage(levelModificator.end.BackgroundImage);
+	} else {
+		background.setFadeTargetColor(levelModificator.end.BackgroundColor);
+	}
+
 	levelModificator.starttime=time;
 	levelModificator.triggerobject=object;
 	levelModificator.duration=mod->transitionTime;
@@ -2326,20 +2325,21 @@ void Game::updateLevelModificator(double time)
 	if (time >= levelModificator.starttime + levelModificator.duration || progress >= 1.0f) {
 		levelModificator.triggerobject=NULL;
 		level.runtimeParams=levelModificator.end;
-		//background.setFadeProgress(1.0f);
+		background.setFadeProgress(1.0f);
 		return;
 	}
-	//background.setFadeProgress(progress);
+	background.setFadeProgress(progress);
 	float revprog=1.0f - progress;
 
 	if (levelModificator.start.GlobalLighting != levelModificator.end.GlobalLighting) {
 		level.runtimeParams.GlobalLighting=levelModificator.start.GlobalLighting * revprog + levelModificator.end.GlobalLighting * progress;
 	}
 
-
+	/*
 	if (levelModificator.start.BackgroundColor != levelModificator.end.BackgroundColor) {
 		level.runtimeParams.BackgroundColor=levelModificator.start.BackgroundColor * revprog + levelModificator.end.BackgroundColor * progress;
 	}
+	*/
 
 }
 

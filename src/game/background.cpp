@@ -68,6 +68,7 @@ void Background::setFadeTargetColor(const ppl7::grafix::Color& color)
     fade_target_color=color;
     fade_target_type=Type::Color;
     fade_progress=0.0f;
+    //ppl7::PrintDebugTime("Background::setFadeTargetColor\n");
 }
 
 void Background::setFadeTargetImage(const ppl7::String& filename)
@@ -79,7 +80,7 @@ void Background::setFadeTargetImage(const ppl7::String& filename)
     }
     if (filename.notEmpty() && ppl7::File::exists(filename)) {
         fade_target_tex=sdl.createStreamingTexture(filename);
-        fade_tex_size=sdl.getTextureSize(tex_sky);
+        if (fade_target_tex) fade_tex_size=sdl.getTextureSize(fade_target_tex);
     }
     fade_target_image_filename=filename;
     fade_target_type=Type::Image;
@@ -88,16 +89,20 @@ void Background::setFadeTargetImage(const ppl7::String& filename)
 
 void Background::setFadeProgress(float progress)
 {
-    if (progress=1.0f) {
+    if (progress >= 1.0f) {
         fade_progress=0.0f;
         if (tex_sky) {
             sdl.destroyTexture(tex_sky);
             tex_sky=NULL;
         }
         tex_sky=fade_target_tex;
+        tex_size=fade_tex_size;
         fade_target_tex=NULL;
         color=fade_target_color;
         t=fade_target_type;
+        last_image=fade_target_image_filename;
+        fade_target_image_filename.clear();
+        return;
     }
     fade_progress=progress;
 }
@@ -141,9 +146,11 @@ void Background::drawFade(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 {
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    //ppl7::PrintDebugTime("progress: %0.3f, type=%d\n", fade_progress, static_cast<int>(fade_target_type));
     if (fade_target_type == Type::Color) {
         SDL_SetRenderDrawColor(renderer, fade_target_color.red(), fade_target_color.green(), fade_target_color.blue(), (Uint8)(255.0f * fade_progress));
-        SDL_RenderClear(renderer);
+        SDL_RenderFillRect(renderer, NULL);
+        //SDL_RenderClear(renderer);
     } else if (fade_target_tex) {
         SDL_Rect target;
         target.x=viewport.x1;
@@ -168,8 +175,8 @@ void Background::drawFade(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
         SDL_SetTextureAlphaMod(fade_target_tex, (Uint8)(255.0f * fade_progress));
         SDL_RenderCopy(renderer, fade_target_tex, &source, &target);
     } else {
-        SDL_SetRenderDrawColor(renderer, 47, 47, 47, (Uint8)(255.0f * fade_progress));
-        SDL_RenderClear(renderer);
+        //SDL_SetRenderDrawColor(renderer, 47, 47, 47, (Uint8)(255.0f * fade_progress));
+        //SDL_RenderClear(renderer);
     }
 
 }
