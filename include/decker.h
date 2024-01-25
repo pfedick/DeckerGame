@@ -544,6 +544,16 @@ private:
 	ppl7::String last_image;
 	ppl7::grafix::Rect level_dimension;
 
+	Type fade_target_type;
+	ppl7::grafix::Color fade_target_color;
+	ppl7::String fade_target_image_filename;
+	SDL_Texture* fade_target_tex;
+	ppl7::grafix::Size fade_tex_size;
+	float fade_progress;
+
+	void drawFade(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& WorldCoords);
+
+
 public:
 	Background(SDL& s);
 	~Background();
@@ -551,6 +561,9 @@ public:
 	void setColor(const ppl7::grafix::Color& color);
 	void setBackgroundType(Type t);
 	void setLevelDimension(const ppl7::grafix::Rect& tiles);
+	void setFadeTargetColor(const ppl7::grafix::Color& color);
+	void setFadeTargetImage(const ppl7::String& filename);
+	void setFadeProgress(float progress);
 
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& WorldCoords);
 
