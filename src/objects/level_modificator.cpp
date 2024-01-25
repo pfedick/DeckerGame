@@ -164,6 +164,7 @@ size_t LevelModificator::load(const unsigned char* buffer, size_t size)
     p+=2;
     s=ppl7::Peek16(buffer + bytes + p);
     Song.set((const char*)(buffer + bytes + p + 2), s);
+    GetGame().texture_cache.get(BackgroundImage);
     return size;
 }
 

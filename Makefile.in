@@ -34,6 +34,7 @@ OBJECTS=compile/main.o \
 	compile/gameviewport.o \
 	compile/soundtrack.o \
 	compile/background.o \
+	compile/texturecache.o \
 	compile/spritetexture.o \
 	compile/level.o \
 	compile/levelparameter.o \
@@ -402,6 +403,10 @@ compile/soundtrack.o: src/game/soundtrack.cpp Makefile include/decker.h
 compile/background.o: src/game/background.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/background.o -c src/game/background.cpp $(CFLAGS)
+
+compile/texturecache.o: src/game/texturecache.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/texturecache.o -c src/game/texturecache.cpp $(CFLAGS)
 
 compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/decker.h
 	- @mkdir -p compile

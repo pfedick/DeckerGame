@@ -13,30 +13,13 @@ Background::Background(SDL& s)
     fade_progress=0.0f;
 }
 
-Background::~Background()
-{
-    if (tex_sky) {
-        sdl.destroyTexture(tex_sky);
-        tex_sky=NULL;
-    }
-    if (fade_target_tex) {
-        sdl.destroyTexture(fade_target_tex);
-        fade_target_tex=NULL;
 
-    }
-}
 
 void Background::setImage(const ppl7::String& filename)
 {
     if (filename == last_image) return;
-    if (tex_sky) {
-        sdl.destroyTexture(tex_sky);
-        tex_sky=NULL;
-    }
-    if (filename.notEmpty() && ppl7::File::exists(filename)) {
-        tex_sky=sdl.createStreamingTexture(filename);
-        tex_size=sdl.getTextureSize(tex_sky);
-    }
+    tex_sky=GetGame().texture_cache.get(filename);
+    if (tex_sky) tex_size=sdl.getTextureSize(tex_sky);
     last_image=filename;
 }
 
@@ -74,14 +57,8 @@ void Background::setFadeTargetColor(const ppl7::grafix::Color& color)
 void Background::setFadeTargetImage(const ppl7::String& filename)
 {
     if (filename == fade_target_image_filename) return;
-    if (fade_target_tex) {
-        sdl.destroyTexture(fade_target_tex);
-        fade_target_tex=NULL;
-    }
-    if (filename.notEmpty() && ppl7::File::exists(filename)) {
-        fade_target_tex=sdl.createStreamingTexture(filename);
-        if (fade_target_tex) fade_tex_size=sdl.getTextureSize(fade_target_tex);
-    }
+    fade_target_tex=GetGame().texture_cache.get(filename);
+    if (fade_target_tex) fade_tex_size=sdl.getTextureSize(fade_target_tex);
     fade_target_image_filename=filename;
     fade_target_type=Type::Image;
     fade_progress=0.0f;
@@ -91,10 +68,6 @@ void Background::setFadeProgress(float progress)
 {
     if (progress >= 1.0f) {
         fade_progress=0.0f;
-        if (tex_sky) {
-            sdl.destroyTexture(tex_sky);
-            tex_sky=NULL;
-        }
         tex_sky=fade_target_tex;
         tex_size=fade_tex_size;
         fade_target_tex=NULL;

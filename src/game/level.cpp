@@ -66,6 +66,7 @@ void Level::clear()
 	waynet.clear();
 	params.clear();
 	runtimeParams.clear();
+	GetGame().texture_cache.clear();
 
 }
 

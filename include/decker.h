@@ -556,7 +556,6 @@ private:
 
 public:
 	Background(SDL& s);
-	~Background();
 	void setImage(const ppl7::String& filename);
 	void setColor(const ppl7::grafix::Color& color);
 	void setBackgroundType(Type t);
@@ -615,6 +614,19 @@ public:
 };
 
 //class LightPlane;
+
+class TextureCache
+{
+private:
+	SDL& sdl;
+	std::map<ppl7::String, SDL_Texture*> texture_cache;
+
+public:
+	TextureCache(SDL& s);
+	~TextureCache();
+	void clear();
+	SDL_Texture* get(const ppl7::String& filename);
+};
 
 class Level
 {
@@ -1027,6 +1039,7 @@ public:
 	Config config;
 	GameState gameState;
 	MessageOverlay message_overlay=MessageOverlay(sdl);
+	TextureCache texture_cache=TextureCache(sdl);
 
 	Game();
 	~Game();
