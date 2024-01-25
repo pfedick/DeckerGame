@@ -288,7 +288,7 @@ ppl7::grafix::Size SDL::getTextureSize(SDL_Texture* texture)
 {
 	int width, height;
 	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height)) {
-		throw SDLException("Couldn't query GUI texture: %s", SDL_GetError());
+		throw SDLException("Couldn't query texture: %s", SDL_GetError());
 	}
 	return ppl7::grafix::Size(width, height);
 }
