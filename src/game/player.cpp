@@ -1280,16 +1280,22 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, f
 	}
 	//printf ("check collision against %zd points:\n", checkpoints.size());
 
-	Decker::Objects::Object* object=objects->detectCollision(checkpoints);
-	if (!object) return;
-	Decker::Objects::Collision col;
-	col.frame_rate_compensation=frame_rate_compensation;
-	col.detect(object, checkpoints, *this);
-	col.bounding_box_player=getBoundingBox();
-	col.bounding_box_object=object->boundary;
-	col.bounding_box_intersection=col.bounding_box_player.intersected(col.bounding_box_object);
+	//Decker::Objects::Object* object=objects->detectCollision(checkpoints);
+	std::list<Decker::Objects::Object*> object_list;
+	objects->detectCollision(checkpoints, object_list);
+	if (object_list.empty()) return;
+	std::list<Decker::Objects::Object*>::iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		Decker::Objects::Object* object=(*it);
+		Decker::Objects::Collision col;
+		col.frame_rate_compensation=frame_rate_compensation;
+		col.detect(object, checkpoints, *this);
+		col.bounding_box_player=getBoundingBox();
+		col.bounding_box_object=object->boundary;
+		col.bounding_box_intersection=col.bounding_box_player.intersected(col.bounding_box_object);
+		object->handleCollision(this, col);
+	}
 
-	object->handleCollision(this, col);
 
 	//printf ("Detected Collision with Object: %s, ID: %d\n",
 	//		(const char*)object->typeName(), object->id);

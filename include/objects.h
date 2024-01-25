@@ -1569,7 +1569,8 @@ public:
 	void load(const ppl7::ByteArrayPtr& ba);
 	Object* getObject(uint32_t object_id);
 	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
-	Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
+	//Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
+	void detectCollision(const std::list<ppl7::grafix::Point>& player, std::list<Object*>& object_list);
 	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);
