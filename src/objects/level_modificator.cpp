@@ -393,13 +393,13 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     */
 
     addChild(new ppl7::tk::Label(0, y, 120, 30, "Transition time: "));
-    transitionTime=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+    transitionTime=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 120 - 120, 30);
     transitionTime->setLimits(0.0f, 60.0f);
     transitionTime->setValue(object->transitionTime);
     transitionTime->enableSpinBox(true, 0.1f, 3, 80);
     transitionTime->setEventHandler(this);
     addChild(transitionTime);
-    addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+    addChild(new ppl7::tk::Label(client.width() - 120, y, 120, 30, "seconds"));
     y+=35;
 
 
