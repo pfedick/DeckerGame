@@ -41,6 +41,9 @@ Door::Door()
 	cooldown_for_locked_door_text=0.0f;
 	myLayer=Layer::BehindPlayer;
 	text_for_closed_door_said=false;
+	warpside=WarpSide::left;
+	autowarp_when_open=false;
+	close_when_passed=false;
 	init();
 }
 
@@ -57,6 +60,7 @@ void Door::reset()
 void Door::init()
 {
 	door_sprite_no=5 + 60 * (int)door_type;
+	if (door_type == DoorType::no_door) door_sprite_no=0;
 	switch (orientation) {
 	case DoorOrientation::right:
 		sprite_no=0;
@@ -137,10 +141,13 @@ void Door::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 			p.x + coords.x,
 			p.y + coords.y,
 			sprite_no, palette.getColor(color_frame));
-		texture->draw(renderer,
-			p.x + coords.x,
-			p.y + coords.y,
-			door_sprite_no, palette.getColor(color_door));
+
+		if (door_type != DoorType::no_door) {
+			texture->draw(renderer,
+				p.x + coords.x,
+				p.y + coords.y,
+				door_sprite_no, palette.getColor(color_door));
+		}
 		if (orientation == DoorOrientation::right) {
 			texture->draw(renderer,
 				p.x + coords.x,
@@ -204,8 +211,8 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	}
 
 	double now=ppl7::GetMicrotime();
-	if (warp_to_id > 0 && (keyboard.matrix & KeyboardKeys::Action)) {
-		if (state == DoorState::closed) {
+	if (state == DoorState::closed) {
+		if (warp_to_id > 0 && (keyboard.matrix & KeyboardKeys::Action)) {
 			if (key_id == 0 || player->isInInventory(key_id)) {
 				state=DoorState::opening;
 				if (door_type == DoorType::lattice_metalic || door_type == DoorType::lattice_opaque) getAudioPool().playOnce(AudioClip::metaldoor, 0.5f);
@@ -213,19 +220,28 @@ void Door::handleCollision(Player* player, const Collision& collision)
 
 				animation.startSequence(door_sprite_no, door_sprite_no + 14, false, door_sprite_no + 14);
 			}
-		} else if (state == DoorState::open && cooldown < now) {
+		}
+	} else if (state == DoorState::open && warp_to_id > 0 && cooldown < now) {
+		if ((keyboard.matrix & KeyboardKeys::Action) || autowarp_when_open) {
 			Door* target=static_cast<Door*>(GetObjectSystem()->getObject(warp_to_id));
 			if (target != NULL && target->type() == Type::ObjectType::Door) {
 				//ppl7::PrintDebugTime("Wir haben eine Zieltuer!\n");
 				target->state=DoorState::open;
 				target->init();
-				target->state=DoorState::closing;
-				getAudioPool().playOnce(AudioClip::door_close, 0.5f);
-				target->animation.startSequence(target->door_sprite_no, target->door_sprite_no - 14, false, target->door_sprite_no - 14);
-				target->cooldown=now + 2.0f;
-				player->move(target->p.x, target->p.y);
-				state=DoorState::closing;
-				animation.startSequence(door_sprite_no, door_sprite_no - 14, false, door_sprite_no - 14);
+				if (close_when_passed) {
+					target->state=DoorState::closing;
+					getAudioPool().playOnce(AudioClip::door_close, 0.5f);
+					target->animation.startSequence(target->door_sprite_no, target->door_sprite_no - 14, false, target->door_sprite_no - 14);
+					target->cooldown=now + 2.0f;
+					state=DoorState::closing;
+					animation.startSequence(door_sprite_no, door_sprite_no - 14, false, door_sprite_no - 14);
+				}
+				if (target->orientation == DoorOrientation::left || target->orientation == DoorOrientation::right) {
+					if (target->warpside == WarpSide::left) player->move(target->p.x - 2 * TILE_WIDTH, target->p.y);
+					else player->move(target->p.x + 2 * TILE_WIDTH, target->p.y);
+				} else {
+					player->move(target->p.x, target->p.y);
+				}
 			}
 		}
 	}
@@ -261,6 +277,9 @@ size_t Door::save(unsigned char* buffer, size_t size) const
 	if (auto_opens_on_collision) flags|=2;
 	if (can_close_again) flags|=4;
 	if (use_background_color) flags|=8;
+	if (warpside == WarpSide::right) flags|=16;
+	if (autowarp_when_open) flags|=32;
+	if (close_when_passed) flags|=64;
 
 	ppl7::Poke8(buffer + bytes + 11, (unsigned char)flags);
 	ppl7::Poke8(buffer + bytes + 12, color_frame);
@@ -352,6 +371,7 @@ size_t Door::load(const unsigned char* buffer, size_t size)
 	myLayer=Layer::BehindPlayer;
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
+	warpside=WarpSide::left;
 	if (version < 1) return 0;
 	if (version == 1) {
 		load_v1(buffer + bytes, size - bytes);
@@ -369,6 +389,9 @@ size_t Door::load(const unsigned char* buffer, size_t size)
 		auto_opens_on_collision=(flags & 2);
 		can_close_again=(flags & 4);
 		use_background_color=(flags & 8);
+		if (flags & 16) warpside=WarpSide::right;
+		autowarp_when_open= (flags & 32);
+		close_when_passed= (flags & 64);
 
 		color_frame=ppl7::Peek8(buffer + bytes + 12);
 		color_door=ppl7::Peek8(buffer + bytes + 13);
@@ -396,6 +419,9 @@ private:
 	ppl7::tk::CheckBox* auto_opens_on_collision;
 	ppl7::tk::CheckBox* can_close_again;
 	ppl7::tk::CheckBox* use_background_color;
+	ppl7::tk::CheckBox* autowarp_when_open;
+	ppl7::tk::CheckBox* close_when_passed;
+	ppl7::tk::ComboBox* warp_side;
 
 
 	ppl7::tk::RadioButton* initial_state_closed;
@@ -470,6 +496,7 @@ DoorDialog::DoorDialog(Door* object)
 	door_type->add("flat door", "1");
 	door_type->add("metal lattice", "2");
 	door_type->add("colored lattice", "3");
+	door_type->add("no door", "4");
 	door_type->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->door_type)));
 	door_type->setEventHandler(this);
 	addChild(door_type);
@@ -576,6 +603,24 @@ DoorDialog::DoorDialog(Door* object)
 	addChild(can_close_again);
 	y+=35;
 
+	close_when_passed=new ppl7::tk::CheckBox(0, y, client.width(), 30, "close when passed", object->close_when_passed);
+	close_when_passed->setEventHandler(this);
+	addChild(close_when_passed);
+	y+=35;
+
+	autowarp_when_open=new ppl7::tk::CheckBox(0, y, client.width(), 30, "auto warp when open", object->autowarp_when_open);
+	autowarp_when_open->setEventHandler(this);
+	addChild(autowarp_when_open);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 140, 30, "Warp to door side:"));
+	warp_side=new ppl7::tk::ComboBox(140, y, 100, 30);
+	warp_side->add("left", "0");
+	warp_side->add("right", "1");
+	warp_side->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->warpside)));
+	warp_side->setEventHandler(this);
+	addChild(warp_side);
+
 
 	if (object->state == Door::DoorState::closed || object->state == Door::DoorState::closing) {
 		current_state_closed->setChecked(true);
@@ -663,6 +708,10 @@ void DoorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 			object->initial_open=false;
 		}
 		object->init();
+	} else if (widget == autowarp_when_open) {
+		object->autowarp_when_open=checked;
+	} else if (widget == close_when_passed) {
+		object->close_when_passed=close_when_passed;
 	}
 
 }
@@ -676,6 +725,10 @@ void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	} else if (widget == door_orientation) {
 		object->orientation=static_cast<Door::DoorOrientation>(door_orientation->currentIdentifier().toInt());
 		object->init();
+	} else if (widget == warp_side) {
+		object->warpside=static_cast<Door::WarpSide>(warp_side->currentIdentifier().toInt());
+		object->init();
+
 	}
 	if (widget == colorframe && color_target != NULL) {
 		*color_target=value;

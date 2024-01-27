@@ -1214,7 +1214,8 @@ public:
 		windowed=0,
 		flat=1,
 		lattice_metalic=2,
-		lattice_opaque=3
+		lattice_opaque=3,
+		no_door=4
 	};
 
 	enum class DoorState {
@@ -1222,6 +1223,10 @@ public:
 		opening=1,
 		open=2,
 		closing=3
+	};
+	enum class WarpSide {
+		left=0,
+		right
 	};
 
 	int color_frame;
@@ -1232,10 +1237,13 @@ public:
 	DoorOrientation orientation;
 	DoorType door_type;
 	DoorState state;
+	WarpSide warpside;
 	bool initial_open;
 	bool auto_opens_on_collision;
 	bool can_close_again;
 	bool use_background_color;
+	bool autowarp_when_open;
+	bool close_when_passed;
 
 
 	Door();
