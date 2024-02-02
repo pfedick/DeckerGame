@@ -100,19 +100,16 @@ But hey, you can already play the game! See below, how to compile it your
 own, or download a preview version on [GitHub](https://github.com/pfedick/DeckerGame/releases).
 
 ## Known issues and limitations
-I have three different systems available for developing and testing, but they all have in common, that display resoltion is
-around 1920 x 1080 pixel with a framerate of 60. I give my best to support other resoltions and frame rates, but I have limited possibilities to test.
+I have three different systems available for developing and testing, but they all have in common, that display resoltion is around 1920 x 1080 pixel with a framerate of 60. I give my best to support other resoltions and frame rates, but I have limited possibilities to test.
 - on systems with framerate other than 60, strange things can happen
 - on systems with framerates lower than 30, everything will get slower and the physics engine will fail
-- on monitors smaller than 1920 x 1080, the viewpoint will get smaller and the different layers of the game (parallax) won't fit together
-- on monitors bigger than 1920 x 1080 evereything will get smaller and you see much more of the "world" than it was intended. Especially
-  you will see gaps and areas in the world, which I have not layed out. Also the parallax layers won't fit together and it is possible, that the front layer will hide the player layer
+- on monitors with resolutions other than 1920 x 1080, the output will be scaled up or down
+- on resolutions lower than 1920 x 1080 the ui of the editor won't fit on the screen, on higher resolutions the ui will get smaller
 
 How to avoid issues with different resolutions:
 - when playing in a window, resize the window to a size of 1920 x 1080 pixel
 - play in fullscreen (not window mode) with a fixed resolution of 1920 x 1080 pixel
-- if framerate is higher than 60 and you run into issues, please report to me and try to configure your grafic card to limit the
-  game at 60 Hz
+- if framerate is higher than 60 and you run into issues, please report to me and try to configure your grafic card to limit the game at 60 Hz
 
 ## Bugreport
 You can open an issue in my [github project](https://github.com/pfedick/DeckerGame/issues) or contact me on [discord](https://discord.gg/QZXPNFKNKP).
@@ -121,72 +118,6 @@ You can open an issue in my [github project](https://github.com/pfedick/DeckerGa
 ### Things which are ongoing
 
 I created a [project board](https://github.com/users/pfedick/projects/3) on github to track all things I'm working on and which are in my backlog.
-
-
-### Things I still have in mind
-- create more interactive objects / enemies:
-    - ghost
-    - huge vent
-    - side wind
-- create more sound effects
-- build more levels
-- story?
-- save and load of progress in a level?
-- difficulty levels
-- how to handle different screen sizes?
-- game controller support
-
-There is probably more, which I'm not aware of, yet ;-)
-
-### Things I have finished
-- basic ui for editing and testing the world
-- how to build and render the tile-based world (tiles, layers)
-- how to move in the world (side scrolling, paralax)
-- how to implement the sprites?
-- which resolution should the game have
-- what is the best size for tiles and sprites?
-- how to implement interactive objects/enemies
-- how to control the main character?
-- physics
-- collision detection
-- create interactive objects / enemies:
-    - spears from ground
-    - gems (can be collected => points)
-    - coins (can be collected  => points)
-    - medikit
-    - savepoint
-    - rat
-    - spider
-    - skeleton
-    - mummy
-    - dissolving ground
-    - floater
-    - lasers
-    - arrows from wall
-    - locked doors
-    - key (used to unlock a locked door)
-    - mushroom (white minifig with big red hat and white dots)
-    - scorpion
-    - bat
-    - bird
-    - ostrich
-    - Wallenstein
-    - Helena
-    - Yeti
-- how does sound work with SDL?
-- write the audio engine
-- how to integrate sound track and sound effects into the game
-- game mechanics (hallways, doors, traps, ladders, walk, run, jump, fall)
-- world editor
-- death animation for objects (player, skeleton)
-- positional sound: objects in the world shot be able to emit sound effects.
-  The loudness and direction (left/right) should depend on the distance to
-  the player.
-- ui for special objects
-- refine physics for jumping & falling
-- particle effects
-- pathfinding for ai enemies
-
 
 ## How to compile
 ### Requirements
@@ -253,6 +184,7 @@ make
 
 ## Release History
 
+* [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-??-??]: Light and Dark update
 * [0.14.0](https://github.com/pfedick/DeckerGame/releases/tag/0.14.0) [2023-09-17]: Play it with controller
 * [0.13.0](https://github.com/pfedick/DeckerGame/releases/tag/0.13.0) [2023-09-01]: Intro
 * [0.12.0](https://github.com/pfedick/DeckerGame/releases/tag/0.12.0) [2023-08-19]: Tutorial and Speech
