@@ -628,6 +628,35 @@ public:
 	SDL_Texture* get(const ppl7::String& filename);
 };
 
+class Screenshot
+{
+private:
+	ppl7::String Filename;
+	ppl7::String Path;
+public:
+	enum class Layer {
+		Background=0,
+		Horizon,
+		Far,
+		Middle,
+		Back,
+		Player,
+		Front,
+		Near,
+		Complete
+	};
+	enum class Type {
+		Color=0,
+		Lightmap,
+		Final
+	};
+	Screenshot();
+	void setPath(const ppl7::String& path);
+	void save(Layer layer, Type type, SDL_Texture* texture);
+	void save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type type, SDL_Texture* texture);
+
+};
+
 class Level
 {
 	friend class Game;
@@ -680,6 +709,8 @@ private:
 	bool showObjects;
 	bool showParticles;
 	bool lightsEnabled;
+
+	Screenshot* screenshot;
 
 	void clear();
 
@@ -760,6 +791,7 @@ public:
 	size_t tileCount() const;
 	ppl7::grafix::Rect getOccupiedArea() const;
 	ppl7::grafix::Rect getOccupiedAreaFromTileTypePlane() const;
+	void TakeScreenshot(Screenshot* screenshot);
 
 };
 
@@ -1034,6 +1066,7 @@ private:
 
 	GameSpeed game_speed;
 	LevelModificator levelModificator;
+	Screenshot* screenshot;
 
 public:
 	Config config;
@@ -1116,6 +1149,7 @@ public:
 
 	void startLevelModification(double time, void* object);
 	void* getLevelModificationObject() const;
+	void TakeScreenshot();
 
 };
 

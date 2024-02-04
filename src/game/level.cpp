@@ -27,6 +27,7 @@ Level::Level()
 	tex_render_layer=NULL;
 	tex_render_lightmap=NULL;
 	tex_render_target=NULL;
+	screenshot=NULL;
 }
 
 Level::~Level()
@@ -68,6 +69,11 @@ void Level::clear()
 	runtimeParams.clear();
 	GetGame().texture_cache.clear();
 
+}
+
+void Level::TakeScreenshot(Screenshot* screenshot)
+{
+	this->screenshot=screenshot;
 }
 
 void Level::setEditmode(bool enabled)
@@ -465,15 +471,20 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 
 void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
+	if (screenshot) screenshot->save(plane, pplane, Screenshot::Type::Color, tex_render_layer);
 	if (!lightsEnabled) return;
 	metrics.time_lights.start();
 	SDL_SetRenderTarget(renderer, tex_render_lightmap);
 	lights.draw(renderer, viewport, worldcoords, plane, pplane);
+	if (screenshot) screenshot->save(plane, pplane, Screenshot::Type::Lightmap, tex_render_lightmap);
+
 	SDL_SetRenderTarget(renderer, tex_render_layer);
 	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
+	lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
+	if (screenshot) screenshot->save(plane, pplane, Screenshot::Type::Final, tex_render_layer);
 	SDL_SetRenderTarget(renderer, tex_render_target);
 	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
-	lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
+	//lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	metrics.time_lights.stop();
 }
 
@@ -559,6 +570,8 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
+	if (screenshot) screenshot->save(Screenshot::Layer::Complete, Screenshot::Type::Final, tex_render_target);
+	screenshot=NULL;
 }
 
 void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)

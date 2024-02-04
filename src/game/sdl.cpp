@@ -270,10 +270,10 @@ ppl7::grafix::Drawable SDL::lockTexture(SDL_Texture* texture)
 	int width, height;
 
 	if (SDL_QueryTexture(texture, &format, &access, &width, &height)) {
-		throw SDLException("Couldn't query GUI texture: %s", SDL_GetError());
+		throw SDLException("Couldn't query texture: %s", SDL_GetError());
 	}
 	if (SDL_LockTexture(texture, NULL, &pixels, &pitch)) {
-		throw SDLException("Couldn't lock GUI texture: %s", SDL_GetError());
+		throw SDLException("Couldn't lock texture: %s", SDL_GetError());
 	}
 	return ppl7::grafix::Drawable(pixels, pitch, width, height,
 		SDL2RGBFormat(format));

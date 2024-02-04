@@ -92,6 +92,7 @@ Game::Game()
 	last_frame_time=0.0f;
 	frame_rate_compensation=1.0f;
 	game_speed=GameSpeed::Normal;
+	screenshot=NULL;
 }
 
 Game::~Game()
@@ -102,6 +103,7 @@ Game::~Game()
 	if (tex_render_target) sdl.destroyTexture(tex_render_target);
 	if (tex_render_lightmap) sdl.destroyTexture(tex_render_lightmap);
 	if (tex_render_layer) sdl.destroyTexture(tex_render_layer);
+	if (screenshot) delete screenshot;
 }
 
 void Game::loadGrafix()
@@ -729,6 +731,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	background.setBackgroundType(level.runtimeParams.backgroundType);
 	background.draw(renderer, game_viewport, WorldCoords);
 	metrics.time_draw_background.stop();
+	if (screenshot) screenshot->save(Screenshot::Layer::Background, Screenshot::Type::Final, tex_render_target);
 
 	// Draw Planes and Sprites
 	metrics.time_draw_tsop.start();
@@ -752,6 +755,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setShowParticles(mainmenue->visibility_particles);
 	level.draw(renderer, WorldCoords, player, metrics);
 	metrics.time_draw_tsop.stop();
+	if (screenshot) {
+		delete(screenshot);
+		screenshot=NULL;
+	}
 
 	metrics.time_misc.start();
 	if (player->isDead() == true && death_state == 0) {
@@ -1930,6 +1937,9 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			enableControls(true);
 			wm->setKeyboardFocus(world_widget);
 		} else openSettingsScreen();
+	} else if (event->key == ppl7::tk::KeyEvent::KEY_F8) {
+		ppl7::PrintDebugTime("TakeScreenshot\n");
+		TakeScreenshot();
 	}
 }
 
@@ -2346,4 +2356,99 @@ void Game::updateLevelModificator(double time)
 void* Game::getLevelModificationObject() const
 {
 	return levelModificator.triggerobject;
+}
+
+
+Screenshot::Screenshot()
+{
+	ppl7::DateTime now=ppl7::DateTime::currentTime();
+	Filename.setf("decker_%s", (const char*)now.getISO8601withMsec());
+	Filename.replace(":", "-");
+}
+
+void Screenshot::setPath(const ppl7::String& path)
+{
+	this->Path=path;
+}
+
+void Screenshot::save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type type, SDL_Texture* texture)
+{
+	Layer layer=Layer::Complete;
+	switch (lplane) {
+	case LightPlaneId::Horizon: layer=Layer::Horizon; break;
+	case LightPlaneId::Far: layer=Layer::Far; break;
+	case LightPlaneId::Middle: layer=Layer::Middle; break;
+	case LightPlaneId::Player:
+		switch (pplane) {
+		case LightPlayerPlaneMatrix::Back: layer=Layer::Back; break;
+		case LightPlayerPlaneMatrix::Player: layer=Layer::Player; break;
+		case LightPlayerPlaneMatrix::Front: layer=Layer::Front; break;
+		default: break;
+		}
+		break;
+	case LightPlaneId::Near: layer=Layer::Near; break;
+	default: break;
+	}
+	save(layer, type, texture);
+}
+
+void Screenshot::save(Layer layer, Type type, SDL_Texture* texture)
+{
+	ppl7::String filename=Path;
+	if (Path.notEmpty()) filename+="/";
+	filename+=this->Filename;
+	filename.appendf("_layer%02d_", static_cast<int>(layer));
+	switch (layer) {
+	case Layer::Background: filename+="background"; break;
+	case Layer::Horizon: filename+="horizon"; break;
+	case Layer::Far: filename+="far"; break;
+	case Layer::Middle: filename+="middle"; break;
+	case Layer::Back: filename+="back"; break;
+	case Layer::Player: filename+="player"; break;
+	case Layer::Front: filename+="front"; break;
+	case Layer::Near: filename+="near"; break;
+	case Layer::Complete: filename+="complete"; break;
+	}
+	filename+="_";
+	switch (type) {
+	case Type::Color: filename+="0_color"; break;
+	case Type::Lightmap: filename+="1_lightmap"; break;
+	case Type::Final: filename+="2_final"; break;
+	}
+	filename+=".png";
+	ppl7::PrintDebugTime("screenshot: %s\n", (const char*)filename);
+
+	SDL_Renderer* renderer=GetGame().getSDLRenderer();
+	if (!renderer) return;
+	int width, height;
+	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height) != 0) return;
+	void* pixels=malloc(width * 4 * height);
+	if (!pixels) return;
+
+	try {
+		//ppl7::PrintDebug("try read pixel: %d x %d\n", width, height);
+		if (SDL_RenderReadPixels(renderer, NULL, 0, pixels, width * 4) != 0) {
+			ppl7::String err(SDL_GetError());
+			throw SDLException("Couldn't read pixel from render target: " + err);
+		}
+		//ppl7::PrintDebug("create drawable\n");
+		ppl7::grafix::Drawable draw(pixels, 4 * width, width, height, ppl7::grafix::RGBFormat::A8R8G8B8);
+		ppl7::grafix::ImageFilter_PNG png;
+		//ppl7::PrintDebug("save png\n");
+		png.saveFile(filename, draw);
+		//ppl7::PrintDebug("done\n");
+	} catch (const ppl7::Exception& exp) {
+		exp.print();
+		ppl7::PrintDebug("\n");
+	}
+	if (pixels) free(pixels);
+}
+
+
+void Game::TakeScreenshot()
+{
+	if (screenshot) level.TakeScreenshot(NULL);
+	delete screenshot;
+	screenshot=new Screenshot();
+	level.TakeScreenshot(screenshot);
 }
