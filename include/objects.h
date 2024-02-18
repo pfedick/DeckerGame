@@ -7,6 +7,7 @@
 #include <ppl7-grafix.h>
 #include "animation.h"
 #include "particle.h"
+#include "light.h"
 
 
 class SDL;
@@ -500,6 +501,7 @@ class GemReward : public Object
 private:
 	double next_animation;
 	AnimationCycle animation;
+	LightObject light_glow;
 public:
 	GemReward();
 	static Representation representation();
@@ -512,6 +514,7 @@ class CrystalReward : public Object
 private:
 	double next_animation;
 	AnimationCycle animation;
+	LightObject light_glow;
 public:
 	CrystalReward();
 	static Representation representation();

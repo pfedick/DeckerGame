@@ -12,6 +12,17 @@ static int crystal_rotate[]={ 120,121,122,123,124,125,126,127,128,129,130,
 	131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,
 	147,148,149 };
 
+struct color_struct {
+	uint8_t r, g, b; ;
+} color_struct;
+static struct color_struct random_colors[]={
+	{192,64,255},
+	{64,64,255},
+	{128,255,64},
+	{255,128,255},
+	{192,128,64}
+};
+
 Representation GemReward::representation()
 {
 	return Representation(Spriteset::GenericObjects, 4);
@@ -25,10 +36,20 @@ GemReward::GemReward()
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=4;
+	int r=ppl7::rand(0, 4);
+	light_glow.color.set(random_colors[r].r, random_colors[r].g, random_colors[r].b, 255);
+	light_glow.sprite_no=0;
+	light_glow.scale_x=0.3f;
+	light_glow.scale_y=0.3f;
+	light_glow.intensity=192;
+	light_glow.plane=static_cast<int>(LightPlaneId::Player);
+	light_glow.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+
 }
 
 void GemReward::update(double time, TileTypePlane&, Player&, float)
 {
+	if (!enabled) return;
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
 		animation.update();
@@ -38,6 +59,17 @@ void GemReward::update(double time, TileTypePlane&, Player&, float)
 			updateBoundary();
 		}
 	}
+	light_glow.x=p.x;
+	int yy=sprite_no - 4;
+	if (yy > 15) yy=30 - yy;
+	light_glow.y=p.y - 15 - yy * 2;
+
+	light_glow.scale_x=0.3f + yy * 0.02;
+	light_glow.scale_y=0.3f;
+
+
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&light_glow);
 }
 
 void GemReward::handleCollision(Player* player, const Collision&)
@@ -64,10 +96,21 @@ CrystalReward::CrystalReward()
 	animation.startRandom(crystal_rotate, sizeof(crystal_rotate) / sizeof(int), true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
+	int r=ppl7::rand(0, 4);
+	light_glow.color.set(random_colors[r].r, random_colors[r].g, random_colors[r].b, 255);
+
+	light_glow.sprite_no=0;
+	light_glow.scale_x=0.3f;
+	light_glow.scale_y=0.3f;
+	light_glow.intensity=192;
+	light_glow.plane=static_cast<int>(LightPlaneId::Player);
+	light_glow.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+
 }
 
 void CrystalReward::update(double time, TileTypePlane&, Player&, float)
 {
+	if (!enabled) return;
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
 		animation.update();
@@ -77,6 +120,17 @@ void CrystalReward::update(double time, TileTypePlane&, Player&, float)
 			updateBoundary();
 		}
 	}
+	light_glow.x=p.x;
+	int yy=sprite_no - 120;
+	if (yy > 15) yy=30 - yy;
+	light_glow.y=p.y - 15 - yy * 2;
+
+	light_glow.scale_x=0.4f + yy * 0.02;
+	light_glow.scale_y=0.4f;
+
+
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&light_glow);
 }
 
 void CrystalReward::handleCollision(Player* player, const Collision&)
@@ -94,7 +148,6 @@ void CrystalReward::handleCollision(Player* player, const Collision&)
 	}
 
 }
-
 
 
 }	// EOF namespace Decker::Objects
