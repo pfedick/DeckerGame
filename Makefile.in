@@ -348,10 +348,9 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/enemies/yeti/ -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/bat/ -t res/bat.tex -w 256 -h 256 -px 64 -py 120
 	./texmaker -s lightwave/Render/enemies/bird/ -t res/bird.tex -w 512 -h 512 -px 64 -py 120
-	./texmaker -s lightwave/Render/enemies/stamper_vertical/ -t res/stamper_vertical.tex -w 1024 -h 1024 -px 64 -py 271
+	./texmaker -s lightwave/Render/enemies/stamper_v2/ -t res/stamper_v2.tex -w 512 -h 512 -px 64 -py 272
 	./texmaker -s lightwave/Render/objects/laser/ -t res/laser.tex -w 128 -h 128 -px 16 -py 16
 	./texmaker -s lightwave/Render/objects/treasure_chest/ -t res/treasure_chest.tex -w 1024 -h 1024 -px 128 -py 242
-	./texmaker -s lightwave/Render/objects/doors/ -t res/doors.tex -w 1024 -h 1024 -px 144 -py 242
 	./texmaker -s lightwave/Render/objects/levelend/ -t res/levelend.tex -w 2048 -h 1024 -px 160 -py 280
 	./texmaker -s lightwave/Render/waynet/ -t res/waynet.tex -w 128 -h 128 -px 64 -py 64
 	./texmaker -s lightwave/Render/lights/ -t res/lightobjects.tex -w 256 -h 256 -px 64 -py 64
