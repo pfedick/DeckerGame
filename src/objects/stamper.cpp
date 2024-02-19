@@ -10,14 +10,14 @@
 namespace Decker::Objects {
 
 
-Representation StamperVertical::representation()
+Representation Stamper::representation()
 {
 	return Representation(Spriteset::StamperVertical, 5);
 }
 
 
-StamperVertical::StamperVertical()
-	:Trap(Type::ObjectType::StamperVertical)
+Stamper::Stamper()
+	:Trap(Type::ObjectType::Stamper)
 {
 	sprite_set=Spriteset::StamperVertical;
 	sprite_no=0;
@@ -38,10 +38,14 @@ StamperVertical::StamperVertical()
 	//printf("Stamper Initial: %0.3f, %0.3f\n", time_active, time_inactive);
 	auto_intervall=true;
 	next_animation=0.0f;
+	color_stamper=7;
+	color_teeth=9;
+	orientation=Orientation::down;
+	teeth_type=14;
 	init();
 }
 
-void StamperVertical::init()
+void Stamper::init()
 {
 	state=initial_state;
 	sprite_no=stamper_type * 20;
@@ -52,7 +56,7 @@ void StamperVertical::init()
 }
 
 
-void StamperVertical::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	Trap::draw(renderer, coords);
 	/*
@@ -69,7 +73,7 @@ void StamperVertical::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 
 
 
-void StamperVertical::update(double time, TileTypePlane& ttplane, Player& player, float)
+void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float)
 {
 	if (time > next_animation) {
 		next_animation=time + 0.03f;
@@ -103,7 +107,7 @@ void StamperVertical::update(double time, TileTypePlane& ttplane, Player& player
 
 
 
-void StamperVertical::handleCollision(Player* player, const Collision& collision)
+void Stamper::handleCollision(Player* player, const Collision& collision)
 {
 	if (state == 1) {
 		player->dropHealth(100, Player::Smashed);
@@ -114,7 +118,7 @@ void StamperVertical::handleCollision(Player* player, const Collision& collision
 	if (player->x > p.x) player->x++;
 }
 
-void StamperVertical::toggle(bool enabled, Object* source)
+void Stamper::toggle(bool enabled, Object* source)
 {
 	int start_sprite_no=stamper_type * 20;
 	if (enabled) {
@@ -126,18 +130,18 @@ void StamperVertical::toggle(bool enabled, Object* source)
 	}
 }
 
-void StamperVertical::trigger(Object* source)
+void Stamper::trigger(Object* source)
 {
 	toggle(!enabled, source);
 }
 
-size_t StamperVertical::saveSize() const
+size_t Stamper::saveSize() const
 {
 	return Object::saveSize() + 12;
 }
 
 
-size_t StamperVertical::save(unsigned char* buffer, size_t size) const
+size_t Stamper::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
@@ -153,7 +157,7 @@ size_t StamperVertical::save(unsigned char* buffer, size_t size) const
 	return bytes + 12;
 }
 
-size_t StamperVertical::load(const unsigned char* buffer, size_t size)
+size_t Stamper::load(const unsigned char* buffer, size_t size)
 {
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
@@ -178,10 +182,10 @@ private:
 	ppl7::tk::CheckBox* auto_intervall;
 	ppl7::tk::DoubleSpinBox* time_active;
 	ppl7::tk::DoubleSpinBox* time_inactive;
-	StamperVertical* object;
+	Stamper* object;
 
 public:
-	StamperDialog(StamperVertical* object);
+	StamperDialog(Stamper* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
@@ -189,13 +193,13 @@ public:
 };
 
 
-void StamperVertical::openUi()
+void Stamper::openUi()
 {
 	StamperDialog* dialog=new StamperDialog(this);
 	GetGameWindow()->addChild(dialog);
 }
 
-StamperDialog::StamperDialog(StamperVertical* object)
+StamperDialog::StamperDialog(Stamper* object)
 	: Decker::ui::Dialog(640, 280)
 {
 	this->object=object;

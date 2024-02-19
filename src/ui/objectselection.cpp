@@ -61,7 +61,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::TreasureChest, "Treasure Chest", 33);
 	addObject(Decker::Objects::Type::Scarabeus, "Scarabeus", 34);
 	addObject(Decker::Objects::Type::Switch, "Switch", 35);
-	addObject(Decker::Objects::Type::StamperVertical, "Stamper vertical", 36);
+	addObject(Decker::Objects::Type::Stamper, "Stamper", 36);
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);
 	addObject(Decker::Objects::Type::Yeti, "Yeti", 47);

@@ -78,7 +78,7 @@ public:
 		LaserBeamVertical=107,
 		Mushroom=108,
 		Scarabeus=109,
-		StamperVertical=110,
+		Stamper=110,
 		Wallenstein=111,
 		Helena=112,
 		Scorpion=113,
@@ -126,6 +126,7 @@ public:
 		Rat,
 		Ghost,
 		Zombie,
+		StamperV2,
 		MaxSpritesets
 	};
 };
@@ -669,7 +670,7 @@ public:
 
 };
 
-class StamperVertical : public Trap
+class Stamper : public Trap
 {
 private:
 	AnimationCycle animation;
@@ -677,12 +678,25 @@ private:
 	double next_animation;
 	int state;
 public:
+
+	enum class Orientation {
+		down=0,
+		up=1,
+		left=2,
+		right=3
+	};
+
 	float time_active, time_inactive;
 	bool auto_intervall;
 	unsigned char initial_state;
 	unsigned char stamper_type;
+	unsigned char teeth_type;
+	Orientation orientation;
+	int color_stamper;
+	int color_teeth;
 
-	StamperVertical();
+
+	Stamper();
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;

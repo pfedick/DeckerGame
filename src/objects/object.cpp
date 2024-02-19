@@ -48,7 +48,7 @@ ppl7::String Type::name(Type::ObjectType type)
 	case ObjectType::LaserBeamVertical: return ppl7::String("LaserBeamVertical");
 	case ObjectType::Mushroom: return ppl7::String("Mushroom");
 	case ObjectType::Scarabeus: return ppl7::String("Scarabeus");
-	case ObjectType::StamperVertical: return ppl7::String("StamperVertical");
+	case ObjectType::Stamper: return ppl7::String("Stamper");
 	case ObjectType::Wallenstein: return ppl7::String("Wallenstein");
 	case ObjectType::Helena: return ppl7::String("Helena");
 	case ObjectType::Yeti: return ppl7::String("Yeti");

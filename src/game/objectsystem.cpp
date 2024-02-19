@@ -109,6 +109,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::StamperVertical]->enableMemoryBuffer(true);
 	spriteset[Spriteset::StamperVertical]->load(sdl, "res/stamper_vertical.tex");
 
+	spriteset[Spriteset::StamperV2]->enableOutlines(true);
+	spriteset[Spriteset::StamperV2]->enableMemoryBuffer(true);
+	spriteset[Spriteset::StamperV2]->load(sdl, "res/stamper_v2.tex");
+
 	spriteset[Spriteset::Wallenstein]->enableOutlines(true);
 	spriteset[Spriteset::Wallenstein]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Wallenstein]->load(sdl, "res/wallenstein.tex");
@@ -395,7 +399,7 @@ Representation getRepresentation(int object_type)
 	case Type::Door: return Door::representation();
 	case Type::Scarabeus: return Scarabeus::representation();
 	case Type::Switch: return Switch::representation();
-	case Type::StamperVertical: return StamperVertical::representation();
+	case Type::Stamper: return Stamper::representation();
 	case Type::Wallenstein: return Wallenstein::representation();
 	case Type::Helena: return Helena::representation();
 	case Type::Bat: return Bat::representation();
@@ -484,7 +488,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Door: return new Door();
 	case Type::Scarabeus: return new Scarabeus();
 	case Type::Switch: return new Switch();
-	case Type::StamperVertical: return new StamperVertical();
+	case Type::Stamper: return new Stamper();
 	case Type::Wallenstein: return new Wallenstein();
 	case Type::Helena: return new Helena();
 	case Type::Yeti: return new Yeti();
