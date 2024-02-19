@@ -13,11 +13,19 @@ Background::Background(SDL& s)
     fade_progress=0.0f;
 }
 
+void Background::clear()
+{
+    tex_sky=NULL;
+    fade_target_tex=NULL;
+    fade_progress=0.0f;
+    last_image.clear();
+    fade_target_image_filename.clear();
 
+}
 
 void Background::setImage(const ppl7::String& filename)
 {
-    if (filename == last_image) return;
+    if (filename == last_image && tex_sky != NULL) return;
     tex_sky=GetGame().texture_cache.get(filename);
     if (tex_sky) tex_size=sdl.getTextureSize(tex_sky);
     last_image=filename;
@@ -56,7 +64,7 @@ void Background::setFadeTargetColor(const ppl7::grafix::Color& color)
 
 void Background::setFadeTargetImage(const ppl7::String& filename)
 {
-    if (filename == fade_target_image_filename) return;
+    if (filename == fade_target_image_filename && fade_target_tex != NULL) return;
     fade_target_tex=GetGame().texture_cache.get(filename);
     if (fade_target_tex) fade_tex_size=sdl.getTextureSize(fade_target_tex);
     fade_target_image_filename=filename;

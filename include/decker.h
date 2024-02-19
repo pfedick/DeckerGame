@@ -556,6 +556,7 @@ private:
 
 public:
 	Background(SDL& s);
+	void clear();
 	void setImage(const ppl7::String& filename);
 	void setColor(const ppl7::grafix::Color& color);
 	void setBackgroundType(Type t);

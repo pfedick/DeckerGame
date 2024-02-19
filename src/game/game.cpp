@@ -1373,6 +1373,7 @@ void Game::unloadLevel()
 	remember.clear();
 	LevelFile.clear();
 	level.clear();
+	background.clear();
 }
 
 void Game::startLevel(const ppl7::String& filename)
@@ -1387,6 +1388,7 @@ void Game::startLevel(const ppl7::String& filename)
 	closeWayNet();
 	remember.clear();
 	level.load(filename);
+	background.clear();
 	LevelFile=filename;
 	mainmenue->update();
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
