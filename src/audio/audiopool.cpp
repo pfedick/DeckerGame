@@ -228,8 +228,21 @@ void AudioPool::load()
 		sample[AudioClip::yeti_angry_growl2].load("res/audio/yeti/yeti_angry_growl2.mp3");
 		sample[AudioClip::yeti_angry_growl3].load("res/audio/yeti/yeti_angry_growl3.mp3");
 		sample[AudioClip::yeti_angry_growl4].load("res/audio/yeti/yeti_angry_growl4.mp3");
-
-
+		sample[AudioClip::cave4].load("res/audio/cave4.mp3");
+		sample[AudioClip::night1].load("res/audio/night1.mp3");
+		sample[AudioClip::night2].load("res/audio/night2.mp3");
+		sample[AudioClip::night3].load("res/audio/night3.mp3");
+		sample[AudioClip::night4].load("res/audio/night4.mp3");
+		sample[AudioClip::nightowl1].load("res/audio/nightowl1.mp3");
+		sample[AudioClip::nightowl2].load("res/audio/nightowl2.mp3");
+		sample[AudioClip::nightowl3].load("res/audio/nightowl3.mp3");
+		sample[AudioClip::waterdrips2].load("res/audio/waterdrips2.mp3");
+		sample[AudioClip::waterdrips3].load("res/audio/waterdrips3.mp3");
+		sample[AudioClip::zombie_step1].load("res/audio/zombie_step1.mp3");
+		sample[AudioClip::zombie_step2].load("res/audio/zombie_step2.mp3");
+		sample[AudioClip::zombie_step3].load("res/audio/zombie_step3.mp3");
+		sample[AudioClip::zombie_step4].load("res/audio/zombie_step4.mp3");
+		sample[AudioClip::zombie_step5].load("res/audio/zombie_step5.mp3");
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

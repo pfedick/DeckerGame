@@ -174,6 +174,7 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Cave 1", ppl7::ToString("%d", AudioClip::cave1));
 	sample_name->add("Cave 2", ppl7::ToString("%d", AudioClip::cave2));
 	sample_name->add("Cave 3", ppl7::ToString("%d", AudioClip::cave3));
+	sample_name->add("Cave 4", ppl7::ToString("%d", AudioClip::cave4));
 	sample_name->add("Desert at Night", ppl7::ToString("%d", AudioClip::desert_at_night));
 	sample_name->add("Electric", ppl7::ToString("%d", AudioClip::electric));
 	sample_name->add("Fire 1", ppl7::ToString("%d", AudioClip::fire1));
@@ -181,6 +182,13 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Fire 3", ppl7::ToString("%d", AudioClip::fire3));
 	sample_name->add("Jungle 1", ppl7::ToString("%d", AudioClip::jungle1));
 	sample_name->add("Jungle 2", ppl7::ToString("%d", AudioClip::jungle2));
+	sample_name->add("Night 1", ppl7::ToString("%d", AudioClip::night1));
+	sample_name->add("Night 2", ppl7::ToString("%d", AudioClip::night2));
+	sample_name->add("Night 3", ppl7::ToString("%d", AudioClip::night3));
+	sample_name->add("Night 4", ppl7::ToString("%d", AudioClip::night4));
+	sample_name->add("Nightowl 1", ppl7::ToString("%d", AudioClip::nightowl1));
+	sample_name->add("Nightowl 2", ppl7::ToString("%d", AudioClip::nightowl2));
+	sample_name->add("Nightowl 3", ppl7::ToString("%d", AudioClip::nightowl3));
 
 	sample_name->add("Rain 1", ppl7::ToString("%d", AudioClip::rain1));
 	sample_name->add("Rain 2", ppl7::ToString("%d", AudioClip::rain2));
@@ -194,6 +202,8 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Waterflow 2", ppl7::ToString("%d", AudioClip::waterflow2));
 	sample_name->add("Waterflow 3", ppl7::ToString("%d", AudioClip::waterflow3));
 	sample_name->add("Waterdrips in a cave", ppl7::ToString("%d", AudioClip::waterdrips));
+	sample_name->add("Waterdrips 2", ppl7::ToString("%d", AudioClip::waterdrips2));
+	sample_name->add("Waterdrips 3", ppl7::ToString("%d", AudioClip::waterdrips3));
 	sample_name->add("Waves 1", ppl7::ToString("%d", AudioClip::waves1));
 
 	sample_name->add("Wind and grills", ppl7::ToString("%d", AudioClip::wind3));

@@ -153,12 +153,12 @@ static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
 {
 	int r=ppl7::rand(1, 5);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::yeti_step1, position, 1600, 0.5f); break;
-	case 2: ap.playOnce(AudioClip::yeti_step2, position, 1600, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::yeti_step3, position, 1600, 0.5f); break;
-	case 4: ap.playOnce(AudioClip::yeti_step4, position, 1600, 0.5f); break;
-	case 5: ap.playOnce(AudioClip::yeti_step5, position, 1600, 0.5f); break;
-	default: ap.playOnce(AudioClip::yeti_step1, position, 1600, 0.5f); break;
+	case 1: ap.playOnce(AudioClip::zombie_step1, position, 1600, 0.5f); break;
+	case 2: ap.playOnce(AudioClip::zombie_step2, position, 1600, 0.5f); break;
+	case 3: ap.playOnce(AudioClip::zombie_step3, position, 1600, 0.5f); break;
+	case 4: ap.playOnce(AudioClip::zombie_step4, position, 1600, 0.5f); break;
+	case 5: ap.playOnce(AudioClip::zombie_step5, position, 1600, 0.5f); break;
+	default: ap.playOnce(AudioClip::zombie_step1, position, 1600, 0.5f); break;
 	}
 }
 
@@ -248,6 +248,7 @@ void Zombie::throwKnife(Player& player)
 	}
 	particle->initial_p=particle->p;
 	GetObjectSystem()->addObject(particle);
+	getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.8f);
 }
 
 

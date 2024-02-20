@@ -166,8 +166,21 @@ public:
 		yeti_angry_growl2,
 		yeti_angry_growl3,
 		yeti_angry_growl4,
-
-
+		cave4,
+		night1,
+		night2,
+		night3,
+		night4,
+		nightowl1,
+		nightowl2,
+		nightowl3,
+		waterdrips2,
+		waterdrips3,
+		zombie_step1,
+		zombie_step2,
+		zombie_step3,
+		zombie_step4,
+		zombie_step5,
 		// this must always be the last entry!
 		maxClips
 	};
