@@ -87,17 +87,21 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
             animation.startSequence(1, 10, false, 10);
             next_state=time + ppl7::randf(4.0f, 40.0f);
         }
+    } else if (state == State::Stand && time < next_state) {
+        TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
+        if (t1 == TileType::NonBlocking) height-=(10 * frame_rate_compensation);
+
     } else if (state == State::TurnToLeft && animation.isFinished()) {
         state=State::FlyLeft;
         animation.startSequence(55, 55, false, 55);
-        height=0.0f;
+        //height=0.0f;
         land=false;
         target_height=2 * TILE_HEIGHT;
         change_height=time + ppl7::randf(1.0f, 5.0f);
     } else if (state == State::TurnToRight && animation.isFinished()) {
         state=State::FlyRight;
         animation.startSequence(60, 65, false, 65);
-        height=0.0f;
+        //height=0.0f;
         target_height=2 * TILE_HEIGHT;
         land=false;
         change_height=time + ppl7::randf(1.0f, 5.0f);
@@ -134,11 +138,23 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
     } else if (state == State::FlyRightToLeft) {
         p.x+=(3 * frame_rate_compensation);
     } else if (state == State::LandLeft && animation.isFinished()) {
-        state=State::TurnToMid;
-        animation.startSequence(20, 11, false, 0);
+        TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
+        if (t1 == TileType::NonBlocking) {
+            height-=(10 * frame_rate_compensation);
+
+        } else {
+            state=State::TurnToMid;
+            animation.startSequence(20, 11, false, 0);
+        }
     } else if (state == State::LandRight && animation.isFinished()) {
-        state=State::TurnToMid;
-        animation.startSequence(10, 0, false, 0);
+        TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
+        if (t1 == TileType::NonBlocking) {
+            height-=(10 * frame_rate_compensation);
+
+        } else {
+            state=State::TurnToMid;
+            animation.startSequence(10, 0, false, 0);
+        }
     } else if (state == State::TurnToMid && animation.isFinished()) {
         next_state=time + ppl7::randf(1.0f, 5.0f);
         state=State::Stand;
