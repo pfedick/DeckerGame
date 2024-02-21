@@ -235,6 +235,8 @@ void Door::handleCollision(Player* player, const Collision& collision)
 					target->cooldown=now + 2.0f;
 					state=DoorState::closing;
 					animation.startSequence(door_sprite_no, door_sprite_no - 14, false, door_sprite_no - 14);
+				} else {
+					target->cooldown=now + 1.0f;
 				}
 				if (target->orientation == DoorOrientation::left || target->orientation == DoorOrientation::right) {
 					if (target->warpside == WarpSide::left) player->move(target->p.x - 2 * TILE_WIDTH, target->p.y);
