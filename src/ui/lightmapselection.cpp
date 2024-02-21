@@ -304,6 +304,8 @@ void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 	} else if (event->widget() == global_lighting) {
 		game->updateLayerForSelectedObject(value);
 		game->getLevel().params.GlobalLighting=global_lighting->color();
+		game->getLevel().runtimeParams.GlobalLighting=global_lighting->color();
+
 	} else if (event->widget() == colorframe) {
 		tilesframe->setColor(colorframe->color());
 		//game->updateLightFromUi();
