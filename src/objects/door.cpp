@@ -211,6 +211,7 @@ void Door::handleCollision(Player* player, const Collision& collision)
 	}
 
 	double now=ppl7::GetMicrotime();
+	if (!(keyboard.matrix & KeyboardKeys::Action)) cooldown=0.0f;
 	if (state == DoorState::closed) {
 		if (warp_to_id > 0 && (keyboard.matrix & KeyboardKeys::Action)) {
 			if (key_id == 0 || player->isInInventory(key_id)) {
