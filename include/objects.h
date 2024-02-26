@@ -673,13 +673,21 @@ public:
 class Stamper : public Trap
 {
 private:
+	enum class State {
+		Open=0,
+		Closing,
+		Closed,
+		Opening
+	};
+	State state;
+
 	AnimationCycle animation;
 	double next_state;
 	double next_animation;
-	int state;
 	float acceleration;
 	float position;
-	SpriteTexture* texturev2;
+
+	void updateStamperBoundary();
 public:
 
 	enum class Orientation {
@@ -691,7 +699,7 @@ public:
 
 	float time_active, time_inactive;
 	bool auto_intervall;
-	unsigned char initial_state;
+	unsigned char initial_state;		// <=== Refactor to boolean and Flag
 	unsigned char stamper_type;
 	unsigned char teeth_type;
 	Orientation orientation;
