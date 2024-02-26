@@ -677,6 +677,9 @@ private:
 	double next_state;
 	double next_animation;
 	int state;
+	float acceleration;
+	float position;
+	SpriteTexture* texturev2;
 public:
 
 	enum class Orientation {
@@ -708,7 +711,7 @@ public:
 	void toggle(bool enable, Object* source=NULL) override;
 	void trigger(Object* source=NULL) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
 };
 
 
