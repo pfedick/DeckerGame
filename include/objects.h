@@ -110,7 +110,7 @@ public:
 		Doors,
 		Scarabeus,
 		Laser,
-		StamperVertical,
+		//StamperVertical,
 		Wallenstein,
 		Helena,
 		Bat,

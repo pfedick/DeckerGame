@@ -105,9 +105,11 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Laser]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Laser]->load(sdl, "res/laser.tex");
 
+	/*
 	spriteset[Spriteset::StamperVertical]->enableOutlines(true);
 	spriteset[Spriteset::StamperVertical]->enableMemoryBuffer(true);
 	spriteset[Spriteset::StamperVertical]->load(sdl, "res/stamper_vertical.tex");
+	*/
 
 	spriteset[Spriteset::StamperV2]->enableOutlines(true);
 	spriteset[Spriteset::StamperV2]->enableMemoryBuffer(true);
