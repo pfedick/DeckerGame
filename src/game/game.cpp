@@ -1897,6 +1897,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		player->setSavePoint(pos);
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3 && showui == true) {
 		level.load(LevelFile);
+		background.clear();
 		translator.load();
 	} else if (event->key == ppl7::tk::KeyEvent::KEY_F5 && showui == true) {
 		player->resetState();
