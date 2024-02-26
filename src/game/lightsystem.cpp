@@ -18,9 +18,11 @@ LightObject::LightObject()
     angle=0.0f;
     color.set(255, 255, 255, 255);
     intensity=255;
+    current_intensity=1.0f;
     flare_intensity=0;
     //lightsystem=NULL;
     myType=LightType::Static;
+    typeParameter=0.5f;
     enabled=true;
     initial_state=true;
     plane=static_cast<int>(LightPlaneId::Player);
@@ -28,7 +30,11 @@ LightObject::LightObject()
     flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     has_lensflare=false;
     flare_useLightColor=false;
-    save_size=37;
+    save_size=41;
+    target_intensity=0.0f;
+    intensity_increment=0.0f;
+    next_change=0.0f;
+    animation_state=0;
 }
 
 LightObject::~LightObject()
@@ -39,7 +45,7 @@ LightObject::~LightObject()
 size_t LightObject::save(unsigned char* buffer, size_t size) const
 {
     if (size < save_size) return 0;
-    ppl7::Poke8(buffer + 0, 2);	// Object-Header-Version
+    ppl7::Poke8(buffer + 0, 3);	// Object-Header-Version
     ppl7::Poke8(buffer + 1, static_cast<int>(myType));
     ppl7::Poke32(buffer + 2, id);
     ppl7::Poke8(buffer + 6, plane);
@@ -61,7 +67,8 @@ size_t LightObject::save(unsigned char* buffer, size_t size) const
     ppl7::Poke8(buffer + 34, color.red());
     ppl7::Poke8(buffer + 35, color.green());
     ppl7::Poke8(buffer + 36, color.blue());
-    return 37;
+    ppl7::PokeFloat(buffer + 37, typeParameter);
+    return 41;
 }
 
 size_t LightObject::load(const unsigned char* buffer, size_t size)
@@ -79,6 +86,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         enabled=initial_state;
         color=GetColorPalette().getColor(ppl7::Peek8(buffer + 9));
         intensity=ppl7::Peek8(buffer + 10);
+        current_intensity=(float)intensity / 255.0f;
         flare_intensity=ppl7::Peek8(buffer + 11);
         x=ppl7::Peek32(buffer + 12);
         y=ppl7::Peek32(buffer + 16);
@@ -87,7 +95,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         angle=ppl7::PeekFloat(buffer + 28);
         sprite_no=ppl7::Peek16(buffer + 32);
         return 34;
-    } else if (version == 2) {
+    } else if (version >= 2) {
         myType=static_cast<LightType>(ppl7::Peek8(buffer + 1));
         id=ppl7::Peek32(buffer + 2);
         plane=ppl7::Peek8(buffer + 6);
@@ -99,6 +107,7 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         enabled=initial_state;
         flarePlane=ppl7::Peek8(buffer + 9);
         intensity=ppl7::Peek8(buffer + 10);
+        current_intensity=(float)intensity / 255.0f;
         flare_intensity=ppl7::Peek8(buffer + 11);
         x=ppl7::Peek32(buffer + 12);
         y=ppl7::Peek32(buffer + 16);
@@ -107,7 +116,9 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
         angle=ppl7::PeekFloat(buffer + 28);
         sprite_no=ppl7::Peek16(buffer + 32);
         color.set(ppl7::Peek8(buffer + 34), ppl7::Peek8(buffer + 35), ppl7::Peek8(buffer + 36), 255);
-        return 37;
+        if (version < 3) return 37;
+        typeParameter=ppl7::PeekFloat(buffer + 37);
+        return 41;
     }
     return 0;
 }
@@ -115,6 +126,93 @@ size_t LightObject::load(const unsigned char* buffer, size_t size)
 void LightObject::trigger()
 {
     enabled=!enabled;
+}
+
+void LightObject::update(double time, float frame_rate_compensation)
+{
+    if (myType == LightType::Static) {
+        current_intensity=(float)intensity / 255.0f;
+        return;
+    } else if (myType == LightType::Fire) updateFire(time, frame_rate_compensation);
+    else if (myType == LightType::Candle) updateCandle(time, frame_rate_compensation);
+    else if (myType == LightType::Flicker) updateFlicker(time, frame_rate_compensation);
+    else if (myType == LightType::Fade) updateFade(time, frame_rate_compensation);
+}
+
+void LightObject::updateFire(double time, float frame_rate_compensation)
+{
+    if (typeParameter < 0.01f) typeParameter=0.01f;
+    else if (typeParameter > 1.0f) typeParameter=1.0f;
+    if (animation_state == 0) {
+        animation_state=1;
+        target_intensity=ppl7::randf(0.4f, 0.9f) * ((float)intensity / 255.0f);
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * -0.2f;
+
+    } else if (animation_state == 1 && current_intensity <= target_intensity) {    // fade to dark
+        animation_state=2;
+        target_intensity=ppl7::randf(0.8f, 1.0f) * ((float)intensity / 255.0f);
+        if (target_intensity <= current_intensity) target_intensity=1.0f;
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * 0.2f;
+    } else if (animation_state == 2 && current_intensity >= target_intensity) {    // fade to light
+        animation_state=1;
+        target_intensity=ppl7::randf(0.4f, 0.9f) * ((float)intensity / 255.0f);
+        if (target_intensity >= current_intensity) target_intensity=0.1f * ((float)intensity / 255.0f);
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * -0.2f;
+    }
+    current_intensity+=intensity_increment * frame_rate_compensation;
+    if (current_intensity < 0.0f) current_intensity=0.0f;
+    else if (current_intensity > 1.0f) current_intensity=1.0f;
+    //ppl7::PrintDebugTime("state: %d, param: %0.3f, target_intensity: %0.3f, current_intensity: %0.3f, increment: %0.3f\n", animation_state, typeParameter, target_intensity, current_intensity, intensity_increment);
+}
+
+void LightObject::updateCandle(double time, float frame_rate_compensation)
+{
+    if (typeParameter < 0.01f) typeParameter=0.01f;
+    else if (typeParameter > 1.0f) typeParameter=1.0f;
+    if (animation_state == 0) {
+        animation_state=1;
+        target_intensity=ppl7::randf(0.8f, 0.9f) * ((float)intensity / 255.0f);
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * -0.02f;
+
+    } else if (animation_state == 1 && current_intensity <= target_intensity) {    // fade to dark
+        animation_state=2;
+        target_intensity=ppl7::randf(0.9f, 1.0f) * ((float)intensity / 255.0f);
+        if (target_intensity <= current_intensity) target_intensity=1.0f;
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * 0.02f;
+    } else if (animation_state == 2 && current_intensity >= target_intensity) {    // fade to light
+        animation_state=1;
+        target_intensity=ppl7::randf(0.8f, 0.9f) * ((float)intensity / 255.0f);
+        if (target_intensity >= current_intensity) target_intensity=0.8f * ((float)intensity / 255.0f);
+        intensity_increment=ppl7::randf(typeParameter / 2.0f, typeParameter) * -0.02f;
+    }
+    current_intensity+=intensity_increment * frame_rate_compensation;
+    if (current_intensity < 0.0f) current_intensity=0.0f;
+    else if (current_intensity > 1.0f) current_intensity=1.0f;
+    //ppl7::PrintDebugTime("state: %d, param: %0.3f, target_intensity: %0.3f, current_intensity: %0.3f, increment: %0.3f\n", animation_state, typeParameter, target_intensity, current_intensity, intensity_increment);
+}
+
+void LightObject::updateFlicker(double time, float frame_rate_compensation)
+{
+    if (typeParameter < 0.01f) typeParameter=0.01f;
+    else if (typeParameter > 1.0f) typeParameter=1.0f;
+    if (animation_state == 0) {
+        current_intensity=(float)intensity / 255.0f;
+        next_change=time + ppl7::randf(0.5f, 4.0f) * typeParameter;
+        animation_state=1;
+    } else if (animation_state == 1 && next_change < time) {    // dark
+        current_intensity=0.0f;
+        next_change=time + ppl7::randf(0.5f, 2.0f) * typeParameter;
+        animation_state=2;
+    } else if (animation_state == 2 && next_change < time) {    // dark
+        current_intensity=(float)intensity / 255.0f;
+        next_change=time + ppl7::randf(0.5f, 4.0f) * typeParameter;
+        animation_state=1;
+    }
+}
+
+void LightObject::updateFade(double time, float frame_rate_compensation)
+{
+
 }
 
 void LightSystem::loadLegacyLightLayer(const ppl7::ByteArrayPtr& ba, LightPlaneId plane, int pplane)
@@ -233,6 +331,23 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
     }
 }
 
+void LightSystem::update(double time, float frame_rate_compensation)
+{
+    updatePlane(LightPlaneId::Near, time, frame_rate_compensation);
+    updatePlane(LightPlaneId::Player, time, frame_rate_compensation);
+    updatePlane(LightPlaneId::Middle, time, frame_rate_compensation);
+    updatePlane(LightPlaneId::Far, time, frame_rate_compensation);
+    updatePlane(LightPlaneId::Horizon, time, frame_rate_compensation);
+}
+
+void LightSystem::updatePlane(LightPlaneId plane, double time, float frame_rate_compensation)
+{
+    std::map<uint32_t, LightObject*>::const_iterator it;
+    for (it=visible_light_map[static_cast<int>(plane)].begin();it != visible_light_map[static_cast<int>(plane)].end();++it) {
+        (*it).second->update(time, frame_rate_compensation);
+    }
+}
+
 
 void LightSystem::addObjectLight(LightObject* light)
 {
@@ -342,7 +457,7 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
         if (item->enabled) {
             if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
                 ppl7::grafix::Color c=item->color;
-                c.setAlpha(item->intensity);
+                c.setAlpha((int)(item->current_intensity * 255.0f));
                 lightmaps->drawScaledWithAngle(renderer,
                     item->x + viewport.x1 - worldcoords.x,
                     item->y + viewport.y1 - worldcoords.y,
@@ -400,6 +515,7 @@ void LightSystem::drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rec
         //if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
         if (item->has_lensflare && item->enabled) {
             if (plane == LightPlaneId::Player && static_cast<int>(pplane) != item->flarePlane) continue;
+            if (item->myType == LightType::Flicker && item->current_intensity == 0.0f) continue;
             ppl7::grafix::Color c=ppl7::grafix::Color(255, 255, 255, 255);
             if (item->flare_useLightColor) c=item->color;
             int x=item->x + viewport.x1 - worldcoords.x;

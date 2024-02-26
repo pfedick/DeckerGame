@@ -631,6 +631,9 @@ private:
 	ppl7::tk::CheckBox* flare_useLightColor;
 	ppl7::tk::HorizontalSlider* lensflareIntensity;
 	ppl7::tk::ComboBox* flarePlane;
+	ppl7::tk::ComboBox* lightType;
+	ppl7::tk::DoubleHorizontalSlider* lightParameter;
+
 
 	ppl7::tk::Label* light_id;
 
@@ -674,6 +677,12 @@ public:
 
 	bool getFlareUseLightColor() const;
 	void setFlareUseLightColor(bool flag);
+
+	LightType getLightType() const;
+	void setLightType(LightType type);
+	float lightTypeParameter() const;
+	void setLightTypeParameter(float value);
+
 
 	void valueChangedEvent(ppl7::tk::Event* event, int value)  override;
 	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;

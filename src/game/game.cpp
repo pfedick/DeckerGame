@@ -663,6 +663,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setEditmode(object_selection != NULL);
 	metrics.time_update_lights.start();
 	level.updateVisibleLightsLists(WorldCoords, game_viewport);
+	level.lights.update(now, frame_rate_compensation);
 	metrics.time_update_lights.stop();
 
 	metrics.time_update_sprites.start();
@@ -1595,6 +1596,8 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		light->has_lensflare=lights_selection->getLensflare();
 		light->flare_useLightColor=lights_selection->getFlareUseLightColor();
 		light->flare_intensity=lights_selection->getLensflareIntensity();
+		light->myType=lights_selection->getLightType();
+		light->typeParameter=lights_selection->lightTypeParameter();
 
 		level.lights.addLight(light);
 	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
@@ -1769,8 +1772,8 @@ void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 			if (sprite_mode == spriteModeDraw) {
 				float scale_x=lights_selection->lightScaleX();
 				float scale_y=lights_selection->lightScaleY();
-				if (event->wheel.y < 0 && scale_x>0.1) scale_x-=0.05;
-				if (event->wheel.y < 0 && scale_y>0.1) scale_y-=0.05;
+				if (event->wheel.y < 0 && scale_x>0.01) scale_x-=0.05;
+				if (event->wheel.y < 0 && scale_y>0.01) scale_y-=0.05;
 				if (event->wheel.y > 0 && scale_x < 5.0) scale_x+=0.05;
 				if (event->wheel.y > 0 && scale_y < 5.0) scale_y+=0.05;
 				lights_selection->setLightScaleX(scale_x);
@@ -1836,6 +1839,8 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 		lights_selection->setLensflare(selected_light->has_lensflare);
 		lights_selection->setLensflareIntensity(selected_light->flare_intensity);
 		lights_selection->setFlareUseLightColor(selected_light->flare_useLightColor);
+		lights_selection->setLightType(selected_light->myType);
+		lights_selection->setLightTypeParameter(selected_light->typeParameter);
 
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
@@ -2292,6 +2297,9 @@ void Game::updateLightFromUi()
 		selected_light->flare_intensity=lights_selection->getLensflareIntensity();
 		selected_light->flare_useLightColor=lights_selection->getFlareUseLightColor();
 		selected_light->playerPlane=static_cast<uint8_t>(lights_selection->getPlayerPlaneMatrix());
+		selected_light->myType=lights_selection->getLightType();
+		selected_light->typeParameter=lights_selection->lightTypeParameter();
+
 		//selected_light_system->modifyLight(selected_light);
 	}
 }

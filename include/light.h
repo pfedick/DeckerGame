@@ -8,7 +8,10 @@ class Object;
 
 enum class LightType {
     Static=0,
-    Fire
+    Fire,
+    Flicker,
+    Fade,
+    Candle
 };
 
 
@@ -28,7 +31,23 @@ enum class LightPlayerPlaneMatrix {
     Back=4
 };
 
+class LightSystem;
+
 class LightObject {
+    friend class LightSystem;
+private:
+    float current_intensity;
+    float target_intensity;
+    double next_change;
+    float intensity_increment;
+    int animation_state;
+
+
+    void updateFire(double time, float frame_rate_compensation);
+    void updateCandle(double time, float frame_rate_compensation);
+    void updateFlicker(double time, float frame_rate_compensation);
+    void updateFade(double time, float frame_rate_compensation);
+
 public:
     LightObject();
     virtual ~LightObject();
@@ -49,6 +68,7 @@ public:
     uint8_t     plane;   // 1 Byte
     uint8_t     playerPlane; // 1 Byte
     uint8_t     flarePlane; // 1 Byte
+    float       typeParameter; // 4 Byte, used for light type
 
     ppl7::grafix::Rect boundary;
     bool enabled;
@@ -59,6 +79,8 @@ public:
     virtual size_t save(unsigned char* buffer, size_t size) const;
     virtual size_t load(const unsigned char* buffer, size_t size);
     virtual void trigger();
+
+    void update(double time, float frame_rate_compensation);
 };
 
 class ColorPalette;
@@ -71,13 +93,14 @@ private:
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
     bool visibility[static_cast<int>(LightPlaneId::Max)];
+    void updatePlane(LightPlaneId plane, double time, float frame_rate_compensation);
 
 public:
     LightSystem();
     ~LightSystem();
     void loadSpritesets(SDL& sdl);
     void clear();
-    //void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+    void update(double time, float frame_rate_compensation);
     void updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
     void save(ppl7::FileObject& file, unsigned char id) const;
     void load(const ppl7::ByteArrayPtr& ba);
