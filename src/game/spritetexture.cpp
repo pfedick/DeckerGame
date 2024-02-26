@@ -755,3 +755,11 @@ void SpriteTexture::setPivot(int id, int x, int y)
 	if (it == SpriteList.end()) return;
 	it->second.Pivot.setPoint(x, y);
 }
+
+const SpriteTexture::SpriteIndexItem* SpriteTexture::getSpriteIndex(int id) const
+{
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it=SpriteList.find(id);
+	if (it == SpriteList.end()) return NULL;
+	return &it->second;
+}

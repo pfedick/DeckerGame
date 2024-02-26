@@ -193,7 +193,7 @@ public:
 
 class SpriteTexture
 {
-private:
+public:
 	class SpriteIndexItem
 	{
 	public:
@@ -223,6 +223,7 @@ private:
 			drawable=other.drawable;
 		}
 	};
+private:
 	std::map<int, SDL_Texture*> TextureMap;
 	std::map<int, SDL_Texture*> OutlinesTextureMap;
 	std::map<int, ppl7::grafix::Image> InMemoryTextureMap;
@@ -278,6 +279,7 @@ public:
 	void setPivot(int id, int x, int y);
 
 	SDL_Rect getSpriteSource(int id) const;
+	const SpriteIndexItem* getSpriteIndex(int id) const;
 	ppl7::grafix::Point spriteOffset(int id) const;
 };
 
