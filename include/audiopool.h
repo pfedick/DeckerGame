@@ -181,6 +181,9 @@ public:
 		zombie_step3,
 		zombie_step4,
 		zombie_step5,
+		stamper_down,
+		stamper_up,
+		stamper_echo,
 		// this must always be the last entry!
 		maxClips
 	};

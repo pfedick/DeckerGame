@@ -243,6 +243,9 @@ void AudioPool::load()
 		sample[AudioClip::zombie_step3].load("res/audio/zombie_step3.mp3");
 		sample[AudioClip::zombie_step4].load("res/audio/zombie_step4.mp3");
 		sample[AudioClip::zombie_step5].load("res/audio/zombie_step5.mp3");
+		sample[AudioClip::stamper_down].load("res/audio/stamper_down.mp3");
+		sample[AudioClip::stamper_up].load("res/audio/stamper_up.mp3");
+		sample[AudioClip::stamper_echo].load("res/audio/stamper_echo.mp3");
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

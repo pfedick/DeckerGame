@@ -43,8 +43,17 @@ Stamper::Stamper()
 	orientation=Orientation::down;
 	teeth_type=6;
 	//texture=GetObjectSystem()->getTexture(Spriteset::StamperV2);
-
+	audio_drag_up=NULL;
 	init();
+}
+
+Stamper::~Stamper()
+{
+	if (audio_drag_up) {
+		getAudioPool().stopInstace(audio_drag_up);
+		delete audio_drag_up;
+		audio_drag_up=NULL;
+	}
 }
 
 void Stamper::init()
@@ -62,6 +71,7 @@ void Stamper::init()
 	//printf ("sprite_no=%d, state=%d\n",sprite_no, state);
 	updateBoundary();
 	updateStamperBoundary();
+	if (audio_drag_up) getAudioPool().stopInstace(audio_drag_up);
 }
 
 void Stamper::updateStamperBoundary()
@@ -160,6 +170,7 @@ void Stamper::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 
 void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& audiopool=getAudioPool();
 	if (state == State::Closing) {
 		position+=acceleration * frame_rate_compensation;
 		acceleration=acceleration * (1.7 * frame_rate_compensation);
@@ -168,11 +179,10 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 		acceleration+=(0.2 * frame_rate_compensation);
 		if (acceleration > 5.0f) acceleration=5.0f;
 	}
-	//int start_sprite_no=stamper_type * 20;
 	if (auto_intervall) {
 		if (state == State::Open && time > next_state) {
+			audiopool.playOnce(AudioClip::stamper_down, p, 1600, 1.0f);
 			state=State::Closing;
-			//animation.startSequence(start_sprite_no, start_sprite_no + 5, false, start_sprite_no + 5);
 			position=0;
 			acceleration=2.0f;
 		} else if (state == State::Closing && position >= 261.0f) {
@@ -183,16 +193,28 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == State::Closed && time > next_state) {
 			state=State::Opening;
 			acceleration=1.0f;
-			//animation.startSequence(start_sprite_no + 6, start_sprite_no + 19, false, start_sprite_no + 19);
+			if (!audio_drag_up) {
+				audio_drag_up=audiopool.getInstance(AudioClip::stamper_up);
+			}
+			if (audio_drag_up) {
+				audio_drag_up->setVolume(1.0f);
+				audio_drag_up->setAutoDelete(false);
+				audio_drag_up->setLoop(true);
+				audio_drag_up->setPositional(p, 1600);
+				audiopool.playInstance(audio_drag_up);
+			}
 		} else if (state == State::Opening && position <= 0.0f) {
 			state=State::Open;
 			position=0.0f;
 			next_state=time + time_inactive;
+			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
+			audiopool.playOnce(AudioClip::stamper_echo, p, 1600, 1.0f);
 			if (GetGame().config.difficulty == Config::DifficultyLevel::easy) next_state+=time_inactive;
 		}
 	} else {
 
 	}
+	if (audio_drag_up) audio_drag_up->setPositional(p, 1600);
 	updateStamperBoundary();
 }
 

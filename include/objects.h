@@ -110,7 +110,6 @@ public:
 		Doors,
 		Scarabeus,
 		Laser,
-		//StamperVertical,
 		Wallenstein,
 		Helena,
 		Bat,
@@ -686,6 +685,7 @@ private:
 	double next_animation;
 	float acceleration;
 	float position;
+	AudioInstance* audio_drag_up;
 
 	void updateStamperBoundary();
 public:
@@ -708,6 +708,7 @@ public:
 
 
 	Stamper();
+	~Stamper();
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
