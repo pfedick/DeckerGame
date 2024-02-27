@@ -28,7 +28,8 @@ enum class LightPlayerPlaneMatrix {
     None=0,
     Front=1,
     Player=2,
-    Back=4
+    Back=4,
+    All=7
 };
 
 class LightSystem;

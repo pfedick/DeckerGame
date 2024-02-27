@@ -36,6 +36,22 @@ Floater::Floater(Type::ObjectType type)
 	color_gradient.push_back(Particle::ColorGradientItem(0.775, ppl7::grafix::Color(255, 255, 255, 23)));
 	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(114, 116, 116, 0)));
 	particle_velocity_correction=0;
+
+	thuruster1.color.set(255, 200, 0, 255);
+	thuruster1.sprite_no=12;
+	thuruster1.scale_x=0.8f;
+	thuruster1.scale_y=0.5f;
+	thuruster1.scale_y=0.5f;
+	thuruster1.intensity=64;
+	thuruster1.plane=static_cast<int>(LightPlaneId::Player);
+	thuruster1.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::All);
+	thuruster1.has_lensflare=true;
+	thuruster1.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+	thuruster1.flare_intensity=128;
+	thuruster1.flare_useLightColor=true;
+
+	thuruster2=thuruster1;
+
 	init();
 }
 
@@ -75,6 +91,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		audio->setPositional(p, 1800);
 		audio->setLoop(true);
 	}
+	LightSystem& lights=GetGame().getLightSystem();
 	audio->setPositional(p, 1800);
 	if (direction == 0) {		// horizontal
 		if (next_state < time && (state == 0 || state == 2)) {
@@ -90,6 +107,11 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 				next_birth=time + randf(0.020, 0.085);
 			}
 			updateBoundary();
+			thuruster1.x=p.x - 74;
+			thuruster1.y=p.y - 25;
+			thuruster1.angle=90;
+			lights.addObjectLight(&thuruster1);
+
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 64, p.y));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
 				velocity.setPoint(0, 0);
@@ -99,6 +121,8 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 			}
 			if (time > next_animation) {
 				flame_sprite1=ppl7::rand(152, 161);
+				thuruster1.intensity=ppl7::rand(128, 255);
+				thuruster1.flare_intensity=ppl7::rand(64, 128);
 				next_animation=time + 0.06f;
 			}
 		} else if (state == 3) {
@@ -111,6 +135,10 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 				next_birth=time + randf(0.020, 0.085);
 			}
 			updateBoundary();
+			thuruster1.x=p.x + 74;
+			thuruster1.y=p.y - 24;
+			thuruster1.angle=270;
+			lights.addObjectLight(&thuruster1);
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 64, p.y));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
 				velocity.setPoint(0, 0);
@@ -120,6 +148,8 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 			}
 			if (time > next_animation) {
 				flame_sprite1=ppl7::rand(162, 171);
+				thuruster1.intensity=ppl7::rand(128, 255);
+				thuruster1.flare_intensity=ppl7::rand(64, 128);
 				next_animation=time + 0.06f;
 			}
 		}
@@ -138,6 +168,15 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 				next_birth=time + randf(0.020, 0.085);
 			}
 			updateBoundary();
+			thuruster1.x=p.x - 16;
+			thuruster1.y=p.y - 8;
+			thuruster2.x=p.x + 16;
+			thuruster2.y=p.y - 8;
+			thuruster1.angle=0;
+			thuruster2.angle=0;
+			lights.addObjectLight(&thuruster1);
+			lights.addObjectLight(&thuruster2);
+
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 64));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
 				velocity.setPoint(0, 0);
@@ -148,6 +187,10 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 			if (time > next_animation) {
 				flame_sprite1=ppl7::rand(172, 181);
 				flame_sprite2=ppl7::rand(172, 181);
+				thuruster1.intensity=ppl7::rand(128, 255);
+				thuruster1.flare_intensity=ppl7::rand(64, 128);
+				thuruster2.intensity=ppl7::rand(128, 255);
+				thuruster2.flare_intensity=ppl7::rand(64, 128);
 				next_animation=time + 0.06f;
 			}
 		} else if (state == 3) {
@@ -161,6 +204,15 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 				next_birth=time + randf(0.020, 0.085);
 			}
 			updateBoundary();
+			thuruster1.x=p.x - 16;
+			thuruster1.y=p.y - 8;
+			thuruster2.x=p.x + 16;
+			thuruster2.y=p.y - 8;
+			thuruster1.angle=0;
+			thuruster2.angle=0;
+			lights.addObjectLight(&thuruster1);
+			lights.addObjectLight(&thuruster2);
+
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 64));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
 				velocity.setPoint(0, 0);
@@ -171,6 +223,10 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 			if (time > next_animation) {
 				flame_sprite1=ppl7::rand(172, 181);
 				flame_sprite2=ppl7::rand(172, 181);
+				thuruster1.intensity=ppl7::rand(128, 255);
+				thuruster1.flare_intensity=ppl7::rand(64, 128);
+				thuruster2.intensity=ppl7::rand(128, 255);
+				thuruster2.flare_intensity=ppl7::rand(64, 128);
 				next_animation=time + 0.06f;
 			}
 		}
@@ -182,11 +238,11 @@ void Floater::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) co
 	if (direction == 0) {
 		if (state == 1) texture->draw(renderer,
 			p.x + coords.x - 128 - 32,
-			p.y + coords.y,
+			p.y + coords.y - 10,
 			flame_sprite1);
 		else if (state == 3) texture->draw(renderer,
 			p.x + coords.x + 128 + 32,
-			p.y + coords.y,
+			p.y + coords.y - 10,
 			flame_sprite1);
 	} else if (direction == 1 && (state == 1 || state == 3)) {
 		texture->draw(renderer,

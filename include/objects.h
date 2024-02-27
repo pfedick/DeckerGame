@@ -1187,6 +1187,11 @@ private:
 	ppl7::grafix::PointF velocity;
 	AnimationCycle animation;
 	AudioInstance* audio;
+
+	LightObject thuruster1;
+	LightObject thuruster2;
+
+
 	void emmitParticles(double time, const Player& player, const ppl7::grafix::PointF p, float angle);
 public:
 	bool initial_state;
