@@ -389,13 +389,22 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 		}
 		return;
 	}
-	player->setZeroVelocity();
 	if (orientation == Orientation::down || orientation == Orientation::up) {
+		player->setZeroVelocity();
 		if (player->x < p.x) player->x--;
 		if (player->x > p.x) player->x++;
 	} else if (orientation == Orientation::left || orientation == Orientation::right) {
-		if (player->y < p.y) player->y=p.y - boundary.y1 - 1;
-		if (player->y > p.y) player->y++;
+		if (player->y < p.y) {
+			player->fallstart=0.0f;
+			player->y=boundary.y1;
+			player->setStandingOnObject(this);
+		}
+		if (player->y > p.y) {
+			player->setZeroVelocity();
+			player->y++;
+		}
+
+
 	}
 }
 
