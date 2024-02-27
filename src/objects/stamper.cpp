@@ -82,7 +82,7 @@ void Stamper::updateStamperBoundary()
 
 	int s=teeth_type;
 	if (stamper_type == 0) s+=7;
-	const SpriteTexture::SpriteIndexItem* teeth_item=texture->getSpriteIndex(s);
+	const SpriteTexture::SpriteIndexItem* teeth_item=texture->getSpriteIndex(s + 5);
 
 	switch (orientation) {
 	case Orientation::down:
