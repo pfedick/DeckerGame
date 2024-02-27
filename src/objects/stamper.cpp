@@ -224,7 +224,7 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 void Stamper::handleCollision(Player* player, const Collision& collision)
 {
 	if (state == State::Closing) {
-		player->dropHealth(100, Player::Smashed);
+		player->dropHealth(1000, Player::Smashed);
 		return;
 	}
 	player->setZeroVelocity();

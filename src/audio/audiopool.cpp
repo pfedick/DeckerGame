@@ -246,6 +246,7 @@ void AudioPool::load()
 		sample[AudioClip::stamper_down].load("res/audio/stamper_down.mp3");
 		sample[AudioClip::stamper_up].load("res/audio/stamper_up.mp3");
 		sample[AudioClip::stamper_echo].load("res/audio/stamper_echo.mp3");
+		sample[AudioClip::stamper_squish].load("res/audio/stamper_squish.mp3");
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

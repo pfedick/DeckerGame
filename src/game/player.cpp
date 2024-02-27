@@ -591,16 +591,6 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	if (game->config.difficulty == Config::DifficultyLevel::easy) points*=0.5f;
 	else if (game->config.difficulty == Config::DifficultyLevel::hard) points*=2.0f;
 
-	if (time > voiceDamageCooldown) {
-		int r=ppl7::rand(1, 4);
-		switch (r) {
-		case 1: speak(VoiceGeorge::aua1); break;
-		case 2: speak(VoiceGeorge::aua2); break;
-		case 3: speak(VoiceGeorge::aua3); break;
-		default: speak(VoiceGeorge::aua4); break;
-		}
-		voiceDamageCooldown=time + ppl7::randf(0.0f, 4.0f);
-	}
 	if (orientation == Front && movement == Stand) {
 		if (animation.getFrame() != 297) animation.setStaticFrame(297);
 	}
@@ -617,6 +607,11 @@ void Player::dropHealth(float points, HealthDropReason reason)
 			animation.start(death_by_falling, sizeof(death_by_falling) / sizeof(int), false, 106);
 		} else if (reason == Drowned) {
 			animation.startSequence(260, 281, false, 281);
+		} else if (reason == Smashed) {
+			animation.startSequence(403, 408, false, 408);
+			ppl7::grafix::Point p(x, y);
+			getAudioPool().playOnce(AudioClip::stamper_squish, p, 1600, 1.0f);
+			startEmittingParticles(time + 1.0f, ParticleReason::Smashed);
 		} else if (reason == Burned) {
 			animation.startSequence(208, 216, false, 216);
 			startEmittingParticles(time + 1.0f, ParticleReason::Burning);
@@ -624,7 +619,19 @@ void Player::dropHealth(float points, HealthDropReason reason)
 		} else {
 			animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 106);
 		}
+	} else if (health > 0.0f && movement != Dead) {
+		if (time > voiceDamageCooldown) {
+			int r=ppl7::rand(1, 4);
+			switch (r) {
+			case 1: speak(VoiceGeorge::aua1); break;
+			case 2: speak(VoiceGeorge::aua2); break;
+			case 3: speak(VoiceGeorge::aua3); break;
+			default: speak(VoiceGeorge::aua4); break;
+			}
+			voiceDamageCooldown=time + ppl7::randf(0.0f, 4.0f);
+		}
 	}
+
 }
 
 void Player::addInventory(int object_id, const Decker::Objects::Representation& repr)
@@ -1574,8 +1581,35 @@ void Player::emmitParticles(double time)
 			particle->initColorGradient(color_gradient);
 			ps->addParticle(particle);
 		}
+	} else if (particle_reason == ParticleReason::Smashed && next_particle_birth < time) {
+		ppl7::grafix::PointF p(x, y);
+		std::list<Particle::ScaleGradientItem>scale_gradient;
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.009, 1.000));
+		scale_gradient.push_back(Particle::ScaleGradientItem(0.450, 1.000));
+		scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 0.010));
+		next_particle_birth=time + randf(1.440, 2.118);
+		ParticleSystem* ps=GetParticleSystem();
+		particle_end_time=0.0f;
+		int new_particles=ppl7::rand(84, 150);
+		for (int i=0;i < new_particles;i++) {
+			Particle* particle=new Particle();
+			particle->birth_time=time;
+			particle->death_time=randf(0.198, 0.764) + time;
+			particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(87, 1), 0.000);
+			particle->layer=Particle::Layer::BeforePlayer;
+			particle->weight=randf(0.377, 0.726);
+			particle->gravity.setPoint(0.000, 0.396);
+			particle->velocity=calculateVelocity(randf(3.396, 7.736), 0.000 + randf(-32.264, 32.264));
+			particle->scale=randf(0.217, 1.000);
+			particle->color_mod.set(116, 0, 0, 255);
+			particle->initAnimation(Particle::Type::RotatingParticleWhite);
+			particle->initScaleGradient(scale_gradient, particle->scale);
+			ps->addParticle(particle);
+		}
 	}
 }
+
+
 
 
 void Player::enableTalkie(bool flag)

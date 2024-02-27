@@ -184,6 +184,7 @@ public:
 		stamper_down,
 		stamper_up,
 		stamper_echo,
+		stamper_squish,
 		// this must always be the last entry!
 		maxClips
 	};
