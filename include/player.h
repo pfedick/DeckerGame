@@ -74,7 +74,8 @@ private:
 		None=0,
 		Drowned,
 		Burning,
-		Smashed
+		Smashed,
+		SmashedSideways
 	};
 	double particle_end_time, next_particle_birth;
 	ParticleReason particle_reason;

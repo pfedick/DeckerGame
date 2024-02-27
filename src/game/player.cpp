@@ -612,6 +612,12 @@ void Player::dropHealth(float points, HealthDropReason reason)
 			ppl7::grafix::Point p(x, y);
 			getAudioPool().playOnce(AudioClip::stamper_squish, p, 1600, 1.0f);
 			startEmittingParticles(time + 1.0f, ParticleReason::Smashed);
+		} else if (reason == SmashedSideways) {
+			animation.startSequence(409, 414, false, 414);
+			ppl7::grafix::Point p(x, y);
+			getAudioPool().playOnce(AudioClip::stamper_squish, p, 1600, 1.0f);
+			startEmittingParticles(time + 1.0f, ParticleReason::Smashed);
+
 		} else if (reason == Burned) {
 			animation.startSequence(208, 216, false, 216);
 			startEmittingParticles(time + 1.0f, ParticleReason::Burning);

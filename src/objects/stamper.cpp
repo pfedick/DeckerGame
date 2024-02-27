@@ -104,14 +104,14 @@ void Stamper::updateStamperBoundary()
 		this->boundary.y1=p.y + 261 - position;
 		this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
 		this->boundary.y2=p.y + stamper_item->r.h;
-		if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
+		if (teeth_item) this->boundary.y1-=(teeth_item->r.h - 7);
 		break;
 	case Orientation::right:
 		this->boundary.x1=p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
 		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
 		this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
 		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-		if (teeth_item) this->boundary.x2+=teeth_item->r.h - 7;
+		if (teeth_item) this->boundary.x2+=teeth_item->r.h + 7;
 		break;
 	case Orientation::left:
 		this->boundary.x1=p.x + 261 - position;
@@ -180,9 +180,30 @@ void Stamper::drawUp(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) 
 	int x=p.x + coords.x;
 	int y=p.y + coords.y;
 
-
 	SDL_Rect tr;
 	SDL_Rect sr=spi_item->r;
+	sr.h=position;
+	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x);
+	tr.y=y + 261 * 2 + (spi_item->Offset.y - spi_item->Pivot.y) - position;
+	tr.w=spi_item->r.w;
+	tr.h=position;
+	SDL_SetTextureAlphaMod(spi_item->tex, 255);
+	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
+	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 0, NULL, SDL_FLIP_NONE);
+
+	if (!spi_item_teeth) return;
+	c=palette.getColor(color_teeth);
+	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
+	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
+	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + 261 - position + 7;
+	tr.w=spi_item_teeth->r.w;
+	tr.h=spi_item_teeth->r.h;
+	SDL_Point center;
+	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 0, &center, SDL_FLIP_NONE);
+
 }
 
 void Stamper::drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
@@ -306,7 +327,13 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 void Stamper::handleCollision(Player* player, const Collision& collision)
 {
 	if (state == State::Closing) {
-		player->dropHealth(1000, Player::Smashed);
+		if (orientation == Orientation::down || orientation == Orientation::up) {
+			player->dropHealth(1000, Player::Smashed);
+			player->y=p.y;
+		} else {
+			player->x=p.x;
+			player->dropHealth(1000, Player::SmashedSideways);
+		}
 		return;
 	}
 	player->setZeroVelocity();

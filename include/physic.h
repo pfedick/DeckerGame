@@ -74,7 +74,8 @@ public:
 		FallingDeep,
 		Smashed,
 		Drowned,
-		Burned
+		Burned,
+		SmashedSideways
 	};
 
 	class Keys {
