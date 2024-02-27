@@ -44,6 +44,7 @@ Stamper::Stamper()
 	teeth_type=6;
 	//texture=GetObjectSystem()->getTexture(Spriteset::StamperV2);
 	audio_drag_up=NULL;
+	myLayer=Decker::Objects::Object::Layer::BehindBricks;
 	init();
 }
 
@@ -298,6 +299,7 @@ size_t Stamper::load(const unsigned char* buffer, size_t size)
 		color_teeth=ppl7::Peek8(buffer + bytes + 14);
 		orientation=static_cast<Orientation>(ppl7::Peek8(buffer + bytes + 15));
 	}
+	myLayer=Decker::Objects::Object::Layer::BehindBricks;
 	init();
 	return size;
 }
