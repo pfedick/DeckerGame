@@ -111,14 +111,14 @@ void Stamper::updateStamperBoundary()
 		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
 		this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
 		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-		if (teeth_item) this->boundary.x2+=teeth_item->r.h + 7;
+		if (teeth_item) this->boundary.x2+=(teeth_item->r.h - 7);
 		break;
 	case Orientation::left:
 		this->boundary.x1=p.x + 261 - position;
 		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
 		this->boundary.x2=p.x + 261;
 		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-		if (teeth_item) this->boundary.x2+=teeth_item->r.h + 7;
+		if (teeth_item) this->boundary.x1-=(teeth_item->r.h - 7);
 		break;
 
 	default:
@@ -218,9 +218,35 @@ void Stamper::drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 	int x=p.x + coords.x;
 	int y=p.y + coords.y;
 
-
 	SDL_Rect tr;
 	SDL_Rect sr=spi_item->r;
+	sr.h=position;
+	SDL_Point center;
+	center.x=(spi_item->Pivot.x - spi_item->Offset.x);
+	center.y=(spi_item->Pivot.y - spi_item->Offset.y);
+
+	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x) - 2 * 261 + position;
+	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
+	tr.w=spi_item->r.w;
+	tr.h=position;
+
+	SDL_SetTextureAlphaMod(spi_item->tex, 255);
+	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
+	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 90, &center, SDL_FLIP_HORIZONTAL);
+
+	if (!spi_item_teeth) return;
+	c=palette.getColor(color_teeth);
+	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
+	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) - 261 + position - 7;
+	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
+	tr.w=spi_item_teeth->r.w;
+	tr.h=spi_item_teeth->r.h;
+	//SDL_Point center;
+	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 90, &center, SDL_FLIP_NONE);
+
 }
 
 void Stamper::drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
@@ -238,6 +264,31 @@ void Stamper::drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords
 
 	SDL_Rect tr;
 	SDL_Rect sr=spi_item->r;
+	sr.h=position;
+	SDL_Point center;
+	center.x=(spi_item->Pivot.x - spi_item->Offset.x);
+	center.y=(spi_item->Pivot.y - spi_item->Offset.y);
+
+	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x) + 2 * 261 - position;
+	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
+	tr.w=spi_item->r.w;
+	tr.h=position;
+
+	SDL_SetTextureAlphaMod(spi_item->tex, 255);
+	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
+	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 270, &center, SDL_FLIP_HORIZONTAL);
+
+	if (!spi_item_teeth) return;
+	c=palette.getColor(color_teeth);
+	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
+	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) + 261 - position + 7;
+	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
+	tr.w=spi_item_teeth->r.w;
+	tr.h=spi_item_teeth->r.h;
+	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 270, &center, SDL_FLIP_NONE);
 }
 
 void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
@@ -249,7 +300,9 @@ void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) co
 	else if (orientation == Orientation::right) drawRight(renderer, coords);
 	else if (orientation == Orientation::left) drawLeft(renderer, coords);
 
+
 	// Collision-Box
+	/*
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
 	SDL_Rect col;
 	col.x=boundary.x1 + coords.x;
@@ -257,7 +310,7 @@ void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) co
 	col.w=boundary.width();
 	col.h=boundary.height();
 	SDL_RenderDrawRect(renderer, &col);
-
+	*/
 
 }
 
