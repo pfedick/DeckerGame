@@ -351,6 +351,7 @@ void LightSystem::updatePlane(LightPlaneId plane, double time, float frame_rate_
 
 void LightSystem::addObjectLight(LightObject* light)
 {
+    light->current_intensity=(float)light->intensity / 255.0f;
     light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
     uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
     visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
