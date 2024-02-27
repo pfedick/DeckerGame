@@ -1790,6 +1790,8 @@ void Player::toggleFlashlight()
 		if (hasSpecialObject(Decker::Objects::Type::Flashlight)) {
 			flashlightOn=!flashlightOn;
 			actionToggleCooldown=time + 0.2f;
+			ppl7::grafix::Point p(x, y);
+			getAudioPool().playOnce(AudioClip::light_switch1, p, 1600, 1.0f);
 		} else if (flashlightOn == true) {
 			flashlightOn=false;
 			actionToggleCooldown=time + 0.2f;
