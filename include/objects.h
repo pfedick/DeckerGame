@@ -688,6 +688,12 @@ private:
 	AudioInstance* audio_drag_up;
 
 	void updateStamperBoundary();
+
+	void drawDown(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void drawUp(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+
 public:
 
 	enum class Orientation {

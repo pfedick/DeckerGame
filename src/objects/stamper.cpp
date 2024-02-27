@@ -12,7 +12,7 @@ namespace Decker::Objects {
 
 Representation Stamper::representation()
 {
-	return Representation(Spriteset::StamperV2, 0);
+	return Representation(Spriteset::StamperV2, 19);
 }
 
 
@@ -23,7 +23,7 @@ Stamper::Stamper()
 	sprite_no=0;
 	collisionDetection=true;
 	visibleAtPlaytime=true;
-	sprite_no_representation=0;
+	sprite_no_representation=19;
 	pixelExactCollision=false;
 	next_state=0.0f;
 	state=State::Open;
@@ -69,6 +69,12 @@ void Stamper::init()
 	sprite_no=stamper_type * 20;
 	if (state == State::Closed) sprite_no+=5;
 	animation.setStaticFrame(sprite_no);
+	switch (orientation) {
+	case Orientation::down: sprite_no_representation=19; break;
+	case Orientation::up: sprite_no_representation=20; break;
+	case Orientation::right: sprite_no_representation=21; break;
+	case Orientation::left: sprite_no_representation=22; break;
+	}
 	//printf ("sprite_no=%d, state=%d\n",sprite_no, state);
 	updateBoundary();
 	updateStamperBoundary();
@@ -93,6 +99,28 @@ void Stamper::updateStamperBoundary()
 		this->boundary.y2=this->boundary.y1 + stamper_item->r.h - 261 + position;
 		if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
 		break;
+	case Orientation::up:
+		this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.y1=p.y + 261 - position;
+		this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
+		this->boundary.y2=p.y + stamper_item->r.h;
+		if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
+		break;
+	case Orientation::right:
+		this->boundary.x1=p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
+		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
+		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
+		if (teeth_item) this->boundary.x2+=teeth_item->r.h - 7;
+		break;
+	case Orientation::left:
+		this->boundary.x1=p.x + 261 - position;
+		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.x2=p.x + 261;
+		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
+		if (teeth_item) this->boundary.x2+=teeth_item->r.h + 7;
+		break;
+
 	default:
 		this->boundary.setRect(0, 0, 0, 0);
 	}
@@ -100,20 +128,22 @@ void Stamper::updateStamperBoundary()
 }
 
 
-void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+void Stamper::drawDown(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	//Trap::draw(renderer, coords);
-
 	const ColorPalette& palette=GetColorPalette();
 	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
 	if (!spi_item) return;
-	//ppl7::PrintDebug("ok\n");
+	int s=teeth_type;
+	if (stamper_type == 0) s+=7;
+
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
 	int x=p.x + coords.x;
 	int y=p.y + coords.y;
 
 
 	SDL_Rect tr;
 	SDL_Rect sr=spi_item->r;
+
 	sr.h=position;
 	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x);
 	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
@@ -124,31 +154,79 @@ void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) co
 	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
 	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 180, NULL, SDL_FLIP_HORIZONTAL);
 
-	/*
-	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	SDL_RenderDrawRect(renderer, &tr);
-	tr.x=x;
-	tr.y=y;
-	tr.w=1;
-	tr.h=1;
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-	SDL_RenderDrawRect(renderer, &tr);
-	*/
+
+	if (!spi_item_teeth) return;
+	c=palette.getColor(color_teeth);
+	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
+	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
+	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + position - 7 - 261;
+	tr.w=spi_item_teeth->r.w;
+	tr.h=spi_item_teeth->r.h;
+	SDL_Point center;
+	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 180, &center, SDL_FLIP_HORIZONTAL);
+}
+
+void Stamper::drawUp(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	if (!spi_item) return;
 	int s=teeth_type;
 	if (stamper_type == 0) s+=7;
-	spi_item=texture->getSpriteIndex(s + 5);
-	if (!spi_item) return;
-	c=palette.getColor(color_teeth);
-	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
-	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x);
-	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y) + position - 7 - 261;
-	tr.w=spi_item->r.w;
-	tr.h=spi_item->r.h;
-	SDL_Point center;
-	center.x=(spi_item->Pivot.x - spi_item->Offset.x);
-	center.y=(spi_item->Pivot.y - spi_item->Offset.y);
-	SDL_RenderCopyEx(renderer, spi_item->tex, &spi_item->r, &tr, 180, &center, SDL_FLIP_HORIZONTAL);
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
 
+	const ColorPalette& palette=GetColorPalette();
+	int x=p.x + coords.x;
+	int y=p.y + coords.y;
+
+
+	SDL_Rect tr;
+	SDL_Rect sr=spi_item->r;
+}
+
+void Stamper::drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	if (!spi_item) return;
+	int s=teeth_type;
+	if (stamper_type == 0) s+=7;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
+
+	const ColorPalette& palette=GetColorPalette();
+	int x=p.x + coords.x;
+	int y=p.y + coords.y;
+
+
+	SDL_Rect tr;
+	SDL_Rect sr=spi_item->r;
+}
+
+void Stamper::drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	if (!spi_item) return;
+	int s=teeth_type;
+	if (stamper_type == 0) s+=7;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
+
+	const ColorPalette& palette=GetColorPalette();
+	int x=p.x + coords.x;
+	int y=p.y + coords.y;
+
+
+	SDL_Rect tr;
+	SDL_Rect sr=spi_item->r;
+}
+
+void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+
+
+	if (orientation == Orientation::down) drawDown(renderer, coords);
+	else if (orientation == Orientation::up) drawUp(renderer, coords);
+	else if (orientation == Orientation::right) drawRight(renderer, coords);
+	else if (orientation == Orientation::left) drawLeft(renderer, coords);
 
 	// Collision-Box
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 128);
@@ -165,6 +243,10 @@ void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) co
 void Stamper::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	Stamper::draw(renderer, coords);
+	texture->drawScaled(renderer,
+		initial_p.x + coords.x,
+		initial_p.y + coords.y,
+		sprite_no_representation, scale, color_mod);
 }
 
 
