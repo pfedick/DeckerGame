@@ -187,6 +187,7 @@ public:
 		stamper_squish,
 		fireball_fly,
 		fireball_impact,
+		flashlight_pickup,
 		// this must always be the last entry!
 		maxClips
 	};

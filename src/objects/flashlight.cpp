@@ -41,7 +41,7 @@ void Flashlight::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->countObject(type());
 	AudioPool& audio=getAudioPool();
-	//audio.playOnce(AudioClip::hammer, 0.4f);
+	audio.playOnce(AudioClip::flashlight_pickup, 0.7f);
 	player->addSpecialObject(static_cast<int>(Type::ObjectType::Flashlight));
 	//if (!player->hasSpoken(3)) player->speak(3);
 }
