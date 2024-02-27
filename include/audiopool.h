@@ -185,6 +185,8 @@ public:
 		stamper_up,
 		stamper_echo,
 		stamper_squish,
+		fireball_fly,
+		fireball_impact,
 		// this must always be the last entry!
 		maxClips
 	};

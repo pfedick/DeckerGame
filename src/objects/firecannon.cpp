@@ -21,9 +21,11 @@ private:
 
 	LightObject light_ball;
 	LightObject light_shine;
+	AudioInstance* audio;
 
 public:
 	Fireball();
+	~Fireball();
 	static Representation representation();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
@@ -74,7 +76,17 @@ Fireball::Fireball()
 	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
 	light_shine.flare_intensity=255;
 	light_shine.flare_useLightColor=true;
+	audio=NULL;
 
+}
+
+Fireball::~Fireball()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 Representation Fireball::representation()
@@ -119,7 +131,16 @@ void Fireball::emmitParticles(double time, const Player& player)
 
 void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& pool=getAudioPool();
+	if (!audio) {
+		audio=pool.getInstance(AudioClip::fireball_fly);
+		audio->setVolume(1.0f);
+		audio->setPositional(p, 1800);
+		audio->setLoop(true);
+		pool.playInstance(audio);
+	}
 	p+=velocity * frame_rate_compensation;
+	audio->setPositional(p, 1200);
 	updateBoundary();
 	light_shine.x=p.x;
 	light_shine.y=p.y;
@@ -134,10 +155,11 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
 	if (t1 == TileType::Blocking) {
 		deleteDefered=true;
-		//getAudioPool().playOnce(AudioClip::light_switch1, p, 1600, 0.4f);
-
+		pool.stopInstace(audio);
+		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
 	} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
 		deleteDefered=true;
+		pool.stopInstace(audio);
 	}
 }
 
