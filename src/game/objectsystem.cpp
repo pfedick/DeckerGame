@@ -108,6 +108,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::StamperV2]->enableOutlines(true);
 	spriteset[Spriteset::StamperV2]->enableMemoryBuffer(true);
 	spriteset[Spriteset::StamperV2]->load(sdl, "res/stamper_v2.tex");
+	spriteset[Spriteset::StamperV2]->setPivot(19, 64, 268);
+	spriteset[Spriteset::StamperV2]->setPivot(20, 64, 146);
+	spriteset[Spriteset::StamperV2]->setPivot(21, 125, 238);
+	spriteset[Spriteset::StamperV2]->setPivot(22, 1, 238);
 
 	spriteset[Spriteset::Wallenstein]->enableOutlines(true);
 	spriteset[Spriteset::Wallenstein]->enableMemoryBuffer(true);
