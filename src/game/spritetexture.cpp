@@ -285,13 +285,20 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 	}
 }
 
+static inline void putOutlinePixel(ppl7::grafix::Image& surface, int x, int y, ppl7::grafix::Color& c)
+{
+
+}
+
 SDL_Texture* SpriteTexture::generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src)
 {
 	ppl7::grafix::Image surface;
 	ppl7::grafix::Color white(255, 255, 255, 255);
 	surface.create(src.width(), src.height(), src.rgbformat());
-	for (int y=0;y < src.height();y++) {
-		for (int x=0;x < src.width();x++) {
+	int w=src.width();
+	int h=src.height();
+	for (int y=0;y < h;y++) {
+		for (int x=0;x < w;x++) {
 			ppl7::grafix::Color c=src.getPixel(x, y);
 			ppl7::grafix::Color cl=src.getPixel(x - 1, y);
 			ppl7::grafix::Color cr=src.getPixel(x + 1, y);
@@ -300,9 +307,30 @@ SDL_Texture* SpriteTexture::generateOutlines(SDL_Renderer* renderer, int id, con
 			if (c.alpha() > 192 && (cl.alpha() <= 192 || cr.alpha() <= 192 ||
 				cu.alpha() <= 192 || cd.alpha() <= 192)) {
 				surface.putPixel(x, y, white);
-				surface.putPixel(x + 1, y, white);
-				surface.putPixel(x, y + 1, white);
-				surface.putPixel(x + 1, y + 1, white);
+				if (x < w - 1) {
+					surface.putPixel(x + 1, y, white);
+					if (y > 0) {
+						surface.putPixel(x + 1, y - 1, white);
+						surface.putPixel(x, y - 1, white);
+					}
+					if (y < h - 1) {
+						surface.putPixel(x + 1, y + 1, white);
+						surface.putPixel(x, y + 1, white);
+					}
+				}
+
+				if (x > 0) {
+					surface.putPixel(x - 1, y, white);
+					if (y > 0) {
+						surface.putPixel(x - 1, y - 1, white);
+						surface.putPixel(x, y - 1, white);
+					}
+					if (y < h - 1) {
+						surface.putPixel(x - 1, y + 1, white);
+						surface.putPixel(x, y + 1, white);
+					}
+
+				}
 			}
 		}
 	}
