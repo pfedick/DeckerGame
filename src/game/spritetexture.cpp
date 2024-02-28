@@ -574,14 +574,18 @@ SDL_Rect SpriteTexture::getSpriteSource(int id) const
 	return (*it).second.r;
 }
 
-SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int id)
+SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int sprite_id)
 {
 	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
+	ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
+	generateOutlinesV2(renderer);
 	std::map<int, SpriteIndexItem>::iterator it;
-	it=SpriteList.find(id);
+	it=SpriteList.find(sprite_id);
 	if (it == SpriteList.end()) return NULL;
 	SpriteIndexItem& item=it->second;
 	if (item.outlines) return item.outlines;
+	return NULL;
+	/*
 	if (!item.drawable) return NULL;
 
 	SDL_Texture* tex=findOutlines(item.textureId);
@@ -593,6 +597,7 @@ SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int id)
 	//ppl7::PrintDebugTime("postGenerate outlines for texture %d!\n", item.textureId);
 	item.outlines=generateOutlines(renderer, item.textureId, *item.drawable);
 	return item.outlines;
+	*/
 }
 
 void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor)
@@ -807,19 +812,20 @@ static inline bool isBorder(const ppl7::grafix::Drawable& src, int x, int y)
 	ppl7::grafix::Color cr=src.getPixel(x + 1, y);
 	ppl7::grafix::Color cu=src.getPixel(x, y - 1);
 	ppl7::grafix::Color cd=src.getPixel(x, y + 1);
-	if (c.alpha() > 192 && (cl.alpha() <= 192 || cr.alpha() <= 192 ||
-		cu.alpha() <= 192 || cd.alpha() <= 192)) {
+	if (c.alpha() > 128 && (cl.alpha() <= 128 || cr.alpha() <= 128 ||
+		cu.alpha() <= 128 || cd.alpha() <= 128)) {
 		return true;
 	}
 	return false;
 }
 
 
-void SpriteTexture::generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7::grafix::Drawable& target)
+static void generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7::grafix::Drawable& target)
 {
 	if (source.width() != target.width() || source.height() != target.height()) {
 		target.cls(ppl7::grafix::Color(255, 0, 0, 255));
-		ppl7::PrintDebugLog("ERROR: SpriteTexture::generateOutlinesForSprite, invalid source or target");
+		ppl7::PrintDebugTime("   ERROR: SpriteTexture::generateOutlinesForSprite, invalid source or target: src: %d:%d, tgt: %d,%d\n",
+		source.width(),source.height(),target.width(),target.height());
 		return;
 	}
 	ppl7::grafix::Color white(255, 255, 255, 255);
@@ -832,18 +838,18 @@ void SpriteTexture::generateOutlinesForSprite(const ppl7::grafix::Drawable& sour
 	for (int x=0; x < source.width(); x++) {
 		// top line
 		c=source.getPixel(x, y1);
-		if (c.alpha() > 0) putOutlinePixel4x4(target, x, y1, white);
+		if (c.alpha() > 128) putOutlinePixel4x4(target, x, y1, white);
 		// bottom line
 		c=source.getPixel(x, y2);
-		if (c.alpha() > 0) putOutlinePixel4x4(target, x, y2 - 1, white);
+		if (c.alpha() > 128) putOutlinePixel4x4(target, x, y2 - 1, white);
 	}
 	for (int y=0; y < source.height(); y++) {
 		// left line
 		c=source.getPixel(x1, y);
-		if (c.alpha() > 0) putOutlinePixel4x4(target, x1, y, white);
+		if (c.alpha() > 128) putOutlinePixel4x4(target, x1, y, white);
 		// right line
 		c=source.getPixel(x2, y);
-		if (c.alpha() > 0) putOutlinePixel4x4(target, x2 - 1, y, white);
+		if (c.alpha() > 128) putOutlinePixel4x4(target, x2 - 1, y, white);
 	}
 
 	// Sprite interior
@@ -856,28 +862,35 @@ void SpriteTexture::generateOutlinesForSprite(const ppl7::grafix::Drawable& sour
 	}
 }
 
-
-/*
-	ppl7::grafix::Image surface;
-	ppl7::grafix::Color white(255, 255, 255, 255);
-	surface.create(src.width(), src.height(), src.rgbformat());
-	int w=src.width();
-	int h=src.height();
-
-		SDL_Texture* tex=SDL::createTexture(renderer, surface);
-	OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
-
-
-*/
-
 void SpriteTexture::generateOutlinesV2(SDL_Renderer* renderer)
 {
 	// Generate InMemory Target-Images for all Textures
 	std::map<int, ppl7::grafix::Image> InMemoryOutlines;
 	std::map<int, ppl7::grafix::Image>::const_iterator it;
+	// pregenerate the target images for the outlines
 	for (it=InMemoryTextureMap.begin(); it != InMemoryTextureMap.end();++it) {
-
+		//ppl7::grafix::Image img;
+		//InMemoryOutlines.insert(std::pair<int, ppl7::grafix::Image>(it->first, img));
+		InMemoryOutlines[it->first].create(it->second.width(), it->second.height(), it->second.rgbformat());
 	}
 
+	// Now iterate over the sprites and generate the outlines
+	std::map<int, SpriteIndexItem>::iterator slit;
+	for (slit=SpriteList.begin();slit != SpriteList.end();++slit) {
+		//SpriteIndexItem& item=slit->second;
+		ppl7::grafix::Rect r(slit->second.r.x, slit->second.r.y, slit->second.r.w, slit->second.r.h);
+		ppl7::grafix::Drawable source=slit->second.drawable->getDrawable(r);
+		ppl7::grafix::Drawable target=InMemoryOutlines[slit->second.textureId].getDrawable(r);
+		generateOutlinesForSprite(source, target);
+	}
 
+	// Now we can generate SDL_Textures from the outlines
+	for (it=InMemoryOutlines.begin(); it != InMemoryOutlines.end();++it) {
+		SDL_Texture* tex=SDL::createTexture(renderer, InMemoryOutlines[it->first]);
+		OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(it->first, tex));
+	}
+	// And finally assign the SDL_Textures from the otlines to the sprites
+	for (slit=SpriteList.begin();slit != SpriteList.end();++slit) {
+		slit->second.outlines=OutlinesTextureMap[slit->second.textureId];
+	}
 }
