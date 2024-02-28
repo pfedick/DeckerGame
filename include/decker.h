@@ -238,7 +238,8 @@ private:
 	void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
 	void loadIndex(ppl7::PFPChunk* chunk);
 	SDL_Texture* postGenerateOutlines(SDL_Renderer* renderer, int id);
-	//void generateOutlines(SDL& sdl, int id, const ppl7::grafix::Image& src);
+	void generateOutlinesV2(SDL_Renderer* renderer);
+	void generateOutlinesForSprite(const ppl7::grafix::Drawable &source, ppl7::grafix::Drawable &target);
 	SDL_Texture* generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src);
 	SDL_Texture* findTexture(int id) const;
 	SDL_Texture* findOutlines(int id) const;

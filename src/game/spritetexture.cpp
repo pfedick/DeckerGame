@@ -791,3 +791,93 @@ const SpriteTexture::SpriteIndexItem* SpriteTexture::getSpriteIndex(int id) cons
 	if (it == SpriteList.end()) return NULL;
 	return &it->second;
 }
+
+static inline void putOutlinePixel4x4(ppl7::grafix::Drawable& target, int x, int y, ppl7::grafix::Color& color)
+{
+	target.putPixel(x, y, color);
+	target.putPixel(x + 1, y, color);
+	target.putPixel(x, y + 1, color);
+	target.putPixel(x + 1, y + 1, color);
+}
+
+static inline bool isBorder(const ppl7::grafix::Drawable& src, int x, int y)
+{
+	ppl7::grafix::Color c=src.getPixel(x, y);
+	ppl7::grafix::Color cl=src.getPixel(x - 1, y);
+	ppl7::grafix::Color cr=src.getPixel(x + 1, y);
+	ppl7::grafix::Color cu=src.getPixel(x, y - 1);
+	ppl7::grafix::Color cd=src.getPixel(x, y + 1);
+	if (c.alpha() > 192 && (cl.alpha() <= 192 || cr.alpha() <= 192 ||
+		cu.alpha() <= 192 || cd.alpha() <= 192)) {
+		return true;
+	}
+	return false;
+}
+
+
+void SpriteTexture::generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7::grafix::Drawable& target)
+{
+	if (source.width() != target.width() || source.height() != target.height()) {
+		target.cls(ppl7::grafix::Color(255, 0, 0, 255));
+		ppl7::PrintDebugLog("ERROR: SpriteTexture::generateOutlinesForSprite, invalid source or target");
+		return;
+	}
+	ppl7::grafix::Color white(255, 255, 255, 255);
+	// Outlines at border of sprite
+	int y1=0;
+	int y2=source.height() - 1;
+	int x1=0;
+	int x2=source.width() - 1;
+	ppl7::grafix::Color c;
+	for (int x=0; x < source.width(); x++) {
+		// top line
+		c=source.getPixel(x, y1);
+		if (c.alpha() > 0) putOutlinePixel4x4(target, x, y1, white);
+		// bottom line
+		c=source.getPixel(x, y2);
+		if (c.alpha() > 0) putOutlinePixel4x4(target, x, y2 - 1, white);
+	}
+	for (int y=0; y < source.height(); y++) {
+		// left line
+		c=source.getPixel(x1, y);
+		if (c.alpha() > 0) putOutlinePixel4x4(target, x1, y, white);
+		// right line
+		c=source.getPixel(x2, y);
+		if (c.alpha() > 0) putOutlinePixel4x4(target, x2 - 1, y, white);
+	}
+
+	// Sprite interior
+	for (int y=1; y < y2;y++) {
+		for (int x=1; x < x2;x++) {
+			if (isBorder(source, x, y)) {
+				putOutlinePixel4x4(target, x, y, white);
+			}
+		}
+	}
+}
+
+
+/*
+	ppl7::grafix::Image surface;
+	ppl7::grafix::Color white(255, 255, 255, 255);
+	surface.create(src.width(), src.height(), src.rgbformat());
+	int w=src.width();
+	int h=src.height();
+
+		SDL_Texture* tex=SDL::createTexture(renderer, surface);
+	OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
+
+
+*/
+
+void SpriteTexture::generateOutlinesV2(SDL_Renderer* renderer)
+{
+	// Generate InMemory Target-Images for all Textures
+	std::map<int, ppl7::grafix::Image> InMemoryOutlines;
+	std::map<int, ppl7::grafix::Image>::const_iterator it;
+	for (it=InMemoryTextureMap.begin(); it != InMemoryTextureMap.end();++it) {
+
+	}
+
+
+}
