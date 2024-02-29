@@ -200,7 +200,6 @@ public:
 		int id;
 		int textureId;
 		SDL_Texture* tex;
-		SDL_Texture* outlines;
 		const ppl7::grafix::Drawable* drawable;
 		SDL_Rect r;
 		ppl7::grafix::Point Pivot;
@@ -210,7 +209,7 @@ public:
 		{
 			id=0;
 			textureId=0;
-			tex=outlines=NULL;
+			tex=NULL;
 			drawable=NULL;
 		}
 		SpriteIndexItem(const SpriteIndexItem& other)
@@ -219,15 +218,16 @@ public:
 			id=other.id;
 			textureId=other.textureId;
 			tex=other.tex;
-			outlines=other.outlines;
 			drawable=other.drawable;
 		}
 	};
 private:
 	std::map<int, SDL_Texture*> TextureMap;
-	std::map<int, SDL_Texture*> OutlinesTextureMap;
 	std::map<int, ppl7::grafix::Image> InMemoryTextureMap;
 	std::map<int, SpriteIndexItem> SpriteList;
+
+	SDL_Texture* current_outline_texture;
+	int current_outline_sprite_id;
 
 	bool bSDLBufferd;
 	bool bMemoryBufferd;
@@ -238,10 +238,7 @@ private:
 	void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
 	void loadIndex(ppl7::PFPChunk* chunk);
 	SDL_Texture* postGenerateOutlines(SDL_Renderer* renderer, int sprite_id);
-	void generateOutlinesV2(SDL_Renderer* renderer);
-	SDL_Texture* generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src);
 	SDL_Texture* findTexture(int id) const;
-	SDL_Texture* findOutlines(int id) const;
 	const ppl7::grafix::Drawable* findInMemoryTexture(int id) const;
 
 public:

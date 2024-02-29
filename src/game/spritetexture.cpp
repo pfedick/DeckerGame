@@ -120,6 +120,8 @@ SpriteTexture::SpriteTexture()
 	bCollisionDetectionEnabled=false;
 	bSDLBufferd=true;
 	defaultBlendMode=SDL_BLENDMODE_BLEND;
+	current_outline_texture=NULL;
+	current_outline_sprite_id=-1;
 }
 
 SpriteTexture::~SpriteTexture()
@@ -153,11 +155,10 @@ void SpriteTexture::clear()
 	for (it=TextureMap.begin();it != TextureMap.end();++it) {
 		SDL_DestroyTexture(it->second);
 	}
-	for (it=OutlinesTextureMap.begin();it != OutlinesTextureMap.end();++it) {
-		SDL_DestroyTexture(it->second);
-	}
+	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
+	current_outline_texture=NULL;
+	current_outline_sprite_id=-1;
 	TextureMap.clear();
-	OutlinesTextureMap.clear();
 	InMemoryTextureMap.clear();
 	SpriteList.clear();
 }
@@ -171,17 +172,6 @@ SDL_Texture* SpriteTexture::findTexture(int id) const
 	}
 	return NULL;
 }
-
-SDL_Texture* SpriteTexture::findOutlines(int id) const
-{
-	if (bOutlinesEnabled) {
-		std::map<int, SDL_Texture*>::const_iterator it;
-		it=OutlinesTextureMap.find(id);
-		if (it != OutlinesTextureMap.end()) return it->second;
-	}
-	return NULL;
-}
-
 
 const ppl7::grafix::Drawable* SpriteTexture::findInMemoryTexture(int id) const
 {
@@ -203,7 +193,7 @@ void SpriteTexture::loadIndex(ppl7::PFPChunk* chunk)
 		item.id=Peek32(p + 0);
 		item.textureId=Peek16(p + 4);
 		item.tex=findTexture(item.textureId);
-		item.outlines=findOutlines(item.textureId);
+		//item.outlines=findOutlines(item.textureId);
 		item.drawable=findInMemoryTexture(item.textureId);
 		item.r.x=Peek16(p + 6 + 0);
 		item.r.y=Peek16(p + 6 + 2);
@@ -275,9 +265,6 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 	if (bMemoryBufferd) {
 		InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id, surface));
 	}
-	if (bOutlinesEnabled) {
-		//generateOutlines(sdl.getRenderer(), id, surface);
-	}
 	if (bSDLBufferd) {
 		SDL_Texture* tex=sdl.createTexture(surface);
 		SDL_SetTextureBlendMode(tex, defaultBlendMode);
@@ -288,55 +275,6 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 static inline void putOutlinePixel(ppl7::grafix::Image& surface, int x, int y, ppl7::grafix::Color& c)
 {
 
-}
-
-SDL_Texture* SpriteTexture::generateOutlines(SDL_Renderer* renderer, int id, const ppl7::grafix::Image& src)
-{
-	ppl7::grafix::Image surface;
-	ppl7::grafix::Color white(255, 255, 255, 255);
-	surface.create(src.width(), src.height(), src.rgbformat());
-	int w=src.width();
-	int h=src.height();
-	for (int y=0;y < h;y++) {
-		for (int x=0;x < w;x++) {
-			ppl7::grafix::Color c=src.getPixel(x, y);
-			ppl7::grafix::Color cl=src.getPixel(x - 1, y);
-			ppl7::grafix::Color cr=src.getPixel(x + 1, y);
-			ppl7::grafix::Color cu=src.getPixel(x, y - 1);
-			ppl7::grafix::Color cd=src.getPixel(x, y + 1);
-			if (c.alpha() > 192 && (cl.alpha() <= 192 || cr.alpha() <= 192 ||
-				cu.alpha() <= 192 || cd.alpha() <= 192)) {
-				surface.putPixel(x, y, white);
-				if (x < w - 1) {
-					surface.putPixel(x + 1, y, white);
-					if (y > 0) {
-						surface.putPixel(x + 1, y - 1, white);
-						surface.putPixel(x, y - 1, white);
-					}
-					if (y < h - 1) {
-						surface.putPixel(x + 1, y + 1, white);
-						surface.putPixel(x, y + 1, white);
-					}
-				}
-
-				if (x > 0) {
-					surface.putPixel(x - 1, y, white);
-					if (y > 0) {
-						surface.putPixel(x - 1, y - 1, white);
-						surface.putPixel(x, y - 1, white);
-					}
-					if (y < h - 1) {
-						surface.putPixel(x - 1, y + 1, white);
-						surface.putPixel(x, y + 1, white);
-					}
-
-				}
-			}
-		}
-	}
-	SDL_Texture* tex=SDL::createTexture(renderer, surface);
-	OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
-	return tex;
 }
 
 void SpriteTexture::load(SDL& sdl, const String& filename, const ppl7::grafix::Color& tint)
@@ -574,31 +512,6 @@ SDL_Rect SpriteTexture::getSpriteSource(int id) const
 	return (*it).second.r;
 }
 
-SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int sprite_id)
-{
-	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
-	ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
-	generateOutlinesV2(renderer);
-	std::map<int, SpriteIndexItem>::iterator it;
-	it=SpriteList.find(sprite_id);
-	if (it == SpriteList.end()) return NULL;
-	SpriteIndexItem& item=it->second;
-	if (item.outlines) return item.outlines;
-	return NULL;
-	/*
-	if (!item.drawable) return NULL;
-
-	SDL_Texture* tex=findOutlines(item.textureId);
-	if (tex) {
-		//ppl7::PrintDebugTime("found already generated outlines for texture %d!\n", item.textureId);
-		item.outlines=tex;
-		return tex;
-	}
-	//ppl7::PrintDebugTime("postGenerate outlines for texture %d!\n", item.textureId);
-	item.outlines=generateOutlines(renderer, item.textureId, *item.drawable);
-	return item.outlines;
-	*/
-}
 
 void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor)
 {
@@ -608,12 +521,12 @@ void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, f
 	if (it == SpriteList.end()) return;
 	const SpriteIndexItem& item=it->second;
 
-	SDL_Texture* tex=item.outlines;
-	if (!item.outlines) {
-		//ppl7::PrintDebugTime("no outlines!\n");
-		tex=postGenerateOutlines(renderer, id);
-		if (!tex) return;
+	if (id != current_outline_sprite_id || current_outline_texture == NULL) {
+		current_outline_texture=postGenerateOutlines(renderer, id);
+		if (current_outline_texture) current_outline_sprite_id=id;
+		else return;
 	}
+
 	SDL_Rect tr;
 	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
 	if (scale_factor == 1.0) {
@@ -627,7 +540,7 @@ void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, f
 		tr.w=(int)((float)item.r.w * scale_factor);
 		tr.h=(int)((float)item.r.h * scale_factor);
 	}
-	SDL_RenderCopy(renderer, tex, &item.r, &tr);
+	SDL_RenderCopy(renderer, current_outline_texture, NULL, &tr);
 }
 
 void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle)
@@ -638,11 +551,10 @@ void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, 
 	if (it == SpriteList.end()) return;
 	const SpriteIndexItem& item=it->second;
 
-	SDL_Texture* tex=item.outlines;
-	if (!item.outlines) {
-		//ppl7::PrintDebugTime("no outlines!\n");
-		tex=postGenerateOutlines(renderer, id);
-		if (!tex) return;
+	if (id != current_outline_sprite_id || current_outline_texture == NULL) {
+		current_outline_texture=postGenerateOutlines(renderer, id);
+		if (current_outline_texture) current_outline_sprite_id=id;
+		else return;
 	}
 	SDL_Rect tr;
 	tr.x=x + (item.Offset.x - item.Pivot.x) * scale_x;
@@ -653,7 +565,7 @@ void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, 
 	center.x=(item.Pivot.x - item.Offset.x) * scale_x;
 	center.y=(item.Pivot.y - item.Offset.y) * scale_y;
 
-	SDL_RenderCopyEx(renderer, tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, current_outline_texture, NULL, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
 
@@ -825,7 +737,7 @@ static void generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7
 	if (source.width() != target.width() || source.height() != target.height()) {
 		target.cls(ppl7::grafix::Color(255, 0, 0, 255));
 		ppl7::PrintDebugTime("   ERROR: SpriteTexture::generateOutlinesForSprite, invalid source or target: src: %d:%d, tgt: %d,%d\n",
-		source.width(),source.height(),target.width(),target.height());
+			source.width(), source.height(), target.width(), target.height());
 		return;
 	}
 	ppl7::grafix::Color white(255, 255, 255, 255);
@@ -862,35 +774,25 @@ static void generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7
 	}
 }
 
-void SpriteTexture::generateOutlinesV2(SDL_Renderer* renderer)
+SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int sprite_id)
 {
-	// Generate InMemory Target-Images for all Textures
-	std::map<int, ppl7::grafix::Image> InMemoryOutlines;
-	std::map<int, ppl7::grafix::Image>::const_iterator it;
-	// pregenerate the target images for the outlines
-	for (it=InMemoryTextureMap.begin(); it != InMemoryTextureMap.end();++it) {
-		//ppl7::grafix::Image img;
-		//InMemoryOutlines.insert(std::pair<int, ppl7::grafix::Image>(it->first, img));
-		InMemoryOutlines[it->first].create(it->second.width(), it->second.height(), it->second.rgbformat());
-	}
+	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
+	//ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
+	double start=ppl7::GetMicrotime();
+	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
+	current_outline_texture=NULL;
+	current_outline_sprite_id=-1;
+	std::map<int, SpriteIndexItem>::iterator it;
+	it=SpriteList.find(sprite_id);
+	if (it == SpriteList.end()) return NULL;
+	const SpriteIndexItem& item=it->second;
+	ppl7::grafix::Image target(item.r.w, item.r.h, ppl7::grafix::RGBFormat::A8R8G8B8);
 
-	// Now iterate over the sprites and generate the outlines
-	std::map<int, SpriteIndexItem>::iterator slit;
-	for (slit=SpriteList.begin();slit != SpriteList.end();++slit) {
-		//SpriteIndexItem& item=slit->second;
-		ppl7::grafix::Rect r(slit->second.r.x, slit->second.r.y, slit->second.r.w, slit->second.r.h);
-		ppl7::grafix::Drawable source=slit->second.drawable->getDrawable(r);
-		ppl7::grafix::Drawable target=InMemoryOutlines[slit->second.textureId].getDrawable(r);
-		generateOutlinesForSprite(source, target);
-	}
+	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
+	ppl7::grafix::Drawable source=item.drawable->getDrawable(r);
+	generateOutlinesForSprite(source, target);
+	SDL_Texture* tex=SDL::createTexture(renderer, target);
+	//ppl7::PrintDebugTime("  ===> %0.6f s\n", ppl7::GetMicrotime() - start);
+	return tex;
 
-	// Now we can generate SDL_Textures from the outlines
-	for (it=InMemoryOutlines.begin(); it != InMemoryOutlines.end();++it) {
-		SDL_Texture* tex=SDL::createTexture(renderer, InMemoryOutlines[it->first]);
-		OutlinesTextureMap.insert(std::pair<int, SDL_Texture*>(it->first, tex));
-	}
-	// And finally assign the SDL_Textures from the otlines to the sprites
-	for (slit=SpriteList.begin();slit != SpriteList.end();++slit) {
-		slit->second.outlines=OutlinesTextureMap[slit->second.textureId];
-	}
 }
