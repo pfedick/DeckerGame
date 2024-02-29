@@ -778,7 +778,7 @@ SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int spr
 {
 	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
 	//ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
-	double start=ppl7::GetMicrotime();
+	//double start=ppl7::GetMicrotime();
 	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
 	current_outline_texture=NULL;
 	current_outline_sprite_id=-1;
