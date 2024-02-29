@@ -168,7 +168,8 @@ int IVFDemuxer::read(Dav1dData* const buf) {
 	uint64_t ts;
 	try {
 		if (read_header(&sz, &off, &ts)) return -1;
-		//ppl7::PrintDebugTime("sz=%zd\n", sz);
+		//ppl7::PrintDebug("buf->sz=%zd, new sz=%zd, data=%x\n", buf->sz, sz, buf->data);
+
 		if (!(ptr = dav1d_data_create(buf, sz))) return -1;
 		if (file.fread(ptr, sz, 1) != 1) {
 			ppl7::PrintDebugTime("Failed to read frame data: %s\n", strerror(errno));

@@ -83,12 +83,18 @@ bool VideoPlayer::nextFrame()
 	Dav1dPicture* p=NULL;
 	while (1) {
 		if (decode_frame(&p)) {
+			if (p) {
+				dav1d_picture_unref(p);
+				free(p);
+			}
 			endreached=true;
 			return false;
 		}
 		if (p) {
 			//ppl7::PrintDebugTime("we have a pixture\n");
 			sdl_update_texture(p);
+			dav1d_picture_unref(p);
+			free(p);
 			break;
 		}
 	}
