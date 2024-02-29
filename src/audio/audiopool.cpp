@@ -250,6 +250,9 @@ void AudioPool::load()
 		sample[AudioClip::fireball_fly].load("res/audio/fireball_fly.mp3");
 		sample[AudioClip::fireball_impact].load("res/audio/fireball_impact.mp3");
 		sample[AudioClip::flashlight_pickup].load("res/audio/flashlight_pickup.mp3");
+		sample[AudioClip::ghost_chains].load("res/audio/ghost_chains.mp3");
+		sample[AudioClip::ghost_turn].load("res/audio/ghost_turn.mp3");
+		sample[AudioClip::ghost_land].load("res/audio/ghost_land.mp3");
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

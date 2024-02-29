@@ -962,11 +962,13 @@ private:
 	float height;
 	float target_height;
 	bool land;
+	AudioInstance* audio;
 	//double next_glowtime;
 	void update_glow(double time, float frame_rate_compensation);
 	void update_animation(double time);
 public:
 	Ghost();
+	~Ghost();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;

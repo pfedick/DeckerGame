@@ -31,11 +31,32 @@ Ghost::Ghost()
     height=0.0f;
     myLayer=Layer::BeforePlayer;
     land=false;
+    audio=NULL;
     change_height=0.0f;
     target_height=0.0f;
-    //glowtime=0.0f;
-    //animation.start(turn_from_mid_to_left, sizeof(turn_from_mid_to_left) / sizeof(int), false, 0);
+    audio=getAudioPool().getInstance(AudioClip::ghost_chains);
+    if (audio) {
+        audio->setVolume(1.0f);
+        audio->setAutoDelete(false);
+        audio->setLoop(true);
+        audio->setPositional(p, 960);
+        //audiopool.playInstance(audio);
+    }
+
+
+//glowtime=0.0f;
+//animation.start(turn_from_mid_to_left, sizeof(turn_from_mid_to_left) / sizeof(int), false, 0);
 }
+
+Ghost::~Ghost()
+{
+    if (audio) {
+        getAudioPool().stopInstace(audio);
+        delete audio;
+        audio=NULL;
+    }
+}
+
 
 void Ghost::update_glow(double time, float frame_rate_compensation)
 {
@@ -76,6 +97,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
 {
     update_glow(time, frame_rate_compensation);
     update_animation(time);
+    AudioPool& audiopool=getAudioPool();
 
     if (state == State::Stand && time > next_state) {
         if (ppl7::rand(0, 1) == 0) {
@@ -99,6 +121,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
     } else if (state == State::TurnToLeft && animation.isFinished()) {
         state=State::FlyLeft;
+        if (audio) audiopool.playInstance(audio);
         animation.startSequence(55, 55, false, 55);
         //height=0.0f;
         land=false;
@@ -106,6 +129,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
         change_height=time + ppl7::randf(1.0f, 5.0f);
     } else if (state == State::TurnToRight && animation.isFinished()) {
         state=State::FlyRight;
+        if (audio) audiopool.playInstance(audio);
         animation.startSequence(60, 65, false, 65);
         //height=0.0f;
         target_height=2 * TILE_HEIGHT;
@@ -118,6 +142,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
                 TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 96, p.y - i * TILE_HEIGHT));
                 if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || p.x < initial_p.x - 1000) {
                     state=State::FlyLeftToRight;
+                    audiopool.playOnce(AudioClip::ghost_turn, p, 1600, 1.0f);
                     animation.startSequence(86, 100, false, 65);
                     break;
                 }
@@ -130,6 +155,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
                 TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 96, p.y - i * TILE_HEIGHT));
                 if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || p.x > initial_p.x + 1000) {
                     state=State::FlyRightToLeft;
+                    audiopool.playOnce(AudioClip::ghost_turn, p, 1600, 1.0f);
                     animation.startSequence(71, 85, false, 55);
                     break;
                 }
@@ -145,9 +171,13 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
         p.x+=(3 * frame_rate_compensation);
     } else if (state == State::LandLeft && animation.isFinished()) {
         state=State::TurnToMid;
+        audiopool.playOnce(AudioClip::ghost_land, p, 1600, 1.0f);
+        if (audio) audiopool.stopInstace(audio);
         animation.startSequence(20, 11, false, 0);
     } else if (state == State::LandRight && animation.isFinished()) {
         state=State::TurnToMid;
+        audiopool.playOnce(AudioClip::ghost_land, p, 1600, 1.0f);
+        if (audio) audiopool.stopInstace(audio);
         animation.startSequence(10, 0, false, 0);
     } else if (state == State::TurnToMid && animation.isFinished()) {
         next_state=time + ppl7::randf(1.0f, 5.0f);
@@ -201,6 +231,7 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
         }
     }
     p.y=initial_p.y - height;
+    if (audio)  audio->setPositional(p, 1200);
     if (abs(initial_p.x - p.x) > 2000 || abs(initial_p.y - p.y) > 2000) p=initial_p;
     updateBoundary();
 }

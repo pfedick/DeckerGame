@@ -188,6 +188,9 @@ public:
 		fireball_fly,
 		fireball_impact,
 		flashlight_pickup,
+		ghost_chains,
+		ghost_turn,
+		ghost_land,
 		// this must always be the last entry!
 		maxClips
 	};
