@@ -74,12 +74,12 @@ My target platforms are:
 
 - Linux (development is done on Fedora 38)
 - Windows 10 and 11
-- it is known that the Windows version also runs on the Steamdeck!
+- The Windows version also runs on the Steamdeck!
 
 The game depends on the [Simple DirectMedia Layer](https://www.libsdl.org/)
-library, which is available on many platforms. So in theory it should be possible to
+library, which is available for many platforms. So in theory it should be possible to
 compile it on any platform with a c++ compiler and the SDL library available.
-See belwo on [how to compile](#How-to-compile).
+See below on [how to compile](#How-to-compile).
 
 ## Can you make a release for iOS, Android, Debian, Ubuntu, Fedora,...
 Sorry, but in this moment, that goes above my knowledge and I don't have the time either.
@@ -98,20 +98,20 @@ I use  the [Simple DirectMedia Layer](https://www.libsdl.org/) library for low l
 I don't know. This is one of my hobbies, but I have others, too :-)
 Maybe I will never finish it or decide to do something else. We will see...
 
-But hey, you can already play the game! See below, how to compile it your
+But hey, you can already play the game! See below, on how to compile it on your
 own, or download a preview version on [GitHub](https://github.com/pfedick/DeckerGame/releases).
 
 ## Known issues and limitations
 I have three different systems available for developing and testing, but they all have in common, that display resoltion is around 1920 x 1080 pixel with a framerate of 60. I give my best to support other resoltions and frame rates, but I have limited possibilities to test.
 - on systems with framerate other than 60, strange things can happen
-- on systems with framerates lower than 30, everything will get slower and the physics engine will fail
+- on systems with framerates lower than 30, everything will get slower and the physics engine will start to fail
 - on monitors with resolutions other than 1920 x 1080, the output will be scaled up or down
 - on resolutions lower than 1920 x 1080 the ui of the editor won't fit on the screen, on higher resolutions the ui will get smaller
 
 How to avoid issues with different resolutions:
 - when playing in a window, resize the window to a size of 1920 x 1080 pixel
 - play in fullscreen (not window mode) with a fixed resolution of 1920 x 1080 pixel
-- if framerate is higher than 60 and you run into issues, please report to me and try to configure your grafic card to limit the game at 60 Hz
+- if framerate is higher than 60 and you run into issues, please report to me and try to configure your graphic card to limit the game at 60 Hz
 
 ## Bugreport
 You can open an issue in my [github project](https://github.com/pfedick/DeckerGame/issues) or contact me on [discord](https://discord.gg/QZXPNFKNKP).
@@ -160,6 +160,7 @@ pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
 ```
 
 ### Checkout and compile
+You can download a release version [here](https://github.com/pfedick/DeckerGame/releases). If you want the newest version, you can check out the sources from github:
 
 ```bash
 git clone --recurse-submodules https://github.com/pfedick/DeckerGame.git
