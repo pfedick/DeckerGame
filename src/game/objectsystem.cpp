@@ -413,6 +413,7 @@ Representation getRepresentation(int object_type)
 	case Type::Oxygen: return OxygenTank::representation();
 	case Type::Fish: return Fish::representation();
 	case Type::Piranha: return Piranha::representation();
+	case Type::Skull: return Skull::representation();
 	case Type::BreakingWall: return BreakingWall::representation();
 	case Type::Hammer: return Hammer::representation();
 	case Type::Flashlight: return Flashlight::representation();
@@ -502,6 +503,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Oxygen: return new OxygenTank();
 	case Type::Fish: return new Fish();
 	case Type::Piranha: return new Piranha();
+	case Type::Skull: return new Skull();
 	case Type::BreakingWall: return new BreakingWall();
 	case Type::Hammer: return new Hammer();
 	case Type::Flashlight: return new Flashlight();

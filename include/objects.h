@@ -91,7 +91,8 @@ public:
 		Piranha=120,
 		Ghost=121,
 		Zombie=122,
-		FireCannon=123
+		FireCannon=123,
+		Skull=124
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -1080,6 +1081,23 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
 };
+
+class Skull : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	float speed;
+	int state;
+	LightObject light;
+public:
+	Skull();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+};
+
 
 
 class HangingSpider : public Enemy

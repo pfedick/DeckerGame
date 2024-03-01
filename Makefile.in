@@ -129,6 +129,7 @@ OBJECTS=compile/main.o \
 	compile/object_oxygen.o \
 	compile/object_fish.o \
 	compile/object_piranha.o \
+	compile/object_skull.o \
 	compile/object_breakingwall.o \
 	compile/object_hammer.o \
 	compile/object_flashlight.o \
@@ -716,6 +717,10 @@ compile/object_fish.o: src/objects/fish.cpp Makefile include/objects.h include/a
 compile/object_piranha.o: src/objects/piranha.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_piranha.o -c src/objects/piranha.cpp $(CFLAGS)
+
+compile/object_skull.o: src/objects/skull.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_skull.o -c src/objects/skull.cpp $(CFLAGS)
 
 compile/object_breakingwall.o: src/objects/breakingwall.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
