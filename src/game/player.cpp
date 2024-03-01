@@ -600,6 +600,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	health-=(points * frame_rate_compensation);
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
+		flashlightOn=false;
 		movement=Dead;
 		fallstart=0.0f;
 		// we can play different animations for different reasons
