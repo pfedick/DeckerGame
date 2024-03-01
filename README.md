@@ -50,6 +50,7 @@ The player can be controlled by the arrow keys or alternatively with "wasd" or "
 - cursor right / d / l: walk to the right
 - shift left / shift right: walk faster, jump higher
 - e / o: action key, it activates switches or open doors
+- f: activates the flashlight, if the player has collected it (version 0.15.0 and above)
 - space: skip the intro video
 
 When walking an pressing the key for up, the player will jump in the direction of walking.
@@ -62,6 +63,7 @@ Since version 0.14.0 the game supports game controllers. The controller is detec
 - Button "A": action key, it activates switches or open doors. In a Menu it selects the highlighted element
 - Button "B": alternative for jump
 - Button "X": go back in a menu
+- Button "Y": activates the flashlight, if the player has collected it (version 0.15.0 and above)
 - Button "Menu": go to the settings
 - Pad: navigate in a Menu, also alternative for player movement
 
