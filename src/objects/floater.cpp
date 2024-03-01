@@ -157,7 +157,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		if (next_state < time && (state == 0 || state == 2)) {
 			state++;
 			pool.playInstance(audio);
-		} else if (state == 1) {
+		} else if (state == 1) {	// down
 			velocity.x=0;
 			velocity.y=4;
 			p+=velocity * frame_rate_compensation;
@@ -177,7 +177,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 			lights.addObjectLight(&thuruster1);
 			lights.addObjectLight(&thuruster2);
 
-			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 64));
+			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 32));
 			if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker) {
 				velocity.setPoint(0, 0);
 				state=2;
@@ -264,6 +264,7 @@ void Floater::handleCollision(Player* player, const Collision& collision)
 		player->setStandingOnObject(this);
 		player->x+=velocity.x * frame_rate_compensation;
 		player->y+=velocity.y * frame_rate_compensation;
+		if (player->y > p.y - 58) player->y=p.y - 58;
 	}
 }
 
@@ -271,6 +272,11 @@ void Floater::toggle(bool enable, Object* source)
 {
 	current_state=enable;
 	//printf ("Floater::toggle %d: %d\n", id, (int)enable);
+}
+
+void Floater::trigger(Object* source)
+{
+	current_state=!current_state;
 }
 
 void Floater::reset()

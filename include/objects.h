@@ -1225,6 +1225,7 @@ public:
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const  override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
