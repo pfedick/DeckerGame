@@ -765,6 +765,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 
 	}
+	if (isSwimming() && flashlightOn == true) {
+		toggleFlashlight();
+	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	keys=getKeyboardMatrix(state);
 
@@ -1800,4 +1803,8 @@ void Player::toggleFlashlight()
 	} else {
 		actionToggleCooldown=this->time + 0.2f;
 	}
+}
+
+bool Player::isFlashlightOn() const {
+	return flashlightOn;
 }
