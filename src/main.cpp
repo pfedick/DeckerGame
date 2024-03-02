@@ -109,7 +109,7 @@ void start(int argc, char** argv)
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
 			game.resetPlayer();
-			game.startLevel("level/heaven.lvl");
+			game.startLevel("level/haunted.lvl");
 			game.enableControls(true);
 			game.run();
 			if (game.gameState == GameState::QuitGame) break;
