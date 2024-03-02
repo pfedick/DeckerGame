@@ -41,11 +41,41 @@ Skull::Skull()
 
 }
 
+static void emmitParticles(double time, const ppl7::grafix::PointF& p)
+{
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.286));
+	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(107, 145, 104, 29)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.279, ppl7::grafix::Color(155, 255, 160, 29)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.653, ppl7::grafix::Color(125, 237, 216, 21)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(84, 100, 69, 0)));
 
+	ParticleSystem* ps=GetParticleSystem();
+	int new_particles=ppl7::rand(200, 300);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.104, 1.235) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(49, 1), 0.000);
+		particle->layer=Particle::Layer::BeforePlayer;
+		particle->weight=randf(0.000, 0.000);
+		particle->gravity.setPoint(0.000, 0.000);
+		particle->velocity=calculateVelocity(randf(1.396, 3.981), 0.000 + randf(-10.189, 10.189));
+		particle->scale=randf(0.723, 1.799);
+		particle->color_mod.set(210, 255, 203, 29);
+		particle->initAnimation(Particle::Type::RotatingParticleWhite);
+		particle->initScaleGradient(scale_gradient, particle->scale);
+		particle->initColorGradient(color_gradient);
+		ps->addParticle(particle);
+	}
+}
 
 
 void Skull::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	if (!enabled) return;
 	if (state == 0) {
 		speed+=0.05f * frame_rate_compensation;
 		p.y-=speed;
@@ -86,8 +116,11 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 				sprite_no=470;
 				light.sprite_no=471;
 				collisionDetection=false;
-				speed=0.1f;
+				speed=1.0f;
 				player.addPoints(20);
+				emmitParticles(time, p);
+				myLayer == Layer::BeforeBricks;
+
 			}
 		}
 	}
