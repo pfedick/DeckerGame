@@ -765,7 +765,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 
 	}
-	if (isSwimming() && flashlightOn == true) {
+	if ((isSwimming() || isDiving()) && flashlightOn == true) {
 		toggleFlashlight();
 	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
