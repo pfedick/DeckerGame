@@ -18,8 +18,8 @@ Skull::Skull()
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=468;
 	sprite_no_representation=468;
-	state=0;
-	speed=0.0f;
+	state=ppl7::rand(0, 4);
+	speed=ppl7::randf(0.0f, 2.0f);;
 	collisionDetection=true;
 	updateBoundary();
 	light.color.set(255, 255, 255, 255);
@@ -91,7 +91,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		p.y+=speed;
 		if (p.y >= initial_p.y) state=4;
 	} else if (state == 4) {
-		speed-=0.05f * frame_rate_compensation;
+		speed-=0.1f * frame_rate_compensation;
 		if (speed < 0) {
 			state=0;
 			speed=0.0f;
