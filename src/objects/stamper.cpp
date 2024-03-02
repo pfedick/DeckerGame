@@ -328,15 +328,25 @@ void Stamper::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	AudioPool& audiopool=getAudioPool();
-	if (state == State::Closing) {
-		position+=acceleration * frame_rate_compensation;
-		acceleration=acceleration * (1.7 * frame_rate_compensation);
-	} else if (state == State::Opening) {
-		position-=acceleration * frame_rate_compensation;
-		acceleration+=(0.2 * frame_rate_compensation);
-		if (acceleration > 5.0f) acceleration=5.0f;
+	if (!audio_drag_up) {
+		audio_drag_up=audiopool.getInstance(AudioClip::stamper_up);
+		if (audio_drag_up) {
+			audio_drag_up->setVolume(1.0f);
+			audio_drag_up->setAutoDelete(false);
+			audio_drag_up->setLoop(true);
+			audio_drag_up->setPositional(p, 1600);
+		}
 	}
 	if (auto_intervall) {
+		if (state == State::Closing) {
+			position+=acceleration * frame_rate_compensation;
+			acceleration=acceleration * (1.7 * frame_rate_compensation);
+		} else if (state == State::Opening) {
+			position-=acceleration * frame_rate_compensation;
+			acceleration+=(0.2 * frame_rate_compensation);
+			if (acceleration > 5.0f) acceleration=5.0f;
+		}
+
 		if (state == State::Open && time > next_state) {
 			audiopool.playOnce(AudioClip::stamper_down, p, 1600, 1.0f);
 			state=State::Closing;
@@ -350,14 +360,7 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == State::Closed && time > next_state) {
 			state=State::Opening;
 			acceleration=1.0f;
-			if (!audio_drag_up) {
-				audio_drag_up=audiopool.getInstance(AudioClip::stamper_up);
-			}
 			if (audio_drag_up) {
-				audio_drag_up->setVolume(1.0f);
-				audio_drag_up->setAutoDelete(false);
-				audio_drag_up->setLoop(true);
-				audio_drag_up->setPositional(p, 1600);
 				audiopool.playInstance(audio_drag_up);
 			}
 		} else if (state == State::Opening && position <= 0.0f) {
@@ -369,6 +372,26 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 			if (GetGame().config.difficulty == Config::DifficultyLevel::easy) next_state+=time_inactive;
 		}
 	} else {
+		if (state == State::Closing) {
+			position+=acceleration * frame_rate_compensation;
+			acceleration+=(0.2 * frame_rate_compensation);
+		} else if (state == State::Opening) {
+			position-=acceleration * frame_rate_compensation;
+			acceleration+=(0.2 * frame_rate_compensation);
+			if (acceleration > 5.0f) acceleration=5.0f;
+		}
+		if (state == State::Closing && position >= 261.0f) {
+			position=261.0f;
+			state=State::Closed;
+			acceleration=0.0f;
+			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
+			audiopool.playOnce(AudioClip::stamper_echo, p, 1600, 1.0f);
+		} else if (state == State::Opening && position <= 0.0f) {
+			state=State::Open;
+			position=0.0f;
+			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
+			audiopool.playOnce(AudioClip::stamper_echo, p, 1600, 1.0f);
+		}
 
 	}
 	if (audio_drag_up) audio_drag_up->setPositional(p, 1600);
@@ -410,15 +433,25 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 
 void Stamper::toggle(bool enabled, Object* source)
 {
-	//int start_sprite_no=stamper_type * 20;
-	if (enabled) {
-		//animation.startSequence(start_sprite_no, start_sprite_no + 5, false, start_sprite_no + 5);
-		state=State::Closed;
-		position=261.0f;
-	} else {
-		//animation.startSequence(start_sprite_no + 6, start_sprite_no + 19, false, start_sprite_no + 19);
-		state=State::Open;
-		position=0.0f;
+	AudioPool& audiopool=getAudioPool();
+	if (!auto_intervall) {
+		if (enabled) {
+			if (audio_drag_up) {
+				audiopool.stopInstace(audio_drag_up);
+				audiopool.playInstance(audio_drag_up);
+			}
+			acceleration=0.0f;
+			state=State::Closing;
+			//position=261.0f;
+		} else {
+			if (audio_drag_up) {
+				audiopool.stopInstace(audio_drag_up);
+				audiopool.playInstance(audio_drag_up);
+			}
+			acceleration=0.0f;
+			state=State::Opening;
+			//position=0.0f;
+		}
 	}
 }
 
