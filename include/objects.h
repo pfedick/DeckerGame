@@ -1090,6 +1090,7 @@ private:
 	float speed;
 	int state;
 	LightObject light;
+	LightObject shine;
 public:
 	Skull();
 	static Representation representation();

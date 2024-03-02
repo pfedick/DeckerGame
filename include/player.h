@@ -177,6 +177,7 @@ public:
 	bool speak(uint16_t id, float volume=0.7f);
 	bool isSpeaking() const;
 	bool hasSpoken(uint16_t id) const;
+	bool isFlashlightOn() const;
 
 };
 #endif /* INCLUDE_PLAYER_H_ */
