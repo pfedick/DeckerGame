@@ -100,7 +100,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == 1) {
 			velocity.x=4;
 			velocity.y=0;
-			p+=velocity * frame_rate_compensation;
+			p+=(velocity * frame_rate_compensation);
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 64, p.y - 20), 270);
@@ -128,7 +128,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == 3) {
 			velocity.x=-4;
 			velocity.y=0;
-			p+=velocity * frame_rate_compensation;
+			p+=(velocity * frame_rate_compensation);
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x + 64, p.y - 20), 90);
@@ -160,7 +160,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == 1) {	// down
 			velocity.x=0;
 			velocity.y=4;
-			p+=velocity * frame_rate_compensation;
+			p+=(velocity * frame_rate_compensation);
 			if (next_birth < time) {
 				particle_velocity_correction=velocity.y;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
@@ -196,7 +196,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 		} else if (state == 3) {
 			velocity.x=0;
 			velocity.y=-4;
-			p+=velocity * frame_rate_compensation;
+			p+=(velocity * frame_rate_compensation);
 			if (next_birth < time) {
 				particle_velocity_correction=0.0f;
 				emmitParticles(time, player, ppl7::grafix::PointF(p.x - 16, p.y - 20), 180);
@@ -262,8 +262,8 @@ void Floater::handleCollision(Player* player, const Collision& collision)
 	if (collision.onFoot()) {
 		//printf ("collision with floater\n");
 		player->setStandingOnObject(this);
-		player->x+=velocity.x * frame_rate_compensation;
-		player->y+=velocity.y * frame_rate_compensation;
+		player->x+=(velocity.x * frame_rate_compensation);
+		player->y+=(velocity.y * frame_rate_compensation);
 		if (player->y > p.y - 58) player->y=p.y - 58;
 	}
 }
