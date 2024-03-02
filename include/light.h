@@ -70,6 +70,7 @@ public:
     uint8_t     playerPlane; // 1 Byte
     uint8_t     flarePlane; // 1 Byte
     float       typeParameter; // 4 Byte, used for light type
+    SpriteTexture* custom_texture;
 
     ppl7::grafix::Rect boundary;
     bool enabled;

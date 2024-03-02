@@ -35,6 +35,7 @@ LightObject::LightObject()
     intensity_increment=0.0f;
     next_change=0.0f;
     animation_state=0;
+    custom_texture=NULL;
 }
 
 LightObject::~LightObject()
@@ -459,11 +460,19 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
             if (plane != LightPlaneId::Player || (item->playerPlane & static_cast<int>(pplane))) {
                 ppl7::grafix::Color c=item->color;
                 c.setAlpha((int)(item->current_intensity * 255.0f));
-                lightmaps->drawScaledWithAngle(renderer,
-                    item->x + viewport.x1 - worldcoords.x,
-                    item->y + viewport.y1 - worldcoords.y,
-                    item->sprite_no, item->scale_x, item->scale_y, item->angle,
-                    c);
+                if (item->custom_texture) {
+                    item->custom_texture->drawScaledWithAngle(renderer,
+                        item->x + viewport.x1 - worldcoords.x,
+                        item->y + viewport.y1 - worldcoords.y,
+                        item->sprite_no, item->scale_x, item->scale_y, item->angle,
+                        c);
+                } else {
+                    lightmaps->drawScaledWithAngle(renderer,
+                        item->x + viewport.x1 - worldcoords.x,
+                        item->y + viewport.y1 - worldcoords.y,
+                        item->sprite_no, item->scale_x, item->scale_y, item->angle,
+                        c);
+                }
             }
         }
     }
