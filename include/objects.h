@@ -1108,6 +1108,7 @@ private:
 	double next_state;
 	int state;
 	double velocity;
+	LightObject eyes_light;
 public:
 	HangingSpider();
 	static Representation representation();

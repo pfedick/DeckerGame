@@ -9,18 +9,26 @@ namespace Decker::Objects {
 
 Representation HangingSpider::representation()
 {
-	return Representation(Spriteset::GenericObjects, 49);
+	return Representation(Spriteset::GenericObjects, 48);
 }
 
 HangingSpider::HangingSpider()
 	:Enemy(Type::ObjectType::HangingSpider)
 {
-	sprite_no=49;
+	sprite_no=48;
 	next_state=ppl7::GetMicrotime() + (double)ppl7::rand(5, 20);
 	sprite_no_representation=49;
 	state=0;
 	velocity=0.0f;
 	collisionDetection=true;
+	eyes_light.color.set(255, 255, 255, 255);
+	eyes_light.sprite_no=49;
+	eyes_light.scale_x=1.0f;
+	eyes_light.scale_y=1.0f;
+	eyes_light.custom_texture=NULL;
+	eyes_light.intensity=255;
+	eyes_light.plane=static_cast<int>(LightPlaneId::Player);
+	eyes_light.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 }
 
 void HangingSpider::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
@@ -61,6 +69,11 @@ void HangingSpider::update(double time, TileTypePlane& ttplane, Player& player, 
 			next_state=time + (double)ppl7::rand(5, 20);
 		}
 	}
+	eyes_light.custom_texture=this->texture;
+	eyes_light.x=p.x;
+	eyes_light.y=p.y;
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&eyes_light);
 
 }
 
