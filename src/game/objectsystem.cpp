@@ -320,6 +320,7 @@ void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& player,
 					//printf ("inside boundary\n");
 					if (item->pixelExactCollision == false) {
 						object_list.push_back(item);
+						break;
 					} else {
 						const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
 						if (draw.width()) {
@@ -328,6 +329,7 @@ void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& player,
 							ppl7::grafix::Color c=draw.getPixel(x, y);
 							if (c.alpha() > 92) {
 								object_list.push_back(item);
+								break;
 							}
 						}
 					}
