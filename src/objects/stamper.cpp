@@ -420,6 +420,15 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 		if (player->y < p.y) {
 			player->fallstart=0.0f;
 			player->y=boundary.y1;
+			/* this leads to a strange effect
+			if (orientation == Orientation::left) {
+				if (state == State::Opening) player->x+=acceleration * collision.frame_rate_compensation;
+				if (state == State::Closing) player->x-=acceleration * collision.frame_rate_compensation;
+			} else if (orientation == Orientation::right) {
+				if (state == State::Opening) player->x-=acceleration * collision.frame_rate_compensation;
+				if (state == State::Closing) player->x+=acceleration * collision.frame_rate_compensation;
+			}
+			*/
 			player->setStandingOnObject(this);
 		}
 		if (player->y > p.y) {
