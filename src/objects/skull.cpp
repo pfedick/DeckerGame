@@ -119,7 +119,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 				speed=1.0f;
 				player.addPoints(20);
 				emmitParticles(time, p);
-				myLayer == Layer::BeforeBricks;
+				myLayer = Layer::BeforeBricks;
 
 			}
 		}
