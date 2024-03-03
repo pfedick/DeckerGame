@@ -17,7 +17,7 @@ HangingSpider::HangingSpider()
 {
 	sprite_no=48;
 	next_state=ppl7::GetMicrotime() + (double)ppl7::rand(5, 20);
-	sprite_no_representation=49;
+	sprite_no_representation=48;
 	state=0;
 	velocity=0.0f;
 	collisionDetection=true;
