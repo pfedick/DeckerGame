@@ -24,6 +24,14 @@ Bat::Bat()
 	next_animation=0.0f;
 	velocity=-3;
 	audio=NULL;
+	eyes_light.color.set(255, 255, 255, 255);
+	eyes_light.sprite_no=12;
+	eyes_light.scale_x=1.0f;
+	eyes_light.scale_y=1.0f;
+	eyes_light.custom_texture=NULL;
+	eyes_light.intensity=255;
+	eyes_light.plane=static_cast<int>(LightPlaneId::Player);
+	eyes_light.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 }
 
 Bat::~Bat()
@@ -49,6 +57,13 @@ void Bat::update(double time, TileTypePlane& ttplane, Player& player, float fram
 		updateBoundary();
 	}
 	p.y+=(velocity * frame_rate_compensation);
+	eyes_light.custom_texture=this->texture;
+	eyes_light.sprite_no=12 + sprite_no;
+	eyes_light.x=p.x;
+	eyes_light.y=p.y;
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&eyes_light);
+
 	if (state == 0) {
 		if (velocity > -3.0f) {
 			velocity-=(0.2f * frame_rate_compensation);

@@ -881,6 +881,7 @@ private:
 	float velocity;
 	int state;
 	AudioInstance* audio;
+	LightObject eyes_light;
 public:
 	Bat();
 	~Bat();
