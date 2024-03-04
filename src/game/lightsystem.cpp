@@ -461,11 +461,15 @@ void LightSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpor
                 ppl7::grafix::Color c=item->color;
                 c.setAlpha((int)(item->current_intensity * 255.0f));
                 if (item->custom_texture) {
+                    SDL_BlendMode bm=item->custom_texture->getTextureBlendMode();
+                    item->custom_texture->setTextureBlendMode(SDL_BLENDMODE_ADD);
                     item->custom_texture->drawScaledWithAngle(renderer,
                         item->x + viewport.x1 - worldcoords.x,
                         item->y + viewport.y1 - worldcoords.y,
                         item->sprite_no, item->scale_x, item->scale_y, item->angle,
                         c);
+                    item->custom_texture->setTextureBlendMode(bm);
+
                 } else {
                     lightmaps->drawScaledWithAngle(renderer,
                         item->x + viewport.x1 - worldcoords.x,

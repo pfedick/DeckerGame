@@ -273,6 +273,7 @@ public:
 	int numTextures() const;
 	int numSprites() const;
 	void setTextureBlendMode(SDL_BlendMode blendMode);
+	SDL_BlendMode getTextureBlendMode() const;
 	void setPivot(int id, int x, int y);
 
 	SDL_Rect getSpriteSource(int id) const;

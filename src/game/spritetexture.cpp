@@ -693,6 +693,18 @@ void SpriteTexture::setTextureBlendMode(SDL_BlendMode blendMode)
 	defaultBlendMode=blendMode;
 }
 
+SDL_BlendMode SpriteTexture::getTextureBlendMode() const
+{
+	std::map<int, SDL_Texture*>::const_iterator it;
+	SDL_BlendMode bm=defaultBlendMode;
+	for (it=TextureMap.begin();it != TextureMap.end();++it) {
+		SDL_GetTextureBlendMode(it->second, &bm);
+		return bm;
+	}
+	return bm;
+}
+
+
 void SpriteTexture::setPivot(int id, int x, int y)
 {
 	std::map<int, SpriteIndexItem>::iterator it;
