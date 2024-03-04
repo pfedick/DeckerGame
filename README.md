@@ -187,7 +187,7 @@ make
 
 ## Release History
 
-* [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-??-??]: Light and Dark update
+* [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-03-04]: Light and Dark update
 * [0.14.0](https://github.com/pfedick/DeckerGame/releases/tag/0.14.0) [2023-09-17]: Play it with controller
 * [0.13.0](https://github.com/pfedick/DeckerGame/releases/tag/0.13.0) [2023-09-01]: Intro
 * [0.12.0](https://github.com/pfedick/DeckerGame/releases/tag/0.12.0) [2023-08-19]: Tutorial and Speech
