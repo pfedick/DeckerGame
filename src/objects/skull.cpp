@@ -6,6 +6,222 @@
 
 namespace Decker::Objects {
 
+	/*
+	class FireCannon : public Trap
+{
+private:
+	double next_state;
+	void fire();
+public:
+	float direction;
+	float min_cooldown_time;
+	float max_cooldown_time;
+	float speed;
+	bool current_state_on;
+	bool initial_state_on;
+	*/
+
+class SkullFireball : public Object
+{
+	friend class Skull;
+private:
+	ppl7::grafix::PointF velocity;
+	double next_birth;
+	float direction;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	void emmitParticles(double time, const Player& player);
+
+	LightObject light_ball;
+	LightObject light_shine;
+	AudioInstance* audio;
+
+public:
+	SkullFireball();
+	~SkullFireball();
+	static Representation representation();
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	virtual void handleCollision(Player* player, const Collision& collision);
+};
+
+
+
+SkullFireball::SkullFireball()
+	:Object(Type::ObjectType::Arrow)
+{
+	collisionDetection=true;
+	next_birth=0.0f;
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.243));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.270, 0.620));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.500, 0.421));
+	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(11, 170, 0, 18)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.036, ppl7::grafix::Color(30, 216, 0, 53)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.081, ppl7::grafix::Color(40, 255, 0, 78)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.176, ppl7::grafix::Color(70, 255, 0, 78)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.243, ppl7::grafix::Color(26, 22, 26, 112)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.486, ppl7::grafix::Color(120, 118, 116, 27)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(196, 196, 198, 0)));
+
+	light_ball.color.set(255, 255, 255, 255);
+	light_ball.sprite_no=2;
+	light_ball.scale_x=0.2f;
+	light_ball.scale_y=0.2f;
+	light_ball.plane=static_cast<int>(LightPlaneId::Player);
+	light_ball.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
+
+	light_shine.color.set(100, 255, 0, 255);
+	light_shine.sprite_no=0;
+	light_shine.scale_x=0.4f;
+	light_shine.scale_y=0.4f;
+	light_shine.plane=static_cast<int>(LightPlaneId::Player);
+	light_shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);;
+
+	light_shine.has_lensflare=true;
+	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
+	light_shine.flare_intensity=255;
+	light_shine.flare_useLightColor=true;
+	audio=NULL;
+
+}
+
+SkullFireball::~SkullFireball()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+}
+
+Representation SkullFireball::representation()
+{
+	return Representation(Spriteset::GenericObjects, 300);
+}
+
+
+
+/*
+ * add the following function to your class:
+ */
+
+void SkullFireball::emmitParticles(double time, const Player& player)
+{
+	//if (next_birth < time) {
+		//next_birth=time + randf(0.010, 0.111);
+	ParticleSystem* ps=GetParticleSystem();
+	if (!emitterInPlayerRange(p, player)) return;
+	int new_particles=ppl7::rand(10, 30);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.552, 1.189) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(32, 32), 0.000);
+		particle->layer=Particle::Layer::BeforePlayer;
+		particle->weight=randf(0.132, 0.660);
+		particle->gravity.setPoint(0.000, 0.000);
+		particle->velocity=calculateVelocity(randf(0.566, 1.321), direction + randf(-15.283, 15.283));
+		particle->scale=randf(0.300, 1.375);
+		particle->color_mod.set(255, 255, 255, 255);
+		particle->initAnimation(Particle::Type::RotatingParticleWhite);
+		particle->initScaleGradient(scale_gradient, particle->scale);
+		particle->initColorGradient(color_gradient);
+		ps->addParticle(particle);
+	}
+//}
+}
+
+
+
+
+void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	AudioPool& pool=getAudioPool();
+	if (!audio) {
+		audio=pool.getInstance(AudioClip::fireball_fly);
+		audio->setVolume(1.0f);
+		audio->setPositional(p, 1800);
+		audio->setLoop(true);
+		pool.playInstance(audio);
+	}
+	p+=velocity * frame_rate_compensation;
+	audio->setPositional(p, 1200);
+	updateBoundary();
+	light_shine.x=p.x;
+	light_shine.y=p.y;
+	light_ball.x=p.x + 1;
+	light_ball.y=p.y;
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&light_shine);
+	lights.addObjectLight(&light_ball);
+
+
+	emmitParticles(time, player);
+	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
+	if (t1 == TileType::Blocking) {
+		deleteDefered=true;
+		pool.stopInstace(audio);
+		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
+	} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
+		deleteDefered=true;
+		pool.stopInstace(audio);
+	}
+}
+
+void SkullFireball::handleCollision(Player* player, const Collision& collision)
+{
+	deleteDefered=true;
+	player->dropHealth(10, Physic::HealthDropReason::Burned);
+}
+
+void SkullFireball::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	draw(renderer, coords);
+}
+
+void SkullFireball::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	texture->draw(renderer,
+		p.x + coords.x,
+		p.y + coords.y,
+		sprite_no, color_mod);
+	return;
+
+	SpriteTexture& lightmap=getResources().Lightmaps;
+	Game& game=GetGame();
+	SDL_Texture* lighttarget=game.getLightRenderTarget();
+	if (!lighttarget) return;
+	SDL_Texture* rendertarget=SDL_GetRenderTarget(renderer);
+	SDL_SetRenderTarget(renderer, lighttarget);
+
+	ppl7::grafix::Color rc[7];
+	rc[0].setColor(255, 255, 255, 255);
+	rc[2].setColor(255, 255, 0, 255);
+	rc[3].setColor(255, 128, 0, 255);
+	rc[4].setColor(255, 192, 0, 255);
+	rc[5].setColor(255, 0, 0, 255);
+	rc[6].setColor(255, 255, 255, 255);
+
+	ppl7::grafix::Color c(255, 200, 60, 255);
+	lightmap.drawScaled(renderer, p.x + coords.x,
+		p.y + coords.y, 0, 1.0f, c);
+	c=rc[ppl7::rand(0, 6)];
+	c.setAlpha(ppl7::rand(128, 255));
+
+	lightmap.drawScaled(renderer, p.x + coords.x,
+		p.y + coords.y, 1, 1.0f, c);
+	c.setColor(255, 255, 255, 255);
+	lightmap.drawScaled(renderer, p.x + coords.x,
+		p.y + coords.y, 1, 0.1f, c);
+
+	SDL_SetRenderTarget(renderer, rendertarget);
+
+}
+
+
 
 Representation Skull::representation()
 {
@@ -33,12 +249,13 @@ Skull::Skull()
 	light.intensity=255;
 	light.plane=static_cast<int>(LightPlaneId::Player);
 	light.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
-
+	next_roll=0.0f;
 	shine.color.set(0, 255, 0, 255);
 	shine.sprite_no=0;
 	shine.scale_x=0.15f;
 	shine.scale_y=0.15f;
 	shine.intensity=128;
+	fire_cooldown=0.0f;
 	shine.plane=static_cast<int>(LightPlaneId::Player);
 	shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 
@@ -76,7 +293,7 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 }
 
 
-void Skull::updateBouncing(float frame_rate_compensation)
+void Skull::updateBouncing(double time, float frame_rate_compensation)
 {
 	//ppl7::PrintDebugTime("Skull::updateBouncing\n");
 	if (state == 0) {
@@ -101,6 +318,11 @@ void Skull::updateBouncing(float frame_rate_compensation)
 			state=1;
 		}
 	}
+	if (next_roll < time && animation.isFinished()) {
+		next_roll=time + ppl7::randf(1.f, 10.0f);
+		if (ppl7::rand(0, 1) == 0) animation.startSequence(36, 56, false, 0);
+		else animation.startSequence(56, 36, false, 0);
+	}
 }
 
 void Skull::newState(double time, TileTypePlane& ttplane, Player& player)
@@ -112,14 +334,17 @@ void Skull::newState(double time, TileTypePlane& ttplane, Player& player)
 	float distance=ppl7::grafix::Distance(ppl7::grafix::PointF(player.x, player.y), p);
 	if (distance < 300) {
 		aState=ActionState::Attack;
+		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
 		return;
 	}
 	//ppl7::PrintDebugTime("Skull::newState: %d\n", r);
 	switch (r) {
 	case 0: aState=ActionState::GoBackToOrigin;
 		break;
-	case 1: if (distance < 600) aState=ActionState::Attack;
-		  else aState=ActionState::Bouncing;
+	case 1: if (distance < 600) {
+		aState=ActionState::Attack;
+		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
+	} else aState=ActionState::Bouncing;
 		break;
 
 	default: aState=ActionState::Bouncing;
@@ -191,6 +416,7 @@ void Skull::updateAttack(double time, TileTypePlane& ttplane, Player& player, fl
 	while (ttplane.getType(checkp) != TileType::Blocking) {
 		distance=ppl7::grafix::Distance(playerp, checkp);
 		if (distance < 20) {
+			if (distance < 600 && fire_cooldown < time) fire(time, player);
 			goToTarget(time, frame_rate_compensation, playerp);
 			return;
 		}
@@ -200,6 +426,24 @@ void Skull::updateAttack(double time, TileTypePlane& ttplane, Player& player, fl
 		if (playerp.y > checkp.y) checkp.y+=10.0f;
 	}
 	aState=ActionState::GoBackToOrigin;
+}
+
+void Skull::fire(double time, Player& player)
+{
+	float direction=0.0f;
+	if (player.x < p.x) direction=270;
+	else direction=90;
+	fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
+	SkullFireball* particle=new SkullFireball();
+	particle->p=p;
+	particle->initial_p=p;
+	particle->spawned=true;
+	particle->sprite_no=300;
+	particle->sprite_set=sprite_set;
+	particle->sprite_no_representation=300;
+	particle->velocity=calculateVelocity(10.0f, direction);
+	particle->direction=180 + direction;
+	GetObjectSystem()->addObject(particle);
 }
 
 void Skull::die(double time) {
@@ -279,14 +523,17 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	}
 	//ppl7::PrintDebugTime("velocity=%0.3f : %0.3f, aState=%d\n", velocity.x, velocity.y, (int)aState);
 	if (next_state == 0.0f) next_state=time + ppl7::randf(0.2f, 4.0f);
+	if (next_roll == 0.0f) next_roll=time + ppl7::randf(1.f, 10.0f);
+
 
 	float distance=ppl7::grafix::Distance(ppl7::grafix::PointF(player.x, player.y), p);
-	if (distance < 300 && aState != ActionState::Dead) aState=ActionState::Attack;
-
-
+	if (distance < 300 && aState != ActionState::Dead && aState != ActionState::Attack) {
+		aState=ActionState::Attack;
+		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
+	}
 
 	if ((aState == ActionState::Wait || aState == ActionState::Bouncing) && next_state < time) newState(time, ttplane, player);
-	else if (aState == ActionState::Bouncing) updateBouncing(frame_rate_compensation);
+	else if (aState == ActionState::Bouncing) updateBouncing(time, frame_rate_compensation);
 	else if (aState == ActionState::GoBackToOrigin) updateGoBackToOrigin(time, frame_rate_compensation);
 	else if (aState == ActionState::Attack) updateAttack(time, ttplane, player, frame_rate_compensation);
 	else if (aState == ActionState::Stop) updateStop(time, frame_rate_compensation);
@@ -316,7 +563,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		}
 	}
 	light.custom_texture=this->texture;
-	light.sprite_no=36 + sprite_no;
+	light.sprite_no=57 + sprite_no;
 	light.x=p.x;
 	light.y=p.y;
 	shine.x=p.x;
