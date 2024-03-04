@@ -1090,6 +1090,7 @@ private:
 	AnimationCycle animation;
 	double next_state, next_animation;
 	double fire_cooldown, next_roll, voice_cooldown;
+	float health;
 	int state;
 	ppl7::grafix::PointF bounce_start;
 	enum class ActionState {

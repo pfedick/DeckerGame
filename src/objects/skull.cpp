@@ -238,6 +238,7 @@ Skull::Skull()
 	sprite_no=0;
 	sprite_no_representation=0;
 	state=0;
+	health=100.0f;
 	collisionDetection=true;
 	updateBoundary();
 	orientation=Orientation::Front;
@@ -566,12 +567,16 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	if (player.isFlashlightOn() && aState != ActionState::Dead) {
 		float y_dist=abs((player.y - 40) - p.y);
 		float x_dist=abs(player.x - p.x);
-		if (y_dist < 2 * TILE_HEIGHT && x_dist < 4 * TILE_WIDTH) {
+		if (y_dist < 2 * TILE_HEIGHT && x_dist < 6 * TILE_WIDTH) {
 			if ((player.orientation == Player::PlayerOrientation::Left && p.x < player.x) ||
 				(player.orientation == Player::PlayerOrientation::Right && p.x > player.x)) {
 					// In light cone
-				die(time);
-				player.addPoints(20);
+				health-=6.0f * frame_rate_compensation;
+				if (health < 0) {
+					die(time);
+					player.addPoints(20);
+
+				}
 			}
 		}
 	}
