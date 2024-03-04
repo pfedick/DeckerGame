@@ -1089,10 +1089,38 @@ class Skull : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	float speed;
+	//float speed;
 	int state;
+	ppl7::grafix::PointF bounce_start;
+	enum class ActionState {
+		Wait,
+		Bouncing,
+		Turn,
+		Attack,
+		GoBackToOrigin,
+		Stop,
+		Dead
+	};
+	enum class Orientation {
+		Front,
+		Left,
+		Right
+	};
+	Orientation orientation;
+	ActionState aState;
 	LightObject light;
 	LightObject shine;
+	ppl7::grafix::PointF velocity;
+
+	void updateBouncing(float frame_rate_compensation);
+	void updateGoBackToOrigin(double time, float frame_rate_compensation);
+	void newState(double time, TileTypePlane& ttplane, Player& player);
+	void updateStop(double time, float frame_rate_compensation);
+	void updateAttack(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void die(double time);
+	void turn();
+	void stopHorizontalVelocity(float frame_rate_compensation);
+	void goToTarget(double time, float frame_rate_compensation, const ppl7::grafix::PointF& target);
 public:
 	Skull();
 	static Representation representation();
