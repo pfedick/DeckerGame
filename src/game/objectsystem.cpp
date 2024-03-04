@@ -165,6 +165,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Rat]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Rat]->load(sdl, "res/rat.tex");
 
+	spriteset[Spriteset::Skull]->enableOutlines(true);
+	spriteset[Spriteset::Skull]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Skull]->load(sdl, "res/skull.tex");
+
 	spriteset[Spriteset::Ghost]->enableOutlines(true);
 	spriteset[Spriteset::Ghost]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Ghost]->load(sdl, "res/ghost.tex");

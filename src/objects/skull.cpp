@@ -9,21 +9,21 @@ namespace Decker::Objects {
 
 Representation Skull::representation()
 {
-	return Representation(Spriteset::GenericObjects, 468);
+	return Representation(Spriteset::Skull, 0);
 }
 
 Skull::Skull()
 	:Enemy(Type::ObjectType::Skull)
 {
-	sprite_set=Spriteset::GenericObjects;
-	sprite_no=468;
-	sprite_no_representation=468;
+	sprite_set=Spriteset::Skull;
+	sprite_no=0;
+	sprite_no_representation=0;
 	state=ppl7::rand(0, 4);
 	speed=ppl7::randf(0.0f, 2.0f);;
 	collisionDetection=true;
 	updateBoundary();
 	light.color.set(255, 255, 255, 255);
-	light.sprite_no=469;
+	light.sprite_no=36;
 	light.scale_x=1.0f;
 	light.scale_y=1.0f;
 	light.custom_texture=NULL;
@@ -76,6 +76,16 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 void Skull::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	if (!enabled) return;
+	if (time > next_animation) {
+		next_animation=time + 0.033f;
+		animation.update();
+		int new_sprite=animation.getFrame();
+		if (new_sprite != sprite_no) {
+			sprite_no=new_sprite;
+			updateBoundary();
+		}
+	}
+
 	if (state == 0) {
 		speed+=0.05f * frame_rate_compensation;
 		p.y-=speed;
@@ -106,15 +116,14 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 	}
 	if (player.isFlashlightOn() && state < 5) {
-		float y_dist=abs(player.y - p.y - 50);
+		float y_dist=abs((player.y - 40) - p.y);
 		float x_dist=abs(player.x - p.x);
-		if (y_dist < TILE_HEIGHT && x_dist < 4 * TILE_WIDTH) {
+		if (y_dist < 2 * TILE_HEIGHT && x_dist < 4 * TILE_WIDTH) {
 			if ((player.orientation == Player::PlayerOrientation::Left && p.x < player.x) ||
 				(player.orientation == Player::PlayerOrientation::Right && p.x > player.x)) {
 					// In light cone
 				state=5;
-				sprite_no=470;
-				light.sprite_no=471;
+				animation.startSequence(24, 35, false, 35);
 				collisionDetection=false;
 				speed=1.0f;
 				player.addPoints(20);
@@ -125,13 +134,14 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		}
 	}
 	light.custom_texture=this->texture;
+	light.sprite_no=36 + sprite_no;
 	light.x=p.x;
 	light.y=p.y;
 	shine.x=p.x;
-	shine.y=p.y - 22;
+	shine.y=p.y - 1;
 	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&light);
 	lights.addObjectLight(&shine);
+	lights.addObjectLight(&light);
 }
 
 void Skull::handleCollision(Player* player, const Collision& collision)

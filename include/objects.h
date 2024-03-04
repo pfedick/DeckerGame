@@ -127,6 +127,7 @@ public:
 		Ghost,
 		Zombie,
 		StamperV2,
+		Skull,
 		MaxSpritesets
 	};
 };
