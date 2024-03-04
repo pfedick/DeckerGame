@@ -191,6 +191,14 @@ public:
 		ghost_chains,
 		ghost_turn,
 		ghost_land,
+		skull_voice1,
+		skull_voice2,
+		skull_voice3,
+		skull_hui,
+		skull_death,
+		skull_fireball,
+		skull_impact,
+		skull_shoot,
 		// this must always be the last entry!
 		maxClips
 	};

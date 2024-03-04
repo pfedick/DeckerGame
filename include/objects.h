@@ -1089,7 +1089,7 @@ class Skull : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	double fire_cooldown, next_roll;
+	double fire_cooldown, next_roll, voice_cooldown;
 	int state;
 	ppl7::grafix::PointF bounce_start;
 	enum class ActionState {

@@ -141,7 +141,7 @@ void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, 
 {
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
-		audio=pool.getInstance(AudioClip::fireball_fly);
+		audio=pool.getInstance(AudioClip::skull_fireball);
 		audio->setVolume(1.0f);
 		audio->setPositional(p, 1800);
 		audio->setLoop(true);
@@ -164,7 +164,7 @@ void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, 
 	if (t1 == TileType::Blocking) {
 		deleteDefered=true;
 		pool.stopInstace(audio);
-		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
+		pool.playOnce(AudioClip::skull_impact, p, 1800, 1.0f);
 	} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
 		deleteDefered=true;
 		pool.stopInstace(audio);
@@ -256,6 +256,7 @@ Skull::Skull()
 	shine.scale_y=0.15f;
 	shine.intensity=128;
 	fire_cooldown=0.0f;
+	voice_cooldown=0.0f;
 	shine.plane=static_cast<int>(LightPlaneId::Player);
 	shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 
@@ -318,23 +319,32 @@ void Skull::updateBouncing(double time, float frame_rate_compensation)
 			state=1;
 		}
 	}
+	if (voice_cooldown == 0) voice_cooldown=time + ppl7::randf(1.0f, 5.0f);
 	if (next_roll < time && animation.isFinished()) {
+		int r=ppl7::rand(0, 1);
+		if (r == 0) getAudioPool().playOnce(AudioClip::skull_hui, p, 1800, 1.0f);
+		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice3, p, 1800, 1.0f);
 		next_roll=time + ppl7::randf(1.f, 10.0f);
 		if (ppl7::rand(0, 1) == 0) animation.startSequence(36, 56, false, 0);
 		else animation.startSequence(56, 36, false, 0);
+	} else if (voice_cooldown < time) {
+		int r=ppl7::rand(0, 1);
+		if (r == 0) getAudioPool().playOnce(AudioClip::skull_voice1, p, 1800, 1.0f);
+		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice2, p, 1800, 1.0f);
+		voice_cooldown=time + ppl7::randf(3.0f, 10.0f);
 	}
 }
 
 void Skull::newState(double time, TileTypePlane& ttplane, Player& player)
 {
 	next_state=time + ppl7::randf(0.2f, 2.0f);
-	int r=ppl7::rand(0, 6);
+	int r=ppl7::rand(0, 4);
 	velocity.setPoint(0, 0);
 	state=0;
 	float distance=ppl7::grafix::Distance(ppl7::grafix::PointF(player.x, player.y), p);
 	if (distance < 300) {
 		aState=ActionState::Attack;
-		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
+		fire_cooldown=time + ppl7::randf(0.3f, 1.0f);
 		return;
 	}
 	//ppl7::PrintDebugTime("Skull::newState: %d\n", r);
@@ -444,9 +454,12 @@ void Skull::fire(double time, Player& player)
 	particle->velocity=calculateVelocity(10.0f, direction);
 	particle->direction=180 + direction;
 	GetObjectSystem()->addObject(particle);
+	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1800, 1.0f);
 }
 
 void Skull::die(double time) {
+	getAudioPool().playOnce(AudioClip::skull_death, p, 1800, 1.0f);
+	getAudioPool().playOnce(AudioClip::skull_impact, p, 1800, 1.0f);
 	state=5;
 	animation.startSequence(24, 35, false, 35);
 	collisionDetection=false;
