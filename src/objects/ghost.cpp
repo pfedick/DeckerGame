@@ -183,29 +183,29 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
         next_state=time + ppl7::randf(1.0f, 5.0f);
         state=State::Stand;
     }
-
+    //ppl7::PrintDebugTime("state: %d, p.y=%0.3f, height: %0.3f\n", (int)state, p.y, height);
     if (state == State::FlyLeft || state == State::FlyRight) {
         if (next_state < time) land=true;
         if (land == false) {
             if (height < target_height) {
                 height+=2 * frame_rate_compensation;
-                if (height > target_height) {
-                    target_height=ppl7::randf(TILE_HEIGHT, 6 * TILE_HEIGHT);
-                    //change_height=time + ppl7::randf(0.0f, 2.0f);
+                if (ttplane.getType(ppl7::grafix::Point(p.x, p.y - 4 * TILE_HEIGHT)) != TileType::NonBlocking) {
+                    target_height=ppl7::randf(-3 * TILE_HEIGHT, height);
+                    //ppl7::PrintDebugTime("Collision up, p.y=%0.3f, Height: %0.3f, new target_height: %0.3f\n", p.y, height, target_height);
+                } else if (height > target_height) {
+                    target_height=ppl7::randf(-3 * TILE_HEIGHT, 6 * TILE_HEIGHT);
+                    //ppl7::PrintDebugTime("Change Targetheight 3, p.y=%0.3f, Height: %0.3f, new target_height: %0.3f\n", p.y, height, target_height);
                 }
             } else if (height > target_height) {
                 height-=2 * frame_rate_compensation;
-                if (height < target_height) {
-                    target_height=ppl7::randf(TILE_HEIGHT, 6 * TILE_HEIGHT);
-                    //change_height=time + ppl7::randf(0.0f, 2.0f);
+                if (ttplane.getType(ppl7::grafix::Point(p.x, p.y + TILE_HEIGHT)) != TileType::NonBlocking) {
+                    target_height=ppl7::randf(height, 6 * TILE_HEIGHT);
+                    //ppl7::PrintDebugTime("Collision down, p.y=%0.3f, Height: %0.3f, new target_height: %0.3f\n", p.y, height, target_height);
+                } else if (height < target_height) {
+                    target_height=ppl7::randf(-3 * TILE_HEIGHT, 6 * TILE_HEIGHT);
+                    //ppl7::PrintDebugTime("Change Targetheight 2, p.y=%0.3f, Height: %0.3f, new target_height: %0.3f\n", p.y, height, target_height);
                 }
             }
-            /*
-            if (change_height < time) {
-                change_height=time + ppl7::randf(0.0f, 1.0f);
-                target_height=ppl7::randf(10, 3 * TILE_HEIGHT);
-            }
-            */
         } else {
             TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
             if (t1 != TileType::Blocking) {
@@ -215,11 +215,6 @@ void Ghost::update(double time, TileTypePlane& ttplane, Player& player, float fr
                     height+=1;
                     p.y=initial_p.y - height;
                 }
-
-
-            //if (height > 0) height-=4 * frame_rate_compensation;
-            //if (height < 0) {
-                //height=0;
                 if (state == State::FlyRight) {
                     state = State::LandRight;
                     animation.startSequence(65, 70, false, 10);
