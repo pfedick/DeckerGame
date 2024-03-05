@@ -427,7 +427,7 @@ void Skull::updateAttack(double time, TileTypePlane& ttplane, Player& player, fl
 	}
 	// check, if direct way to player is free
 	ppl7::grafix::PointF checkp=p;
-	while (ttplane.getType(checkp) != TileType::Blocking) {
+	while (ttplane.getType(checkp) == TileType::NonBlocking) {
 		distance=ppl7::grafix::Distance(playerp, checkp);
 		if (distance < 20) {
 			if (distance < 600 && fire_cooldown < time) fire(time, player);
