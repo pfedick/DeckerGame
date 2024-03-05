@@ -1,4 +1,4 @@
-VERSION ?= 0.15.0
+VERSION ?= 0.15.1
 PREVIOUS_TAG = 0.15.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')

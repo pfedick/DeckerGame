@@ -1113,7 +1113,7 @@ private:
 	LightObject shine;
 	ppl7::grafix::PointF velocity;
 
-	void updateBouncing(double time, float frame_rate_compensation);
+	void updateBouncing(double time, TileTypePlane& ttplane, float frame_rate_compensation);
 	void updateGoBackToOrigin(double time, float frame_rate_compensation);
 	void newState(double time, TileTypePlane& ttplane, Player& player);
 	void updateStop(double time, float frame_rate_compensation);

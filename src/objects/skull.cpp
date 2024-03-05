@@ -295,7 +295,7 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 }
 
 
-void Skull::updateBouncing(double time, float frame_rate_compensation)
+void Skull::updateBouncing(double time, TileTypePlane& ttplane, float frame_rate_compensation)
 {
 	//ppl7::PrintDebugTime("Skull::updateBouncing\n");
 	if (state == 0) {
@@ -333,6 +333,9 @@ void Skull::updateBouncing(double time, float frame_rate_compensation)
 		if (r == 0) getAudioPool().playOnce(AudioClip::skull_voice1, p, 1800, 1.0f);
 		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice2, p, 1800, 1.0f);
 		voice_cooldown=time + ppl7::randf(3.0f, 10.0f);
+	}
+	if (ttplane.getType(p) != TileType::NonBlocking) {
+		aState=ActionState::GoBackToOrigin;
 	}
 }
 
@@ -553,7 +556,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	}
 
 	if ((aState == ActionState::Wait || aState == ActionState::Bouncing) && next_state < time) newState(time, ttplane, player);
-	else if (aState == ActionState::Bouncing) updateBouncing(time, frame_rate_compensation);
+	else if (aState == ActionState::Bouncing) updateBouncing(time, ttplane, frame_rate_compensation);
 	else if (aState == ActionState::GoBackToOrigin) updateGoBackToOrigin(time, frame_rate_compensation);
 	else if (aState == ActionState::Attack) updateAttack(time, ttplane, player, frame_rate_compensation);
 	else if (aState == ActionState::Stop) updateStop(time, frame_rate_compensation);
