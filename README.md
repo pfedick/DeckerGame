@@ -23,15 +23,15 @@ This game is completely free and open source! I provide finished binaries for Wi
 You can even fork the sourcecode and make your own modifications!
 
 ## Where can I download it?
-I provide finished binaries for Windows for download on my [github page](https://github.com/pfedick/DeckerGame/releases).
+I provide binaries for Windows for download on my [github page](https://github.com/pfedick/DeckerGame/releases).
 
 
 ## Where can I find more information about the game?
 You can find a lot of videos about the game on my channel on YouTube and Twitch, I'm also on mastodon and discord:
 
+* Mastodon: https://mastodon.de/@patrickf
 * YouTube: https://www.youtube.com/@PatrickFedick
 * Twitch: https://www.twitch.tv/pfedick
-* Mastodon: https://mastodon.de/@patrickf
 * Discord: https://discord.gg/QZXPNFKNKP
 
 ## What's the status of the game?
