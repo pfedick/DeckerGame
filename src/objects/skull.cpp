@@ -82,7 +82,7 @@ SkullFireball::SkullFireball()
 
 	light_shine.has_lensflare=true;
 	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
-	light_shine.flare_intensity=255;
+	light_shine.flare_intensity=60;
 	light_shine.flare_useLightColor=true;
 	audio=NULL;
 
@@ -326,8 +326,8 @@ void Skull::updateBouncing(double time, float frame_rate_compensation)
 		if (r == 0) getAudioPool().playOnce(AudioClip::skull_hui, p, 1800, 1.0f);
 		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice3, p, 1800, 1.0f);
 		next_roll=time + ppl7::randf(1.f, 10.0f);
-		if (ppl7::rand(0, 1) == 0) animation.startSequence(36, 56, false, 0);
-		else animation.startSequence(56, 36, false, 0);
+		if (ppl7::rand(0, 1) == 0) animation.startSequence(55, 75, false, 0);
+		else animation.startSequence(75, 55, false, 0);
 	} else if (voice_cooldown < time) {
 		int r=ppl7::rand(0, 1);
 		if (r == 0) getAudioPool().playOnce(AudioClip::skull_voice1, p, 1800, 1.0f);
@@ -442,16 +442,22 @@ void Skull::updateAttack(double time, TileTypePlane& ttplane, Player& player, fl
 void Skull::fire(double time, Player& player)
 {
 	float direction=0.0f;
-	if (player.x < p.x) direction=270;
-	else direction=90;
+	if (player.x < p.x) {
+		direction=270;
+		animation.startSequence(22, 31, false, 22);
+	} else {
+		direction=90;
+		animation.startSequence(33, 42, false, 32);
+	}
 	fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
 	SkullFireball* particle=new SkullFireball();
 	particle->p=p;
 	particle->initial_p=p;
 	particle->spawned=true;
-	particle->sprite_no=300;
+	particle->sprite_no=152;
+	particle->color_mod.set(64, 192, 0, 255);
 	particle->sprite_set=sprite_set;
-	particle->sprite_no_representation=300;
+	particle->sprite_no_representation=152;
 	particle->velocity=calculateVelocity(10.0f, direction);
 	particle->direction=180 + direction;
 	GetObjectSystem()->addObject(particle);
@@ -462,7 +468,7 @@ void Skull::die(double time) {
 	getAudioPool().playOnce(AudioClip::skull_death, p, 1800, 1.0f);
 	getAudioPool().playOnce(AudioClip::skull_impact, p, 1800, 1.0f);
 	state=5;
-	animation.startSequence(24, 35, false, 35);
+	animation.startSequence(43, 54, false, 54);
 	collisionDetection=false;
 	//velocity.y=1.0f;
 	emmitParticles(time, p);
@@ -483,7 +489,7 @@ void Skull::turn()
 			animation.startSequence(10, 0, false, 0);
 			orientation=Orientation::Front;
 		} else if (velocity.x > 0 && orientation == Orientation::Front) {
-			animation.startSequence(11, 21, false, 23);
+			animation.startSequence(11, 21, false, 32);
 			orientation=Orientation::Right;
 		} else if (velocity.x == 0.0f && orientation == Orientation::Right) {
 			animation.startSequence(21, 11, false, 0);
@@ -581,7 +587,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		}
 	}
 	light.custom_texture=this->texture;
-	light.sprite_no=57 + sprite_no;
+	light.sprite_no=76 + sprite_no;
 	light.x=p.x;
 	light.y=p.y;
 	shine.x=p.x;
