@@ -16,6 +16,9 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 {
 	ppl7::grafix::Rect client=this->clientRect();
 
+	selected_object=0;
+	spriteset=NULL;
+
 	scrollbar=new ppl7::tk::Scrollbar(client.width() - 28, client.y1, 28, client.height());
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
