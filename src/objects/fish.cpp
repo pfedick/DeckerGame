@@ -19,6 +19,7 @@ Fish::Fish()
 	sprite_no_representation=399;
 	state=0;
 	collisionDetection=true;
+	next_animation=0.0f;
 	scale=ppl7::randf(0.2f, 1.0f);
 	speed=ppl7::randf(0.8f, 6.0f);
 	color_mod.setColor(ppl7::rand(10, 80),
