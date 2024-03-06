@@ -186,7 +186,17 @@ bool Plane::isVisible() const
 void Plane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (tilematrix == NULL) return;
-	unsigned char* buffer=(unsigned char*)malloc(10 + width * height * (MAX_TILE_LAYER * 11));
+	// calculate required size
+	size_t buffersize=10;
+	for (int y=0;y < height;y++) {
+		for (int x=0;x < width;x++) {
+			const Tile* t=tilematrix[y * width + x];
+			if (t) {
+				buffersize+=(5 + MAX_TILE_LAYER * 11);
+			}
+		}
+	}
+	unsigned char* buffer=(unsigned char*)malloc(buffersize);
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
 	ppl7::Poke8(buffer + 5, 1);		// Version
@@ -214,6 +224,7 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 			}
 		}
 	}
+	//ppl7::PrintDebugTime("saving plane, rquired size: %d, realsize: %d\n", buffersize,p);
 	ppl7::Poke32(buffer + 0, p);
 	file.write(buffer, p);
 	free(buffer);
