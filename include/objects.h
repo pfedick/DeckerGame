@@ -1024,6 +1024,7 @@ private:
 	double next_state, next_animation;
 	//int velocity;
 	int state;
+	LightObject lightmap;
 public:
 	Mushroom();
 	static Representation representation();

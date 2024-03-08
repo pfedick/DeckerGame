@@ -32,6 +32,15 @@ Mushroom::Mushroom()
 	next_animation=0.0f;
 	collisionDetection=true;
 	animation.start(turn_from_mid_to_left, sizeof(turn_from_mid_to_left) / sizeof(int), false, 0);
+	lightmap.color.set(200, 200, 255, 255);
+	lightmap.sprite_no=1;
+	lightmap.scale_x=1.0f;
+	lightmap.scale_y=1.0f;
+	lightmap.custom_texture=NULL;
+	lightmap.intensity=255;
+	lightmap.plane=static_cast<int>(LightPlaneId::Player);
+	lightmap.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
+
 }
 
 void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
@@ -45,6 +54,12 @@ void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float
 			updateBoundary();
 		}
 	}
+	lightmap.x=p.x;
+	lightmap.y=p.y;
+	lightmap.custom_texture=texture;
+	lightmap.sprite_no=sprite_no + 89;
+	LightSystem& lights=GetGame().getLightSystem();
+	lights.addObjectLight(&lightmap);
 
 	if (state == 0 && animation.isFinished()) {
 		state=1;
