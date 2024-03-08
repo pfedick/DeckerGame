@@ -720,7 +720,8 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	// Draw background
 	metrics.time_draw_background.start();
 	// For unknown reason, the SDL_RenderClear on the screen is extreme expensive on linux with intel grafix card, it takes up to 12 ms!
-	//SDL_SetRenderTarget(renderer, NULL);
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderClear(renderer);
 	//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	//SDL_RenderFillRect(renderer, NULL);
 
