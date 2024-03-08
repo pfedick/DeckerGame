@@ -584,6 +584,8 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 				if (health < 0) {
 					die(time);
 					player.addPoints(20);
+					player.addHealth(10);
+
 
 				}
 			}
