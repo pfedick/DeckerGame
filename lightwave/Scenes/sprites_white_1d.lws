@@ -10,7 +10,7 @@ RenderRangeArbitrary 0-120
 PreviewFirstFrame 0
 PreviewLastFrame 60
 PreviewFrameStep 1
-CurrentFrame 0
+CurrentFrame 6
 FramesPerSecond 30
 AutoKeyFixedFrame 0
 ChangeScene 0
@@ -6214,7 +6214,7 @@ SplineFit 0
 IKInitialState 0
 UseIKChainValues 1
 LightColor 1 1 1
-LightIntensity 2
+LightIntensity 1
 AffectCaustics 1
 VolumetricLighting 1
 VolumetricSamples 2
@@ -6692,7 +6692,7 @@ Plugin VirtualStudio 1 VirtualStudio
 EndPlugin
 
 CurrentObject 12
-CurrentLight 1
+CurrentLight 0
 CurrentCamera 0
 GraphEditorData
 { GraphEd_Favorites
