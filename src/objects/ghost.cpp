@@ -36,7 +36,7 @@ Ghost::Ghost()
     target_height=0.0f;
     audio=getAudioPool().getInstance(AudioClip::ghost_chains);
     if (audio) {
-        audio->setVolume(1.0f);
+        audio->setVolume(0.7f);
         audio->setAutoDelete(false);
         audio->setLoop(true);
         audio->setPositional(p, 960);

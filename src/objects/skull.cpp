@@ -142,8 +142,8 @@ void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, 
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::skull_fireball);
-		audio->setVolume(1.0f);
-		audio->setPositional(p, 1800);
+		audio->setVolume(0.7f);
+		audio->setPositional(p, 1200);
 		audio->setLoop(true);
 		pool.playInstance(audio);
 	}
@@ -323,15 +323,15 @@ void Skull::updateBouncing(double time, TileTypePlane& ttplane, float frame_rate
 	if (voice_cooldown == 0) voice_cooldown=time + ppl7::randf(1.0f, 5.0f);
 	if (next_roll < time && animation.isFinished()) {
 		int r=ppl7::rand(0, 1);
-		if (r == 0) getAudioPool().playOnce(AudioClip::skull_hui, p, 1800, 1.0f);
-		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice3, p, 1800, 1.0f);
+		if (r == 0) getAudioPool().playOnce(AudioClip::skull_hui, p, 1200, 0.5f);
+		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice3, p, 1200, 0.5f);
 		next_roll=time + ppl7::randf(1.f, 10.0f);
 		if (ppl7::rand(0, 1) == 0) animation.startSequence(55, 75, false, 0);
 		else animation.startSequence(75, 55, false, 0);
 	} else if (voice_cooldown < time) {
 		int r=ppl7::rand(0, 1);
-		if (r == 0) getAudioPool().playOnce(AudioClip::skull_voice1, p, 1800, 1.0f);
-		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice2, p, 1800, 1.0f);
+		if (r == 0) getAudioPool().playOnce(AudioClip::skull_voice1, p, 1200, 0.5f);
+		else if (r == 1) getAudioPool().playOnce(AudioClip::skull_voice2, p, 1200, 0.5f);
 		voice_cooldown=time + ppl7::randf(3.0f, 10.0f);
 	}
 	if (ttplane.getType(p) != TileType::NonBlocking) {
@@ -464,12 +464,12 @@ void Skull::fire(double time, Player& player)
 	particle->velocity=calculateVelocity(10.0f, direction);
 	particle->direction=180 + direction;
 	GetObjectSystem()->addObject(particle);
-	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1800, 1.0f);
+	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1600, 0.7f);
 }
 
 void Skull::die(double time) {
-	getAudioPool().playOnce(AudioClip::skull_death, p, 1800, 1.0f);
-	getAudioPool().playOnce(AudioClip::skull_impact, p, 1800, 1.0f);
+	getAudioPool().playOnce(AudioClip::skull_death, p, 1600, 0.6f);
+	getAudioPool().playOnce(AudioClip::skull_impact, p, 1600, 0.6f);
 	state=5;
 	animation.startSequence(43, 54, false, 54);
 	collisionDetection=false;

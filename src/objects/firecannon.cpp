@@ -134,8 +134,8 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::fireball_fly);
-		audio->setVolume(1.0f);
-		audio->setPositional(p, 1800);
+		audio->setVolume(0.7f);
+		audio->setPositional(p, 1200);
 		audio->setLoop(true);
 		pool.playInstance(audio);
 	}
@@ -252,7 +252,7 @@ void FireCannon::fire()
 	particle->velocity=calculateVelocity(speed, direction);
 	particle->direction=180 + direction;
 	GetObjectSystem()->addObject(particle);
-	//getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.4f);
+	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1200, 0.7f);
 }
 
 void FireCannon::toggle(bool enable, Object* source)
