@@ -604,7 +604,13 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 void Skull::handleCollision(Player* player, const Collision& collision)
 {
-	player->dropHealth(2);
+	Player::PlayerMovement movement=player->getMovement();
+	if (collision.onFoot() == true && movement == Player::Falling) {
+		die(player->time);
+		player->addPoints(20);
+	} else {
+		player->dropHealth(2);
+	}
 }
 
 
