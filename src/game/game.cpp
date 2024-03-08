@@ -154,6 +154,10 @@ void Game::loadGrafix()
 	resources.Sprites_Tropical.enableMemoryBuffer(true);
 	resources.Sprites_Tropical.load(sdl, "res/sprites_tropical.tex");
 
+	resources.Sprites_White1D.enableOutlines(true);
+	resources.Sprites_White1D.enableMemoryBuffer(true);
+	resources.Sprites_White1D.load(sdl, "res/sprites_white_x1.tex");
+
 	resources.Lightmaps.enableOutlines(true);
 	resources.Lightmaps.enableMemoryBuffer(true);
 	resources.Lightmaps.setTextureBlendMode(SDL_BLENDMODE_ADD);
@@ -213,6 +217,10 @@ void Game::loadGrafix()
 	resources.uiSpritesWhite.enableSDLBuffer(false);
 	resources.uiSpritesWhite.enableMemoryBuffer(true);
 	resources.uiSpritesWhite.load(sdl, "res/sprites_white_ui.tex");
+
+	resources.uiSprites_White1D.enableSDLBuffer(false);
+	resources.uiSprites_White1D.enableMemoryBuffer(true);
+	resources.uiSprites_White1D.load(sdl, "res/sprites_white_x1_ui.tex");
 
 	resources.uiSpritesTropical.enableSDLBuffer(false);
 	resources.uiSpritesTropical.enableMemoryBuffer(true);
@@ -491,6 +499,7 @@ void Game::init_grafix()
 	level.setSpriteset(7, &resources.Sprites_Treasure);
 	level.setSpriteset(8, &resources.Sprites_White);
 	level.setSpriteset(9, &resources.Sprites_Tropical);
+	level.setSpriteset(10, &resources.Sprites_White1D);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -1101,7 +1110,8 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(5, "Rocks", &resources.uiSpritesRocks, 4);
 		sprite_selection->setSpriteSet(6, "Flowers", &resources.uiSpritesFlowers, 1);
 		sprite_selection->setSpriteSet(7, "Treasure", &resources.uiSpritesTreasure, 1);
-		sprite_selection->setSpriteSet(8, "Recolorable Sprites", &resources.uiSpritesWhite, 8);
+		sprite_selection->setSpriteSet(8, "Recolorable 8d", &resources.uiSpritesWhite, 8);
+		sprite_selection->setSpriteSet(10, "Recolorable 1d", &resources.uiSprites_White1D, 1);
 		sprite_selection->setSpriteSet(9, "Tropical", &resources.uiSpritesTropical, 4);
 		this->addChild(sprite_selection);
 		viewport.x1=300;

@@ -123,8 +123,9 @@ void SpriteSelection::setColorIndex(int index)
 void SpriteSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
 	if (event->widget() == tileset_combobox) {
-		//printf("value=%d\n",value);
-		setCurrentSpriteSet(value + 1);
+		int v=tileset_combobox->currentIdentifier().toInt();
+		//printf("value=%d\n", v);
+		setCurrentSpriteSet(v);
 	} else if (event->widget() == colorframe) {
 		tilesframe->setColor(colorframe->color());
 	}

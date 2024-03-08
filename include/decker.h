@@ -29,7 +29,7 @@
 
 
 #ifndef MAX_SPRITESETS
-#define MAX_SPRITESETS 15
+#define MAX_SPRITESETS 16
 #endif
 
 #define MAX_TILE_LAYER 4
@@ -504,6 +504,8 @@ public:
 	SpriteTexture Lightmaps;
 	SpriteTexture uiLightmaps;
 	SpriteTexture LightObjects;
+	SpriteTexture Sprites_White1D;
+	SpriteTexture uiSprites_White1D;
 
 	SpriteTexture Waynet;
 
