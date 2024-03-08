@@ -500,6 +500,7 @@ void Game::init_grafix()
 	level.setSpriteset(8, &resources.Sprites_White);
 	level.setSpriteset(9, &resources.Sprites_Tropical);
 	level.setSpriteset(10, &resources.Sprites_White1D);
+	level.setSpriteset(11, &resources.bricks[2].world);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -1113,6 +1114,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(8, "Recolorable 8d", &resources.uiSpritesWhite, 8);
 		sprite_selection->setSpriteSet(10, "Recolorable 1d", &resources.uiSprites_White1D, 1);
 		sprite_selection->setSpriteSet(9, "Tropical", &resources.uiSpritesTropical, 4);
+		sprite_selection->setSpriteSet(11, "Bricks", &resources.bricks[2].ui, 1);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
