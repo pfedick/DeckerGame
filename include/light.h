@@ -94,6 +94,8 @@ private:
     std::map<uint32_t, LightObject*> light_map;
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
+    double time;
+    float frame_rate_compensation;
     bool visibility[static_cast<int>(LightPlaneId::Max)];
     void updatePlane(LightPlaneId plane, double time, float frame_rate_compensation);
 

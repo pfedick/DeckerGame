@@ -334,6 +334,8 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
 
 void LightSystem::update(double time, float frame_rate_compensation)
 {
+    this->time=time;
+    this->frame_rate_compensation=frame_rate_compensation;
     updatePlane(LightPlaneId::Near, time, frame_rate_compensation);
     updatePlane(LightPlaneId::Player, time, frame_rate_compensation);
     updatePlane(LightPlaneId::Middle, time, frame_rate_compensation);
@@ -352,7 +354,8 @@ void LightSystem::updatePlane(LightPlaneId plane, double time, float frame_rate_
 
 void LightSystem::addObjectLight(LightObject* light)
 {
-    light->current_intensity=(float)light->intensity / 255.0f;
+    //light->current_intensity=(float)light->intensity / 255.0f;
+    light->update(time, frame_rate_compensation);
     light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
     uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
     visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
