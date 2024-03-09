@@ -771,6 +771,33 @@ public:
 
 };
 
+class Fireball : public Object
+{
+private:
+	double next_birth;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	void emmitParticles(double time, const Player& player);
+
+	LightObject light_ball;
+	LightObject light_shine;
+	AudioInstance* audio;
+
+public:
+	ppl7::grafix::PointF velocity;
+	float direction;
+
+	Fireball();
+	~Fireball();
+	static Representation representation();
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	virtual void handleCollision(Player* player, const Collision& collision);
+};
+
+
 class FireCannon : public Trap
 {
 private:
