@@ -786,6 +786,8 @@ private:
 public:
 	ppl7::grafix::PointF velocity;
 	float direction;
+	float gravity;
+	float player_damage;
 
 	Fireball();
 	~Fireball();
@@ -1165,19 +1167,24 @@ class SkullMaster : public Enemy
 {
 private:
 	AnimationCycle animation;
-	double next_state, next_animation;
-	double fire_cooldown, voice_cooldown;
+	double next_state, next_animation, next_birth;
+	double fire_cooldown, voice_cooldown, collision_cooldown;
 	float health;
-	int state;
+	int wait_state;
+	float bounce_distance;
+	float bounce_speed;
+	float max_bounce_velocity;
 
 	enum class ActionState {
 		Wait,
 		Turn,
 		Attack,
+		Die,
 		Dead
 	};
 	enum class Orientation {
 		Front,
+		FrontDown,
 		Left,
 		LeftDown,
 		Right,
@@ -1187,17 +1194,25 @@ private:
 	ActionState aState;
 	LightObject lightmap;
 	LightObject shine;
+	ppl7::grafix::PointF velocity;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+
 
 	void die(double time);
-	void turn();
+	void turn(Orientation target);
 	void fire(double time, Player& player);
+	void update_bounce(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void update_wait(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void update_attack(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void update_die(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 
 public:
 	SkullMaster();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 };
 
 

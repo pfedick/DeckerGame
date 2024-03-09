@@ -49,6 +49,8 @@ Fireball::Fireball()
 	light_shine.flare_intensity=255;
 	light_shine.flare_useLightColor=true;
 	audio=NULL;
+	gravity=0.0f;
+	player_damage=20.0f;
 
 }
 
@@ -112,6 +114,7 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 		pool.playInstance(audio);
 	}
 	p+=velocity * frame_rate_compensation;
+	velocity.y+=(gravity * frame_rate_compensation);
 	audio->setPositional(p, 1200);
 	updateBoundary();
 	light_shine.x=p.x;
@@ -138,7 +141,7 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 void Fireball::handleCollision(Player* player, const Collision& collision)
 {
 	deleteDefered=true;
-	player->dropHealth(20, Physic::HealthDropReason::Burned);
+	player->dropHealth(player_damage, Physic::HealthDropReason::Burned);
 }
 
 void Fireball::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
