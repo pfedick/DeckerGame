@@ -788,6 +788,8 @@ public:
 	float direction;
 	float gravity;
 	float player_damage;
+	int min_particles;
+	int max_particles;
 
 	Fireball();
 	~Fireball();
@@ -1126,6 +1128,7 @@ private:
 	int state;
 	ppl7::grafix::PointF bounce_start;
 	enum class ActionState {
+		Frozen,
 		Wait,
 		Bouncing,
 		Turn,
@@ -1160,6 +1163,7 @@ public:
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void freeze(bool flag);
 
 };
 
@@ -1168,17 +1172,26 @@ class SkullMaster : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation, next_birth;
-	double fire_cooldown, voice_cooldown, collision_cooldown;
+	double fire_cooldown, voice_cooldown, collision_cooldown, flashlight_cooldown;
 	float health;
 	int wait_state;
+	int suspend_count;
 	float bounce_distance;
 	float bounce_speed;
 	float max_bounce_velocity;
+
+	enum class SuspendState {
+		Start,
+		Drop,
+		Retreat,
+		Comeback
+	};
 
 	enum class ActionState {
 		Wait,
 		Turn,
 		Attack,
+		Suspend,
 		Die,
 		Dead
 	};
@@ -1192,20 +1205,25 @@ private:
 	};
 	Orientation orientation;
 	ActionState aState;
+	SuspendState sState;
 	LightObject lightmap;
 	LightObject shine;
 	ppl7::grafix::PointF velocity;
 	std::list<Particle::ScaleGradientItem>scale_gradient;
 	std::list<Particle::ColorGradientItem>color_gradient;
 
-
+	void reset();
 	void die(double time);
 	void turn(Orientation target);
 	void fire(double time, Player& player);
+	void dropSkull(float direction);
+	void dropFireball(float direction, const ppl7::grafix::PointF& p);
+
 	void update_bounce(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void update_wait(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void update_attack(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void update_die(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void update_suspend(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 
 public:
 	SkullMaster();

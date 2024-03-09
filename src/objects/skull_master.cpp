@@ -7,6 +7,94 @@
 namespace Decker::Objects {
 
 
+class SkullDropper : public Object
+{
+private:
+	AudioInstance* audio;
+	Skull* skull;
+public:
+	ppl7::grafix::PointF velocity;
+	float direction;
+	float gravity;
+
+	SkullDropper();
+	~SkullDropper();
+	static Representation representation();
+	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+};
+
+SkullDropper::SkullDropper()
+	:Object(Type::ObjectType::Arrow)
+{
+	collisionDetection=false;
+	sprite_no=0;
+	sprite_set=Spriteset::Skull;
+	updateSpriteset(Spriteset::Skull);
+	audio=NULL;
+	gravity=0.1f;
+	skull=new Skull();
+	skull->freeze(true);
+	skull->spawned=true;
+}
+
+SkullDropper::~SkullDropper()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+}
+
+Representation SkullDropper::representation()
+{
+	return Representation(Spriteset::Skull, 0);
+}
+
+void SkullDropper::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	AudioPool& pool=getAudioPool();
+	if (!audio) {
+		audio=pool.getInstance(AudioClip::fireball_fly);
+		audio->setVolume(0.7f);
+		audio->setPositional(p, 1200);
+		audio->setLoop(true);
+		pool.playInstance(audio);
+	}
+	p+=velocity * frame_rate_compensation;
+	skull->p=p;
+	skull->initial_p=p;
+	skull->update(time, ttplane, player, frame_rate_compensation);
+
+	velocity.y+=(gravity * frame_rate_compensation);
+	audio->setPositional(p, 1200);
+	updateBoundary();
+	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
+	TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 3 * TILE_HEIGHT));
+	if (t1 == TileType::Blocking || t2 == TileType::Blocking) {
+		deleteDefered=true;
+		skull->initial_p.y=p.y - 3 * TILE_HEIGHT;
+		skull->freeze(false);
+		GetObjectSystem()->addObject(skull);
+
+		pool.stopInstace(audio);
+		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
+	}
+}
+
+void SkullDropper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	skull->p=p;
+	skull->sprite_set=sprite_set;
+	skull->texture=texture;
+	skull->draw(renderer, coords);
+}
+
+/***************************************************************************************************
+ * SkullMaster
+ **************************************************************************************************/
+
 
 Representation SkullMaster::representation()
 {
@@ -23,10 +111,12 @@ SkullMaster::SkullMaster()
 	sprite_no=0;
 	sprite_no_representation=0;
 	wait_state=0;
+	suspend_count=0;
 	next_birth=0.0f;
 	health=100.0f;
 	bounce_distance=0.0f;
 	collision_cooldown=0.0f;
+	flashlight_cooldown=0.0f;
 	bounce_speed=0.2f;
 	max_bounce_velocity=1.0f;
 	collisionDetection=true;
@@ -64,6 +154,19 @@ SkullMaster::SkullMaster()
 
 }
 
+void SkullMaster::reset()
+{
+	shine.scale_x=0.6f;
+	shine.scale_y=0.6f;
+	shine.plane=static_cast<int>(LightPlaneId::Player);
+	shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
+	myLayer=Layer::BehindPlayer;
+	aState=ActionState::Wait;
+	health=100.0f;
+	suspend_count=0;
+	p=initial_p;
+}
+
 static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 {
 	std::list<Particle::ScaleGradientItem>scale_gradient;
@@ -98,25 +201,24 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 
 void SkullMaster::fire(double time, Player& player)
 {
-	Fireball* particle=new Fireball();
-	particle->p=p;
+	ppl7::grafix::PointF fp=p;
 	float direction=180.0f;
 	if (orientation == Orientation::Left) {
 		direction=270;
 		animation.startSequence(11, 19, false, 10);
-		particle->p.x-=64;
+		fp.x-=64;
 	} else if (orientation == Orientation::LeftDown) {
 		direction=270 + 30;
 		animation.startSequence(11, 19, false, 10);
-		particle->p.x-=45;
+		fp.x-=45;
 	} else if (orientation == Orientation::Right) {
 		direction=90;
 		animation.startSequence(46, 54, false, 45);
-		particle->p.x+=64;
+		fp.x+=64;
 	} else if (orientation == Orientation::RightDown) {
 		direction=90 + 30;
 		animation.startSequence(61, 69, false, 60);
-		particle->p.x+=45;
+		fp.x+=45;
 	} else if (orientation == Orientation::FrontDown) {
 		direction=180;
 		animation.startSequence(85, 93, false, 84);
@@ -126,19 +228,26 @@ void SkullMaster::fire(double time, Player& player)
 	}
 	if (health > 30) fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
 	else fire_cooldown=time + ppl7::randf(0.2f, 0.8f);
+	dropFireball(direction, fp);
+}
 
-
+void SkullMaster::dropFireball(float direction, const ppl7::grafix::PointF& p)
+{
+	Fireball* particle=new Fireball();
+	particle->p=p;
 	particle->p.y+=80;
 	particle->initial_p=p;
 	particle->spawned=true;
 	particle->sprite_no=300;
-	particle->player_damage=5.0f;
+	particle->player_damage=3.0f;
 	particle->color_mod.set(64, 192, 0, 255);
 	particle->sprite_set=Spriteset::GenericObjects;
 	particle->sprite_no_representation=300;
 	particle->velocity=calculateVelocity(ppl7::randf(9.0f, 12.0f), direction);
 	particle->gravity=ppl7::randf(0.1f, 0.6f);
 	particle->direction=180 + direction;
+	particle->min_particles=30;
+	particle->max_particles=60;
 	GetObjectSystem()->addObject(particle);
 	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1600, 0.7f);
 }
@@ -219,6 +328,9 @@ void SkullMaster::update_wait(double time, TileTypePlane& ttplane, Player& playe
 		if (p.x > initial_p.x) p.x=initial_p.x;
 	}
 	if (health < 100.0f) health+=0.1f * frame_rate_compensation;
+	if (health > 20.0f && suspend_count > 2)  suspend_count=2;
+	if (health > 40.0f && suspend_count > 1)  suspend_count=1;
+	if (health > 70.0f && suspend_count > 1)  suspend_count=0;
 
 	bounce_distance=32;
 	shine.color.set(0, 255, 0, 255);
@@ -339,10 +451,6 @@ void SkullMaster::update_die(double time, TileTypePlane& ttplane, Player& player
 	shine.intensity=255;
 	shine.plane=static_cast<int>(LightPlaneId::Player);
 	shine.playerPlane=static_cast<int>(LightPlayerPlaneMatrix::All);
-
-
-
-
 	if (next_birth < time) {
 		next_birth=time + randf(0.010, 0.123);
 		ParticleSystem* ps=GetParticleSystem();
@@ -371,7 +479,65 @@ void SkullMaster::update_die(double time, TileTypePlane& ttplane, Player& player
 }
 
 
+void SkullMaster::update_suspend(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	if (sState == SuspendState::Start) {
+		next_state=time + 10.0f;
+		sState=SuspendState::Drop;
+		suspend_count++;
+	} else if (sState == SuspendState::Drop) {
+		sState=SuspendState::Retreat;
+		dropSkull(40);
+		dropSkull(50);
+		dropSkull(60);
+		dropSkull(70);
+		dropSkull(80);
+		dropSkull(90);
+		dropSkull(270);
+		dropSkull(290);
+		dropSkull(300);
+		dropSkull(310);
+		dropSkull(320);
+		if (suspend_count > 1) {
+			dropSkull(100);
+			dropSkull(110);
+			dropSkull(120);
+			dropSkull(260);
+			dropSkull(250);
+			dropSkull(240);
+		}
 
+	} else if (sState == SuspendState::Retreat) {
+		if (velocity.y > -3.0f) velocity.y-=(0.1 * frame_rate_compensation);
+		if (p.x > initial_p.x) {
+			p.x-=0.5f * frame_rate_compensation;
+			if (p.x < initial_p.x) p.x=initial_p.x;
+		} else if (p.x < initial_p.x) {
+			p.x+=0.5f * frame_rate_compensation;
+			if (p.x > initial_p.x) p.x=initial_p.x;
+		}
+		if (p.y < initial_p.y - 2000) velocity.y=0;
+		if (next_state < time) sState=SuspendState::Comeback;
+	} else if (sState == SuspendState::Comeback) {
+		if (velocity.y < 3.0f) velocity.y+=(0.1 * frame_rate_compensation);
+		if (p.y > initial_p.y) aState=ActionState::Attack;
+	}
+}
+
+void SkullMaster::dropSkull(float direction)
+{
+	SkullDropper* particle=new SkullDropper();
+	particle->p=p;
+	particle->p.y+=80;
+	particle->initial_p=p;
+	particle->spawned=true;
+	particle->color_mod.set(64, 192, 0, 255);
+	particle->velocity=calculateVelocity(ppl7::randf(9.0f, 11.0f), direction);
+	particle->gravity=ppl7::randf(0.1f, 0.3f);
+	particle->direction=180 + direction;
+	GetObjectSystem()->addObject(particle);
+
+}
 
 void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
@@ -398,40 +564,46 @@ void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, fl
 		case ActionState::Die:
 			update_die(time, ttplane, player, frame_rate_compensation);
 			break;
+		case ActionState::Suspend:
+			update_suspend(time, ttplane, player, frame_rate_compensation);
+			break;
+
 		case ActionState::Dead:
 			if (shine.scale_x > 0.2f) shine.scale_x-=0.1f * frame_rate_compensation;
 			else {
-				shine.scale_x=0.6f;
-				shine.scale_y=0.6f;
-				shine.plane=static_cast<int>(LightPlaneId::Player);
-				shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);
-				myLayer=Layer::BehindPlayer;
+				reset();
 				enabled=false;
-				aState=ActionState::Wait;
-				health=100.0f;
-				p=initial_p;
 				return;
 			}
 			break;
 	}
 	p+=velocity;
+	updateBoundary();
 
 
-
-	if (player.isFlashlightOn() && aState != ActionState::Dead && aState != ActionState::Die) {
+	if (player.isFlashlightOn() && aState != ActionState::Dead && aState != ActionState::Die && flashlight_cooldown < time) {
 		float y_dist=abs((player.y - 40) - p.y);
 		float x_dist=abs(player.x - p.x);
 		if (y_dist < 2 * TILE_HEIGHT && x_dist < 6 * TILE_WIDTH) {
 			if ((player.orientation == Player::PlayerOrientation::Left && p.x < player.x) ||
 				(player.orientation == Player::PlayerOrientation::Right && p.x > player.x)) {
 					// In light cone
-				health-=0.5f * frame_rate_compensation;
+				health-=5.0f * frame_rate_compensation;
+				flashlight_cooldown=time + 1.0f;
 				if (health < 0) {
 					die(time);
+					for (int i=30;i < 330;i+=30) dropFireball(i, p);
 					player.addPoints(1000);
 					player.addHealth(30);
-
-
+				} else if (health < 70 && suspend_count == 0) {
+					aState=ActionState::Suspend;
+					sState=SuspendState::Start;
+				} else if (health < 40 && suspend_count == 1) {
+					aState=ActionState::Suspend;
+					sState=SuspendState::Start;
+				} else if (health < 20 && suspend_count == 2) {
+					suspend_count+=1;
+					for (int i=30;i < 330;i+=30) dropFireball(i, p);
 				}
 			}
 		}
@@ -451,7 +623,7 @@ void SkullMaster::handleCollision(Player* player, const Collision& collision)
 {
 	if (collision_cooldown < player->time) {
 		collision_cooldown=player->time + 1.0f;
-		player->dropHealth(5);
+		player->dropHealth(3);
 	}
 }
 

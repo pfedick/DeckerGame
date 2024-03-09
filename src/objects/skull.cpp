@@ -353,15 +353,15 @@ void Skull::newState(double time, TileTypePlane& ttplane, Player& player)
 	}
 	//ppl7::PrintDebugTime("Skull::newState: %d\n", r);
 	switch (r) {
-	case 0: aState=ActionState::GoBackToOrigin;
-		break;
-	case 1: if (distance < 600) {
-		aState=ActionState::Attack;
-		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
-	} else aState=ActionState::Bouncing;
-		break;
+		case 0: aState=ActionState::GoBackToOrigin;
+			break;
+		case 1: if (distance < 600) {
+			aState=ActionState::Attack;
+			fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
+		} else aState=ActionState::Bouncing;
+			break;
 
-	default: aState=ActionState::Bouncing;
+		default: aState=ActionState::Bouncing;
 
 	}
 }
@@ -550,7 +550,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 
 	float distance=ppl7::grafix::Distance(ppl7::grafix::PointF(player.x, player.y), p);
-	if (distance < 300 && aState != ActionState::Dead && aState != ActionState::Attack) {
+	if (distance < 300 && aState != ActionState::Dead && aState != ActionState::Attack && aState != ActionState::Frozen) {
 		aState=ActionState::Attack;
 		fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
 	}
@@ -573,7 +573,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	updateBoundary();
 
 
-	if (player.isFlashlightOn() && aState != ActionState::Dead) {
+	if (player.isFlashlightOn() && aState != ActionState::Dead && aState != ActionState::Frozen) {
 		float y_dist=abs((player.y - 40) - p.y);
 		float x_dist=abs(player.x - p.x);
 		if (y_dist < 2 * TILE_HEIGHT && x_dist < 6 * TILE_WIDTH) {
@@ -604,6 +604,7 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 void Skull::handleCollision(Player* player, const Collision& collision)
 {
+	if (aState == ActionState::Frozen) return;
 	Player::PlayerMovement movement=player->getMovement();
 	if (collision.onFoot() == true && movement == Player::Falling) {
 		die(player->time);
@@ -613,6 +614,12 @@ void Skull::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
+
+void Skull::freeze(bool flag)
+{
+	if (flag) aState=ActionState::Frozen;
+	else aState=ActionState::GoBackToOrigin;
+}
 
 
 }	// EOF namespace Decker::Objects

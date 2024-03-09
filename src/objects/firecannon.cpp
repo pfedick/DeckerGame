@@ -51,6 +51,8 @@ Fireball::Fireball()
 	audio=NULL;
 	gravity=0.0f;
 	player_damage=20.0f;
+	min_particles=79;
+	max_particles=169;
 
 }
 
@@ -80,7 +82,7 @@ void Fireball::emmitParticles(double time, const Player& player)
 		//next_birth=time + randf(0.010, 0.111);
 	ParticleSystem* ps=GetParticleSystem();
 	if (!emitterInPlayerRange(p, player)) return;
-	int new_particles=ppl7::rand(79, 169);
+	int new_particles=ppl7::rand(min_particles, max_particles);
 	for (int i=0;i < new_particles;i++) {
 		Particle* particle=new Particle();
 		particle->birth_time=time;
