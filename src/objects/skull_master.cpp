@@ -6,206 +6,6 @@
 
 namespace Decker::Objects {
 
-class SkullMasterFireball : public Object
-{
-	friend class SkullMaster;
-private:
-	ppl7::grafix::PointF velocity;
-	double next_birth;
-	float direction;
-	std::list<Particle::ScaleGradientItem>scale_gradient;
-	std::list<Particle::ColorGradientItem>color_gradient;
-	void emmitParticles(double time, const Player& player);
-
-	LightObject light_ball;
-	LightObject light_shine;
-	AudioInstance* audio;
-
-public:
-	SkullMasterFireball();
-	~SkullMasterFireball();
-	static Representation representation();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-
-	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
-	virtual void handleCollision(Player* player, const Collision& collision);
-};
-
-
-
-SkullMasterFireball::SkullMasterFireball()
-	:Object(Type::ObjectType::Arrow)
-{
-	collisionDetection=true;
-	next_birth=0.0f;
-	scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.243));
-	scale_gradient.push_back(Particle::ScaleGradientItem(0.270, 0.620));
-	scale_gradient.push_back(Particle::ScaleGradientItem(0.500, 0.421));
-	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 1.000));
-	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(11, 170, 0, 18)));
-	color_gradient.push_back(Particle::ColorGradientItem(0.036, ppl7::grafix::Color(30, 216, 0, 53)));
-	color_gradient.push_back(Particle::ColorGradientItem(0.081, ppl7::grafix::Color(40, 255, 0, 78)));
-	color_gradient.push_back(Particle::ColorGradientItem(0.176, ppl7::grafix::Color(70, 255, 0, 78)));
-	color_gradient.push_back(Particle::ColorGradientItem(0.243, ppl7::grafix::Color(26, 22, 26, 112)));
-	color_gradient.push_back(Particle::ColorGradientItem(0.486, ppl7::grafix::Color(120, 118, 116, 27)));
-	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(196, 196, 198, 0)));
-
-	light_ball.color.set(255, 255, 255, 255);
-	light_ball.sprite_no=2;
-	light_ball.scale_x=0.2f;
-	light_ball.scale_y=0.2f;
-	light_ball.plane=static_cast<int>(LightPlaneId::Player);
-	light_ball.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
-
-	light_shine.color.set(100, 255, 0, 255);
-	light_shine.sprite_no=0;
-	light_shine.scale_x=0.4f;
-	light_shine.scale_y=0.4f;
-	light_shine.plane=static_cast<int>(LightPlaneId::Player);
-	light_shine.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back);;
-
-	light_shine.has_lensflare=true;
-	light_shine.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
-	light_shine.flare_intensity=60;
-	light_shine.flare_useLightColor=true;
-	audio=NULL;
-
-}
-
-SkullMasterFireball::~SkullMasterFireball()
-{
-	if (audio) {
-		getAudioPool().stopInstace(audio);
-		delete audio;
-		audio=NULL;
-	}
-}
-
-Representation SkullMasterFireball::representation()
-{
-	return Representation(Spriteset::GenericObjects, 300);
-}
-
-
-
-/*
- * add the following function to your class:
- */
-
-void SkullMasterFireball::emmitParticles(double time, const Player& player)
-{
-	//if (next_birth < time) {
-		//next_birth=time + randf(0.010, 0.111);
-	ParticleSystem* ps=GetParticleSystem();
-	if (!emitterInPlayerRange(p, player)) return;
-	int new_particles=ppl7::rand(10, 30);
-	for (int i=0;i < new_particles;i++) {
-		Particle* particle=new Particle();
-		particle->birth_time=time;
-		particle->death_time=randf(0.552, 1.189) + time;
-		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(32, 32), 0.000);
-		particle->layer=Particle::Layer::BeforePlayer;
-		particle->weight=randf(0.132, 0.660);
-		particle->gravity.setPoint(0.000, 0.000);
-		particle->velocity=calculateVelocity(randf(0.566, 1.321), direction + randf(-15.283, 15.283));
-		particle->scale=randf(0.300, 1.375);
-		particle->color_mod.set(255, 255, 255, 255);
-		particle->initAnimation(Particle::Type::RotatingParticleWhite);
-		particle->initScaleGradient(scale_gradient, particle->scale);
-		particle->initColorGradient(color_gradient);
-		ps->addParticle(particle);
-	}
-//}
-}
-
-
-
-
-void SkullMasterFireball::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
-{
-	AudioPool& pool=getAudioPool();
-	if (!audio) {
-		audio=pool.getInstance(AudioClip::skull_fireball);
-		audio->setVolume(0.7f);
-		audio->setPositional(p, 1200);
-		audio->setLoop(true);
-		pool.playInstance(audio);
-	}
-	p+=velocity * frame_rate_compensation;
-	audio->setPositional(p, 1200);
-	updateBoundary();
-	light_shine.x=p.x;
-	light_shine.y=p.y;
-	light_ball.x=p.x + 1;
-	light_ball.y=p.y;
-	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&light_shine);
-	lights.addObjectLight(&light_ball);
-
-
-	emmitParticles(time, player);
-	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
-	if (t1 == TileType::Blocking) {
-		deleteDefered=true;
-		pool.stopInstace(audio);
-		pool.playOnce(AudioClip::skull_impact, p, 1800, 1.0f);
-	} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
-		deleteDefered=true;
-		pool.stopInstace(audio);
-	}
-}
-
-void SkullMasterFireball::handleCollision(Player* player, const Collision& collision)
-{
-	deleteDefered=true;
-	player->dropHealth(10, Physic::HealthDropReason::Burned);
-}
-
-void SkullMasterFireball::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
-{
-	draw(renderer, coords);
-}
-
-void SkullMasterFireball::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
-{
-	texture->draw(renderer,
-		p.x + coords.x,
-		p.y + coords.y,
-		sprite_no, color_mod);
-	return;
-
-	SpriteTexture& lightmap=getResources().Lightmaps;
-	Game& game=GetGame();
-	SDL_Texture* lighttarget=game.getLightRenderTarget();
-	if (!lighttarget) return;
-	SDL_Texture* rendertarget=SDL_GetRenderTarget(renderer);
-	SDL_SetRenderTarget(renderer, lighttarget);
-
-	ppl7::grafix::Color rc[7];
-	rc[0].setColor(255, 255, 255, 255);
-	rc[2].setColor(255, 255, 0, 255);
-	rc[3].setColor(255, 128, 0, 255);
-	rc[4].setColor(255, 192, 0, 255);
-	rc[5].setColor(255, 0, 0, 255);
-	rc[6].setColor(255, 255, 255, 255);
-
-	ppl7::grafix::Color c(255, 200, 60, 255);
-	lightmap.drawScaled(renderer, p.x + coords.x,
-		p.y + coords.y, 0, 1.0f, c);
-	c=rc[ppl7::rand(0, 6)];
-	c.setAlpha(ppl7::rand(128, 255));
-
-	lightmap.drawScaled(renderer, p.x + coords.x,
-		p.y + coords.y, 1, 1.0f, c);
-	c.setColor(255, 255, 255, 255);
-	lightmap.drawScaled(renderer, p.x + coords.x,
-		p.y + coords.y, 1, 0.1f, c);
-
-	SDL_SetRenderTarget(renderer, rendertarget);
-
-}
-
 
 
 Representation SkullMaster::representation()
@@ -237,11 +37,11 @@ SkullMaster::SkullMaster()
 	lightmap.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
 	shine.color.set(0, 255, 0, 255);
 	shine.sprite_no=0;
-	shine.scale_x=0.4f;
-	shine.scale_y=0.4f;
+	shine.scale_x=0.6f;
+	shine.scale_y=0.6f;
 	shine.intensity=128;
 	shine.myType=LightType::Fire;
-	shine.typeParameter=0.9;
+	shine.typeParameter=0.3;
 	fire_cooldown=0.0f;
 	voice_cooldown=0.0f;
 	shine.plane=static_cast<int>(LightPlaneId::Player);
@@ -292,7 +92,7 @@ void SkullMaster::fire(double time, Player& player)
 		animation.startSequence(33, 42, false, 32);
 	}
 	fire_cooldown=time + ppl7::randf(0.5f, 1.5f);
-	SkullMasterFireball* particle=new SkullMasterFireball();
+	Fireball* particle=new Fireball();
 	particle->p=p;
 	particle->initial_p=p;
 	particle->spawned=true;
@@ -316,6 +116,7 @@ void SkullMaster::die(double time) {
 	emmitParticles(time, p);
 	myLayer = Layer::BeforeBricks;
 	aState = ActionState::Dead;
+	next_state=time + 1.0f;
 }
 
 void SkullMaster::turn()
@@ -339,7 +140,10 @@ void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, fl
 			updateBoundary();
 		}
 	}
-
+	if (aState == ActionState::Dead && time >= next_state) {
+		enabled=false;
+		return;
+	}
 
 
 	if (player.isFlashlightOn() && aState != ActionState::Dead) {
@@ -349,7 +153,7 @@ void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, fl
 			if ((player.orientation == Player::PlayerOrientation::Left && p.x < player.x) ||
 				(player.orientation == Player::PlayerOrientation::Right && p.x > player.x)) {
 					// In light cone
-				//health-=0.5f * frame_rate_compensation;
+				health-=0.5f * frame_rate_compensation;
 				if (health < 0) {
 					die(time);
 					player.addPoints(20);
@@ -361,10 +165,10 @@ void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, fl
 		}
 	}
 	lightmap.custom_texture=this->texture;
-	lightmap.sprite_no=70 + sprite_no;
+	lightmap.sprite_no=94 + sprite_no;
 	lightmap.x=p.x;
 	lightmap.y=p.y;
-	shine.update(time, frame_rate_compensation);
+	//shine.update(time, frame_rate_compensation);
 	shine.x=p.x;
 	shine.y=p.y - 1;
 	LightSystem& lights=GetGame().getLightSystem();
