@@ -1469,6 +1469,7 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source) override;
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 

@@ -171,6 +171,12 @@ void LevelEnd::toggle(bool enable, Object* source)
     }
 }
 
+void LevelEnd::trigger(Object* source)
+{
+    if (state == State::Inactive) toggle(true, source);
+    else toggle(false, source);
+}
+
 void LevelEnd::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
     LevelEnd::draw(renderer, coords);
