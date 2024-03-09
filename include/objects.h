@@ -92,7 +92,8 @@ public:
 		Ghost=121,
 		Zombie=122,
 		FireCannon=123,
-		Skull=124
+		Skull=124,
+		SkullMaster=125
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -128,6 +129,7 @@ public:
 		Zombie,
 		StamperV2,
 		Skull,
+		SkullMaster,
 		MaxSpritesets
 	};
 };
@@ -1132,6 +1134,44 @@ public:
 
 };
 
+class SkullMaster : public Enemy
+{
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	double fire_cooldown, voice_cooldown;
+	float health;
+	int state;
+
+	enum class ActionState {
+		Wait,
+		Turn,
+		Attack,
+		Dead
+	};
+	enum class Orientation {
+		Front,
+		Left,
+		LeftDown,
+		Right,
+		RightDown
+	};
+	Orientation orientation;
+	ActionState aState;
+	LightObject lightmap;
+	LightObject shine;
+
+	void die(double time);
+	void turn();
+	void fire(double time, Player& player);
+
+public:
+	SkullMaster();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+};
 
 
 class HangingSpider : public Enemy

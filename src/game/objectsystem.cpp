@@ -169,6 +169,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Skull]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Skull]->load(sdl, "res/skull.tex");
 
+	spriteset[Spriteset::SkullMaster]->enableOutlines(true);
+	spriteset[Spriteset::SkullMaster]->enableMemoryBuffer(true);
+	spriteset[Spriteset::SkullMaster]->load(sdl, "res/skull_master.tex");
+
 	spriteset[Spriteset::Ghost]->enableOutlines(true);
 	spriteset[Spriteset::Ghost]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Ghost]->load(sdl, "res/ghost.tex");
@@ -420,6 +424,7 @@ Representation getRepresentation(int object_type)
 	case Type::Fish: return Fish::representation();
 	case Type::Piranha: return Piranha::representation();
 	case Type::Skull: return Skull::representation();
+	case Type::SkullMaster: return SkullMaster::representation();
 	case Type::BreakingWall: return BreakingWall::representation();
 	case Type::Hammer: return Hammer::representation();
 	case Type::Flashlight: return Flashlight::representation();
@@ -510,6 +515,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 	case Type::Fish: return new Fish();
 	case Type::Piranha: return new Piranha();
 	case Type::Skull: return new Skull();
+	case Type::SkullMaster: return new SkullMaster();
 	case Type::BreakingWall: return new BreakingWall();
 	case Type::Hammer: return new Hammer();
 	case Type::Flashlight: return new Flashlight();

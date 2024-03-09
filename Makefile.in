@@ -130,6 +130,7 @@ OBJECTS=compile/main.o \
 	compile/object_fish.o \
 	compile/object_piranha.o \
 	compile/object_skull.o \
+	compile/object_skull_master.o \
 	compile/object_breakingwall.o \
 	compile/object_hammer.o \
 	compile/object_flashlight.o \
@@ -354,6 +355,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/enemies/yeti/ -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/bat/ -t res/bat.tex -w 256 -h 256 -px 64 -py 120
 	./texmaker -s lightwave/Render/enemies/skull/ -t res/skull.tex -w 1024 -h 512 -px 64 -py 64
+	./texmaker -s lightwave/Render/enemies/skull_master/ -t res/skull_master.tex -w 2048 -h 2048 -px 128 -py 128
 	./texmaker -s lightwave/Render/enemies/bird/ -t res/bird.tex -w 512 -h 512 -px 64 -py 120
 	./texmaker -s lightwave/Render/enemies/stamper_v2/ -t res/stamper_v2.tex -w 512 -h 512 -px 64 -py 272
 	./texmaker -s lightwave/Render/objects/laser/ -t res/laser.tex -w 128 -h 128 -px 16 -py 16
@@ -727,6 +729,10 @@ compile/object_piranha.o: src/objects/piranha.cpp Makefile include/objects.h inc
 compile/object_skull.o: src/objects/skull.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_skull.o -c src/objects/skull.cpp $(CFLAGS)
+
+compile/object_skull_master.o: src/objects/skull_master.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_skull_master.o -c src/objects/skull_master.cpp $(CFLAGS)
 
 compile/object_breakingwall.o: src/objects/breakingwall.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile

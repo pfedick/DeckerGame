@@ -50,6 +50,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Bat, "Bat", 39);
 	addObject(Decker::Objects::Type::Scorpion, "Scorpion", 50);
 	addObject(Decker::Objects::Type::Skull, "Skull", 66);
+	addObject(Decker::Objects::Type::SkullMaster, "Skull Master", 67);
 	addObject(Decker::Objects::Type::Ghost, "Ghost", 60);
 	addObject(Decker::Objects::Type::HangingSpider, "hanging Spider", 6);
 	addObject(Decker::Objects::Type::Mummy, "Mummy", 21);
