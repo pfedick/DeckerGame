@@ -34,6 +34,7 @@ SkullDropper::SkullDropper()
 	audio=NULL;
 	gravity=0.1f;
 	skull=new Skull();
+	skull->texture=GetObjectSystem()->getTexture(Spriteset::Skull);
 	skull->freeze(true);
 	skull->spawned=true;
 }
@@ -57,14 +58,14 @@ void SkullDropper::update(double time, TileTypePlane& ttplane, Player& player, f
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::fireball_fly);
-		audio->setVolume(0.7f);
+		audio->setVolume(0.3f);
 		audio->setPositional(p, 1200);
 		audio->setLoop(true);
 		pool.playInstance(audio);
 	}
 	skull->initial_p=p;
 	p+=velocity * frame_rate_compensation;
-	skull->p=initial_p;
+	skull->p=skull->initial_p;
 	skull->update(time, ttplane, player, frame_rate_compensation);
 
 	velocity.y+=(gravity * frame_rate_compensation);
@@ -79,7 +80,7 @@ void SkullDropper::update(double time, TileTypePlane& ttplane, Player& player, f
 		GetObjectSystem()->addObject(skull);
 
 		pool.stopInstace(audio);
-		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
+		pool.playOnce(AudioClip::fireball_impact, p, 1800, 0.6f);
 	}
 }
 
@@ -381,11 +382,21 @@ void SkullMaster::update_wait(double time, TileTypePlane& ttplane, Player& playe
 
 void SkullMaster::update_attack(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& pool=getAudioPool();
 	bounce_distance=64;
 	shine.color.set(255, 64, 128, 255);
 	shine.intensity=255;
 	bounce_speed=0.2f;
 	max_bounce_velocity=5.0f;
+	if (voice_cooldown < time) {
+		voice_cooldown=time + ppl7::randf(2.0, 5.0);
+		int r=ppl7::rand(1, 3);
+		if (r == 1) pool.playOnce(AudioClip::skullmaster_laugh1, p, 1600, 1.0f);
+		else if (r == 2) pool.playOnce(AudioClip::skullmaster_laugh2, p, 1600, 1.0f);
+		else pool.playOnce(AudioClip::skullmaster_laugh3, p, 1600, 1.0f);
+	}
+
+
 	int px_dist=abs(player.x - p.x);
 	if (px_dist < 60 && abs(initial_p.x - p.x) < 500) {
 		if (player.x > p.x) {
@@ -434,7 +445,7 @@ void SkullMaster::update_attack(double time, TileTypePlane& ttplane, Player& pla
 
 void SkullMaster::die(double time) {
 	getAudioPool().playOnce(AudioClip::skull_death, p, 1600, 0.6f);
-	getAudioPool().playOnce(AudioClip::skull_impact, p, 1600, 0.6f);
+	getAudioPool().playOnce(AudioClip::explosion1, p, 1600, 0.7f);
 
 	animation.startSequence(43, 54, false, 54);
 	collisionDetection=false;
@@ -482,6 +493,7 @@ void SkullMaster::update_die(double time, TileTypePlane& ttplane, Player& player
 
 void SkullMaster::dropSkulls()
 {
+	getAudioPool().playOnce(AudioClip::skullmaster_burp, p, 1600, 0.7f);
 	dropSkull(40);
 	dropSkull(50);
 	dropSkull(60);
@@ -552,6 +564,7 @@ void SkullMaster::dropSkull(float direction)
 void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	if (!enabled) return;
+	AudioPool& pool=getAudioPool();
 	if (time > next_animation) {
 		next_animation=time + 0.033f;
 		animation.update();
@@ -614,6 +627,12 @@ void SkullMaster::update(double time, TileTypePlane& ttplane, Player& player, fl
 				} else if (health < 20 && suspend_count == 2) {
 					suspend_count+=1;
 					for (int i=30;i < 330;i+=30) dropFireball(i, p);
+				} else {
+					int r=ppl7::rand(1, 3);
+					if (r == 1) pool.playOnce(AudioClip::skullmaster_hurt1, p, 1600, 1.0f);
+					else if (r == 2) pool.playOnce(AudioClip::skullmaster_hurt2, p, 1600, 1.0f);
+					else pool.playOnce(AudioClip::skullmaster_hurt3, p, 1600, 1.0f);
+
 				}
 			}
 		}

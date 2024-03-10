@@ -199,6 +199,14 @@ public:
 		skull_fireball,
 		skull_impact,
 		skull_shoot,
+		explosion1,
+		skullmaster_burp,
+		skullmaster_hurt1,
+		skullmaster_hurt2,
+		skullmaster_hurt3,
+		skullmaster_laugh1,
+		skullmaster_laugh2,
+		skullmaster_laugh3,
 		// this must always be the last entry!
 		maxClips
 	};
