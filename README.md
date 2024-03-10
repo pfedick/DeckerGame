@@ -187,6 +187,7 @@ make
 
 ## Release History
 
+* [0.15.1](https://github.com/pfedick/DeckerGame/releases/tag/0.15.1) [2024-03-10]: Skullmaster update
 * [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-03-04]: Light and Dark update
 * [0.14.0](https://github.com/pfedick/DeckerGame/releases/tag/0.14.0) [2023-09-17]: Play it with controller
 * [0.13.0](https://github.com/pfedick/DeckerGame/releases/tag/0.13.0) [2023-09-01]: Intro
