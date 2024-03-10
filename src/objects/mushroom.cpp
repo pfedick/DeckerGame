@@ -28,7 +28,7 @@ Mushroom::Mushroom()
 	animation.setStaticFrame(27);
 	sprite_no_representation=27;
 	next_state=ppl7::GetMicrotime() + (double)ppl7::rand(5, 20);
-	state=0;
+	state=ActionState::Falling;
 	next_animation=0.0f;
 	collisionDetection=true;
 	animation.start(turn_from_mid_to_left, sizeof(turn_from_mid_to_left) / sizeof(int), false, 0);
@@ -40,11 +40,14 @@ Mushroom::Mushroom()
 	lightmap.intensity=255;
 	lightmap.plane=static_cast<int>(LightPlaneId::Player);
 	lightmap.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
+	max_gravity=ppl7::randf(1.0f, 2.0f);
+	gravity=0.0f;
 
 }
 
 void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	if (!enabled) return;
 	if (time > next_animation) {
 		next_animation=time + 0.07f;
 		animation.update();
@@ -61,49 +64,67 @@ void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float
 	LightSystem& lights=GetGame().getLightSystem();
 	lights.addObjectLight(&lightmap);
 
-	if (state == 0 && animation.isFinished()) {
-		state=1;
+	if (state == ActionState::Start && animation.isFinished()) {
+		state=ActionState::WalkLeft;
 		animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
-	} else if (state == 1) {	// walk left
+	} else if (state == ActionState::WalkLeft) {	// walk left
 		p.x-=1 * frame_rate_compensation;
 		updateBoundary();
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 20, p.y - 6));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 20, p.y + 6));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 20, p.y + 2));
 		if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || t2 != TileType::Blocking) {
-			state=2;
+			state=ActionState::WaitForTurnRight;
 			animation.setStaticFrame(0);
 			next_state=time + (double)ppl7::rand(1, 5);
 		}
-	} else if (state == 2 && time > next_state) {
+	} else if (state == ActionState::WaitForTurnRight && time > next_state) {
 		getAudioPool().playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
 		animation.start(turn_from_left_to_right, sizeof(turn_from_left_to_right) / sizeof(int), false, 26);
-		state=3;
-	} else if (state == 3 && animation.isFinished()) {
-		state=4;
+		state=ActionState::TurnRight;
+	} else if (state == ActionState::TurnRight && animation.isFinished()) {
+		state=ActionState::WalkRight;
 		animation.start(walk_cycle_right, sizeof(walk_cycle_right) / sizeof(int), true, 9);
 
-	} else if (state == 4) {
+	} else if (state == ActionState::WalkRight) {
 		p.x+=1 * frame_rate_compensation;
 		updateBoundary();
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 20, p.y - 6));
-		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 20, p.y + 6));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 20, p.y + 2));
 		if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || t2 != TileType::Blocking) {
-			state=5;
+			state=ActionState::WaitForTurnLeft;
 			animation.setStaticFrame(9);
 			next_state=time + (double)ppl7::rand(1, 5);
 		}
-	} else if (state == 5 && time > next_state) {
+	} else if (state == ActionState::WaitForTurnLeft && time > next_state) {
 		getAudioPool().playOnce(AudioClip::skeleton_turn, p, 1600, 1.0f);
 		animation.start(turn_from_right_to_left, sizeof(turn_from_right_to_left) / sizeof(int), false, 22);
-		state=0;
-	} else if (state == 6) {
+		state=ActionState::TurnLeft;
+	} else if (state == ActionState::TurnLeft) {
 		if (animation.isFinished()) {
-			state=7;
+			state=ActionState::Start;
 			next_state=time + 5.0f;
 		}
-	} else if (state == 7 && time > next_state) {
+	} else if (state == ActionState::Dead && time > next_state) {
 		enabled=false;
-		state=8;
+		state=ActionState::Disabled;
+	} else if (state == ActionState::Falling) {
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
+		if (t1 != TileType::NonBlocking) state=ActionState::Start;
+		else {
+			if (gravity < max_gravity) {
+				gravity+=0.2 * frame_rate_compensation;
+				if (gravity > max_gravity) gravity=max_gravity;
+			}
+			p.y+=gravity;
+		}
+	}
+	if (state != ActionState::Falling && state != ActionState::Dead && state != ActionState::Disabled) {
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
+		if (t1 == TileType::NonBlocking) {
+			state=ActionState::Falling;
+			gravity=0.0f;
+		}
+
 	}
 }
 
@@ -145,7 +166,7 @@ void Mushroom::handleCollision(Player* player, const Collision& collision)
 	Player::PlayerMovement movement=player->getMovement();
 	if (collision.onFoot() == true && movement == Player::Falling) {
 		animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 100);
-		state=6;
+		state=ActionState::Dead;
 		collisionDetection=false;
 		//enabled=false;
 		player->addPoints(50);
@@ -158,5 +179,21 @@ void Mushroom::handleCollision(Player* player, const Collision& collision)
 		player->dropHealth(1);
 	}
 }
+
+void Mushroom::toggle(bool enable, Object* source)
+{
+	if (state != ActionState::Disabled) {
+		this->enabled=enable;
+	}
+}
+
+void Mushroom::trigger(Object* source)
+{
+	if (state != ActionState::Disabled) {
+		if (enabled) toggle(false, source);
+		else toggle(true, source);
+	}
+}
+
 
 }	// EOF namespace Decker::Objects

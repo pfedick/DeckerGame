@@ -1055,14 +1055,37 @@ class Mushroom : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	//int velocity;
-	int state;
+	float max_gravity;
+	float gravity;
+	enum class ActionState {
+		Start,
+		WalkLeft,
+		WaitForTurnRight,
+		TurnRight,
+		WalkRight,
+		WaitForTurnLeft,
+		TurnLeft,
+		Dead,
+		Disabled,
+		Falling
+	};
+	ActionState state;
 	LightObject lightmap;
 public:
 	Mushroom();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source) override;
+	/*
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	*/
+
 };
 
 class Scarabeus : public Enemy
