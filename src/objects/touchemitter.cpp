@@ -120,11 +120,11 @@ void TouchEmitter::emmitObject(double time)
 	float v1=ppl7::randf(3.5, 6.5);
 	//printf ("v0=%0.3f, v1=%0.3f\n",v0,v1);
 	switch (direction) {
-	case 0: particle->velocity.setPoint(v0, -v1); break;
-	case 1: particle->velocity.setPoint(v1, v0); break;
-	case 2: particle->velocity.setPoint(v0, v1); break;
-	case 3: particle->velocity.setPoint(-v1, v0); break;
-	default: particle->velocity.setPoint(v0, -v1); break;
+		case 0: particle->velocity.setPoint(v0, -v1); break;
+		case 1: particle->velocity.setPoint(v1, v0); break;
+		case 2: particle->velocity.setPoint(v0, v1); break;
+		case 3: particle->velocity.setPoint(-v1, v0); break;
+		default: particle->velocity.setPoint(v0, -v1); break;
 	}
 	GetObjectSystem()->addObject(particle);
 }
@@ -293,7 +293,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
 	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
-	//object_type->add("ExtraLife",ppl7::ToString("%d",Type::ExtraLife));
+	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
