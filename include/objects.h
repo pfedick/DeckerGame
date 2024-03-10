@@ -1179,10 +1179,10 @@ private:
 	float bounce_distance;
 	float bounce_speed;
 	float max_bounce_velocity;
+	bool skullsDropped;
 
 	enum class SuspendState {
 		Start,
-		Drop,
 		Retreat,
 		Comeback
 	};
@@ -1216,6 +1216,7 @@ private:
 	void die(double time);
 	void turn(Orientation target);
 	void fire(double time, Player& player);
+	void dropSkulls();
 	void dropSkull(float direction);
 	void dropFireball(float direction, const ppl7::grafix::PointF& p);
 

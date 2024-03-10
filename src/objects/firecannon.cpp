@@ -110,7 +110,7 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::fireball_fly);
-		audio->setVolume(0.7f);
+		audio->setVolume(0.6f);
 		audio->setPositional(p, 1200);
 		audio->setLoop(true);
 		pool.playInstance(audio);

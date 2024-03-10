@@ -114,6 +114,7 @@ SkullMaster::SkullMaster()
 	suspend_count=0;
 	next_birth=0.0f;
 	health=100.0f;
+	skullsDropped=false;
 	bounce_distance=0.0f;
 	collision_cooldown=0.0f;
 	flashlight_cooldown=0.0f;
@@ -165,6 +166,7 @@ void SkullMaster::reset()
 	health=100.0f;
 	suspend_count=0;
 	p=initial_p;
+	skullsDropped=false;
 }
 
 static void emmitParticles(double time, const ppl7::grafix::PointF& p)
@@ -249,7 +251,7 @@ void SkullMaster::dropFireball(float direction, const ppl7::grafix::PointF& p)
 	particle->min_particles=30;
 	particle->max_particles=60;
 	GetObjectSystem()->addObject(particle);
-	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1600, 0.7f);
+	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1600, 0.4f);
 }
 
 void SkullMaster::turn(Orientation target)
@@ -478,35 +480,39 @@ void SkullMaster::update_die(double time, TileTypePlane& ttplane, Player& player
 	}
 }
 
+void SkullMaster::dropSkulls()
+{
+	dropSkull(40);
+	dropSkull(50);
+	dropSkull(60);
+	dropSkull(70);
+	dropSkull(80);
+	dropSkull(90);
+	dropSkull(270);
+	dropSkull(290);
+	dropSkull(300);
+	dropSkull(310);
+	dropSkull(320);
+	if (suspend_count > 1) {
+		dropSkull(100);
+		dropSkull(110);
+		dropSkull(120);
+		dropSkull(260);
+		dropSkull(250);
+		dropSkull(240);
+	}
+}
+
 
 void SkullMaster::update_suspend(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	if (sState == SuspendState::Start) {
 		next_state=time + 10.0f;
-		sState=SuspendState::Drop;
-		suspend_count++;
-	} else if (sState == SuspendState::Drop) {
 		sState=SuspendState::Retreat;
-		dropSkull(40);
-		dropSkull(50);
-		dropSkull(60);
-		dropSkull(70);
-		dropSkull(80);
-		dropSkull(90);
-		dropSkull(270);
-		dropSkull(290);
-		dropSkull(300);
-		dropSkull(310);
-		dropSkull(320);
-		if (suspend_count > 1) {
-			dropSkull(100);
-			dropSkull(110);
-			dropSkull(120);
-			dropSkull(260);
-			dropSkull(250);
-			dropSkull(240);
-		}
-
+		suspend_count++;
+		skullsDropped=false;
+		dropFireball(150, p);
+		dropFireball(210, p);
 	} else if (sState == SuspendState::Retreat) {
 		if (velocity.y > -3.0f) velocity.y-=(0.1 * frame_rate_compensation);
 		if (p.x > initial_p.x) {
@@ -515,6 +521,10 @@ void SkullMaster::update_suspend(double time, TileTypePlane& ttplane, Player& pl
 		} else if (p.x < initial_p.x) {
 			p.x+=0.5f * frame_rate_compensation;
 			if (p.x > initial_p.x) p.x=initial_p.x;
+		}
+		if (!skullsDropped && p.y < (initial_p.y - 2 * TILE_HEIGHT)) {
+			dropSkulls();
+			skullsDropped=true;
 		}
 		if (p.y < initial_p.y - 2000) velocity.y=0;
 		if (next_state < time) sState=SuspendState::Comeback;
