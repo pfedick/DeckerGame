@@ -1055,8 +1055,7 @@ class Mushroom : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	float max_gravity;
-	float gravity;
+	ppl7::grafix::PointF velocity;
 	enum class ActionState {
 		Start,
 		WalkLeft,
@@ -1072,6 +1071,10 @@ private:
 	ActionState state;
 	LightObject lightmap;
 public:
+	float gravity_x;
+	float max_gravity_y;
+	bool initial_state;
+
 	Mushroom();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
@@ -1079,12 +1082,12 @@ public:
 
 	void toggle(bool enable, Object* source=NULL) override;
 	void trigger(Object* source) override;
-	/*
+
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	*/
+
 
 };
 

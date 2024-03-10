@@ -40,8 +40,9 @@ Mushroom::Mushroom()
 	lightmap.intensity=255;
 	lightmap.plane=static_cast<int>(LightPlaneId::Player);
 	lightmap.playerPlane= static_cast<int>(LightPlayerPlaneMatrix::Player);
-	max_gravity=ppl7::randf(1.0f, 2.0f);
-	gravity=0.0f;
+	max_gravity_y=ppl7::randf(1.0f, 2.0f);
+	gravity_x=0.0f;
+	initial_state=true;
 
 }
 
@@ -111,18 +112,18 @@ void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
 		if (t1 != TileType::NonBlocking) state=ActionState::Start;
 		else {
-			if (gravity < max_gravity) {
-				gravity+=0.2 * frame_rate_compensation;
-				if (gravity > max_gravity) gravity=max_gravity;
+			if (velocity.y < max_gravity_y) {
+				velocity.y+=0.2 * frame_rate_compensation;
+				if (velocity.y > max_gravity_y) velocity.y=max_gravity_y;
 			}
-			p.y+=gravity;
+			p+=velocity;
 		}
 	}
 	if (state != ActionState::Falling && state != ActionState::Dead && state != ActionState::Disabled) {
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
 		if (t1 == TileType::NonBlocking) {
 			state=ActionState::Falling;
-			gravity=0.0f;
+			velocity.y=0.0f;
 		}
 
 	}
@@ -194,6 +195,129 @@ void Mushroom::trigger(Object* source)
 		else toggle(true, source);
 	}
 }
+
+size_t Mushroom::save(unsigned char* buffer, size_t size) const
+{
+	size_t bytes=Object::save(buffer, size);
+	if (!bytes) return 0;
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
+
+	uint8_t flags=0;
+	if (initial_state) flags|=1;
+	ppl7::Poke8(buffer + bytes + 1, flags);	// reserved
+	ppl7::PokeFloat(buffer + bytes + 2, gravity_x);
+	ppl7::PokeFloat(buffer + bytes + 6, max_gravity_y);
+	return bytes + 10;
+}
+size_t Mushroom::saveSize() const
+{
+	return Object::saveSize() + 10;
+}
+
+size_t Mushroom::load(const unsigned char* buffer, size_t size)
+{
+	size_t bytes=Object::load(buffer, size);
+	if (bytes == 0) return 0;
+	if (size < bytes + 1) return bytes;
+	int version=ppl7::Peek8(buffer + bytes);
+	if (version != 2) return 0;
+	uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
+	initial_state=(flags & 1);
+	enabled=initial_state;
+	gravity_x=ppl7::PeekFloat(buffer + bytes + 2);
+	velocity.x=gravity_x;
+	max_gravity_y=ppl7::PeekFloat(buffer + bytes + 6);
+	return size;
+}
+
+
+
+/**********************************************************************************************
+ * Mushroom Dialog
+ **********************************************************************************************/
+
+class MushroomDialog : public Decker::ui::Dialog
+{
+private:
+	ppl7::tk::DoubleHorizontalSlider* max_gravity_y;
+	ppl7::tk::DoubleHorizontalSlider* gravity_x;
+	ppl7::tk::CheckBox* current_state;
+	ppl7::tk::CheckBox* initial_state;
+
+	Mushroom* object;
+
+public:
+	MushroomDialog(Mushroom* object);
+	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
+	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+};
+
+void Mushroom::openUi()
+{
+	MushroomDialog* dialog=new MushroomDialog(this);
+	GetGameWindow()->addChild(dialog);
+}
+
+MushroomDialog::MushroomDialog(Mushroom* object)
+	: Decker::ui::Dialog(500, 300)
+{
+	this->object=object;
+	setWindowTitle(ppl7::ToString("Mushroom, ID: %d", object->id));
+	ppl7::grafix::Rect client=clientRect();
+	int y=0;
+	int col1=100;
+	int w=client.width() - col1 - 10;
+	int col2=client.width() / 2;
+	int col3=col2 + 100;
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "initial State:"));
+	initial_state=new ppl7::tk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state);
+	initial_state->setEventHandler(this);
+	addChild(initial_state);
+	addChild(new ppl7::tk::Label(col2, y, 100, 30, "current State:"));
+	current_state=new ppl7::tk::CheckBox(col3, y, 120, 30, "enabled", object->enabled);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "Gravity:"));
+	max_gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	max_gravity_y->setLimits(1.0f, 4.0f);
+	max_gravity_y->enableSpinBox(true, 0.1f, 1, 80);
+	max_gravity_y->setValue(object->max_gravity_y);
+	max_gravity_y->setEventHandler(this);
+	addChild(max_gravity_y);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "Gravity x:"));
+	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	gravity_x->setLimits(0.0f, 360.0f);
+	gravity_x->enableSpinBox(true, 1.0f, 0, 80);
+	gravity_x->setValue(object->gravity_x);
+	gravity_x->setEventHandler(this);
+	addChild(gravity_x);
+	y+=35;
+}
+
+void MushroomDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+{
+	if (event->widget() == max_gravity_y) {
+		object->max_gravity_y=value;
+	} else 	if (event->widget() == gravity_x) {
+		object->gravity_x=value;
+	}
+
+}
+
+void MushroomDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+{
+	if (event->widget() == initial_state) {
+		object->initial_state=checked;
+	} else if (event->widget() == current_state) {
+		object->enabled=checked;
+	}
+}
+
 
 
 }	// EOF namespace Decker::Objects
