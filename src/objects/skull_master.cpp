@@ -62,19 +62,19 @@ void SkullDropper::update(double time, TileTypePlane& ttplane, Player& player, f
 		audio->setLoop(true);
 		pool.playInstance(audio);
 	}
-	p+=velocity * frame_rate_compensation;
-	skull->p=p;
 	skull->initial_p=p;
+	p+=velocity * frame_rate_compensation;
+	skull->p=initial_p;
 	skull->update(time, ttplane, player, frame_rate_compensation);
 
 	velocity.y+=(gravity * frame_rate_compensation);
 	audio->setPositional(p, 1200);
 	updateBoundary();
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
-	TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 3 * TILE_HEIGHT));
+	TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2 * TILE_HEIGHT));
 	if (t1 == TileType::Blocking || t2 == TileType::Blocking) {
 		deleteDefered=true;
-		skull->initial_p.y=p.y - 3 * TILE_HEIGHT;
+		skull->initial_p.y=skull->p.y - 3 * TILE_HEIGHT;
 		skull->freeze(false);
 		GetObjectSystem()->addObject(skull);
 
