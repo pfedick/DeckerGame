@@ -117,6 +117,7 @@ void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float
 				if (velocity.y > max_gravity_y) velocity.y=max_gravity_y;
 			}
 			p+=velocity;
+			updateBoundary();
 		}
 	}
 	if (state != ActionState::Falling && state != ActionState::Dead && state != ActionState::Disabled) {
@@ -291,8 +292,8 @@ MushroomDialog::MushroomDialog(Mushroom* object)
 
 	addChild(new ppl7::tk::Label(0, y, 100, 30, "Gravity x:"));
 	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
-	gravity_x->setLimits(0.0f, 360.0f);
-	gravity_x->enableSpinBox(true, 1.0f, 0, 80);
+	gravity_x->setLimits(-4.0f, 4.0f);
+	gravity_x->enableSpinBox(true, 0.1f, 1, 100);
 	gravity_x->setValue(object->gravity_x);
 	gravity_x->setEventHandler(this);
 	addChild(gravity_x);
