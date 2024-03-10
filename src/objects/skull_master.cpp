@@ -398,7 +398,7 @@ void SkullMaster::update_attack(double time, TileTypePlane& ttplane, Player& pla
 
 
 	int px_dist=abs(player.x - p.x);
-	if (px_dist < 60 && abs(initial_p.x - p.x) < 500) {
+	if (px_dist < 60 && abs(initial_p.x - p.x) < 1000) {
 		if (player.x > p.x) {
 			velocity.x-=0.4f * frame_rate_compensation;
 			if (velocity.x < -3.0f) velocity.x=-5.0f;
@@ -406,7 +406,7 @@ void SkullMaster::update_attack(double time, TileTypePlane& ttplane, Player& pla
 			velocity.x+=0.4f * frame_rate_compensation;
 			if (velocity.x > 3.0f) velocity.x=5.0f;
 		}
-	} else if (px_dist > 700 && abs(initial_p.x - p.x) < 500) {
+	} else if (px_dist > 700 && (abs(initial_p.x - p.x) < 1000)) {
 		if (player.x > p.x) {
 			velocity.x+=0.2f * frame_rate_compensation;
 			if (velocity.x > 3.0f) velocity.x=3.0f;
