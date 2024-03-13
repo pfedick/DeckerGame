@@ -12,9 +12,9 @@ static void getVideoDestination(VideoPlayer& video, ppl7::tk::Window& window, SD
 	float aspect=(float)video.width() / (float)video.height();
 	dest.x=0;
 	dest.y=0;
-	dest.w=video.width();
-	dest.h=video.height();
-	if (dest.w > window.width()) dest.w=window.width();
+	dest.w=window.width();
+	//dest.h=dest.w/aspect;
+	//if (dest.w > window.width()) dest.w=window.width();
 	dest.h=dest.w / aspect;
 	if (dest.h > window.height()) {
 		dest.h=window.height();
