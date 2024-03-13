@@ -13,9 +13,9 @@ static void getDestinationRect(ppl7::grafix::Size img_size, ppl7::tk::Window& wi
 	float aspect=(float)img_size.width / (float)img_size.height;
 	dest.x=0;
 	dest.y=0;
-	dest.w=img_size.width;
-	dest.h=img_size.height;
-	if (dest.w > window.width()) dest.w=window.width();
+	//dest.w=img_size.width;
+	//dest.h=img_size.height;
+	dest.w=window.width();
 	dest.h=dest.w / aspect;
 	if (dest.h > window.height()) {
 		dest.h=window.height();
@@ -29,7 +29,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 {
 	world_widget->setVisible(false);
 	world_widget->setEnabled(false);
-	ppl7::grafix::Color black(128, 0, 0, 255);
+	ppl7::grafix::Color black(0, 0, 0, 255);
 	SDL_Renderer* renderer=sdl.getRenderer();
 
 	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
@@ -117,12 +117,12 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	delete start_screen;
 	start_screen=NULL;
 	switch (state) {
-	case StartScreen::State::QuitGame: return GameState::QuitGame;
-	case StartScreen::State::StartGame: return GameState::StartGame;
-	case StartScreen::State::StartTutorial: return GameState::StartTutorial;
-	case StartScreen::State::ShowSettings: return GameState::ShowSettings;
-	case StartScreen::State::StartEditor: return GameState::StartEditor;
-	default: return GameState::QuitGame;
+		case StartScreen::State::QuitGame: return GameState::QuitGame;
+		case StartScreen::State::StartGame: return GameState::StartGame;
+		case StartScreen::State::StartTutorial: return GameState::StartTutorial;
+		case StartScreen::State::ShowSettings: return GameState::ShowSettings;
+		case StartScreen::State::StartEditor: return GameState::StartEditor;
+		default: return GameState::QuitGame;
 	}
 	return GameState::QuitGame;
 }
