@@ -455,11 +455,13 @@ void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
 	end->setPos(10, yy);	end->setSize(element_w, element_h);
 	yy+=element_h + 10;
 
+	start_tutorial->setFontSize(font_size);
 	start_game->setFontSize(font_size);
 	settings->setFontSize(font_size);
 	editor->setFontSize(font_size);
 	end->setFontSize(font_size);
 
+	start_tutorial->setBorderWidth(border_width);
 	start_game->setBorderWidth(border_width);
 	settings->setBorderWidth(border_width);
 	editor->setBorderWidth(border_width);
