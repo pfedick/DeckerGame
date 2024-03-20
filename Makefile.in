@@ -340,6 +340,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/objects/treasure/ -t res/sprites_treasure.tex -w 512 -h 512 -px 64 -py 110
 	./texmaker -s lightwave/Render/objects/treasure_ui/ -t res/sprites_treasure_ui.tex -w 128 -h 128 -px 0 -py 0
 
+	./texmaker -s lightwave/Render/objects/switches/ -t res/switches.tex -w 512 -h 512 -px 144 -py 242 -x tmp/switches
 	./texmaker -s res/solidcolor/ -t res/bricks_solid.tex -w 512 -h 512 -px 0 -py 76
 	./texmaker -s res/solidcolor/ -t res/bricks_solid_ui.tex -w 512 -h 512 -px 0 -py 0
 	./texmaker -s lightwave/Render/bricks_white_ui/ -t res/bricks_white_ui.tex -w 512 -h 512 -px 0 -py 0
