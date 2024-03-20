@@ -72,6 +72,9 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::RainEmitter, "Rain emiter", 41);
 	addObject(Decker::Objects::Type::ParticleEmitter, "Particle emiter", 46);
 	addObject(Decker::Objects::Type::Switch, "Switch", 35);
+	addObject(Decker::Objects::Type::ButtonSwitch, "Button", 69);
+	addObject(Decker::Objects::Type::TouchPlateSwitch, "Touch plate", 70);
+	addObject(Decker::Objects::Type::LightSignal, "Light signal", 68);
 
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);
