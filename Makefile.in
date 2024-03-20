@@ -116,6 +116,9 @@ OBJECTS=compile/main.o \
 	compile/object_warpgate.o \
 	compile/object_scarabeus.o \
 	compile/object_switch.o \
+	compile/object_buttonswitch.o \
+	compile/object_touchplateswitch.o \
+	compile/object_lightsignal.o \
 	compile/object_stamper.o \
 	compile/object_ai_figure.o \
 	compile/object_wallenstein.o \
@@ -668,6 +671,19 @@ compile/object_touchemitter.o: src/objects/touchemitter.cpp Makefile include/obj
 compile/object_switch.o: src/objects/switch.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_switch.o -c src/objects/switch.cpp $(CFLAGS)
+
+compile/object_buttonswitch.o: src/objects/buttonswitch.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_buttonswitch.o -c src/objects/buttonswitch.cpp $(CFLAGS)
+
+compile/object_touchplateswitch.o: src/objects/touchplateswitch.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_touchplateswitch.o -c src/objects/touchplateswitch.cpp $(CFLAGS)
+
+compile/object_lightsignal.o: src/objects/lightsignal.cpp Makefile include/objects.h include/light.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_lightsignal.o -c src/objects/lightsignal.cpp $(CFLAGS)
+
 
 compile/object_stamper.o: src/objects/stamper.cpp Makefile include/objects.h
 	- @mkdir -p compile

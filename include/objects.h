@@ -68,6 +68,9 @@ public:
 		Flashlight=34,
 		LightTrigger=35,
 		LevelModificator=36,
+		TouchPlateSwitch=37,
+		ButtonSwitch=38,
+		LightSignal=39,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -130,6 +133,7 @@ public:
 		StamperV2,
 		Skull,
 		SkullMaster,
+		Switches,
 		MaxSpritesets
 	};
 };
@@ -431,6 +435,9 @@ public:
 	Switch();
 	static Representation representation();
 	void init();
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -1773,6 +1780,67 @@ public:
 	void openUi() override;
 	void test();
 };
+
+class TouchPlateSwitch : public Object
+{
+private:
+public:
+	TouchPlateSwitch();
+	~TouchPlateSwitch();
+
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+
+};
+
+class ButtonSwitch : public Object
+{
+private:
+public:
+	ButtonSwitch();
+	~ButtonSwitch();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	virtual void toggle(bool enable, Object* source=NULL) override;
+	virtual void trigger(Object* source=NULL) override;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+
+
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+};
+
+class LightSignal : public Object
+{
+private:
+	LightObject led;
+public:
+
+	LightSignal();
+	~LightSignal();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	//void handleCollision(Player* player, const Collision& collision) override;
+	virtual void toggle(bool enable, Object* source=NULL) override;
+	virtual void trigger(Object* source=NULL) override;
+
+
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+};
+
 
 
 class ObjectSystem

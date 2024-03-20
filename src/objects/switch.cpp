@@ -12,7 +12,7 @@ namespace Decker::Objects {
 
 Representation Switch::representation()
 {
-	return Representation(Spriteset::GenericObjects, 1);
+	return Representation(Spriteset::Switches, 0);
 }
 
 Switch::TargetObject::TargetObject()
@@ -49,6 +49,17 @@ void Switch::init()
 	this->updateBoundary();
 
 }
+
+void Switch::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	Object::draw(renderer, coords);
+}
+
+void Switch::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	Object::drawEditMode(renderer, coords);
+}
+
 
 void Switch::reset()
 {
