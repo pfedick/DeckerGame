@@ -24,11 +24,12 @@ Switch::TargetObject::TargetObject()
 Switch::Switch()
 	:Object(Type::ObjectType::Switch)
 {
-	sprite_set=Spriteset::GenericObjects;
-	sprite_no=1;
+	sprite_set=Spriteset::Switches;
+	sprite_no=3;
 	collisionDetection=true;
+	pixelExactCollision=false;
 	visibleAtPlaytime=true;
-	sprite_no_representation=1;
+	sprite_no_representation=0;
 	initial_state=false;
 	one_time_switch=false;
 	auto_toggle_on_collision=false;
@@ -36,28 +37,41 @@ Switch::Switch()
 	cooldown=0.0f;
 	state=0;
 	current_state=initial_state;
+	color_mod.set(226, 192, 52, 255);
 	init();
 }
 
 void Switch::init()
 {
 	state=0;
-	sprite_no=1;
-	if (current_state == true) {
-		sprite_no+=2;
-	}
+	sprite_no=3;
 	this->updateBoundary();
 
 }
 
 void Switch::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	Object::draw(renderer, coords);
+	ppl7::grafix::Color nocolormod(255, 255, 255, 255);
+	int corpus=3;
+	int lever=6;
+	if (current_state == true) {
+		corpus=1;
+		lever=4;
+	}
+	texture->draw(renderer,
+		p.x + coords.x,
+		p.y + coords.y,
+		corpus, color_mod);
+	texture->draw(renderer,
+		p.x + coords.x,
+		p.y + coords.y,
+		lever, nocolormod);
+
 }
 
 void Switch::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	Object::drawEditMode(renderer, coords);
+	draw(renderer, coords);
 }
 
 
