@@ -99,7 +99,7 @@ void SkullDropper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 
 Representation SkullMaster::representation()
 {
-	return Representation(Spriteset::Skull, 0);
+	return Representation(Spriteset::SkullMaster, 0);
 }
 
 SkullMaster::SkullMaster()
