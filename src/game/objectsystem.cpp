@@ -185,6 +185,7 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Switches]->enableOutlines(true);
 	spriteset[Spriteset::Switches]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Switches]->load(sdl, "res/switches.tex");
+	for (int i=1;i <= 6;i++) spriteset[Spriteset::Switches]->setPivot(i, 144, 250); // compat reason
 }
 
 void ObjectSystem::addObject(Object* object)
