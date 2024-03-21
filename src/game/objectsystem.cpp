@@ -68,6 +68,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::GenericObjects]->load(sdl, "res/objects.tex");
 	spriteset[Spriteset::GenericObjects]->setPivot(299, 128, 149);
 	spriteset[Spriteset::GenericObjects]->setPivot(300, 128, 236);
+	spriteset[Spriteset::GenericObjects]->setPivot(1, 128, 228);
+	spriteset[Spriteset::GenericObjects]->setPivot(2, 128, 228);
+
+
 
 	spriteset[Spriteset::ThreeSpeers]->enableOutlines(true);
 	spriteset[Spriteset::ThreeSpeers]->enableMemoryBuffer(true);
@@ -439,6 +443,10 @@ Representation getRepresentation(int object_type)
 		case Type::Trigger: return Trigger::representation();
 		case Type::LightTrigger: return LightTrigger::representation();
 		case Type::LevelModificator: return LevelModificator::representation();
+		case Type::LightSignal: return LightSignal::representation();
+		case Type::ButtonSwitch: return ButtonSwitch::representation();
+		case Type::TouchPlateSwitch: return TouchPlateSwitch::representation();
+
 		default: return Object::representation();
 	}
 }
@@ -530,6 +538,9 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::Trigger: return new Trigger();
 		case Type::LightTrigger: return new LightTrigger();
 		case Type::LevelModificator: return new LevelModificator();
+		case Type::LightSignal: return new LightSignal();
+		//case Type::ButtonSwitch: return new ButtonSwitch();
+		//case Type::TouchPlateSwitch: return new TouchPlateSwitch();
 	}
 	return NULL;
 }

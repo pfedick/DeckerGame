@@ -6,6 +6,11 @@
 
 namespace Decker::Objects {
 
+Representation ButtonSwitch::representation()
+{
+    return Representation(Spriteset::Switches, 46);
+}
+
 
 
 }	// EOF namespace Decker::Objects

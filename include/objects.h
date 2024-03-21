@@ -1825,6 +1825,11 @@ class LightSignal : public Object
 private:
 	LightObject led;
 public:
+	bool initialState;
+	bool currentState;
+	bool dualColor;
+	ppl7::grafix::Color color_on;
+	ppl7::grafix::Color color_off;
 
 	LightSignal();
 	~LightSignal();

@@ -6,6 +6,10 @@
 
 namespace Decker::Objects {
 
+Representation TouchPlateSwitch::representation()
+{
+    return Representation(Spriteset::Switches, 44);
+}
 
 
 }	// EOF namespace Decker::Objects
