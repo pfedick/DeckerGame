@@ -41,9 +41,9 @@ static int swimm_down_right[]={ 176,177,178,179,180,181,182,183,184,185 };
 static float getMaxAirFromDifficultyLevel(Config::DifficultyLevel level)
 {
 	switch (level) {
-	case Config::DifficultyLevel::easy: return 45.0f;
-	case Config::DifficultyLevel::normal: return 30.0f;
-	case Config::DifficultyLevel::hard: return 20.0f;
+		case Config::DifficultyLevel::easy: return 45.0f;
+		case Config::DifficultyLevel::normal: return 30.0f;
+		case Config::DifficultyLevel::hard: return 20.0f;
 	}
 	return 30.0f;
 }
@@ -493,6 +493,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	if (state[SDL_SCANCODE_UP]) k.matrix|=KeyboardKeys::Up;
 	if (state[SDL_SCANCODE_I] || state[SDL_SCANCODE_W]) k.matrix|=KeyboardKeys::Up;
 	if (state[SDL_SCANCODE_DOWN]) k.matrix|=KeyboardKeys::Down;
+	if (state[SDL_SCANCODE_LCTRL]) k.matrix|=KeyboardKeys::Crouch;
 	if (state[SDL_SCANCODE_K] || state[SDL_SCANCODE_S]) k.matrix|=KeyboardKeys::Down;
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT]) k.matrix|=KeyboardKeys::Shift;
 	if (state[SDL_SCANCODE_E] || state[SDL_SCANCODE_O]) k.matrix|=KeyboardKeys::Action;
@@ -515,9 +516,14 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 		//if (k.velocity_y < 0) k.matrix|=KeyboardKeys::Up;
 		if (k.velocity_y < -16384) k.matrix|=KeyboardKeys::Up | KeyboardKeys::Shift;
 
+		if (gc.getAxisState(gc.mapping.getSDLAxis(GameControllerMapping::Axis::Crouch)) > 0) {
+			k.matrix|=KeyboardKeys::Crouch;
+		}
 
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Action))) k.matrix|=KeyboardKeys::Action;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Flashlight))) k.matrix|=KeyboardKeys::Flashlight;
+		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Crouch))) k.matrix|=KeyboardKeys::Crouch;
+
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::Jump))) k.matrix|=KeyboardKeys::Up | KeyboardKeys::Shift;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::MenuLeft))) k.matrix|=KeyboardKeys::Left | KeyboardKeys::Shift;
 		if (gc.getButtonState(gc.mapping.getSDLButton(GameControllerMapping::Button::MenuRight))) k.matrix|=KeyboardKeys::Right | KeyboardKeys::Shift;
@@ -630,10 +636,10 @@ void Player::dropHealth(float points, HealthDropReason reason)
 		if (time > voiceDamageCooldown) {
 			int r=ppl7::rand(1, 4);
 			switch (r) {
-			case 1: speak(VoiceGeorge::aua1); break;
-			case 2: speak(VoiceGeorge::aua2); break;
-			case 3: speak(VoiceGeorge::aua3); break;
-			default: speak(VoiceGeorge::aua4); break;
+				case 1: speak(VoiceGeorge::aua1); break;
+				case 2: speak(VoiceGeorge::aua2); break;
+				case 3: speak(VoiceGeorge::aua3); break;
+				default: speak(VoiceGeorge::aua4); break;
 			}
 			voiceDamageCooldown=time + ppl7::randf(0.0f, 4.0f);
 		}
@@ -731,12 +737,12 @@ static void play_step(AudioPool& ap)
 {
 	int r=ppl7::rand(1, 5);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::george_step1, 0.5f); break;
-	case 2: ap.playOnce(AudioClip::george_step2, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::george_step3, 0.5f); break;
-	case 4: ap.playOnce(AudioClip::george_step4, 0.5f); break;
-	case 5: ap.playOnce(AudioClip::george_step5, 0.5f); break;
-	default: ap.playOnce(AudioClip::george_step1, 0.5f); break;
+		case 1: ap.playOnce(AudioClip::george_step1, 0.5f); break;
+		case 2: ap.playOnce(AudioClip::george_step2, 0.5f); break;
+		case 3: ap.playOnce(AudioClip::george_step3, 0.5f); break;
+		case 4: ap.playOnce(AudioClip::george_step4, 0.5f); break;
+		case 5: ap.playOnce(AudioClip::george_step5, 0.5f); break;
+		default: ap.playOnce(AudioClip::george_step1, 0.5f); break;
 	}
 }
 
@@ -901,7 +907,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 
 	acceleration_jump_sideways=0;
 
-		//ppl7::PrintDebugTime("keys\n");
+	ppl7::PrintDebugTime("keys matrix: %d\n", keys.matrix);
 
 	if (keys.matrix == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
@@ -995,7 +1001,9 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 					animation.start(climb_down_cycle, sizeof(climb_down_cycle) / sizeof(int), true, 0);
 				}
 			}
-		} else if (collision_matrix[2][5] == TileType::Blocking || collision_matrix[3][5] == TileType::Blocking
+		}
+	} else if ((keys.matrix & KeyboardKeys::Crouch) && (movement != Crouch && movement != Crawling && movement != CrawlTurn)) {
+		if (collision_matrix[2][5] == TileType::Blocking || collision_matrix[3][5] == TileType::Blocking
 			|| collision_matrix[2][5] == TileType::BlockFromTop || collision_matrix[3][5] == TileType::BlockFromTop) {
 			movement=Crouch;
 			if (orientation == Left) animation.setStaticFrame(43);
@@ -1003,7 +1011,6 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			else animation.setStaticFrame(309);
 			//ppl7::PrintDebugTime("crawling\n");
 		}
-
 	} else if (keys.matrix == (KeyboardKeys::Left) && movement == Jump) {
 		if (!isCollisionLeft()) velocity_move.x=-2 * frame_rate_compensation;
 	} else if (keys.matrix == (KeyboardKeys::Right) && movement == Jump) {
@@ -1225,7 +1232,8 @@ void Player::handleKeyboardWhileSwimming(double time, const TileTypePlane& world
 void Player::handleKeyboardWhileCrawling(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation)
 {
 	if (movement == CrawlTurn) return;
-	if (keys.matrix & KeyboardKeys::Up) {
+
+	if (keys.matrix & KeyboardKeys::Up || ((keys.matrix & KeyboardKeys::Crouch) == 0 && (movement == Crouch || movement == Crawling))) {
 		if (collision_matrix[2][0] != TileType::Blocking && collision_matrix[3][0] != TileType::Blocking
 			&& collision_matrix[2][1] != TileType::Blocking && collision_matrix[3][1] != TileType::Blocking
 			&& collision_matrix[2][2] != TileType::Blocking && collision_matrix[3][2] != TileType::Blocking
@@ -1378,15 +1386,15 @@ void Player::splashIntoWater(float gravity)
 	AudioPool& audio=getAudioPool();
 	AudioClip::Id id=AudioClip::watersplash1;
 	switch (ppl7::rand(0, 4)) {
-	case 0:
-	case 1:
-		id=AudioClip::watersplash1; break;
-	case 2:
-		id=AudioClip::watersplash2; break;
-	case 3:
-		id=AudioClip::watersplash3; break;
-	case 4:
-		id=AudioClip::watersplash4; break;
+		case 0:
+		case 1:
+			id=AudioClip::watersplash1; break;
+		case 2:
+			id=AudioClip::watersplash2; break;
+		case 3:
+			id=AudioClip::watersplash3; break;
+		case 4:
+			id=AudioClip::watersplash4; break;
 
 	}
 	audio.playOnce(id, gravity / 21.0f);
@@ -1751,10 +1759,10 @@ void Player::idleJokes(double time)
 			nextIdleSpeech=time + ppl7::randf(30.0f, 120.0f);
 			int r=ppl7::rand(1, 4);
 			switch (r) {
-			case 1: speak(VoiceGeorge::hello, 0.6f, translate("Hello!"), translate("elooo")); break;
-			case 2: speak(VoiceGeorge::hello_questioned, 0.6f, translate("Hello?"), translate("eloooo")); break;
-			case 3: speak(VoiceGeorge::hello_here_i_am, 0.6f, translate("Hello, here I am!"), translate("elloooooeerraiieemmm")); break;
-			default: speak(VoiceGeorge::play_with_me, 0.6f, translate("Play with me!"), translate("pleiiwissme")); break;
+				case 1: speak(VoiceGeorge::hello, 0.6f, translate("Hello!"), translate("elooo")); break;
+				case 2: speak(VoiceGeorge::hello_questioned, 0.6f, translate("Hello?"), translate("eloooo")); break;
+				case 3: speak(VoiceGeorge::hello_here_i_am, 0.6f, translate("Hello, here I am!"), translate("elloooooeerraiieemmm")); break;
+				default: speak(VoiceGeorge::play_with_me, 0.6f, translate("Play with me!"), translate("pleiiwissme")); break;
 			}
 		}
 	} else {

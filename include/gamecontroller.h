@@ -21,17 +21,20 @@ public:
         Action,
         Flashlight,
         Jump,
-        Back
+        Back,
+        Crouch
     };
     enum class Axis {
         Unknown=0,
         Walk=1,
-        Jump
+        Jump,
+        Crouch
     };
 
 private:
     int player_axis_x;
     int player_axis_y;
+    int player_axis_crouch;
 
     int menu_button_up;
     int menu_button_down;
@@ -42,6 +45,7 @@ private:
     int back_button;
     int jump_button;
     int flashlight_button;
+    int crouch_button;
     std::map<int, Button> button_mapping;
     std::map<int, Axis> axis_mapping;
 

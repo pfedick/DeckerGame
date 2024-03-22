@@ -146,18 +146,18 @@ void GameController::rumble(uint16_t low, uint16_t high, uint32_t duration_ms)
 ppl7::String GameController::getAxisName(int axis)
 {
     switch (axis) {
-    case SDL_CONTROLLER_AXIS_LEFTX: return ppl7::String("Stick left horizontal");
-        break;
-    case SDL_CONTROLLER_AXIS_LEFTY: return ppl7::String("Stick left vertical");
-        break;
-    case SDL_CONTROLLER_AXIS_RIGHTX: return ppl7::String("Stick right horizontal");
-        break;
-    case SDL_CONTROLLER_AXIS_RIGHTY: return ppl7::String("Stick right vertical");
-        break;
-    case SDL_CONTROLLER_AXIS_TRIGGERLEFT: return ppl7::String("Trigger left");
-        break;
-    case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: return ppl7::String("Trigger right");
-        break;
+        case SDL_CONTROLLER_AXIS_LEFTX: return ppl7::String("Stick left horizontal");
+            break;
+        case SDL_CONTROLLER_AXIS_LEFTY: return ppl7::String("Stick left vertical");
+            break;
+        case SDL_CONTROLLER_AXIS_RIGHTX: return ppl7::String("Stick right horizontal");
+            break;
+        case SDL_CONTROLLER_AXIS_RIGHTY: return ppl7::String("Stick right vertical");
+            break;
+        case SDL_CONTROLLER_AXIS_TRIGGERLEFT: return ppl7::String("Trigger left");
+            break;
+        case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: return ppl7::String("Trigger right");
+            break;
     }
     return ppl7::String("unknown");
 
@@ -166,46 +166,46 @@ ppl7::String GameController::getAxisName(int axis)
 ppl7::String GameController::getButtonName(int button)
 {
     switch (button) {
-    case SDL_CONTROLLER_BUTTON_A: return ppl7::String("Button A");
-        break;
-    case SDL_CONTROLLER_BUTTON_B: return ppl7::String("Button B");
-        break;
-    case SDL_CONTROLLER_BUTTON_X: return ppl7::String("Button X");
-        break;
-    case SDL_CONTROLLER_BUTTON_Y: return ppl7::String("Button Y");
-        break;
-    case SDL_CONTROLLER_BUTTON_BACK: return ppl7::String("Button back");
-        break;
-    case SDL_CONTROLLER_BUTTON_GUIDE: return ppl7::String("Button guide");
-        break;
-    case SDL_CONTROLLER_BUTTON_START: return ppl7::String("Button start");
-        break;
-    case SDL_CONTROLLER_BUTTON_LEFTSTICK: return ppl7::String("Stick left");
-        break;
-    case SDL_CONTROLLER_BUTTON_RIGHTSTICK: return ppl7::String("Stick right");
-        break;
-    case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: return ppl7::String("Shoulder left");
-        break;
-    case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: return ppl7::String("Shoulder right");
-        break;
-    case SDL_CONTROLLER_BUTTON_DPAD_UP: return ppl7::String("Pad up");
-        break;
-    case SDL_CONTROLLER_BUTTON_DPAD_DOWN: return ppl7::String("Pad down");
-        break;
-    case SDL_CONTROLLER_BUTTON_DPAD_LEFT: return ppl7::String("Pad left");
-        break;
-    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: return ppl7::String("Pad right");
-        break;
-    case SDL_CONTROLLER_BUTTON_MISC1: return ppl7::String("Button misc");
-        break;
-    case SDL_CONTROLLER_BUTTON_PADDLE1: return ppl7::String("Paddle 1");
-        break;
-    case SDL_CONTROLLER_BUTTON_PADDLE2: return ppl7::String("Paddle 2");
-        break;
-    case SDL_CONTROLLER_BUTTON_PADDLE3: return ppl7::String("Paddle 3");
-        break;
-    case SDL_CONTROLLER_BUTTON_PADDLE4: return ppl7::String("Paddle 4");
-        break;
+        case SDL_CONTROLLER_BUTTON_A: return ppl7::String("Button A");
+            break;
+        case SDL_CONTROLLER_BUTTON_B: return ppl7::String("Button B");
+            break;
+        case SDL_CONTROLLER_BUTTON_X: return ppl7::String("Button X");
+            break;
+        case SDL_CONTROLLER_BUTTON_Y: return ppl7::String("Button Y");
+            break;
+        case SDL_CONTROLLER_BUTTON_BACK: return ppl7::String("Button back");
+            break;
+        case SDL_CONTROLLER_BUTTON_GUIDE: return ppl7::String("Button guide");
+            break;
+        case SDL_CONTROLLER_BUTTON_START: return ppl7::String("Button start");
+            break;
+        case SDL_CONTROLLER_BUTTON_LEFTSTICK: return ppl7::String("Stick left");
+            break;
+        case SDL_CONTROLLER_BUTTON_RIGHTSTICK: return ppl7::String("Stick right");
+            break;
+        case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: return ppl7::String("Shoulder left");
+            break;
+        case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: return ppl7::String("Shoulder right");
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_UP: return ppl7::String("Pad up");
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN: return ppl7::String("Pad down");
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_LEFT: return ppl7::String("Pad left");
+            break;
+        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: return ppl7::String("Pad right");
+            break;
+        case SDL_CONTROLLER_BUTTON_MISC1: return ppl7::String("Button misc");
+            break;
+        case SDL_CONTROLLER_BUTTON_PADDLE1: return ppl7::String("Paddle 1");
+            break;
+        case SDL_CONTROLLER_BUTTON_PADDLE2: return ppl7::String("Paddle 2");
+            break;
+        case SDL_CONTROLLER_BUTTON_PADDLE3: return ppl7::String("Paddle 3");
+            break;
+        case SDL_CONTROLLER_BUTTON_PADDLE4: return ppl7::String("Paddle 4");
+            break;
 
     }
     return ppl7::String("unknown");
@@ -217,6 +217,7 @@ GameControllerMapping::GameControllerMapping()
 {
     player_axis_x=SDL_CONTROLLER_AXIS_LEFTX;
     player_axis_y=SDL_CONTROLLER_AXIS_LEFTY;
+    player_axis_crouch=SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 
     menu_button_up=SDL_CONTROLLER_BUTTON_DPAD_UP;
     menu_button_down=SDL_CONTROLLER_BUTTON_DPAD_DOWN;
@@ -228,6 +229,7 @@ GameControllerMapping::GameControllerMapping()
     back_button=SDL_CONTROLLER_BUTTON_B;
     jump_button=SDL_CONTROLLER_BUTTON_X;
     flashlight_button=SDL_CONTROLLER_BUTTON_Y;
+    crouch_button=SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
     updateMapping();
 }
 
@@ -240,6 +242,7 @@ void GameControllerMapping::updateMapping()
 
     axis_mapping.insert(std::pair<int, Axis>(player_axis_x, Axis::Walk));
     axis_mapping.insert(std::pair<int, Axis>(player_axis_y, Axis::Jump));
+    axis_mapping.insert(std::pair<int, Axis>(player_axis_crouch, Axis::Crouch));
     button_mapping.insert(std::pair<int, Button>(menu_button_up, Button::MenuUp));
     button_mapping.insert(std::pair<int, Button>(menu_button_down, Button::MenuDown));
     button_mapping.insert(std::pair<int, Button>(menu_button_left, Button::MenuLeft));
@@ -249,9 +252,11 @@ void GameControllerMapping::updateMapping()
     button_mapping.insert(std::pair<int, Button>(jump_button, Button::Jump));
     button_mapping.insert(std::pair<int, Button>(back_button, Button::Back));
     button_mapping.insert(std::pair<int, Button>(flashlight_button, Button::Flashlight));
+    button_mapping.insert(std::pair<int, Button>(crouch_button, Button::Crouch));
 
     axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Walk, player_axis_x));
     axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Jump, player_axis_y));
+    axis_mapping_rev.insert(std::pair<Axis, int>(Axis::Crouch, player_axis_crouch));
     button_mapping_rev.insert(std::pair<Button, int>(Button::MenuUp, menu_button_up));
     button_mapping_rev.insert(std::pair<Button, int>(Button::MenuDown, menu_button_down));
     button_mapping_rev.insert(std::pair<Button, int>(Button::MenuLeft, menu_button_left));
@@ -261,6 +266,7 @@ void GameControllerMapping::updateMapping()
     button_mapping_rev.insert(std::pair<Button, int>(Button::Jump, back_button));
     button_mapping_rev.insert(std::pair<Button, int>(Button::Back, jump_button));
     button_mapping_rev.insert(std::pair<Button, int>(Button::Flashlight, flashlight_button));
+    button_mapping_rev.insert(std::pair<Button, int>(Button::Crouch, crouch_button));
 
 }
 
@@ -299,25 +305,27 @@ int GameControllerMapping::getSDLButton(const Button b)
 void GameControllerMapping::setMappingAxis(const Axis a, int id)
 {
     switch (a) {
-    case Axis::Walk: player_axis_x=id; break;
-    case Axis::Jump: player_axis_y=id; break;
-    default: break;
+        case Axis::Walk: player_axis_x=id; break;
+        case Axis::Jump: player_axis_y=id; break;
+        case Axis::Crouch: player_axis_crouch=id; break;
+        default: break;
     }
 }
 
 void GameControllerMapping::setMappingButton(const Button a, int id)
 {
     switch (a) {
-    case Button::MenuUp: menu_button_up=id; break;
-    case Button::MenuDown: menu_button_down=id; break;
-    case Button::MenuLeft: menu_button_left=id; break;
-    case Button::MenuRight: menu_button_right=id; break;
-    case Button::Menu: menu_button=id; break;
-    case Button::Action: action_button=id; break;
-    case Button::Flashlight: flashlight_button=id; break;
-    case Button::Jump: back_button=id; break;
-    case Button::Back: jump_button=id; break;
-    default: break;
+        case Button::MenuUp: menu_button_up=id; break;
+        case Button::MenuDown: menu_button_down=id; break;
+        case Button::MenuLeft: menu_button_left=id; break;
+        case Button::MenuRight: menu_button_right=id; break;
+        case Button::Menu: menu_button=id; break;
+        case Button::Action: action_button=id; break;
+        case Button::Flashlight: flashlight_button=id; break;
+        case Button::Jump: back_button=id; break;
+        case Button::Back: jump_button=id; break;
+        case Button::Crouch: crouch_button=id; break;
+        default: break;
     }
 
 }

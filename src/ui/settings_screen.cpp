@@ -398,18 +398,18 @@ void SettingsScreen::updateDifficultyDescription()
 {
     Config::DifficultyLevel level=static_cast<Config::DifficultyLevel>(difficulty_slider->value());
     switch (level) {
-    case Config::DifficultyLevel::easy:
-        difficulty_name->setText(translate("easy"));
-        difficulty_description->setText(translate("no falling damage, less enemies, less damage"));
-        break;
-    case Config::DifficultyLevel::normal:
-        difficulty_name->setText(translate("normal"));
-        difficulty_description->setText(translate("all the fun, play how it's meant to be played"));
-        break;
-    case Config::DifficultyLevel::hard:
-        difficulty_name->setText(translate("hard"));
-        difficulty_description->setText(translate("more enemies, more damage"));
-        break;
+        case Config::DifficultyLevel::easy:
+            difficulty_name->setText(translate("easy"));
+            difficulty_description->setText(translate("no falling damage, less enemies, less damage"));
+            break;
+        case Config::DifficultyLevel::normal:
+            difficulty_name->setText(translate("normal"));
+            difficulty_description->setText(translate("all the fun, play how it's meant to be played"));
+            break;
+        case Config::DifficultyLevel::hard:
+            difficulty_name->setText(translate("hard"));
+            difficulty_description->setText(translate("more enemies, more damage"));
+            break;
     }
 }
 
@@ -534,6 +534,17 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_jump);
     y+=50;
 
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Crouch:"));
+    label->setFont(style_label.font);
+    page_controller->addChild(label);
+    controller_button_crouch=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_crouch->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
+    controller_button_crouch->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Crouch));
+    controller_button_crouch->setEventHandler(this);
+    page_controller->addChild(controller_button_crouch);
+    y+=50;
+
+
     label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Flashlight:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
@@ -578,31 +589,31 @@ void SettingsScreen::selectSettingsPage(SettingsMenue page)
     this->removeChild(page_misc);
     this->removeChild(page_controller);
     switch (page) {
-    case SettingsMenue::Audio:
-        select_audio->setSelected(true);
-        this->addChild(page_audio);
-        break;
-    case SettingsMenue::Video:
-        select_video->setSelected(true);
-        this->addChild(page_video);
-        break;
-    case SettingsMenue::Controller:
-        select_controller->setSelected(true);
-        this->addChild(page_controller);
-        break;
-    case SettingsMenue::Misc:
-        select_misc->setSelected(true);
-        this->addChild(page_misc);
-        break;
-    case SettingsMenue::Back:
-        select_back->setSelected(true);
-        break;
-    case SettingsMenue::Menue:
-        if (select_menue) select_menue->setSelected(true);
-        break;
-    case SettingsMenue::Exit:
-        if (select_game_exit) select_game_exit->setSelected(true);
-        break;
+        case SettingsMenue::Audio:
+            select_audio->setSelected(true);
+            this->addChild(page_audio);
+            break;
+        case SettingsMenue::Video:
+            select_video->setSelected(true);
+            this->addChild(page_video);
+            break;
+        case SettingsMenue::Controller:
+            select_controller->setSelected(true);
+            this->addChild(page_controller);
+            break;
+        case SettingsMenue::Misc:
+            select_misc->setSelected(true);
+            this->addChild(page_misc);
+            break;
+        case SettingsMenue::Back:
+            select_back->setSelected(true);
+            break;
+        case SettingsMenue::Menue:
+            if (select_menue) select_menue->setSelected(true);
+            break;
+        case SettingsMenue::Exit:
+            if (select_game_exit) select_game_exit->setSelected(true);
+            break;
     }
     currentMenueSelection=page;
 }
@@ -690,11 +701,11 @@ void SettingsScreen::handleMenuKeyDownEvent(int key)
 ppl7::tk::HorizontalSlider* SettingsScreen::getCurrentAudioSlider()
 {
     switch (currentAudioSelection) {
-    case SettingsAudio::Total: return audio_total_slider;
-    case SettingsAudio::Music: return audio_music_slider;
-    case SettingsAudio::Effects: return audio_effects_slider;
-    case SettingsAudio::Ambience: return audio_ambience_slider;
-    case SettingsAudio::Speech: return audio_speech_slider;
+        case SettingsAudio::Total: return audio_total_slider;
+        case SettingsAudio::Music: return audio_music_slider;
+        case SettingsAudio::Effects: return audio_effects_slider;
+        case SettingsAudio::Ambience: return audio_ambience_slider;
+        case SettingsAudio::Speech: return audio_speech_slider;
     }
     return NULL;
 }
@@ -702,18 +713,19 @@ ppl7::tk::HorizontalSlider* SettingsScreen::getCurrentAudioSlider()
 Decker::ui::ControllerButtonSelector* SettingsScreen::getCurrentControllerInput()
 {
     switch (currentControllerSelection) {
-    case SettingsController::AxisWalk: return controller_axis_walk;
-    case SettingsController::AxisJump: return controller_axis_jump;
-    case SettingsController::ButtonUp: return controller_button_up;
-    case SettingsController::ButtonDown: return controller_button_down;
-    case SettingsController::ButtonLeft: return controller_button_left;
-    case SettingsController::ButtonRight: return controller_button_right;
-    case SettingsController::ButtonMenu: return controller_button_menu;
-    case SettingsController::ButtonAction: return controller_button_action;
-    case SettingsController::ButtonBack: return controller_button_back;
-    case SettingsController::ButtonJump: return controller_button_jump;
-    case SettingsController::ButtonFlashlight: return controller_button_flashlight;
-    default: return NULL;
+        case SettingsController::AxisWalk: return controller_axis_walk;
+        case SettingsController::AxisJump: return controller_axis_jump;
+        case SettingsController::ButtonUp: return controller_button_up;
+        case SettingsController::ButtonDown: return controller_button_down;
+        case SettingsController::ButtonLeft: return controller_button_left;
+        case SettingsController::ButtonRight: return controller_button_right;
+        case SettingsController::ButtonMenu: return controller_button_menu;
+        case SettingsController::ButtonAction: return controller_button_action;
+        case SettingsController::ButtonBack: return controller_button_back;
+        case SettingsController::ButtonJump: return controller_button_jump;
+        case SettingsController::ButtonCrouch: return controller_button_crouch;
+        case SettingsController::ButtonFlashlight: return controller_button_flashlight;
+        default: return NULL;
     }
     return NULL;
 }
@@ -802,18 +814,19 @@ void SettingsScreen::handleControllerKeyDownEvent(int key)
 void SettingsScreen::setFocusToControllerWidget()
 {
     switch (currentControllerSelection) {
-    case SettingsController::Deadzone: controller_deadzone->setFocus(); break;
-    case SettingsController::AxisWalk: controller_axis_walk->setFocus(); break;
-    case SettingsController::AxisJump: controller_axis_jump->setFocus(); break;
-    case SettingsController::ButtonUp: controller_button_up->setFocus(); break;
-    case SettingsController::ButtonDown: controller_button_down->setFocus(); break;
-    case SettingsController::ButtonLeft: controller_button_left->setFocus(); break;
-    case SettingsController::ButtonRight: controller_button_right->setFocus(); break;
-    case SettingsController::ButtonMenu: controller_button_menu->setFocus(); break;
-    case SettingsController::ButtonAction: controller_button_action->setFocus(); break;
-    case SettingsController::ButtonBack: controller_button_back->setFocus(); break;
-    case SettingsController::ButtonJump: controller_button_jump->setFocus(); break;
-    case SettingsController::ButtonFlashlight: controller_button_flashlight->setFocus(); break;
+        case SettingsController::Deadzone: controller_deadzone->setFocus(); break;
+        case SettingsController::AxisWalk: controller_axis_walk->setFocus(); break;
+        case SettingsController::AxisJump: controller_axis_jump->setFocus(); break;
+        case SettingsController::ButtonUp: controller_button_up->setFocus(); break;
+        case SettingsController::ButtonDown: controller_button_down->setFocus(); break;
+        case SettingsController::ButtonLeft: controller_button_left->setFocus(); break;
+        case SettingsController::ButtonRight: controller_button_right->setFocus(); break;
+        case SettingsController::ButtonMenu: controller_button_menu->setFocus(); break;
+        case SettingsController::ButtonAction: controller_button_action->setFocus(); break;
+        case SettingsController::ButtonBack: controller_button_back->setFocus(); break;
+        case SettingsController::ButtonJump: controller_button_jump->setFocus(); break;
+        case SettingsController::ButtonCrouch: controller_button_crouch->setFocus(); break;
+        case SettingsController::ButtonFlashlight: controller_button_flashlight->setFocus(); break;
     }
 }
 
@@ -1011,6 +1024,7 @@ void SettingsScreen::valueChangedEvent(ppl7::tk::Event* event, int value)
         else if (event->widget() == controller_button_back) game.config.controller.button_back=value;
         else if (event->widget() == controller_button_action) game.config.controller.button_action=value;
         else if (event->widget() == controller_button_jump) game.config.controller.button_jump=value;
+        else if (event->widget() == controller_button_crouch) game.config.controller.button_crouch=value;
         else if (event->widget() == controller_button_flashlight) game.config.controller.button_flashlight=value;
         game.config.save();
         game.updateGameControllerMapping();

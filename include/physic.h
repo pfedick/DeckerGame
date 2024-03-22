@@ -30,8 +30,9 @@ public:
 		Shift=16,
 		Action=32,
 		Flashlight=64,
+		Crouch=128,
 		JumpLeft=5,
-		JumpRight=6,
+		JumpRight=6
 	};
 };
 

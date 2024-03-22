@@ -125,6 +125,7 @@ public:
 		int					button_back;
 		int					button_action;
 		int					button_jump;
+		int					button_crouch;
 		int					button_flashlight;
 		bool				use_rumble;
 		Controller();
