@@ -33,7 +33,7 @@ Switch::Switch()
 	initial_state=false;
 	one_time_switch=false;
 	auto_toggle_on_collision=false;
-	switch_style=0;
+	switch_style=SwitchStyle::SwitchWithLever;
 	color_base=7;
 	color_lever=3;
 	color_button=20;
@@ -156,7 +156,7 @@ size_t Switch::save(unsigned char* buffer, size_t size) const
 	if (auto_toggle_on_collision) flags|=4;
 	if (visibleAtPlaytime) flags|=8;
 	ppl7::Poke8(buffer + bytes + 1, flags);
-	ppl7::Poke8(buffer + bytes + 2, switch_style);
+	ppl7::Poke8(buffer + bytes + 2, static_cast<int>(switch_style));
 	ppl7::Poke8(buffer + bytes + 3, color_base);
 	ppl7::Poke8(buffer + bytes + 4, color_lever);
 	ppl7::Poke8(buffer + bytes + 5, color_button);
@@ -184,14 +184,14 @@ size_t Switch::load(const unsigned char* buffer, size_t size)
 	visibleAtPlaytime=(bool)(flags & 8);
 	if (version == 1) {
 		bytes+=2;
-		switch_style=flags >> 4;
+		switch_style=static_cast<SwitchStyle>(flags >> 4);
 		for (int i=0;i < 10;i++) {
 			targets[i].object_id=ppl7::Peek16(buffer + bytes);
 			targets[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + 2));
 			bytes+=3;
 		}
 	} else if (version == 2) {
-		switch_style=ppl7::Peek8(buffer + bytes + 2);
+		switch_style=static_cast<SwitchStyle>(ppl7::Peek8(buffer + bytes + 2));
 		color_base=ppl7::Peek8(buffer + bytes + 3);
 		color_lever=ppl7::Peek8(buffer + bytes + 4);
 		color_button=ppl7::Peek8(buffer + bytes + 5);
@@ -310,7 +310,7 @@ SwitchDialog::SwitchDialog(Switch* object)
 	switch_style->add("Switch with small lever and top", "2");
 	switch_style->add("Light switch", "3");
 	switch_style->add("Lever", "4");
-	switch_style->setCurrentIdentifier(ppl7::ToString("%d", object->switch_style));
+	switch_style->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->switch_style)));
 	switch_style->setEventHandler(this);
 	addChild(switch_style);
 	y+=40;
@@ -406,7 +406,7 @@ void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
 	ppl7::tk::Widget* widget=event->widget();
 	if (widget == switch_style) {
-		object->switch_style=switch_style->currentIdentifier().toInt();
+		object->switch_style=static_cast<Switch::SwitchStyle>(switch_style->currentIdentifier().toInt());
 		object->init();
 	}
 	if (widget == colorframe && color_target != NULL) {

@@ -422,6 +422,15 @@ public:
 		enable=1,
 		trigger=2
 	};
+
+	enum class SwitchStyle {
+		SwitchWithLever=0,
+		SwitchWithLeverAndTop=1,
+		SwitchWithSmallLeverAndTop=2,
+		LightSwitch=3,
+		Lever=4
+	};
+
 	class TargetObject
 	{
 	public:
@@ -429,11 +438,12 @@ public:
 		int object_id;
 		TargetState state;
 	};
+
 	bool current_state;
 	bool initial_state;
 	bool one_time_switch;
 	bool auto_toggle_on_collision;
-	unsigned char switch_style;
+	SwitchStyle switch_style;
 	int color_base;
 	int color_lever;
 	int color_button;
