@@ -110,7 +110,7 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	scale_x=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	scale_x->setEventHandler(this);
 	scale_x->setLimits(0.01f, 5.0f);
-	scale_x->enableSpinBox(true, 0.05, 1, 80);
+	scale_x->enableSpinBox(true, 0.05, 2, 80);
 	scale_x->setValue(1.0f);
 	this->addChild(scale_x);
 	yy+=30;
@@ -119,7 +119,7 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	scale_y=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	scale_y->setEventHandler(this);
 	scale_y->setLimits(0.01f, 5.0f);
-	scale_y->enableSpinBox(true, 0.05, 1, 80);
+	scale_y->enableSpinBox(true, 0.05, 2, 80);
 	scale_y->setValue(1.0f);
 	this->addChild(scale_y);
 	yy+=30;
