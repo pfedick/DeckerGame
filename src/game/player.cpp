@@ -907,7 +907,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 
 	acceleration_jump_sideways=0;
 
-	ppl7::PrintDebugTime("keys matrix: %d\n", keys.matrix);
+	//ppl7::PrintDebugTime("keys matrix: %d\n", keys.matrix);
 
 	if (keys.matrix == KeyboardKeys::Left) {
 		if (orientation != Left) { turn(Left); return; }
