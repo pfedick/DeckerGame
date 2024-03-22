@@ -18,7 +18,7 @@ Representation Switch::representation()
 Switch::TargetObject::TargetObject()
 {
 	object_id=0;
-	enable=true;
+	state=TargetState::enable;
 }
 
 Switch::Switch()
@@ -33,7 +33,10 @@ Switch::Switch()
 	initial_state=false;
 	one_time_switch=false;
 	auto_toggle_on_collision=false;
-	color_scheme=0;
+	switch_style=0;
+	color_base=7;
+	color_lever=3;
+	color_button=20;
 	cooldown=0.0f;
 	state=0;
 	current_state=initial_state;
@@ -88,11 +91,16 @@ void Switch::notify_targets()
 		if (targets[i].object_id > 0) {
 			Object* target=objs->getObject(targets[i].object_id);
 			if (target) {
-				bool target_state=targets[i].enable;
-				if (!current_state) {
-					target_state=!target_state;
+				TargetState target_state=targets[i].state;
+				if (target_state == TargetState::trigger) target->trigger(this);
+				else {
+					bool s=false;
+					if (target_state == TargetState::enable) s=true;
+					if (!current_state) {
+						s=!s;
+					}
+					target->toggle(s, this);
 				}
-				target->toggle(target_state, this);
 			}
 		}
 	}
@@ -133,26 +141,29 @@ void Switch::handleCollision(Player* player, const Collision& collision)
 
 size_t Switch::saveSize() const
 {
-	return Object::saveSize() + 2 + 10 * 3;
+	return Object::saveSize() + 6 + 15 * 3;
 }
 
 size_t Switch::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
-	int flags=(color_scheme << 4) & 0xf0;
+	int flags=0;
 	if (initial_state) flags|=1;
 	if (one_time_switch) flags|=2;
 	if (auto_toggle_on_collision) flags|=4;
 	if (visibleAtPlaytime) flags|=8;
-
 	ppl7::Poke8(buffer + bytes + 1, flags);
-	bytes+=2;
-	for (int i=0;i < 10;i++) {
+	ppl7::Poke8(buffer + bytes + 2, switch_style);
+	ppl7::Poke8(buffer + bytes + 3, color_base);
+	ppl7::Poke8(buffer + bytes + 4, color_lever);
+	ppl7::Poke8(buffer + bytes + 5, color_button);
+	bytes+=6;
+	for (int i=0;i < 15;i++) {
 		ppl7::Poke16(buffer + bytes, targets[i].object_id);
-		ppl7::Poke8(buffer + bytes + 2, (int)targets[i].enable);
+		ppl7::Poke8(buffer + bytes + 2, static_cast<int>(targets[i].state));
 		bytes+=3;
 	}
 	return bytes;
@@ -163,20 +174,33 @@ size_t Switch::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
+	if (version < 1 || version>2) return 0;
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
-	bytes+=2;
-	color_scheme=flags >> 4;
 	initial_state=(bool)(flags & 1);
 	current_state=initial_state;
 	one_time_switch=(bool)(flags & 2);
 	auto_toggle_on_collision=(bool)(flags & 4);
 	visibleAtPlaytime=(bool)(flags & 8);
-	for (int i=0;i < 10;i++) {
-		targets[i].object_id=ppl7::Peek16(buffer + bytes);
-		targets[i].enable=ppl7::Peek8(buffer + bytes + 2);
-		bytes+=3;
+	if (version == 1) {
+		bytes+=2;
+		switch_style=flags >> 4;
+		for (int i=0;i < 10;i++) {
+			targets[i].object_id=ppl7::Peek16(buffer + bytes);
+			targets[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + 2));
+			bytes+=3;
+		}
+	} else if (version == 2) {
+		switch_style=ppl7::Peek8(buffer + bytes + 2);
+		color_base=ppl7::Peek8(buffer + bytes + 3);
+		color_lever=ppl7::Peek8(buffer + bytes + 4);
+		color_button=ppl7::Peek8(buffer + bytes + 5);
+		bytes+=6;
+		for (int i=0;i < 15;i++) {
+			targets[i].object_id=ppl7::Peek16(buffer + bytes);
+			targets[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + 2));
+			bytes+=3;
+		}
 	}
 	init();
 	return size;
@@ -186,23 +210,48 @@ size_t Switch::load(const unsigned char* buffer, size_t size)
 class SwitchDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* color_scheme;
+	Switch* object;
+	ppl7::tk::ComboBox* switch_style;
 	ppl7::tk::CheckBox* visible_at_playtime;
 	ppl7::tk::CheckBox* initial_state, * current_state;
 	ppl7::tk::CheckBox* one_time_switch;
 	ppl7::tk::CheckBox* auto_toggle_on_collision;
-	ppl7::tk::SpinBox* target_id[10];
-	ppl7::tk::CheckBox* target_state[10];
-	ppl7::tk::Button* reset;
+	ppl7::tk::SpinBox* target_id[15];
+	ppl7::tk::RadioButton* target_state_on[15];
+	ppl7::tk::RadioButton* target_state_off[15];
+	ppl7::tk::RadioButton* target_state_trigger[15];
+	//ppl7::tk::Button* reset;
 
-	Switch* object;
+	Decker::ui::ColorSelectionFrame* colorframe;
+	ppl7::tk::Button* button_color_base;
+	ppl7::tk::Button* button_color_lever;
+	ppl7::tk::Button* button_color_button;
+	ppl7::tk::Frame* frame_color_base;
+	ppl7::tk::Frame* frame_color_lever;
+	ppl7::tk::Frame* frame_color_button;
+	ppl7::tk::Label* current_element_label;
+	ppl7::tk::Frame* current_element_color_frame;
+	int* color_target;
+
+	enum class Element {
+		Base,
+		Lever,
+		Button
+	};
+
+	Element current_element;
+	void setCurrentElement(Element element);
+
+
 
 public:
 	SwitchDialog(Switch* object);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
 	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
 	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void dialogButtonEvent(Dialog::Buttons button) override;
+	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+
 };
 
 void Switch::openUi()
@@ -212,71 +261,165 @@ void Switch::openUi()
 }
 
 SwitchDialog::SwitchDialog(Switch* object)
-	: Decker::ui::Dialog(640, 660)
+	: Decker::ui::Dialog(900, 600, Dialog::Buttons::OK | Dialog::Buttons::Reset)
 {
 	this->object=object;
-	setWindowTitle("Switch");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Switch-Color: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Flags: "));
-	addChild(new ppl7::tk::Label(0, 170, 120, 30, "Targets: "));
+	current_element=Element::Base;
+	current_element_color_frame=NULL;
+	color_target=NULL;
 
-	color_scheme=new ppl7::tk::ComboBox(120, 0, 400, 30);
-	color_scheme->add("yellow", "0");
-	color_scheme->setCurrentIdentifier(ppl7::ToString("%d", object->color_scheme));
-	color_scheme->setEventHandler(this);
-	addChild(color_scheme);
-
-	visible_at_playtime=new ppl7::tk::CheckBox(120, 40, 400, 30, "switch is visible", object->visibleAtPlaytime);
-	visible_at_playtime->setEventHandler(this);
-	addChild(visible_at_playtime);
-
-	initial_state=new ppl7::tk::CheckBox(120, 70, 400, 30, "Initial state: on", object->initial_state);
-	initial_state->setEventHandler(this);
-	addChild(initial_state);
-
-	current_state=new ppl7::tk::CheckBox(300, 70, 400, 30, "current state: on", object->current_state);
-	current_state->setEventHandler(this);
-	addChild(current_state);
+	setWindowTitle(ppl7::ToString("Switch, ID: %d", object->id));
+	//ppl7::grafix::Rect client=clientRect();
+	int y=0;
+	//int sw=(client.width()) / 2;
+	int sw=480;
 
 
-	one_time_switch=new ppl7::tk::CheckBox(120, 100, 400, 30, "one time switch", object->one_time_switch);
-	one_time_switch->setEventHandler(this);
-	addChild(one_time_switch);
-
-	auto_toggle_on_collision=new ppl7::tk::CheckBox(120, 130, 400, 30, "auto toggle on collision", object->auto_toggle_on_collision);
-	auto_toggle_on_collision->setEventHandler(this);
-	addChild(auto_toggle_on_collision);
-
-	int y=170;
-
-	for (int i=0;i < 10;i++) {
-		addChild(new ppl7::tk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i * 1)));
-		target_id[i]=new ppl7::tk::SpinBox(220, y, 100, 30, object->targets[i].object_id);
+	addChild(new ppl7::tk::Label(sw, y, 120, 30, "Targets: "));
+	y+=35;
+	for (int i=0;i < 15;i++) {
+		addChild(new ppl7::tk::Label(sw + 20, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		target_id[i]=new ppl7::tk::SpinBox(sw + 100, y, 100, 30, object->targets[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
-		target_state[i]=new ppl7::tk::CheckBox(325, y, 100, 30, "enable", object->targets[i].enable);
-		target_state[i]->setEventHandler(this);
-		addChild(target_state[i]);
-		y+=35;
+
+		ppl7::tk::Frame* frame=new ppl7::tk::Frame(sw + 210, y, 210, 30, ppl7::tk::Frame::BorderStyle::NoBorder);
+		frame->setTransparent(true);
+
+		target_state_on[i]=new ppl7::tk::RadioButton(0, 0, 50, 30, "on", object->targets[i].state == Switch::TargetState::enable);
+		target_state_on[i]->setEventHandler(this);
+		frame->addChild(target_state_on[i]);
+		target_state_off[i]=new ppl7::tk::RadioButton(50, 0, 60, 30, "off", object->targets[i].state == Switch::TargetState::disable);
+		target_state_off[i]->setEventHandler(this);
+		frame->addChild(target_state_off[i]);
+		target_state_trigger[i]=new ppl7::tk::RadioButton(100, 0, 90, 30, "trigger", object->targets[i].state == Switch::TargetState::trigger);
+		target_state_trigger[i]->setEventHandler(this);
+		frame->addChild(target_state_trigger[i]);
+		addChild(frame);
+
+		y+=30;
 	}
-	reset=new ppl7::tk::Button(0, y, 80, 30, "Reset");
-	reset->setEventHandler(this);
-	addChild(reset);
+	y=0;
+
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "Switch-Style: "));
+	switch_style=new ppl7::tk::ComboBox(100, y, 300, 30);
+	switch_style->add("Switch with lever", "0");
+	switch_style->add("Switch with lever and top", "1");
+	switch_style->add("Switch with small lever and top", "2");
+	switch_style->add("Light switch", "3");
+	switch_style->add("Lever", "4");
+	switch_style->setCurrentIdentifier(ppl7::ToString("%d", object->switch_style));
+	switch_style->setEventHandler(this);
+	addChild(switch_style);
+	y+=40;
+
+	addChild(new ppl7::tk::Label(0, y, 100, 30, "Flags: "));
+	initial_state=new ppl7::tk::CheckBox(100, y, 160, 30, "Initial state: on", object->initial_state);
+	initial_state->setEventHandler(this);
+	addChild(initial_state);
+
+	current_state=new ppl7::tk::CheckBox(260, y, 160, 30, "current state: on", object->current_state);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+	y+=35;
+
+
+
+	visible_at_playtime=new ppl7::tk::CheckBox(100, y, 160, 30, "switch is visible", object->visibleAtPlaytime);
+	visible_at_playtime->setEventHandler(this);
+	addChild(visible_at_playtime);
+
+	one_time_switch=new ppl7::tk::CheckBox(260, y, 160, 30, "one time switch", object->one_time_switch);
+	one_time_switch->setEventHandler(this);
+	addChild(one_time_switch);
+	y+=35;
+
+	auto_toggle_on_collision=new ppl7::tk::CheckBox(100, y, 220, 30, "auto toggle on collision", object->auto_toggle_on_collision);
+	auto_toggle_on_collision->setEventHandler(this);
+	addChild(auto_toggle_on_collision);
+	y+=35;
+
+	addChild(new ppl7::tk::Label(0, y, 80, 30, "Colors:"));
+	current_element_label=new ppl7::tk::Label(170, y, 300, 30, "Base");
+	addChild(current_element_label);
+	y+=35;
+	ColorPalette& palette=GetColorPalette();
+	colorframe=new Decker::ui::ColorSelectionFrame(170, y, 300, 300, palette);
+	colorframe->setEventHandler(this);
+	this->addChild(colorframe);
+
+	button_color_base=new ppl7::tk::Button(0, y, 100, 30, "Base");
+	button_color_base->setEventHandler(this);
+	addChild(button_color_base);
+	frame_color_base=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_base->setBackgroundColor(palette.getColor(object->color_base));
+	addChild(frame_color_base);
+	y+=35;
+
+	button_color_lever=new ppl7::tk::Button(0, y, 100, 30, "Lever");
+	button_color_lever->setEventHandler(this);
+	addChild(button_color_lever);
+	frame_color_lever=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_lever->setBackgroundColor(palette.getColor(object->color_lever));
+	addChild(frame_color_lever);
+	y+=35;
+
+	button_color_button=new ppl7::tk::Button(0, y, 100, 30, "Button");
+	button_color_button->setEventHandler(this);
+	addChild(button_color_button);
+	frame_color_button=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_button->setBackgroundColor(palette.getColor(object->color_button));
+	addChild(frame_color_button);
+	y+=35;
+	setCurrentElement(Element::Base);
+
+
 }
+
+void SwitchDialog::setCurrentElement(Element element)
+{
+	current_element=element;
+	switch (element) {
+		case Element::Base:
+			current_element_label->setText("Base");
+			current_element_color_frame=frame_color_base;
+			color_target=&object->color_base;
+			break;
+		case Element::Lever:
+			current_element_label->setText("Lever");
+			current_element_color_frame=frame_color_lever;
+			color_target=&object->color_lever;
+			break;
+		case Element::Button:
+			current_element_label->setText("Button");
+			current_element_color_frame=frame_color_button;
+			color_target=&object->color_button;
+			break;
+	}
+	colorframe->setColorIndex(*color_target);
+}
+
 
 void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 {
-	if (event->widget() == color_scheme) {
-		object->color_scheme=color_scheme->currentIdentifier().toInt();
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == switch_style) {
+		object->switch_style=switch_style->currentIdentifier().toInt();
 		object->init();
+	}
+	if (widget == colorframe && color_target != NULL) {
+		*color_target=value;
+		if (current_element_color_frame)
+			current_element_color_frame->setBackgroundColor(GetColorPalette().getColor(value));
 
 	}
 }
 
 void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 {
-	for (int i=0;i < 10;i++) {
+	for (int i=0;i < 15;i++) {
 		if (event->widget() == target_id[i]) {
 			//handled=true;
 			object->targets[i].object_id=(value & 0xffff);
@@ -284,11 +427,28 @@ void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 	}
 }
 
+void SwitchDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+{
+	ppl7::tk::Widget* widget=event->widget();
+	if (widget == button_color_base || widget == frame_color_base) setCurrentElement(Element::Base);
+	else if (widget == button_color_lever || widget == frame_color_lever) setCurrentElement(Element::Lever);
+	else if (widget == button_color_button || widget == frame_color_button) setCurrentElement(Element::Button);
+	else Dialog::mouseDownEvent(event);
+}
+
+
+
 void SwitchDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 {
-	for (int i=0;i < 10;i++) {
-		if (event->widget() == target_state[i]) {
-			object->targets[i].enable=checked;
+	if (checked) {
+		for (int i=0;i < 15;i++) {
+			if (event->widget() == target_state_on[i]) {
+				object->targets[i].state=Switch::TargetState::enable;
+			} else 	if (event->widget() == target_state_off[i]) {
+				object->targets[i].state=Switch::TargetState::disable;
+			} else 	if (event->widget() == target_state_trigger[i]) {
+				object->targets[i].state=Switch::TargetState::trigger;
+			}
 		}
 	}
 	if (event->widget() == visible_at_playtime) object->visibleAtPlaytime=checked;
@@ -298,13 +458,10 @@ void SwitchDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 	else if (event->widget() == auto_toggle_on_collision) object->auto_toggle_on_collision=checked;
 
 }
-
-void SwitchDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void SwitchDialog::dialogButtonEvent(Dialog::Buttons button)
 {
-	if (event->widget() == reset) object->reset();
-	else Decker::ui::Dialog::mouseDownEvent(event);
+	if (button == Dialog::Buttons::Reset) object->reset();
 }
-
 
 
 }	// EOF namespace Decker::Objects

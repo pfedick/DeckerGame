@@ -417,20 +417,29 @@ private:
 	void notify_targets();
 
 public:
+	enum class TargetState {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
 	class TargetObject
 	{
 	public:
 		TargetObject();
 		int object_id;
-		bool enable;
+		TargetState state;
 	};
 	bool current_state;
 	bool initial_state;
 	bool one_time_switch;
 	bool auto_toggle_on_collision;
-	unsigned char color_scheme;
+	unsigned char switch_style;
+	int color_base;
+	int color_lever;
+	int color_button;
 
-	TargetObject targets[10];
+
+	TargetObject targets[15];
 
 	Switch();
 	static Representation representation();
