@@ -35,10 +35,9 @@ Switch::Switch()
 	auto_toggle_on_collision=false;
 	switch_style=SwitchStyle::SwitchWithLever;
 	color_base=7;
-	color_lever=3;
+	color_lever=2;
 	color_button=20;
 	cooldown=0.0f;
-	state=0;
 	current_state=initial_state;
 	color_mod.set(226, 192, 52, 255);
 	init();
@@ -46,29 +45,73 @@ Switch::Switch()
 
 void Switch::init()
 {
-	state=0;
-	sprite_no=3;
+	switch (switch_style) {
+		case SwitchStyle::SwitchWithLever:
+			sprite_no=3;
+			break;
+		case SwitchStyle::SwitchWithLeverAndTop:
+			sprite_no=9;
+			break;
+		case SwitchStyle::SwitchWithSmallLeverAndTop:
+			sprite_no=18;
+			break;
+		case SwitchStyle::LightSwitch:
+			sprite_no=27;
+			break;
+		case SwitchStyle::Lever:
+			sprite_no=31;
+			break;
+	}
+	sprite_no_representation=sprite_no;
+
+
 	this->updateBoundary();
 
 }
 
 void Switch::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	ppl7::grafix::Color nocolormod(255, 255, 255, 255);
-	int corpus=3;
-	int lever=6;
-	if (current_state == true) {
-		corpus=1;
-		lever=4;
+	const ColorPalette& palette=GetColorPalette();
+	int sprite_base=0;
+	int sprite_lever=0;
+	int sprite_button=0;
+
+	switch (switch_style) {
+		case SwitchStyle::SwitchWithLever:
+			sprite_base=3; sprite_lever=6;
+			if (current_state == true) { sprite_base=1; sprite_lever=4; }
+			break;
+		case SwitchStyle::SwitchWithLeverAndTop:
+			sprite_base=9; sprite_lever=12; sprite_button=15;
+			if (current_state == true) { sprite_base=7; sprite_lever=10; sprite_button=13; }
+			break;
+		case SwitchStyle::SwitchWithSmallLeverAndTop:
+			sprite_base=18; sprite_lever=21; sprite_button=24;
+			if (current_state == true) { sprite_base=16; sprite_lever=19; sprite_button=22; }
+			break;
+		case SwitchStyle::LightSwitch:
+			sprite_base=27; sprite_lever=30;
+			if (current_state == true) { sprite_base=25; sprite_lever=28; }
+			break;
+		case SwitchStyle::Lever:
+			sprite_base=31;
+			if (current_state == true) { sprite_base=33; }
+			break;
+		default:
+			return;
 	}
-	texture->draw(renderer,
+	if (sprite_base) texture->draw(renderer,
 		p.x + coords.x,
 		p.y + coords.y,
-		corpus, color_mod);
-	texture->draw(renderer,
+		sprite_base, palette.getColor(color_base));
+	if (sprite_lever) texture->draw(renderer,
 		p.x + coords.x,
 		p.y + coords.y,
-		lever, nocolormod);
+		sprite_lever, palette.getColor(color_lever));
+	if (sprite_button) texture->draw(renderer,
+		p.x + coords.x,
+		p.y + coords.y,
+		sprite_button, palette.getColor(color_button));
 
 }
 
@@ -122,8 +165,8 @@ void Switch::update(double, TileTypePlane&, Player&, float)
 
 void Switch::handleCollision(Player* player, const Collision& collision)
 {
-	if (auto_toggle_on_collision == true && state == 0) {
-		state=1;
+	if (auto_toggle_on_collision == true && current_state == false) {
+		current_state=true;
 		return;
 	}
 	Player::Keys keyboard=player->getKeyboardMatrix();

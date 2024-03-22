@@ -412,7 +412,7 @@ class Switch : public Object
 {
 private:
 	double cooldown;
-	int state;
+	//int state;
 
 	void notify_targets();
 
