@@ -157,6 +157,11 @@ void Switch::toggle(bool enable, Object* source)
 	notify_targets();
 }
 
+void Switch::trigger(Object* source)
+{
+	toggle(!current_state, source);
+}
+
 
 void Switch::update(double, TileTypePlane&, Player&, float)
 {

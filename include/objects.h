@@ -465,6 +465,7 @@ public:
 	void openUi() override;
 	void reset() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
 };
 
 
