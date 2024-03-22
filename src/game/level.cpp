@@ -520,9 +520,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		}
 		if (showObjects) {	// Objects behind Bricks
 			metrics.time_objects.start();
-			if (editMode)
-				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
-			else
+			if (!editMode)
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 			metrics.time_objects.stop();
 		}
@@ -540,22 +538,30 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		drawParticles(renderer, Particle::Layer::BehindPlayer, worldcoords * planeFactor[0], metrics);
 		metrics.time_objects.start();
 		if (showObjects) {	// Objects behind Player
-			if (editMode)
-				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
-			else
+			metrics.time_objects.start();
+			if (!editMode)
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
+			metrics.time_objects.stop();
 		}
 		// Player
 		player->draw(renderer, viewport, worldcoords * planeFactor[0]);
 		if (showObjects) {	// Objects before Player
-			if (editMode)
-				objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
-			else
+			metrics.time_objects.start();
+			if (!editMode)
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+			metrics.time_objects.stop();
 		}
 		metrics.time_objects.stop();
 		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
 		addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Player, worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], metrics);
+
+		if (showObjects && editMode) {
+			metrics.time_objects.start();
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+			metrics.time_objects.stop();
+		}
 	}
 	//addLightmap(renderer, PlayerLights, worldcoords * planeFactor[0], metrics);
 	prepareLayer(renderer);

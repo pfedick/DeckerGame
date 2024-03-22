@@ -33,6 +33,7 @@ ObjectSystem::ObjectSystem(Waynet* waynet)
 	for (int i=0;i < Spriteset::MaxSpritesets;i++) {
 		spriteset[i]=new SpriteTexture();
 	}
+	light_objects=new SpriteTexture();
 	player_start=0;
 	this->waynet=waynet;
 }
@@ -63,6 +64,12 @@ void ObjectSystem::clear()
 void ObjectSystem::loadSpritesets(SDL& sdl)
 {
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
+	light_objects->enableOutlines(true);
+	light_objects->enableMemoryBuffer(true);
+	light_objects->load(sdl, "res/lightobjects.tex");
+
+
 	spriteset[Spriteset::GenericObjects]->enableOutlines(true);
 	spriteset[Spriteset::GenericObjects]->enableMemoryBuffer(true);
 	spriteset[Spriteset::GenericObjects]->load(sdl, "res/objects.tex");
@@ -282,6 +289,19 @@ void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewpo
 	}
 }
 
+static void drawId(SDL_Renderer* renderer, SpriteTexture* spriteset, int x, int y, uint32_t as)
+{
+	ppl7::String s;
+	s.setf("%d", as);
+	int w=(int)s.size() * 10;
+	x-=w / 2;
+	for (size_t p=0;p < s.size();p++) {
+		int num=s[p] - 48 + 3;
+		spriteset->draw(renderer, x, y, num);
+		x+=10;
+	}
+}
+
 void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
 {
 	std::map<uint32_t, Object*>::const_iterator it;
@@ -295,6 +315,8 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 		} else {
 			if (object->texture != NULL && object->myLayer == layer) {
 				object->drawEditMode(renderer, coords);
+				drawId(renderer, light_objects, object->p.x + coords.x, object->p.y + coords.y, object->id);
+				if (object->p != object->initial_p) drawId(renderer, light_objects, object->initial_p.x + coords.x, object->initial_p.y + coords.y, object->id);
 			}
 		}
 	}
