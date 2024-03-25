@@ -71,7 +71,8 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		}
 
 		drawWidgets();
-		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
+
 		if (fade_state == 0) {
 			fade_to_black-=5 * frame_rate_compensation;
 			if (fade_to_black <= 0.0f) {
