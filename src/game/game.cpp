@@ -913,7 +913,7 @@ void Game::run()
 
 		drawWidgets();
 		// Mouse
-		if (showui) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		if (showui || settings_screen) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
 
 		metrics.time_draw_ui.stop();
