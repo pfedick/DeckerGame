@@ -311,6 +311,7 @@ void Game::showUi(bool enable)
 {
 	const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
+	world_widget->setShowUi(showui);
 	if (showui) {
 		viewport.y1=32;
 		viewport.y2=desktop.height - 32;
@@ -912,7 +913,7 @@ void Game::run()
 
 		drawWidgets();
 		// Mouse
-		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		if (showui) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
 		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
 
 		metrics.time_draw_ui.stop();
@@ -2399,19 +2400,19 @@ void Screenshot::save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type t
 {
 	Layer layer=Layer::Complete;
 	switch (lplane) {
-	case LightPlaneId::Horizon: layer=Layer::Horizon; break;
-	case LightPlaneId::Far: layer=Layer::Far; break;
-	case LightPlaneId::Middle: layer=Layer::Middle; break;
-	case LightPlaneId::Player:
-		switch (pplane) {
-		case LightPlayerPlaneMatrix::Back: layer=Layer::Back; break;
-		case LightPlayerPlaneMatrix::Player: layer=Layer::Player; break;
-		case LightPlayerPlaneMatrix::Front: layer=Layer::Front; break;
+		case LightPlaneId::Horizon: layer=Layer::Horizon; break;
+		case LightPlaneId::Far: layer=Layer::Far; break;
+		case LightPlaneId::Middle: layer=Layer::Middle; break;
+		case LightPlaneId::Player:
+			switch (pplane) {
+				case LightPlayerPlaneMatrix::Back: layer=Layer::Back; break;
+				case LightPlayerPlaneMatrix::Player: layer=Layer::Player; break;
+				case LightPlayerPlaneMatrix::Front: layer=Layer::Front; break;
+				default: break;
+			}
+			break;
+		case LightPlaneId::Near: layer=Layer::Near; break;
 		default: break;
-		}
-		break;
-	case LightPlaneId::Near: layer=Layer::Near; break;
-	default: break;
 	}
 	save(layer, type, texture);
 }
@@ -2423,21 +2424,21 @@ void Screenshot::save(Layer layer, Type type, SDL_Texture* texture)
 	filename+=this->Filename;
 	filename.appendf("_layer%02d_", static_cast<int>(layer));
 	switch (layer) {
-	case Layer::Background: filename+="background"; break;
-	case Layer::Horizon: filename+="horizon"; break;
-	case Layer::Far: filename+="far"; break;
-	case Layer::Middle: filename+="middle"; break;
-	case Layer::Back: filename+="back"; break;
-	case Layer::Player: filename+="player"; break;
-	case Layer::Front: filename+="front"; break;
-	case Layer::Near: filename+="near"; break;
-	case Layer::Complete: filename+="complete"; break;
+		case Layer::Background: filename+="background"; break;
+		case Layer::Horizon: filename+="horizon"; break;
+		case Layer::Far: filename+="far"; break;
+		case Layer::Middle: filename+="middle"; break;
+		case Layer::Back: filename+="back"; break;
+		case Layer::Player: filename+="player"; break;
+		case Layer::Front: filename+="front"; break;
+		case Layer::Near: filename+="near"; break;
+		case Layer::Complete: filename+="complete"; break;
 	}
 	filename+="_";
 	switch (type) {
-	case Type::Color: filename+="0_color"; break;
-	case Type::Lightmap: filename+="1_lightmap"; break;
-	case Type::Final: filename+="2_final"; break;
+		case Type::Color: filename+="0_color"; break;
+		case Type::Lightmap: filename+="1_lightmap"; break;
+		case Type::Final: filename+="2_final"; break;
 	}
 	filename+=".png";
 	ppl7::PrintDebugTime("screenshot: %s\n", (const char*)filename);

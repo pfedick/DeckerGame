@@ -517,6 +517,7 @@ private:
 	OxygenFrame* stats_oxygen;
 	int value_health, value_lifes, value_points;
 	double oxygen_cooldown;
+	bool showui;
 public:
 	WorldWidget();
 	void retranslateUi();
@@ -526,6 +527,7 @@ public:
 
 	void updatePlayerStats(const Player* player);
 	void resetPlayerStats(const Player* player);
+	void setShowUi(bool enable);
 
 
 };

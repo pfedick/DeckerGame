@@ -163,6 +163,7 @@ WorldWidget::WorldWidget()
 	value_lifes=0;
 	value_points=0;
 	oxygen_cooldown=0.0f;
+	showui=false;
 	retranslateUi();
 	ppl7::tk::Label l;
 
@@ -280,10 +281,16 @@ static void drawFrame(ppl7::grafix::Drawable& draw, const ppl7::grafix::Point& p
 	draw.line(p2.x, p1.y, p2.x, p2.y, light);
 }
 
+void WorldWidget::setShowUi(bool enable)
+{
+	showui=enable;
+}
+
 void WorldWidget::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf("WorldWidget::paint %d x %d\n", draw.width(), draw.height());
 	//draw.cls();
+	if (!showui) return;
 	ppl7::grafix::Point p0(1, 1);
 	ppl7::grafix::Point p1(0, 0);
 	ppl7::grafix::Point p2(draw.width() - 1, draw.height() - 1);
