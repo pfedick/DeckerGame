@@ -1804,9 +1804,41 @@ public:
 class TouchPlateSwitch : public Object
 {
 private:
+	double cooldown;
+	double last_collision;
+	bool touched;
+
+	void notify_targets();
+
+public:
+	enum class TargetState {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
+
+	enum class PlateStyle {
+		Narrow=0,
+		Wide=1
+	};
+
+	class TargetObject
+	{
+	public:
+		TargetObject();
+		int object_id;
+		TargetState state;
+	};
+
+	bool current_state;
+	bool initial_state;
+	PlateStyle plate_style;
+	int color_base;
+	TargetObject targets[10];
+
+
 public:
 	TouchPlateSwitch();
-	~TouchPlateSwitch();
 
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
@@ -1816,6 +1848,12 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
+
+	void toggle(bool enable, Object* source=NULL);
+	void trigger(Object* source=NULL);
+
+	void init();
+	void reset();
 
 };
 

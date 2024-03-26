@@ -561,8 +561,9 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::LightTrigger: return new LightTrigger();
 		case Type::LevelModificator: return new LevelModificator();
 		case Type::LightSignal: return new LightSignal();
+		case Type::TouchPlateSwitch: return new TouchPlateSwitch();
 		//case Type::ButtonSwitch: return new ButtonSwitch();
-		//case Type::TouchPlateSwitch: return new TouchPlateSwitch();
+
 	}
 	return NULL;
 }
