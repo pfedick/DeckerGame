@@ -197,6 +197,11 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Switches]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Switches]->load(sdl, "res/switches.tex");
 	for (int i=1;i <= 6;i++) spriteset[Spriteset::Switches]->setPivot(i, 144, 250); // compat reason
+
+	spriteset[Spriteset::Crates]->enableOutlines(true);
+	spriteset[Spriteset::Crates]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Crates]->load(sdl, "res/crates.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -468,6 +473,7 @@ Representation getRepresentation(int object_type)
 		case Type::LightSignal: return LightSignal::representation();
 		case Type::ButtonSwitch: return ButtonSwitch::representation();
 		case Type::TouchPlateSwitch: return TouchPlateSwitch::representation();
+		case Type::Crate: return Crate::representation();
 
 		default: return Object::representation();
 	}
@@ -563,6 +569,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::LightSignal: return new LightSignal();
 		case Type::TouchPlateSwitch: return new TouchPlateSwitch();
 		//case Type::ButtonSwitch: return new ButtonSwitch();
+		case Type::Crate: return new Crate();
 
 	}
 	return NULL;

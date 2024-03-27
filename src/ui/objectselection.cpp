@@ -75,6 +75,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::ButtonSwitch, "Button", 69);
 	addObject(Decker::Objects::Type::TouchPlateSwitch, "Touch plate", 70);
 	addObject(Decker::Objects::Type::LightSignal, "Light signal", 68);
+	addObject(Decker::Objects::Type::Crate, "Crate", 71);
 
 	addObject(Decker::Objects::Type::Wallenstein, "Wallenstein", 37);
 	addObject(Decker::Objects::Type::Helena, "Helena", 38);

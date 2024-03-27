@@ -71,6 +71,7 @@ public:
 		TouchPlateSwitch=37,
 		ButtonSwitch=38,
 		LightSignal=39,
+		Crate,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -134,6 +135,7 @@ public:
 		Skull,
 		SkullMaster,
 		Switches,
+		Crates,
 		MaxSpritesets
 	};
 };
@@ -1901,6 +1903,20 @@ public:
 	virtual void trigger(Object* source=NULL) override;
 
 
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+};
+
+class Crate : public Object
+{
+private:
+public:
+	Crate();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
