@@ -764,8 +764,6 @@ void ObjectSystem::detectObjectCollision(const Object* object, std::list<Object*
 	collision_object_list.clear();
 	std::list<ppl7::grafix::Point> checkpoints;
 	if (object->pixelExactCollision) getCheckPoints(object, checkpoints);
-	//ppl7::PrintDebugTime("pixelexact: %d, we have %d checkpoints\n", (int)object->pixelExactCollision, (int)checkpoints.size());
-
 	std::map<uint32_t, Object*>::const_iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		if (it->second != object && it->second->enabled == true && it->second->visibleAtPlaytime == true) {
