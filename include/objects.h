@@ -1954,6 +1954,7 @@ public:
 	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
 	//Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
 	void detectCollision(const std::list<ppl7::grafix::Point>& player, std::list<Object*>& object_list);
+	void detectObjectCollision(const Object* object, std::list<Object*>& collision_object_list);
 	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);

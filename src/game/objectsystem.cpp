@@ -719,6 +719,64 @@ bool ObjectSystem::findObjectsInRange(const ppl7::grafix::PointF& p, double rang
 	return false;
 }
 
+static void getCheckPoints(const Object* object, std::list<ppl7::grafix::Point>& checkpoints)
+{
+	const ppl7::grafix::Drawable& draw=object->texture->getDrawable(object->sprite_no);
+	ppl7::grafix::Rect boundary=object->texture->spriteBoundary(object->sprite_no, 1.0f, object->p.x, object->p.y);
+	if (!draw.width()) return;
+	int stepx=boundary.width() / 16;
+	int stepy=boundary.height() / 16;
+	for (int py=boundary.y1;py < boundary.y2;py+=stepx) {
+		for (int px=boundary.x1;px < boundary.x2;px+=stepy) {
+			ppl7::grafix::Color c=draw.getPixel(px - boundary.x1, py - boundary.y1);
+			if (c.alpha() > 92) {
+				checkpoints.push_back(ppl7::grafix::Point(px, py));
+			}
+		}
+	}
+}
+
+static bool checkCollision(const Object* obj1, const std::list<ppl7::grafix::Point> checkpoints1, const Object* obj2) {
+	if (obj1->pixelExactCollision == false && obj2->pixelExactCollision == false) return true;
+	ppl7::grafix::Rect intersection=obj1->boundary.intersected(obj2->boundary);
+	std::list<ppl7::grafix::Point>::const_iterator it;
+	if (obj1->pixelExactCollision == false) {
+		std::list<ppl7::grafix::Point> checkpoints2;
+		getCheckPoints(obj2, checkpoints2);
+		//ppl7::PrintDebug("we have %d checkpoints\n", (int)checkpoints2.size());
+		for (it=checkpoints2.begin();it != checkpoints2.end();++it) {
+			if (it->inside(intersection)) return true;
+		}
+	} else if (obj2->pixelExactCollision == false) {
+		for (it=checkpoints1.begin();it != checkpoints1.end();++it) {
+			if (it->inside(intersection)) return true;
+		}
+	} else {
+		ppl7::PrintDebug("checkCollision with two pixelExcact objects not implemented yet\n");
+	}
+	return false;
+}
+
+
+
+void ObjectSystem::detectObjectCollision(const Object* object, std::list<Object*>& collision_object_list)
+{
+	collision_object_list.clear();
+	std::list<ppl7::grafix::Point> checkpoints;
+	if (object->pixelExactCollision) getCheckPoints(object, checkpoints);
+	//ppl7::PrintDebugTime("pixelexact: %d, we have %d checkpoints\n", (int)object->pixelExactCollision, (int)checkpoints.size());
+
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		if (it->second != object && it->second->enabled == true && it->second->visibleAtPlaytime == true) {
+			if (object->boundary.intersects(it->second->boundary)) {
+				if (checkCollision(object, checkpoints, it->second))
+					collision_object_list.push_back(it->second);
+			}
+		}
+	}
+}
+
 
 
 

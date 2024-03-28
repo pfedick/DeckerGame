@@ -101,6 +101,13 @@ void TouchPlateSwitch::trigger(Object* source)
 
 void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float)
 {
+    std::list<Object*> object_list;
+
+    GetObjectSystem()->detectObjectCollision(this, object_list);
+    if (object_list.size() > 0) {
+        last_collision=time;
+    }
+
     if (touched == false && last_collision > time - 0.1) {
         touched=true;
         current_state=true;
