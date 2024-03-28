@@ -60,7 +60,25 @@ size_t Crate::load(const unsigned char* buffer, size_t size)
 
 void Crate::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-
+	p+=velocity;
+	int blockcount=0;
+	for (int x=0;x < boundary.width();x+=16) {
+		if (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) == TileType::Blocking) blockcount++;
+	}
+	if (blockcount == 0) {
+		velocity.y+=0.2 * frame_rate_compensation;
+		if (velocity.y > 16.0f)velocity.y=16.0f;
+	} else {
+		velocity.y=0.0f;
+		while (true) {
+			blockcount=0;
+			for (int x=0;x < boundary.width();x+=16) {
+				if (ttplane.getType(ppl7::grafix::Point(p.x, p.y)) == TileType::Blocking) blockcount++;
+			}
+			if (blockcount == 0) break;
+			p.y--;
+		}
+	}
 }
 
 

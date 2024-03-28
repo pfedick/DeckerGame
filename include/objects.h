@@ -1912,6 +1912,7 @@ public:
 class Crate : public Object
 {
 private:
+	ppl7::grafix::PointF velocity;
 public:
 	Crate();
 	static Representation representation();
