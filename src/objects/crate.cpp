@@ -79,6 +79,7 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			p.y--;
 		}
 	}
+	updateBoundary();
 }
 
 
