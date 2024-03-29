@@ -62,8 +62,8 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 {
 	p+=velocity;
 	int blockcount=0;
-	for (int x=0;x < boundary.width();x+=16) {
-		if (ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1)) == TileType::Blocking) blockcount++;
+	for (int x=boundary.left();x < boundary.right();x+=8) {
+		if (ttplane.getType(ppl7::grafix::Point(x, p.y + 1)) == TileType::Blocking) blockcount++;
 	}
 	if (blockcount == 0) {
 		velocity.y+=0.2 * frame_rate_compensation;
@@ -72,8 +72,8 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		velocity.y=0.0f;
 		while (true) {
 			blockcount=0;
-			for (int x=0;x < boundary.width();x+=16) {
-				if (ttplane.getType(ppl7::grafix::Point(p.x, p.y)) == TileType::Blocking) blockcount++;
+			for (int x=boundary.left();x < boundary.right();x+=8) {
+				if (ttplane.getType(ppl7::grafix::Point(x, p.y)) == TileType::Blocking) blockcount++;
 			}
 			if (blockcount == 0) break;
 			p.y--;
@@ -85,7 +85,60 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 void Crate::handleCollision(Player* player, const Collision& collision)
 {
+	/*
+	ObjectSystem* objs=GetObjectSystem();
+	const std::list<ppl7::grafix::Point>& checkpoints=player->getCollisionCheckpoints();
+	while (objs->checkCollisionWithObject(checkpoints,this)
+	GetObjectSystem()->checkCollisionWithObject()
+	*/
+	/*
+	player->x-=player->velocity_move.x;
+	player->y-=player->velocity_move.y;
+	return;
+	*/
 
+	Collision col_recheck(collision);
+	//ppl7::PrintDebug("BoundingBox Player: %d:%d - %d:%d\n", col_recheck.bounding_box_player.x1, col_recheck.bounding_box_player.y1, col_recheck.bounding_box_player.x2, col_recheck.bounding_box_player.y2);
+	//ppl7::PrintDebug("BoundingBox Object: %d:%d - %d:%d\n", col_recheck.bounding_box_object.x1, col_recheck.bounding_box_object.y1, col_recheck.bounding_box_object.x2, col_recheck.bounding_box_object.y2);
+	//ppl7::PrintDebug("Intersection:       %d:%d - %d:%d\n", col_recheck.bounding_box_intersection.x1, col_recheck.bounding_box_intersection.y1, col_recheck.bounding_box_intersection.x2, col_recheck.bounding_box_intersection.y2);
+	bool col=true;
+	int tolerance=40;
+	while (col) {
+		col=false;
+		col_recheck.bounding_box_object=boundary;
+		col_recheck.bounding_box_player=player->getBoundingBox();
+		if (col_recheck.objectTop(tolerance)) {
+			player->fallstart=0.0f;
+			player->y=boundary.y1;
+			player->velocity_move.y=0;
+			player->setStandingOnObject(this);
+		} else if (col_recheck.objectBottom(tolerance)) {
+			player->setZeroVelocity();
+			player->y++;
+			col=true;
+		}
+
+		if (col_recheck.objectRight(tolerance)) {
+			player->x=col_recheck.bounding_box_object.x2 + player->x - col_recheck.bounding_box_player.x1;
+			/*
+			if (player->velocity_move.x < 0) player->x-=player->velocity_move.x;
+			else player->x++;
+			player->velocity_move.x=0;
+			updateBoundary();
+			*/
+			col=true;
+		}
+
+		if (col_recheck.objectLeft(tolerance)) {
+			player->x=col_recheck.bounding_box_object.x1 - (col_recheck.bounding_box_player.x2 - player->x);
+			/*
+			if (player->velocity_move.x > 0) player->x-=player->velocity_move.x;
+			else player->x--;
+			player->velocity_move.x=0;
+			*/
+			col=true;
+		}
+	}
 }
 
 
