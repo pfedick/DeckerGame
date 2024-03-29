@@ -84,6 +84,7 @@ private:
 	int hackingState;
 	double hacking_end;
 	ppl7::String phonetics;
+	std::list<ppl7::grafix::Point> collision_checkpoints;
 
 
 	class FlashLightPivot
@@ -178,6 +179,8 @@ public:
 	bool isSpeaking() const;
 	bool hasSpoken(uint16_t id) const;
 	bool isFlashlightOn() const;
+
+	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 
 };
 #endif /* INCLUDE_PLAYER_H_ */

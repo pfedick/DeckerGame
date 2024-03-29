@@ -1284,21 +1284,21 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, f
 	// to build a list with points we want to check against the
 	// objects
 	if (movement == Dead) return;
-	std::list<ppl7::grafix::Point> checkpoints;
-	checkpoints.push_back(ppl7::grafix::Point(x, y));
+	collision_checkpoints.clear();
+	collision_checkpoints.push_back(ppl7::grafix::Point(x, y));
 
 	const ppl7::grafix::Drawable& draw=sprite_resource->getDrawable(animation.getFrame());
 	ppl7::grafix::Rect boundary=sprite_resource->spriteBoundary(animation.getFrame(), 1.0f, x, y);
 
 	if (draw.width()) {
 		//ppl7::PrintDebugTime("boundary= %d:%d - %d:%d\n", boundary.x1, boundary.y1, boundary.x2, boundary.y2);
-		int stepx=boundary.width() / 8;
-		int stepy=boundary.height() / 12;
+		int stepx=boundary.width() / 16;
+		int stepy=boundary.height() / 16;
 		for (int py=boundary.y1;py < boundary.y2;py+=stepx) {
 			for (int px=boundary.x1;px < boundary.x2;px+=stepy) {
 				ppl7::grafix::Color c=draw.getPixel(px - boundary.x1, py - boundary.y1);
 				if (c.alpha() > 92) {
-					checkpoints.push_back(ppl7::grafix::Point(px, py));
+					collision_checkpoints.push_back(ppl7::grafix::Point(px, py));
 				}
 			}
 		}
@@ -1307,18 +1307,13 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, f
 
 	//Decker::Objects::Object* object=objects->detectCollision(checkpoints);
 	std::list<Decker::Objects::Object*> object_list;
-	objects->detectCollision(checkpoints, object_list);
+	objects->detectCollision(collision_checkpoints, object_list);
 	if (object_list.empty()) return;
 	std::list<Decker::Objects::Object*>::iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
-		Decker::Objects::Object* object=(*it);
-		Decker::Objects::Collision col;
-		col.frame_rate_compensation=frame_rate_compensation;
-		col.detect(object, checkpoints, *this);
-		col.bounding_box_player=getBoundingBox();
-		col.bounding_box_object=object->boundary;
-		col.bounding_box_intersection=col.bounding_box_player.intersected(col.bounding_box_object);
-		object->handleCollision(this, col);
+		Decker::Objects::Collision col(this, (*it), frame_rate_compensation);
+		col.detect((*it), collision_checkpoints, *this);
+		(*it)->handleCollision(this, col);
 	}
 
 
@@ -1330,6 +1325,11 @@ void Player::checkCollisionWithObjects(Decker::Objects::ObjectSystem* objects, f
 	//printf ("Intersection:       %d:%d - %d:%d\n", bbi.x1, bbi.y1, bbi.x2, bbi.y2);
 
 
+}
+
+const std::list<ppl7::grafix::Point>& Player::getCollisionCheckpoints() const
+{
+	return collision_checkpoints;
 }
 
 ppl7::grafix::Rect Player::getBoundingBox() const

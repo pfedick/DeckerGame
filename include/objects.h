@@ -163,14 +163,27 @@ public:
 	float frame_rate_compensation;
 	Collision();
 	Collision(const Collision& other);
+	Collision(const Player* player, const Object* object, float frame_rate_compensation=1.0f);
 	void detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player);
 	const std::list<ppl7::grafix::Point>& getCollisionPoints() const;
 	Object* getObject() const;
 	bool onFoot() const;
+
 	bool objectTop() const;
 	bool objectBottom() const;
 	bool objectLeft() const;
 	bool objectRight() const;
+
+	bool objectTop(int t) const;
+	bool objectBottom(int t) const;
+	bool objectLeft(int t) const;
+	bool objectRight(int t) const;
+
+	bool playerTop(int t) const;
+	bool playerBottom(int t) const;
+	bool playerLeft(int t) const;
+	bool playerRight(int t) const;
+
 };
 
 class Object
@@ -1954,7 +1967,8 @@ public:
 	Object* getObject(uint32_t object_id);
 	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
 	//Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
-	void detectCollision(const std::list<ppl7::grafix::Point>& player, std::list<Object*>& object_list);
+	void detectCollision(const std::list<ppl7::grafix::Point>& checkpoints, std::list<Object*>& object_list);
+	static bool checkCollisionWithObject(const std::list<ppl7::grafix::Point>& checkpoints, const Object* object);
 	void detectObjectCollision(const Object* object, std::list<Object*>& collision_object_list);
 	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);

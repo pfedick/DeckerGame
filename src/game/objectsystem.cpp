@@ -351,7 +351,28 @@ Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
 	return found_object;
 }
 
-void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& player, std::list<Object*>& object_list)
+bool ObjectSystem::checkCollisionWithObject(const std::list<ppl7::grafix::Point>& checkpoints, const Object* object)
+{
+	std::list<ppl7::grafix::Point>::const_iterator p_it;
+	for (p_it=checkpoints.begin();p_it != checkpoints.end();++p_it) {
+		if ((*p_it).inside(object->boundary)) {
+			//printf ("inside boundary\n");
+			if (object->pixelExactCollision == false) return true;
+			else {
+				const ppl7::grafix::Drawable draw=object->texture->getDrawable(object->sprite_no);
+				if (draw.width()) {
+					int x=(*p_it).x - object->boundary.x1;
+					int y=(*p_it).y - object->boundary.y1;
+					ppl7::grafix::Color c=draw.getPixel(x, y);
+					if (c.alpha() > 92) return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& checkpoints, std::list<Object*>& object_list)
 {
 	std::map<uint32_t, Object*>::const_iterator it;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
@@ -359,26 +380,7 @@ void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& player,
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		Object* item=it->second;
 		if (item->texture != NULL && item->collisionDetection == true && item->enabled == true && (item->difficulty_matrix & dm)) {
-			for (p_it=player.begin();p_it != player.end();++p_it) {
-				if ((*p_it).inside(item->boundary)) {
-					//printf ("inside boundary\n");
-					if (item->pixelExactCollision == false) {
-						object_list.push_back(item);
-						break;
-					} else {
-						const ppl7::grafix::Drawable draw=item->texture->getDrawable(item->sprite_no);
-						if (draw.width()) {
-							int x=(*p_it).x - item->boundary.x1;
-							int y=(*p_it).y - item->boundary.y1;
-							ppl7::grafix::Color c=draw.getPixel(x, y);
-							if (c.alpha() > 92) {
-								object_list.push_back(item);
-								break;
-							}
-						}
-					}
-				}
-			}
+			if (ObjectSystem::checkCollisionWithObject(checkpoints, item)) object_list.push_back(item);
 		}
 	}
 }
@@ -390,7 +392,6 @@ Object* ObjectSystem::getObject(uint32_t object_id)
 	if (it != object_list.end()) return it->second;
 	return NULL;
 }
-
 
 void ObjectSystem::drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id)
 {
@@ -787,8 +788,20 @@ Collision::Collision(const Collision& other)
 {
 	object=other.object;
 	collision_points=other.collision_points;
+	bounding_box_object=other.bounding_box_object;
+	bounding_box_player=other.bounding_box_player;
+	bounding_box_intersection=other.bounding_box_intersection;
+	frame_rate_compensation=other.frame_rate_compensation;
 }
 
+
+Collision::Collision(const Player* player, const Object* object, float frame_rate_compensation)
+{
+	this->frame_rate_compensation=frame_rate_compensation;
+	bounding_box_player=player->getBoundingBox();
+	bounding_box_object=object->boundary;
+	bounding_box_intersection=bounding_box_player.intersected(bounding_box_object);
+}
 
 void Collision::detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player)
 {
@@ -833,7 +846,7 @@ bool Collision::objectBottom() const
 {
 	if (bounding_box_player.y2 > bounding_box_object.y2 &&
 		bounding_box_player.y1<bounding_box_object.y2 &&
-		bounding_box_player.y2>bounding_box_object.y2) {
+		bounding_box_player.y1>bounding_box_object.y1) {
 		return true;
 	}
 	return false;
@@ -870,6 +883,83 @@ bool Collision::objectRight() const
 	return false;
 }
 
+
+bool Collision::objectBottom(int t) const
+{
+	if (bounding_box_player.y1 > bounding_box_object.y2 - t &&
+		bounding_box_player.y1 < bounding_box_object.y2) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::objectTop(int t) const
+{
+	if (bounding_box_player.y2<bounding_box_object.y1 + t &&
+		bounding_box_player.y2>bounding_box_object.y1) {
+		return true;
+	}
+	return false;
+
+}
+
+bool Collision::objectLeft(int t) const
+{
+	if (bounding_box_player.x2<bounding_box_object.x1 + t &&
+		bounding_box_player.x2>bounding_box_object.x1) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::objectRight(int t) const
+{
+	if (bounding_box_player.x1 > bounding_box_object.x2 - t &&
+		bounding_box_player.x1 < bounding_box_object.x2) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::playerBottom(int t) const
+{
+	if (bounding_box_object.y2 > bounding_box_player.y2 &&
+		bounding_box_object.y1<bounding_box_player.y2 &&
+		bounding_box_object.y1>bounding_box_player.y2 - t) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::playerTop(int t) const
+{
+	if (bounding_box_object.y2<bounding_box_player.y1 + t &&
+		bounding_box_object.y2>bounding_box_player.y1 &&
+		bounding_box_object.y1 < bounding_box_player.y1) {
+		return true;
+	}
+	return false;
+
+}
+
+bool Collision::playerLeft(int t) const
+{
+	if (bounding_box_player.x1 > bounding_box_object.x2 - t &&
+		bounding_box_player.x1 < bounding_box_object.x2) {
+		return true;
+	}
+	return false;
+}
+
+bool Collision::playerRight(int t) const
+{
+	if (bounding_box_object.x1 > bounding_box_player.x1 &&
+		bounding_box_object.x1<bounding_box_player.x2 - t &&
+		bounding_box_object.x2>bounding_box_player.x2) {
+		return true;
+	}
+	return false;
+}
 
 
 }	// EOF namespace Decker::Objects
