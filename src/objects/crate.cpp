@@ -103,6 +103,7 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 	//ppl7::PrintDebug("Intersection:       %d:%d - %d:%d\n", col_recheck.bounding_box_intersection.x1, col_recheck.bounding_box_intersection.y1, col_recheck.bounding_box_intersection.x2, col_recheck.bounding_box_intersection.y2);
 	bool col=true;
 	int tolerance=40;
+	float velox=0.0f;
 	while (col) {
 		col=false;
 		col_recheck.bounding_box_object=boundary;
@@ -117,27 +118,33 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			player->y++;
 			col=true;
 		}
+	}
+	if (player->y > col_recheck.bounding_box_object.x1 + tolerance) {
 
 		if (col_recheck.objectRight(tolerance)) {
-			player->x=col_recheck.bounding_box_object.x2 + player->x - col_recheck.bounding_box_player.x1;
+			player->x=col_recheck.bounding_box_object.x2 + 30;
 			/*
 			if (player->velocity_move.x < 0) player->x-=player->velocity_move.x;
 			else player->x++;
 			player->velocity_move.x=0;
 			updateBoundary();
 			*/
+			if (player->velocity_move.x < 0) velox=-2.0f * collision.frame_rate_compensation;
 			col=true;
 		}
 
 		if (col_recheck.objectLeft(tolerance)) {
-			player->x=col_recheck.bounding_box_object.x1 - (col_recheck.bounding_box_player.x2 - player->x);
+			player->x=col_recheck.bounding_box_object.x1 - 30;
 			/*
 			if (player->velocity_move.x > 0) player->x-=player->velocity_move.x;
 			else player->x--;
 			player->velocity_move.x=0;
 			*/
+			if (player->velocity_move.x > 0) velox=2.0f * collision.frame_rate_compensation;
 			col=true;
 		}
+	//}
+		p.x+=velox;
 	}
 }
 
