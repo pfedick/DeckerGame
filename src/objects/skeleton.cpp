@@ -96,17 +96,22 @@ void Skeleton::handleCollision(Player* player, const Collision& collision)
 {
 	Player::PlayerMovement movement=player->getMovement();
 	if (collision.onFoot() == true && movement == Player::Falling) {
-		animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 100);
-		state=6;
-		collisionDetection=false;
-		//enabled=false;
+		die();
 		player->addPoints(100);
-		AudioPool& audio=getAudioPool();
-		audio.playOnce(AudioClip::skeleton_death);
 
 	} else {
 		player->dropHealth(4);
 	}
+}
+
+void Skeleton::die()
+{
+	if (state >= 6) return;
+	animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 100);
+	state=6;
+	collisionDetection=false;
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::skeleton_death);
 }
 
 }	// EOF namespace Decker::Objects

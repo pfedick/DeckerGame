@@ -19,6 +19,7 @@ Crate::Crate()
 	sprite_no=4;
 	sprite_no_representation=4;
 	collisionDetection=true;
+	pixelExactCollision=false;
 	color_mod.setColor(ppl7::rand(220, 250),
 		ppl7::rand(220, 250),
 		ppl7::rand(220, 250),
@@ -101,8 +102,7 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	std::list<Object*>::iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		if ((*it)->type() == Decker::Objects::Type::Skeleton) {
-
-
+			((Decker::Objects::Skeleton*)(*it))->die();
 		}
 
 	}
