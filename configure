@@ -654,6 +654,7 @@ ac_func_c_list=
 ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
+ASAN_FLAGS
 FT2_CFLAGS
 IMLIB_CFLAGS
 LIBLDNS_CFLAGS
@@ -840,6 +841,7 @@ enable_silent_rules
 enable_dependency_tracking
 enable_largefile
 with_x
+with_asan
 with_libpng
 with_jpeg
 with_libjpegturbo
@@ -1529,6 +1531,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-x                use the X Window System
+  --with-asan             Build with address sanitizer checking
   --with-libpng[=PATH]     Prefix where libpng is installed (optional)
   --with-jpeg[=PATH]     Prefix where libjpeg is installed (optional)
   --with-libjpegturbo[=PATH]     Prefix where libjpeg-turbo is installed (optional)
@@ -6012,6 +6015,7 @@ fi
 
 
 CFLAGS=$OLD_CFLAGS
+CXXFLAGS="-g "
 
 
 
@@ -6292,11 +6296,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++11 features" >&5
 printf %s "checking for $CXX option to enable C++11 features... " >&6; }
-if test ${ac_cv_prog_cxx_11+y}
+if test ${ac_cv_prog_cxx_cxx11+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_11=no
+  ac_cv_prog_cxx_cxx11=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -6338,11 +6342,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++98 features" >&5
 printf %s "checking for $CXX option to enable C++98 features... " >&6; }
-if test ${ac_cv_prog_cxx_98+y}
+if test ${ac_cv_prog_cxx_cxx98+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_98=no
+  ac_cv_prog_cxx_cxx98=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10117,14 +10121,6 @@ fi
 
 
 
-# Obsolete code to be removed.
-if test $ac_cv_header_sys_time_h = yes; then
-
-printf "%s\n" "#define TIME_WITH_SYS_TIME 1" >>confdefs.h
-
-fi
-# End of obsolete code.
-
 ac_fn_c_check_type "$LINENO" "mode_t" "ac_cv_type_mode_t" "$ac_includes_default"
 if test "x$ac_cv_type_mode_t" = xyes
 then :
@@ -13276,7 +13272,37 @@ fi
 
 #LDFLAGS="$LDFLAGS -L/usr/local/lib"
 #CFLAGS="$CFLAGS -I/usr/local/include"
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if address sanitizer (asan) is wanted" >&5
+printf %s "checking if address sanitizer (asan) is wanted... " >&6; }
 
+# Check whether --with-asan was given.
+if test ${with_asan+y}
+then :
+  withval=$with_asan; with_asan=${withval}
+else $as_nop
+  with_asan=no
+fi
+
+if test "x$with_asan" = "xno"
+then :
+  ASAN_FLAGS=""
+	   CXXFLAGS="${CXXFLAGS} -O2 "
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+elif test "x$with_asan" = "xyes"
+then :
+  ASAN_FLAGS=" -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   CXXFLAGS="${CXXFLAGS} -O1 -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+
+else $as_nop
+  ASAN_FLAGS="$with_asan"
+	  CXXFLAGS="${CXXFLAGS} -O1 $with_asan "
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+
+fi
 
 ##################################################################################### PNG
 
@@ -13350,8 +13376,8 @@ fi
 
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for PNG" >&5
-printf %s "checking for PNG... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpng" >&5
+printf %s "checking for libpng... " >&6; }
 
 if test -n "$PNG_CFLAGS"; then
     pkg_cv_PNG_CFLAGS="$PNG_CFLAGS"
@@ -13391,7 +13417,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -13400,14 +13426,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpng" 2>&1`
+                PNG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpng" 2>&1`
         else
-	        PNG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpng" 2>&1`
+                PNG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpng" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PNG_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$PNG_PKG_ERRORS" >&5
 
-	have_libpng="no"
+        have_libpng="no"
 				PNG_LIBS="-lpng -lz -lm"
 
 
@@ -13424,9 +13450,9 @@ fi
 
 
 elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	have_libpng="no"
+        have_libpng="no"
 				PNG_LIBS="-lpng -lz -lm"
 
 
@@ -13443,11 +13469,11 @@ printf "%s\n" "no" >&6; }
 
 
 else
-	PNG_CFLAGS=$pkg_cv_PNG_CFLAGS
-	PNG_LIBS=$pkg_cv_PNG_LIBS
+        PNG_CFLAGS=$pkg_cv_PNG_CFLAGS
+        PNG_LIBS=$pkg_cv_PNG_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-	have_libpng="yes"
+        have_libpng="yes"
 				LIBS="$PNG_LIBS"
 				CFLAGS="$PNG_CFLAGS"
 				CPPFLAGS="$PNG_CFLAGS"
@@ -13566,8 +13592,8 @@ printf "%s\n" "yes" >&6; }
 
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for JPEG" >&5
-printf %s "checking for JPEG... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libjpeg >= 6.0.0" >&5
+printf %s "checking for libjpeg >= 6.0.0... " >&6; }
 
 if test -n "$JPEG_CFLAGS"; then
     pkg_cv_JPEG_CFLAGS="$JPEG_CFLAGS"
@@ -13607,7 +13633,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -13616,14 +13642,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        JPEG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libjpeg >= 6.0.0" 2>&1`
+                JPEG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libjpeg >= 6.0.0" 2>&1`
         else
-	        JPEG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libjpeg >= 6.0.0" 2>&1`
+                JPEG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libjpeg >= 6.0.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$JPEG_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$JPEG_PKG_ERRORS" >&5
 
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing jpeg_finish_decompress" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing jpeg_finish_decompress" >&5
 printf %s "checking for library containing jpeg_finish_decompress... " >&6; }
 if test ${ac_cv_search_jpeg_finish_decompress+y}
 then :
@@ -13695,9 +13721,9 @@ fi
 
 
 elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing jpeg_finish_decompress" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing jpeg_finish_decompress" >&5
 printf %s "checking for library containing jpeg_finish_decompress... " >&6; }
 if test ${ac_cv_search_jpeg_finish_decompress+y}
 then :
@@ -13769,8 +13795,8 @@ fi
 
 
 else
-	JPEG_CFLAGS=$pkg_cv_JPEG_CFLAGS
-	JPEG_LIBS=$pkg_cv_JPEG_LIBS
+        JPEG_CFLAGS=$pkg_cv_JPEG_CFLAGS
+        JPEG_LIBS=$pkg_cv_JPEG_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -13817,8 +13843,8 @@ printf "%s\n" "yes" >&6; }
 		LIBS=""
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for TURBOJPEG" >&5
-printf %s "checking for TURBOJPEG... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libturbojpeg >= 1.3.0" >&5
+printf %s "checking for libturbojpeg >= 1.3.0... " >&6; }
 
 if test -n "$TURBOJPEG_CFLAGS"; then
     pkg_cv_TURBOJPEG_CFLAGS="$TURBOJPEG_CFLAGS"
@@ -13858,7 +13884,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -13867,14 +13893,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        TURBOJPEG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libturbojpeg >= 1.3.0" 2>&1`
+                TURBOJPEG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libturbojpeg >= 1.3.0" 2>&1`
         else
-	        TURBOJPEG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libturbojpeg >= 1.3.0" 2>&1`
+                TURBOJPEG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libturbojpeg >= 1.3.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$TURBOJPEG_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$TURBOJPEG_PKG_ERRORS" >&5
 
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing tjInitDecompress" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing tjInitDecompress" >&5
 printf %s "checking for library containing tjInitDecompress... " >&6; }
 if test ${ac_cv_search_tjInitDecompress+y}
 then :
@@ -13952,9 +13978,9 @@ fi
 
 
 elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing tjInitDecompress" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing tjInitDecompress" >&5
 printf %s "checking for library containing tjInitDecompress... " >&6; }
 if test ${ac_cv_search_tjInitDecompress+y}
 then :
@@ -14032,8 +14058,8 @@ fi
 
 
 else
-	TURBOJPEG_CFLAGS=$pkg_cv_TURBOJPEG_CFLAGS
-	TURBOJPEG_LIBS=$pkg_cv_TURBOJPEG_LIBS
+        TURBOJPEG_CFLAGS=$pkg_cv_TURBOJPEG_CFLAGS
+        TURBOJPEG_LIBS=$pkg_cv_TURBOJPEG_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
 
@@ -14296,7 +14322,7 @@ else $as_nop
       *-*-aix*)
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#if defined __powerpc64__ || defined _ARCH_PPC64
+#if defined __powerpc64__ || defined __LP64__
                 int ok;
                #else
                 error fail
@@ -14586,7 +14612,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
            # be generating 64-bit code.
            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#if defined __powerpc64__ || defined _ARCH_PPC64
+#if defined __powerpc64__ || defined __LP64__
                    int ok;
                   #else
                    error fail
@@ -14693,7 +14719,7 @@ then :
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef __ELF__
+#if defined __ELF__ || (defined __linux__ && defined __EDG__)
         Extensible Linking Format
         #endif
 
@@ -14711,7 +14737,7 @@ rm -rf conftest*
 fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gl_cv_elf" >&5
 printf "%s\n" "$gl_cv_elf" >&6; }
-  if test $gl_cv_elf; then
+  if test $gl_cv_elf = yes; then
     # Extract the ELF class of a file (5th byte) in decimal.
     # Cf. https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#File_header
     if od -A x < /dev/null >/dev/null 2>/dev/null; then
@@ -14728,19 +14754,22 @@ printf "%s\n" "$gl_cv_elf" >&6; }
         echo
       }
     fi
+    # Use 'expr', not 'test', to compare the values of func_elfclass, because on
+    # Solaris 11 OpenIndiana and Solaris 11 OmniOS, the result is 001 or 002,
+    # not 1 or 2.
     case $HOST_CPU_C_ABI_32BIT in
       yes)
         # 32-bit ABI.
         acl_is_expected_elfclass ()
         {
-          test "`func_elfclass | sed -e 's/[ 	]//g'`" = 1
+          expr "`func_elfclass | sed -e 's/[ 	]//g'`" = 1 > /dev/null
         }
         ;;
       no)
         # 64-bit ABI.
         acl_is_expected_elfclass ()
         {
-          test "`func_elfclass | sed -e 's/[ 	]//g'`" = 2
+          expr "`func_elfclass | sed -e 's/[ 	]//g'`" = 2 > /dev/null
         }
         ;;
       *)
@@ -16095,8 +16124,8 @@ fi
   if test "x$sdl_prefix$sdl_exec_prefix" = x ; then
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SDL2" >&5
-printf %s "checking for SDL2... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for sdl2 >= $min_sdl_version" >&5
+printf %s "checking for sdl2 >= $min_sdl_version... " >&6; }
 
 if test -n "$SDL2_CFLAGS"; then
     pkg_cv_SDL2_CFLAGS="$SDL2_CFLAGS"
@@ -16136,7 +16165,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -16145,24 +16174,24 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        SDL2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
+                SDL2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
         else
-	        SDL2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
+                SDL2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$SDL2_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$SDL2_PKG_ERRORS" >&5
 
-	sdl_pc=no
+        sdl_pc=no
 elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	sdl_pc=no
+        sdl_pc=no
 else
-	SDL2_CFLAGS=$pkg_cv_SDL2_CFLAGS
-	SDL2_LIBS=$pkg_cv_SDL2_LIBS
+        SDL2_CFLAGS=$pkg_cv_SDL2_CFLAGS
+        SDL2_LIBS=$pkg_cv_SDL2_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-	sdl_pc=yes
+        sdl_pc=yes
 fi
   else
     sdl_pc=no
@@ -16792,7 +16821,6 @@ LIBCURL_CPPFLAGS=""
 LIBLDNS_CFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
-
 
 
 

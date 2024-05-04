@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.69)
-AC_INIT([deckergame], [1.0.0], [patrick@pfp.de], [deckergame-1.0.0.tar.bz2])
+AC_PREREQ([2.71])
+AC_INIT([deckergame],[1.0.0],[patrick@pfp.de],[deckergame-1.0.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
@@ -55,6 +55,7 @@ OLD_CFLAGS=$CFLAGS
 # Checks for programs.
 AC_PROG_CC
 CFLAGS=$OLD_CFLAGS
+CXXFLAGS="-g "
 AC_PROG_CXX
 
 AX_CXX_COMPILE_STDCXX_17
@@ -159,7 +160,7 @@ PKG_PROG_PKG_CONFIG()
 #--------------------------------------------------------------------
 
 AC_HEADER_STDBOOL
-AC_HEADER_TIME
+AC_CHECK_HEADERS_ONCE([sys/time.h])
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -242,9 +243,8 @@ AC_CHECK_LIB(pthread, pthread_setname_np,
 
 
 AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/socket.h>], [struct sockaddr s; s.sa_len;],
-ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
+#include <sys/socket.h>]], [[struct sockaddr s; s.sa_len;]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])])
 if test $ac_cv_struct_sa_len = yes; then
   AC_DEFINE(HAVE_SOCKADDR_SA_LEN)
 fi
@@ -252,7 +252,25 @@ fi
 
 #LDFLAGS="$LDFLAGS -L/usr/local/lib"
 #CFLAGS="$CFLAGS -I/usr/local/include"
-
+AC_MSG_CHECKING(if address sanitizer (asan) is wanted)
+AC_ARG_WITH([asan],
+			[AS_HELP_STRING([--with-asan],
+                            [Build with address sanitizer checking])],
+            [with_asan=${withval}],
+            [with_asan=no])
+AS_IF([test "x$with_asan" = "xno"],
+      [ASAN_FLAGS=""
+	   CXXFLAGS="${CXXFLAGS} -O2 "
+	   AC_MSG_RESULT(no)],
+      [test "x$with_asan" = "xyes"],
+      [ASAN_FLAGS=" -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   CXXFLAGS="${CXXFLAGS} -O1 -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   AC_MSG_RESULT(yes)
+	  ],
+      [ASAN_FLAGS="$with_asan"
+	  CXXFLAGS="${CXXFLAGS} -O1 $with_asan "
+	   AC_MSG_RESULT(yes)
+	  ])	
 
 ##################################################################################### PNG
 AC_CHECK_LIBPNG([1.2],
@@ -461,8 +479,7 @@ AC_SUBST(LIBCURL_CPPFLAGS)
 AC_SUBST(LIBLDNS_CFLAGS)
 AC_SUBST(IMLIB_CFLAGS)
 AC_SUBST(FT2_CFLAGS)
-
-
+AC_SUBST(ASAN_FLAGS)
 
 
 
