@@ -20,6 +20,86 @@ void help()
 }
 
 
+void startDebug(Game &game)
+{
+	game.startLevel("level/tutorial.lvl");
+	//game.startLevel("level/waynet.lvl");
+	//game.startLevel("level/sound.lvl");
+	//game.startLevel("level/desert.lvl");
+	//game.startLevel("level/heaven.lvl");
+	//game.startLevel("level/water.lvl");
+	//game.startLevel("level/devel.lvl");
+	//game.startLevel("level/test.lvl");
+	/*
+	game.startLevel("level/start.lvl");
+	Decker::Objects::LevelEnd* leo=static_cast<Decker::Objects::LevelEnd*>(Decker::Objects::GetObjectSystem()->getObject(64));
+	if (leo && leo->type() == Decker::Objects::Type::LevelEnd) {
+		leo->state=Decker::Objects::LevelEnd::State::Inactive;
+
+	}
+	*/
+	//game.startLevel("level/levelstats_test.lvl");
+	//game.startLevel("level/particle.lvl");
+	game.showUi(true);
+	game.run();
+}
+
+void startLevel(Game &game, int argc, char** argv)
+{
+	ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
+	if (level.right(4) != ".lvl") level+=".lvl";
+	if (!ppl7::File::exists(level)) {
+		level="level/" + level;
+	}
+	if (ppl7::File::exists(level)) {
+		game.startLevel(level);
+		game.showUi(true);
+		game.run();
+		game.audiosystem.shutdown();
+		return;
+	}
+	printf("ERROR: Level not found [%s]\n", (const char*)ppl7::GetArgv(argc, argv, "-l"));
+	game.audiosystem.shutdown();
+	return;
+}
+
+void startNormal(Game &game)
+{
+	if (!game.config.skipIntro) {
+		game.playIntroVideo();
+		if (game.gameState == GameState::QuitGame) return;
+	}
+	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
+	while (1) {
+		GameState state=game.showStartScreen(GeorgeDeckerTheme);
+		if (state == GameState::QuitGame) break;
+		else if (state == GameState::StartGame) {
+			game.showUi(false);
+			game.resetPlayer();
+			game.startLevel("level/haunted.lvl");
+			game.enableControls(true);
+			game.run();
+			if (game.gameState == GameState::QuitGame) break;
+		} else if (state == GameState::StartTutorial) {
+			game.showUi(false);
+			game.resetPlayer();
+			game.startLevel("level/tutorial.lvl");
+			game.enableControls(true);
+			game.run();
+			game.config.tutorialPlayed=true;
+			game.config.save();
+		} else if (state == GameState::StartEditor) {
+			game.showUi(true);
+			LevelParameter default_params;
+			game.createNewLevel(default_params);
+			game.resetPlayer();
+			game.openNewLevelDialog();
+			game.run();
+		} else if (state == GameState::ShowSettings) {
+		}
+	}
+}
+
 void start(int argc, char** argv)
 {
 #ifdef WIN32
@@ -46,91 +126,20 @@ void start(int argc, char** argv)
 	ppl7::grafix::Grafix gfx;
 	ppl7::tk::WindowManager_SDL2 wm;
 	Game game;
-
-
 	game.init();
 	game.init_grafix();
 
-
 #ifdef DEBUGTIME
 	if (ppl7::HaveArgv(argc, argv, "-d") && ppl7::File::exists("Makefile")) {
-		//game.playIntroVideo();
-		game.startLevel("level/tutorial.lvl");
-		//game.startLevel("level/waynet.lvl");
-		//game.startLevel("level/sound.lvl");
-		//game.startLevel("level/desert.lvl");
-		//game.startLevel("level/heaven.lvl");
-		//game.startLevel("level/water.lvl");
-		//game.startLevel("level/devel.lvl");
-		//game.startLevel("level/test.lvl");
-		/*
-		game.startLevel("level/start.lvl");
-		Decker::Objects::LevelEnd* leo=static_cast<Decker::Objects::LevelEnd*>(Decker::Objects::GetObjectSystem()->getObject(64));
-		if (leo && leo->type() == Decker::Objects::Type::LevelEnd) {
-			leo->state=Decker::Objects::LevelEnd::State::Inactive;
-
-		}
-		*/
-		//game.startLevel("level/levelstats_test.lvl");
-		//game.startLevel("level/particle.lvl");
-		game.showUi(true);
-		game.run();
-
-		return;
-	}
+		startDebug(game);
+	} else
 #endif
 	if (ppl7::HaveArgv(argc, argv, "-l")) {
-		ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
-		if (level.right(4) != ".lvl") level+=".lvl";
-		if (!ppl7::File::exists(level)) {
-			level="level/" + level;
-		}
-		if (ppl7::File::exists(level)) {
-			game.startLevel(level);
-			game.showUi(true);
-			game.run();
-			return;
-		}
-		printf("ERROR: Level not found [%s]\n", (const char*)ppl7::GetArgv(argc, argv, "-l"));
-		return;
-
+		startLevel(game,argc,argv);
+	} else {
+		startNormal(game);
 	}
-
-	if (!game.config.skipIntro) {
-		game.playIntroVideo();
-		if (game.gameState == GameState::QuitGame) return;
-	}
-
-	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
-
-	while (1) {
-		GameState state=game.showStartScreen(GeorgeDeckerTheme);
-		if (state == GameState::QuitGame) return;
-		else if (state == GameState::StartGame) {
-			game.showUi(false);
-			game.resetPlayer();
-			game.startLevel("level/haunted.lvl");
-			game.enableControls(true);
-			game.run();
-			if (game.gameState == GameState::QuitGame) break;
-		} else if (state == GameState::StartTutorial) {
-			game.showUi(false);
-			game.resetPlayer();
-			game.startLevel("level/tutorial.lvl");
-			game.enableControls(true);
-			game.run();
-			game.config.tutorialPlayed=true;
-			game.config.save();
-		} else if (state == GameState::StartEditor) {
-			game.showUi(true);
-			LevelParameter default_params;
-			game.createNewLevel(default_params);
-			game.resetPlayer();
-			game.openNewLevelDialog();
-			game.run();
-		} else if (state == GameState::ShowSettings) {
-		}
-	}
+	game.audiosystem.shutdown();
 }
 
 #ifdef WIN32

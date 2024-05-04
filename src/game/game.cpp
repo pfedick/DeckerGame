@@ -404,7 +404,7 @@ void Game::presentStartupScreen()
 {
 	SDL_Texture* tex=sdl.createStreamingTexture("res/loading.png");
 	ppl7::grafix::Size imgsize=sdl.getTextureSize(tex);
-	wm->handleEvents();
+	//wm->handleEvents();
 	//ppl7::grafix::Color white(255, 255, 255, 255);
 	//sdl.startFrame(white);
 	sdl.startFrame(Style.windowBackgroundColor);
