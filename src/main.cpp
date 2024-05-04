@@ -98,6 +98,7 @@ void startNormal(Game &game)
 		} else if (state == GameState::ShowSettings) {
 		}
 	}
+	game.audiosystem.stop(&GeorgeDeckerTheme);
 }
 
 void start(int argc, char** argv)
