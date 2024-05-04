@@ -45,6 +45,7 @@ ObjectSystem::~ObjectSystem()
 	for (int i=0;i < Spriteset::MaxSpritesets;i++) {
 		delete spriteset[i];
 	}
+	delete(light_objects);
 }
 
 void ObjectSystem::clear()
