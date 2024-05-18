@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  msys2-ucrt64:
+  build:
     runs-on: windows-latest
     defaults:
       run:
@@ -20,9 +20,9 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: git make nasm mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-dav1d mingw-w64-ucrt-x86_64-libjpeg-turbo
-      - name: CI-Build
-        run: |
-          echo 'Running in MSYS2!'
-          ./configure
-          make -j2
+    - name: install packages
+      run: pacman --noconfirm -S --needed --overwrite git make nasm mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-dav1d mingw-w64-ucrt-x86_64-libjpeg-turbo
+    - name: configure
+      run: ./configure
+    - name: make
+      run: make -j2
