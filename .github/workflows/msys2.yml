@@ -1,4 +1,4 @@
-name: MSYS2
+name: Windows MSYS2 mingw64
 on:
   push:
     branches: [ main ]
