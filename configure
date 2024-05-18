@@ -702,6 +702,8 @@ ICONV_LIBS
 ICONV_CFLAGS
 LTLIBICONV
 LIBICONV
+DAV1D_LIBS
+DAV1D_CFLAGS
 MPG123_LIBS
 MPG123_CFLAGS
 TURBOJPEG_LIBS
@@ -846,6 +848,7 @@ with_libpng
 with_jpeg
 with_libjpegturbo
 with_mpg123
+with_dav1d
 with_gnu_ld
 enable_rpath
 with_libiconv_prefix
@@ -1536,6 +1539,7 @@ Optional Packages:
   --with-jpeg[=PATH]     Prefix where libjpeg is installed (optional)
   --with-libjpegturbo[=PATH]     Prefix where libjpeg-turbo is installed (optional)
   --with-mpg123[=PATH]     Prefix where libmpg123 is installed (optional)
+  --with-dav1d[=PATH]     Prefix where libdav1d is installed
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
@@ -4015,9 +4019,11 @@ ac_config_headers="$ac_config_headers pplib/include/ppl7-config.h"
 
 
 
+
 report_have_pthreads="no"
 report_have_jpeg="no"
 report_have_mpg123="no"
+report_have_dav1d="no"
 report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
@@ -14210,7 +14216,7 @@ else $as_nop
   mpg123_prefix="auto"
 fi
 
-	echo "mpg123_prefix=$mpg123_prefix"
+	#echo "mpg123_prefix=$mpg123_prefix"
 
 	if test "$mpg123_prefix" != "no"
 	then
@@ -14288,6 +14294,123 @@ then :
 printf "%s\n" "#define HAVE_MPG123 1" >>confdefs.h
 
             report_have_mpg123="yes"
+
+
+
+
+else $as_nop
+  :
+			:
+fi
+
+
+else $as_nop
+  :
+
+fi
+
+done
+		CPPFLAGS="$am_save_CPPFLAGS"
+		LIBS="$am_save_LIBS"
+		LDFLAGS="$am_save_LDFLAGS"
+		CFLAGS="$am_save_CFLAGS"
+	else
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+		:
+	fi
+
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use libdav1d" >&5
+printf %s "checking if we should use libdav1d... " >&6; }
+
+# Check whether --with-dav1d was given.
+if test ${with_dav1d+y}
+then :
+  withval=$with_dav1d; dav1d_prefix="$withval"
+else $as_nop
+  dav1d_prefix="auto"
+fi
+
+	#echo "dav1d_prefix=$dav1d_prefix"
+
+	if test "$dav1d_prefix" != "no"
+	then
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+		if test "$dav1d_prefix" != "yes"
+		then
+			intdav1d_LIBS="-L $dav1d_prefix/lib -ldav1d"
+			intdav1d_CFLAGS="-I $dav1d_prefix/include"
+		else
+			intdav1d_LIBS="-ldav1d"
+			intdav1d_CFLAGS=""
+		fi
+
+		am_save_CPPFLAGS="$CPPFLAGS"
+		am_save_LIBS="$LIBS"
+		am_save_LDFLAGS="$LDFLAGS"
+		am_save_CFLAGS="$CFLAGS"
+
+		LIBS="$LIBS $intdav1d_LIBS"
+		CFLAGS="$CFLAGS $intdav1d_CFLAGS"
+		       for ac_header in dav1d/dav1d.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "dav1d/dav1d.h" "ac_cv_header_dav1d_dav1d_h" "$ac_includes_default"
+if test "x$ac_cv_header_dav1d_dav1d_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_DAV1D_DAV1D_H 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for dav1d_open in -ldav1d" >&5
+printf %s "checking for dav1d_open in -ldav1d... " >&6; }
+if test ${ac_cv_lib_dav1d_dav1d_open+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldav1d  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dav1d_open (void);
+int
+main (void)
+{
+return dav1d_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_dav1d_dav1d_open=yes
+else $as_nop
+  ac_cv_lib_dav1d_dav1d_open=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dav1d_dav1d_open" >&5
+printf "%s\n" "$ac_cv_lib_dav1d_dav1d_open" >&6; }
+if test "x$ac_cv_lib_dav1d_dav1d_open" = xyes
+then :
+  DAV1D_LIBS=$intdav1d_LIBS
+				DAV1D_CFLAGS=$intdav1d_CFLAGS
+
+
+printf "%s\n" "#define HAVE_DAV1D 1" >>confdefs.h
+
+            report_have_dav1d="yes"
 
 
 
@@ -18472,6 +18595,7 @@ fi
 **   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
+**   dav1d library:        $report_have_dav1d
 **
 ******************************************************************************
 " >&5
@@ -18502,6 +18626,7 @@ printf "%s\n" "
 **   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
+**   dav1d library:        $report_have_dav1d
 **
 ******************************************************************************
 " >&6; }
@@ -18558,6 +18683,11 @@ then
 "
 fi
 
+if test "$report_have_dav1d" != "yes"
+then
+	missing="$missing  - libdav1d not found
+"
+fi
 
 
 
