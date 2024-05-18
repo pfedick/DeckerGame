@@ -226,17 +226,23 @@
         "Button right:": {
             "de": "Knopf rechts:"
         },
-        "Button Menu:": {
+        "Button menu:": {
             "de": "Knopf Menü:"
         },
-        "Button Action:": {
+        "Button action:": {
             "de": "Knopf Aktion:"
         },
-        "Button Back:": {
+        "Button back:": {
             "de": "Knopf zurück:"
         },
-        "Button Jump:": {
+        "Button jump:": {
             "de": "Knopf Springen:"
+        },
+        "Button crouch:": {
+            "de": "Knopf krabbeln:"
+        },
+        "Button flashlight:": {
+            "de": "Knopf Taschenlampe:"
         },
         "Stick left horizontal": {
             "de": "Stick links horizontal"

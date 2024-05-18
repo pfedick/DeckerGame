@@ -494,7 +494,7 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_right);
     y+=50;
 
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Menu:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button menu:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
     controller_button_menu=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
@@ -504,7 +504,7 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_menu);
     y+=50;
 
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Action:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button action:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
     controller_button_action=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
@@ -514,7 +514,7 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_action);
     y+=50;
 
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Back:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button back:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
     controller_button_back=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
@@ -524,7 +524,7 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_back);
     y+=50;
 
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Jump:"));
+    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button jump:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
     controller_button_jump=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
@@ -534,28 +534,30 @@ void SettingsScreen::initPageController()
     page_controller->addChild(controller_button_jump);
     y+=50;
 
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Crouch:"));
+    y=0;
+    int xbase=input_widget_x + input_widget.width + 10;
+
+    label=new ppl7::tk::Label(xbase, y, input_widget_x, 40, translate("Button crouch:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
-    controller_button_crouch=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_crouch=new Decker::ui::ControllerButtonSelector(xbase + input_widget_x, y, input_widget.width, input_widget.height);
     controller_button_crouch->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
     controller_button_crouch->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Crouch));
     controller_button_crouch->setEventHandler(this);
     page_controller->addChild(controller_button_crouch);
     y+=50;
 
-
-    label=new ppl7::tk::Label(0, y, input_widget_x, 40, translate("Button Flashlight:"));
+    label=new ppl7::tk::Label(xbase, y, input_widget_x, 40, translate("Button flashlight:"));
     label->setFont(style_label.font);
     page_controller->addChild(label);
-    controller_button_flashlight=new Decker::ui::ControllerButtonSelector(input_widget_x, y, input_widget.width, input_widget.height);
+    controller_button_flashlight=new Decker::ui::ControllerButtonSelector(xbase + input_widget_x, y, input_widget.width, input_widget.height);
     controller_button_flashlight->setControllerType(Decker::ui::ControllerButtonSelector::ControllerType::Button);
     controller_button_flashlight->setId(game.controller.mapping.getSDLButton(GameControllerMapping::Button::Flashlight));
     controller_button_flashlight->setEventHandler(this);
     page_controller->addChild(controller_button_flashlight);
     y+=50;
 
-    controller_use_rumble=new ppl7::tk::CheckBox(0, y, 700, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
+    controller_use_rumble=new ppl7::tk::CheckBox(xbase, y, 700, 40, translate("rumble when player gets hurt"), game.config.controller.use_rumble);
     controller_use_rumble->setFont(style_label.font);
     controller_use_rumble->setEventHandler(this);
     page_controller->addChild(controller_use_rumble);
