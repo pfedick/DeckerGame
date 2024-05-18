@@ -9,12 +9,12 @@ INCLUDE	= -Iinclude -Ipplib/include -I/mingw64/include/SDL2
 CPPFLAGS	= @CPPFLAGS@
 CXXFLAGS	= @CXXFLAGS@
 
-CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) $(CXXFLAGS) @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ 	@ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@ \
+CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) $(CXXFLAGS) @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @DAV1D_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@ \
 	@MPG123_CFLAGS@	@SDL2_CFLAGS@
 LDFLAGS		= @LDFLAGS@
 LIBS_PPL7 = pplib/release/libppl7-tk.a  pplib/release/libppl7-audio.a  pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a
 LIBS		= $(LIBS_PPL7)  @ASAN_FLAGS@ \
-	@LIBS@ -ldav1d @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
+	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @DAV1D_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
 	@PNG_LIBS@ @JPEG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ \
 	-lstdc++
 
@@ -230,7 +230,7 @@ mergeintro: compile/mergeintro_main.o
 	-chmod 755 mergeintro
 
 vplay: $(VPLAY_OBJECTS)
-	$(CXX) -o vplay $(VPLAY_OBJECTS) -ldav1d $(LIBS)
+	$(CXX) -o vplay $(VPLAY_OBJECTS) $(LIBS)
 	-chmod 755 vplay
 
 flashlighttracking: compile/flashlighttracking_main.o
