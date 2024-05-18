@@ -270,7 +270,7 @@ AS_IF([test "x$with_asan" = "xno"],
       [ASAN_FLAGS="$with_asan"
 	  CXXFLAGS="${CXXFLAGS} -O1 $with_asan "
 	   AC_MSG_RESULT(yes)
-	  ])	
+	  ])
 
 ##################################################################################### PNG
 AC_CHECK_LIBPNG([1.2],
@@ -357,8 +357,6 @@ use_asm="none"
 report_have_nasm="no"
 
 case `uname -s` in
-	MINGW*)
-		;;
 	*)
 		case $target in
 			i?86*|x86*|amd64*)
