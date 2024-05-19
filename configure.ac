@@ -47,6 +47,7 @@ report_have_sdl2="no"
 report_have_png="no"
 report_have_jpeg="no"
 report_have_nasm="no"
+report_use_address_sanitizer="no"
 
 
 AC_CANONICAL_TARGET
@@ -266,7 +267,9 @@ AS_IF([test "x$with_asan" = "xno"],
 	   AC_MSG_RESULT(no)],
       [test "x$with_asan" = "xyes"],
       [ASAN_FLAGS=" -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   report_use_address_sanitizer="yes"
 	   CXXFLAGS="${CXXFLAGS} -O1 -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+
 	   AC_MSG_RESULT(yes)
 	  ],
       [ASAN_FLAGS="$with_asan"
@@ -384,7 +387,10 @@ case $target in
 esac
 
 
-
+if test $report_use_address_sanitizer = "yes"
+then
+	report_have_nasm="disabled because of address sanitizer"
+fi
 
 if test $report_have_nasm = "yes"
 then
@@ -458,6 +464,8 @@ AC_SUBST(report_have_iconv)
 AC_SUBST(report_have_nasm)
 AC_SUBST(report_have_pthreads)
 AC_SUBST(report_have_mpg123)
+AC_SUBST(report_have_dav1d)
+AC_SUBST(report_use_address_sanitizer)
 
 ###
 JPEG_CFLAGS=""
@@ -520,6 +528,7 @@ AC_MSG_RESULT([
 **   Nasm (x86 assembler): $report_have_nasm
 **
 ** Threads:                $report_have_pthreads
+** Address Sanitizer:      $report_use_address_sanitizer
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib
