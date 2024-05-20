@@ -171,7 +171,7 @@ void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coo
 		sprite_no_representation, scale, color_mod);
 
 	ppl7::grafix::Color c=color_mod;
-	c.setAlpha(128);
+	c.setAlpha(90);
 	texture->drawScaled(renderer,
 		p.x + coords.x,
 		p.y + coords.y,
