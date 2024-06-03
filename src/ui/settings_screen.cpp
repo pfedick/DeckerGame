@@ -569,7 +569,10 @@ void SettingsScreen::initPageController()
 
 SettingsScreen::~SettingsScreen()
 {
-
+    if (page_audio) delete (page_audio);
+    if (page_video) delete (page_video);
+    if (page_misc) delete (page_misc);
+    if (page_controller) delete (page_controller);
 }
 
 void SettingsScreen::retranslateUi()
