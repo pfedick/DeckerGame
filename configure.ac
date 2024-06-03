@@ -31,7 +31,7 @@ sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
 sinclude(pplib/autoconf/ax_check_compile_flag.m4)
 sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
 sinclude(pplib/autoconf/ax_gcc_archflag.m4)
-sinclude(autoconf/mpg123.m4)
+sinclude(pplib/autoconf/mpg123.m4)
 sinclude(autoconf/dav1d.m4)
 
 
