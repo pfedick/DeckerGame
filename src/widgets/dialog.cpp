@@ -9,7 +9,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	setUseOwnDrawbuffer(true);
 	setTopmost(true);
 	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
-	//ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
+	ppl7::tk::WindowManager *wm=ppl7::tk::GetWindowManager();
 	myBackground=style.windowBackgroundColor * 1.4f;
 	myBackground.setAlpha(240);
 	ppl7::tk::Window* gamewin=GetGameWindow();
@@ -21,8 +21,15 @@ Dialog::Dialog(int width, int height, int buttons)
 	paste_button=NULL;
 	test_button=NULL;
 	reset_button=NULL;
+	close_button=NULL;
 	int x=width - 2 - 16;
 	int y=height - 40;
+
+	close_button=new ppl7::tk::Button(width - 31, 2, 30, 30, "");
+	close_button->setIcon(wm->ButtonSymbols.getDrawable(0));
+	close_button->setEventHandler(this);
+	ppl7::tk::Widget::addChild(close_button);
+
 
 	int client_offset_y2=8;
 	if (buttons & Buttons::OK) {
@@ -53,7 +60,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	x=18;
 	if (buttons & Buttons::Reset) {
 		reset_button=new ppl7::tk::Button(x, y, 60, 32, "Reset");
-		//reset_button->setIcon(gfx->Toolbar.getDrawable(37));
+		reset_button->setIcon(gfx->Toolbar.getDrawable(34));
 		reset_button->setEventHandler(this);
 		ppl7::tk::Widget::addChild(reset_button);
 		x+=62;
@@ -61,7 +68,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	}
 	if (buttons & Buttons::Test) {
 		test_button=new ppl7::tk::Button(x, y, 60, 32, "Test");
-		//reset_button->setIcon(gfx->Toolbar.getDrawable(37));
+		reset_button->setIcon(gfx->Toolbar.getDrawable(63));
 		test_button->setEventHandler(this);
 		ppl7::tk::Widget::addChild(test_button);
 		x+=62;
@@ -180,7 +187,7 @@ void Dialog::paint(ppl7::grafix::Drawable& draw)
 void Dialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
 	ppl7::tk::Widget* widget=event->widget();
-	if (widget == ok_button) {
+	if (widget == ok_button || widget == close_button) {
 		this->deleteLater();
 	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
 	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);

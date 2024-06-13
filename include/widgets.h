@@ -35,6 +35,7 @@ private:
 	ppl7::tk::Button* paste_button;
 	ppl7::tk::Button* test_button;
 	ppl7::tk::Button* reset_button;
+	ppl7::tk::Button* close_button;
 	ppl7::grafix::Point move_start;
 	ppl7::tk::Frame* client_frame;
 
