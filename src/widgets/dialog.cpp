@@ -59,11 +59,11 @@ Dialog::Dialog(int width, int height, int buttons)
 
 	x=18;
 	if (buttons & Buttons::Reset) {
-		reset_button=new ppl7::tk::Button(x, y, 60, 32, "Reset");
+		reset_button=new ppl7::tk::Button(x, y, 80, 32, "Reset");
 		reset_button->setIcon(gfx->Toolbar.getDrawable(34));
 		reset_button->setEventHandler(this);
 		ppl7::tk::Widget::addChild(reset_button);
-		x+=62;
+		x+=82;
 		client_offset_y2=40 + 8;
 	}
 	if (buttons & Buttons::Test) {
