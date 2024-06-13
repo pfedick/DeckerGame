@@ -64,6 +64,7 @@ public:
 	virtual void paint(ppl7::grafix::Drawable& draw);
 	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 	virtual void dialogButtonEvent(Dialog::Buttons button);
+	void mouseClickEvent(ppltk::MouseEvent* event) override;
 
 	virtual void mouseUpEvent(ppltk::MouseEvent* event);
 	virtual void lostFocusEvent(ppltk::FocusEvent* event);
@@ -122,6 +123,7 @@ public:
 	void mouseClickEvent(ppltk::MouseEvent* event) override;
 	void valueChangedEvent(ppltk::Event* event, int value) override;
 	void keyDownEvent(ppltk::KeyEvent* event) override;
+	void closeEvent(ppltk::Event* event) override;
 
 };
 

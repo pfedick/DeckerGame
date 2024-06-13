@@ -605,6 +605,8 @@ public:
 	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 	void keyDownEvent(ppltk::KeyEvent* event) override;
 	void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;
+	void closeEvent(ppltk::Event* event);
+
 };
 
 

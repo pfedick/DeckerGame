@@ -315,6 +315,19 @@ void LevelDialog::mouseDownEvent(ppltk::MouseEvent* event)
     Dialog::mouseDownEvent(event);
 }
 
+void LevelDialog::closeEvent(ppltk::Event* event)
+{
+    if (game) {
+        game->getLevel().params.BackgroundColor=previous_background;
+    }
+    my_state=DialogState::Aborted;
+    ppltk::Event ev(ppltk::Event::Close);
+    ev.setWidget(this);
+    EventHandler::closeEvent(&ev);
+}
+
+
+
 void LevelDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     ppltk::Widget* widget=event->widget();

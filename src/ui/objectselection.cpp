@@ -19,7 +19,7 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	selected_object=0;
 	spriteset=NULL;
 
-	scrollbar=new ppltk::Scrollbar(client.width() - 28, client.y1, 28, client.height());
+	scrollbar=new ppltk::Scrollbar(client.width() - 27, 0, 27, client.height() - 1);
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
@@ -165,11 +165,13 @@ void ObjectsFrame::mouseDownEvent(ppltk::MouseEvent* event)
 void ObjectsFrame::mouseWheelEvent(ppltk::MouseEvent* event)
 {
 	if (!spriteset) return;
-
+	scrollbar->mouseWheelEvent(event);
+	/*
 	if (event->wheel.y != 0) {
 		scrollbar->setPosition(scrollbar->position() + event->wheel.y * -1);
 		needsRedraw();
 	}
+	*/
 }
 
 void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)

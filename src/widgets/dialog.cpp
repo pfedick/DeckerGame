@@ -187,8 +187,9 @@ void Dialog::paint(ppl7::grafix::Drawable& draw)
 void Dialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	ppltk::Widget* widget=event->widget();
-	if (widget == ok_button || widget == close_button) {
+	if (widget == ok_button) {
 		this->deleteLater();
+		return;
 	} else if (copy_button && widget == copy_button) dialogButtonEvent(Buttons::Copy);
 	else if (paste_button && widget == paste_button) dialogButtonEvent(Buttons::Paste);
 	else if (reset_button && widget == reset_button) dialogButtonEvent(Buttons::Reset);
@@ -197,6 +198,21 @@ void Dialog::mouseDownEvent(ppltk::MouseEvent* event)
 		drag_started=true;
 		drag_start_pos=event->p;
 		ppltk::GetWindowManager()->grabMouse(this);
+	}
+}
+
+void Dialog::mouseClickEvent(ppltk::MouseEvent* event)
+{
+	ppltk::Widget* widget=event->widget();
+	if (widget == ok_button || (widget == close_button && ok_button != NULL)) {
+		this->deleteLater();
+		return;
+	} else if (widget == close_button) {
+		// TODO: close Event schicken?
+		ppltk::Event ev(ppltk::Event::Type::Close);
+		ev.setWidget(this);
+		closeEvent(&ev);
+
 	}
 }
 

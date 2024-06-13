@@ -283,7 +283,14 @@ void FileDialog::mouseDownEvent(ppltk::MouseEvent* event)
         filename_lineinput->setText(new_file);
     }
     Dialog::mouseDownEvent(event);
+}
 
+void FileDialog::closeEvent(ppltk::Event* event)
+{
+    my_state=DialogState::Aborted;
+    ppltk::Event ev(ppltk::Event::Close);
+    ev.setWidget(this);
+    EventHandler::closeEvent(&ev);
 }
 
 void FileDialog::valueChangedEvent(ppltk::Event* event, int value)
