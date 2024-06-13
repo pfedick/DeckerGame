@@ -618,6 +618,8 @@ PACKAGE_URL=''
 
 ac_unique_file="pplib/include/ppl7.h"
 ac_unique_file="pplib/include/config_ppl7.h.in"
+ac_unique_file="ppltk/include/ppltk.h"
+ac_unique_file="ppltk/include/ppltk_config.h.in"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stddef.h>
@@ -654,6 +656,21 @@ ac_func_c_list=
 ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
+LIBPPL7_LIBS
+LIBPPL7_CFLAGS
+LIBIDN_LIBS
+LIBMICROHTTPD_LIBS
+LIBCDIO_LDFLAGS
+LIBCURL
+LIBLDNS_LIBS
+LAME_LIBS
+SQLITE3_LDFLAGS
+POSTGRESQL_LDFLAGS
+MYSQL_LDFLAGS
+FT2_LIBS
+IMLIB_LIBS
+OPENSSL_LIBS
+OPENSSL_LDFLAGS
 ASAN_FLAGS
 FT2_CFLAGS
 IMLIB_CFLAGS
@@ -3403,11 +3420,17 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_files="$ac_config_files Makefile pplib/Makefile"
+
+
+
+ac_config_files="$ac_config_files Makefile pplib/Makefile ppltk/Makefile"
 
 ac_config_headers="$ac_config_headers pplib/include/config_ppl7.h"
 
 ac_config_headers="$ac_config_headers pplib/include/ppl7-config.h"
+
+
+ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 
 
 
@@ -16755,6 +16778,19 @@ LIBCURL_CPPFLAGS=""
 LIBLDNS_CFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
+OPENSSL_LDFLAGS=""
+OPENSSL_LIBS=""
+IMLIB_LIBS=""
+FT2_LIBS=""
+MYSQL_LDFLAGS=""
+POSTGRESQL_LDFLAGS=""
+SQLITE3_LDFLAGS=""
+LAME_LIBS=""
+LIBLDNS_LIBS=""
+LIBCURL=""
+LIBCDIO_LDFLAGS=""
+LIBMICROHTTPD_LIBS=""
+LIBIDN_LIBS=""
 
 
 
@@ -16769,6 +16805,24 @@ FT2_CFLAGS=""
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LIBPPL7_CFLAGS=-I../pplib/include
+LIBPPL7_LIBS=""
 
 
 
@@ -17504,8 +17558,10 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "pplib/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/Makefile" ;;
+    "ppltk/Makefile") CONFIG_FILES="$CONFIG_FILES ppltk/Makefile" ;;
     "pplib/include/config_ppl7.h") CONFIG_HEADERS="$CONFIG_HEADERS pplib/include/config_ppl7.h" ;;
     "pplib/include/ppl7-config.h") CONFIG_HEADERS="$CONFIG_HEADERS pplib/include/ppl7-config.h" ;;
+    "ppltk/include/ppltk_config.h") CONFIG_HEADERS="$CONFIG_HEADERS ppltk/include/ppltk_config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

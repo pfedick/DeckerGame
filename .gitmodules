@@ -1,3 +1,6 @@
 [submodule "pplib"]
 	path = pplib
 	url = https://github.com/pfedick/pplib.git
+[submodule "ppltk"]
+	path = ppltk
+	url = https://github.com/pfedick/ppltk.git

@@ -5,7 +5,7 @@ BUILDDATE := $(shell date '+%Y%m%d')
 
 CXX			= @CXX@
 EXTRA_CFLAGS = -ggdb -Wall
-INCLUDE	= -Iinclude -Ipplib/include -I/mingw64/include/SDL2
+INCLUDE	= -Iinclude -Ipplib/include -Ippltk/include -I/mingw64/include/SDL2
 CPPFLAGS	= @CPPFLAGS@
 CXXFLAGS	= @CXXFLAGS@
 
@@ -13,7 +13,8 @@ CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) $(CXXFLAGS) @CFLAGS@ @DEFS@  @PTHREAD_CFLA
 	@MPG123_CFLAGS@	@SDL2_CFLAGS@
 LDFLAGS		= @LDFLAGS@
 LIBS_PPL7 = pplib/release/libppl7-tk.a  pplib/release/libppl7-audio.a  pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a
-LIBS		= $(LIBS_PPL7)  @ASAN_FLAGS@ \
+LIBS_PPLTK = ppltk/compile/libppltk.a
+LIBS		= $(LIBS_PPL7)  $(LIBS_PPLTK) @ASAN_FLAGS@ \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @DAV1D_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
 	@PNG_LIBS@ @JPEG_LIBS@ @ICONV_LIBS@ @MPG123_LIBS@ @SDL2_LIBS@ \
 	-lstdc++
@@ -174,7 +175,7 @@ VPLAY_OBJECTS = compile/vplay_main.o \
 
 
 
-$(PROGRAM): update_version ppl7 $(OBJECTS)
+$(PROGRAM): update_version ppl7 ppl_toolkit $(OBJECTS)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(LIBS)
 	-chmod 755 $(PROGRAM)
 
@@ -184,6 +185,7 @@ mingw: update_version
 	rm -rf release/deploy
 	mkdir -p release/deploy
 	make -j 16 ppl7
+	make -j 16 ppl_toolkit
 	make -j 16 $(PROGRAM)
 	ldd decker.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
 
@@ -211,6 +213,10 @@ ppl7:
 	cd pplib && $(MAKE) -j release/libppl7-gfx.a
 	cd pplib && $(MAKE) -j release/libppl7-tk.a
 	cd pplib && $(MAKE) -j release/libppl7-audio.a
+
+ppl_toolkit:
+	-mkdir -p ppltk/release
+	cd ppltk && $(MAKE) -j
 
 texmaker: $(TEXMAKER_OBJECTS) ppl7
 	$(CXX) -o texmaker $(TEXMAKER_OBJECTS) $(TEXMAKER_LIBS)
@@ -248,6 +254,7 @@ clean:
 cleanall:
 	-rm -f compile/*.o $(PROGRAM) texmaker mergeintro fixbricks *.core vplay flashlighttracking nightbackground
 	cd pplib && $(MAKE) clean
+	cd ppltk && $(MAKE) clean
 
 
 sprites_white:

@@ -6,9 +6,14 @@ AC_CONFIG_AUX_DIR(autoconf)
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
 AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
 
-AC_CONFIG_FILES([Makefile pplib/Makefile])
+AC_CONFIG_SRCDIR([ppltk/include/ppltk.h])
+AC_CONFIG_SRCDIR([ppltk/include/ppltk_config.h.in])
+
+AC_CONFIG_FILES([Makefile pplib/Makefile ppltk/Makefile])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
+
+AC_CONFIG_HEADERS([ppltk/include/ppltk_config.h])
 
 
 ###############################################################################
@@ -20,7 +25,7 @@ sinclude(pplib/autoconf/png.m4)
 sinclude(pplib/autoconf/jpeg.m4)
 sinclude(pplib/autoconf/libjpeg-turbo.m4)
 sinclude(pplib/autoconf/ax_pthread.m4)
-sinclude(pplib/autoconf/sdl2.m4)
+sinclude(ppltk/autoconf/sdl2.m4)
 sinclude(pplib/autoconf/nasm.m4)
 sinclude(pplib/autoconf/lib-link.m4)
 sinclude(pplib/autoconf/iconv.m4)
@@ -481,6 +486,20 @@ LIBCURL_CPPFLAGS=""
 LIBLDNS_CFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
+OPENSSL_LDFLAGS=""
+OPENSSL_LIBS=""
+IMLIB_LIBS=""
+FT2_LIBS=""
+MYSQL_LDFLAGS=""
+POSTGRESQL_LDFLAGS=""
+SQLITE3_LDFLAGS=""
+LAME_LIBS=""
+LIBLDNS_LIBS=""
+LIBCURL=""
+LIBCDIO_LDFLAGS=""
+LIBMICROHTTPD_LIBS=""
+LIBIDN_LIBS=""
+
 
 AC_SUBST(JPEG_CFLAGS)
 AC_SUBST(OPENSSL_INCLUDES)
@@ -496,7 +515,24 @@ AC_SUBST(LIBLDNS_CFLAGS)
 AC_SUBST(IMLIB_CFLAGS)
 AC_SUBST(FT2_CFLAGS)
 AC_SUBST(ASAN_FLAGS)
+AC_SUBST(OPENSSL_LDFLAGS)
+AC_SUBST(OPENSSL_LIBS)
+AC_SUBST(IMLIB_LIBS)
+AC_SUBST(FT2_LIBS)
+AC_SUBST(MYSQL_LDFLAGS)
+AC_SUBST(POSTGRESQL_LDFLAGS)
+AC_SUBST(SQLITE3_LDFLAGS)
+AC_SUBST(LAME_LIBS)
+AC_SUBST(LIBLDNS_LIBS)
+AC_SUBST(LIBCURL)
+AC_SUBST(LIBCDIO_LDFLAGS)
+AC_SUBST(LIBMICROHTTPD_LIBS)
+AC_SUBST(LIBIDN_LIBS)
 
+LIBPPL7_CFLAGS=-I../pplib/include
+LIBPPL7_LIBS=""
+AC_SUBST(LIBPPL7_CFLAGS)
+AC_SUBST(LIBPPL7_LIBS)
 
 
 ###############################################################################
