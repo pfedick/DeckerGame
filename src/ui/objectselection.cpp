@@ -15,11 +15,11 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	: ppltk::Frame(x, y, width, height)
 {
 	ppl7::grafix::Rect client=this->clientRect();
-
+	//setBorderStyle(ppltk::Frame::Inset);
 	selected_object=0;
 	spriteset=NULL;
 
-	scrollbar=new ppltk::Scrollbar(client.width() - 27, 0, 27, client.height() - 1);
+	scrollbar=new ppltk::Scrollbar(client.width() - 25, 0, 24, client.height());
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
@@ -146,6 +146,7 @@ void ObjectsFrame::valueChangedEvent(ppltk::Event* event, int value)
 void ObjectsFrame::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	if (!spriteset) return;
+	if (event->p.x >= scrollbar->x()) return;
 	if (event->widget() == this && event->buttonMask & ppltk::MouseState::Left) {
 		size_t object_pos=((event->p.y) / 160) * 2 + ((event->p.x) / 130) + scrollbar->position() * 2;
 		std::map<size_t, Item>::const_iterator it;
@@ -191,7 +192,7 @@ void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)
 
 	if (!spriteset) return;
 	ppltk::Frame::paint(draw);
-	draw=clientDrawable(draw);
+	ppl7::grafix::Drawable cdraw=clientDrawable(draw);
 
 	ppl7::grafix::Color white(245, 245, 242, 255);
 	int x=0, y=0, c=0;
@@ -199,7 +200,7 @@ void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)
 	for (it=object_map.begin();it != object_map.end();++it) {
 		const Item& item=it->second;
 		if (c >= scrollbar->position() * 2) {
-			ppl7::grafix::Drawable frame=draw.getDrawable(x, y, x + 128, y + 128 + 30);
+			ppl7::grafix::Drawable frame=cdraw.getDrawable(x, y, x + 128, y + 128 + 30);
 			int w=frame.width() - 1;
 			int h=frame.height() - 1;
 			if (item.id == selected_object) {
