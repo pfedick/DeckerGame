@@ -3,7 +3,7 @@
 //#include <stdlib.h>
 #include <SDL.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 #include "audio.h"
 #include <math.h>
 #include "objects.h"
@@ -20,7 +20,7 @@ void help()
 }
 
 
-void startDebug(Game &game)
+void startDebug(Game& game)
 {
 	game.startLevel("level/tutorial.lvl");
 	//game.startLevel("level/waynet.lvl");
@@ -44,7 +44,7 @@ void startDebug(Game &game)
 	game.run();
 }
 
-void startLevel(Game &game, int argc, char** argv)
+void startLevel(Game& game, int argc, char** argv)
 {
 	ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
 	if (level.right(4) != ".lvl") level+=".lvl";
@@ -63,7 +63,7 @@ void startLevel(Game &game, int argc, char** argv)
 	return;
 }
 
-void startNormal(Game &game)
+void startNormal(Game& game)
 {
 	if (!game.config.skipIntro) {
 		game.playIntroVideo();
@@ -125,7 +125,7 @@ void start(int argc, char** argv)
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
 
 	ppl7::grafix::Grafix gfx;
-	ppl7::tk::WindowManager_SDL2 wm;
+	ppltk::WindowManager_SDL2 wm;
 	Game game;
 	game.init();
 	game.init_grafix();
@@ -135,11 +135,11 @@ void start(int argc, char** argv)
 		startDebug(game);
 	} else
 #endif
-	if (ppl7::HaveArgv(argc, argv, "-l")) {
-		startLevel(game,argc,argv);
-	} else {
-		startNormal(game);
-	}
+		if (ppl7::HaveArgv(argc, argv, "-l")) {
+			startLevel(game, argc, argv);
+		} else {
+			startNormal(game);
+		}
 	game.audiosystem.shutdown();
 }
 

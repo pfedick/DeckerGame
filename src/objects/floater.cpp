@@ -351,16 +351,16 @@ void Floater::emmitParticles(double time, const Player& player, const ppl7::graf
 class FloaterDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* floater_type;
-	ppl7::tk::CheckBox* initial_state;
+	ppltk::ComboBox* floater_type;
+	ppltk::CheckBox* initial_state;
 	Floater* object;
 
 public:
 	FloaterDialog(Floater* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	//virtual void textChangedEvent(ppl7::tk::Event *event, const ppl7::String &text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
-	//virtual void mouseDownEvent(ppl7::tk::MouseEvent *event);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	//virtual void textChangedEvent(ppltk::Event *event, const ppl7::String &text);
+	virtual void toggledEvent(ppltk::Event* event, bool checked);
+	//virtual void mouseDownEvent(ppltk::MouseEvent *event);
 };
 
 void Floater::openUi()
@@ -374,23 +374,23 @@ FloaterDialog::FloaterDialog(Floater* object)
 {
 	this->object=object;
 	setWindowTitle("Floater");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Floater-Type: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Initial state: "));
+	addChild(new ppltk::Label(0, 0, 120, 30, "Floater-Type: "));
+	addChild(new ppltk::Label(0, 40, 120, 30, "Initial state: "));
 
-	floater_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
+	floater_type=new ppltk::ComboBox(120, 0, 400, 30);
 	floater_type->add("studded", "0");
 	floater_type->add("flat", "1");
 	floater_type->setCurrentIdentifier(ppl7::ToString("%d", object->floater_type));
 	floater_type->setEventHandler(this);
 	addChild(floater_type);
 
-	initial_state=new ppl7::tk::CheckBox(120, 40, 400, 30, "enabled", object->initial_state);
+	initial_state=new ppltk::CheckBox(120, 40, 400, 30, "enabled", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
 }
 
-void FloaterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void FloaterDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == floater_type) {
 		object->floater_type=floater_type->currentIdentifier().toInt();
@@ -399,7 +399,7 @@ void FloaterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void FloaterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void FloaterDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) {
 		object->initial_state=checked;

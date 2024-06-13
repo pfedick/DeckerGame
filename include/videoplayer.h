@@ -5,7 +5,7 @@
 
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 #include "decker_sdl.h"
 
 #include "audio.h"

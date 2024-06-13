@@ -186,24 +186,24 @@ class TouchPlateSwitchDialog : public Decker::ui::Dialog
 {
 private:
     TouchPlateSwitch* object;
-    ppl7::tk::ComboBox* plate_style;
-    ppl7::tk::CheckBox* initial_state, * current_state;
-    ppl7::tk::SpinBox* target_id[10];
-    ppl7::tk::RadioButton* target_state_on[10];
-    ppl7::tk::RadioButton* target_state_off[10];
-    ppl7::tk::RadioButton* target_state_trigger[10];
-    //ppl7::tk::Button* reset;
+    ppltk::ComboBox* plate_style;
+    ppltk::CheckBox* initial_state, * current_state;
+    ppltk::SpinBox* target_id[10];
+    ppltk::RadioButton* target_state_on[10];
+    ppltk::RadioButton* target_state_off[10];
+    ppltk::RadioButton* target_state_trigger[10];
+    //ppltk::Button* reset;
 
     Decker::ui::ColorSelectionFrame* colorframe;
 
 
 public:
     TouchPlateSwitchDialog(TouchPlateSwitch* object);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-    virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
+    virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+    virtual void toggledEvent(ppltk::Event* event, bool checked);
     virtual void dialogButtonEvent(Dialog::Buttons button) override;
-    //void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+    //void mouseDownEvent(ppltk::MouseEvent* event) override;
 
 };
 
@@ -226,25 +226,25 @@ TouchPlateSwitchDialog::TouchPlateSwitchDialog(TouchPlateSwitch* object)
     int sw=480;
 
 
-    addChild(new ppl7::tk::Label(sw, y, 120, 30, "Targets: "));
+    addChild(new ppltk::Label(sw, y, 120, 30, "Targets: "));
     y+=35;
     for (int i=0;i < 10;i++) {
-        addChild(new ppl7::tk::Label(sw + 20, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-        target_id[i]=new ppl7::tk::SpinBox(sw + 100, y, 100, 30, object->targets[i].object_id);
+        addChild(new ppltk::Label(sw + 20, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+        target_id[i]=new ppltk::SpinBox(sw + 100, y, 100, 30, object->targets[i].object_id);
         target_id[i]->setLimits(0, 65535);
         target_id[i]->setEventHandler(this);
         addChild(target_id[i]);
 
-        ppl7::tk::Frame* frame=new ppl7::tk::Frame(sw + 210, y, 210, 30, ppl7::tk::Frame::BorderStyle::NoBorder);
+        ppltk::Frame* frame=new ppltk::Frame(sw + 210, y, 210, 30, ppltk::Frame::BorderStyle::NoBorder);
         frame->setTransparent(true);
 
-        target_state_on[i]=new ppl7::tk::RadioButton(0, 0, 50, 30, "on", object->targets[i].state == TouchPlateSwitch::TargetState::enable);
+        target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->targets[i].state == TouchPlateSwitch::TargetState::enable);
         target_state_on[i]->setEventHandler(this);
         frame->addChild(target_state_on[i]);
-        target_state_off[i]=new ppl7::tk::RadioButton(50, 0, 60, 30, "off", object->targets[i].state == TouchPlateSwitch::TargetState::disable);
+        target_state_off[i]=new ppltk::RadioButton(50, 0, 60, 30, "off", object->targets[i].state == TouchPlateSwitch::TargetState::disable);
         target_state_off[i]->setEventHandler(this);
         frame->addChild(target_state_off[i]);
-        target_state_trigger[i]=new ppl7::tk::RadioButton(100, 0, 90, 30, "trigger", object->targets[i].state == TouchPlateSwitch::TargetState::trigger);
+        target_state_trigger[i]=new ppltk::RadioButton(100, 0, 90, 30, "trigger", object->targets[i].state == TouchPlateSwitch::TargetState::trigger);
         target_state_trigger[i]->setEventHandler(this);
         frame->addChild(target_state_trigger[i]);
         addChild(frame);
@@ -254,8 +254,8 @@ TouchPlateSwitchDialog::TouchPlateSwitchDialog(TouchPlateSwitch* object)
     y=0;
 
 
-    addChild(new ppl7::tk::Label(0, y, 100, 30, "Plate-Style: "));
-    plate_style=new ppl7::tk::ComboBox(100, y, 300, 30);
+    addChild(new ppltk::Label(0, y, 100, 30, "Plate-Style: "));
+    plate_style=new ppltk::ComboBox(100, y, 300, 30);
     plate_style->add("Narrow", "0");
     plate_style->add("Wide", "1");
     plate_style->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->plate_style)));
@@ -263,17 +263,17 @@ TouchPlateSwitchDialog::TouchPlateSwitchDialog(TouchPlateSwitch* object)
     addChild(plate_style);
     y+=40;
 
-    addChild(new ppl7::tk::Label(0, y, 100, 30, "Flags: "));
-    initial_state=new ppl7::tk::CheckBox(100, y, 160, 30, "Initial state: on", object->initial_state);
+    addChild(new ppltk::Label(0, y, 100, 30, "Flags: "));
+    initial_state=new ppltk::CheckBox(100, y, 160, 30, "Initial state: on", object->initial_state);
     initial_state->setEventHandler(this);
     addChild(initial_state);
 
-    current_state=new ppl7::tk::CheckBox(260, y, 160, 30, "current state: on", object->current_state);
+    current_state=new ppltk::CheckBox(260, y, 160, 30, "current state: on", object->current_state);
     current_state->setEventHandler(this);
     addChild(current_state);
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 80, 30, "Color:"));
+    addChild(new ppltk::Label(0, y, 80, 30, "Color:"));
     y+=35;
     ColorPalette& palette=GetColorPalette();
     colorframe=new Decker::ui::ColorSelectionFrame(170, y, 300, 300, palette);
@@ -283,9 +283,9 @@ TouchPlateSwitchDialog::TouchPlateSwitchDialog(TouchPlateSwitch* object)
 
 }
 
-void TouchPlateSwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void TouchPlateSwitchDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-    ppl7::tk::Widget* widget=event->widget();
+    ppltk::Widget* widget=event->widget();
     if (widget == plate_style) {
         object->plate_style=static_cast<TouchPlateSwitch::PlateStyle>(plate_style->currentIdentifier().toInt());
         object->init();
@@ -296,7 +296,7 @@ void TouchPlateSwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value
     }
 }
 
-void TouchPlateSwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void TouchPlateSwitchDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     for (int i=0;i < 10;i++) {
         if (event->widget() == target_id[i]) {
@@ -306,7 +306,7 @@ void TouchPlateSwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t v
     }
 }
 
-void TouchPlateSwitchDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void TouchPlateSwitchDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
     if (checked) {
         for (int i=0;i < 10;i++) {

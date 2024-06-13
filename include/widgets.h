@@ -3,7 +3,7 @@
 
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 #include <list>
 
 class Game;
@@ -13,7 +13,7 @@ class SpriteTexture;
 namespace Decker {
 namespace ui {
 
-class Dialog : public ppl7::tk::Widget
+class Dialog : public ppltk::Widget
 {
 public:
 	enum Buttons {
@@ -30,14 +30,14 @@ private:
 	ppl7::grafix::Image WindowIcon;
 	ppl7::grafix::Image widget_drawable;
 	ppl7::grafix::Color	myBackground;
-	ppl7::tk::Button* ok_button;
-	ppl7::tk::Button* copy_button;
-	ppl7::tk::Button* paste_button;
-	ppl7::tk::Button* test_button;
-	ppl7::tk::Button* reset_button;
-	ppl7::tk::Button* close_button;
+	ppltk::Button* ok_button;
+	ppltk::Button* copy_button;
+	ppltk::Button* paste_button;
+	ppltk::Button* test_button;
+	ppltk::Button* reset_button;
+	ppltk::Button* close_button;
 	ppl7::grafix::Point move_start;
-	ppl7::tk::Frame* client_frame;
+	ppltk::Frame* client_frame;
 
 	bool drag_started;
 	int drag_offset;
@@ -62,12 +62,12 @@ public:
 	const ppl7::grafix::Color& backgroundColor() const;
 	void setBackgroundColor(const ppl7::grafix::Color& c);
 	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 	virtual void dialogButtonEvent(Dialog::Buttons button);
 
-	virtual void mouseUpEvent(ppl7::tk::MouseEvent* event);
-	virtual void lostFocusEvent(ppl7::tk::FocusEvent* event);
-	virtual void mouseMoveEvent(ppl7::tk::MouseEvent* event);
+	virtual void mouseUpEvent(ppltk::MouseEvent* event);
+	virtual void lostFocusEvent(ppltk::FocusEvent* event);
+	virtual void mouseMoveEvent(ppltk::MouseEvent* event);
 };
 
 
@@ -87,14 +87,14 @@ public:
 	};
 
 private:
-	ppl7::tk::Button* ok_button;
-	ppl7::tk::Button* cancel_button;
-	ppl7::tk::LineInput* path_lineinput;
-	ppl7::tk::LineInput* filename_lineinput;
-	ppl7::tk::ListWidget* dir_list;
-	ppl7::tk::ListWidget* file_list;
+	ppltk::Button* ok_button;
+	ppltk::Button* cancel_button;
+	ppltk::LineInput* path_lineinput;
+	ppltk::LineInput* filename_lineinput;
+	ppltk::ListWidget* dir_list;
+	ppltk::ListWidget* file_list;
 #ifdef WIN32
-	ppl7::tk::ComboBox* drives_combobox;
+	ppltk::ComboBox* drives_combobox;
 #endif
 	bool matchFilter(const ppl7::String& filename) const;
 
@@ -117,26 +117,26 @@ public:
 	void setDirectory(const ppl7::String& path);
 	void setFilter(const ppl7::String& patternlist);
 
-	void mouseDblClickEvent(ppl7::tk::MouseEvent* event) override;
-	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
-	void mouseClickEvent(ppl7::tk::MouseEvent* event) override;
-	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+	void mouseDblClickEvent(ppltk::MouseEvent* event) override;
+	void mouseDownEvent(ppltk::MouseEvent* event) override;
+	void mouseClickEvent(ppltk::MouseEvent* event) override;
+	void valueChangedEvent(ppltk::Event* event, int value) override;
+	void keyDownEvent(ppltk::KeyEvent* event) override;
 
 };
 
-class ColorSliderWidget : public ppl7::tk::Widget
+class ColorSliderWidget : public ppltk::Widget
 {
 private:
-	ppl7::tk::SpinBox* color_red;
-	ppl7::tk::SpinBox* color_green;
-	ppl7::tk::SpinBox* color_blue;
-	ppl7::tk::SpinBox* color_alpha;
-	ppl7::tk::HorizontalSlider* slider_red;
-	ppl7::tk::HorizontalSlider* slider_green;
-	ppl7::tk::HorizontalSlider* slider_blue;
-	ppl7::tk::HorizontalSlider* slider_alpha;
-	ppl7::tk::Frame* color_preview;
+	ppltk::SpinBox* color_red;
+	ppltk::SpinBox* color_green;
+	ppltk::SpinBox* color_blue;
+	ppltk::SpinBox* color_alpha;
+	ppltk::HorizontalSlider* slider_red;
+	ppltk::HorizontalSlider* slider_green;
+	ppltk::HorizontalSlider* slider_blue;
+	ppltk::HorizontalSlider* slider_alpha;
+	ppltk::Frame* color_preview;
 	bool with_alphachannel;
 
 
@@ -152,12 +152,12 @@ public:
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
-	void keyDownEvent(ppl7::tk::KeyEvent* event) override;
+	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	void keyDownEvent(ppltk::KeyEvent* event) override;
 
 };
 
-class TabWidget : public ppl7::tk::Widget
+class TabWidget : public ppltk::Widget
 {
 private:
 	int current_tab;
@@ -165,9 +165,9 @@ private:
 	class Tab {
 	public:
 		Tab();
-		Tab(ppl7::tk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+		Tab(ppltk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
 		Tab(const Tab& other);
-		ppl7::tk::Widget* widget;
+		ppltk::Widget* widget;
 		ppl7::String title;
 		ppl7::grafix::Image icon;
 		int x;
@@ -178,15 +178,15 @@ public:
 	TabWidget(int x, int y, int width, int height);
 	~TabWidget();
 
-	ppl7::tk::Widget* addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
-	void addWidget(int id, const ppl7::String& title, ppl7::tk::Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	ppltk::Widget* addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
+	void addWidget(int id, const ppl7::String& title, ppltk::Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
 	void removeTab(int id);
 	void setVisible(int id, bool visible);
 	void setEnabled(int id, bool enabled);
 	void setTitle(int id, const ppl7::String& title);
 	void setIcon(int id, const ppl7::grafix::Drawable& icon);
-	void setWidget(int id, ppl7::tk::Widget* widget);
-	ppl7::tk::Widget* getWidget(int id) const;
+	void setWidget(int id, ppltk::Widget* widget);
+	ppltk::Widget* getWidget(int id) const;
 	int currentTab() const;
 	void setCurrentTab(int id);
 	size_t tabCount() const;
@@ -194,11 +194,11 @@ public:
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseDownEvent(ppltk::MouseEvent* event) override;
 
 };
 
-class GradientWidget : public ppl7::tk::Widget
+class GradientWidget : public ppltk::Widget
 {
 private:
 	class Item
@@ -223,8 +223,8 @@ private:
 	int drag_offset;
 	ppl7::grafix::Point drag_start_pos;
 
-	ppl7::tk::Button* add_item_button;
-	ppl7::tk::Button* delete_item_button;
+	ppltk::Button* add_item_button;
+	ppltk::Button* delete_item_button;
 
 	std::list<Item> getSortedList() const;
 
@@ -252,15 +252,15 @@ public:
 
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
-	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
-	void mouseUpEvent(ppl7::tk::MouseEvent* event) override;
-	void lostFocusEvent(ppl7::tk::FocusEvent* event) override;
-	void mouseMoveEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseDownEvent(ppltk::MouseEvent* event) override;
+	void mouseUpEvent(ppltk::MouseEvent* event) override;
+	void lostFocusEvent(ppltk::FocusEvent* event) override;
+	void mouseMoveEvent(ppltk::MouseEvent* event) override;
 
 };
 
 
-class GameMenuArea : public ppl7::tk::Widget
+class GameMenuArea : public ppltk::Widget
 {
 private:
 	ppl7::String text;
@@ -277,7 +277,7 @@ public:
 	virtual void paint(ppl7::grafix::Drawable& draw);
 };
 
-class ControllerButtonSelector : public ppl7::tk::Widget
+class ControllerButtonSelector : public ppltk::Widget
 {
 public:
 	enum class ControllerType {
@@ -303,9 +303,9 @@ public:
 	void setName(const ppl7::String& name);
 	void setInputmode();
 	virtual void paint(ppl7::grafix::Drawable& draw);
-	virtual void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
-	virtual void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event);
+	virtual void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 };
 
 

@@ -15,7 +15,7 @@ GradientWidget::Item::Item()
 }
 
 GradientWidget::GradientWidget(int x, int y, int width, int height)
-    : ppl7::tk::Widget(x, y, width, height)
+    : ppltk::Widget(x, y, width, height)
 {
     ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
     max_items=8;
@@ -25,10 +25,10 @@ GradientWidget::GradientWidget(int x, int y, int width, int height)
     drag_offset=0;
     gradient_y1=0;
     gradient_y2=0;
-    add_item_button=new ppl7::tk::Button(width - 32, 2, 30, 30, "", gfx->Toolbar.getDrawable(43));
+    add_item_button=new ppltk::Button(width - 32, 2, 30, 30, "", gfx->Toolbar.getDrawable(43));
     add_item_button->setEventHandler(this);
     addChild(add_item_button);
-    delete_item_button=new ppl7::tk::Button(width - 32, height - 32, 30, 30, "", gfx->Toolbar.getDrawable(44));
+    delete_item_button=new ppltk::Button(width - 32, height - 32, 30, 30, "", gfx->Toolbar.getDrawable(44));
     delete_item_button->setEventHandler(this);
     addChild(delete_item_button);
 }
@@ -37,7 +37,7 @@ GradientWidget::~GradientWidget()
 {
     if (drag_started) {
         drag_started=false;
-        ppl7::tk::GetWindowManager()->releaseMouse(this);
+        ppltk::GetWindowManager()->releaseMouse(this);
     }
 
 }
@@ -292,7 +292,7 @@ void GradientWidget::drawHandler(ppl7::grafix::Drawable& draw, int y1, int y2)
 
 void GradientWidget::paint(ppl7::grafix::Drawable& draw)
 {
-    const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+    const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
     ppl7::grafix::Color bg=style.frameBackgroundColor * 0.9f;
     ppl7::grafix::Color light=style.frameBackgroundColor * 1.8f;
     ppl7::grafix::Color shadow=style.frameBackgroundColor * 0.4f;
@@ -324,19 +324,19 @@ void GradientWidget::paint(ppl7::grafix::Drawable& draw)
     drawHandler(draw, 11, h - 11);
 }
 
-void GradientWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void GradientWidget::mouseDownEvent(ppltk::MouseEvent* event)
 {
     std::map<size_t, int>::const_iterator it;
     if (event->widget() == add_item_button) {
         addItem(1.0f, currentColor());
-        ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+        ppltk::Event ev(ppltk::Event::SelectionChanged);
         ev.setWidget(this);
         EventHandler::selectionChangedEvent(&ev);
         return;
 
     } else if (event->widget() == delete_item_button) {
         deleteCurrentItem();
-        ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+        ppltk::Event ev(ppltk::Event::SelectionChanged);
         ev.setWidget(this);
         EventHandler::selectionChangedEvent(&ev);
         return;
@@ -349,7 +349,7 @@ void GradientWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
                     drag_started=true;
                     drag_offset=event->p.y - it->second + 11;
                     drag_start_pos=event->p;
-                    ppl7::tk::GetWindowManager()->grabMouse(this);
+                    ppltk::GetWindowManager()->grabMouse(this);
                     return;
                 }
             }
@@ -357,13 +357,13 @@ void GradientWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
         for (it=handler_pos.begin();it != handler_pos.end();++it) {
             if (event->p.y >= it->second - 4 && event->p.y <= it->second + 4) {
                 selected_id=it->first;
-                ppl7::tk::Event ev(ppl7::tk::Event::SelectionChanged);
+                ppltk::Event ev(ppltk::Event::SelectionChanged);
                 ev.setWidget(this);
                 EventHandler::selectionChangedEvent(&ev);
                 drag_started=true;
                 drag_offset=event->p.y - it->second + 11;
                 drag_start_pos=event->p;
-                ppl7::tk::GetWindowManager()->grabMouse(this);
+                ppltk::GetWindowManager()->grabMouse(this);
                 needsRedraw();
                 return;
             }
@@ -371,36 +371,36 @@ void GradientWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
     }
 }
 
-void GradientWidget::mouseUpEvent(ppl7::tk::MouseEvent* event)
+void GradientWidget::mouseUpEvent(ppltk::MouseEvent* event)
 {
     if (drag_started) {
         drag_started=false;
-        ppl7::tk::GetWindowManager()->releaseMouse(this);
+        ppltk::GetWindowManager()->releaseMouse(this);
     }
 }
 
-void GradientWidget::lostFocusEvent(ppl7::tk::FocusEvent* event)
+void GradientWidget::lostFocusEvent(ppltk::FocusEvent* event)
 {
     if (drag_started) {
         drag_started=false;
-        ppl7::tk::GetWindowManager()->releaseMouse(this);
+        ppltk::GetWindowManager()->releaseMouse(this);
     }
 }
 
-void GradientWidget::mouseMoveEvent(ppl7::tk::MouseEvent* event)
+void GradientWidget::mouseMoveEvent(ppltk::MouseEvent* event)
 {
-    if (event->buttonMask & ppl7::tk::MouseEvent::MouseButton::Left) {
+    if (event->buttonMask & ppltk::MouseEvent::MouseButton::Left) {
         if (drag_started) {
             float draw_range=gradient_y2 - gradient_y1;
             float age=(float)(event->p.y - drag_offset) / draw_range;
             setCurrentAge(age);
-            ppl7::tk::Event ev(ppl7::tk::Event::ValueChanged);
+            ppltk::Event ev(ppltk::Event::ValueChanged);
             ev.setWidget(this);
             EventHandler::valueChangedEvent(&ev, (int)selected_id);
         }
     } else if (drag_started) {
         drag_started=false;
-        ppl7::tk::GetWindowManager()->releaseMouse(this);
+        ppltk::GetWindowManager()->releaseMouse(this);
     }
 }
 

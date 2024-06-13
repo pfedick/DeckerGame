@@ -259,26 +259,26 @@ class SwitchDialog : public Decker::ui::Dialog
 {
 private:
 	Switch* object;
-	ppl7::tk::ComboBox* switch_style;
-	ppl7::tk::CheckBox* visible_at_playtime;
-	ppl7::tk::CheckBox* initial_state, * current_state;
-	ppl7::tk::CheckBox* one_time_switch;
-	ppl7::tk::CheckBox* auto_toggle_on_collision;
-	ppl7::tk::SpinBox* target_id[15];
-	ppl7::tk::RadioButton* target_state_on[15];
-	ppl7::tk::RadioButton* target_state_off[15];
-	ppl7::tk::RadioButton* target_state_trigger[15];
-	//ppl7::tk::Button* reset;
+	ppltk::ComboBox* switch_style;
+	ppltk::CheckBox* visible_at_playtime;
+	ppltk::CheckBox* initial_state, * current_state;
+	ppltk::CheckBox* one_time_switch;
+	ppltk::CheckBox* auto_toggle_on_collision;
+	ppltk::SpinBox* target_id[15];
+	ppltk::RadioButton* target_state_on[15];
+	ppltk::RadioButton* target_state_off[15];
+	ppltk::RadioButton* target_state_trigger[15];
+	//ppltk::Button* reset;
 
 	Decker::ui::ColorSelectionFrame* colorframe;
-	ppl7::tk::Button* button_color_base;
-	ppl7::tk::Button* button_color_lever;
-	ppl7::tk::Button* button_color_button;
-	ppl7::tk::Frame* frame_color_base;
-	ppl7::tk::Frame* frame_color_lever;
-	ppl7::tk::Frame* frame_color_button;
-	ppl7::tk::Label* current_element_label;
-	ppl7::tk::Frame* current_element_color_frame;
+	ppltk::Button* button_color_base;
+	ppltk::Button* button_color_lever;
+	ppltk::Button* button_color_button;
+	ppltk::Frame* frame_color_base;
+	ppltk::Frame* frame_color_lever;
+	ppltk::Frame* frame_color_button;
+	ppltk::Label* current_element_label;
+	ppltk::Frame* current_element_color_frame;
 	int* color_target;
 
 	enum class Element {
@@ -294,11 +294,11 @@ private:
 
 public:
 	SwitchDialog(Switch* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	virtual void toggledEvent(ppltk::Event* event, bool checked);
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
-	void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+	void mouseDownEvent(ppltk::MouseEvent* event) override;
 
 };
 
@@ -323,25 +323,25 @@ SwitchDialog::SwitchDialog(Switch* object)
 	int sw=480;
 
 
-	addChild(new ppl7::tk::Label(sw, y, 120, 30, "Targets: "));
+	addChild(new ppltk::Label(sw, y, 120, 30, "Targets: "));
 	y+=35;
 	for (int i=0;i < 15;i++) {
-		addChild(new ppl7::tk::Label(sw + 20, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-		target_id[i]=new ppl7::tk::SpinBox(sw + 100, y, 100, 30, object->targets[i].object_id);
+		addChild(new ppltk::Label(sw + 20, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		target_id[i]=new ppltk::SpinBox(sw + 100, y, 100, 30, object->targets[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
 
-		ppl7::tk::Frame* frame=new ppl7::tk::Frame(sw + 210, y, 210, 30, ppl7::tk::Frame::BorderStyle::NoBorder);
+		ppltk::Frame* frame=new ppltk::Frame(sw + 210, y, 210, 30, ppltk::Frame::BorderStyle::NoBorder);
 		frame->setTransparent(true);
 
-		target_state_on[i]=new ppl7::tk::RadioButton(0, 0, 50, 30, "on", object->targets[i].state == Switch::TargetState::enable);
+		target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->targets[i].state == Switch::TargetState::enable);
 		target_state_on[i]->setEventHandler(this);
 		frame->addChild(target_state_on[i]);
-		target_state_off[i]=new ppl7::tk::RadioButton(50, 0, 60, 30, "off", object->targets[i].state == Switch::TargetState::disable);
+		target_state_off[i]=new ppltk::RadioButton(50, 0, 60, 30, "off", object->targets[i].state == Switch::TargetState::disable);
 		target_state_off[i]->setEventHandler(this);
 		frame->addChild(target_state_off[i]);
-		target_state_trigger[i]=new ppl7::tk::RadioButton(100, 0, 90, 30, "trigger", object->targets[i].state == Switch::TargetState::trigger);
+		target_state_trigger[i]=new ppltk::RadioButton(100, 0, 90, 30, "trigger", object->targets[i].state == Switch::TargetState::trigger);
 		target_state_trigger[i]->setEventHandler(this);
 		frame->addChild(target_state_trigger[i]);
 		addChild(frame);
@@ -351,8 +351,8 @@ SwitchDialog::SwitchDialog(Switch* object)
 	y=0;
 
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Switch-Style: "));
-	switch_style=new ppl7::tk::ComboBox(100, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Switch-Style: "));
+	switch_style=new ppltk::ComboBox(100, y, 300, 30);
 	switch_style->add("Switch with lever", "0");
 	switch_style->add("Switch with lever and top", "1");
 	switch_style->add("Switch with small lever and top", "2");
@@ -363,34 +363,34 @@ SwitchDialog::SwitchDialog(Switch* object)
 	addChild(switch_style);
 	y+=40;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Flags: "));
-	initial_state=new ppl7::tk::CheckBox(100, y, 160, 30, "Initial state: on", object->initial_state);
+	addChild(new ppltk::Label(0, y, 100, 30, "Flags: "));
+	initial_state=new ppltk::CheckBox(100, y, 160, 30, "Initial state: on", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	current_state=new ppl7::tk::CheckBox(260, y, 160, 30, "current state: on", object->current_state);
+	current_state=new ppltk::CheckBox(260, y, 160, 30, "current state: on", object->current_state);
 	current_state->setEventHandler(this);
 	addChild(current_state);
 	y+=35;
 
 
 
-	visible_at_playtime=new ppl7::tk::CheckBox(100, y, 160, 30, "switch is visible", object->visibleAtPlaytime);
+	visible_at_playtime=new ppltk::CheckBox(100, y, 160, 30, "switch is visible", object->visibleAtPlaytime);
 	visible_at_playtime->setEventHandler(this);
 	addChild(visible_at_playtime);
 
-	one_time_switch=new ppl7::tk::CheckBox(260, y, 160, 30, "one time switch", object->one_time_switch);
+	one_time_switch=new ppltk::CheckBox(260, y, 160, 30, "one time switch", object->one_time_switch);
 	one_time_switch->setEventHandler(this);
 	addChild(one_time_switch);
 	y+=35;
 
-	auto_toggle_on_collision=new ppl7::tk::CheckBox(100, y, 220, 30, "auto toggle on collision", object->auto_toggle_on_collision);
+	auto_toggle_on_collision=new ppltk::CheckBox(100, y, 220, 30, "auto toggle on collision", object->auto_toggle_on_collision);
 	auto_toggle_on_collision->setEventHandler(this);
 	addChild(auto_toggle_on_collision);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 80, 30, "Colors:"));
-	current_element_label=new ppl7::tk::Label(170, y, 300, 30, "Base");
+	addChild(new ppltk::Label(0, y, 80, 30, "Colors:"));
+	current_element_label=new ppltk::Label(170, y, 300, 30, "Base");
 	addChild(current_element_label);
 	y+=35;
 	ColorPalette& palette=GetColorPalette();
@@ -398,26 +398,26 @@ SwitchDialog::SwitchDialog(Switch* object)
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 
-	button_color_base=new ppl7::tk::Button(0, y, 100, 30, "Base");
+	button_color_base=new ppltk::Button(0, y, 100, 30, "Base");
 	button_color_base->setEventHandler(this);
 	addChild(button_color_base);
-	frame_color_base=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_base=new ppltk::Frame(105, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_base->setBackgroundColor(palette.getColor(object->color_base));
 	addChild(frame_color_base);
 	y+=35;
 
-	button_color_lever=new ppl7::tk::Button(0, y, 100, 30, "Lever");
+	button_color_lever=new ppltk::Button(0, y, 100, 30, "Lever");
 	button_color_lever->setEventHandler(this);
 	addChild(button_color_lever);
-	frame_color_lever=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_lever=new ppltk::Frame(105, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_lever->setBackgroundColor(palette.getColor(object->color_lever));
 	addChild(frame_color_lever);
 	y+=35;
 
-	button_color_button=new ppl7::tk::Button(0, y, 100, 30, "Button");
+	button_color_button=new ppltk::Button(0, y, 100, 30, "Button");
 	button_color_button->setEventHandler(this);
 	addChild(button_color_button);
-	frame_color_button=new ppl7::tk::Frame(105, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_button=new ppltk::Frame(105, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_button->setBackgroundColor(palette.getColor(object->color_button));
 	addChild(frame_color_button);
 	y+=35;
@@ -450,9 +450,9 @@ void SwitchDialog::setCurrentElement(Element element)
 }
 
 
-void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void SwitchDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == switch_style) {
 		object->switch_style=static_cast<Switch::SwitchStyle>(switch_style->currentIdentifier().toInt());
 		object->init();
@@ -465,7 +465,7 @@ void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void SwitchDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	for (int i=0;i < 15;i++) {
 		if (event->widget() == target_id[i]) {
@@ -475,9 +475,9 @@ void SwitchDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 	}
 }
 
-void SwitchDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void SwitchDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == button_color_base || widget == frame_color_base) setCurrentElement(Element::Base);
 	else if (widget == button_color_lever || widget == frame_color_lever) setCurrentElement(Element::Lever);
 	else if (widget == button_color_button || widget == frame_color_button) setCurrentElement(Element::Button);
@@ -486,7 +486,7 @@ void SwitchDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 
 
 
-void SwitchDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void SwitchDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (checked) {
 		for (int i=0;i < 15;i++) {

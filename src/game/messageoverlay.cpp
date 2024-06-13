@@ -62,7 +62,7 @@ void MessageOverlay::resize(const ppl7::grafix::Size& size)
 	if (overlay) sdl.destroyTexture(overlay);
 	overlay=sdl.createStreamingTexture(size.width - 100, 200);
 
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	font=style.buttonFont;
 
 	font.setName("NotoSansBlack");

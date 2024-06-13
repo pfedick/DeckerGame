@@ -5,7 +5,7 @@ namespace Decker::ui {
 
 
 SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game)
-	: ppl7::tk::Frame(x, y, width, height)
+	: ppltk::Frame(x, y, width, height)
 {
 	for (int i=0;i <= MAX_SPRITESETS;i++)
 		tilesets[i]=NULL;
@@ -13,16 +13,16 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
 
-	this->addChild(new ppl7::tk::Label(5, 5, 80, 30, "Spriteset: "));
-	tileset_combobox=new ppl7::tk::ComboBox(85, 5, client.width() - 85, 25);
+	this->addChild(new ppltk::Label(5, 5, 80, 30, "Spriteset: "));
+	tileset_combobox=new ppltk::ComboBox(85, 5, client.width() - 85, 25);
 	tileset_combobox->setEventHandler(this);
 	this->addChild(tileset_combobox);
 
-	this->addChild(new ppl7::tk::Label(5, 35, 70, 20, "Layer: "));
-	layer0=new ppl7::tk::RadioButton(60, 35, 110, 20, "before Tiles", true);
+	this->addChild(new ppltk::Label(5, 35, 70, 20, "Layer: "));
+	layer0=new ppltk::RadioButton(60, 35, 110, 20, "before Tiles", true);
 	this->addChild(layer0);
 
-	layer1=new ppl7::tk::RadioButton(170, 35, 110, 20, "behind Tiles");
+	layer1=new ppltk::RadioButton(170, 35, 110, 20, "behind Tiles");
 	this->addChild(layer1);
 
 	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 360, game);
@@ -120,7 +120,7 @@ void SpriteSelection::setColorIndex(int index)
 }
 
 
-void SpriteSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
+void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == tileset_combobox) {
 		int v=tileset_combobox->currentIdentifier().toInt();

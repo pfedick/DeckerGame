@@ -62,22 +62,22 @@ void Door::init()
 	door_sprite_no=5 + 60 * (int)door_type;
 	if (door_type == DoorType::no_door) door_sprite_no=0;
 	switch (orientation) {
-	case DoorOrientation::right:
-		sprite_no=0;
-		door_sprite_no+=0;
-		break;
-	case DoorOrientation::left:
-		sprite_no=2;
-		door_sprite_no+=15;
-		break;
-	case DoorOrientation::front:
-		sprite_no=4;
-		door_sprite_no+=30;
-		break;
-	case DoorOrientation::back:
-		sprite_no=4;
-		door_sprite_no+=45;
-		break;
+		case DoorOrientation::right:
+			sprite_no=0;
+			door_sprite_no+=0;
+			break;
+		case DoorOrientation::left:
+			sprite_no=2;
+			door_sprite_no+=15;
+			break;
+		case DoorOrientation::front:
+			sprite_no=4;
+			door_sprite_no+=30;
+			break;
+		case DoorOrientation::back:
+			sprite_no=4;
+			door_sprite_no+=45;
+			break;
 	}
 
 	if (state == DoorState::open) door_sprite_no+=14;
@@ -133,43 +133,43 @@ void Door::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 	}
 
 	switch (orientation) {
-	case DoorOrientation::left:
-	case DoorOrientation::right:
-	case DoorOrientation::front:
+		case DoorOrientation::left:
+		case DoorOrientation::right:
+		case DoorOrientation::front:
 
-		texture->draw(renderer,
-			p.x + coords.x,
-			p.y + coords.y,
-			sprite_no, palette.getColor(color_frame));
+			texture->draw(renderer,
+				p.x + coords.x,
+				p.y + coords.y,
+				sprite_no, palette.getColor(color_frame));
 
-		if (door_type != DoorType::no_door) {
+			if (door_type != DoorType::no_door) {
+				texture->draw(renderer,
+					p.x + coords.x,
+					p.y + coords.y,
+					door_sprite_no, palette.getColor(color_door));
+			}
+			if (orientation == DoorOrientation::right) {
+				texture->draw(renderer,
+					p.x + coords.x,
+					p.y + coords.y,
+					1, palette.getColor(color_frame));
+			} else if (orientation == DoorOrientation::left) {
+				texture->draw(renderer,
+					p.x + coords.x,
+					p.y + coords.y,
+					3, palette.getColor(color_frame));
+			}
+			break;
+		case DoorOrientation::back:
 			texture->draw(renderer,
 				p.x + coords.x,
 				p.y + coords.y,
 				door_sprite_no, palette.getColor(color_door));
-		}
-		if (orientation == DoorOrientation::right) {
 			texture->draw(renderer,
 				p.x + coords.x,
 				p.y + coords.y,
-				1, palette.getColor(color_frame));
-		} else if (orientation == DoorOrientation::left) {
-			texture->draw(renderer,
-				p.x + coords.x,
-				p.y + coords.y,
-				3, palette.getColor(color_frame));
-		}
-		break;
-	case DoorOrientation::back:
-		texture->draw(renderer,
-			p.x + coords.x,
-			p.y + coords.y,
-			door_sprite_no, palette.getColor(color_door));
-		texture->draw(renderer,
-			p.x + coords.x,
-			p.y + coords.y,
-			sprite_no, palette.getColor(color_frame));
-		break;
+				sprite_no, palette.getColor(color_frame));
+			break;
 	}
 }
 
@@ -298,50 +298,50 @@ void Door::load_v1(const unsigned char* buffer, size_t size)
 
 	int old_frame_type=ppl7::Peek8(buffer + 5);
 	switch (old_frame_type) {
-	case 0: // black
-		color_frame=9;
-		break;
-	case 1: // blue
-		color_frame=8;
-		break;
-	case 2: // dark brown
-		color_frame=12;
-		break;
-	case 3: // dark stone grey
-		color_frame=4;
-		break;
-	case 4: // green
-		color_frame=5;
-		break;
-	case 5: // medium stone grey
-		color_frame=3;
-		break;
-	case 6: // orange
-		color_frame=14;
-		break;
-	case 7: // red
-		color_frame=6;
-		break;
-	case 8: // reddish brown
-		color_frame=13;
-		break;
-	case 9: // white
-		color_frame=2;
-		break;
-	default: // 10 = yellow
-		color_frame=7;
-		break;
+		case 0: // black
+			color_frame=9;
+			break;
+		case 1: // blue
+			color_frame=8;
+			break;
+		case 2: // dark brown
+			color_frame=12;
+			break;
+		case 3: // dark stone grey
+			color_frame=4;
+			break;
+		case 4: // green
+			color_frame=5;
+			break;
+		case 5: // medium stone grey
+			color_frame=3;
+			break;
+		case 6: // orange
+			color_frame=14;
+			break;
+		case 7: // red
+			color_frame=6;
+			break;
+		case 8: // reddish brown
+			color_frame=13;
+			break;
+		case 9: // white
+			color_frame=2;
+			break;
+		default: // 10 = yellow
+			color_frame=7;
+			break;
 	}
 
 	int old_door_type=ppl7::Peek8(buffer + 6);
 	switch (old_door_type) {
-	case 0: // metal lattice bar
-		door_type=DoorType::lattice_metalic;
-		color_door=2;
-		break;
-	default: // white
-		door_type=DoorType::windowed;
-		color_door=2;
+		case 0: // metal lattice bar
+			door_type=DoorType::lattice_metalic;
+			color_door=2;
+			break;
+		default: // white
+			door_type=DoorType::windowed;
+			color_door=2;
 	}
 
 	int flags=ppl7::Peek8(buffer + 7);
@@ -409,44 +409,44 @@ class DoorDialog : public Decker::ui::Dialog
 {
 private:
 /*
-	ppl7::tk::ComboBox* frame_type;
-	ppl7::tk::ComboBox* door_type;
-	ppl7::tk::ComboBox* initial_state;
-	ppl7::tk::Button* reset;
-	ppl7::tk::RadioButton* orientation_left;
-	ppl7::tk::RadioButton* orientation_right;
-	ppl7::tk::LineInput* key_id;
+	ppltk::ComboBox* frame_type;
+	ppltk::ComboBox* door_type;
+	ppltk::ComboBox* initial_state;
+	ppltk::Button* reset;
+	ppltk::RadioButton* orientation_left;
+	ppltk::RadioButton* orientation_right;
+	ppltk::LineInput* key_id;
 	*/
-	ppl7::tk::ComboBox* door_type;
-	ppl7::tk::ComboBox* door_orientation;
-	ppl7::tk::CheckBox* auto_opens_on_collision;
-	ppl7::tk::CheckBox* can_close_again;
-	ppl7::tk::CheckBox* use_background_color;
-	ppl7::tk::CheckBox* autowarp_when_open;
-	ppl7::tk::CheckBox* close_when_passed;
-	ppl7::tk::ComboBox* warp_side;
+	ppltk::ComboBox* door_type;
+	ppltk::ComboBox* door_orientation;
+	ppltk::CheckBox* auto_opens_on_collision;
+	ppltk::CheckBox* can_close_again;
+	ppltk::CheckBox* use_background_color;
+	ppltk::CheckBox* autowarp_when_open;
+	ppltk::CheckBox* close_when_passed;
+	ppltk::ComboBox* warp_side;
 
 
-	ppl7::tk::RadioButton* initial_state_closed;
-	ppl7::tk::RadioButton* initial_state_open;
-	ppl7::tk::RadioButton* current_state_closed;
-	ppl7::tk::RadioButton* current_state_open;
+	ppltk::RadioButton* initial_state_closed;
+	ppltk::RadioButton* initial_state_open;
+	ppltk::RadioButton* current_state_closed;
+	ppltk::RadioButton* current_state_open;
 
-	ppl7::tk::SpinBox* key_id;
-	ppl7::tk::SpinBox* warp_target_id;
+	ppltk::SpinBox* key_id;
+	ppltk::SpinBox* warp_target_id;
 
 	Decker::ui::ColorSelectionFrame* colorframe;
-	ppl7::tk::Button* button_color_background;
-	ppl7::tk::Button* button_color_frame;
-	ppl7::tk::Button* button_color_door;
+	ppltk::Button* button_color_background;
+	ppltk::Button* button_color_frame;
+	ppltk::Button* button_color_door;
 
-	ppl7::tk::Frame* frame_color_background;
-	ppl7::tk::Frame* frame_color_frame;
-	ppl7::tk::Frame* frame_color_door;
+	ppltk::Frame* frame_color_background;
+	ppltk::Frame* frame_color_frame;
+	ppltk::Frame* frame_color_door;
 
 
-	ppl7::tk::Label* current_element_label;
-	ppl7::tk::Frame* current_element_color_frame;
+	ppltk::Label* current_element_label;
+	ppltk::Frame* current_element_color_frame;
 	int* color_target;
 
 	enum class Element {
@@ -464,11 +464,11 @@ public:
 	DoorDialog(Door* object);
 	//~DoorDialog();
 
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-	//virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	//virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+	virtual void toggledEvent(ppltk::Event* event, bool checked);
+	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 
 };
@@ -493,8 +493,8 @@ DoorDialog::DoorDialog(Door* object)
 	int y=0;
 	//int sw=(client.width()) / 2;
 
-	addChild(new ppl7::tk::Label(0, y, 150, 30, "Door Type:"));
-	door_type=new ppl7::tk::ComboBox(150, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 150, 30, "Door Type:"));
+	door_type=new ppltk::ComboBox(150, y, 300, 30);
 	door_type->add("windowed door", "0");
 	door_type->add("flat door", "1");
 	door_type->add("metal lattice", "2");
@@ -505,8 +505,8 @@ DoorDialog::DoorDialog(Door* object)
 	addChild(door_type);
 
 	y+=35;
-	addChild(new ppl7::tk::Label(0, y, 150, 30, "Orientation:"));
-	door_orientation=new ppl7::tk::ComboBox(150, 40, 300, 30);
+	addChild(new ppltk::Label(0, y, 150, 30, "Orientation:"));
+	door_orientation=new ppltk::ComboBox(150, 40, 300, 30);
 	door_orientation->add("left", "1");
 	door_orientation->add("right", "0");
 	door_orientation->add("open to front", "2");
@@ -516,49 +516,49 @@ DoorDialog::DoorDialog(Door* object)
 	addChild(door_orientation);
 	y+=35;
 
-	ppl7::tk::Frame* frame=new ppl7::tk::Frame(0, y, 310, 30, ppl7::tk::Frame::NoBorder);
+	ppltk::Frame* frame=new ppltk::Frame(0, y, 310, 30, ppltk::Frame::NoBorder);
 	addChild(frame);
 
-	frame->addChild(new ppl7::tk::Label(0, 0, 150, 30, "initial state:"));
+	frame->addChild(new ppltk::Label(0, 0, 150, 30, "initial state:"));
 
-	initial_state_closed=new ppl7::tk::RadioButton(150, 0, 80, 30, "closed");
+	initial_state_closed=new ppltk::RadioButton(150, 0, 80, 30, "closed");
 	initial_state_closed->setEventHandler(this);
 	frame->addChild(initial_state_closed);
 
-	initial_state_open=new ppl7::tk::RadioButton(230, 0, 80, 30, "open");
+	initial_state_open=new ppltk::RadioButton(230, 0, 80, 30, "open");
 	initial_state_open->setEventHandler(this);
 	frame->addChild(initial_state_open);
 
-	frame=new ppl7::tk::Frame(310, y, 240, 30, ppl7::tk::Frame::NoBorder);
+	frame=new ppltk::Frame(310, y, 240, 30, ppltk::Frame::NoBorder);
 	addChild(frame);
-	frame->addChild(new ppl7::tk::Label(0, 0, 80, 30, "current:"));
+	frame->addChild(new ppltk::Label(0, 0, 80, 30, "current:"));
 
-	current_state_closed=new ppl7::tk::RadioButton(80, 0, 80, 30, "closed");
+	current_state_closed=new ppltk::RadioButton(80, 0, 80, 30, "closed");
 	current_state_closed->setEventHandler(this);
 	frame->addChild(current_state_closed);
 
-	current_state_open=new ppl7::tk::RadioButton(160, 0, 80, 30, "open");
+	current_state_open=new ppltk::RadioButton(160, 0, 80, 30, "open");
 	current_state_open->setEventHandler(this);
 	frame->addChild(current_state_open);
 
 
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 150, 30, "unlock with Object ID:"));
-	key_id=new ppl7::tk::SpinBox(150, y, 100, 30);
+	addChild(new ppltk::Label(0, y, 150, 30, "unlock with Object ID:"));
+	key_id=new ppltk::SpinBox(150, y, 100, 30);
 	key_id->setLimits(0, 65535);
 	key_id->setEventHandler(this);
 	addChild(key_id);
 
-	addChild(new ppl7::tk::Label(280, y, 150, 30, "transfer to object ID:"));
-	warp_target_id=new ppl7::tk::SpinBox(430, y, 100, 30);
+	addChild(new ppltk::Label(280, y, 150, 30, "transfer to object ID:"));
+	warp_target_id=new ppltk::SpinBox(430, y, 100, 30);
 	warp_target_id->setLimits(0, 65535);
 	warp_target_id->setEventHandler(this);
 	addChild(warp_target_id);
 
 	y+=40;
-	addChild(new ppl7::tk::Label(0, y, 80, 30, "Colors:"));
-	current_element_label=new ppl7::tk::Label(client.width() - 300, y, 300, 30, "Background");
+	addChild(new ppltk::Label(0, y, 80, 30, "Colors:"));
+	current_element_label=new ppltk::Label(client.width() - 300, y, 300, 30, "Background");
 	addChild(current_element_label);
 	y+=35;
 
@@ -567,57 +567,57 @@ DoorDialog::DoorDialog(Door* object)
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 
-	button_color_background=new ppl7::tk::Button(30, y, 100, 30, "Background");
+	button_color_background=new ppltk::Button(30, y, 100, 30, "Background");
 	button_color_background->setEventHandler(this);
 	addChild(button_color_background);
-	frame_color_background=new ppl7::tk::Frame(135, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_background=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_background->setBackgroundColor(palette.getColor(object->color_background));
 	addChild(frame_color_background);
 	y+=35;
 
-	button_color_frame=new ppl7::tk::Button(30, y, 100, 30, "Doorframe");
+	button_color_frame=new ppltk::Button(30, y, 100, 30, "Doorframe");
 	button_color_frame->setEventHandler(this);
 	addChild(button_color_frame);
-	frame_color_frame=new ppl7::tk::Frame(135, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_frame=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_frame->setBackgroundColor(palette.getColor(object->color_frame));
 	addChild(frame_color_frame);
 	y+=35;
 
-	button_color_door=new ppl7::tk::Button(30, y, 100, 30, "Door");
+	button_color_door=new ppltk::Button(30, y, 100, 30, "Door");
 	button_color_door->setEventHandler(this);
 	addChild(button_color_door);
-	frame_color_door=new ppl7::tk::Frame(135, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_door=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_door->setBackgroundColor(palette.getColor(object->color_door));
 	addChild(frame_color_door);
 	y+=35;
 
-	use_background_color=new ppl7::tk::CheckBox(0, y, client.width(), 30, "use Background color");
+	use_background_color=new ppltk::CheckBox(0, y, client.width(), 30, "use Background color");
 	use_background_color->setEventHandler(this);
 	addChild(use_background_color);
 	y+=35;
 
-	auto_opens_on_collision=new ppl7::tk::CheckBox(0, y, client.width(), 30, "automatically opens on collision");
+	auto_opens_on_collision=new ppltk::CheckBox(0, y, client.width(), 30, "automatically opens on collision");
 	auto_opens_on_collision->setEventHandler(this);
 	addChild(auto_opens_on_collision);
 	y+=35;
 
-	can_close_again=new ppl7::tk::CheckBox(0, y, client.width(), 30, "can be closed again");
+	can_close_again=new ppltk::CheckBox(0, y, client.width(), 30, "can be closed again");
 	can_close_again->setEventHandler(this);
 	addChild(can_close_again);
 	y+=35;
 
-	close_when_passed=new ppl7::tk::CheckBox(0, y, client.width(), 30, "close when passed", object->close_when_passed);
+	close_when_passed=new ppltk::CheckBox(0, y, client.width(), 30, "close when passed", object->close_when_passed);
 	close_when_passed->setEventHandler(this);
 	addChild(close_when_passed);
 	y+=35;
 
-	autowarp_when_open=new ppl7::tk::CheckBox(0, y, client.width(), 30, "auto warp when open", object->autowarp_when_open);
+	autowarp_when_open=new ppltk::CheckBox(0, y, client.width(), 30, "auto warp when open", object->autowarp_when_open);
 	autowarp_when_open->setEventHandler(this);
 	addChild(autowarp_when_open);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Warp to door side:"));
-	warp_side=new ppl7::tk::ComboBox(140, y, 100, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Warp to door side:"));
+	warp_side=new ppltk::ComboBox(140, y, 100, 30);
 	warp_side->add("left", "0");
 	warp_side->add("right", "1");
 	warp_side->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->warpside)));
@@ -655,30 +655,30 @@ void DoorDialog::setCurrentElement(Element element)
 {
 	current_element=element;
 	switch (element) {
-	case Element::Background:
-		current_element_label->setText("Background");
-		current_element_color_frame=frame_color_background;
-		color_target=&object->color_background;
-		break;
-	case Element::Frame:
-		current_element_label->setText("Doorframe");
-		current_element_color_frame=frame_color_frame;
-		color_target=&object->color_frame;
-		break;
-	case Element::Door:
-		current_element_label->setText("Door");
-		current_element_color_frame=frame_color_door;
-		color_target=&object->color_door;
-		break;
+		case Element::Background:
+			current_element_label->setText("Background");
+			current_element_color_frame=frame_color_background;
+			color_target=&object->color_background;
+			break;
+		case Element::Frame:
+			current_element_label->setText("Doorframe");
+			current_element_color_frame=frame_color_frame;
+			color_target=&object->color_frame;
+			break;
+		case Element::Door:
+			current_element_label->setText("Door");
+			current_element_color_frame=frame_color_door;
+			color_target=&object->color_door;
+			break;
 	}
 
 	colorframe->setColorIndex(*color_target);
 }
 
 
-void DoorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void DoorDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == use_background_color) {
 		object->use_background_color=checked;
 	} else if (widget == auto_opens_on_collision) {
@@ -719,9 +719,9 @@ void DoorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 }
 
-void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void DoorDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == door_type) {
 		object->door_type=static_cast<Door::DoorType>(door_type->currentIdentifier().toInt());
 		object->init();
@@ -741,17 +741,17 @@ void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 }
 
 
-void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void DoorDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == key_id) object->key_id=value;
 	if (widget == warp_target_id) object->warp_to_id=value;
 
 }
 
-void DoorDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void DoorDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == button_color_background || widget == frame_color_background) setCurrentElement(Element::Background);
 	else if (widget == button_color_door) setCurrentElement(Element::Door);
 	else if (widget == button_color_frame) setCurrentElement(Element::Frame);
@@ -802,14 +802,14 @@ DoorDialog::DoorDialog(Door* object)
 {
 	this->object=object;
 	setWindowTitle("Door");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Frame-Color: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Door-Type: "));
-	addChild(new ppl7::tk::Label(0, 80, 120, 30, "Initial state: "));
-	addChild(new ppl7::tk::Label(0, 120, 120, 30, "Orientation: "));
-	addChild(new ppl7::tk::Label(0, 160, 120, 30, "Open with: "));
-	addChild(new ppl7::tk::Label(220, 160, 120, 30, " (Object-ID)"));
+	addChild(new ppltk::Label(0, 0, 120, 30, "Frame-Color: "));
+	addChild(new ppltk::Label(0, 40, 120, 30, "Door-Type: "));
+	addChild(new ppltk::Label(0, 80, 120, 30, "Initial state: "));
+	addChild(new ppltk::Label(0, 120, 120, 30, "Orientation: "));
+	addChild(new ppltk::Label(0, 160, 120, 30, "Open with: "));
+	addChild(new ppltk::Label(220, 160, 120, 30, " (Object-ID)"));
 
-	frame_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
+	frame_type=new ppltk::ComboBox(120, 0, 400, 30);
 	frame_type->add("black", "0");
 	frame_type->add("dark stone grey", "3");
 	frame_type->add("medium stone grey", "5");
@@ -825,40 +825,40 @@ DoorDialog::DoorDialog(Door* object)
 	frame_type->setEventHandler(this);
 	addChild(frame_type);
 
-	door_type=new ppl7::tk::ComboBox(120, 40, 400, 30);
+	door_type=new ppltk::ComboBox(120, 40, 400, 30);
 	door_type->add("metal lattice bar", "0");
 	door_type->add("white", "1");
 	door_type->setCurrentIdentifier(ppl7::ToString("%d", object->door_type));
 	door_type->setEventHandler(this);
 	addChild(door_type);
 
-	initial_state=new ppl7::tk::ComboBox(120, 80, 400, 30);
+	initial_state=new ppltk::ComboBox(120, 80, 400, 30);
 	initial_state->add("closed", "0");
 	initial_state->add("open", "1");
 	initial_state->setCurrentIdentifier(ppl7::ToString("%d", (int)object->initial_open));
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
-	orientation_left=new ppl7::tk::RadioButton(120, 120, 80, 30, "left");
+	orientation_left=new ppltk::RadioButton(120, 120, 80, 30, "left");
 	orientation_left->setEventHandler(this);
 	addChild(orientation_left);
 
-	orientation_right=new ppl7::tk::RadioButton(200, 120, 80, 30, "right");
+	orientation_right=new ppltk::RadioButton(200, 120, 80, 30, "right");
 	orientation_right->setEventHandler(this);
 	addChild(orientation_right);
 	if (object->left_sided) orientation_left->setChecked(true);
 
-	key_id=new ppl7::tk::LineInput(120, 160, 100, 30, ppl7::ToString("%d", object->key_id));
+	key_id=new ppltk::LineInput(120, 160, 100, 30, ppl7::ToString("%d", object->key_id));
 	key_id->setEventHandler(this);
 	addChild(key_id);
 
-	reset=new ppl7::tk::Button(0, 240, 80, 30, "Reset");
+	reset=new ppltk::Button(0, 240, 80, 30, "Reset");
 	reset->setEventHandler(this);
 	addChild(reset);
 
 }
 
-void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void DoorDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == frame_type) {
 		object->frame_type=frame_type->currentIdentifier().toInt();
@@ -873,13 +873,13 @@ void DoorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 
 }
 
-void DoorDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void DoorDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	if (event->widget() == reset) object->reset();
 	else Decker::ui::Dialog::mouseDownEvent(event);
 }
 
-void DoorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void DoorDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == orientation_left && checked == true) {
 		object->left_sided=true;
@@ -891,7 +891,7 @@ void DoorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 	}
 }
 
-void DoorDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void DoorDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
 	if (event->widget() == key_id) {
 		object->key_id=text.toInt();

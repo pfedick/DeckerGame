@@ -137,11 +137,11 @@ size_t ObjectWatcher::load(const unsigned char* buffer, size_t size)
 class ObjectWatcherDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::SpinBox* target_id[5];
-	ppl7::tk::CheckBox* target_state[5];
+	ppltk::SpinBox* target_id[5];
+	ppltk::CheckBox* target_state[5];
 
-	ppl7::tk::SpinBox* watch_id[10];
-	ppl7::tk::CheckBox* watch_state[10];
+	ppltk::SpinBox* watch_id[10];
+	ppltk::CheckBox* watch_state[10];
 
 	ObjectWatcher* object;
 
@@ -149,10 +149,10 @@ public:
 	ObjectWatcherDialog(ObjectWatcher* object);
 	~ObjectWatcherDialog();
 
-	//virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	//virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	//virtual void valueChangedEvent(ppltk::Event* event, int value);
+	//virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
@@ -173,29 +173,29 @@ ObjectWatcherDialog::ObjectWatcherDialog(ObjectWatcher* object)
 
 	//int sw=width() / 2;
 
-	addChild(new ppl7::tk::Label(0, y, 400, 30, "Objects to watch for:"));
+	addChild(new ppltk::Label(0, y, 400, 30, "Objects to watch for:"));
 	y+=35;
 
 	for (int i=0;i < 5;i++) {
 		int x=0;
-		addChild(new ppl7::tk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-		watch_id[i]=new ppl7::tk::SpinBox(x + 110, y, 100, 30, object->watchObjects[i].object_id);
+		addChild(new ppltk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		watch_id[i]=new ppltk::SpinBox(x + 110, y, 100, 30, object->watchObjects[i].object_id);
 		watch_id[i]->setLimits(0, 65535);
 		watch_id[i]->setEventHandler(this);
 		addChild(watch_id[i]);
 
-		watch_state[i]=new ppl7::tk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[i].expectedState);
+		watch_state[i]=new ppltk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[i].expectedState);
 		watch_state[i]->setEventHandler(this);
 		addChild(watch_state[i]);
 
 		x=330;
-		addChild(new ppl7::tk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", 5 + i + 1)));
-		watch_id[5 + i]=new ppl7::tk::SpinBox(x + 110, y, 100, 30, object->watchObjects[5 + i].object_id);
+		addChild(new ppltk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", 5 + i + 1)));
+		watch_id[5 + i]=new ppltk::SpinBox(x + 110, y, 100, 30, object->watchObjects[5 + i].object_id);
 		watch_id[5 + i]->setLimits(0, 65535);
 		watch_id[5 + i]->setEventHandler(this);
 		addChild(watch_id[5 + i]);
 
-		watch_state[5 + i]=new ppl7::tk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[5 + i].expectedState);
+		watch_state[5 + i]=new ppltk::CheckBox(x + 215, y, 100, 30, "enable", object->watchObjects[5 + i].expectedState);
 		watch_state[5 + i]->setEventHandler(this);
 		addChild(watch_state[5 + i]);
 
@@ -204,12 +204,12 @@ ObjectWatcherDialog::ObjectWatcherDialog(ObjectWatcher* object)
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, 400, 30, "Objects to trigger:"));
+	addChild(new ppltk::Label(0, y, 400, 30, "Objects to trigger:"));
 	y+=35;
 
 	for (int i=0;i < 5;i++) {
-		addChild(new ppl7::tk::Label(30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-		target_id[i]=new ppl7::tk::SpinBox(110, y, 100, 30, object->triggerObjects[i].object_id);
+		addChild(new ppltk::Label(30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		target_id[i]=new ppltk::SpinBox(110, y, 100, 30, object->triggerObjects[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
@@ -225,7 +225,7 @@ ObjectWatcherDialog::~ObjectWatcherDialog()
 
 }
 
-void ObjectWatcherDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void ObjectWatcherDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	for (int i=0;i < 10;i++) {
 		if (event->widget() == watch_state[i]) object->watchObjects[i].expectedState=checked;
@@ -233,7 +233,7 @@ void ObjectWatcherDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 }
 
 
-void ObjectWatcherDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void ObjectWatcherDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 
 	for (int i=0;i < 5;i++) {

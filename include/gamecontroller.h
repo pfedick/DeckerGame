@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 
 #include <SDL.h>
 #include <map>
@@ -57,8 +57,8 @@ public:
     GameControllerMapping();
     void updateMapping();
 
-    Button getButton(const ppl7::tk::GameControllerButtonEvent* event) const;
-    Axis getAxis(const ppl7::tk::GameControllerAxisEvent* event) const;
+    Button getButton(const ppltk::GameControllerButtonEvent* event) const;
+    Axis getAxis(const ppltk::GameControllerAxisEvent* event) const;
     int getSDLAxis(const Axis a);
     int getSDLButton(const Button b);
 

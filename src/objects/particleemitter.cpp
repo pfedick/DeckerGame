@@ -281,14 +281,14 @@ ppl7::String ParticleEmitter::generateCode() const
 			(const char*)Tmp, emitter_size.width, emitter_size.height, direction);
 	}
 	switch (particle_layer) {
-	case Particle::Layer::BehindBricks: Tmp="BehindBricks"; break;
-	case Particle::Layer::BehindPlayer: Tmp="BehindPlayer"; break;
-	case Particle::Layer::BeforePlayer: Tmp="BeforePlayer"; break;
-	case Particle::Layer::BackplaneFront: Tmp="BackplaneFront"; break;
-	case Particle::Layer::BackplaneBack: Tmp="BackplaneBack"; break;
-	case Particle::Layer::FrontplaneFront: Tmp="FrontplaneFront"; break;
-	case Particle::Layer::FrontplaneBack: Tmp="FrontplaneBack"; break;
-	default: Tmp="BeforePlayer";
+		case Particle::Layer::BehindBricks: Tmp="BehindBricks"; break;
+		case Particle::Layer::BehindPlayer: Tmp="BehindPlayer"; break;
+		case Particle::Layer::BeforePlayer: Tmp="BeforePlayer"; break;
+		case Particle::Layer::BackplaneFront: Tmp="BackplaneFront"; break;
+		case Particle::Layer::BackplaneBack: Tmp="BackplaneBack"; break;
+		case Particle::Layer::FrontplaneFront: Tmp="FrontplaneFront"; break;
+		case Particle::Layer::FrontplaneBack: Tmp="FrontplaneBack"; break;
+		default: Tmp="BeforePlayer";
 	}
 	code.appendf("            particle->layer=Particle::Layer::%s;\n", (const char*)Tmp);
 	code.appendf("            particle->weight=randf(%0.3f, %0.3f);\n", weight_min, weight_max);
@@ -299,20 +299,20 @@ ppl7::String ParticleEmitter::generateCode() const
 	code.appendf("            particle->color_mod.set(%d, %d, %d, %d);\n", ParticleColor.red(), ParticleColor.green(),
 		ParticleColor.blue(), ParticleColor.alpha());
 	switch (particle_type) {
-	case Particle::Type::RotatingParticleTransparent: Tmp="RotatingParticleTransparent"; break;
-	case Particle::Type::RotatingParticleWhite: Tmp="RotatingParticleWhite"; break;
-	case Particle::Type::RotatingSnowflakeTransparent: Tmp="RotatingSnowflakeTransparent"; break;
-	case Particle::Type::RotatingSnowflakeWhite: Tmp="RotatingSnowflakeWhite"; break;
-	case Particle::Type::RotatingCylinder: Tmp="RotatingCylinder"; break;
-	case Particle::Type::StaticParticle: Tmp="StaticParticle"; break;
-	case Particle::Type::StaticParticleBig: Tmp="StaticParticleBig"; break;
-	case Particle::Type::StaticCircle: Tmp="StaticCircle"; break;
-	case Particle::Type::StaticCircleBig: Tmp="StaticCircleBig"; break;
-	case Particle::Type::StaticBulletSmall: Tmp="StaticBulletSmall"; break;
-	case Particle::Type::StaticBulletBig: Tmp="StaticBulletBig"; break;
-	case Particle::Type::StaticStudSmall: Tmp="StaticStudSmall"; break;
-	case Particle::Type::StaticStudBig: Tmp="StaticStudBig"; break;
-	default: Tmp="RotatingParticleWhite"; break;
+		case Particle::Type::RotatingParticleTransparent: Tmp="RotatingParticleTransparent"; break;
+		case Particle::Type::RotatingParticleWhite: Tmp="RotatingParticleWhite"; break;
+		case Particle::Type::RotatingSnowflakeTransparent: Tmp="RotatingSnowflakeTransparent"; break;
+		case Particle::Type::RotatingSnowflakeWhite: Tmp="RotatingSnowflakeWhite"; break;
+		case Particle::Type::RotatingCylinder: Tmp="RotatingCylinder"; break;
+		case Particle::Type::StaticParticle: Tmp="StaticParticle"; break;
+		case Particle::Type::StaticParticleBig: Tmp="StaticParticleBig"; break;
+		case Particle::Type::StaticCircle: Tmp="StaticCircle"; break;
+		case Particle::Type::StaticCircleBig: Tmp="StaticCircleBig"; break;
+		case Particle::Type::StaticBulletSmall: Tmp="StaticBulletSmall"; break;
+		case Particle::Type::StaticBulletBig: Tmp="StaticBulletBig"; break;
+		case Particle::Type::StaticStudSmall: Tmp="StaticStudSmall"; break;
+		case Particle::Type::StaticStudBig: Tmp="StaticStudBig"; break;
+		default: Tmp="RotatingParticleWhite"; break;
 	}
 	code.appendf("            particle->initAnimation(Particle::Type::%s);\n", (const char*)Tmp);
 	if (flags & static_cast<int>(Flags::useScaleGradient)) {
@@ -342,32 +342,32 @@ private:
 	Decker::ui::TabWidget* tabwidget;
 
 	// Particle Tab
-	ppl7::tk::ComboBox* particle_layer;
-	ppl7::tk::ComboBox* emitter_type;
-	ppl7::tk::ComboBox* particle_type;
-	ppl7::tk::HorizontalSlider* emitter_pixel_width, * emitter_pixel_height;
-	ppl7::tk::HorizontalSlider* min_birth_per_cycle, * max_birth_per_cycle;
-	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
-	ppl7::tk::DoubleHorizontalSlider* min_velocity, * max_velocity;
-	ppl7::tk::DoubleHorizontalSlider* scale_min, * scale_max;
-	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
-	ppl7::tk::DoubleHorizontalSlider* weight_min, * weight_max;
-	ppl7::tk::DoubleHorizontalSlider* direction, * variation, * gravity_x, * gravity_y;
-	ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
+	ppltk::ComboBox* particle_layer;
+	ppltk::ComboBox* emitter_type;
+	ppltk::ComboBox* particle_type;
+	ppltk::HorizontalSlider* emitter_pixel_width, * emitter_pixel_height;
+	ppltk::HorizontalSlider* min_birth_per_cycle, * max_birth_per_cycle;
+	ppltk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
+	ppltk::DoubleHorizontalSlider* min_velocity, * max_velocity;
+	ppltk::DoubleHorizontalSlider* scale_min, * scale_max;
+	ppltk::DoubleHorizontalSlider* age_min, * age_max;
+	ppltk::DoubleHorizontalSlider* weight_min, * weight_max;
+	ppltk::DoubleHorizontalSlider* direction, * variation, * gravity_x, * gravity_y;
+	ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
 
 	// Color Tab
 	Decker::ui::ColorSliderWidget* color;
-	ppl7::tk::RadioButton* radio_solid_color;
-	ppl7::tk::RadioButton* radio_color_gradient;
+	ppltk::RadioButton* radio_solid_color;
+	ppltk::RadioButton* radio_color_gradient;
 	Decker::ui::ColorSliderWidget* color_gradient;
-	ppl7::tk::DoubleHorizontalSlider* color_gradient_age;
+	ppltk::DoubleHorizontalSlider* color_gradient_age;
 	Decker::ui::GradientWidget* gradient_widget;
 
 	// Scale Gradient
-	ppl7::tk::CheckBox* checkbox_scale_gradient;
+	ppltk::CheckBox* checkbox_scale_gradient;
 	Decker::ui::GradientWidget* scale_gradient_widget;
-	ppl7::tk::DoubleHorizontalSlider* scale_gradient_age;
-	ppl7::tk::DoubleHorizontalSlider* scale_gradient_scale;
+	ppltk::DoubleHorizontalSlider* scale_gradient_age;
+	ppltk::DoubleHorizontalSlider* scale_gradient_scale;
 
 
 	void setValuesToUi(const ParticleEmitter* object);
@@ -381,12 +381,12 @@ private:
 
 public:
 	ParticleEmitterDialog(ParticleEmitter* object);
-	virtual void selectionChangedEvent(ppl7::tk::Event* event) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
+	virtual void selectionChangedEvent(ppltk::Event* event) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 void ParticleEmitter::openUi()
@@ -424,8 +424,8 @@ void ParticleEmitterDialog::setupParticleTab()
 	int y=0;
 	ppl7::grafix::Rect client=tab->clientRect();
 
-	tab->addChild(new ppl7::tk::Label(0, 0, 60, 30, "Layer:"));
-	particle_layer=new ppl7::tk::ComboBox(60, y, 150, 30);
+	tab->addChild(new ppltk::Label(0, 0, 60, 30, "Layer:"));
+	particle_layer=new ppltk::ComboBox(60, y, 150, 30);
 	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BeforePlayer)));
 	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
 	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindBricks)));
@@ -437,8 +437,8 @@ void ParticleEmitterDialog::setupParticleTab()
 	particle_layer->setEventHandler(this);
 	tab->addChild(particle_layer);
 
-	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Emitter Type:"));
-	emitter_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
+	tab->addChild(new ppltk::Label(220, y, 100, 30, "Emitter Type:"));
+	emitter_type=new ppltk::ComboBox(320, y, client.width() - 330, 30);
 	emitter_type->setEventHandler(this);
 	emitter_type->add("Point", ppl7::ToString("%d", static_cast<int>(EmitterType::Point)));
 	emitter_type->add("Rectangle", ppl7::ToString("%d", static_cast<int>(EmitterType::Rectangle)));
@@ -447,8 +447,8 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(emitter_type);
 	y+=35;
 
-	tab->addChild(new ppl7::tk::Label(220, y, 100, 30, "Particle Type:"));
-	particle_type=new ppl7::tk::ComboBox(320, y, client.width() - 330, 30);
+	tab->addChild(new ppltk::Label(220, y, 100, 30, "Particle Type:"));
+	particle_type=new ppltk::ComboBox(320, y, client.width() - 330, 30);
 	particle_type->setEventHandler(this);
 	particle_type->add("rotating transparent particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleTransparent)));
 	particle_type->add("rotating particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleWhite)));
@@ -471,15 +471,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	col1=150;
 	int sw=(client.width() - col1 - 40 - 40) / 2;
 
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size (pixel):"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "width:"));
-	emitter_pixel_width=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Emitter size (pixel):"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "width:"));
+	emitter_pixel_width=new ppltk::HorizontalSlider(col1 + 40, y, sw, 30);
 	emitter_pixel_width->setEventHandler(this);
 	emitter_pixel_width->setLimits(1, 1024);
 	emitter_pixel_width->enableSpinBox(true, 1, 80);
 	tab->addChild(emitter_pixel_width);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "height:"));
-	emitter_pixel_height=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "height:"));
+	emitter_pixel_height=new ppltk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	emitter_pixel_height->setEventHandler(this);
 	emitter_pixel_height->setLimits(1, 1024);
 	emitter_pixel_height->enableSpinBox(true, 1, 80);
@@ -488,15 +488,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Next birth time (sec):"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
+	birth_time_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
 	birth_time_min->setLimits(0.010, 4.0f);
 	birth_time_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(birth_time_min);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	birth_time_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	birth_time_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	birth_time_max->setEventHandler(this);
 	birth_time_max->setLimits(0.010, 4.0f);
 	birth_time_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -504,15 +504,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Birth per cycle:"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	min_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Birth per cycle:"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
+	min_birth_per_cycle=new ppltk::HorizontalSlider(col1 + 40, y, sw, 30);
 	min_birth_per_cycle->setEventHandler(this);
 	min_birth_per_cycle->setLimits(0, 200);
 	min_birth_per_cycle->enableSpinBox(true, 1, 80);
 	tab->addChild(min_birth_per_cycle);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_birth_per_cycle=new ppl7::tk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	max_birth_per_cycle=new ppltk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_birth_per_cycle->setEventHandler(this);
 	max_birth_per_cycle->setLimits(0, 200);
 	max_birth_per_cycle->enableSpinBox(true, 1, 80);
@@ -520,15 +520,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	min_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Velocity:"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
+	min_velocity=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity->setEventHandler(this);
 	min_velocity->setLimits(0.0f, 20.0f);
 	min_velocity->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(min_velocity);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_velocity=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	max_velocity=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity->setEventHandler(this);
 	max_velocity->setLimits(0.0f, 20.0f);
 	max_velocity->enableSpinBox(true, 0.01f, 3, 80);
@@ -536,15 +536,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Direction + variation
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Direction (degrees):"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "base:"));
-	direction=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Direction (degrees):"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "base:"));
+	direction=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	direction->setEventHandler(this);
 	direction->setLimits(0.0f, 360.0f);
 	direction->enableSpinBox(true, 15.0f, 1, 80);
 	tab->addChild(direction);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
-	variation=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
+	variation=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	variation->setEventHandler(this);
 	variation->setLimits(0.0f, 180.0f);
 	variation->enableSpinBox(true, 1.0f, 1, 80);
@@ -552,16 +552,16 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Scale
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Scale:"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	scale_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	scale_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	scale_min->setEventHandler(this);
 	scale_min->setLimits(0.010, 2.0f);
 	scale_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(scale_min);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	scale_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	scale_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
 	scale_max->setLimits(0.010, 5.0f);
 	scale_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -569,16 +569,16 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Age
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Age (sec):"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Age (sec):"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	age_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	age_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	age_min->setEventHandler(this);
 	age_min->setLimits(0.010f, 10.0f);
 	age_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(age_min);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	age_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	age_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	age_max->setEventHandler(this);
 	age_max->setLimits(0.010f, 10.0f);
 	age_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -586,16 +586,16 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Weight
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Weight:"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Weight:"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	weight_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	weight_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	weight_min->setEventHandler(this);
 	weight_min->setLimits(0.0f, 1.0f);
 	weight_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(weight_min);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	weight_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	weight_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	weight_max->setEventHandler(this);
 	weight_max->setLimits(0.0f, 1.0f);
 	weight_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -603,16 +603,16 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Gravity
-	tab->addChild(new ppl7::tk::Label(0, y, col1, 30, "Gravity:"));
-	tab->addChild(new ppl7::tk::Label(col1, y, 40, 30, "x:"));
+	tab->addChild(new ppltk::Label(0, y, col1, 30, "Gravity:"));
+	tab->addChild(new ppltk::Label(col1, y, 40, 30, "x:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	gravity_x=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	gravity_x->setEventHandler(this);
 	gravity_x->setLimits(-1.0f, 1.0f);
 	gravity_x->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_x);
-	tab->addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
-	gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
+	gravity_y=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	gravity_y->setEventHandler(this);
 	gravity_y->setLimits(-1.0f, 1.0f);
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
@@ -620,10 +620,10 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// State
-	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
+	initial_state_checkbox=new ppltk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	tab->addChild(initial_state_checkbox);
-	current_state_checkbox=new ppl7::tk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
+	current_state_checkbox=new ppltk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
 	current_state_checkbox->setEventHandler(this);
 	tab->addChild(current_state_checkbox);
 
@@ -638,7 +638,7 @@ void ParticleEmitterDialog::setupColorTab()
 	int y=0;
 	ppl7::grafix::Rect client=tab->clientRect();
 
-	radio_solid_color=new ppl7::tk::RadioButton(0, y, 200, 30, "solid color:", false);
+	radio_solid_color=new ppltk::RadioButton(0, y, 200, 30, "solid color:", false);
 	radio_solid_color->setEventHandler(this);
 	tab->addChild(radio_solid_color);
 	y+=35;
@@ -648,7 +648,7 @@ void ParticleEmitterDialog::setupColorTab()
 	tab->addChild(color);
 	y+=4 * 35;
 
-	radio_color_gradient=new ppl7::tk::RadioButton(0, y, 200, 30, "color gradient:", false);
+	radio_color_gradient=new ppltk::RadioButton(0, y, 200, 30, "color gradient:", false);
 	radio_color_gradient->setEventHandler(this);
 	tab->addChild(radio_color_gradient);
 	y+=35;
@@ -658,8 +658,8 @@ void ParticleEmitterDialog::setupColorTab()
 	gradient_widget->setEventHandler(this);
 	tab->addChild(gradient_widget);
 
-	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "age:"));
-	color_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
+	tab->addChild(new ppltk::Label(col3, y, 40, 30, "age:"));
+	color_gradient_age=new ppltk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
 	color_gradient_age->setEventHandler(this);
 	color_gradient_age->setLimits(0.0f, 1.0f);
 	color_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
@@ -683,7 +683,7 @@ void ParticleEmitterDialog::setupSizeTab()
 	int y=0;
 	//ppl7::grafix::Rect client=tab->clientRect();
 
-	checkbox_scale_gradient=new ppl7::tk::CheckBox(0, y, 200, 30, "use scale gradient", false);
+	checkbox_scale_gradient=new ppltk::CheckBox(0, y, 200, 30, "use scale gradient", false);
 	checkbox_scale_gradient->setEventHandler(this);
 	tab->addChild(checkbox_scale_gradient);
 	y+=35;
@@ -692,16 +692,16 @@ void ParticleEmitterDialog::setupSizeTab()
 	scale_gradient_widget->setEventHandler(this);
 	tab->addChild(scale_gradient_widget);
 
-	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "age:"));
-	scale_gradient_age=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
+	tab->addChild(new ppltk::Label(col3, y, 40, 30, "age:"));
+	scale_gradient_age=new ppltk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
 	scale_gradient_age->setEventHandler(this);
 	scale_gradient_age->setLimits(0.0f, 1.0f);
 	scale_gradient_age->enableSpinBox(true, 0.001f, 3, 80);
 	tab->addChild(scale_gradient_age);
 	y+=35;
 
-	tab->addChild(new ppl7::tk::Label(col3, y, 40, 30, "scale:"));
-	scale_gradient_scale=new ppl7::tk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
+	tab->addChild(new ppltk::Label(col3, y, 40, 30, "scale:"));
+	scale_gradient_scale=new ppltk::DoubleHorizontalSlider(col3 + 40, y, 460, 30);
 	scale_gradient_scale->setEventHandler(this);
 	scale_gradient_scale->setLimits(0.01f, 1.0f);
 	scale_gradient_scale->enableSpinBox(true, 0.010f, 3, 80);
@@ -770,10 +770,10 @@ void ParticleEmitterDialog::setValuesToUi(const ParticleEmitter* object)
 }
 
 
-void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ParticleEmitterDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == particle_type) {
 		object->particle_type=static_cast<Particle::Type>(particle_type->currentIdentifier().toInt());
 	} else 	if (widget == emitter_type) {
@@ -795,10 +795,10 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void ParticleEmitterDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with int64_t value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == emitter_pixel_width) {
 		object->emitter_size.width=value;
 	} else if (widget == emitter_pixel_height) {
@@ -813,10 +813,10 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t va
 
 }
 
-void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void ParticleEmitterDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == birth_time_min) {
 		object->birth_time_min=value;
 		if (value > birth_time_max->value()) birth_time_max->setValue(value);
@@ -869,7 +869,7 @@ void ParticleEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double val
 	}
 }
 
-void ParticleEmitterDialog::selectionChangedEvent(ppl7::tk::Event* event)
+void ParticleEmitterDialog::selectionChangedEvent(ppltk::Event* event)
 {
 	if (event->widget() == gradient_widget) {
 		color_gradient->setColor(gradient_widget->currentColor());
@@ -906,7 +906,7 @@ void ParticleEmitterDialog::copyScaleGradientToObject()
 	}
 }
 
-void ParticleEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void ParticleEmitterDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == radio_color_gradient || event->widget() == radio_solid_color) {
 		int flags=object->flags & (0xffff - static_cast<int>(ParticleEmitter::Flags::useColorGradient));

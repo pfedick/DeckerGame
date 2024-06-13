@@ -5,7 +5,7 @@
 
 namespace Decker::ui {
 ColorSliderWidget::ColorSliderWidget(int x, int y, int width, int height, bool withAlphaChannel)
-    : ppl7::tk::Widget(x, y, width, height)
+    : ppltk::Widget(x, y, width, height)
 {
     color_red=NULL;
     color_green=NULL;
@@ -40,41 +40,41 @@ void ColorSliderWidget::setupUi()
     int col4=col3 + slider_width + 10;
     int preview_height=3 * 35;
     if (with_alphachannel)preview_height+=35;
-    color_preview=new ppl7::tk::Frame(col4, y1, 3 * 35, preview_height);
+    color_preview=new ppltk::Frame(col4, y1, 3 * 35, preview_height);
     color_preview->setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 255));
     addChild(color_preview);
 
     // red
-    addChild(new ppl7::tk::Label(col1, y1, 50, 30, "red:"));
-    color_red=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+    addChild(new ppltk::Label(col1, y1, 50, 30, "red:"));
+    color_red=new ppltk::SpinBox(col2, y1, 70, 30, 0);
     color_red->setLimits(0, 255);
     color_red->setEventHandler(this);
     addChild(color_red);
-    slider_red=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
+    slider_red=new ppltk::HorizontalSlider(col3, y1, slider_width, 30);
     slider_red->setLimits(0, 255);
     slider_red->setEventHandler(this);
     addChild(slider_red);
     y1+=35;
 
     // green
-    addChild(new ppl7::tk::Label(col1, y1, 50, 30, "green:"));
-    color_green=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+    addChild(new ppltk::Label(col1, y1, 50, 30, "green:"));
+    color_green=new ppltk::SpinBox(col2, y1, 70, 30, 0);
     color_green->setLimits(0, 255);
     color_green->setEventHandler(this);
     addChild(color_green);
-    slider_green=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
+    slider_green=new ppltk::HorizontalSlider(col3, y1, slider_width, 30);
     slider_green->setLimits(0, 255);
     slider_green->setEventHandler(this);
     addChild(slider_green);
     y1+=35;
 
     // blue
-    addChild(new ppl7::tk::Label(col1, y1, 50, 30, "blue:"));
-    color_blue=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+    addChild(new ppltk::Label(col1, y1, 50, 30, "blue:"));
+    color_blue=new ppltk::SpinBox(col2, y1, 70, 30, 0);
     color_blue->setLimits(0, 255);
     color_blue->setEventHandler(this);
     addChild(color_blue);
-    slider_blue=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
+    slider_blue=new ppltk::HorizontalSlider(col3, y1, slider_width, 30);
     slider_blue->setLimits(0, 255);
     slider_blue->setEventHandler(this);
     addChild(slider_blue);
@@ -82,12 +82,12 @@ void ColorSliderWidget::setupUi()
 
     // alpha
     if (with_alphachannel) {
-        addChild(new ppl7::tk::Label(col1, y1, 50, 30, "alpha:"));
-        color_alpha=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+        addChild(new ppltk::Label(col1, y1, 50, 30, "alpha:"));
+        color_alpha=new ppltk::SpinBox(col2, y1, 70, 30, 0);
         color_alpha->setLimits(0, 255);
         color_alpha->setEventHandler(this);
         addChild(color_alpha);
-        slider_alpha=new ppl7::tk::HorizontalSlider(col3, y1, slider_width, 30);
+        slider_alpha=new ppltk::HorizontalSlider(col3, y1, slider_width, 30);
         slider_alpha->setLimits(0, 255);
         slider_alpha->setEventHandler(this);
         addChild(slider_alpha);
@@ -137,7 +137,7 @@ void ColorSliderWidget::updateColorPreview()
     if (color_preview && color_red && color_green && color_blue) {
         ppl7::grafix::Color color=ppl7::grafix::Color(color_red->value(), color_green->value(), color_blue->value(), 255);
         color_preview->setBackgroundColor(color);
-        ppl7::tk::Event new_event(ppl7::tk::Event::ValueChanged);
+        ppltk::Event new_event(ppltk::Event::ValueChanged);
         new_event.setWidget(this);
         /*
         printf("sending valueChangedEvent to Eventhandler\n");
@@ -159,9 +159,9 @@ void ColorSliderWidget::paint(ppl7::grafix::Drawable& draw)
 }
 
 
-void ColorSliderWidget::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void ColorSliderWidget::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
-    ppl7::tk::Widget* widget=event->widget();
+    ppltk::Widget* widget=event->widget();
     if (widget == slider_red) {
         if (color_red && color_red->value() != slider_red->value()) color_red->setValue(slider_red->value());
         updateColorPreview();
@@ -189,29 +189,29 @@ void ColorSliderWidget::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
     }
 }
 
-void ColorSliderWidget::keyDownEvent(ppl7::tk::KeyEvent* event)
+void ColorSliderWidget::keyDownEvent(ppltk::KeyEvent* event)
 {
     //printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
-    ppl7::tk::WindowManager* wm=ppl7::tk::GetWindowManager();
-    ppl7::tk::Widget* widget=event->widget();
-    if ((event->key == ppl7::tk::KeyEvent::KEY_TAB || event->key == ppl7::tk::KeyEvent::KEY_RETURN)
-        && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_SHIFT) == 0) {
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    ppltk::Widget* widget=event->widget();
+    if ((event->key == ppltk::KeyEvent::KEY_TAB || event->key == ppltk::KeyEvent::KEY_RETURN)
+        && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) == 0) {
            // Tab forward
         if (widget == color_red) wm->setKeyboardFocus(color_green);
         else if (widget == color_green) wm->setKeyboardFocus(color_blue);
         else if (widget == color_blue) {
-            ppl7::tk::KeyEvent new_event=(*event);
+            ppltk::KeyEvent new_event=(*event);
             new_event.setWidget(this);
             EventHandler::keyDownEvent(&new_event);
         }
 
-    } else if ((event->key == ppl7::tk::KeyEvent::KEY_TAB || event->key == ppl7::tk::KeyEvent::KEY_RETURN)
-        && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_SHIFT) != 0) {
+    } else if ((event->key == ppltk::KeyEvent::KEY_TAB || event->key == ppltk::KeyEvent::KEY_RETURN)
+        && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) != 0) {
            // Tab backward
         if (widget == color_blue) wm->setKeyboardFocus(color_green);
         else if (widget == color_green) wm->setKeyboardFocus(color_red);
         else if (widget == color_red) {
-            ppl7::tk::KeyEvent new_event=(*event);
+            ppltk::KeyEvent new_event=(*event);
             new_event.setWidget(this);
             EventHandler::keyDownEvent(&new_event);
         }

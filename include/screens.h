@@ -3,11 +3,11 @@
 
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 #include "decker.h"
 #include "widgets.h"
 
-class IntroScreen : public ppl7::tk::Widget
+class IntroScreen : public ppltk::Widget
 {
 private:
     bool stop_playback;
@@ -18,10 +18,10 @@ public:
 
     bool stopSignal() const;
     // EventHandler
-    void keyDownEvent(ppl7::tk::KeyEvent* event);
-    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
-    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+    void keyDownEvent(ppltk::KeyEvent* event);
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
 
 };
 
@@ -37,7 +37,7 @@ public:
 };
 
 
-class SettingsScreen : public ppl7::tk::Widget
+class SettingsScreen : public ppltk::Widget
 {
 private:
     enum class SettingsMenue {
@@ -94,11 +94,11 @@ private:
     ppl7::grafix::Size input_widget;
 
 
-    ppl7::tk::Frame* menue;
-    ppl7::tk::Frame* page_audio;
-    ppl7::tk::Frame* page_video;
-    ppl7::tk::Frame* page_controller;
-    ppl7::tk::Frame* page_misc;
+    ppltk::Frame* menue;
+    ppltk::Frame* page_audio;
+    ppltk::Frame* page_video;
+    ppltk::Frame* page_controller;
+    ppltk::Frame* page_misc;
 
 
     Decker::ui::GameMenuArea* select_audio;
@@ -112,22 +112,22 @@ private:
 
 
     // Audio
-    //ppl7::tk::ComboBox* audio_device_combobox;
-    ppl7::tk::HorizontalSlider* audio_total_slider;
-    ppl7::tk::HorizontalSlider* audio_music_slider;
-    ppl7::tk::HorizontalSlider* audio_effects_slider;
-    ppl7::tk::HorizontalSlider* audio_ambience_slider;
-    ppl7::tk::HorizontalSlider* audio_speech_slider;
+    //ppltk::ComboBox* audio_device_combobox;
+    ppltk::HorizontalSlider* audio_total_slider;
+    ppltk::HorizontalSlider* audio_music_slider;
+    ppltk::HorizontalSlider* audio_effects_slider;
+    ppltk::HorizontalSlider* audio_ambience_slider;
+    ppltk::HorizontalSlider* audio_speech_slider;
 
     // Video
-    ppl7::tk::ComboBox* video_device_combobox;
-    ppl7::tk::ComboBox* screen_resolution_combobox;
-    ppl7::tk::ComboBox* windowmode_combobox;
-    ppl7::tk::Button* save_video_settings_button;
+    ppltk::ComboBox* video_device_combobox;
+    ppltk::ComboBox* screen_resolution_combobox;
+    ppltk::ComboBox* windowmode_combobox;
+    ppltk::Button* save_video_settings_button;
 
     // Controller
-    ppl7::tk::Label* controller_name;
-    ppl7::tk::HorizontalSlider* controller_deadzone;
+    ppltk::Label* controller_name;
+    ppltk::HorizontalSlider* controller_deadzone;
     Decker::ui::ControllerButtonSelector* controller_axis_walk;
     Decker::ui::ControllerButtonSelector* controller_axis_jump;
     Decker::ui::ControllerButtonSelector* controller_button_up;
@@ -140,16 +140,16 @@ private:
     Decker::ui::ControllerButtonSelector* controller_button_jump;
     Decker::ui::ControllerButtonSelector* controller_button_flashlight;
     Decker::ui::ControllerButtonSelector* controller_button_crouch;
-    ppl7::tk::CheckBox* controller_use_rumble;
+    ppltk::CheckBox* controller_use_rumble;
 
     // Misc
-    ppl7::tk::ComboBox* text_language_combobox;
-    ppl7::tk::ComboBox* speech_language_combobox;
-    ppl7::tk::CheckBox* skipIntro_checkbox;
-    ppl7::tk::HorizontalSlider* difficulty_slider;
-    ppl7::tk::Label* difficulty_name;
-    ppl7::tk::Label* difficulty_description;
-    ppl7::tk::CheckBox* noBlood_checkbox;
+    ppltk::ComboBox* text_language_combobox;
+    ppltk::ComboBox* speech_language_combobox;
+    ppltk::CheckBox* skipIntro_checkbox;
+    ppltk::HorizontalSlider* difficulty_slider;
+    ppltk::Label* difficulty_name;
+    ppltk::Label* difficulty_description;
+    ppltk::CheckBox* noBlood_checkbox;
 
 
 
@@ -171,7 +171,7 @@ private:
     void handleControllerKeyDownEvent(int key);
     void setFocusToControllerWidget();
 
-    ppl7::tk::HorizontalSlider* getCurrentAudioSlider();
+    ppltk::HorizontalSlider* getCurrentAudioSlider();
     Decker::ui::ControllerButtonSelector* getCurrentControllerInput();
 
 
@@ -180,24 +180,24 @@ public:
     ~SettingsScreen();
     virtual void paint(ppl7::grafix::Drawable& draw);
 
-    virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
-    virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
-    virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
+    virtual void keyDownEvent(ppltk::KeyEvent* event);
+    virtual void mouseEnterEvent(ppltk::MouseEvent* event);
+    virtual void mouseClickEvent(ppltk::MouseEvent* event);
 
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
-    virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
-    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
-    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
-    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+    virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+    virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void resizeEvent(ppltk::ResizeEvent* event);
+    virtual void toggledEvent(ppltk::Event* event, bool checked) override;
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+    void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event);
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
 
 };
 
 
 
-class StartScreen : public ppl7::tk::Widget
+class StartScreen : public ppltk::Widget
 {
 public:
 
@@ -219,8 +219,8 @@ private:
     Decker::ui::GameMenuArea* end;
     SettingsScreen* settings_screen;
 
-    ppl7::tk::Frame* menue;
-    ppl7::tk::Label* version;
+    ppltk::Frame* menue;
+    ppltk::Label* version;
 
     //Decker::ui::FileDialog *filedialog;
 
@@ -242,22 +242,22 @@ public:
     void showSettings();
 
     virtual void paint(ppl7::grafix::Drawable& draw);
-    virtual void mouseEnterEvent(ppl7::tk::MouseEvent* event);
-    virtual void mouseClickEvent(ppl7::tk::MouseEvent* event);
-    virtual void keyDownEvent(ppl7::tk::KeyEvent* event);
-    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
-    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+    virtual void mouseEnterEvent(ppltk::MouseEvent* event);
+    virtual void mouseClickEvent(ppltk::MouseEvent* event);
+    virtual void keyDownEvent(ppltk::KeyEvent* event);
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
 
-    virtual void closeEvent(ppl7::tk::Event* event);
-    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
+    virtual void closeEvent(ppltk::Event* event);
+    virtual void resizeEvent(ppltk::ResizeEvent* event);
 
 
     // Event handler
 
 };
 
-class IngameMenuScreen : public ppl7::tk::Widget
+class IngameMenuScreen : public ppltk::Widget
 {
 public:
     enum class State {
@@ -284,12 +284,12 @@ public:
     void setState(State state);
 
     virtual void paint(ppl7::grafix::Drawable& draw);
-    virtual void closeEvent(ppl7::tk::Event* event);
-    virtual void resizeEvent(ppl7::tk::ResizeEvent* event);
+    virtual void closeEvent(ppltk::Event* event);
+    virtual void resizeEvent(ppltk::ResizeEvent* event);
 };
 
 
-class GameStatsScreen : public ppl7::tk::Widget
+class GameStatsScreen : public ppltk::Widget
 {
 private:
     Game& game;
@@ -314,9 +314,9 @@ public:
     void addTotal(const ppl7::String& caption, int points);
     void addLine(const ppl7::String& caption);
 
-    void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-    void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
-    void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
 
 };
 

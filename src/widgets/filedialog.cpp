@@ -24,24 +24,24 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     }
     ppl7::grafix::Size clientarea=this->clientSize();
 
-    ok_button=new ppl7::tk::Button(20, clientarea.height - 30, 200, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
+    ok_button=new ppltk::Button(20, clientarea.height - 30, 200, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppl7::tk::Button(clientarea.width - 220, clientarea.height - 30, 200, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppltk::Button(clientarea.width - 220, clientarea.height - 30, 200, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);
-    ppl7::tk::Label* label;
+    ppltk::Label* label;
     ppl7::String text;
     ppl7::grafix::Size text_size;
     text=translate("Path:");
 
-    label=new ppl7::tk::Label(10, 0, 100, 30, text);
+    label=new ppltk::Label(10, 0, 100, 30, text);
     text_size=label->font().measure(text);
     label->setWidth(text_size.width + 10);
 
     this->addChild(label);
 
-    path_lineinput=new ppl7::tk::LineInput(10 + text_size.width + 10, 0, clientarea.width - 30 - text_size.width, 30, path);
+    path_lineinput=new ppltk::LineInput(10 + text_size.width + 10, 0, clientarea.width - 30 - text_size.width, 30, path);
     path_lineinput->setEventHandler(this);
     this->addChild(path_lineinput);
 
@@ -49,9 +49,9 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
 #ifdef WIN32
     text=translate("Drives:");
     text_size=label->font().measure(text);
-    label=new ppl7::tk::Label(10, 40, text_size.width + 10, 30, text);
+    label=new ppltk::Label(10, 40, text_size.width + 10, 30, text);
     text_size=label->font().measure(text);
-    drives_combobox=new ppl7::tk::ComboBox(20 + text_size.width, 40, 100, 30);
+    drives_combobox=new ppltk::ComboBox(20 + text_size.width, 40, 100, 30);
     drives_combobox->setEventHandler(this);
     wchar_t* drives=new wchar_t[MAX_PATH * sizeof(wchar_t)]();
     if (drives != NULL && GetLogicalDriveStringsW(MAX_PATH * sizeof(wchar_t), drives) > 0) {
@@ -68,20 +68,20 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
     this->addChild(drives_combobox);
     y+=35;
 #endif
-    dir_list=new ppl7::tk::ListWidget(10, y, 260, clientarea.height - y - 90);
+    dir_list=new ppltk::ListWidget(10, y, 260, clientarea.height - y - 90);
     dir_list->setEventHandler(this);
     this->addChild(dir_list);
 
-    file_list=new ppl7::tk::ListWidget(280, y, clientarea.width - 290, clientarea.height - y - 90);
+    file_list=new ppltk::ListWidget(280, y, clientarea.width - 290, clientarea.height - y - 90);
     file_list->setEventHandler(this);
     this->addChild(file_list);
 
 
     text=translate("Filename:");
     text_size=label->font().measure(text);
-    label=new ppl7::tk::Label(10, clientarea.height - 80, text_size.width + 10, 30, text);
+    label=new ppltk::Label(10, clientarea.height - 80, text_size.width + 10, 30, text);
     this->addChild(label);
-    filename_lineinput=new ppl7::tk::LineInput(20 + text_size.width, clientarea.height - 80, clientarea.width - text_size.width - 30 - 300, 30);
+    filename_lineinput=new ppltk::LineInput(20 + text_size.width, clientarea.height - 80, clientarea.width - text_size.width - 30 - 300, 30);
     filename_lineinput->setEventHandler(this);
     this->addChild(filename_lineinput);
     setDirectory(path);
@@ -213,7 +213,7 @@ bool FileDialog::matchFilter(const ppl7::String& filename) const
     return false;
 }
 
-void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
+void FileDialog::mouseDblClickEvent(ppltk::MouseEvent* event)
 {
     //ppl7::PrintDebugTime("FileDialog::mouseDblClickEvent\n");
     if (event->widget() == dir_list) {
@@ -246,7 +246,7 @@ void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
         ppl7::String new_file=file_list->currentText();
         filename_lineinput->setText(new_file);
         my_state=DialogState::OK;
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         EventHandler::closeEvent(&event);
         return;
@@ -254,7 +254,7 @@ void FileDialog::mouseDblClickEvent(ppl7::tk::MouseEvent* event)
     Dialog::mouseDblClickEvent(event);
 }
 
-void FileDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
+void FileDialog::mouseClickEvent(ppltk::MouseEvent* event)
 {
     if (event->widget() == file_list) {
         ppl7::String new_file=file_list->currentText();
@@ -262,13 +262,13 @@ void FileDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
         return;
     } else if (event->widget() == ok_button) {
         my_state=DialogState::OK;
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         EventHandler::closeEvent(&event);
         return;
     } else if (event->widget() == cancel_button) {
         my_state=DialogState::Aborted;
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         EventHandler::closeEvent(&event);
         return;
@@ -276,7 +276,7 @@ void FileDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
     Dialog::mouseClickEvent(event);
 }
 
-void FileDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void FileDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
     if (event->widget() == file_list) {
         ppl7::String new_file=file_list->currentText();
@@ -286,7 +286,7 @@ void FileDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
 
 }
 
-void FileDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void FileDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 #ifdef WIN32
     if (event->widget() == drives_combobox) {
@@ -299,19 +299,19 @@ void FileDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
     Dialog::valueChangedEvent(event, value);
 }
 
-void FileDialog::keyDownEvent(ppl7::tk::KeyEvent* event)
+void FileDialog::keyDownEvent(ppltk::KeyEvent* event)
 {
     //printf("FileDialog::keyDownEvent(keycode=%i, repeat=%i, modifier: %i)\n", event->key, event->repeat, event->modifier);
     if (event->widget() == path_lineinput) {
         //printf("FileDialog::keyDownEvent(keycode=%i, repeat=%i, modifier: %i)\n", event->key, event->repeat, event->modifier);
-        if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
+        if (event->key == ppltk::KeyEvent::KEY_RETURN) {
             ppl7::String new_path=directory();
             setDirectory(new_path);
         }
     } else if (event->widget() == filename_lineinput) {
-        if (event->key == ppl7::tk::KeyEvent::KEY_RETURN) {
+        if (event->key == ppltk::KeyEvent::KEY_RETURN) {
             my_state=DialogState::OK;
-            ppl7::tk::Event event(ppl7::tk::Event::Close);
+            ppltk::Event event(ppltk::Event::Close);
             event.setWidget(this);
             EventHandler::closeEvent(&event);
             return;

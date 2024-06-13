@@ -12,21 +12,21 @@ namespace Decker::Objects {
 class SpeakerDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* sample_name;
-	ppl7::tk::HorizontalSlider* max_distance;
-	ppl7::tk::DoubleHorizontalSlider* volume;
-	ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
+	ppltk::ComboBox* sample_name;
+	ppltk::HorizontalSlider* max_distance;
+	ppltk::DoubleHorizontalSlider* volume;
+	ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
 	Speaker* object;
 
 public:
 	SpeakerDialog(Speaker* object);
 	~SpeakerDialog();
 
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	virtual void valueChangedEvent(ppltk::Event* event, double value);
+	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 
@@ -164,8 +164,8 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	setWindowTitle("Speaker");
 	int y=0;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Sample: "));
-	sample_name=new ppl7::tk::ComboBox(120, y, client.width() - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Sample: "));
+	sample_name=new ppltk::ComboBox(120, y, client.width() - 120, 30);
 	sample_name->add("no sound", ppl7::ToString("%d", AudioClip::none));
 	sample_name->add("Birds 1", ppl7::ToString("%d", AudioClip::birds1));
 	sample_name->add("Birds 2", ppl7::ToString("%d", AudioClip::birds2));
@@ -219,8 +219,8 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	addChild(sample_name);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "volume: "));
-	volume=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "volume: "));
+	volume=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 120, 30);
 	volume->setLimits(0.0f, 2.0f);
 	volume->setValue(object->volume);
 	volume->enableSpinBox(true, 0.01f, 3, 80);
@@ -228,8 +228,8 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	addChild(volume);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "max_distance: "));
-	max_distance=new ppl7::tk::HorizontalSlider(120, y, client.width() - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "max_distance: "));
+	max_distance=new ppltk::HorizontalSlider(120, y, client.width() - 120, 30);
 	max_distance->setLimits(800, 3000);
 	max_distance->enableSpinBox(true, 100, 80);
 	max_distance->setValue(object->max_distance);
@@ -239,10 +239,10 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 
 	// State
 	int sw=width() / 2;
-	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, sw, 30, "initial State");
+	initial_state_checkbox=new ppltk::CheckBox(0, y, sw, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	addChild(initial_state_checkbox);
-	current_state_checkbox=new ppl7::tk::CheckBox(sw, y, sw, 30, "current State");
+	current_state_checkbox=new ppltk::CheckBox(sw, y, sw, 30, "current State");
 	current_state_checkbox->setEventHandler(this);
 	addChild(current_state_checkbox);
 
@@ -257,7 +257,7 @@ SpeakerDialog::~SpeakerDialog()
 
 }
 
-void SpeakerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void SpeakerDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state_checkbox) {
 		int flags=object->flags & (0xffff - static_cast<int>(Speaker::Flags::initialStateEnabled));
@@ -271,7 +271,7 @@ void SpeakerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 }
 
 
-void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void SpeakerDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int): >>%d<<", value);
 	if (event->widget() == sample_name) {
@@ -281,7 +281,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void SpeakerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (int64_t): >>%d<<", (int)value);
 	if (event->widget() == max_distance) {
@@ -289,7 +289,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 	}
 }
 
-void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void SpeakerDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
 	if (event->widget() == volume) {
@@ -297,7 +297,7 @@ void SpeakerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 	}
 }
 
-void SpeakerDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void SpeakerDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::textChangedEvent: >>%s<<", (const char*)text);
 	if (event->widget() == volume) {

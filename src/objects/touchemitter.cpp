@@ -27,15 +27,15 @@ public:
 class TouchEmitterDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* touch_type;
-	ppl7::tk::ComboBox* object_type;
-	ppl7::tk::ComboBox* direction;
-	ppl7::tk::CheckBox* activator_top;
-	ppl7::tk::CheckBox* activator_right;
-	ppl7::tk::CheckBox* activator_bottom;
-	ppl7::tk::CheckBox* activator_left;
-	ppl7::tk::LineInput* max_toggles;
-	ppl7::tk::Button* reset;
+	ppltk::ComboBox* touch_type;
+	ppltk::ComboBox* object_type;
+	ppltk::ComboBox* direction;
+	ppltk::CheckBox* activator_top;
+	ppltk::CheckBox* activator_right;
+	ppltk::CheckBox* activator_bottom;
+	ppltk::CheckBox* activator_left;
+	ppltk::LineInput* max_toggles;
+	ppltk::Button* reset;
 
 	TouchEmitter* object;
 
@@ -43,10 +43,10 @@ public:
 	TouchEmitterDialog(TouchEmitter* object);
 	~TouchEmitterDialog();
 
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+	virtual void toggledEvent(ppltk::Event* event, bool checked);
+	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 };
 
 
@@ -256,13 +256,13 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 {
 	this->object=object;
 	setWindowTitle("TouchEmitter");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Touch-Type: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Activation: "));
-	addChild(new ppl7::tk::Label(0, 120, 120, 30, "Emitted object: "));
-	addChild(new ppl7::tk::Label(0, 160, 120, 30, "direction: "));
-	addChild(new ppl7::tk::Label(0, 200, 120, 30, "max toggles: "));
+	addChild(new ppltk::Label(0, 0, 120, 30, "Touch-Type: "));
+	addChild(new ppltk::Label(0, 40, 120, 30, "Activation: "));
+	addChild(new ppltk::Label(0, 120, 120, 30, "Emitted object: "));
+	addChild(new ppltk::Label(0, 160, 120, 30, "direction: "));
+	addChild(new ppltk::Label(0, 200, 120, 30, "max toggles: "));
 
-	touch_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
+	touch_type=new ppltk::ComboBox(120, 0, 400, 30);
 	touch_type->add("2 x 4", "0");
 	touch_type->add("2 x 2", "1");
 	touch_type->add("invisible", "2");
@@ -272,21 +272,21 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	touch_type->setEventHandler(this);
 	addChild(touch_type);
 
-	activator_top=new ppl7::tk::CheckBox(180, 40, 60, 30, "top", object->touchtype & 16);
+	activator_top=new ppltk::CheckBox(180, 40, 60, 30, "top", object->touchtype & 16);
 	activator_top->setEventHandler(this);
 	addChild(activator_top);
-	activator_right=new ppl7::tk::CheckBox(240, 60, 70, 30, "right", object->touchtype & 32);
+	activator_right=new ppltk::CheckBox(240, 60, 70, 30, "right", object->touchtype & 32);
 	activator_right->setEventHandler(this);
 	addChild(activator_right);
-	activator_bottom=new ppl7::tk::CheckBox(180, 80, 84, 30, "bottom", object->touchtype & 64);
+	activator_bottom=new ppltk::CheckBox(180, 80, 84, 30, "bottom", object->touchtype & 64);
 	activator_bottom->setEventHandler(this);
 	addChild(activator_bottom);
-	activator_left=new ppl7::tk::CheckBox(120, 60, 60, 30, "left", object->touchtype & 128);
+	activator_left=new ppltk::CheckBox(120, 60, 60, 30, "left", object->touchtype & 128);
 	activator_left->setEventHandler(this);
 	addChild(activator_left);
 
 
-	object_type=new ppl7::tk::ComboBox(120, 120, 400, 30);
+	object_type=new ppltk::ComboBox(120, 120, 400, 30);
 	object_type->setEventHandler(this);
 	object_type->add("Medikit", ppl7::ToString("%d", Type::Medikit));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
@@ -297,7 +297,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
-	direction=new ppl7::tk::ComboBox(120, 160, 400, 30);
+	direction=new ppltk::ComboBox(120, 160, 400, 30);
 	direction->setEventHandler(this);
 	direction->add("up", "0");
 	direction->add("right", "1");
@@ -306,11 +306,11 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	direction->setCurrentIdentifier(ppl7::ToString("%d", object->direction));
 	addChild(direction);
 
-	max_toggles=new ppl7::tk::LineInput(120, 200, 80, 30, ppl7::ToString("%d", object->max_toggles));
+	max_toggles=new ppltk::LineInput(120, 200, 80, 30, ppl7::ToString("%d", object->max_toggles));
 	max_toggles->setEventHandler(this);
 	addChild(max_toggles);
 
-	reset=new ppl7::tk::Button(0, 240, 80, 30, "Reset");
+	reset=new ppltk::Button(0, 240, 80, 30, "Reset");
 	reset->setEventHandler(this);
 	addChild(reset);
 
@@ -321,7 +321,7 @@ TouchEmitterDialog::~TouchEmitterDialog()
 
 }
 
-void TouchEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void TouchEmitterDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	// checkboxes
 	//printf ("TouchEmitterDialog::toggledEvent\n");
@@ -341,7 +341,7 @@ void TouchEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 }
 
-void TouchEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void TouchEmitterDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	// combobox
 	//printf ("TouchEmitterDialog::valueChangedEvent\n");
@@ -357,7 +357,7 @@ void TouchEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 
 }
 
-void TouchEmitterDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void TouchEmitterDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
 	// input box
 	//printf ("TouchEmitterDialog::textChangedEvent\n");
@@ -366,7 +366,7 @@ void TouchEmitterDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::St
 	}
 }
 
-void TouchEmitterDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void TouchEmitterDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	if (event->widget() == reset) object->reset();
 	else Decker::ui::Dialog::mouseDownEvent(event);

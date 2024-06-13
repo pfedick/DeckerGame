@@ -6,7 +6,7 @@ namespace Decker::ui {
 
 
 LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
-	: ppl7::tk::Frame(x, y, width, height)
+	: ppltk::Frame(x, y, width, height)
 {
 	setClientOffset(4, 4, 4, 4);
 	spriteset=NULL;
@@ -14,13 +14,13 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	ppl7::grafix::Rect client=this->clientRect();
 	int yy=0;
 	/*
-	enable_lighting=new ppl7::tk::CheckBox(80, yy, 80, 30, "enable light", game->getM);
+	enable_lighting=new ppltk::CheckBox(80, yy, 80, 30, "enable light", game->getM);
 	enable_lighting->setEventHandler(this);
 	this->addChild(enable_lighting);
 	yy+=40;
 	*/
 
-	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "Global Lighting:"));
+	this->addChild(new ppltk::Label(0, yy, client.width(), 30, "Global Lighting:"));
 	yy+=30;
 	global_lighting=new ColorSliderWidget(0, yy, client.width(), 100);
 	global_lighting->setEventHandler(this);
@@ -30,22 +30,22 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	yy+=110;
 
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "LightId:"));
-	light_id=new ppl7::tk::Label(70, yy, client.width(), 30, "-");
-	light_id->setBorderStyle(ppl7::tk::Frame::BorderStyle::Inset);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "LightId:"));
+	light_id=new ppltk::Label(70, yy, client.width(), 30, "-");
+	light_id->setBorderStyle(ppltk::Frame::BorderStyle::Inset);
 	this->addChild(light_id);
 	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "States:"));
-	initial_state=new ppl7::tk::CheckBox(70, yy, 100, 30, "initial", true);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "States:"));
+	initial_state=new ppltk::CheckBox(70, yy, 100, 30, "initial", true);
 	initial_state->setEventHandler(this);
 	this->addChild(initial_state);
-	current_state=new ppl7::tk::CheckBox(70 + 90, yy, 100, 30, "current", true);
+	current_state=new ppltk::CheckBox(70 + 90, yy, 100, 30, "current", true);
 	current_state->setEventHandler(this);
 	this->addChild(current_state);
 
 	yy+=30;
 
-	this->addChild(new ppl7::tk::Label(0, yy, client.width(), 30, "LightObject:"));
+	this->addChild(new ppltk::Label(0, yy, client.width(), 30, "LightObject:"));
 	yy+=30;
 	tilesframe=new TilesFrame(client.left(), yy, client.width(), client.height() - yy - 480, game);
 	tilesframe->setEventHandler(this);
@@ -53,8 +53,8 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 
 	yy=client.height() - 480;
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Type:"));
-	lightType=new ppl7::tk::ComboBox(70, yy, 120, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Type:"));
+	lightType=new ppltk::ComboBox(70, yy, 120, 30);
 	lightType->add("Static", ppl7::ToString("%d", static_cast<int>(LightType::Static)));
 	lightType->add("Fire", ppl7::ToString("%d", static_cast<int>(LightType::Fire)));
 	lightType->add("Candle", ppl7::ToString("%d", static_cast<int>(LightType::Candle)));
@@ -64,8 +64,8 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	//lightType->setEventHandler(this);
 	this->addChild(lightType);
 	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Param:"));
-	lightParameter=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Param:"));
+	lightParameter=new ppltk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	lightParameter->setEventHandler(this);
 	lightParameter->setLimits(0, 1.0f);
 	lightParameter->enableSpinBox(true, 0.001, 3, 80);
@@ -75,7 +75,7 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 
 
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Color:"));
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Color:"));
 	yy+=30;
 	colorframe=new ColorSliderWidget(0, yy, client.width(), 100, false);
 	colorframe->setEventHandler(this);
@@ -84,8 +84,8 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(colorframe);
 	yy+=110;
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
-	intensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Intensity:"));
+	intensity=new ppltk::HorizontalSlider(70, yy, client.width() - 70, 30);
 	intensity->setEventHandler(this);
 	intensity->setLimits(0, 255);
 	intensity->enableSpinBox(true, 1, 80);
@@ -94,20 +94,20 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	yy+=30;
 
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Planes:"));
-	front_plane_checkbox=new ppl7::tk::CheckBox(70, yy, 90, 30, "front");
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Planes:"));
+	front_plane_checkbox=new ppltk::CheckBox(70, yy, 90, 30, "front");
 	front_plane_checkbox->setEventHandler(this);
 	this->addChild(front_plane_checkbox);
-	player_plane_checkbox=new ppl7::tk::CheckBox(70 + 70, yy, 90, 30, "player", true);
+	player_plane_checkbox=new ppltk::CheckBox(70 + 70, yy, 90, 30, "player", true);
 	player_plane_checkbox->setEventHandler(this);
 	this->addChild(player_plane_checkbox);
-	back_plane_checkbox=new ppl7::tk::CheckBox(70 + 140, yy, 90, 30, "back", true);
+	back_plane_checkbox=new ppltk::CheckBox(70 + 140, yy, 90, 30, "back", true);
 	back_plane_checkbox->setEventHandler(this);
 	this->addChild(back_plane_checkbox);
 	yy+=30;
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Scale x:"));
-	scale_x=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Scale x:"));
+	scale_x=new ppltk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	scale_x->setEventHandler(this);
 	scale_x->setLimits(0.01f, 5.0f);
 	scale_x->enableSpinBox(true, 0.05, 2, 80);
@@ -115,8 +115,8 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(scale_x);
 	yy+=30;
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Scale y:"));
-	scale_y=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Scale y:"));
+	scale_y=new ppltk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	scale_y->setEventHandler(this);
 	scale_y->setLimits(0.01f, 5.0f);
 	scale_y->enableSpinBox(true, 0.05, 2, 80);
@@ -124,20 +124,20 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(scale_y);
 	yy+=30;
 
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Angle:"));
-	angle=new ppl7::tk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Angle:"));
+	angle=new ppltk::DoubleHorizontalSlider(70, yy, client.width() - 70, 30);
 	angle->setEventHandler(this);
 	angle->setLimits(0.0f, 355.0f);
 	angle->enableSpinBox(true, 5, 0, 80);
 	angle->setValue(0.0f);
 	this->addChild(angle);
 	yy+=40;
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Lensflare:"));
-	lensflare=new ppl7::tk::CheckBox(70, yy, 30, 30, "", false);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Lensflare:"));
+	lensflare=new ppltk::CheckBox(70, yy, 30, 30, "", false);
 	lensflare->setEventHandler(this);
 	this->addChild(lensflare);
-	this->addChild(new ppl7::tk::Label(100, yy, 70, 30, "Plane:"));
-	flarePlane=new ppl7::tk::ComboBox(160, yy, 120, 30);
+	this->addChild(new ppltk::Label(100, yy, 70, 30, "Plane:"));
+	flarePlane=new ppltk::ComboBox(160, yy, 120, 30);
 	flarePlane->add("Back", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Back)));
 	flarePlane->add("Player", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Player)));
 	flarePlane->add("Front", ppl7::ToString("%d", static_cast<int>(LightPlayerPlaneMatrix::Front)));
@@ -146,15 +146,15 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(flarePlane);
 
 	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, 70, 30, "Intensity:"));
-	lensflareIntensity=new ppl7::tk::HorizontalSlider(70, yy, client.width() - 70, 30);
+	this->addChild(new ppltk::Label(0, yy, 70, 30, "Intensity:"));
+	lensflareIntensity=new ppltk::HorizontalSlider(70, yy, client.width() - 70, 30);
 	lensflareIntensity->setEventHandler(this);
 	lensflareIntensity->setLimits(0, 255);
 	lensflareIntensity->enableSpinBox(true, 1, 80);
 	lensflareIntensity->setValue(255);
 	this->addChild(lensflareIntensity);
 	yy+=30;
-	flare_useLightColor=new ppl7::tk::CheckBox(70, yy, 200, 30, "use light color");
+	flare_useLightColor=new ppltk::CheckBox(70, yy, 200, 30, "use light color");
 	flare_useLightColor->setEventHandler(this);
 	this->addChild(flare_useLightColor);
 	yy+=40;
@@ -342,7 +342,7 @@ void LightSelection::setFlareUseLightColor(bool flag)
 
 
 
-void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
+void LightSelection::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == tilesframe) {
 		//game->setSpriteModeToDraw();
@@ -359,12 +359,12 @@ void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 }
 
 
-void LightSelection::valueChangedEvent(ppl7::tk::Event* event, double value)
+void LightSelection::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//game->updateLightFromUi();
 }
 
-void LightSelection::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void LightSelection::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//game->updateLightFromUi();
 }

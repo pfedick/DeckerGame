@@ -5,12 +5,12 @@ namespace Decker::ui {
 
 
 MetricsSubMenu::MetricsSubMenu(int x, int y, MainMenue* menue)
-	: ppl7::tk::Frame(x, y, 450, 255)
+	: ppltk::Frame(x, y, 450, 255)
 {
 	this->menue=menue;
 	this->setTransparent(false);
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 196));
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	font=style.labelFont;
 	font.setColor(style.labelFontColor);
 	font.setSize(10);

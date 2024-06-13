@@ -196,34 +196,34 @@ class RainEmitterDialog : public Decker::ui::Dialog
 {
 private:
 	Decker::ui::ColorSliderWidget* color;
-	ppl7::tk::ComboBox* particle_type;
-	ppl7::tk::ComboBox* particle_layer;
-	ppl7::tk::HorizontalSlider* emitter_width;
-	ppl7::tk::HorizontalSlider* max_birth;
-	ppl7::tk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
-	ppl7::tk::DoubleHorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
-	ppl7::tk::DoubleHorizontalSlider* scale_min, * scale_max;
-	ppl7::tk::DoubleHorizontalSlider* age_min, * age_max;
-	ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
+	ppltk::ComboBox* particle_type;
+	ppltk::ComboBox* particle_layer;
+	ppltk::HorizontalSlider* emitter_width;
+	ppltk::HorizontalSlider* max_birth;
+	ppltk::DoubleHorizontalSlider* birth_time_min, * birth_time_max;
+	ppltk::DoubleHorizontalSlider* min_velocity_y, * max_velocity_y, * max_velocity_x;
+	ppltk::DoubleHorizontalSlider* scale_min, * scale_max;
+	ppltk::DoubleHorizontalSlider* age_min, * age_max;
+	ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
 	/*
-	ppl7::tk::ComboBox* color_scheme;
-	ppl7::tk::ComboBox* on_start_state;
-	ppl7::tk::CheckBox* initial_state;
-	ppl7::tk::CheckBox* always_on;
-	ppl7::tk::CheckBox* block_player;
-	ppl7::tk::LineInput* time_on_min, * time_on_max;
-	ppl7::tk::LineInput* time_off_min, * time_off_max;
+	ppltk::ComboBox* color_scheme;
+	ppltk::ComboBox* on_start_state;
+	ppltk::CheckBox* initial_state;
+	ppltk::CheckBox* always_on;
+	ppltk::CheckBox* block_player;
+	ppltk::LineInput* time_on_min, * time_on_max;
+	ppltk::LineInput* time_off_min, * time_off_max;
 	*/
 	void setValuesToUi(const RainEmitter* object);
 	RainEmitter* object;
 
 public:
 	RainEmitterDialog(RainEmitter* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 void RainEmitter::openUi()
@@ -243,16 +243,16 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	ppl7::grafix::Rect client=clientRect();
 	int sw=(client.width() - col1 - 40 - 40) / 2;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Type:"));
-	particle_type=new ppl7::tk::ComboBox(col1, y, sw, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Particle Type:"));
+	particle_type=new ppltk::ComboBox(col1, y, sw, 30);
 	particle_type->setEventHandler(this);
 	particle_type->add("Transparent particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleTransparent)));
 	particle_type->add("White particle", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingParticleWhite)));
 	particle_type->add("Transparent Snowflake", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeTransparent)));
 	particle_type->add("White Snowflake", ppl7::ToString("%d", static_cast<int>(Particle::Type::RotatingSnowflakeWhite)));
 	addChild(particle_type);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, col1, 40, "Layer:"));
-	particle_layer=new ppl7::tk::ComboBox(col1 + 90 + sw, y, sw - 10, 30);
+	addChild(new ppltk::Label(col1 + 40 + sw, y, col1, 40, "Layer:"));
+	particle_layer=new ppltk::ComboBox(col1 + 90 + sw, y, sw - 10, 30);
 	particle_layer->add("Before Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BeforePlayer)));
 	particle_layer->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
 	particle_layer->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindBricks)));
@@ -265,7 +265,7 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	addChild(particle_layer);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Particle Color:"));
+	addChild(new ppltk::Label(0, y, col1, 30, "Particle Color:"));
 	color=new Decker::ui::ColorSliderWidget(col1, y, client.width() - col1, 4 * 35, true);
 	color->setEventHandler(this);
 	addChild(color);
@@ -273,16 +273,16 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 
 	col1=150;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Emitter size:"));
-	emitter_width=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Emitter size:"));
+	emitter_width=new ppltk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	emitter_width->setEventHandler(this);
 	emitter_width->setLimits(1, 32);
 	emitter_width->enableSpinBox(true, 1, 60);
 	addChild(emitter_width);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Max birth per cycle:"));
-	max_birth=new ppl7::tk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Max birth per cycle:"));
+	max_birth=new ppltk::HorizontalSlider(col1, y, client.width() - col1 - 20, 30);
 	max_birth->setEventHandler(this);
 	max_birth->setLimits(1, 100);
 	max_birth->enableSpinBox(true, 1, 60);
@@ -290,15 +290,15 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Next birth time (sec):"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	birth_time_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Next birth time (sec):"));
+	addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
+	birth_time_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	birth_time_min->setEventHandler(this);
 	birth_time_min->setLimits(0.010, 4.0f);
 	birth_time_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(birth_time_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	birth_time_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	birth_time_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	birth_time_max->setEventHandler(this);
 	birth_time_max->setLimits(0.010, 4.0f);
 	birth_time_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -307,24 +307,24 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 
 
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Velocity:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
-	min_velocity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Velocity:"));
+	addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
+	min_velocity_y=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	min_velocity_y->setEventHandler(this);
 	min_velocity_y->setLimits(0.010, 20.0f);
 	min_velocity_y->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(min_velocity_y);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_velocity_y=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	max_velocity_y=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	max_velocity_y->setEventHandler(this);
 	max_velocity_y->setLimits(0.010, 20.0f);
 	max_velocity_y->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(max_velocity_y);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Horizontal Velocity:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "max:"));
-	max_velocity_x=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	addChild(new ppltk::Label(0, y, col1, 30, "Horizontal Velocity:"));
+	addChild(new ppltk::Label(col1, y, 40, 30, "max:"));
+	max_velocity_x=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	max_velocity_x->setEventHandler(this);
 	max_velocity_x->setLimits(0.010, 5.0f);
 	max_velocity_x->enableSpinBox(true, 0.01f, 3, 80);
@@ -332,16 +332,16 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	y+=35;
 
 	// Scale
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Scale:"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	addChild(new ppltk::Label(0, y, col1, 30, "Scale:"));
+	addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	scale_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	scale_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	scale_min->setEventHandler(this);
 	scale_min->setLimits(0.010, 2.0f);
 	scale_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(scale_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	scale_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	scale_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	scale_max->setEventHandler(this);
 	scale_max->setLimits(0.010, 2.0f);
 	scale_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -349,16 +349,16 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	y+=35;
 
 	// Age
-	addChild(new ppl7::tk::Label(0, y, col1, 30, "Age (sec):"));
-	addChild(new ppl7::tk::Label(col1, y, 40, 30, "min:"));
+	addChild(new ppltk::Label(0, y, col1, 30, "Age (sec):"));
+	addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
 	sw=(client.width() - col1 - 40 - 40) / 2;
-	age_min=new ppl7::tk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	age_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
 	age_min->setEventHandler(this);
 	age_min->setLimits(0.010f, 10.0f);
 	age_min->enableSpinBox(true, 0.01f, 3, 80);
 	addChild(age_min);
-	addChild(new ppl7::tk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	age_max=new ppl7::tk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
+	age_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
 	age_max->setEventHandler(this);
 	age_max->setLimits(0.010f, 10.0f);
 	age_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -366,10 +366,10 @@ RainEmitterDialog::RainEmitterDialog(RainEmitter* object)
 	y+=35;
 
 	// State
-	initial_state_checkbox=new ppl7::tk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
+	initial_state_checkbox=new ppltk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	addChild(initial_state_checkbox);
-	current_state_checkbox=new ppl7::tk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
+	current_state_checkbox=new ppltk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
 	current_state_checkbox->setEventHandler(this);
 	addChild(current_state_checkbox);
 
@@ -398,10 +398,10 @@ void RainEmitterDialog::setValuesToUi(const RainEmitter* object)
 }
 
 
-void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void RainEmitterDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == particle_type) {
 		object->particle_type=static_cast<Particle::Type>(particle_type->currentIdentifier().toInt());
 	} else if (widget == color) {
@@ -411,10 +411,10 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void RainEmitterDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with int64_t value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == emitter_width) {
 		object->emitter_stud_width=value;
 	} else if (widget == max_birth) {
@@ -423,10 +423,10 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 
 }
 
-void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void RainEmitterDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == birth_time_min) {
 		object->birth_time_min=value;
 		if (value > birth_time_max->value()) birth_time_max->setValue(value);
@@ -456,7 +456,7 @@ void RainEmitterDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 	}
 }
 
-void RainEmitterDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void RainEmitterDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state_checkbox) {
 		int flags=object->flags & (0xffff - static_cast<int>(RainEmitter::Flags::initialStateEnabled));

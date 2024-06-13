@@ -1,4 +1,4 @@
-VERSION ?= 0.15.2
+VERSION ?= 0.16.0
 PREVIOUS_TAG = 0.15.1
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
@@ -12,7 +12,7 @@ CXXFLAGS	= @CXXFLAGS@
 CFLAGS		=  $(INCLUDE) $(EXTRA_CFLAGS) $(CXXFLAGS) @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @DAV1D_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @ICONV_CFLAGS@ \
 	@MPG123_CFLAGS@	@SDL2_CFLAGS@
 LDFLAGS		= @LDFLAGS@
-LIBS_PPL7 = pplib/release/libppl7-tk.a  pplib/release/libppl7-audio.a  pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a
+LIBS_PPL7 =  pplib/release/libppl7-audio.a  pplib/release/libppl7-gfx.a  pplib/release/libppl7-core.a
 LIBS_PPLTK = ppltk/compile/libppltk.a
 LIBS		= $(LIBS_PPL7)  $(LIBS_PPLTK) @ASAN_FLAGS@ \
 	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @DAV1D_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
@@ -211,7 +211,6 @@ ppl7:
 	-mkdir -p pplib/release
 	cd pplib && $(MAKE) -j release/libppl7-core.a
 	cd pplib && $(MAKE) -j release/libppl7-gfx.a
-	cd pplib && $(MAKE) -j release/libppl7-tk.a
 	cd pplib && $(MAKE) -j release/libppl7-audio.a
 
 ppl_toolkit:

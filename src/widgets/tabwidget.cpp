@@ -9,7 +9,7 @@
 
 namespace Decker::ui {
 
-class TabWidgetItem : public ppl7::tk::Widget
+class TabWidgetItem : public ppltk::Widget
 {
 public:
     TabWidgetItem(int x, int y, int width, int height);
@@ -18,7 +18,7 @@ public:
 };
 
 TabWidgetItem::TabWidgetItem(int x, int y, int width, int height)
-    :ppl7::tk::Widget(x, y, width, height)
+    :ppltk::Widget(x, y, width, height)
 {
 
 }
@@ -38,7 +38,7 @@ TabWidget::Tab::Tab(const Tab& other) {
     icon=other.icon;
 }
 
-TabWidget::Tab::Tab(ppl7::tk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon) {
+TabWidget::Tab::Tab(ppltk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon) {
     this->widget=widget;
     this->title=title;
     this->icon=icon;
@@ -48,7 +48,7 @@ TabWidget::Tab::Tab(ppl7::tk::Widget* widget, const ppl7::String& title, const p
 
 
 TabWidget::TabWidget(int x, int y, int width, int height)
-    : ppl7::tk::Widget(x, y, width, height)
+    : ppltk::Widget(x, y, width, height)
 {
     this->setTransparent(true);
     current_tab=-1;
@@ -62,7 +62,7 @@ TabWidget::~TabWidget()
     clear();
 }
 
-ppl7::tk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon)
+ppltk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
     TabWidgetItem* widget=new TabWidgetItem(client.x1 + 4, client.y1 + 40, client.width() - 8, client.height() - 40);
@@ -74,7 +74,7 @@ ppl7::tk::Widget* TabWidget::addTab(int id, const ppl7::String& title, const ppl
     return widget;
 }
 
-void TabWidget::addWidget(int id, const ppl7::String& title, ppl7::tk::Widget* widget, const ppl7::grafix::Drawable& icon)
+void TabWidget::addWidget(int id, const ppl7::String& title, ppltk::Widget* widget, const ppl7::grafix::Drawable& icon)
 {
     ppl7::grafix::Rect client=clientRect();
     widget->setPos(client.x1 + 4, client.y1 + 40);
@@ -164,7 +164,7 @@ void TabWidget::setWidget(int id, Widget* widget)
 }
 
 
-ppl7::tk::Widget* TabWidget::getWidget(int id) const
+ppltk::Widget* TabWidget::getWidget(int id) const
 {
     std::map<int, Tab>::const_iterator it;
     it=tabs.find(id);
@@ -209,7 +209,7 @@ ppl7::String TabWidget::widgetType() const
 void TabWidget::paint(ppl7::grafix::Drawable& draw)
 {
     if (tabs.empty()) return;
-    const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+    const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
     ppl7::grafix::Color light=style.frameBackgroundColor * 1.8f;
     ppl7::grafix::Color shadow=style.frameBackgroundColor * 0.4f;
     ppl7::grafix::Font font=style.labelFont;
@@ -270,7 +270,7 @@ void TabWidget::paint(ppl7::grafix::Drawable& draw)
     }
 }
 
-void TabWidget::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void TabWidget::mouseDownEvent(ppltk::MouseEvent* event)
 {
     if (event->p.y <= 30) {
         std::map<int, Tab>::const_iterator it;

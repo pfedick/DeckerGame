@@ -11,17 +11,17 @@ namespace Decker::Objects {
 class ArrowDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* direction;
-	ppl7::tk::LineInput* min_cooldown;
-	ppl7::tk::LineInput* max_cooldown;
-	ppl7::tk::LineInput* distance;
+	ppltk::ComboBox* direction;
+	ppltk::LineInput* min_cooldown;
+	ppltk::LineInput* max_cooldown;
+	ppltk::LineInput* distance;
 	Arrow* arrow_trap;
 
 public:
 	ArrowDialog(Arrow* object);
 	~ArrowDialog();
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
 };
 
 class ArrowFired : public Object
@@ -98,10 +98,10 @@ void Arrow::changeDirection(int new_direction)
 	if (new_direction != direction) {
 		direction=new_direction;
 		switch (direction) {
-		case 0: sprite_no=35; break;
-		case 1: sprite_no=36; break;
-		case 2: sprite_no=119; break;
-		case 3: sprite_no=37; break;
+			case 0: sprite_no=35; break;
+			case 1: sprite_no=36; break;
+			case 2: sprite_no=119; break;
+			case 3: sprite_no=37; break;
 		}
 		sprite_no_representation=sprite_no;
 		this->updateBoundary();
@@ -136,11 +136,11 @@ void Arrow::fire()
 	particle->sprite_set=sprite_set;
 	particle->sprite_no_representation=sprite_no;
 	switch (direction) {
-	case 0: particle->velocity.setPoint(0, -12); break;
-	case 1: particle->velocity.setPoint(12, 0); break;
-	case 2: particle->velocity.setPoint(0, 12); break;
-	case 3: particle->velocity.setPoint(-12, 0); break;
-	default: particle->velocity.setPoint(0, -12); break;
+		case 0: particle->velocity.setPoint(0, -12); break;
+		case 1: particle->velocity.setPoint(12, 0); break;
+		case 2: particle->velocity.setPoint(0, 12); break;
+		case 3: particle->velocity.setPoint(-12, 0); break;
+		default: particle->velocity.setPoint(0, -12); break;
 	}
 	GetObjectSystem()->addObject(particle);
 	getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.4f);
@@ -190,12 +190,12 @@ ArrowDialog::ArrowDialog(Arrow* object)
 {
 	arrow_trap=object;
 	setWindowTitle("Arrow Trap");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Direction: "));
-	addChild(new ppl7::tk::Label(0, 40, 120, 30, "Cooldown time: "));
-	addChild(new ppl7::tk::Label(330, 40, 120, 30, "(min/max)"));
-	addChild(new ppl7::tk::Label(0, 80, 120, 30, "player distance: "));
+	addChild(new ppltk::Label(0, 0, 120, 30, "Direction: "));
+	addChild(new ppltk::Label(0, 40, 120, 30, "Cooldown time: "));
+	addChild(new ppltk::Label(330, 40, 120, 30, "(min/max)"));
+	addChild(new ppltk::Label(0, 80, 120, 30, "player distance: "));
 
-	direction=new ppl7::tk::ComboBox(120, 0, 360, 30);
+	direction=new ppltk::ComboBox(120, 0, 360, 30);
 	direction->add("up", "0");
 	direction->add("right", "1");
 	direction->add("down", "2");
@@ -204,16 +204,16 @@ ArrowDialog::ArrowDialog(Arrow* object)
 	direction->setEventHandler(this);
 	addChild(direction);
 
-	min_cooldown=new ppl7::tk::LineInput(120, 40, 100, 30);
+	min_cooldown=new ppltk::LineInput(120, 40, 100, 30);
 	min_cooldown->setText(ppl7::ToString("%0.3f", arrow_trap->min_cooldown_time));
 	min_cooldown->setEventHandler(this);
 	addChild(min_cooldown);
-	max_cooldown=new ppl7::tk::LineInput(225, 40, 100, 30);
+	max_cooldown=new ppltk::LineInput(225, 40, 100, 30);
 	max_cooldown->setText(ppl7::ToString("%0.3f", arrow_trap->max_cooldown_time));
 	max_cooldown->setEventHandler(this);
 	addChild(max_cooldown);
 
-	distance=new ppl7::tk::LineInput(120, 80, 100, 30);
+	distance=new ppltk::LineInput(120, 80, 100, 30);
 	distance->setText(ppl7::ToString("%d", arrow_trap->player_activation_distance));
 	distance->setEventHandler(this);
 	addChild(distance);
@@ -225,14 +225,14 @@ ArrowDialog::~ArrowDialog()
 
 }
 
-void ArrowDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ArrowDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == direction) {
 		arrow_trap->changeDirection(direction->currentIdentifier().toInt());
 	}
 }
 
-void ArrowDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void ArrowDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
 	//printf ("SpeakerDialog::textChangedEvent: >>%s<<",(const char*)text);
 	if (event->widget() == min_cooldown) {

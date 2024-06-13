@@ -211,25 +211,25 @@ void LightTrigger::trigger(Object* source)
 class LightTriggerDialog : public Decker::ui::Dialog
 {
 private:
-    ppl7::tk::HorizontalSlider* range_x;
-    ppl7::tk::HorizontalSlider* range_y;
-    ppl7::tk::HorizontalSlider* maxTriggerCount;
-    ppl7::tk::DoubleHorizontalSlider* cooldownUntilNextTrigger;
-    ppl7::tk::DoubleHorizontalSlider* triggerDeleay;
-    ppl7::tk::CheckBox* initialStateEnabled, * currentState;
-    ppl7::tk::CheckBox* multiTrigger, * triggeredByCollision;
-    ppl7::tk::SpinBox* target_id[10];
+    ppltk::HorizontalSlider* range_x;
+    ppltk::HorizontalSlider* range_y;
+    ppltk::HorizontalSlider* maxTriggerCount;
+    ppltk::DoubleHorizontalSlider* cooldownUntilNextTrigger;
+    ppltk::DoubleHorizontalSlider* triggerDeleay;
+    ppltk::CheckBox* initialStateEnabled, * currentState;
+    ppltk::CheckBox* multiTrigger, * triggeredByCollision;
+    ppltk::SpinBox* target_id[10];
     LightTrigger* object;
 
 public:
     LightTriggerDialog(LightTrigger* object);
     ~LightTriggerDialog();
 
-    //virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
-    virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+    //virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+    virtual void valueChangedEvent(ppltk::Event* event, double value);
+    virtual void toggledEvent(ppltk::Event* event, bool checked) override;
     virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
@@ -249,35 +249,35 @@ LightTriggerDialog::LightTriggerDialog(LightTrigger* object)
     int y=0;
 
     int sw=client.width() / 2;
-    initialStateEnabled=new ppl7::tk::CheckBox(0, y, sw, 30, "initial state");
+    initialStateEnabled=new ppltk::CheckBox(0, y, sw, 30, "initial state");
     initialStateEnabled->setEventHandler(this);
     initialStateEnabled->setChecked(object->initialStateEnabled);
     addChild(initialStateEnabled);
-    currentState=new ppl7::tk::CheckBox(sw, y, sw, 30, "current state");
+    currentState=new ppltk::CheckBox(sw, y, sw, 30, "current state");
     currentState->setEventHandler(this);
     currentState->setChecked(object->enabled);
     addChild(currentState);
     y+=35;
 
-    multiTrigger=new ppl7::tk::CheckBox(0, y, sw, 30, "multiTrigger");
+    multiTrigger=new ppltk::CheckBox(0, y, sw, 30, "multiTrigger");
     multiTrigger->setEventHandler(this);
     multiTrigger->setChecked(object->multiTrigger);
     addChild(multiTrigger);
-    triggeredByCollision=new ppl7::tk::CheckBox(sw, y, sw, 30, "triggeredByCollision");
+    triggeredByCollision=new ppltk::CheckBox(sw, y, sw, 30, "triggeredByCollision");
     triggeredByCollision->setChecked(object->triggeredByCollision);
     triggeredByCollision->setEventHandler(this);
     addChild(triggeredByCollision);
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "Collision Range x:"));
-    range_x=new ppl7::tk::HorizontalSlider(120, y, sw - 120, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
+    range_x=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
     range_x->setLimits(0, 1600);
     range_x->setValue(object->range.x);
     range_x->enableSpinBox(true, 1, 80);
     range_x->setEventHandler(this);
     addChild(range_x);
-    addChild(new ppl7::tk::Label(sw, y, 60, 30, "Range y:"));
-    range_y=new ppl7::tk::HorizontalSlider(sw + 60, y, sw - 60, 30);
+    addChild(new ppltk::Label(sw, y, 60, 30, "Range y:"));
+    range_y=new ppltk::HorizontalSlider(sw + 60, y, sw - 60, 30);
     range_y->setLimits(0, 1600);
     range_y->setValue(object->range.y);
     range_y->enableSpinBox(true, 1, 80);
@@ -286,8 +286,8 @@ LightTriggerDialog::LightTriggerDialog(LightTrigger* object)
     y+=35;
 
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "max trigger count: "));
-    maxTriggerCount=new ppl7::tk::HorizontalSlider(120, y, sw - 120, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "max trigger count: "));
+    maxTriggerCount=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
     maxTriggerCount->setLimits(0, 1024);
     maxTriggerCount->setValue(object->maxTriggerCount);
     maxTriggerCount->enableSpinBox(true, 1, 80);
@@ -295,44 +295,44 @@ LightTriggerDialog::LightTriggerDialog(LightTrigger* object)
     addChild(maxTriggerCount);
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "Cooldown: "));
-    cooldownUntilNextTrigger=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "Cooldown: "));
+    cooldownUntilNextTrigger=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
     cooldownUntilNextTrigger->setLimits(0.0f, 120.0f);
     cooldownUntilNextTrigger->setValue(object->cooldownUntilNextTrigger);
     cooldownUntilNextTrigger->enableSpinBox(true, 0.2f, 3, 80);
     cooldownUntilNextTrigger->setEventHandler(this);
     addChild(cooldownUntilNextTrigger);
-    addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+    addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "LightTrigger delay: "));
-    triggerDeleay=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "LightTrigger delay: "));
+    triggerDeleay=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
     triggerDeleay->setLimits(0.0f, 60.0f);
     triggerDeleay->setValue(object->triggerDeleay);
     triggerDeleay->enableSpinBox(true, 0.2f, 3, 80);
     triggerDeleay->setEventHandler(this);
     addChild(triggerDeleay);
-    addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+    addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
     y+=35;
 
 
-    addChild(new ppl7::tk::Label(0, y, 400, 30, "LightTrigger objects:"));
+    addChild(new ppltk::Label(0, y, 400, 30, "LightTrigger objects:"));
     y+=35;
     for (int i=0;i < 5;i++) {
         int x=0;
-        addChild(new ppl7::tk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-        target_id[i]=new ppl7::tk::SpinBox(x + 110, y, 100, 30, object->triggerObjects[i].light_id);
+        addChild(new ppltk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+        target_id[i]=new ppltk::SpinBox(x + 110, y, 100, 30, object->triggerObjects[i].light_id);
         target_id[i]->setLimits(0, 65535);
         target_id[i]->setEventHandler(this);
         addChild(target_id[i]);
         x=300;
-        addChild(new ppl7::tk::Label(x, y, 80, 30, ppl7::ToString("Object %d: ", i + 6)));
-        target_id[i + 5]=new ppl7::tk::SpinBox(x + 80, y, 100, 30, object->triggerObjects[i + 5].light_id);
+        addChild(new ppltk::Label(x, y, 80, 30, ppl7::ToString("Object %d: ", i + 6)));
+        target_id[i + 5]=new ppltk::SpinBox(x + 80, y, 100, 30, object->triggerObjects[i + 5].light_id);
         target_id[i + 5]->setLimits(0, 65535);
         target_id[i + 5]->setEventHandler(this);
         addChild(target_id[i + 5]);
         /*
-        target_state[i]=new ppl7::tk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
+        target_state[i]=new ppltk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
         target_state[i]->setEventHandler(this);
         addChild(target_state[i]);
         */
@@ -349,7 +349,7 @@ LightTriggerDialog::~LightTriggerDialog()
 
 }
 
-void LightTriggerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void LightTriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
     if (event->widget() == multiTrigger) {
         object->multiTrigger=checked;
@@ -365,7 +365,7 @@ void LightTriggerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 
 
-void LightTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void LightTriggerDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
     //ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
     if (event->widget() == cooldownUntilNextTrigger) {
@@ -375,7 +375,7 @@ void LightTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
     }
 }
 
-void LightTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void LightTriggerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     //ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int64_t\n");
     if (event->widget() == range_x) {
@@ -391,7 +391,7 @@ void LightTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value
     }
 }
 
-void LightTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void LightTriggerDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
     ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
     if (event->widget() == maxTriggerCount) {

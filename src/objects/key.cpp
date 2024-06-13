@@ -27,15 +27,15 @@ KeyReward::KeyReward()
 void KeyReward::init()
 {
 	switch (key_type) {
-	case KeyType::silver:
-		animation.startRandomSequence(272, 292, true, 272);
-		break;
-	case KeyType::golden:
-		animation.startRandomSequence(216, 236, true, 216);
-		break;
-	case KeyType::colored:
-		animation.startRandomSequence(366, 386, true, 366);
-		break;
+		case KeyType::silver:
+			animation.startRandomSequence(272, 292, true, 272);
+			break;
+		case KeyType::golden:
+			animation.startRandomSequence(216, 236, true, 216);
+			break;
+		case KeyType::colored:
+			animation.startRandomSequence(366, 386, true, 366);
+			break;
 	}
 	updateColor();
 }
@@ -111,7 +111,7 @@ size_t KeyReward::load(const unsigned char* buffer, size_t size)
 class KeyRewardDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* key_type;
+	ppltk::ComboBox* key_type;
 	Decker::ui::ColorSelectionFrame* colorframe;
 
 
@@ -119,7 +119,7 @@ private:
 
 public:
 	KeyRewardDialog(KeyReward* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
 };
 
 
@@ -139,8 +139,8 @@ KeyRewardDialog::KeyRewardDialog(KeyReward* object)
 	int y=0;
 
 
-	addChild(new ppl7::tk::Label(0, y, 150, 30, "Key Type:"));
-	key_type=new ppl7::tk::ComboBox(150, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 150, 30, "Key Type:"));
+	key_type=new ppltk::ComboBox(150, y, 300, 30);
 	key_type->add("silver", "0");
 	key_type->add("golden", "1");
 	key_type->add("colored", "2");
@@ -148,7 +148,7 @@ KeyRewardDialog::KeyRewardDialog(KeyReward* object)
 	key_type->setEventHandler(this);
 	addChild(key_type);
 	y+=40;
-	addChild(new ppl7::tk::Label(0, y, 80, 30, "Color:"));
+	addChild(new ppltk::Label(0, y, 80, 30, "Color:"));
 	ColorPalette& palette=GetColorPalette();
 	colorframe=new Decker::ui::ColorSelectionFrame(150, y, 300, 300, palette);
 	colorframe->setEventHandler(this);
@@ -158,9 +158,9 @@ KeyRewardDialog::KeyRewardDialog(KeyReward* object)
 }
 
 
-void KeyRewardDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void KeyRewardDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == key_type) {
 		object->key_type=static_cast<KeyReward::KeyType>(key_type->currentIdentifier().toInt());
 		object->init();

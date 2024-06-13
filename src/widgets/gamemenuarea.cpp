@@ -16,7 +16,7 @@ GameMenuArea::GameMenuArea(int x, int y, int width, int height, const ppl7::Stri
     this->text=text;
     selected=false;
     border_width=10;
-    const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+    const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
     font=style.buttonFont;
     font.setName("NotoSansBlack");
     font.setBold(false);

@@ -12,14 +12,14 @@ ObjectsFrame::Item::Item(int id, const ppl7::String& name, int sprite_no)
 }
 
 ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
-	: ppl7::tk::Frame(x, y, width, height)
+	: ppltk::Frame(x, y, width, height)
 {
 	ppl7::grafix::Rect client=this->clientRect();
 
 	selected_object=0;
 	spriteset=NULL;
 
-	scrollbar=new ppl7::tk::Scrollbar(client.width() - 28, client.y1, 28, client.height());
+	scrollbar=new ppltk::Scrollbar(client.width() - 28, client.y1, 28, client.height());
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
@@ -136,17 +136,17 @@ ppl7::String ObjectsFrame::widgetType() const
 	return "ObjectsFrame";
 }
 
-void ObjectsFrame::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ObjectsFrame::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == scrollbar) {
 		needsRedraw();
 	}
 }
 
-void ObjectsFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void ObjectsFrame::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	if (!spriteset) return;
-	if (event->widget() == this && event->buttonMask & ppl7::tk::MouseState::Left) {
+	if (event->widget() == this && event->buttonMask & ppltk::MouseState::Left) {
 		size_t object_pos=((event->p.y) / 160) * 2 + ((event->p.x) / 130) + scrollbar->position() * 2;
 		std::map<size_t, Item>::const_iterator it;
 		it=object_map.find(object_pos);
@@ -154,7 +154,7 @@ void ObjectsFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
 			selected_object=it->second.id;
 			// TODO
 			//game->setSpriteModeToDraw();
-			ppl7::tk::Event event(ppl7::tk::Event::ValueChanged);
+			ppltk::Event event(ppltk::Event::ValueChanged);
 			event.setWidget(this);
 			getParent()->valueChangedEvent(&event, selected_object);
 			needsRedraw();
@@ -162,7 +162,7 @@ void ObjectsFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void ObjectsFrame::mouseWheelEvent(ppl7::tk::MouseEvent* event)
+void ObjectsFrame::mouseWheelEvent(ppltk::MouseEvent* event)
 {
 	if (!spriteset) return;
 
@@ -174,7 +174,7 @@ void ObjectsFrame::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 
 void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)
 {
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	ppl7::grafix::Color myBorderColorLight=style.frameBorderColorLight;
 	ppl7::grafix::Color myBorderColorShadow=style.frameBorderColorShadow;
 	ppl7::grafix::Font myFont=style.labelFont;
@@ -188,7 +188,7 @@ void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)
 	myFont.setOrientation(ppl7::grafix::Font::TOP);
 
 	if (!spriteset) return;
-	ppl7::tk::Frame::paint(draw);
+	ppltk::Frame::paint(draw);
 	draw=clientDrawable(draw);
 
 	ppl7::grafix::Color white(245, 245, 242, 255);
@@ -229,7 +229,7 @@ void ObjectsFrame::paint(ppl7::grafix::Drawable& draw)
 // ***************************************************************
 
 ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game)
-	: ppl7::tk::Frame(x, y, width, height)
+	: ppltk::Frame(x, y, width, height)
 {
 	setClientOffset(4, 4, 4, 4);
 	spriteset=NULL;
@@ -238,8 +238,8 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	ppl7::grafix::Rect client=this->clientRect();
 
 	int yy=0;
-	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "Layer:"));
-	layer_selection=new ppl7::tk::ComboBox(80, yy, width - 90, 30);
+	this->addChild(new ppltk::Label(0, yy, 80, 30, "Layer:"));
+	layer_selection=new ppltk::ComboBox(80, yy, width - 90, 30);
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
@@ -247,18 +247,18 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	layer_selection->setEventHandler(this);
 	this->addChild(layer_selection);
 	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, 80, 30, "difficulty:"));
-	difficulty_easy=new ppl7::tk::CheckBox(80, yy, 80, 30, "easy", true);
+	this->addChild(new ppltk::Label(0, yy, 80, 30, "difficulty:"));
+	difficulty_easy=new ppltk::CheckBox(80, yy, 80, 30, "easy", true);
 	difficulty_easy->setEventHandler(this);
 	this->addChild(difficulty_easy);
-	difficulty_normal=new ppl7::tk::CheckBox(145, yy, 100, 30, "normal", true);
+	difficulty_normal=new ppltk::CheckBox(145, yy, 100, 30, "normal", true);
 	difficulty_normal->setEventHandler(this);
 	this->addChild(difficulty_normal);
-	difficulty_hard=new ppl7::tk::CheckBox(225, yy, 90, 30, "hard", true);
+	difficulty_hard=new ppltk::CheckBox(225, yy, 90, 30, "hard", true);
 	difficulty_hard->setEventHandler(this);
 	this->addChild(difficulty_hard);
 	yy+=30;
-	this->addChild(new ppl7::tk::Label(0, yy, width, 30, "Object selection:"));
+	this->addChild(new ppltk::Label(0, yy, width, 30, "Object selection:"));
 	yy+=30;
 
 	objects_frame=new ObjectsFrame(client.left(), yy, client.width(), client.height() - yy);
@@ -304,7 +304,7 @@ ppl7::String ObjectSelection::widgetType() const
 	return "ObjectSelection";
 }
 
-void ObjectSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ObjectSelection::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == objects_frame) {
 		game->setSpriteModeToDraw();
@@ -313,14 +313,14 @@ void ObjectSelection::valueChangedEvent(ppl7::tk::Event* event, int value)
 		game->updateLayerForSelectedObject(value);
 	}
 }
-void ObjectSelection::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void ObjectSelection::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	//printf("ObjectSelection::mouseDownEvent\n");
 }
 
-void ObjectSelection::toggledEvent(ppl7::tk::Event* event, bool checked)
+void ObjectSelection::toggledEvent(ppltk::Event* event, bool checked)
 {
-	ppl7::tk::Widget* w=event->widget();
+	ppltk::Widget* w=event->widget();
 	if (w == difficulty_easy || w == difficulty_normal || w == difficulty_hard) {
 		uint8_t d=getDifficulty();
 		game->updateDifficultyForSelectedObject(d);

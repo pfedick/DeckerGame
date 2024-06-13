@@ -109,12 +109,12 @@ size_t ThreeSpeers::load(const unsigned char* buffer, size_t size)
 class ThreeSpeersDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* speer_type;
+	ppltk::ComboBox* speer_type;
 	ThreeSpeers* object;
 
 public:
 	ThreeSpeersDialog(ThreeSpeers* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
 };
 
 void ThreeSpeers::openUi()
@@ -128,10 +128,10 @@ ThreeSpeersDialog::ThreeSpeersDialog(ThreeSpeers* object)
 {
 	this->object=object;
 	setWindowTitle("Three Speers");
-	addChild(new ppl7::tk::Label(0, 0, 120, 30, "Speer-Type: "));
+	addChild(new ppltk::Label(0, 0, 120, 30, "Speer-Type: "));
 
 
-	speer_type=new ppl7::tk::ComboBox(120, 0, 400, 30);
+	speer_type=new ppltk::ComboBox(120, 0, 400, 30);
 	speer_type->add("Speers with Skeleton", "0");
 	speer_type->add("Speers only", "1");
 	speer_type->add("Speers from ceiling", "2");
@@ -144,7 +144,7 @@ ThreeSpeersDialog::ThreeSpeersDialog(ThreeSpeers* object)
 
 }
 
-void ThreeSpeersDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ThreeSpeersDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == speer_type) {
 		object->speer_type=speer_type->currentIdentifier().toInt();

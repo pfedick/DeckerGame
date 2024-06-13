@@ -14,7 +14,7 @@ ControllerButtonSelector::ControllerButtonSelector(int x, int y, int width, int 
     create(x, y, width, height);
     this->text=text;
     border_width=5;
-    const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+    const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
     font=style.buttonFont;
     font.setName("NotoSansBlack");
     font.setBold(false);
@@ -54,7 +54,7 @@ void ControllerButtonSelector::setInputmode()
 {
     inputmode=true;
     needsRedraw();
-    ppl7::tk::WindowManager* wm=ppl7::tk::GetWindowManager();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     wm->setGameControllerFocus(this);
     //ppl7::PrintDebugTime("ControllerButtonSelector::setInputmode\n");
 }
@@ -89,18 +89,18 @@ void ControllerButtonSelector::paint(ppl7::grafix::Drawable& draw)
 
 void ControllerButtonSelector::emmitValueChangedEvent()
 {
-    ppl7::tk::Event ev(ppl7::tk::Event::Type::ValueChanged);
+    ppltk::Event ev(ppltk::Event::Type::ValueChanged);
     ev.setWidget(this);
     this->valueChangedEvent(&ev, button_id);
 }
 
-void ControllerButtonSelector::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void ControllerButtonSelector::mouseDownEvent(ppltk::MouseEvent* event)
 {
     setFocus();
     setInputmode();
 }
 
-void ControllerButtonSelector::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event)
+void ControllerButtonSelector::gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event)
 {
     if (!GetGame().controller.isOpen()) return;
     if (GetGame().controller.deadzone() > abs(event->value)) return;
@@ -118,7 +118,7 @@ void ControllerButtonSelector::gameControllerAxisMotionEvent(ppl7::tk::GameContr
     }
 }
 
-void ControllerButtonSelector::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+void ControllerButtonSelector::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)
 {
     if (hasFocus() && controllertype == ControllerType::Button && inputmode) {
         inputmode=false;

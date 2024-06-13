@@ -286,19 +286,19 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 class FireCannonDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::DoubleHorizontalSlider* direction;
-	ppl7::tk::DoubleHorizontalSlider* min_cooldown;
-	ppl7::tk::DoubleHorizontalSlider* max_cooldown;
-	ppl7::tk::DoubleHorizontalSlider* speed;
-	ppl7::tk::CheckBox* current_state;
-	ppl7::tk::CheckBox* initial_state;
+	ppltk::DoubleHorizontalSlider* direction;
+	ppltk::DoubleHorizontalSlider* min_cooldown;
+	ppltk::DoubleHorizontalSlider* max_cooldown;
+	ppltk::DoubleHorizontalSlider* speed;
+	ppltk::CheckBox* current_state;
+	ppltk::CheckBox* initial_state;
 
 	FireCannon* object;
 
 public:
 	FireCannonDialog(FireCannon* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 
@@ -321,19 +321,19 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	int col2=client.width() / 2;
 	int col3=col2 + 100;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "initial State:"));
-	initial_state=new ppl7::tk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state_on);
+	addChild(new ppltk::Label(0, y, 100, 30, "initial State:"));
+	initial_state=new ppltk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state_on);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
-	addChild(new ppl7::tk::Label(col2, y, 100, 30, "current State:"));
-	current_state=new ppl7::tk::CheckBox(col3, y, 120, 30, "enabled", object->current_state_on);
+	addChild(new ppltk::Label(col2, y, 100, 30, "current State:"));
+	current_state=new ppltk::CheckBox(col3, y, 120, 30, "enabled", object->current_state_on);
 	current_state->setEventHandler(this);
 	addChild(current_state);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Direction:"));
-	direction=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Direction:"));
+	direction=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	direction->setLimits(0.0f, 360.0f);
 	direction->enableSpinBox(true, 1.0f, 0, 80);
 	direction->setValue(object->direction);
@@ -341,8 +341,8 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	addChild(direction);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Speed:"));
-	speed=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Speed:"));
+	speed=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	speed->setLimits(1.0f, 30.0f);
 	speed->enableSpinBox(true, 0.1f, 1, 80);
 	speed->setValue(object->speed);
@@ -350,8 +350,8 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	addChild(speed);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Min Cooldown:"));
-	min_cooldown=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Min Cooldown:"));
+	min_cooldown=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	min_cooldown->setLimits(0.1f, 30.0f);
 	min_cooldown->enableSpinBox(true, 0.1f, 1, 80);
 	min_cooldown->setValue(object->min_cooldown_time);
@@ -359,8 +359,8 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	addChild(min_cooldown);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Max Cooldown:"));
-	max_cooldown=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Max Cooldown:"));
+	max_cooldown=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	max_cooldown->setLimits(0.1f, 30.0f);
 	max_cooldown->enableSpinBox(true, 0.1f, 1, 80);
 	max_cooldown->setValue(object->max_cooldown_time);
@@ -371,7 +371,7 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 }
 
 
-void FireCannonDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void FireCannonDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	if (event->widget() == direction) {
 		object->direction=value;
@@ -385,7 +385,7 @@ void FireCannonDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 
 }
 
-void FireCannonDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void FireCannonDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) {
 		object->initial_state_on=checked;

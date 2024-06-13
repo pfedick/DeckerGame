@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 #include <map>
 #include <list>
 #include <vector>
@@ -87,12 +87,12 @@ public:
 		normal=2,
 		hard=3
 	};
-	typedef ppl7::tk::Window::WindowMode WindowMode;
+	typedef ppltk::Window::WindowMode WindowMode;
 		// Video
 	int					videoDevice;
 	ppl7::grafix::Size	ScreenResolution;
 	int 				ScreenRefreshRate;
-	ppl7::tk::Window::WindowMode windowMode;
+	ppltk::Window::WindowMode windowMode;
 
 	// Audio
 	float				volumeTotal;
@@ -902,7 +902,7 @@ public:
 	void setAllowUpscale(bool allow);
 	ppl7::grafix::Point translate(const ppl7::grafix::Point& coords) const;
 
-	void translateMouseEvent(ppl7::tk::MouseEvent* event);
+	void translateMouseEvent(ppltk::MouseEvent* event);
 	void getRenderRect(SDL_Rect& rect) const;
 	const SDL_Rect& getRenderRect() const;
 };
@@ -924,13 +924,13 @@ public:
 
 };
 
-class Game : private ppl7::tk::Window
+class Game : private ppltk::Window
 {
 private:
 	SDL sdl;
-	ppl7::tk::WindowManager* wm;
-	ppl7::tk::WidgetStyle Style;
-	//ppl7::tk::Window window;
+	ppltk::WindowManager* wm;
+	ppltk::WidgetStyle Style;
+	//ppltk::Window window;
 
 	class RememberMe {
 	public:
@@ -999,6 +999,7 @@ private:
 	bool showui;
 	bool quitGame;
 	bool controlsEnabled;
+	bool bGameWindowCreated;
 
 	ppl7::grafix::Size windowedSize;
 	RememberMe remember;
@@ -1021,7 +1022,7 @@ private:
 	void resizeMenueAndStatusbar();
 	void initAudio();
 	void initGameController();
-	void updateUi(const ppl7::tk::MouseState& mouse, const Metrics& metrics);
+	void updateUi(const ppltk::MouseState& mouse, const Metrics& metrics);
 	void drawWorld(SDL_Renderer* renderer);
 	void drawGrid();
 	void drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
@@ -1029,8 +1030,8 @@ private:
 	void drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& mouse);
 	void moveWorld(int offset_x, int offset_y);
-	void moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse);
-	void handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse);
+	void moveWorldOnMouseClick(const ppltk::MouseState& mouse);
+	void handleMouseDrawInWorld(const ppltk::MouseState& mouse);
 	void closeTileTypeSelection();
 	void closeTileSelection();
 	void closeSpriteSelection();
@@ -1042,10 +1043,10 @@ private:
 	void updateWorldCoords();
 	void handleDeath(SDL_Renderer* renderer, float frame_rate_compensation);
 
-	void mouseDownEventOnSprite(ppl7::tk::MouseEvent* event);
-	void mouseDownEventOnObject(ppl7::tk::MouseEvent* event);
-	void mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event);
-	void mouseDownEventOnLight(ppl7::tk::MouseEvent* event);
+	void mouseDownEventOnSprite(ppltk::MouseEvent* event);
+	void mouseDownEventOnObject(ppltk::MouseEvent* event);
+	void mouseDownEventOnWayNet(ppltk::MouseEvent* event);
+	void mouseDownEventOnLight(ppltk::MouseEvent* event);
 
 	void checkFileDialog();
 	void checkSoundtrack();
@@ -1085,19 +1086,19 @@ public:
 	void run();
 
 	// EventHandler
-	void quitEvent(ppl7::tk::Event* event);
-	void closeEvent(ppl7::tk::Event* event);
-	//void mouseClickEvent(ppl7::tk::MouseEvent *event);
-	void mouseDownEvent(ppl7::tk::MouseEvent* event);
-	void mouseWheelEvent(ppl7::tk::MouseEvent* event);
-	void keyDownEvent(ppl7::tk::KeyEvent* event);
-	void mouseMoveEvent(ppl7::tk::MouseEvent* event);
-	void resizeEvent(ppl7::tk::ResizeEvent* event);
-	void gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event);
-	void gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event);
-	void gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event);
-	void gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event);
-	void gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event);
+	void quitEvent(ppltk::Event* event);
+	void closeEvent(ppltk::Event* event);
+	//void mouseClickEvent(ppltk::MouseEvent *event);
+	void mouseDownEvent(ppltk::MouseEvent* event);
+	void mouseWheelEvent(ppltk::MouseEvent* event);
+	void keyDownEvent(ppltk::KeyEvent* event);
+	void mouseMoveEvent(ppltk::MouseEvent* event);
+	void resizeEvent(ppltk::ResizeEvent* event);
+	void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event);
+	void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
+	void gameControllerButtonUpEvent(ppltk::GameControllerButtonEvent* event);
+	void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
+	void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
 
 
 	void showTilesSelection();
@@ -1115,7 +1116,7 @@ public:
 	SDL& getSDL();
 	ppl7::grafix::Point getViewPos() const;
 
-	ppl7::tk::Window& window();
+	ppltk::Window& window();
 	Level& getLevel();
 	LightSystem& getLightSystem();
 
@@ -1157,7 +1158,7 @@ public:
 
 };
 
-ppl7::tk::Window* GetGameWindow();
+ppltk::Window* GetGameWindow();
 ColorPalette& GetColorPalette();
 Game& GetGame();
 

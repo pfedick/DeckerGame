@@ -7,7 +7,7 @@
 
 
 
-static void getVideoDestination(VideoPlayer& video, ppl7::tk::Window& window, SDL_Rect& dest)
+static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_Rect& dest)
 {
 	float aspect=(float)video.width() / (float)video.height();
 	dest.x=0;
@@ -25,7 +25,7 @@ static void getVideoDestination(VideoPlayer& video, ppl7::tk::Window& window, SD
 }
 
 
-static void getDestinationRect(ppl7::grafix::Size img_size, ppl7::tk::Window& window, SDL_Rect& dest)
+static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
 {
 	float aspect=(float)img_size.width / (float)img_size.height;
 	dest.x=0;
@@ -98,7 +98,7 @@ void Game::playIntroVideo()
 			if (next_video_frame == 0.0f) next_video_frame=now;
 			wm->handleEvents();
 			sdl.startFrame(black);
-			ppl7::tk::MouseState mouse=wm->getMouseState();
+			ppltk::MouseState mouse=wm->getMouseState();
 			//drawWidgets();
 			if (next_video_frame <= now) {
 				frame++;
@@ -170,15 +170,15 @@ bool IntroScreen::stopSignal() const
 	return stop_playback;
 }
 
-void IntroScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
+void IntroScreen::keyDownEvent(ppltk::KeyEvent* event)
 {
-	if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE || event->key == ppl7::tk::KeyEvent::KEY_SPACE) {
+	if (event->key == ppltk::KeyEvent::KEY_ESCAPE || event->key == ppltk::KeyEvent::KEY_SPACE) {
 		stop_playback=true;
 
 	}
 }
 
-void IntroScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+void IntroScreen::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)
 {
 	GameControllerMapping::Button b=GetGame().controller.mapping.getButton(event);
 	if (b != GameControllerMapping::Button::Unknown) {
@@ -189,12 +189,12 @@ void IntroScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEv
 }
 
 
-void IntroScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+void IntroScreen::gameControllerDeviceAdded(ppltk::GameControllerEvent* event)
 {
 	GetGame().gameControllerDeviceAdded(event);
 }
 
-void IntroScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+void IntroScreen::gameControllerDeviceRemoved(ppltk::GameControllerEvent* event)
 {
 	GetGame().gameControllerDeviceRemoved(event);
 }

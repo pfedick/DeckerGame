@@ -240,17 +240,17 @@ size_t Mushroom::load(const unsigned char* buffer, size_t size)
 class MushroomDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::DoubleHorizontalSlider* max_gravity_y;
-	ppl7::tk::DoubleHorizontalSlider* gravity_x;
-	ppl7::tk::CheckBox* current_state;
-	ppl7::tk::CheckBox* initial_state;
+	ppltk::DoubleHorizontalSlider* max_gravity_y;
+	ppltk::DoubleHorizontalSlider* gravity_x;
+	ppltk::CheckBox* current_state;
+	ppltk::CheckBox* initial_state;
 
 	Mushroom* object;
 
 public:
 	MushroomDialog(Mushroom* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 void Mushroom::openUi()
@@ -271,18 +271,18 @@ MushroomDialog::MushroomDialog(Mushroom* object)
 	int col2=client.width() / 2;
 	int col3=col2 + 100;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "initial State:"));
-	initial_state=new ppl7::tk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state);
+	addChild(new ppltk::Label(0, y, 100, 30, "initial State:"));
+	initial_state=new ppltk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
-	addChild(new ppl7::tk::Label(col2, y, 100, 30, "current State:"));
-	current_state=new ppl7::tk::CheckBox(col3, y, 120, 30, "enabled", object->enabled);
+	addChild(new ppltk::Label(col2, y, 100, 30, "current State:"));
+	current_state=new ppltk::CheckBox(col3, y, 120, 30, "enabled", object->enabled);
 	current_state->setEventHandler(this);
 	addChild(current_state);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Gravity:"));
-	max_gravity_y=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Gravity:"));
+	max_gravity_y=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	max_gravity_y->setLimits(1.0f, 4.0f);
 	max_gravity_y->enableSpinBox(true, 0.1f, 1, 80);
 	max_gravity_y->setValue(object->max_gravity_y);
@@ -290,8 +290,8 @@ MushroomDialog::MushroomDialog(Mushroom* object)
 	addChild(max_gravity_y);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Gravity x:"));
-	gravity_x=new ppl7::tk::DoubleHorizontalSlider(col1, y, w, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Gravity x:"));
+	gravity_x=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	gravity_x->setLimits(-4.0f, 4.0f);
 	gravity_x->enableSpinBox(true, 0.1f, 1, 100);
 	gravity_x->setValue(object->gravity_x);
@@ -300,7 +300,7 @@ MushroomDialog::MushroomDialog(Mushroom* object)
 	y+=35;
 }
 
-void MushroomDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void MushroomDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	if (event->widget() == max_gravity_y) {
 		object->max_gravity_y=value;
@@ -310,7 +310,7 @@ void MushroomDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 
 }
 
-void MushroomDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void MushroomDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) {
 		object->initial_state=checked;

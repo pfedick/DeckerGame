@@ -82,9 +82,9 @@ void GameViewport::setAllowUpscale(bool allow)
 
 
 
-void GameViewport::translateMouseEvent(ppl7::tk::MouseEvent* event)
+void GameViewport::translateMouseEvent(ppltk::MouseEvent* event)
 {
-	ppl7::tk::MouseState mouse=ppl7::tk::GetWindowManager()->getMouseState();
+	ppltk::MouseState mouse=ppltk::GetWindowManager()->getMouseState();
 	float factor=(float)render_size.width / (float)render_rect.w;
 	mouse.p.x=((float)mouse.p.x * factor) - render_rect.x;
 	mouse.p.y=((float)mouse.p.y * factor) - render_rect.y;

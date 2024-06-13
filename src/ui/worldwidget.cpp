@@ -5,11 +5,11 @@
 namespace Decker::ui {
 
 StatsFrame::StatsFrame(int x, int y, int width, int height, const ppl7::String& label)
-	: ppl7::tk::Widget()
+	: ppltk::Widget()
 {
 	create(x, y, width, height);
 	setClientOffset(8, 8, 8, 8);
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	font=style.buttonFont;
 	font.setName("NotoSansBlack");
 	font.setBold(false);
@@ -65,11 +65,11 @@ void StatsFrame::setValue(const ppl7::String& value)
 
 
 OxygenFrame::OxygenFrame(int x, int y, int width, int height, const ppl7::String& label)
-	: ppl7::tk::Widget()
+	: ppltk::Widget()
 {
 	create(x, y, width, height);
 	setClientOffset(8, 8, 8, 8);
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	font=style.buttonFont;
 	font.setName("NotoSansBlack");
 	font.setBold(false);
@@ -165,7 +165,7 @@ WorldWidget::WorldWidget()
 	oxygen_cooldown=0.0f;
 	showui=false;
 	retranslateUi();
-	ppl7::tk::Label l;
+	ppltk::Label l;
 
 }
 

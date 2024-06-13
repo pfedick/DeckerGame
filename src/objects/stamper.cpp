@@ -70,10 +70,10 @@ void Stamper::init()
 	if (state == State::Closed) sprite_no+=5;
 	animation.setStaticFrame(sprite_no);
 	switch (orientation) {
-	case Orientation::down: sprite_no_representation=19; break;
-	case Orientation::up: sprite_no_representation=20; break;
-	case Orientation::right: sprite_no_representation=21; break;
-	case Orientation::left: sprite_no_representation=22; break;
+		case Orientation::down: sprite_no_representation=19; break;
+		case Orientation::up: sprite_no_representation=20; break;
+		case Orientation::right: sprite_no_representation=21; break;
+		case Orientation::left: sprite_no_representation=22; break;
 	}
 	//printf ("sprite_no=%d, state=%d\n",sprite_no, state);
 	updateBoundary();
@@ -92,37 +92,37 @@ void Stamper::updateStamperBoundary()
 	const SpriteTexture::SpriteIndexItem* teeth_item=texture->getSpriteIndex(s + 5);
 
 	switch (orientation) {
-	case Orientation::down:
-		this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
-		this->boundary.y1=p.y + (stamper_item->Offset.y - stamper_item->Pivot.y);
-		this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
-		this->boundary.y2=this->boundary.y1 + stamper_item->r.h - 261 + position;
-		if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
-		break;
-	case Orientation::up:
-		this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
-		this->boundary.y1=p.y + 261 - position;
-		this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
-		this->boundary.y2=p.y + stamper_item->r.h;
-		if (teeth_item) this->boundary.y1-=(teeth_item->r.h - 7);
-		break;
-	case Orientation::right:
-		this->boundary.x1=p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
-		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
-		this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
-		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-		if (teeth_item) this->boundary.x2+=(teeth_item->r.h - 7);
-		break;
-	case Orientation::left:
-		this->boundary.x1=p.x + 261 - position;
-		this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
-		this->boundary.x2=p.x + 261;
-		this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-		if (teeth_item) this->boundary.x1-=(teeth_item->r.h - 7);
-		break;
+		case Orientation::down:
+			this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
+			this->boundary.y1=p.y + (stamper_item->Offset.y - stamper_item->Pivot.y);
+			this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
+			this->boundary.y2=this->boundary.y1 + stamper_item->r.h - 261 + position;
+			if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
+			break;
+		case Orientation::up:
+			this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
+			this->boundary.y1=p.y + 261 - position;
+			this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
+			this->boundary.y2=p.y + stamper_item->r.h;
+			if (teeth_item) this->boundary.y1-=(teeth_item->r.h - 7);
+			break;
+		case Orientation::right:
+			this->boundary.x1=p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
+			this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+			this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
+			this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
+			if (teeth_item) this->boundary.x2+=(teeth_item->r.h - 7);
+			break;
+		case Orientation::left:
+			this->boundary.x1=p.x + 261 - position;
+			this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+			this->boundary.x2=p.x + 261;
+			this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
+			if (teeth_item) this->boundary.x1-=(teeth_item->r.h - 7);
+			break;
 
-	default:
-		this->boundary.setRect(0, 0, 0, 0);
+		default:
+			this->boundary.setRect(0, 0, 0, 0);
 	}
 
 }
@@ -525,23 +525,23 @@ size_t Stamper::load(const unsigned char* buffer, size_t size)
 class StamperDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* stamper_type;
-	ppl7::tk::ComboBox* teeth_type;
-	ppl7::tk::ComboBox* orientation;
-	ppl7::tk::CheckBox* initial_state;
-	ppl7::tk::CheckBox* auto_intervall;
-	ppl7::tk::DoubleHorizontalSlider* time_active;
-	ppl7::tk::DoubleHorizontalSlider* time_inactive;
+	ppltk::ComboBox* stamper_type;
+	ppltk::ComboBox* teeth_type;
+	ppltk::ComboBox* orientation;
+	ppltk::CheckBox* initial_state;
+	ppltk::CheckBox* auto_intervall;
+	ppltk::DoubleHorizontalSlider* time_active;
+	ppltk::DoubleHorizontalSlider* time_inactive;
 
 	Decker::ui::ColorSelectionFrame* colorframe;
-	ppl7::tk::Button* button_color_stamper;
-	ppl7::tk::Button* button_color_teeth;
-	ppl7::tk::Frame* frame_color_stamper;
-	ppl7::tk::Frame* frame_color_teeth;
+	ppltk::Button* button_color_stamper;
+	ppltk::Button* button_color_teeth;
+	ppltk::Frame* frame_color_stamper;
+	ppltk::Frame* frame_color_teeth;
 
 
-	ppl7::tk::Label* current_element_label;
-	ppl7::tk::Frame* current_element_color_frame;
+	ppltk::Label* current_element_label;
+	ppltk::Frame* current_element_color_frame;
 	int* color_target;
 
 	enum class Element {
@@ -556,10 +556,10 @@ private:
 
 public:
 	StamperDialog(Stamper* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked);
-	virtual void mouseDownEvent(ppl7::tk::MouseEvent* event);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, double value);
+	virtual void toggledEvent(ppltk::Event* event, bool checked);
+	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 };
 
 void Stamper::openUi()
@@ -579,8 +579,8 @@ StamperDialog::StamperDialog(Stamper* object)
 	setWindowTitle(ppl7::ToString("Stamper, Object-ID: %d", object->id));
 	int y=0;
 	ppl7::grafix::Rect client=clientRect();
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Stamper-Type: "));
-	stamper_type=new ppl7::tk::ComboBox(120, y, 400, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Stamper-Type: "));
+	stamper_type=new ppltk::ComboBox(120, y, 400, 30);
 	stamper_type->add("4 Tiles", "0");
 	stamper_type->add("2 Tiles", "1");
 	stamper_type->add("2 Tiles bricks", "2");
@@ -590,8 +590,8 @@ StamperDialog::StamperDialog(Stamper* object)
 	stamper_type->setEventHandler(this);
 	addChild(stamper_type);
 	y+=35;
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Teeth-Type: "));
-	teeth_type=new ppl7::tk::ComboBox(120, y, 400, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Teeth-Type: "));
+	teeth_type=new ppltk::ComboBox(120, y, 400, 30);
 	teeth_type->add("plate with rounds", "0");
 	teeth_type->add("plate with peaks", "1");
 	teeth_type->add("peaks", "2");
@@ -604,8 +604,8 @@ StamperDialog::StamperDialog(Stamper* object)
 	addChild(teeth_type);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Orientation: "));
-	orientation=new ppl7::tk::ComboBox(120, y, 400, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Orientation: "));
+	orientation=new ppltk::ComboBox(120, y, 400, 30);
 	orientation->add("down", "0");
 	orientation->add("up", "1");
 	orientation->add("left", "2");
@@ -617,8 +617,8 @@ StamperDialog::StamperDialog(Stamper* object)
 
 
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Colors: "));
-	current_element_label=new ppl7::tk::Label(client.width() - 300, y, 300, 30, "Stamper");
+	addChild(new ppltk::Label(0, y, 120, 30, "Colors: "));
+	current_element_label=new ppltk::Label(client.width() - 300, y, 300, 30, "Stamper");
 	addChild(current_element_label);
 	y+=35;
 	ColorPalette& palette=GetColorPalette();
@@ -626,36 +626,36 @@ StamperDialog::StamperDialog(Stamper* object)
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 
-	button_color_stamper=new ppl7::tk::Button(30, y, 100, 30, "Stamper");
+	button_color_stamper=new ppltk::Button(30, y, 100, 30, "Stamper");
 	button_color_stamper->setEventHandler(this);
 	addChild(button_color_stamper);
-	frame_color_stamper=new ppl7::tk::Frame(135, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_stamper=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_stamper->setBackgroundColor(palette.getColor(object->color_stamper));
 	addChild(frame_color_stamper);
 	y+=35;
 
-	button_color_teeth=new ppl7::tk::Button(30, y, 100, 30, "Teeth");
+	button_color_teeth=new ppltk::Button(30, y, 100, 30, "Teeth");
 	button_color_teeth->setEventHandler(this);
 	addChild(button_color_teeth);
-	frame_color_teeth=new ppl7::tk::Frame(135, y, 60, 30, ppl7::tk::Frame::Inset);
+	frame_color_teeth=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_teeth->setBackgroundColor(palette.getColor(object->color_teeth));
 	addChild(frame_color_teeth);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Flags: "));
-	initial_state=new ppl7::tk::CheckBox(120, y, 200, 30, "Initial state", object->initial_state);
+	addChild(new ppltk::Label(0, y, 120, 30, "Flags: "));
+	initial_state=new ppltk::CheckBox(120, y, 200, 30, "Initial state", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 	y+=30;
-	auto_intervall=new ppl7::tk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
+	auto_intervall=new ppltk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Time active:"));
-	time_active=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Time active:"));
+	time_active=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
 	time_active->setValue(object->time_active);
 	time_active->setEventHandler(this);
 	time_active->setLimits(0.0f, 10.0f);
@@ -663,8 +663,8 @@ StamperDialog::StamperDialog(Stamper* object)
 	this->addChild(time_active);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Time inactive:"));
-	time_inactive=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Time inactive:"));
+	time_inactive=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
 	time_inactive->setValue(object->time_inactive);
 	time_inactive->setEventHandler(this);
 	time_inactive->setLimits(0.0f, 10.0f);
@@ -682,23 +682,23 @@ void StamperDialog::setCurrentElement(Element element)
 {
 	current_element=element;
 	switch (element) {
-	case Element::Stamper:
-		current_element_label->setText("Stamper");
-		current_element_color_frame=frame_color_stamper;
-		color_target=&object->color_stamper;
-		break;
-	case Element::Teeth:
-		current_element_label->setText("Teeth");
-		current_element_color_frame=frame_color_teeth;
-		color_target=&object->color_teeth;
-		break;
+		case Element::Stamper:
+			current_element_label->setText("Stamper");
+			current_element_color_frame=frame_color_stamper;
+			color_target=&object->color_stamper;
+			break;
+		case Element::Teeth:
+			current_element_label->setText("Teeth");
+			current_element_color_frame=frame_color_teeth;
+			color_target=&object->color_teeth;
+			break;
 	}
 
 	colorframe->setColorIndex(*color_target);
 }
 
 
-void StamperDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void StamperDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == stamper_type) {
 		object->stamper_type=stamper_type->currentIdentifier().toInt();
@@ -716,14 +716,14 @@ void StamperDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void StamperDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void StamperDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	if (event->widget() == time_active) object->time_active=value;
 	else if (event->widget() == time_inactive) object->time_inactive=value;
 	//printf("Stamper valueChangedEvent: %0.3f, %0.3f\n", object->time_active, object->time_inactive);
 }
 
-void StamperDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void StamperDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) object->initial_state=(int)checked * 2;
 	else if (event->widget() == auto_intervall) object->auto_intervall=checked;
@@ -732,9 +732,9 @@ void StamperDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 }
 
-void StamperDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void StamperDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == button_color_stamper || widget == frame_color_stamper) setCurrentElement(Element::Stamper);
 	else if (widget == button_color_teeth || widget == frame_color_teeth) setCurrentElement(Element::Teeth);
 	else Dialog::mouseDownEvent(event);

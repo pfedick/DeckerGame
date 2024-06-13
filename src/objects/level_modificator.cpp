@@ -201,27 +201,27 @@ void LevelModificator::trigger(Object* source)
 class LevelModificatorDialog : public Decker::ui::Dialog
 {
 private:
-    ppl7::tk::HorizontalSlider* range_x;
-    ppl7::tk::HorizontalSlider* range_y;
-    ppl7::tk::DoubleHorizontalSlider* transitionTime;
-    ppl7::tk::CheckBox* initialStateEnabled, * currentState;
+    ppltk::HorizontalSlider* range_x;
+    ppltk::HorizontalSlider* range_y;
+    ppltk::DoubleHorizontalSlider* transitionTime;
+    ppltk::CheckBox* initialStateEnabled, * currentState;
     LevelModificator* object;
 
-    ppl7::tk::CheckBox* loadLevelDefault;
-    ppl7::tk::CheckBox* changeBackground;
-    ppl7::tk::CheckBox* changeGlobalLighting;
-    ppl7::tk::CheckBox* changeSong;
-    ppl7::tk::Frame* globalLightingFrame;
-    ppl7::tk::Frame* backgroundFrame;
-    ppl7::tk::Frame* songFrame;
-    ppl7::tk::RadioButton* backgroundTypeImage;
-    ppl7::tk::RadioButton* backgroundTypeColor;
+    ppltk::CheckBox* loadLevelDefault;
+    ppltk::CheckBox* changeBackground;
+    ppltk::CheckBox* changeGlobalLighting;
+    ppltk::CheckBox* changeSong;
+    ppltk::Frame* globalLightingFrame;
+    ppltk::Frame* backgroundFrame;
+    ppltk::Frame* songFrame;
+    ppltk::RadioButton* backgroundTypeImage;
+    ppltk::RadioButton* backgroundTypeColor;
     Decker::ui::ColorSliderWidget* GlobalLighting;
     Decker::ui::ColorSliderWidget* BackgroundColor;
-    ppl7::tk::ComboBox* backgroundImage;
-    ppl7::tk::ComboBox* songComboBox;
-    ppl7::tk::Button* CopyGlobalLightingFromLevel;
-    ppl7::tk::Button* CopyBackgroundFromLevel;
+    ppltk::ComboBox* backgroundImage;
+    ppltk::ComboBox* songComboBox;
+    ppltk::Button* CopyGlobalLightingFromLevel;
+    ppltk::Button* CopyBackgroundFromLevel;
 
 
 
@@ -229,13 +229,13 @@ public:
     LevelModificatorDialog(LevelModificator* object);
     ~LevelModificatorDialog();
 
-    //virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-    virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
-    virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+    //virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void valueChangedEvent(ppltk::Event* event, int value);
+    virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+    virtual void valueChangedEvent(ppltk::Event* event, double value);
+    virtual void toggledEvent(ppltk::Event* event, bool checked) override;
     virtual void dialogButtonEvent(Dialog::Buttons button) override;
-    virtual void mouseDownEvent(ppl7::tk::MouseEvent* event) override;
+    virtual void mouseDownEvent(ppltk::MouseEvent* event) override;
 };
 
 
@@ -255,25 +255,25 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     int y=0;
 
     int sw=client.width() / 2;
-    initialStateEnabled=new ppl7::tk::CheckBox(0, y, sw, 30, "initial state");
+    initialStateEnabled=new ppltk::CheckBox(0, y, sw, 30, "initial state");
     initialStateEnabled->setEventHandler(this);
     initialStateEnabled->setChecked(object->initialStateEnabled);
     addChild(initialStateEnabled);
-    currentState=new ppl7::tk::CheckBox(sw, y, sw, 30, "current state");
+    currentState=new ppltk::CheckBox(sw, y, sw, 30, "current state");
     currentState->setEventHandler(this);
     currentState->setChecked(object->enabled);
     addChild(currentState);
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "Collision Range x:"));
-    range_x=new ppl7::tk::HorizontalSlider(120, y, sw - 120, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
+    range_x=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
     range_x->setLimits(0, 1600);
     range_x->setValue(object->range.x);
     range_x->enableSpinBox(true, 1, 80);
     range_x->setEventHandler(this);
     addChild(range_x);
-    addChild(new ppl7::tk::Label(sw, y, 60, 30, "Range y:"));
-    range_y=new ppl7::tk::HorizontalSlider(sw + 60, y, sw - 60, 30);
+    addChild(new ppltk::Label(sw, y, 60, 30, "Range y:"));
+    range_y=new ppltk::HorizontalSlider(sw + 60, y, sw - 60, 30);
     range_y->setLimits(0, 1600);
     range_y->setValue(object->range.y);
     range_y->enableSpinBox(true, 1, 80);
@@ -281,27 +281,27 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     addChild(range_y);
     y+=35;
 
-    loadLevelDefault=new ppl7::tk::CheckBox(0, y, client.width(), 30, "load level default", object->loadLevelDefault);
+    loadLevelDefault=new ppltk::CheckBox(0, y, client.width(), 30, "load level default", object->loadLevelDefault);
     loadLevelDefault->setEventHandler(this);
     addChild(loadLevelDefault);
     y+=35;
 
-    changeBackground=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change Background", object->changeBackground);
+    changeBackground=new ppltk::CheckBox(0, y, client.width(), 30, "change Background", object->changeBackground);
     changeBackground->setEventHandler(this);
     addChild(changeBackground);
     y+=35;
-    backgroundFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 175);
+    backgroundFrame=new ppltk::Frame(40, y, client.width() - 40, 175);
 
     int y1=0;
-    CopyBackgroundFromLevel=new ppl7::tk::Button(backgroundFrame->width() - 195, 0, 195, 30, "copy from level");
+    CopyBackgroundFromLevel=new ppltk::Button(backgroundFrame->width() - 195, 0, 195, 30, "copy from level");
     CopyBackgroundFromLevel->setEventHandler(this);
     backgroundFrame->addChild(CopyBackgroundFromLevel);
 
 
-    backgroundTypeImage=new ppl7::tk::RadioButton(0, y1, 80, 30, "Image:");
+    backgroundTypeImage=new ppltk::RadioButton(0, y1, 80, 30, "Image:");
     backgroundTypeImage->setEventHandler(this);
     backgroundFrame->addChild(backgroundTypeImage);
-    backgroundImage=new ppl7::tk::ComboBox(100, y1, backgroundFrame->width() - 310, 30);
+    backgroundImage=new ppltk::ComboBox(100, y1, backgroundFrame->width() - 310, 30);
     backgroundImage->setEventHandler(this);
     Resources& res=getResources();
     std::list<ppl7::String>::const_iterator it;
@@ -313,7 +313,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     backgroundFrame->addChild(backgroundImage);
     y1+=35;
 
-    backgroundTypeColor=new ppl7::tk::RadioButton(0, y1, 80, 30, "Color:");
+    backgroundTypeColor=new ppltk::RadioButton(0, y1, 80, 30, "Color:");
     backgroundTypeColor->setEventHandler(this);
     backgroundFrame->addChild(backgroundTypeColor);
     y1+=35;
@@ -330,16 +330,16 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     y+=180;
 
 
-    changeGlobalLighting=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change global lighting", object->changeGlobalLighting);
+    changeGlobalLighting=new ppltk::CheckBox(0, y, client.width(), 30, "change global lighting", object->changeGlobalLighting);
     changeGlobalLighting->setEventHandler(this);
     addChild(changeGlobalLighting);
     y+=35;
-    globalLightingFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 110);
+    globalLightingFrame=new ppltk::Frame(40, y, client.width() - 40, 110);
     GlobalLighting=new Decker::ui::ColorSliderWidget(0, 0, globalLightingFrame->width() - 200, 100);
     GlobalLighting->setEventHandler(this);
     GlobalLighting->setColor(object->GlobalLighting);
     globalLightingFrame->addChild(GlobalLighting);
-    CopyGlobalLightingFromLevel=new ppl7::tk::Button(globalLightingFrame->width() - 195, 0, 195, 30, "copy from level");
+    CopyGlobalLightingFromLevel=new ppltk::Button(globalLightingFrame->width() - 195, 0, 195, 30, "copy from level");
     CopyGlobalLightingFromLevel->setEventHandler(this);
     globalLightingFrame->addChild(CopyGlobalLightingFromLevel);
     addChild(globalLightingFrame);
@@ -348,13 +348,13 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
 
 
 
-    changeSong=new ppl7::tk::CheckBox(0, y, client.width(), 30, "change song", object->changeSong);
+    changeSong=new ppltk::CheckBox(0, y, client.width(), 30, "change song", object->changeSong);
     changeSong->setEventHandler(this);
     addChild(changeSong);
     y+=35;
-    songFrame=new ppl7::tk::Frame(40, y, client.width() - 40, 50);
-    songFrame->addChild(new ppl7::tk::Label(0, 0, 100, 30, "Song:"));
-    songComboBox=new ppl7::tk::ComboBox(100, 0, 300, 30);
+    songFrame=new ppltk::Frame(40, y, client.width() - 40, 50);
+    songFrame->addChild(new ppltk::Label(0, 0, 100, 30, "Song:"));
+    songComboBox=new ppltk::ComboBox(100, 0, 300, 30);
     songComboBox->add("no song", "");
     AudioPool& pool=getAudioPool();
     {
@@ -372,8 +372,8 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
 
     /*
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "max trigger count: "));
-    maxTriggerCount=new ppl7::tk::HorizontalSlider(120, y, sw - 120, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "max trigger count: "));
+    maxTriggerCount=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
     maxTriggerCount->setLimits(0, 1024);
     maxTriggerCount->setValue(object->maxTriggerCount);
     maxTriggerCount->enableSpinBox(true, 1, 80);
@@ -381,25 +381,25 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     addChild(maxTriggerCount);
     y+=35;
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "Cooldown: "));
-    cooldownUntilNextTrigger=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "Cooldown: "));
+    cooldownUntilNextTrigger=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
     cooldownUntilNextTrigger->setLimits(0.0f, 120.0f);
     cooldownUntilNextTrigger->setValue(object->cooldownUntilNextTrigger);
     cooldownUntilNextTrigger->enableSpinBox(true, 0.2f, 3, 80);
     cooldownUntilNextTrigger->setEventHandler(this);
     addChild(cooldownUntilNextTrigger);
-    addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+    addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
     y+=35;
     */
 
-    addChild(new ppl7::tk::Label(0, y, 120, 30, "Transition time: "));
-    transitionTime=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 120 - 120, 30);
+    addChild(new ppltk::Label(0, y, 120, 30, "Transition time: "));
+    transitionTime=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 120 - 120, 30);
     transitionTime->setLimits(0.0f, 60.0f);
     transitionTime->setValue(object->transitionTime);
     transitionTime->enableSpinBox(true, 0.1f, 3, 80);
     transitionTime->setEventHandler(this);
     addChild(transitionTime);
-    addChild(new ppl7::tk::Label(client.width() - 120, y, 120, 30, "seconds"));
+    addChild(new ppltk::Label(client.width() - 120, y, 120, 30, "seconds"));
     y+=35;
 
 
@@ -416,7 +416,7 @@ LevelModificatorDialog::~LevelModificatorDialog()
 
 }
 
-void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void LevelModificatorDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
     //ppl7::PrintDebugTime("LevelModificatorDialog::toggledEvent\n");
     if (event->widget() == initialStateEnabled) {
@@ -444,7 +444,7 @@ void LevelModificatorDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 
 
-void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void LevelModificatorDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
     //ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
     if (event->widget() == transitionTime) {
@@ -452,7 +452,7 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, double va
     }
 }
 
-void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void LevelModificatorDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     //ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int64_t\n");
     if (event->widget() == range_x) {
@@ -462,7 +462,7 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t v
     }
 }
 
-void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void LevelModificatorDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
     //ppl7::PrintDebugTime("LevelModificatorDialog::valueChangedEvent int\n");
     if (event->widget() == GlobalLighting) {
@@ -479,7 +479,7 @@ void LevelModificatorDialog::valueChangedEvent(ppl7::tk::Event* event, int value
 
 }
 
-void LevelModificatorDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void LevelModificatorDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
     //ppl7::PrintDebugTime("LevelModificatorDialog::mouseDownEvent\n");
     if (event->widget() == CopyGlobalLightingFromLevel) {

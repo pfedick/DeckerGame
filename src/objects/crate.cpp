@@ -175,7 +175,7 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 class CrateDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* crate_style;
+	ppltk::ComboBox* crate_style;
 	Decker::ui::ColorSliderWidget* color;
 
 
@@ -183,9 +183,9 @@ private:
 
 public:
 	CrateDialog(Crate* object);
-	//void toggledEvent(ppl7::tk::Event* event, bool checked) override;
-	void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-	//void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
+	//void toggledEvent(ppltk::Event* event, bool checked) override;
+	void valueChangedEvent(ppltk::Event* event, int value) override;
+	//void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 
 };
 
@@ -203,8 +203,8 @@ CrateDialog::CrateDialog(Crate* object)
 	this->setWindowTitle(ppl7::ToString("Crate, ID: %d", object->id));
 	ppl7::grafix::Rect client=clientRect();
 	int y=0;
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Crate-Style: "));
-	crate_style=new ppl7::tk::ComboBox(100, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Crate-Style: "));
+	crate_style=new ppltk::ComboBox(100, y, 300, 30);
 	crate_style->add("Big Barrel", "0");
 	crate_style->add("Small Barrel", "1");
 	crate_style->add("Crate low 1", "2");
@@ -218,7 +218,7 @@ CrateDialog::CrateDialog(Crate* object)
 	addChild(crate_style);
 	y+=40;
 
-	addChild(new ppl7::tk::Label(0, y, 80, 30, "Color modification:"));
+	addChild(new ppltk::Label(0, y, 80, 30, "Color modification:"));
 	y+=30;
 	color=new Decker::ui::ColorSliderWidget(0, y, client.width(), 100);
 	color->setEventHandler(this);
@@ -229,9 +229,9 @@ CrateDialog::CrateDialog(Crate* object)
 }
 
 
-void CrateDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void CrateDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == crate_style) {
 		object->sprite_no=crate_style->currentIdentifier().toInt();
 		object->sprite_no_representation=object->sprite_no;

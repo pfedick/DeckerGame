@@ -240,20 +240,20 @@ void VoiceTrigger::trigger(Object* source)
 class VoiceTriggerDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::LineInput* context;
-	ppl7::tk::SpinBox* speechId;
-	ppl7::tk::HorizontalSlider* range_x;
-	ppl7::tk::HorizontalSlider* range_y;
-	ppl7::tk::HorizontalSlider* max_trigger;
-	ppl7::tk::DoubleHorizontalSlider* volume;
-	ppl7::tk::DoubleHorizontalSlider* cooldownUntilNextTrigger;
-	ppl7::tk::DoubleHorizontalSlider* initialDelay;
-	ppl7::tk::DoubleHorizontalSlider* triggerDeleay;
-	ppl7::tk::CheckBox* initialStateEnabled, * currentState;
-	ppl7::tk::CheckBox* singleTrigger, * triggeredByCollision;
-	ppl7::tk::CheckBox* requireKeypress, * pauseWorld;
-	ppl7::tk::SpinBox* target_id[5];
-	ppl7::tk::CheckBox* target_state[5];
+	ppltk::LineInput* context;
+	ppltk::SpinBox* speechId;
+	ppltk::HorizontalSlider* range_x;
+	ppltk::HorizontalSlider* range_y;
+	ppltk::HorizontalSlider* max_trigger;
+	ppltk::DoubleHorizontalSlider* volume;
+	ppltk::DoubleHorizontalSlider* cooldownUntilNextTrigger;
+	ppltk::DoubleHorizontalSlider* initialDelay;
+	ppltk::DoubleHorizontalSlider* triggerDeleay;
+	ppltk::CheckBox* initialStateEnabled, * currentState;
+	ppltk::CheckBox* singleTrigger, * triggeredByCollision;
+	ppltk::CheckBox* requireKeypress, * pauseWorld;
+	ppltk::SpinBox* target_id[5];
+	ppltk::CheckBox* target_state[5];
 
 	VoiceTrigger* object;
 
@@ -261,12 +261,12 @@ public:
 	VoiceTriggerDialog(VoiceTrigger* object);
 	~VoiceTriggerDialog();
 
-	//virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value);
-	virtual void textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text);
-	virtual void toggledEvent(ppl7::tk::Event* event, bool checked) override;
+	//virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	virtual void valueChangedEvent(ppltk::Event* event, double value);
+	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
@@ -285,14 +285,14 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 	setWindowTitle(ppl7::ToString("Voice Trigger, Object ID: %u", object->id));
 	int y=0;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Context:"));
-	context=new ppl7::tk::LineInput(120, y, client.width() - 120, 30, object->context);
+	addChild(new ppltk::Label(0, y, 120, 30, "Context:"));
+	context=new ppltk::LineInput(120, y, client.width() - 120, 30, object->context);
 	context->setEventHandler(this);
 	addChild(context);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Text ID:"));
-	speechId=new ppl7::tk::SpinBox(120, y, 100, 30, object->speechId);
+	addChild(new ppltk::Label(0, y, 120, 30, "Text ID:"));
+	speechId=new ppltk::SpinBox(120, y, 100, 30, object->speechId);
 	speechId->setLimits(0, 65535);
 	speechId->setEventHandler(this);
 	addChild(speechId);
@@ -300,45 +300,45 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 
 	// State
 	int sw=width() / 2;
-	initialStateEnabled=new ppl7::tk::CheckBox(0, y, sw, 30, "initial state");
+	initialStateEnabled=new ppltk::CheckBox(0, y, sw, 30, "initial state");
 	initialStateEnabled->setEventHandler(this);
 	initialStateEnabled->setChecked(object->initialStateEnabled);
 	addChild(initialStateEnabled);
-	currentState=new ppl7::tk::CheckBox(sw, y, sw, 30, "current state");
+	currentState=new ppltk::CheckBox(sw, y, sw, 30, "current state");
 	currentState->setEventHandler(this);
 	currentState->setChecked(object->enabled);
 	addChild(currentState);
 	y+=35;
 
-	singleTrigger=new ppl7::tk::CheckBox(0, y, sw, 30, "singleTrigger");
+	singleTrigger=new ppltk::CheckBox(0, y, sw, 30, "singleTrigger");
 	singleTrigger->setEventHandler(this);
 	singleTrigger->setChecked(object->singleTrigger);
 	addChild(singleTrigger);
-	triggeredByCollision=new ppl7::tk::CheckBox(sw, y, sw, 30, "triggeredByCollision");
+	triggeredByCollision=new ppltk::CheckBox(sw, y, sw, 30, "triggeredByCollision");
 	triggeredByCollision->setChecked(object->triggeredByCollision);
 	triggeredByCollision->setEventHandler(this);
 	addChild(triggeredByCollision);
 	y+=35;
 
-	requireKeypress=new ppl7::tk::CheckBox(0, y, sw, 30, "require keypress:");
+	requireKeypress=new ppltk::CheckBox(0, y, sw, 30, "require keypress:");
 	requireKeypress->setEventHandler(this);
 	requireKeypress->setChecked(object->requireKeypress);
 	addChild(requireKeypress);
-	pauseWorld=new ppl7::tk::CheckBox(sw, y, sw, 30, "pause world while text is shown");
+	pauseWorld=new ppltk::CheckBox(sw, y, sw, 30, "pause world while text is shown");
 	pauseWorld->setChecked(object->pauseWorld);
 	pauseWorld->setEventHandler(this);
 	addChild(pauseWorld);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Collision Range x:"));
-	range_x=new ppl7::tk::HorizontalSlider(120, y, sw - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
+	range_x=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
 	range_x->setLimits(0, 1600);
 	range_x->setValue(object->range.x);
 	range_x->enableSpinBox(true, 1, 80);
 	range_x->setEventHandler(this);
 	addChild(range_x);
-	addChild(new ppl7::tk::Label(sw, y, 60, 30, "Range y:"));
-	range_y=new ppl7::tk::HorizontalSlider(sw + 60, y, sw - 60, 30);
+	addChild(new ppltk::Label(sw, y, 60, 30, "Range y:"));
+	range_y=new ppltk::HorizontalSlider(sw + 60, y, sw - 60, 30);
 	range_y->setLimits(0, 1600);
 	range_y->setValue(object->range.y);
 	range_y->enableSpinBox(true, 1, 80);
@@ -347,54 +347,54 @@ VoiceTriggerDialog::VoiceTriggerDialog(VoiceTrigger* object)
 	y+=35;
 
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "volume: "));
-	volume=new ppl7::tk::DoubleHorizontalSlider(120, y, client.width() - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "volume: "));
+	volume=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 120, 30);
 	volume->setLimits(0.0f, 2.0f);
 	volume->setValue(object->volume);
 	volume->enableSpinBox(true, 0.01f, 3, 80);
 	volume->setEventHandler(this);
 	addChild(volume);
 	y+=35;
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Initial delay: "));
-	initialDelay=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Initial delay: "));
+	initialDelay=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
 	initialDelay->setLimits(0.0f, 60.0f);
 	initialDelay->setValue(object->initialDelay);
 	initialDelay->enableSpinBox(true, 0.2f, 3, 80);
 	initialDelay->setEventHandler(this);
 	addChild(initialDelay);
-	addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+	addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Voice cooldown: "));
-	cooldownUntilNextTrigger=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Voice cooldown: "));
+	cooldownUntilNextTrigger=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
 	cooldownUntilNextTrigger->setLimits(0.0f, 120.0f);
 	cooldownUntilNextTrigger->setValue(object->cooldownUntilNextTrigger);
 	cooldownUntilNextTrigger->enableSpinBox(true, 0.2f, 3, 80);
 	cooldownUntilNextTrigger->setEventHandler(this);
 	addChild(cooldownUntilNextTrigger);
-	addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+	addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
 	y+=45;
 
-	addChild(new ppl7::tk::Label(0, y, 400, 30, "Trigger other objects, when text finished:"));
+	addChild(new ppltk::Label(0, y, 400, 30, "Trigger other objects, when text finished:"));
 	y+=35;
-	addChild(new ppl7::tk::Label(0, y, 120, 30, "Trigger delay: "));
-	triggerDeleay=new ppl7::tk::DoubleHorizontalSlider(120, y, 300, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Trigger delay: "));
+	triggerDeleay=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
 	triggerDeleay->setLimits(0.0f, 60.0f);
 	triggerDeleay->setValue(object->triggerDeleay);
 	triggerDeleay->enableSpinBox(true, 0.2f, 3, 80);
 	triggerDeleay->setEventHandler(this);
 	addChild(triggerDeleay);
-	addChild(new ppl7::tk::Label(420, y, 120, 30, "seconds"));
+	addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
 	y+=35;
 
 	for (int i=0;i < 5;i++) {
-		addChild(new ppl7::tk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-		target_id[i]=new ppl7::tk::SpinBox(220, y, 100, 30, object->triggerObjects[i].object_id);
+		addChild(new ppltk::Label(120, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		target_id[i]=new ppltk::SpinBox(220, y, 100, 30, object->triggerObjects[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
 		/*
-		target_state[i]=new ppl7::tk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
+		target_state[i]=new ppltk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
 		target_state[i]->setEventHandler(this);
 		addChild(target_state[i]);
 		*/
@@ -411,7 +411,7 @@ VoiceTriggerDialog::~VoiceTriggerDialog()
 
 }
 
-void VoiceTriggerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void VoiceTriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == singleTrigger) {
 		object->singleTrigger=checked;
@@ -431,7 +431,7 @@ void VoiceTriggerDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
 
 
 
-void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void VoiceTriggerDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::valueChangedEvent (volume): >>%0.3f<<", value);
 	if (event->widget() == volume) {
@@ -445,7 +445,7 @@ void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 	}
 }
 
-void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void VoiceTriggerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int64_t\n");
 	if (event->widget() == range_x) {
@@ -461,7 +461,7 @@ void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value
 	}
 }
 
-void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void VoiceTriggerDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	//ppl7::PrintDebugTime("VoiceTriggerDialog::valueChangedEvent int\n");
 	if (event->widget() == speechId) {
@@ -470,7 +470,7 @@ void VoiceTriggerDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
 	}
 }
 
-void VoiceTriggerDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void VoiceTriggerDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
 	//ppl7::PrintDebugTime("SpeakerDialog::textChangedEvent: >>%s<<", (const char*)text);
 	if (event->widget() == context) {

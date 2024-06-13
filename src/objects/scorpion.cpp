@@ -193,24 +193,24 @@ size_t Scorpion::load(const unsigned char* buffer, size_t size)
 class ScorpionDialog : public Decker::ui::Dialog
 {
 private:
-	ppl7::tk::ComboBox* scorpion_type;
-	ppl7::tk::HorizontalSlider* player_distance;
-	ppl7::tk::DoubleHorizontalSlider* minspeed;
-	ppl7::tk::DoubleHorizontalSlider* maxspeed;
-	ppl7::tk::DoubleHorizontalSlider* max_speed_when_player_is_near;
-	ppl7::tk::DoubleHorizontalSlider* min_idle_time;
-	ppl7::tk::DoubleHorizontalSlider* max_idle_time;
-	ppl7::tk::DoubleHorizontalSlider* speed_acceleration;
+	ppltk::ComboBox* scorpion_type;
+	ppltk::HorizontalSlider* player_distance;
+	ppltk::DoubleHorizontalSlider* minspeed;
+	ppltk::DoubleHorizontalSlider* maxspeed;
+	ppltk::DoubleHorizontalSlider* max_speed_when_player_is_near;
+	ppltk::DoubleHorizontalSlider* min_idle_time;
+	ppltk::DoubleHorizontalSlider* max_idle_time;
+	ppltk::DoubleHorizontalSlider* speed_acceleration;
 	Scorpion* object;
 
 	void setValuesToUi(const Scorpion* object);
 
 public:
 	ScorpionDialog(Scorpion* object);
-	//virtual void selectionChangedEvent(ppl7::tk::Event* event) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, double value) override;
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
+	//virtual void selectionChangedEvent(ppltk::Event* event) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
@@ -227,8 +227,8 @@ ScorpionDialog::ScorpionDialog(Scorpion* object)
 	this->setWindowTitle("Scorpion");
 	ppl7::grafix::Rect client=clientRect();
 	int y=0;
-	addChild(new ppl7::tk::Label(0, y, 100, 30, "Scorpion-Type:"));
-	scorpion_type=new ppl7::tk::ComboBox(100, y, 150, 30);
+	addChild(new ppltk::Label(0, y, 100, 30, "Scorpion-Type:"));
+	scorpion_type=new ppltk::ComboBox(100, y, 150, 30);
 	scorpion_type->add("normal", "0");
 	scorpion_type->add("metalic", "1");
 	scorpion_type->setEventHandler(this);
@@ -237,56 +237,56 @@ ScorpionDialog::ScorpionDialog(Scorpion* object)
 
 	int sw=(client.width() - 140 - 20);
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Minimum speed:"));
-	minspeed=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Minimum speed:"));
+	minspeed=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	minspeed->setEventHandler(this);
 	minspeed->setLimits(1.0f, 20.0f);
 	minspeed->enableSpinBox(true, 0.1f, 3, 80);
 	addChild(minspeed);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Maximum speed:"));
-	maxspeed=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Maximum speed:"));
+	maxspeed=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	maxspeed->setEventHandler(this);
 	maxspeed->setLimits(1.0f, 20.0f);
 	maxspeed->enableSpinBox(true, 0.1f, 3, 80);
 	addChild(maxspeed);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Min idle time:"));
-	min_idle_time=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Min idle time:"));
+	min_idle_time=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	min_idle_time->setEventHandler(this);
 	min_idle_time->setLimits(0.0f, 20.0f);
 	min_idle_time->enableSpinBox(true, 0.1f, 3, 80);
 	addChild(min_idle_time);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Max idle time:"));
-	max_idle_time=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Max idle time:"));
+	max_idle_time=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	max_idle_time->setEventHandler(this);
 	max_idle_time->setLimits(0.0f, 20.0f);
 	max_idle_time->enableSpinBox(true, 0.1f, 3, 80);
 	addChild(max_idle_time);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 140, 30, "Player distance:"));
-	player_distance=new ppl7::tk::HorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 140, 30, "Player distance:"));
+	player_distance=new ppltk::HorizontalSlider(140, y, sw, 30);
 	player_distance->setEventHandler(this);
 	player_distance->setLimits(100, 1920);
 	player_distance->enableSpinBox(true, 100, 80);
 	addChild(player_distance);
 	y+=35;
 
-	addChild(new ppl7::tk::Label(0, y, 300, 30, "Max speed when player is near:"));
+	addChild(new ppltk::Label(0, y, 300, 30, "Max speed when player is near:"));
 	y+=35;
-	max_speed_when_player_is_near=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	max_speed_when_player_is_near=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	max_speed_when_player_is_near->setEventHandler(this);
 	max_speed_when_player_is_near->setLimits(1.0f, 20.0f);
 	max_speed_when_player_is_near->enableSpinBox(true, 0.1f, 3, 80);
 	addChild(max_speed_when_player_is_near);
 	y+=35;
-	addChild(new ppl7::tk::Label(0, y, 300, 30, "Speed acceleration:"));
-	speed_acceleration=new ppl7::tk::DoubleHorizontalSlider(140, y, sw, 30);
+	addChild(new ppltk::Label(0, y, 300, 30, "Speed acceleration:"));
+	speed_acceleration=new ppltk::DoubleHorizontalSlider(140, y, sw, 30);
 	speed_acceleration->setEventHandler(this);
 	speed_acceleration->setLimits(0.01f, 2.0f);
 	speed_acceleration->enableSpinBox(true, 0.01f, 2, 80);
@@ -309,19 +309,19 @@ void ScorpionDialog::setValuesToUi(const Scorpion* object)
 	speed_acceleration->setValue(object->speed_acceleration);
 }
 
-void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void ScorpionDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with int value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == scorpion_type) {
 		object->type=scorpion_type->currentIdentifier().toInt();
 	}
 }
 
-void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
+void ScorpionDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == minspeed) {
 		object->minspeed=value;
 		if (object->minspeed > object->maxspeed) {
@@ -353,10 +353,10 @@ void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, double value)
 	}
 }
 
-void ScorpionDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void ScorpionDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	//printf("got a RainEmitterDialog::valueChangedEvent with double value\n");
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == player_distance) {
 		object->player_activation_distance=(int)value;
 	}

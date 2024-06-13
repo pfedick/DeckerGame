@@ -270,7 +270,7 @@ void GameControllerMapping::updateMapping()
 
 }
 
-GameControllerMapping::Button GameControllerMapping::getButton(const ppl7::tk::GameControllerButtonEvent* event) const
+GameControllerMapping::Button GameControllerMapping::getButton(const ppltk::GameControllerButtonEvent* event) const
 {
     std::map<int, Button>::const_iterator it;
     it=button_mapping.find(event->button);
@@ -278,7 +278,7 @@ GameControllerMapping::Button GameControllerMapping::getButton(const ppl7::tk::G
     return Button::Unknown;
 }
 
-GameControllerMapping::Axis GameControllerMapping::getAxis(const ppl7::tk::GameControllerAxisEvent* event) const
+GameControllerMapping::Axis GameControllerMapping::getAxis(const ppltk::GameControllerAxisEvent* event) const
 {
     std::map<int, Axis>::const_iterator it;
     it=axis_mapping.find(event->axis);

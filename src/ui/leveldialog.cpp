@@ -33,37 +33,37 @@ void LevelDialog::setupUi()
     ppl7::grafix::Size clientarea=this->clientSize();
     ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 
-    ok_button=new ppl7::tk::Button(20, clientarea.height - 30, 70, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
+    ok_button=new ppltk::Button(20, clientarea.height - 30, 70, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppl7::tk::Button(clientarea.width - 130, clientarea.height - 30, 120, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppltk::Button(clientarea.width - 130, clientarea.height - 30, 120, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);
     int y=0;
     int col1=150;
 
-    this->addChild(new ppl7::tk::Label(0, 0, 200, 30, "Level Name:"));
-    level_name=new ppl7::tk::LineInput(col1, 0, clientarea.width - 210, 30, "no name yet");
+    this->addChild(new ppltk::Label(0, 0, 200, 30, "Level Name:"));
+    level_name=new ppltk::LineInput(col1, 0, clientarea.width - 210, 30, "no name yet");
     level_name->setEventHandler(this);
     this->addChild(level_name);
     y+=35;
 
-    this->addChild(new ppl7::tk::Label(0, y, 200, 30, "Level Size:"));
-    level_pixel_size=new ppl7::tk::Label(col1 + 60 + 80 + 60 + 80 + 60, y, 200, 30, "= ? x ? pixel");
+    this->addChild(new ppltk::Label(0, y, 200, 30, "Level Size:"));
+    level_pixel_size=new ppltk::Label(col1 + 60 + 80 + 60 + 80 + 60, y, 200, 30, "= ? x ? pixel");
     this->addChild(level_pixel_size);
-    this->addChild(new ppl7::tk::Label(col1, y, 60, 30, "width:"));
-    level_width=new ppl7::tk::SpinBox(col1 + 60, y, 80, 30, 512);
+    this->addChild(new ppltk::Label(col1, y, 60, 30, "width:"));
+    level_width=new ppltk::SpinBox(col1 + 60, y, 80, 30, 512);
     level_width->setEventHandler(this);
     level_width->setLimits(64, 8192);
     level_width->setStepSize(16);
     this->addChild(level_width);
-    this->addChild(new ppl7::tk::Label(col1 + 60 + 80, y, 60, 30, ", height:"));
-    level_height=new ppl7::tk::SpinBox(col1 + 60 + 80 + 60, y, 80, 30, 256);
+    this->addChild(new ppltk::Label(col1 + 60 + 80, y, 60, 30, ", height:"));
+    level_height=new ppltk::SpinBox(col1 + 60 + 80 + 60, y, 80, 30, 256);
     level_height->setLimits(64, 8192);
     level_height->setStepSize(16);
     level_height->setEventHandler(this);
     this->addChild(level_height);
-    this->addChild(new ppl7::tk::Label(col1 + 60 + 80 + 60 + 80, y, 60, 30, "Studs"));
+    this->addChild(new ppltk::Label(col1 + 60 + 80 + 60 + 80, y, 60, 30, "Studs"));
     level_width->setValue(512);
     level_height->setValue(384);
     y+=35;
@@ -71,15 +71,15 @@ void LevelDialog::setupUi()
     {   // Background
         int y1=0;
         col1=90;
-        this->addChild(new ppl7::tk::Label(0, y, 200, 30, "Background:"));
-        level_background_frame=new ppl7::tk::Frame(col1, y, width() - col1 - 20, 35 * 5 + 20);
+        this->addChild(new ppltk::Label(0, y, 200, 30, "Background:"));
+        level_background_frame=new ppltk::Frame(col1, y, width() - col1 - 20, 35 * 5 + 20);
         this->addChild(level_background_frame);
 
         // Image
-        radio_image=new ppl7::tk::RadioButton(0, y1, 80, 30, "Image:");
+        radio_image=new ppltk::RadioButton(0, y1, 80, 30, "Image:");
         radio_image->setEventHandler(this);
         level_background_frame->addChild(radio_image);
-        background_image=new ppl7::tk::ComboBox(col1, y1, level_background_frame->width() - col1 - 30, 30);
+        background_image=new ppltk::ComboBox(col1, y1, level_background_frame->width() - col1 - 30, 30);
         level_background_frame->addChild(background_image);
         background_image->clear();
         Resources& res=getResources();
@@ -91,47 +91,47 @@ void LevelDialog::setupUi()
         y1+=35;
 
         // Color
-        radio_color=new ppl7::tk::RadioButton(0, y1, 80, 30, "Color:");
+        radio_color=new ppltk::RadioButton(0, y1, 80, 30, "Color:");
         radio_color->setEventHandler(this);
         level_background_frame->addChild(radio_color);
         int col2=col1 + 50;
         int col3=col2 + 80;
         int col4=col3 + 320;
-        color_preview=new ppl7::tk::Frame(col4, y1, 3 * 35, 3 * 35);
+        color_preview=new ppltk::Frame(col4, y1, 3 * 35, 3 * 35);
         color_preview->setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 255));
         level_background_frame->addChild(color_preview);
 
         // red
-        level_background_frame->addChild(new ppl7::tk::Label(col1, y1, 50, 30, "red"));
-        color_red=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+        level_background_frame->addChild(new ppltk::Label(col1, y1, 50, 30, "red"));
+        color_red=new ppltk::SpinBox(col2, y1, 70, 30, 0);
         color_red->setLimits(0, 255);
         color_red->setEventHandler(this);
         level_background_frame->addChild(color_red);
-        slider_red=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
+        slider_red=new ppltk::HorizontalSlider(col3, y1, 300, 30);
         slider_red->setLimits(0, 255);
         slider_red->setEventHandler(this);
         level_background_frame->addChild(slider_red);
         y1+=35;
 
         // green
-        level_background_frame->addChild(new ppl7::tk::Label(col1, y1, 50, 30, "green"));
-        color_green=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+        level_background_frame->addChild(new ppltk::Label(col1, y1, 50, 30, "green"));
+        color_green=new ppltk::SpinBox(col2, y1, 70, 30, 0);
         color_green->setLimits(0, 255);
         color_green->setEventHandler(this);
         level_background_frame->addChild(color_green);
-        slider_green=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
+        slider_green=new ppltk::HorizontalSlider(col3, y1, 300, 30);
         slider_green->setLimits(0, 255);
         slider_green->setEventHandler(this);
         level_background_frame->addChild(slider_green);
         y1+=35;
 
         // blue
-        level_background_frame->addChild(new ppl7::tk::Label(col1, y1, 50, 30, "blue"));
-        color_blue=new ppl7::tk::SpinBox(col2, y1, 70, 30, 0);
+        level_background_frame->addChild(new ppltk::Label(col1, y1, 50, 30, "blue"));
+        color_blue=new ppltk::SpinBox(col2, y1, 70, 30, 0);
         color_blue->setLimits(0, 255);
         color_blue->setEventHandler(this);
         level_background_frame->addChild(color_blue);
-        slider_blue=new ppl7::tk::HorizontalSlider(col3, y1, 300, 30);
+        slider_blue=new ppltk::HorizontalSlider(col3, y1, 300, 30);
         slider_blue->setLimits(0, 255);
         slider_blue->setEventHandler(this);
         level_background_frame->addChild(slider_blue);
@@ -140,30 +140,30 @@ void LevelDialog::setupUi()
 
     y+=35 * 5 + 25;
     {   // Soundtrack
-        this->addChild(new ppl7::tk::Label(0, y, 200, 30, "Soundtrack:"));
-        level_soundtrack_frame=new ppl7::tk::Frame(col1, y, width() - col1 - 20, 35 * 7 + 10);
+        this->addChild(new ppltk::Label(0, y, 200, 30, "Soundtrack:"));
+        level_soundtrack_frame=new ppltk::Frame(col1, y, width() - col1 - 20, 35 * 7 + 10);
         this->addChild(level_soundtrack_frame);
         int y2=0;
         int c2=120;
         int w=level_soundtrack_frame->clientRect().width() - c2 - 35;
         int x3=level_soundtrack_frame->clientRect().width() - 35;
-        level_soundtrack_frame->addChild(new ppl7::tk::Label(0, y2, c2, 30, "primary:"));
-        base_soundtrack=new ppl7::tk::ComboBox(c2, y2, w, 30);
+        level_soundtrack_frame->addChild(new ppltk::Label(0, y2, c2, 30, "primary:"));
+        base_soundtrack=new ppltk::ComboBox(c2, y2, w, 30);
         level_soundtrack_frame->addChild(base_soundtrack);
         y2+=35;
-        level_soundtrack_frame->addChild(new ppl7::tk::Label(0, y2, c2, 30, "additional:"));
-        additional_soundtrack=new ppl7::tk::ComboBox(c2, y2, w, 30);
+        level_soundtrack_frame->addChild(new ppltk::Label(0, y2, c2, 30, "additional:"));
+        additional_soundtrack=new ppltk::ComboBox(c2, y2, w, 30);
         level_soundtrack_frame->addChild(additional_soundtrack);
-        add_soundtrack_button=new ppl7::tk::Button(x3, y2, 30, 30, "", gfx->Toolbar.getDrawable(43));
+        add_soundtrack_button=new ppltk::Button(x3, y2, 30, 30, "", gfx->Toolbar.getDrawable(43));
         add_soundtrack_button->setEventHandler(this);
         level_soundtrack_frame->addChild(add_soundtrack_button);
-        delete_soundtrack_button=new ppl7::tk::Button(x3, y2 + 35 * 4, 30, 30, "", gfx->Toolbar.getDrawable(44));
+        delete_soundtrack_button=new ppltk::Button(x3, y2 + 35 * 4, 30, 30, "", gfx->Toolbar.getDrawable(44));
         delete_soundtrack_button->setEventHandler(this);
         level_soundtrack_frame->addChild(delete_soundtrack_button);
-        soundtrack_list=new ppl7::tk::ListWidget(c2, y2 + 35, w, 35 * 4);
+        soundtrack_list=new ppltk::ListWidget(c2, y2 + 35, w, 35 * 4);
         level_soundtrack_frame->addChild(soundtrack_list);
 
-        soundtrack_random=new ppl7::tk::CheckBox(c2, y2 + 35 * 5, 300, 30, "play random");
+        soundtrack_random=new ppltk::CheckBox(c2, y2 + 35 * 5, 300, 30, "play random");
         level_soundtrack_frame->addChild(soundtrack_random);
 
         AudioPool& pool=getAudioPool();
@@ -178,7 +178,7 @@ void LevelDialog::setupUi()
     }
     y+=35 * 7 + 15;
 
-    ppl7::tk::WindowManager* wm=ppl7::tk::GetWindowManager();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     wm->setKeyboardFocus(level_name);
 
 }
@@ -265,8 +265,8 @@ void LevelDialog::saveValues(LevelParameter& params) const
     params.InitialSong=base_soundtrack->currentIdentifier();
     params.randomSong=soundtrack_random->checked();
     params.SongPlaylist.clear();
-    const std::list<ppl7::tk::ListWidget::ListWidgetItem>& songs=soundtrack_list->getItems();
-    std::list<ppl7::tk::ListWidget::ListWidgetItem>::const_iterator it;
+    const std::list<ppltk::ListWidget::ListWidgetItem>& songs=soundtrack_list->getItems();
+    std::list<ppltk::ListWidget::ListWidgetItem>::const_iterator it;
     for (it=songs.begin();it != songs.end();++it) {
         params.SongPlaylist.push_back((*it).identifier);
     }
@@ -282,11 +282,11 @@ void LevelDialog::updateColorPreview()
 }
 
 
-void LevelDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
+void LevelDialog::mouseClickEvent(ppltk::MouseEvent* event)
 {
     if (event->widget() == ok_button) {
         my_state=DialogState::OK;
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         EventHandler::closeEvent(&event);
         return;
@@ -295,7 +295,7 @@ void LevelDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
             game->getLevel().params.BackgroundColor=previous_background;
         }
         my_state=DialogState::Aborted;
-        ppl7::tk::Event event(ppl7::tk::Event::Close);
+        ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         EventHandler::closeEvent(&event);
         return;
@@ -303,9 +303,9 @@ void LevelDialog::mouseClickEvent(ppl7::tk::MouseEvent* event)
     Dialog::mouseClickEvent(event);
 }
 
-void LevelDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void LevelDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
-    ppl7::tk::Widget* w=event->widget();
+    ppltk::Widget* w=event->widget();
     if (w == add_soundtrack_button) {
         soundtrack_list->add(additional_soundtrack->currentText(),
             additional_soundtrack->currentIdentifier());
@@ -315,9 +315,9 @@ void LevelDialog::mouseDownEvent(ppl7::tk::MouseEvent* event)
     Dialog::mouseDownEvent(event);
 }
 
-void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void LevelDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
-    ppl7::tk::Widget* widget=event->widget();
+    ppltk::Widget* widget=event->widget();
 
     if (widget == slider_red) {
         if (color_red && color_red->value() != slider_red->value()) color_red->setValue(slider_red->value());
@@ -341,9 +341,9 @@ void LevelDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
 
 }
 
-void LevelDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& text)
+void LevelDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
 {
-    ppl7::tk::Widget* widget=event->widget();
+    ppltk::Widget* widget=event->widget();
     if (level_width != NULL && level_width != NULL) {
         if (widget == level_width || widget == level_height) {
             level_pixel_size->setText(ppl7::ToString("= %d x %d pixel",
@@ -356,13 +356,13 @@ void LevelDialog::textChangedEvent(ppl7::tk::Event* event, const ppl7::String& t
 
 }
 
-void LevelDialog::keyDownEvent(ppl7::tk::KeyEvent* event)
+void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
 {
     //printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
-    ppl7::tk::WindowManager* wm=ppl7::tk::GetWindowManager();
-    ppl7::tk::Widget* widget=event->widget();
-    if ((event->key == ppl7::tk::KeyEvent::KEY_TAB || event->key == ppl7::tk::KeyEvent::KEY_RETURN)
-        && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_SHIFT) == 0) {
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    ppltk::Widget* widget=event->widget();
+    if ((event->key == ppltk::KeyEvent::KEY_TAB || event->key == ppltk::KeyEvent::KEY_RETURN)
+        && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) == 0) {
            // Tab forward
         if (widget == level_name) wm->setKeyboardFocus(level_width);
         else if (widget == level_width) wm->setKeyboardFocus(level_height);
@@ -370,8 +370,8 @@ void LevelDialog::keyDownEvent(ppl7::tk::KeyEvent* event)
         else if (widget == color_red) wm->setKeyboardFocus(color_green);
         else if (widget == color_green) wm->setKeyboardFocus(color_blue);
 
-    } else if ((event->key == ppl7::tk::KeyEvent::KEY_TAB || event->key == ppl7::tk::KeyEvent::KEY_RETURN)
-        && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_SHIFT) != 0) {
+    } else if ((event->key == ppltk::KeyEvent::KEY_TAB || event->key == ppltk::KeyEvent::KEY_RETURN)
+        && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) != 0) {
            // Tab backward
         if (widget == level_height) wm->setKeyboardFocus(level_width);
         else if (widget == level_width) wm->setKeyboardFocus(level_name);

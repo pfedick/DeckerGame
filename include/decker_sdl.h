@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <ppl7-tk.h>
+#include <ppltk.h>
 
 class SDL
 {
@@ -23,7 +23,7 @@ public:
 		ppl7::String name;
 	};
 
-	typedef ppl7::tk::Window::DisplayMode DisplayMode;
+	typedef ppltk::Window::DisplayMode DisplayMode;
 
 	SDL();
 	~SDL();

@@ -138,8 +138,8 @@ size_t LightSignal::load(const unsigned char* buffer, size_t size)
 class LightSignalDialog : public Decker::ui::Dialog
 {
 private:
-    ppl7::tk::CheckBox* initial_state_checkbox, * current_state_checkbox;
-    ppl7::tk::CheckBox* dual_color_checkbox, * blink_checkbox;
+    ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
+    ppltk::CheckBox* dual_color_checkbox, * blink_checkbox;
     Decker::ui::ColorSliderWidget* color_on;
     Decker::ui::ColorSliderWidget* color_off;
 
@@ -147,9 +147,9 @@ private:
 
 public:
     LightSignalDialog(LightSignal* object);
-    void toggledEvent(ppl7::tk::Event* event, bool checked) override;
-    void valueChangedEvent(ppl7::tk::Event* event, int value) override;
-    void valueChangedEvent(ppl7::tk::Event* event, int64_t value) override;
+    void toggledEvent(ppltk::Event* event, bool checked) override;
+    void valueChangedEvent(ppltk::Event* event, int value) override;
+    void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 
 };
 
@@ -169,22 +169,22 @@ LightSignalDialog::LightSignalDialog(LightSignal* object)
     int y=0;
     int sw=(client.width()) / 2;
     // State
-    initial_state_checkbox=new ppl7::tk::CheckBox(0, y, sw, 30, "initial State", object->initialState);
+    initial_state_checkbox=new ppltk::CheckBox(0, y, sw, 30, "initial State", object->initialState);
     initial_state_checkbox->setEventHandler(this);
     addChild(initial_state_checkbox);
-    current_state_checkbox=new ppl7::tk::CheckBox(sw, y, sw, 30, "current State", object->currentState);
+    current_state_checkbox=new ppltk::CheckBox(sw, y, sw, 30, "current State", object->currentState);
     current_state_checkbox->setEventHandler(this);
     addChild(current_state_checkbox);
     y+=35;
-    dual_color_checkbox=new ppl7::tk::CheckBox(0, y, sw, 30, "dual color", object->dualColor);
+    dual_color_checkbox=new ppltk::CheckBox(0, y, sw, 30, "dual color", object->dualColor);
     dual_color_checkbox->setEventHandler(this);
     addChild(dual_color_checkbox);
-    blink_checkbox=new ppl7::tk::CheckBox(sw, y, sw, 30, "blink", object->blink);
+    blink_checkbox=new ppltk::CheckBox(sw, y, sw, 30, "blink", object->blink);
     blink_checkbox->setEventHandler(this);
     addChild(blink_checkbox);
     y+=40;
 
-    addChild(new ppl7::tk::Label(0, y, 80, 30, "Color On:"));
+    addChild(new ppltk::Label(0, y, 80, 30, "Color On:"));
     y+=30;
     color_on=new Decker::ui::ColorSliderWidget(0, y, client.width(), 100);
     color_on->setEventHandler(this);
@@ -193,7 +193,7 @@ LightSignalDialog::LightSignalDialog(LightSignal* object)
     this->addChild(color_on);
     y+=110;
 
-    addChild(new ppl7::tk::Label(sw, y, 80, 30, "Color Off:"));
+    addChild(new ppltk::Label(sw, y, 80, 30, "Color Off:"));
     y+=30;
     color_off=new Decker::ui::ColorSliderWidget(0, y, client.width(), 100);
     color_off->setEventHandler(this);
@@ -204,7 +204,7 @@ LightSignalDialog::LightSignalDialog(LightSignal* object)
 
 }
 
-void LightSignalDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
+void LightSignalDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
     if (event->widget() == initial_state_checkbox) {
         object->initialState=checked;
@@ -217,7 +217,7 @@ void LightSignalDialog::toggledEvent(ppl7::tk::Event* event, bool checked)
     }
 }
 
-void LightSignalDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void LightSignalDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
     if (event->widget() == color_on) {
         object->color_on=color_on->color();
@@ -226,7 +226,7 @@ void LightSignalDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
     }
 }
 
-void LightSignalDialog::valueChangedEvent(ppl7::tk::Event* event, int64_t value)
+void LightSignalDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 
 }

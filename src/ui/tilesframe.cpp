@@ -4,16 +4,16 @@
 namespace Decker::ui {
 
 TilesFrame::TilesFrame(int x, int y, int width, int height, Game* game)
-	: ppl7::tk::Frame(x, y, width, height)
+	: ppltk::Frame(x, y, width, height)
 {
 	selected_tile=-1;
 	this->game=game;
 	this->tiles=NULL;
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
-	setBorderStyle(ppl7::tk::Frame::Inset);
+	setBorderStyle(ppltk::Frame::Inset);
 	setBackgroundColor(ppl7::grafix::Color(32, 32, 32, 255));
 	ppl7::grafix::Rect client=this->clientRect();
-	scrollbar=new ppl7::tk::Scrollbar(width - 30, 0, 29, client.height());
+	scrollbar=new ppltk::Scrollbar(width - 30, 0, 29, client.height());
 	scrollbar->setName("tiles-scrollbar");
 	//scrollbar->setSize(tiles->numSprites()/4+1);
 	scrollbar->setSize(0);
@@ -47,8 +47,7 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 		for (int i=scrollbar->position() * 4;i < tiles->numSprites();i++) {
 			try {
 				tiles->draw(draw, 2 + x, 2 + y, i, color);
-			}
-			catch (...) {
+			} catch (...) {
 			}
 			if (i == selected_tile) {
 				draw.drawRect(2 + x, 2 + y, 66 + x, 66 + y, white);
@@ -61,16 +60,15 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 			}
 
 		}
-	}
-	catch (...) {
+	} catch (...) {
 
 	}
 }
 
-void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void TilesFrame::mouseDownEvent(ppltk::MouseEvent* event)
 {
 	if (tiles == NULL) return;
-	if (event->widget() == this && event->buttonMask & ppl7::tk::MouseState::Left) {
+	if (event->widget() == this && event->buttonMask & ppltk::MouseState::Left) {
 		int newtile=(event->p.y / 64) * 4 + (event->p.x / 64) + scrollbar->position() * 4;
 		if (selected_tile != newtile && newtile < tiles->numSprites()) {
 			selected_tile=newtile;
@@ -79,10 +77,10 @@ void TilesFrame::mouseDownEvent(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void TilesFrame::mouseMoveEvent(ppl7::tk::MouseEvent* event)
+void TilesFrame::mouseMoveEvent(ppltk::MouseEvent* event)
 {
 	if (tiles == NULL) return;
-	if (event->widget() == this && event->buttonMask & ppl7::tk::MouseState::Left) {
+	if (event->widget() == this && event->buttonMask & ppltk::MouseState::Left) {
 		int newtile=(event->p.y / 64) * 4 + (event->p.x / 64) + scrollbar->position() * 4;
 		if (selected_tile != newtile && newtile < tiles->numSprites()) {
 			selected_tile=newtile;
@@ -108,7 +106,7 @@ int TilesFrame::selectedTile() const
 	return selected_tile;
 }
 
-void TilesFrame::mouseWheelEvent(ppl7::tk::MouseEvent* event)
+void TilesFrame::mouseWheelEvent(ppltk::MouseEvent* event)
 {
 	if (tiles == NULL) return;
 	if (event->wheel.y != 0) {
@@ -117,7 +115,7 @@ void TilesFrame::mouseWheelEvent(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void TilesFrame::valueChangedEvent(ppl7::tk::Event* event, int value)
+void TilesFrame::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == scrollbar) {
 		needsRedraw();

@@ -115,7 +115,7 @@ private:
 
 public:
 	BreakingWallDialog(BreakingWall* object);
-	virtual void valueChangedEvent(ppl7::tk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
 };
 
 
@@ -135,7 +135,7 @@ BreakingWallDialog::BreakingWallDialog(BreakingWall* object)
 	//ppl7::grafix::Rect client=clientRect();
 	int y=0;
 
-	addChild(new ppl7::tk::Label(0, y, 80, 30, "Color:"));
+	addChild(new ppltk::Label(0, y, 80, 30, "Color:"));
 	ColorPalette& palette=GetColorPalette();
 	colorframe=new Decker::ui::ColorSelectionFrame(150, y, 300, 300, palette);
 	colorframe->setEventHandler(this);
@@ -144,9 +144,9 @@ BreakingWallDialog::BreakingWallDialog(BreakingWall* object)
 
 }
 
-void BreakingWallDialog::valueChangedEvent(ppl7::tk::Event* event, int value)
+void BreakingWallDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
-	ppl7::tk::Widget* widget=event->widget();
+	ppltk::Widget* widget=event->widget();
 	if (widget == colorframe) {
 		object->wall_color=value;
 		object->color_mod=GetColorPalette().getColor(object->wall_color);

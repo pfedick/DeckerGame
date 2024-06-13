@@ -10,7 +10,7 @@
 
 //#define EVENTTRACKING 1
 
-static ppl7::tk::Window* GameWindow=NULL;
+static ppltk::Window* GameWindow=NULL;
 static Game* GameInstance=NULL;
 
 double game_start=0.0f;
@@ -31,7 +31,7 @@ void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 
 
 
-ppl7::tk::Window* GetGameWindow()
+ppltk::Window* GetGameWindow()
 {
 	return GameWindow;
 }
@@ -60,14 +60,15 @@ Game::Game()
 	tex_render_target=NULL;
 	tex_render_layer=NULL;
 	tex_render_lightmap=NULL;
-	wm=ppl7::tk::GetWindowManager();
-	ppl7::tk::WidgetStyle s(ppl7::tk::WidgetStyle::Dark);
+	wm=ppltk::GetWindowManager();
+	ppltk::WidgetStyle s(ppltk::WidgetStyle::Dark);
 	Style=s;
 	player=NULL;
 	mainmenue=NULL;
 	statusbar=NULL;
 	tiles_selection=NULL;
 	quitGame=false;
+	bGameWindowCreated=false;
 	worldIsMoving=false;
 	tiletype_selection=NULL;
 	sprite_selection=NULL;
@@ -245,13 +246,13 @@ void Game::loadGrafix()
 void Game::createWindow()
 {
 	if (config.windowMode == Config::WindowMode::Window) {
-		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::Resizeable);
+		setFlags(ppltk::Window::WaitVsync | ppltk::Window::Resizeable);
 	} else if (config.windowMode == Config::WindowMode::Fullscreen) {
-		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::Fullscreen | ppl7::tk::Window::Resizeable);
+		setFlags(ppltk::Window::WaitVsync | ppltk::Window::Fullscreen | ppltk::Window::Resizeable);
 	} else {
-		setFlags(ppl7::tk::Window::WaitVsync | ppl7::tk::Window::FullscreenDesktop | ppl7::tk::Window::Resizeable);
+		setFlags(ppltk::Window::WaitVsync | ppltk::Window::FullscreenDesktop | ppltk::Window::Resizeable);
 	}
-	//setFlags(ppl7::tk::Window::DefaultFullscreen);
+	//setFlags(ppltk::Window::DefaultFullscreen);
 	setWindowTitle("George Decker");
 	ppl7::grafix::Image icon;
 	icon.load("res/icon_128.png");
@@ -260,13 +261,15 @@ void Game::createWindow()
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
 	setSize(config.ScreenResolution);
 	wm->createWindow(*this);
-	//setPos(0,0);
 	SDL_Renderer* renderer=(SDL_Renderer*)getRenderer();
 	sdl.setRenderer(renderer);
+
+	//setPos(0,0);
 	//SDL_RenderSetLogicalSize(renderer, 1920, 1080);
 	wm->setGameControllerFocus(this);
 
 	SDL_ShowCursor(SDL_DISABLE);
+	bGameWindowCreated=true;
 }
 
 void Game::createRenderTarget()
@@ -282,7 +285,7 @@ void Game::createRenderTarget()
 
 }
 
-ppl7::tk::Window& Game::window()
+ppltk::Window& Game::window()
 {
 	return *this;
 }
@@ -349,7 +352,7 @@ void Game::initUi()
 	wm->setWidgetStyle(Style);
 
 	const ppl7::grafix::Size& desktop=clientSize();
-	//ppl7::tk::Label *label;
+	//ppltk::Label *label;
 
 	resizeMenueAndStatusbar();
 	viewport.y1=33;
@@ -567,11 +570,11 @@ void Game::moveWorld(int offset_x, int offset_y)
 	if (WorldCoords.y > 62000) WorldCoords.y=62000;
 }
 
-void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse)
+void Game::moveWorldOnMouseClick(const ppltk::MouseState& mouse)
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (worldIsMoving) {
-		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
+		if (mouse.buttonMask == ppltk::MouseState::Middle || ((mouse.buttonMask == ppltk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Move\n");
 			moveWorld(WorldMoveStart.x - mouse.p.x, WorldMoveStart.y - mouse.p.y);
 			WorldMoveStart=mouse.p;
@@ -581,7 +584,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse)
 		}
 	} else {
 		//printf("mouse.buttonMask=%d\n", mouse.button);
-		if (mouse.buttonMask == ppl7::tk::MouseState::Middle || ((mouse.buttonMask == ppl7::tk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
+		if (mouse.buttonMask == ppltk::MouseState::Middle || ((mouse.buttonMask == ppltk::MouseState::Left) && state[SDL_SCANCODE_LSHIFT])) {
 			//printf("Start\n");
 			if (showui) {
 				worldIsMoving=true;
@@ -595,7 +598,7 @@ void Game::moveWorldOnMouseClick(const ppl7::tk::MouseState& mouse)
 	}
 }
 
-void Game::updateUi(const ppl7::tk::MouseState& mouse, const Metrics& last_metrics)
+void Game::updateUi(const ppltk::MouseState& mouse, const Metrics& last_metrics)
 {
 	fps.update();
 
@@ -693,7 +696,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
 	}
 
-	ppl7::tk::MouseState mouse=wm->getMouseState();
+	ppltk::MouseState mouse=wm->getMouseState();
 	if (mainmenue->worldFollowsPlayer())
 		updateWorldCoords();
 	metrics.time_update_objects.stop();
@@ -876,7 +879,7 @@ void Game::run()
 		metrics.time_events.start();
 		checkSoundtrack();
 		wm->handleEvents();
-		ppl7::tk::MouseState mouse=wm->getMouseState();
+		ppltk::MouseState mouse=wm->getMouseState();
 		if (filedialog) checkFileDialog();
 		metrics.time_events.stop();
 
@@ -940,14 +943,14 @@ void Game::run()
 	soundtrack.fadeout(4.0f);
 }
 
-void Game::quitEvent(ppl7::tk::Event* e)
+void Game::quitEvent(ppltk::Event* e)
 {
 	quitGame=true;
 }
 
-void Game::closeEvent(ppl7::tk::Event* e)
+void Game::closeEvent(ppltk::Event* e)
 {
-	ppl7::tk::Widget* widget=e->widget();
+	ppltk::Widget* widget=e->widget();
 	if (widget != NULL && widget == settings_screen) {
 		delete settings_screen;
 		settings_screen=NULL;
@@ -1196,7 +1199,7 @@ void Game::showLightsSelection()
 
 
 
-void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
+void Game::handleMouseDrawInWorld(const ppltk::MouseState& mouse)
 {
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	//if (state[SDL_SCANCODE_LSHIFT]) return;
@@ -1206,9 +1209,9 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 		int x=(mouse.p.x + coords.x) / TILE_WIDTH;
 		int y=(mouse.p.y + coords.y) / TILE_HEIGHT;
 		TileType::Type type=(TileType::Type)tiletype_selection->tileType();
-		if (mouse.buttonMask == ppl7::tk::MouseState::Left) {
+		if (mouse.buttonMask == ppltk::MouseState::Left) {
 			level.TileTypeMatrix.setType(x, y, type);
-		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right) {
+		} else if (mouse.buttonMask == ppltk::MouseState::Right) {
 			level.TileTypeMatrix.setType(x, y, TileType::Type::NonBlocking);
 		}
 	} else if (tiles_selection) {
@@ -1224,7 +1227,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 		int color_index=tiles_selection->colorIndex();
 		Plane& plane=level.plane(currentPlane);
 
-		if ((mouse.buttonMask == ppl7::tk::MouseState::Right || mouse.buttonMask == ppl7::tk::MouseState::Middle)
+		if ((mouse.buttonMask == ppltk::MouseState::Right || mouse.buttonMask == ppltk::MouseState::Middle)
 			&& state[SDL_SCANCODE_LSHIFT]) {
 				// Pick Tile
 			ppl7::grafix::Point p=plane.getOccupationOrigin(x, y, currentLayer);
@@ -1233,7 +1236,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 				tiles_selection->setSelectedTile(plane.getTileNo(p.x, p.y, currentLayer));
 				tiles_selection->setColorIndex(plane.getColorIndex(p.x, p.y, currentLayer));
 			}
-		} else if (mouse.buttonMask == ppl7::tk::MouseState::Left && selectedTile >= 0 && state[SDL_SCANCODE_LSHIFT] == 0) {
+		} else if (mouse.buttonMask == ppltk::MouseState::Left && selectedTile >= 0 && state[SDL_SCANCODE_LSHIFT] == 0) {
 			BrickOccupation::Matrix occupation=brick_occupation.get(selectedTile);
 			if (selectedTileSet == 1) occupation=brick_occupation_solid;
 			if (!plane.isOccupied(x, y, currentLayer, occupation)) {
@@ -1243,7 +1246,7 @@ void Game::handleMouseDrawInWorld(const ppl7::tk::MouseState& mouse)
 					selectedTile, color_index, true);
 				plane.setOccupation(x, y, currentLayer, occupation);
 			}
-		} else if (mouse.buttonMask == ppl7::tk::MouseState::Right && state[SDL_SCANCODE_LSHIFT] == 0) {
+		} else if (mouse.buttonMask == ppltk::MouseState::Right && state[SDL_SCANCODE_LSHIFT] == 0) {
 			ppl7::grafix::Point origin=plane.getOccupationOrigin(x, y, currentLayer);
 			if (origin.x >= 0 && origin.y >= 0) {
 				int origin_tile=plane.getTileNo(origin.x, origin.y, currentLayer);
@@ -1513,7 +1516,7 @@ void Game::createNewLevel(const LevelParameter& params)
 	if (mainmenue) mainmenue->update();
 }
 
-void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
+void Game::mouseDownEvent(ppltk::MouseEvent* event)
 {
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEvent\n");
@@ -1537,13 +1540,13 @@ void Game::mouseDownEvent(ppl7::tk::MouseEvent* event)
 }
 
 
-void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
+void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 {
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEventOnSprite\n");
 #endif
 
-	if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
+	if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left) {
 		int nr=sprite_selection->selectedSprite();
 		if (nr < 0) {
 			selectSprite(event->p);
@@ -1570,7 +1573,7 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 			event->p.y + coords.y,
 			0,
 			spriteset, nr, scale, rotation, sprite_selection->colorIndex());
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
 		sprite_mode=spriteModeDraw;
 		selected_sprite.id=-1;
@@ -1578,13 +1581,13 @@ void Game::mouseDownEventOnSprite(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
+void Game::mouseDownEventOnLight(ppltk::MouseEvent* event)
 {
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEventOnSprite\n");
 #endif
 
-	if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
+	if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left) {
 		int nr=lights_selection->selectedLight();
 		if (nr < 0) {
 			selectLight(event->p);
@@ -1615,7 +1618,7 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 		light->typeParameter=lights_selection->lightTypeParameter();
 
 		level.lights.addLight(light);
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
 		lights_selection->setSelectedLight(-1);
 		sprite_mode=spriteModeDraw;
 		selected_light=NULL;
@@ -1624,14 +1627,14 @@ void Game::mouseDownEventOnLight(ppl7::tk::MouseEvent* event)
 }
 
 
-void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
+void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 {
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEventOnObject\n");
 #endif
 
-	if (event->widget() == world_widget && (event->buttonMask == ppl7::tk::MouseState::Middle
-		|| (event->buttonMask == ppl7::tk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))) {
+	if (event->widget() == world_widget && (event->buttonMask == ppltk::MouseState::Middle
+		|| (event->buttonMask == ppltk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))) {
 		Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
@@ -1643,7 +1646,7 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 			sprite_move_start=event->p;
 			object->openUi();
 		}
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left) {
 		int object_type=object_selection->selectedObjectType();
 		if (object_type < 0 || sprite_mode == SpriteModeSelect || sprite_mode == SpriteModeEdit) {
 			sprite_mode=SpriteModeSelect;
@@ -1672,13 +1675,13 @@ void Game::mouseDownEventOnObject(ppl7::tk::MouseEvent* event)
 			level.objects->addObject(selected_object);
 			sprite_mode=spriteModeDraw;
 		}
-	} else if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Right) {
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
 		sprite_mode=SpriteModeSelect;
 		selected_object=NULL;
 	}
 }
 
-void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
+void Game::mouseDownEventOnWayNet(ppltk::MouseEvent* event)
 {
 #ifdef EVENTTRACKING
 	ppl7::PrintDebugTime("Game::mouseDownEventOnWayNet\n");
@@ -1688,15 +1691,15 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 	int y=(event->p.y + coords.y);
 	WayPoint wp(x, y);
 	if (waynet_edit->debugMode()) {
-		if (event->buttonMask == ppl7::tk::MouseState::Left) {
+		if (event->buttonMask == ppltk::MouseState::Left) {
 			waynet_edit->setDebugStart(wp);
 			level.waynet.setDebugStart(wp);
-		} if (event->buttonMask == ppl7::tk::MouseState::Right) {
+		} if (event->buttonMask == ppltk::MouseState::Right) {
 			waynet_edit->setDebugEnd(wp);
 			level.waynet.setDebugEnd(wp);
 		}
 	} else {
-		if (event->buttonMask == ppl7::tk::MouseState::Left) {
+		if (event->buttonMask == ppltk::MouseState::Left) {
 			const WayPoint& found_wp=level.waynet.findPoint(wp);
 			if (found_wp != level.waynet.invalidPoint()) {
 				//printf ("Point selected\n");
@@ -1720,7 +1723,7 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 					level.waynet.clearSelection();
 				}
 			}
-		} else if (event->buttonMask == ppl7::tk::MouseState::Right) {
+		} else if (event->buttonMask == ppltk::MouseState::Right) {
 			const WayPoint& found_wp=level.waynet.findPoint(wp);
 			if (found_wp != level.waynet.invalidPoint()) {
 				level.waynet.deletePoint(found_wp);
@@ -1730,7 +1733,7 @@ void Game::mouseDownEventOnWayNet(ppl7::tk::MouseEvent* event)
 	}
 }
 
-void Game::mouseWheelEvent(ppl7::tk::MouseEvent* event)
+void Game::mouseWheelEvent(ppltk::MouseEvent* event)
 {
 	if (sprite_selection != NULL && event->widget() == world_widget) {
 		const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -1867,11 +1870,11 @@ void Game::selectLight(const ppl7::grafix::Point& mouse)
 }
 
 
-void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
+void Game::keyDownEvent(ppltk::KeyEvent* event)
 {
 	if (gameState == GameState::ShowStats) {
 		if (game_stats_screen) {
-			if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE || event->key == ppl7::tk::KeyEvent::KEY_SPACE) {
+			if (event->key == ppltk::KeyEvent::KEY_ESCAPE || event->key == ppltk::KeyEvent::KEY_SPACE) {
 				game_stats_screen->signalContinue();
 			}
 		}
@@ -1880,23 +1883,23 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 	if (event->widget() == world_widget) {
 		if (sprite_mode == SpriteModeEdit && sprite_selection != NULL && selected_sprite.id >= 0
 			&& selected_sprite_system != NULL) {
-			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
-				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			if (event->key == ppltk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppltk::KeyEvent::KEYMOD_MODIFIER) == 0) {
 			//printf ("KeyEvent\n");
 				selected_sprite_system->deleteSprite(selected_sprite.id);
 				selected_sprite.id=-1;
 				selected_sprite_system=NULL;
 			}
 		} else if (sprite_mode == SpriteModeEdit && object_selection != NULL && selected_object != NULL) {
-			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
-				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			if (event->key == ppltk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppltk::KeyEvent::KEYMOD_MODIFIER) == 0) {
 			//printf ("KeyEvent\n");
 				level.objects->deleteObject(selected_object->id);
 				selected_object=NULL;
 			}
 		} else if (sprite_mode == SpriteModeEdit && lights_selection != NULL && selected_light != NULL) {
-			if (event->key == ppl7::tk::KeyEvent::KEY_DELETE
-				&& (event->modifier & ppl7::tk::KeyEvent::KEYMOD_MODIFIER) == 0) {
+			if (event->key == ppltk::KeyEvent::KEY_DELETE
+				&& (event->modifier & ppltk::KeyEvent::KEYMOD_MODIFIER) == 0) {
 				level.lights.deleteLight(selected_light->id);
 				selected_light=NULL;
 				lights_selection->setLightId(0);
@@ -1905,26 +1908,26 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		}
 	}
 	//printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
-	if (event->key == ppl7::tk::KeyEvent::KEY_F4 && showui == true) {
+	if (event->key == ppltk::KeyEvent::KEY_F4 && showui == true) {
 		ppl7::grafix::Point pos=level.objects->nextPlayerStart();
 		player->move(pos.x, pos.y);
 		player->stand();
 		player->setSavePoint(pos);
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F3 && showui == true) {
+	} else if (event->key == ppltk::KeyEvent::KEY_F3 && showui == true) {
 		level.load(LevelFile);
 		background.clear();
 		translator.load();
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F5 && showui == true) {
+	} else if (event->key == ppltk::KeyEvent::KEY_F5 && showui == true) {
 		player->resetState();
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F9) {
+	} else if (event->key == ppltk::KeyEvent::KEY_F9) {
 		showUi(!showui);
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F10) {
+	} else if (event->key == ppltk::KeyEvent::KEY_F10) {
 		mainmenue->showMetrics();
 		mainmenue->fitMetrics(viewport);
 
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_RETURN && (event->modifier & ppl7::tk::KeyEvent::KEYMOD_ALT) > 0) {
+	} else if (event->key == ppltk::KeyEvent::KEY_RETURN && (event->modifier & ppltk::KeyEvent::KEYMOD_ALT) > 0) {
 		//printf("toggle fullscreen or back\n");
-		ppl7::tk::WindowManager_SDL2* sdl2wm=(ppl7::tk::WindowManager_SDL2*)wm;
+		ppltk::WindowManager_SDL2* sdl2wm=(ppltk::WindowManager_SDL2*)wm;
 		Window::WindowMode mode=sdl2wm->getWindowMode(*this);
 		if (mode == Window::WindowMode::Window) {
 			windowedSize.setSize(width(), height());
@@ -1932,7 +1935,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			ppl7::grafix::Size s=sdl.getDisplaySize(config.videoDevice);
 			//printf("switche zu FullscreenDesktop %d x %d\n", s.width, s.height);
 			sdl2wm->changeWindowMode(*this, Window::WindowMode::FullscreenDesktop);
-			ppl7::tk::Window::DisplayMode dmode;
+			ppltk::Window::DisplayMode dmode;
 			dmode.format=rgbFormat();
 			dmode.width=s.width;
 			dmode.height=s.height;
@@ -1943,7 +1946,7 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 			if (windowedSize.width == 0 || windowedSize.height == 0) windowedSize=config.ScreenResolution;
 			//printf("Aktueller mode ist FullscreenDesktop, switche zu Fenster %d x %d\n", windowedSize.width, windowedSize.height);
 			sdl2wm->changeWindowMode(*this, Window::WindowMode::Window);
-			ppl7::tk::Window::DisplayMode dmode;
+			ppltk::Window::DisplayMode dmode;
 			dmode.format=rgbFormat();
 			dmode.width=windowedSize.width;
 			dmode.height=windowedSize.height;
@@ -1953,23 +1956,23 @@ void Game::keyDownEvent(ppl7::tk::KeyEvent* event)
 		} else {
 			//printf("Aktueller mode ist Fullscreen\n");
 		}
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_ESCAPE) {
+	} else if (event->key == ppltk::KeyEvent::KEY_ESCAPE) {
 		if (settings_screen) {
 			delete settings_screen;
 			settings_screen=NULL;
 			enableControls(true);
 			wm->setKeyboardFocus(world_widget);
 		} else openSettingsScreen();
-	} else if (event->key == ppl7::tk::KeyEvent::KEY_F8) {
+	} else if (event->key == ppltk::KeyEvent::KEY_F8) {
 		ppl7::PrintDebugTime("TakeScreenshot\n");
 		TakeScreenshot();
 	}
 }
 
-void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
+void Game::mouseMoveEvent(ppltk::MouseEvent* event)
 {
 	if (sprite_selection != NULL) {
-		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+		if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left
 			&& sprite_mode == SpriteModeEdit && selected_sprite.id >= 0
 			&& selected_sprite_system != NULL) {
 			game_viewport.translateMouseEvent(event);
@@ -1982,7 +1985,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 
 		}
 	} else if (object_selection != NULL) {
-		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+		if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left
 			&& sprite_mode == SpriteModeEdit && selected_object != NULL) {
 			game_viewport.translateMouseEvent(event);
 			ppl7::grafix::Point diff=event->p - sprite_move_start;
@@ -1993,7 +1996,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 			sprite_move_start=event->p;
 		}
 	} else if (lights_selection != NULL) {
-		if (event->widget() == world_widget && event->buttonMask == ppl7::tk::MouseState::Left
+		if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Left
 			&& sprite_mode == SpriteModeEdit && selected_light != NULL) {
 			game_viewport.translateMouseEvent(event);
 			ppl7::grafix::Point diff=event->p - sprite_move_start;
@@ -2011,7 +2014,7 @@ void Game::mouseMoveEvent(ppl7::tk::MouseEvent* event)
 
 }
 
-void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
+void Game::resizeEvent(ppltk::ResizeEvent* event)
 {
 	/*
 	if (tex_level_grid) {
@@ -2019,6 +2022,7 @@ void Game::resizeEvent(ppl7::tk::ResizeEvent* event)
 		tex_level_grid=NULL;
 	}
 	*/
+	if (!bGameWindowCreated) return;
 	desktopSize=clientSize();
 	viewport=clientRect();
 	game_viewport.setRealViewport(clientSize());
@@ -2214,13 +2218,13 @@ Player* Game::getPlayer()
 }
 
 
-void Game::gameControllerAxisMotionEvent(ppl7::tk::GameControllerAxisEvent* event)
+void Game::gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event)
 {
 
 
 }
 
-void Game::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+void Game::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)
 {
 	GameControllerMapping::Button b=controller.mapping.getButton(event);
 	//ppl7::PrintDebugTime("gameControllerButtonDownEvent b=%d\n", (int)b);
@@ -2236,19 +2240,19 @@ void Game::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* ev
 
 }
 
-void Game::gameControllerButtonUpEvent(ppl7::tk::GameControllerButtonEvent* event)
+void Game::gameControllerButtonUpEvent(ppltk::GameControllerButtonEvent* event)
 {
 
 }
 
 
-void Game::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+void Game::gameControllerDeviceAdded(ppltk::GameControllerEvent* event)
 {
 	//ppl7::PrintDebugTime("gameControllerDeviceAdded: %d\n", event->which);
 	controller.open(event->which);
 }
 
-void Game::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+void Game::gameControllerDeviceRemoved(ppltk::GameControllerEvent* event)
 {
 	//ppl7::PrintDebugTime("gameControllerDeviceRemoved: %d\n", event->which);
 	controller.close();

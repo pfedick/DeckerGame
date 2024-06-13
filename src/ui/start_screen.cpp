@@ -8,7 +8,7 @@
 #include "player.h"
 
 
-static void getDestinationRect(ppl7::grafix::Size img_size, ppl7::tk::Window& window, SDL_Rect& dest)
+static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
 {
 	float aspect=(float)img_size.width / (float)img_size.height;
 	dest.x=0;
@@ -53,7 +53,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	while (1) {
 		wm->handleEvents();
 		sdl.startFrame(black);
-		ppl7::tk::MouseState mouse=wm->getMouseState();
+		ppltk::MouseState mouse=wm->getMouseState();
 		drawWorld(renderer);
 		SDL_SetRenderTarget(renderer, NULL);
 		drawRenderTargetToScreen();
@@ -138,7 +138,7 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 {
 	settings_screen=NULL;
 	create(x, y, width, height);
-	const ppl7::tk::WidgetStyle& style=ppl7::tk::GetWidgetStyle();
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	ppl7::grafix::Font font=style.buttonFont;
 	font.setName("NotoSansBlack");
 	font.setBold(false);
@@ -150,7 +150,7 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 
 	ppl7::grafix::Color background(20, 10, 0, 192);
 
-	menue=new ppl7::tk::Frame(50, 50, 550, height - 100, ppl7::tk::Frame::BorderStyle::NoBorder);
+	menue=new ppltk::Frame(50, 50, 550, height - 100, ppltk::Frame::BorderStyle::NoBorder);
 	menue->setBackgroundColor(background);
 	this->addChild(menue);
 
@@ -180,8 +180,8 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	menue->addChild(end);
 	yy+=100;
 
-	version=new ppl7::tk::Label(10, menue->height() - 50, 520, 50);
-	version->setBorderStyle(ppl7::tk::Frame::BorderStyle::NoBorder);
+	version=new ppltk::Label(10, menue->height() - 50, 520, 50);
+	version->setBorderStyle(ppltk::Frame::BorderStyle::NoBorder);
 	version->setBackgroundColor(background);
 	version->setFont(font);
 
@@ -266,7 +266,7 @@ void StartScreen::paint(ppl7::grafix::Drawable& draw)
 }
 
 
-void StartScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
+void StartScreen::mouseEnterEvent(ppltk::MouseEvent* event)
 {
 	//printf("StartScreen::mouseEnterEvent\n");
 
@@ -304,7 +304,7 @@ void StartScreen::mouseEnterEvent(ppl7::tk::MouseEvent* event)
 
 }
 
-void StartScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
+void StartScreen::mouseClickEvent(ppltk::MouseEvent* event)
 {
 	if (event->widget() == end) {
 		state=State::QuitGame;
@@ -322,7 +322,7 @@ void StartScreen::mouseClickEvent(ppl7::tk::MouseEvent* event)
 
 void StartScreen::handleKeyDownEvent(int key)
 {
-	if (key == ppl7::tk::KeyEvent::KEY_DOWN) {
+	if (key == ppltk::KeyEvent::KEY_DOWN) {
 		if (start_tutorial->isSelected()) {
 			start_tutorial->setSelected(false);
 			start_game->setSelected(true);
@@ -336,7 +336,7 @@ void StartScreen::handleKeyDownEvent(int key)
 			editor->setSelected(false);
 			end->setSelected(true);
 		}
-	} else if (key == ppl7::tk::KeyEvent::KEY_UP) {
+	} else if (key == ppltk::KeyEvent::KEY_UP) {
 		if (end->isSelected()) {
 			end->setSelected(false);
 			editor->setSelected(true);
@@ -350,7 +350,7 @@ void StartScreen::handleKeyDownEvent(int key)
 			start_game->setSelected(false);
 			start_tutorial->setSelected(true);
 		}
-	} else if (key == ppl7::tk::KeyEvent::KEY_RETURN) {
+	} else if (key == ppltk::KeyEvent::KEY_RETURN) {
 		if (start_game->isSelected()) state=State::StartGame;
 		else if (settings->isSelected()) showSettings();
 		else if (editor->isSelected()) state=State::StartEditor;
@@ -359,34 +359,34 @@ void StartScreen::handleKeyDownEvent(int key)
 	}
 }
 
-void StartScreen::keyDownEvent(ppl7::tk::KeyEvent* event)
+void StartScreen::keyDownEvent(ppltk::KeyEvent* event)
 {
 	//printf("StartScreen::keyDownEvent\n");
 	handleKeyDownEvent(event->key);
 }
 
-void StartScreen::gameControllerButtonDownEvent(ppl7::tk::GameControllerButtonEvent* event)
+void StartScreen::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)
 {
 	GameControllerMapping::Button b=game.controller.mapping.getButton(event);
-	if (b == GameControllerMapping::Button::MenuDown) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_DOWN);
-	else if (b == GameControllerMapping::Button::MenuUp) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_UP);
-	else if (b == GameControllerMapping::Button::Action || b == GameControllerMapping::Button::MenuRight) handleKeyDownEvent(ppl7::tk::KeyEvent::KEY_RETURN);
+	if (b == GameControllerMapping::Button::MenuDown) handleKeyDownEvent(ppltk::KeyEvent::KEY_DOWN);
+	else if (b == GameControllerMapping::Button::MenuUp) handleKeyDownEvent(ppltk::KeyEvent::KEY_UP);
+	else if (b == GameControllerMapping::Button::Action || b == GameControllerMapping::Button::MenuRight) handleKeyDownEvent(ppltk::KeyEvent::KEY_RETURN);
 
 
 }
 
-void StartScreen::gameControllerDeviceAdded(ppl7::tk::GameControllerEvent* event)
+void StartScreen::gameControllerDeviceAdded(ppltk::GameControllerEvent* event)
 {
 	GetGame().gameControllerDeviceAdded(event);
 }
 
-void StartScreen::gameControllerDeviceRemoved(ppl7::tk::GameControllerEvent* event)
+void StartScreen::gameControllerDeviceRemoved(ppltk::GameControllerEvent* event)
 {
 	GetGame().gameControllerDeviceRemoved(event);
 }
 
 
-void StartScreen::closeEvent(ppl7::tk::Event* event)
+void StartScreen::closeEvent(ppltk::Event* event)
 {
 	if (event->widget() == settings_screen) {
 		this->removeChild(settings_screen);
@@ -395,8 +395,8 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 		menue->setEnabled(true);
 		menue->setVisible(true);
 		retranslateUi();
-		ppl7::tk::GetWindowManager()->setKeyboardFocus(this);
-		ppl7::tk::GetWindowManager()->setGameControllerFocus(this);
+		ppltk::GetWindowManager()->setKeyboardFocus(this);
+		ppltk::GetWindowManager()->setGameControllerFocus(this);
 		needsRedraw();
 
 	}
@@ -414,7 +414,7 @@ void StartScreen::closeEvent(ppl7::tk::Event* event)
 	*/
 }
 
-void StartScreen::resizeEvent(ppl7::tk::ResizeEvent* event)
+void StartScreen::resizeEvent(ppltk::ResizeEvent* event)
 {
 	//printf("StartScreen: we got a resize event: %d x %d\n", width(), height());
 	int menue_h=height() - 100;
