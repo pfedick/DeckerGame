@@ -43,8 +43,9 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 	if (tiles == NULL) return;
 	ppl7::grafix::Color white(245, 245, 242, 255);
 	int x=0, y=0;
+	int sp=scrollbar->position();
 	try {
-		for (int i=scrollbar->position() * 4;i < tiles->numSprites();i++) {
+		for (int i=sp * 4;i < tiles->numSprites();i++) {
 			try {
 				tiles->draw(draw, 2 + x, 2 + y, i, color);
 			} catch (...) {
@@ -92,6 +93,7 @@ void TilesFrame::mouseMoveEvent(ppltk::MouseEvent* event)
 void TilesFrame::setSelectedTile(int nr)
 {
 	if (tiles == NULL) return;
+	if (nr<0) nr=0;
 	if (nr != selected_tile && nr < tiles->numSprites()) {
 		selected_tile=nr;
 		//ppl7::grafix::Rect client=this->clientRect();
