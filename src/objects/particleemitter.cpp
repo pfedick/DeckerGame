@@ -339,7 +339,7 @@ ppl7::String ParticleEmitter::generateCode() const
 class ParticleEmitterDialog : public Decker::ui::Dialog
 {
 private:
-	Decker::ui::TabWidget* tabwidget;
+	ppltk::TabWidget* tabwidget;
 
 	// Particle Tab
 	ppltk::ComboBox* particle_layer;
@@ -403,21 +403,22 @@ ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
 	this->setWindowTitle("Particle Emitter");
 	ppl7::grafix::Rect client=clientRect();
 
-	tabwidget=new Decker::ui::TabWidget(client.x1, client.y1, client.width(), client.height());
-	tabwidget->addTab(1, "Particle generation");
-	tabwidget->addTab(2, "Colors");
-	tabwidget->addTab(3, "Size gradient");
+	tabwidget=new ppltk::TabWidget(client.x1, client.y1, client.width(), client.height());
+	tabwidget->addTab("Particle generation");
+	tabwidget->addTab("Colors");
+	tabwidget->addTab("Size gradient");
 	//tabwidget->setCurrentTab(2);
 	addChild(tabwidget);
 	setupParticleTab();
 	setupColorTab();
 	setupSizeTab();
+	tabwidget->setCurrentIndex(0);
 	setValuesToUi(object);
 }
 
 void ParticleEmitterDialog::setupParticleTab()
 {
-	Widget* tab=tabwidget->getWidget(1);
+	Widget* tab=tabwidget->getWidget(0);
 	if (!tab) return;
 
 	int col1=100;
@@ -631,7 +632,7 @@ void ParticleEmitterDialog::setupParticleTab()
 
 void ParticleEmitterDialog::setupColorTab()
 {
-	Widget* tab=tabwidget->getWidget(2);
+	Widget* tab=tabwidget->getWidget(1);
 	if (!tab) return;
 
 	int col1=30;
@@ -678,7 +679,7 @@ void ParticleEmitterDialog::setupColorTab()
 
 void ParticleEmitterDialog::setupSizeTab()
 {
-	Widget* tab=tabwidget->getWidget(3);
+	Widget* tab=tabwidget->getWidget(2);
 	if (!tab) return;
 	int y=0;
 	//ppl7::grafix::Rect client=tab->clientRect();
