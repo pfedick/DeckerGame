@@ -397,7 +397,7 @@ void ParticleEmitter::openUi()
 
 
 ParticleEmitterDialog::ParticleEmitterDialog(ParticleEmitter* object)
-	: Decker::ui::Dialog(700, 620, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
+	: Decker::ui::Dialog(750, 620, Dialog::Buttons::OK | Dialog::Buttons::CopyAndPaste)
 {
 	this->object=object;
 	this->setWindowTitle("Particle Emitter");
@@ -468,19 +468,29 @@ void ParticleEmitterDialog::setupParticleTab()
 	tab->addChild(particle_type);
 	y+=35;
 
-
+	int col0=0;
+	int w0=150;
 	col1=150;
-	int sw=(client.width() - col1 - 40 - 40) / 2;
+	int w1=50;
+	int w3=70;
+	int col2=col1+w1;
+	int sw=(client.width() - col2-w3) / 2;
+	int w2=sw;
+	int w4=sw;
+	int col3=col2+w2+10;
+	int col4=col3+w3;
+	
+	
 
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Emitter size (pixel):"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "width:"));
-	emitter_pixel_width=new ppltk::HorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Emitter size (pixel):"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "width:"));
+	emitter_pixel_width=new ppltk::HorizontalSlider(col2, y, w2, 30);
 	emitter_pixel_width->setEventHandler(this);
 	emitter_pixel_width->setLimits(1, 1024);
 	emitter_pixel_width->enableSpinBox(true, 1, 80);
 	tab->addChild(emitter_pixel_width);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "height:"));
-	emitter_pixel_height=new ppltk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "height:"));
+	emitter_pixel_height=new ppltk::HorizontalSlider(col4, y, w4, 30);
 	emitter_pixel_height->setEventHandler(this);
 	emitter_pixel_height->setLimits(1, 1024);
 	emitter_pixel_height->enableSpinBox(true, 1, 80);
@@ -489,15 +499,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Next birth time (sec):"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	birth_time_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Next birth time (sec):"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	birth_time_min=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	birth_time_min->setEventHandler(this);
 	birth_time_min->setLimits(0.010, 4.0f);
 	birth_time_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(birth_time_min);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	birth_time_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	birth_time_max=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	birth_time_max->setEventHandler(this);
 	birth_time_max->setLimits(0.010, 4.0f);
 	birth_time_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -505,15 +515,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Birth per cycle:"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	min_birth_per_cycle=new ppltk::HorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Birth per cycle:"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	min_birth_per_cycle=new ppltk::HorizontalSlider(col2, y, w2, 30);
 	min_birth_per_cycle->setEventHandler(this);
 	min_birth_per_cycle->setLimits(0, 200);
 	min_birth_per_cycle->enableSpinBox(true, 1, 80);
 	tab->addChild(min_birth_per_cycle);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_birth_per_cycle=new ppltk::HorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	max_birth_per_cycle=new ppltk::HorizontalSlider(col4, y, w4, 30);
 	max_birth_per_cycle->setEventHandler(this);
 	max_birth_per_cycle->setLimits(0, 200);
 	max_birth_per_cycle->enableSpinBox(true, 1, 80);
@@ -521,15 +531,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Velocity:"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	min_velocity=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Velocity:"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	min_velocity=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	min_velocity->setEventHandler(this);
 	min_velocity->setLimits(0.0f, 20.0f);
 	min_velocity->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(min_velocity);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	max_velocity=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	max_velocity=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	max_velocity->setEventHandler(this);
 	max_velocity->setLimits(0.0f, 20.0f);
 	max_velocity->enableSpinBox(true, 0.01f, 3, 80);
@@ -537,15 +547,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Direction + variation
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Direction (degrees):"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "base:"));
-	direction=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Direction (degrees):"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "base:"));
+	direction=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	direction->setEventHandler(this);
 	direction->setLimits(0.0f, 360.0f);
 	direction->enableSpinBox(true, 15.0f, 1, 80);
 	tab->addChild(direction);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "variation:"));
-	variation=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "variation:"));
+	variation=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	variation->setEventHandler(this);
 	variation->setLimits(0.0f, 180.0f);
 	variation->enableSpinBox(true, 1.0f, 1, 80);
@@ -553,16 +563,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Scale
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Scale:"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	sw=(client.width() - col1 - 40 - 40) / 2;
-	scale_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Scale:"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	scale_min=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	scale_min->setEventHandler(this);
 	scale_min->setLimits(0.010, 2.0f);
 	scale_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(scale_min);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	scale_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	scale_max=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	scale_max->setEventHandler(this);
 	scale_max->setLimits(0.010, 5.0f);
 	scale_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -570,16 +579,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Age
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Age (sec):"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	sw=(client.width() - col1 - 40 - 40) / 2;
-	age_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Age (sec):"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	age_min=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	age_min->setEventHandler(this);
 	age_min->setLimits(0.010f, 10.0f);
 	age_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(age_min);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	age_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	age_max=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	age_max->setEventHandler(this);
 	age_max->setLimits(0.010f, 10.0f);
 	age_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -587,16 +595,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Weight
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Weight:"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "min:"));
-	sw=(client.width() - col1 - 40 - 40) / 2;
-	weight_min=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Weight:"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	weight_min=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	weight_min->setEventHandler(this);
 	weight_min->setLimits(0.0f, 1.0f);
 	weight_min->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(weight_min);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "max:"));
-	weight_max=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	weight_max=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	weight_max->setEventHandler(this);
 	weight_max->setLimits(0.0f, 1.0f);
 	weight_max->enableSpinBox(true, 0.01f, 3, 80);
@@ -604,16 +611,15 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// Gravity
-	tab->addChild(new ppltk::Label(0, y, col1, 30, "Gravity:"));
-	tab->addChild(new ppltk::Label(col1, y, 40, 30, "x:"));
-	sw=(client.width() - col1 - 40 - 40) / 2;
-	gravity_x=new ppltk::DoubleHorizontalSlider(col1 + 40, y, sw, 30);
+	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Gravity:"));
+	tab->addChild(new ppltk::Label(col1, y, w1, 30, "x:"));
+	gravity_x=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
 	gravity_x->setEventHandler(this);
 	gravity_x->setLimits(-1.0f, 1.0f);
 	gravity_x->enableSpinBox(true, 0.01f, 3, 80);
 	tab->addChild(gravity_x);
-	tab->addChild(new ppltk::Label(col1 + 40 + sw, y, 40, 30, "y:"));
-	gravity_y=new ppltk::DoubleHorizontalSlider(col1 + 80 + sw, y, sw, 30);
+	tab->addChild(new ppltk::Label(col3, y, w3, 30, "y:"));
+	gravity_y=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
 	gravity_y->setEventHandler(this);
 	gravity_y->setLimits(-1.0f, 1.0f);
 	gravity_y->enableSpinBox(true, 0.01f, 3, 80);
@@ -621,10 +627,10 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// State
-	initial_state_checkbox=new ppltk::CheckBox(0, y, col1 + 40 + sw, 30, "initial State");
+	initial_state_checkbox=new ppltk::CheckBox(0, y, w0+w1, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	tab->addChild(initial_state_checkbox);
-	current_state_checkbox=new ppltk::CheckBox(col1 + 40 + sw, y, sw, 30, "current State");
+	current_state_checkbox=new ppltk::CheckBox(col2, y, w2, 30, "current State");
 	current_state_checkbox->setEventHandler(this);
 	tab->addChild(current_state_checkbox);
 
