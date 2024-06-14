@@ -25,7 +25,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	int x=width - 2 - 16;
 	int y=height - 40;
 
-	close_button=new ppltk::Button(width - 31, 2, 30, 30, "");
+	close_button=new ppltk::Button(width - 31, 3, 29, 29, "");
 	close_button->setIcon(wm->ButtonSymbols.getDrawable(0));
 	close_button->setEventHandler(this);
 	ppltk::Widget::addChild(close_button);
