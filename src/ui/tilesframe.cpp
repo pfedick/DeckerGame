@@ -109,10 +109,13 @@ int TilesFrame::selectedTile() const
 void TilesFrame::mouseWheelEvent(ppltk::MouseEvent* event)
 {
 	if (tiles == NULL) return;
+	scrollbar->mouseWheelEvent(event);
+	/*
 	if (event->wheel.y != 0) {
 		scrollbar->setPosition(scrollbar->position() + event->wheel.y * -1);
 		needsRedraw();
 	}
+	*/
 }
 
 void TilesFrame::valueChangedEvent(ppltk::Event* event, int value)

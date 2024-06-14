@@ -423,10 +423,13 @@ void ColorPaletteFrame::mouseDownEvent(ppltk::MouseEvent* event)
 
 void ColorPaletteFrame::mouseWheelEvent(ppltk::MouseEvent* event)
 {
+	scrollbar->mouseWheelEvent(event);
+	/*
 	if (event->wheel.y != 0) {
 		scrollbar->setPosition(scrollbar->position() + event->wheel.y * -1);
 		needsRedraw();
 	}
+	*/
 }
 
 void ColorPaletteFrame::valueChangedEvent(ppltk::Event* event, int value)
