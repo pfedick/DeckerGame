@@ -159,47 +159,6 @@ public:
 
 };
 
-class TabWidget : public ppltk::Widget
-{
-private:
-	int current_tab;
-	Widget* current_child;
-	class Tab {
-	public:
-		Tab();
-		Tab(ppltk::Widget* widget, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
-		Tab(const Tab& other);
-		ppltk::Widget* widget;
-		ppl7::String title;
-		ppl7::grafix::Image icon;
-		int x;
-		int width;
-	};
-	std::map<int, Tab> tabs;
-public:
-	TabWidget(int x, int y, int width, int height);
-	~TabWidget();
-
-	ppltk::Widget* addTab(int id, const ppl7::String& title, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
-	void addWidget(int id, const ppl7::String& title, ppltk::Widget* widget, const ppl7::grafix::Drawable& icon=ppl7::grafix::Drawable());
-	void removeTab(int id);
-	void setVisible(int id, bool visible);
-	void setEnabled(int id, bool enabled);
-	void setTitle(int id, const ppl7::String& title);
-	void setIcon(int id, const ppl7::grafix::Drawable& icon);
-	void setWidget(int id, ppltk::Widget* widget);
-	ppltk::Widget* getWidget(int id) const;
-	int currentTab() const;
-	void setCurrentTab(int id);
-	size_t tabCount() const;
-	void clear();
-
-	ppl7::String widgetType() const override;
-	void paint(ppl7::grafix::Drawable& draw) override;
-	void mouseDownEvent(ppltk::MouseEvent* event) override;
-
-};
-
 class GradientWidget : public ppltk::Widget
 {
 private:
