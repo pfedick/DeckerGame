@@ -2023,6 +2023,7 @@ void Game::resizeEvent(ppltk::ResizeEvent* event)
 	}
 	*/
 	if (!bGameWindowCreated) return;
+	if (event != NULL && event->widget() == world_widget) return;
 	desktopSize=clientSize();
 	viewport=clientRect();
 	game_viewport.setRealViewport(clientSize());
