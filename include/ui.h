@@ -542,12 +542,13 @@ public:
 		Aborted
 	};
 private:
+	ppltk::TabWidget* tabwidget;
+
 	ppltk::LineInput* level_name;
 	ppltk::SpinBox* level_width;
 	ppltk::SpinBox* level_height;
 	ppltk::Label* level_pixel_size;
 
-	ppltk::Frame* level_background_frame;
 
 	ppltk::RadioButton* radio_image;
 	ppltk::RadioButton* radio_color;
@@ -564,7 +565,6 @@ private:
 	ppltk::Frame* color_preview;
 	//ppltk::Button* color_picker;
 
-	ppltk::Frame* level_soundtrack_frame;
 	ppltk::ComboBox* base_soundtrack;
 
 	ppltk::ComboBox* additional_soundtrack;
@@ -586,6 +586,9 @@ private:
 
 	void updateColorPreview();
 	void setupUi();
+	void setupLevelTab();
+	void setupBackgroundTab();
+	void setupSoundtrackTab();
 
 public:
 	int custom_id;
