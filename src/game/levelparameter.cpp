@@ -42,10 +42,15 @@ void LevelParameter::clear()
 {
 	width=0;
 	height=0;
+	levelSort=0;
 	randomSong=true;
+	partOfStory=false;
+	visibleInLevelSelection=true;
 	backgroundType=Background::Type::Color;
 	BackgroundColor.setColor(32, 32, 64, 255);
-	Name.clear();
+	Thumbnail.clear();
+	LevelName.clear();
+	Description.clear();
 	InitialSong.clear();
 	SongPlaylist.clear();
 	BackgroundImage.clear();
@@ -58,10 +63,21 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 	a.clear();
 	a.setf("level_width", "%d", params.width);
 	a.setf("level_height", "%d", params.height);
-	a.set("level_name", params.Name);
+	//a.set("level_name", params.Name);
 	a.set("initial_song", params.InitialSong);
 	if (params.randomSong) a.set("randomSong", "true");
 	else a.set("randomSong", "false");
+
+	if (params.partOfStory) a.set("partOfStory", "true");
+	else a.set("partOfStory", "false");
+
+	if (params.visibleInLevelSelection) a.set("visibleInLevelSelection", "true");
+	else a.set("visibleInLevelSelection", "false");
+
+	a.setf("levelSort", "%d", params.levelSort);
+
+	if (!params.Thumbnail.isEmpty()) a.set("Thumbnail", params.Thumbnail);
+
 	std::vector<ppl7::String>::const_iterator it;
 	for (it=params.SongPlaylist.begin();it != params.SongPlaylist.end();++it) {
 		a.set("additional_playlist/[]", (*it));
@@ -82,7 +98,17 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 		params.GlobalLighting.blue(),
 		params.GlobalLighting.alpha()
 	);
-	//a.list();
+
+
+	//std::map<ppl7::String, LevelParameter::TranslatedStrings>::const_iterator it;
+	for (auto it=params.LevelName.begin();it != params.LevelName.end();++it) {
+		a.set("LevelName/" + it->first, it->second);
+	}
+	for (auto it=params.Description.begin();it != params.Description.end();++it) {
+		a.set("Description/" + it->first, it->second);
+	}
+
+	a.list();
 
 }
 
@@ -122,9 +148,34 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 
 	a.importBinary(assoc_ba);
 	Default="";
+
 	width=a.getInt("level_width", width);
 	height=a.getInt("level_height", height);
-	Name=a.getString("level_name", Default);
+
+	if (a.exists("partOfStory")) partOfStory=a.getString("partOfStory", Default).toBool();
+	if (a.exists("visibleInLevelSelection")) partOfStory=a.getString("visibleInLevelSelection", Default).toBool();
+	if (a.exists("levelSort")) levelSort=a.getString("levelSort", Default).toInt();
+	if (a.exists("level_name")) LevelName["en"]=a.getString("level_name", Default);
+
+	if (a.exists("Thumbnail")) Thumbnail=a.get("Thumbnail").toByteArray();
+
+	if (a.exists("LevelName")) {
+		ppl7::AssocArray::const_iterator it;
+		ppl7::AssocArray& data=a.getAssocArray("LevelName");
+		for (it=data.begin();it != data.end();++it) {
+			LevelName.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
+		}
+	}
+
+	if (a.exists("Description")) {
+		ppl7::AssocArray::const_iterator it;
+		ppl7::AssocArray& data=a.getAssocArray("Description");
+		for (it=data.begin();it != data.end();++it) {
+			Description.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
+		}
+	}
+
+
 	InitialSong=a.getString("initial_song", Default);
 	BackgroundImage=a.getString("BackgroundImage", Default);
 	Default="true";

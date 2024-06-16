@@ -47,8 +47,8 @@ void LevelDialog::setupUi()
     setupBackgroundTab();
     setupSoundtrackTab();
     tabwidget->setCurrentIndex(0);
-    ppltk::WindowManager* wm=ppltk::GetWindowManager();
-    wm->setKeyboardFocus(level_name);
+    //ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    //wm->setKeyboardFocus(level_name);
 
 }
 
@@ -62,11 +62,13 @@ void LevelDialog::setupLevelTab()
     int y=0;
     int col1=150;
 
+    /*
     tab->addChild(new ppltk::Label(0, 0, 200, 30, "Level Name:"));
     level_name=new ppltk::LineInput(col1, 0, clientarea.width - 210, 30, "no name yet");
     level_name->setEventHandler(this);
     tab->addChild(level_name);
     y+=35;
+    */
 
     tab->addChild(new ppltk::Label(0, y, 200, 30, "Level Size:"));
     level_pixel_size=new ppltk::Label(col1 + 60 + 80 + 60 + 80 + 60, y, 200, 30, "= ? x ? pixel");
@@ -86,8 +88,65 @@ void LevelDialog::setupLevelTab()
     tab->addChild(new ppltk::Label(col1 + 60 + 80 + 60 + 80, y, 60, 30, "Studs"));
     level_width->setValue(512);
     level_height->setValue(384);
-
+    y+=35;
     // TODO: Flags + Description
+    level_is_listed=new ppltk::CheckBox(0, y, 400, 30, "level is visible in level selection");
+    tab->addChild(level_is_listed);
+    y+=35;
+
+    part_of_story=new ppltk::CheckBox(0, y, 200, 30, "level is part of story");
+    tab->addChild(part_of_story);
+    tab->addChild(new ppltk::Label(200, y, col1, 30, "Level sort:"));
+    LevelSort=new ppltk::SpinBox(300, y, 100, 30, 0);
+    LevelSort->setLimits(0, 65535);
+    LevelSort->setEventHandler(this);
+    tab->addChild(LevelSort);
+    y+=35;
+
+    tab->addChild(new ppltk::Label(0, y, 100, 30, "Thumbnail:"));
+    thumbnail=new ppltk::Label(100, y, 320, 180, "", ppltk::Label::BorderStyle::Inset);
+    thumbnail->setEventHandler(this);
+    tab->addChild(thumbnail);
+
+    thumb_take_screenshot=new ppltk::Button(430, y + 0, 200, 30, "take screenshot", gfx->Toolbar.getDrawable(2));
+    thumb_to_clipboard=new ppltk::Button(430, y + 30, 200, 30, "copy to clipboard", gfx->Toolbar.getDrawable(37));
+    thumb_from_clipboard=new ppltk::Button(430, y + 60, 200, 30, "copy from clipboard", gfx->Toolbar.getDrawable(38));
+    thumb_load=new ppltk::Button(430, y + 90, 200, 30, "load", gfx->Toolbar.getDrawable(32));
+    thumb_save=new ppltk::Button(430, y + 120, 200, 30, "save", gfx->Toolbar.getDrawable(33));
+
+    thumb_take_screenshot->setEventHandler(this);
+    thumb_to_clipboard->setEventHandler(this);
+    thumb_from_clipboard->setEventHandler(this);
+    thumb_load->setEventHandler(this);
+    thumb_save->setEventHandler(this);
+    tab->addChild(thumb_take_screenshot);
+    tab->addChild(thumb_to_clipboard);
+    tab->addChild(thumb_from_clipboard);
+    tab->addChild(thumb_load);
+    tab->addChild(thumb_save);
+    y+=190;
+
+    tstrings=new ppltk::TabWidget(0, y, clientarea.width, clientarea.height - y);
+    tab->addChild(tstrings);
+    Translator translator=GetTranslator();
+    for (auto it=translator.languages.begin();it != translator.languages.end();++it) {
+        ppltk::Widget* langtab=new ppltk::Widget();
+        tstrings->addTab(langtab, it->first);
+        ppl7::grafix::Size client=langtab->clientSize();
+        int yy=0;
+        langtab->addChild(new ppltk::Label(0, yy, 100, 30, "Level Name:"));
+        ppltk::LineInput* name=new ppltk::LineInput(100, 0, client.width - 100, 30, "no name yet");
+        name->setEventHandler(this);
+        langtab->addChild(name);
+        yy+=35;
+
+        langtab->addChild(new ppltk::Label(0, yy, 100, 30, "Description:"));
+        ppltk::TextEdit* descr=new ppltk::TextEdit(100, yy, client.width - 100, client.height - yy, "");
+        descr->setEventHandler(this);
+        langtab->addChild(descr);
+        yy+=35;
+
+    }
 
 }
 
@@ -255,7 +314,7 @@ void LevelDialog::loadValues(const LevelParameter& params)
 {
     level_width->setValue(params.width);
     level_height->setValue(params.height);
-    level_name->setText(params.Name);
+    //level_name->setText(params.Name);
 
     // Background
     if (params.backgroundType == Background::Type::Color) radio_color->setChecked(true);
@@ -285,7 +344,7 @@ void LevelDialog::saveValues(LevelParameter& params) const
 {
     params.width=level_width->value();
     params.height=level_height->value();
-    params.Name=level_name->text();
+    //params.Name=level_name->text();
 
     // Background
     if (radio_color->checked()) params.backgroundType=Background::Type::Color;
@@ -404,13 +463,15 @@ void LevelDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text
 void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
 {
     //printf("keyDownEvent: %d, modifier: %04x\n", event->key, event->modifier);
+#ifdef TODO1
     ppltk::WindowManager* wm=ppltk::GetWindowManager();
     ppltk::Widget* widget=event->widget();
+
     if ((event->key == ppltk::KeyEvent::KEY_TAB || event->key == ppltk::KeyEvent::KEY_RETURN)
         && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) == 0) {
            // Tab forward
-        if (widget == level_name) wm->setKeyboardFocus(level_width);
-        else if (widget == level_width) wm->setKeyboardFocus(level_height);
+        //if (widget == level_name) wm->setKeyboardFocus(level_width);
+        if (widget == level_width) wm->setKeyboardFocus(level_height);
         else if (widget == level_height) wm->setKeyboardFocus(color_red);
         else if (widget == color_red) wm->setKeyboardFocus(color_green);
         else if (widget == color_green) wm->setKeyboardFocus(color_blue);
@@ -419,12 +480,13 @@ void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
         && (event->modifier & ppltk::KeyEvent::KEYMOD_SHIFT) != 0) {
            // Tab backward
         if (widget == level_height) wm->setKeyboardFocus(level_width);
-        else if (widget == level_width) wm->setKeyboardFocus(level_name);
+        //else if (widget == level_width) wm->setKeyboardFocus(level_name);
         else if (widget == color_blue) wm->setKeyboardFocus(color_green);
         else if (widget == color_green) wm->setKeyboardFocus(color_red);
         else if (widget == color_red) wm->setKeyboardFocus(level_height);
 
     }
+#endif
 }
 
 }   // Decker::ui

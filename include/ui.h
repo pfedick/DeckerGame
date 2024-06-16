@@ -544,10 +544,22 @@ public:
 private:
 	ppltk::TabWidget* tabwidget;
 
-	ppltk::LineInput* level_name;
+	//ppltk::LineInput* level_name;
 	ppltk::SpinBox* level_width;
 	ppltk::SpinBox* level_height;
 	ppltk::Label* level_pixel_size;
+	ppltk::TabWidget* tstrings;
+	std::map<ppl7::String, ppltk::LineInput*> LevelName;
+	std::map<ppl7::String, ppltk::TextEdit*> Description;
+	ppltk::SpinBox* LevelSort;
+	ppltk::CheckBox* part_of_story;
+	ppltk::CheckBox* level_is_listed;
+	ppltk::Label* thumbnail;
+	ppltk::Button* thumb_take_screenshot;
+	ppltk::Button* thumb_to_clipboard;
+	ppltk::Button* thumb_from_clipboard;
+	ppltk::Button* thumb_load;
+	ppltk::Button* thumb_save;
 
 
 	ppltk::RadioButton* radio_image;
