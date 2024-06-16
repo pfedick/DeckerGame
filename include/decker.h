@@ -592,10 +592,17 @@ private:
 public:
 	int width;
 	int height;
-	ppl7::String Name;
+	//ppl7::String Name;
 	ppl7::String InitialSong;
 	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
+
+	bool partOfStory;
+	bool visibleInLevelSelection;
+	int  levelSort;
+	std::map<ppl7::String, ppl7::String> LevelName;
+	std::map<ppl7::String, ppl7::String> Description;
+	ppl7::ByteArray Thumbnail;
 
 	LevelParameter();
 	void clear();
@@ -634,9 +641,6 @@ public:
 
 class Screenshot
 {
-private:
-	ppl7::String Filename;
-	ppl7::String Path;
 public:
 	enum class Layer {
 		Background=0,
@@ -654,11 +658,28 @@ public:
 		Lightmap,
 		Final
 	};
-	Screenshot();
+
+	enum class Mode {
+		File=0,
+		Memory
+	};
+private:
+	ppl7::String Filename;
+	ppl7::String Path;
+	Mode myMode;
+	ppl7::grafix::Image img;
+	bool done_flag;
+public:
+
+
+	Screenshot(Mode m=Mode::File);
 	void setPath(const ppl7::String& path);
 	void save(Layer layer, Type type, SDL_Texture* texture);
 	void save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type type, SDL_Texture* texture);
 
+	const ppl7::grafix::Drawable& image() const;
+	bool isDone() const;
+	Mode mode() const;
 };
 
 class Level
@@ -1155,6 +1176,7 @@ public:
 	void startLevelModification(double time, void* object);
 	void* getLevelModificationObject() const;
 	void TakeScreenshot();
+	void TakeScreenshot(Screenshot* screenshot);
 
 };
 
