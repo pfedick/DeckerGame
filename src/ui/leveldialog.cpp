@@ -134,6 +134,12 @@ void LevelDialog::setupLevelTab()
     thumb_from_clipboard->setEventHandler(this);
     thumb_load->setEventHandler(this);
     thumb_save->setEventHandler(this);
+
+    thumb_to_clipboard->setEnabled(false);
+    thumb_from_clipboard->setEnabled(false);
+    thumb_load->setEnabled(false);
+    thumb_save->setEnabled(false);
+
     tab->addChild(thumb_take_screenshot);
     tab->addChild(thumb_to_clipboard);
     tab->addChild(thumb_from_clipboard);
@@ -150,15 +156,17 @@ void LevelDialog::setupLevelTab()
         ppl7::grafix::Size client=langtab->clientSize();
         int yy=0;
         langtab->addChild(new ppltk::Label(0, yy, 100, 30, "Level Name:"));
-        ppltk::LineInput* name=new ppltk::LineInput(100, 0, client.width - 100, 30, "no name yet");
+        ppltk::LineInput* name=new ppltk::LineInput(100, 0, client.width - 100, 30, "");
         name->setEventHandler(this);
         langtab->addChild(name);
+        LevelName[it->first]=name;
         yy+=35;
 
         langtab->addChild(new ppltk::Label(0, yy, 100, 30, "Description:"));
         ppltk::TextEdit* descr=new ppltk::TextEdit(100, yy, client.width - 100, client.height - yy, "");
         descr->setEventHandler(this);
         langtab->addChild(descr);
+        Description[it->first]=descr;
         yy+=35;
 
     }
@@ -327,9 +335,27 @@ bool LevelDialog::isNewLevel() const
 
 void LevelDialog::loadValues(const LevelParameter& params)
 {
+    // Level
     level_width->setValue(params.width);
     level_height->setValue(params.height);
-    //level_name->setText(params.Name);
+
+    LevelSort->setValue(params.levelSort);
+    part_of_story->setChecked(params.partOfStory);
+    level_is_listed->setChecked(params.visibleInLevelSelection);
+    compressed_screenshot=params.Thumbnail;
+    if (!compressed_screenshot.isEmpty()) {
+        ppl7::grafix::Image img;
+        img.load(compressed_screenshot);
+        thumbnail->setIcon(img);
+    }
+    const Translator& translator=GetTranslator();
+    for (auto it=translator.languages.begin();it != translator.languages.end();++it) {
+        auto it2=params.LevelName.find(it->first);
+        if (it2 != params.LevelName.end()) LevelName[it->first]->setText(it2->second);
+        it2=params.Description.find(it->first);
+        if (it2 != params.Description.end()) Description[it->first]->setText(it2->second);
+    }
+
 
     // Background
     if (params.backgroundType == Background::Type::Color) radio_color->setChecked(true);
@@ -357,9 +383,26 @@ void LevelDialog::loadValues(const LevelParameter& params)
 
 void LevelDialog::saveValues(LevelParameter& params) const
 {
+    // Level
     params.width=level_width->value();
     params.height=level_height->value();
-    //params.Name=level_name->text();
+    params.visibleInLevelSelection=level_is_listed->checked();
+    params.partOfStory=part_of_story->checked();
+    params.levelSort=LevelSort->value();
+    params.Thumbnail=compressed_screenshot;
+
+    const Translator& translator=GetTranslator();
+    for (auto it=translator.languages.begin();it != translator.languages.end();++it) {
+        auto it2=LevelName.find(it->first);
+        if (it2 != LevelName.end()) params.LevelName[it->first]=ppl7::String(it2->second->text()).trimmed();
+        else  params.LevelName[it->first]="";
+        auto it3=Description.find(it->first);
+        if (it3 != Description.end()) params.Description[it->first]=ppl7::String(it3->second->text()).trimmed();
+        else  params.Description[it->first]="";
+
+
+    }
+
 
     // Background
     if (radio_color->checked()) params.backgroundType=Background::Type::Color;
@@ -516,12 +559,19 @@ void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
 
 void LevelDialog::timerEvent(ppltk::Event* event)
 {
-    ppl7::PrintDebug("LevelDialog::timerEvent\n");
+    //ppl7::PrintDebug("LevelDialog::timerEvent\n");
     if (screenshot != NULL && screenshot->isDone()) {
-        ppl7::PrintDebug("screenshot done\n");
+        //ppl7::PrintDebug("screenshot done\n");
         ppltk::WindowManager* wm=ppltk::GetWindowManager();
         wm->removeTimer(screenshot_timer_id);
         thumbnail->setIcon(screenshot->image().scaled(320, 180, true, true));
+        ppl7::grafix::ImageFilter_JPEG jpeg;
+        ppl7::AssocArray jpeg_params;
+        jpeg_params.setf("quality", "%d", 95);
+        ppl7::MemFile memory;
+        jpeg.save(thumbnail->icon(), memory, jpeg_params);
+        //ppl7::PrintDebug("jpeg size: %d\n", (int)memory.size());
+        memory.load(compressed_screenshot);
         delete screenshot;
         screenshot=NULL;
     }

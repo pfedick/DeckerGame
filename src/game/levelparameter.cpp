@@ -45,7 +45,7 @@ void LevelParameter::clear()
 	levelSort=0;
 	randomSong=true;
 	partOfStory=false;
-	visibleInLevelSelection=true;
+	visibleInLevelSelection=false;
 	backgroundType=Background::Type::Color;
 	BackgroundColor.setColor(32, 32, 64, 255);
 	Thumbnail.clear();
@@ -108,7 +108,7 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 		a.set("Description/" + it->first, it->second);
 	}
 
-	a.list();
+	//a.list();
 
 }
 
@@ -148,12 +148,13 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 
 	a.importBinary(assoc_ba);
 	Default="";
+	//a.list();
 
 	width=a.getInt("level_width", width);
 	height=a.getInt("level_height", height);
 
 	if (a.exists("partOfStory")) partOfStory=a.getString("partOfStory", Default).toBool();
-	if (a.exists("visibleInLevelSelection")) partOfStory=a.getString("visibleInLevelSelection", Default).toBool();
+	if (a.exists("visibleInLevelSelection")) visibleInLevelSelection=a.getString("visibleInLevelSelection", Default).toBool();
 	if (a.exists("levelSort")) levelSort=a.getString("levelSort", Default).toInt();
 	if (a.exists("level_name")) LevelName["en"]=a.getString("level_name", Default);
 
