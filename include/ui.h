@@ -26,6 +26,7 @@ class ColorPalette;
 
 class Player;
 class Metrics;
+class Screenshot;
 
 namespace Decker {
 namespace ui {
@@ -532,7 +533,6 @@ public:
 
 };
 
-
 class LevelDialog : public Dialog
 {
 public:
@@ -560,6 +560,9 @@ private:
 	ppltk::Button* thumb_from_clipboard;
 	ppltk::Button* thumb_load;
 	ppltk::Button* thumb_save;
+	Screenshot* screenshot;
+	int screenshot_timer_id;
+
 
 
 	ppltk::RadioButton* radio_image;
@@ -605,6 +608,7 @@ private:
 public:
 	int custom_id;
 	LevelDialog(int width, int height);
+	~LevelDialog();
 
 	void setGame(Game* game);
 	void setNewLevelFlag(bool newlevel);
@@ -621,6 +625,7 @@ public:
 	void keyDownEvent(ppltk::KeyEvent* event) override;
 	void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;
 	void closeEvent(ppltk::Event* event);
+	void timerEvent(ppltk::Event* event);
 
 };
 

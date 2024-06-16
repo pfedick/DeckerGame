@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "decker.h"
 #include "ui.h"
 #include "translate.h"
-#include "decker.h"
+
 #include "audiopool.h"
 
 namespace Decker::ui {
@@ -23,8 +24,22 @@ LevelDialog::LevelDialog(int width, int height)
     slider_green=NULL;
     slider_blue=NULL;
     color_preview=NULL;
-    game=NULL;
+    game=&GetGame();
+    screenshot=NULL;
+    screenshot_timer_id=0;
     setupUi();
+}
+
+LevelDialog::~LevelDialog()
+{
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    if (screenshot_timer_id) wm->removeTimer(screenshot_timer_id);
+
+    if (screenshot) {
+        game->TakeScreenshot(NULL);
+        delete screenshot;
+        screenshot=NULL;
+    }
 }
 
 void LevelDialog::setupUi()
@@ -128,7 +143,7 @@ void LevelDialog::setupLevelTab()
 
     tstrings=new ppltk::TabWidget(0, y, clientarea.width, clientarea.height - y);
     tab->addChild(tstrings);
-    Translator translator=GetTranslator();
+    const Translator& translator=GetTranslator();
     for (auto it=translator.languages.begin();it != translator.languages.end();++it) {
         ppltk::Widget* langtab=new ppltk::Widget();
         tstrings->addTab(langtab, it->first);
@@ -402,6 +417,16 @@ void LevelDialog::mouseDownEvent(ppltk::MouseEvent* event)
             additional_soundtrack->currentIdentifier());
     } else if (w == delete_soundtrack_button) {
         soundtrack_list->remove(soundtrack_list->currentIdentifier());
+    } else if (w == thumb_take_screenshot) {
+        if (screenshot) {
+            game->TakeScreenshot(NULL);
+            delete screenshot;
+            screenshot=NULL;
+        }
+        ppltk::WindowManager* wm=ppltk::GetWindowManager();
+        screenshot=new Screenshot(Screenshot::Mode::Memory);
+        screenshot_timer_id=wm->startTimer(this, 100);
+        game->TakeScreenshot(screenshot);
     }
     Dialog::mouseDownEvent(event);
 }
@@ -488,5 +513,19 @@ void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
     }
 #endif
 }
+
+void LevelDialog::timerEvent(ppltk::Event* event)
+{
+    ppl7::PrintDebug("LevelDialog::timerEvent\n");
+    if (screenshot != NULL && screenshot->isDone()) {
+        ppl7::PrintDebug("screenshot done\n");
+        ppltk::WindowManager* wm=ppltk::GetWindowManager();
+        wm->removeTimer(screenshot_timer_id);
+        thumbnail->setIcon(screenshot->image().scaled(320, 180, true, true));
+        delete screenshot;
+        screenshot=NULL;
+    }
+}
+
 
 }   // Decker::ui
