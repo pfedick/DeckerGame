@@ -25,6 +25,8 @@ public:
         Speech(int id) : id(id) {};
     };
 
+    std::map<ppl7::String, ppl7::String> languages;
+
     Translator();
     ~Translator();
     void load();

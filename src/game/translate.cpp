@@ -31,6 +31,8 @@ Translator::Translator()
 {
     translator=this;
     lang="en";
+    languages.insert(std::pair<ppl7::String, ppl7::String>("en", "english"));
+    languages.insert(std::pair<ppl7::String, ppl7::String>("de", "german"));
 }
 
 Translator::~Translator()
