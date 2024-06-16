@@ -66,6 +66,7 @@ OBJECTS=compile/main.o \
 	compile/tiletype.o \
 	compile/tile.o \
 	compile/spritesystem.o \
+	compile/screenshot.o \
 	compile/particlesystem.o \
 	compile/particle.o \
 	compile/brickoccupation.o \
@@ -466,6 +467,10 @@ compile/plane.o: src/game/plane.cpp Makefile include/decker.h
 compile/tiletype.o: src/game/tiletype.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/tiletype.o -c src/game/tiletype.cpp $(CFLAGS)
+
+compile/screenshot.o: src/game/screenshot.cpp Makefile include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/screenshot.o -c src/game/screenshot.cpp $(CFLAGS)
 
 compile/spritesystem.o: src/game/spritesystem.cpp Makefile include/decker.h
 	- @mkdir -p compile
