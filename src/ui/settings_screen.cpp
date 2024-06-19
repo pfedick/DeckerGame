@@ -270,7 +270,8 @@ void SettingsScreen::initPageAudio()
 
 void SettingsScreen::initPageVideo()
 {
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    //ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     ppl7::grafix::Color background(20, 10, 0, 192);
     page_video=new ppltk::Frame(settings_page.x, settings_page.y, this->width() - settings_page.x - 10, this->height() - settings_page.y - 10, ppltk::Frame::BorderStyle::NoBorder);
     page_video->setName("SettingsPageVideo");
@@ -315,7 +316,7 @@ void SettingsScreen::initPageVideo()
 
     save_video_settings_button=new ppltk::Button(input_widget_x, 200, 450, 50,
         translate("use video settings"),
-        gfx->Toolbar.getDrawable(24));
+        wm->Toolbar.getDrawable(24));
     save_video_settings_button->setFont(style_label.font);
     save_video_settings_button->setEventHandler(this);
     page_video->addChild(save_video_settings_button);
