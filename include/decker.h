@@ -586,7 +586,28 @@ public:
 	bool operator==(const ModifiableParameter& other) const;
 };
 
-class LevelParameter : public ModifiableParameter
+class LevelDescription
+{
+public:
+	bool partOfStory;
+	bool visibleInLevelSelection;
+	int  levelSort;
+	std::map<ppl7::String, ppl7::String> LevelName;
+	std::map<ppl7::String, ppl7::String> Description;
+	ppl7::ByteArray Thumbnail;
+
+	ppl7::String Filename;	// only for Level selection
+	bool isCustomLevel;		// only for Level selection
+
+	LevelDescription();
+	void clear();
+	bool loadFromFile(const ppl7::String& filename);
+	void loadFromAssocArray(const ppl7::AssocArray& a);
+};
+
+void getLevelList(std::list<LevelDescription>& level_list);
+
+class LevelParameter : public ModifiableParameter, public LevelDescription
 {
 private:
 public:
@@ -596,13 +617,6 @@ public:
 	ppl7::String InitialSong;
 	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
-
-	bool partOfStory;
-	bool visibleInLevelSelection;
-	int  levelSort;
-	std::map<ppl7::String, ppl7::String> LevelName;
-	std::map<ppl7::String, ppl7::String> Description;
-	ppl7::ByteArray Thumbnail;
 
 	bool drainBattery;
 	float batteryDrainRate; // EnergyPointsPerSecond
@@ -744,6 +758,7 @@ private:
 
 	void clear();
 
+public:
 	enum LevelChunkId {
 		chunkPlayerPlane=1,
 		chunkFrontPlane=2,
@@ -781,6 +796,7 @@ private:
 		chunkLights=47,
 	};
 
+private:
 	void drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);

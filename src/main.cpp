@@ -22,6 +22,9 @@ void help()
 
 void startDebug(Game& game)
 {
+	std::list<LevelDescription> level_list;
+	getLevelList(level_list);
+	return;
 	game.startLevel("level/tutorial.lvl");
 	//game.startLevel("level/waynet.lvl");
 	//game.startLevel("level/sound.lvl");

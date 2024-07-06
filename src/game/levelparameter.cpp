@@ -8,6 +8,137 @@
 #include "objects.h"
 #include "particle.h"
 
+
+LevelDescription::LevelDescription()
+{
+	partOfStory=false;
+	visibleInLevelSelection=false;
+	isCustomLevel=false;
+	levelSort=0;
+}
+
+void LevelDescription::clear()
+{
+	partOfStory=false;
+	visibleInLevelSelection=false;
+	isCustomLevel=false;
+	Filename.clear();
+	levelSort=0;
+	LevelName.clear();
+	Description.clear();
+	Thumbnail.clear();
+}
+
+void LevelDescription::loadFromAssocArray(const ppl7::AssocArray& a)
+{
+	ppl7::String Default;
+	Default="";
+	if (a.exists("partOfStory")) partOfStory=a.getString("partOfStory", Default).toBool();
+	if (a.exists("visibleInLevelSelection")) visibleInLevelSelection=a.getString("visibleInLevelSelection", Default).toBool();
+	if (a.exists("levelSort")) levelSort=a.getString("levelSort", Default).toInt();
+	if (a.exists("level_name")) LevelName["en"]=a.getString("level_name", Default);
+
+	if (a.exists("Thumbnail")) Thumbnail=a.get("Thumbnail").toByteArray();
+
+	if (a.exists("LevelName")) {
+		ppl7::AssocArray::const_iterator it;
+		ppl7::AssocArray& data=a.getAssocArray("LevelName");
+		for (it=data.begin();it != data.end();++it) {
+			LevelName.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
+		}
+	}
+
+	if (a.exists("Description")) {
+		ppl7::AssocArray::const_iterator it;
+		ppl7::AssocArray& data=a.getAssocArray("Description");
+		for (it=data.begin();it != data.end();++it) {
+			Description.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
+		}
+	}
+
+}
+
+bool LevelDescription::loadFromFile(const ppl7::String& filename)
+{
+	ppl7::File ff;
+	try {
+		ff.open(filename, ppl7::File::READ);
+		ppl7::ByteArray ba;
+		ff.read(ba, 7);
+		const char* buffer=ba.toCharPtr();
+		if (memcmp(buffer, "Decker", 7) != 0) {
+			//printf("Invalid Fileformat\n");
+			return false;
+		}
+		while (!ff.eof()) {
+			size_t bytes_read=ff.read(ba, 5);
+			if (bytes_read != 5) return false;
+			buffer=ba.toCharPtr();
+			size_t size=ppl7::Peek32(buffer);
+			int id=ppl7::Peek8(buffer + 4);
+			//printf ("load id=%d, size=%zd\n",id,size);
+			if (size <= 5) continue;
+
+			if (id == Level::LevelChunkId::chunkLevelParameter) {
+				bytes_read=ff.read(ba, size - 5);
+				if (bytes_read != size - 5) return false;
+				//ppl7::PrintDebug("   found levelparams [%s]\n", (const char*)filename);
+
+				this->Filename=filename;
+
+				const char* buffer=ba.toCharPtr();
+				int version=ppl7::Peek8(buffer);
+				if (version != 1) {
+					printf("Can't load LevelParameter, unknown version! [%d]\n", version);
+					return false;
+				}
+				ppl7::ByteArrayPtr assoc_ba(buffer + 1, ba.size() - 1);
+				ppl7::AssocArray a;
+				a.importBinary(assoc_ba);
+				loadFromAssocArray(a);
+				return true;
+			} else {
+				ff.seek(size - 5, ppl7::FileObject::SeekOrigin::SEEKCUR);
+			}
+
+		}
+
+	} catch (...) {
+		return false;
+	}
+	return false;
+}
+
+static void getLevelList(std::list<LevelDescription>& level_list, const ppl7::String& path)
+{
+	ppl7::Dir dir;
+	try {
+		dir.open(path, ppl7::Dir::Sort::SORT_FILENAME);
+		ppl7::Dir::Iterator it;
+		dir.reset(it);
+		ppl7::DirEntry entry;
+		while (dir.getNextPattern(entry, it, "*.lvl")) {
+			//ppl7::PrintDebug("level file: %s\n", (const char*)entry.File);
+			LevelDescription descr;
+			if (descr.loadFromFile(entry.File)) {
+				level_list.push_back(descr);
+			}
+		}
+	} catch (...) {
+
+	}
+}
+
+void getLevelList(std::list<LevelDescription>& level_list)
+{
+	getLevelList(level_list, "level");
+	ppl7::String CustomLevelPath=ppl7::Dir::documentsPath(APP_COMPANY, APP_NAME);
+	getLevelList(level_list, CustomLevelPath);
+
+	//ppl7::PrintDebug("%d levels found\n", (int)level_list.size());
+}
+
+
 ModifiableParameter::ModifiableParameter()
 {
 	backgroundType=Background::Type::Color;
@@ -42,15 +173,9 @@ void LevelParameter::clear()
 {
 	width=0;
 	height=0;
-	levelSort=0;
 	randomSong=true;
-	partOfStory=false;
-	visibleInLevelSelection=false;
 	backgroundType=Background::Type::Color;
 	BackgroundColor.setColor(32, 32, 64, 255);
-	Thumbnail.clear();
-	LevelName.clear();
-	Description.clear();
 	InitialSong.clear();
 	SongPlaylist.clear();
 	BackgroundImage.clear();
@@ -59,6 +184,8 @@ void LevelParameter::clear()
 	drainBattery=false;
 	batteryDrainRate=1.0f;
 	flashlightOnOnLevelStart=false;
+	LevelDescription::clear();
+
 }
 
 
@@ -169,28 +296,7 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 	width=a.getInt("level_width", width);
 	height=a.getInt("level_height", height);
 
-	if (a.exists("partOfStory")) partOfStory=a.getString("partOfStory", Default).toBool();
-	if (a.exists("visibleInLevelSelection")) visibleInLevelSelection=a.getString("visibleInLevelSelection", Default).toBool();
-	if (a.exists("levelSort")) levelSort=a.getString("levelSort", Default).toInt();
-	if (a.exists("level_name")) LevelName["en"]=a.getString("level_name", Default);
-
-	if (a.exists("Thumbnail")) Thumbnail=a.get("Thumbnail").toByteArray();
-
-	if (a.exists("LevelName")) {
-		ppl7::AssocArray::const_iterator it;
-		ppl7::AssocArray& data=a.getAssocArray("LevelName");
-		for (it=data.begin();it != data.end();++it) {
-			LevelName.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
-		}
-	}
-
-	if (a.exists("Description")) {
-		ppl7::AssocArray::const_iterator it;
-		ppl7::AssocArray& data=a.getAssocArray("Description");
-		for (it=data.begin();it != data.end();++it) {
-			Description.insert(std::pair<ppl7::String, ppl7::String>(it->first, it->second->toString()));
-		}
-	}
+	LevelDescription::loadFromAssocArray(a);
 
 
 	InitialSong=a.getString("initial_song", Default);
