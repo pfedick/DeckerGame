@@ -43,38 +43,39 @@ void MainMenue::setupUi()
 {
 	int x=0;
 	ppl7::grafix::Size s=this->clientSize();
-	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+	//ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+	ppltk::WindowManager* wm=ppltk::GetWindowManager();
 	exit_button=new ppltk::Button(s.width - 100, 0, 100, s.height, "Exit");
-	exit_button->setIcon(gfx->Toolbar.getDrawable(68));
+	exit_button->setIcon(wm->Toolbar.getDrawable(68));
 	exit_button->setEventHandler(this);
 	this->addChild(exit_button);
 
 	save_button=new ppltk::Button(0, 0, 64, s.height, "Save");
-	save_button->setIcon(gfx->Toolbar.getDrawable(33));
+	save_button->setIcon(wm->Toolbar.getDrawable(33));
 	save_button->setEventHandler(this);
 	this->addChild(save_button);
 	x+=65;
 
 	save_as_button=new ppltk::Button(x, 0, 100, s.height, "Save as...");
-	save_as_button->setIcon(gfx->Toolbar.getDrawable(67));
+	save_as_button->setIcon(wm->Toolbar.getDrawable(67));
 	save_as_button->setEventHandler(this);
 	this->addChild(save_as_button);
 	x+=101;
 
 	load_button=new ppltk::Button(x, 0, 64, s.height, "Load");
-	load_button->setIcon(gfx->Toolbar.getDrawable(32));
+	load_button->setIcon(wm->Toolbar.getDrawable(32));
 	load_button->setEventHandler(this);
 	this->addChild(load_button);
 	x+=65;
 
 	new_button=new ppltk::Button(231, 0, 64, s.height, "New");
-	new_button->setIcon(gfx->Toolbar.getDrawable(31));
+	new_button->setIcon(wm->Toolbar.getDrawable(31));
 	new_button->setEventHandler(this);
 	this->addChild(new_button);
 
 	x=320;
 	edit_level_button=new ppltk::Button(320, 0, 70, s.height, "Level");
-	edit_level_button->setIcon(gfx->Toolbar.getDrawable(73));
+	edit_level_button->setIcon(wm->Toolbar.getDrawable(73));
 	edit_level_button->setEventHandler(this);
 	this->addChild(edit_level_button);
 
@@ -129,13 +130,13 @@ void MainMenue::setupUi()
 	this->addChild(show_metrics_submenu_button);
 
 	pause_button=new ppltk::Button(1249, 0, 70, s.height, "Pause");
-	pause_button->setIcon(gfx->Toolbar.getDrawable(64));
+	pause_button->setIcon(wm->Toolbar.getDrawable(64));
 	pause_button->setEventHandler(this);
 	pause_button->setCheckable(true);
 	this->addChild(pause_button);
 
 	step_button=new ppltk::Button(1319, 0, 70, s.height, "Step");
-	step_button->setIcon(gfx->Toolbar.getDrawable(65));
+	step_button->setIcon(wm->Toolbar.getDrawable(65));
 	step_button->setEventHandler(this);
 	this->addChild(step_button);
 

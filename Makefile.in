@@ -246,6 +246,9 @@ nightbackground: compile/nightbackground_main.o
 	$(CXX) -o nightbackground compile/nightbackground_main.o $(LIBS)
 	-chmod 755 nightbackground
 
+git:
+	git submodule update --init --recursive
+	git pull --recurse-submodules
 
 clean:
 	-rm -f compile/*.o $(PROGRAM) *.core

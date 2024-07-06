@@ -13,20 +13,21 @@ FileDialog::FileDialog(int width, int height, FileMode mode)
 {
     my_state=DialogState::Open;
     ppl7::String path=ppl7::Dir::currentPath();
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    //ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
     if (mode == FileMode::AnyFile) {
         setWindowTitle(translate("save file"));
-        setWindowIcon(gfx->Toolbar.getDrawable(33));
+        setWindowIcon(wm->Toolbar.getDrawable(33));
 
     } else {
         setWindowTitle(translate("load file"));
-        setWindowIcon(gfx->Toolbar.getDrawable(32));
+        setWindowIcon(wm->Toolbar.getDrawable(32));
     }
     ppl7::grafix::Size clientarea=this->clientSize();
 
-    ok_button=new ppltk::Button(20, clientarea.height - 30, 200, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
+    ok_button=new ppltk::Button(20, clientarea.height - 30, 200, 30, translate("OK"), wm->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppltk::Button(clientarea.width - 220, clientarea.height - 30, 200, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppltk::Button(clientarea.width - 220, clientarea.height - 30, 200, 30, translate("Cancel"), wm->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);

@@ -47,12 +47,13 @@ void LevelDialog::setupUi()
 {
     destroyChilds();
     ppl7::grafix::Size clientarea=this->clientSize();
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
-    this->setWindowIcon(gfx->Toolbar.getDrawable(73));
+    //ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
+    this->setWindowIcon(wm->Toolbar.getDrawable(73));
 
-    ok_button=new ppltk::Button(20, clientarea.height - 30, 70, 30, translate("OK"), gfx->Toolbar.getDrawable(24));
+    ok_button=new ppltk::Button(20, clientarea.height - 30, 70, 30, translate("OK"), wm->Toolbar.getDrawable(24));
     ok_button->setEventHandler(this);
-    cancel_button=new ppltk::Button(clientarea.width - 130, clientarea.height - 30, 120, 30, translate("Cancel"), gfx->Toolbar.getDrawable(25));
+    cancel_button=new ppltk::Button(clientarea.width - 130, clientarea.height - 30, 120, 30, translate("Cancel"), wm->Toolbar.getDrawable(25));
     cancel_button->setEventHandler(this);
     this->addChild(ok_button);
     this->addChild(cancel_button);
@@ -72,9 +73,9 @@ void LevelDialog::setupUi()
 
 void LevelDialog::setupLevelTab()
 {
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     ppltk::Widget* tab=new ppltk::Widget();
-    tabwidget->addTab(tab, "Level", gfx->Toolbar.getDrawable(58));
+    tabwidget->addTab(tab, "Level", wm->Toolbar.getDrawable(58));
     ppl7::grafix::Size clientarea=tab->clientSize();
     int y=0;
     int col1=150;
@@ -125,11 +126,11 @@ void LevelDialog::setupLevelTab()
     thumbnail->setEventHandler(this);
     tab->addChild(thumbnail);
 
-    thumb_take_screenshot=new ppltk::Button(430, y + 0, 200, 30, "take screenshot", gfx->Toolbar.getDrawable(2));
-    thumb_to_clipboard=new ppltk::Button(430, y + 30, 200, 30, "copy to clipboard", gfx->Toolbar.getDrawable(37));
-    thumb_from_clipboard=new ppltk::Button(430, y + 60, 200, 30, "copy from clipboard", gfx->Toolbar.getDrawable(38));
-    thumb_load=new ppltk::Button(430, y + 90, 200, 30, "load", gfx->Toolbar.getDrawable(32));
-    thumb_save=new ppltk::Button(430, y + 120, 200, 30, "save", gfx->Toolbar.getDrawable(33));
+    thumb_take_screenshot=new ppltk::Button(430, y + 0, 200, 30, "take screenshot", wm->Toolbar.getDrawable(2));
+    thumb_to_clipboard=new ppltk::Button(430, y + 30, 200, 30, "copy to clipboard", wm->Toolbar.getDrawable(37));
+    thumb_from_clipboard=new ppltk::Button(430, y + 60, 200, 30, "copy from clipboard", wm->Toolbar.getDrawable(38));
+    thumb_load=new ppltk::Button(430, y + 90, 200, 30, "load", wm->Toolbar.getDrawable(32));
+    thumb_save=new ppltk::Button(430, y + 120, 200, 30, "save", wm->Toolbar.getDrawable(33));
 
     thumb_take_screenshot->setEventHandler(this);
     thumb_to_clipboard->setEventHandler(this);
@@ -178,10 +179,10 @@ void LevelDialog::setupLevelTab()
 
 void LevelDialog::setupBackgroundTab()
 {
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     ppltk::Widget* tab=new ppltk::Widget();
 
-    tabwidget->addTab(tab, "Background", gfx->Toolbar.getDrawable(57));
+    tabwidget->addTab(tab, "Background", wm->Toolbar.getDrawable(57));
     ppl7::grafix::Size clientarea=tab->clientSize();
     int y1=0;
     int col1=90;
@@ -255,9 +256,9 @@ void LevelDialog::setupBackgroundTab()
 
 void LevelDialog::setupSoundtrackTab()
 {
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     ppltk::Widget* tab=new ppltk::Widget();
-    tabwidget->addTab(tab, "Soundtrack", gfx->Toolbar.getDrawable(55));
+    tabwidget->addTab(tab, "Soundtrack", wm->Toolbar.getDrawable(55));
     ppl7::grafix::Size clientarea=tab->clientSize();
 
     //this->addChild(new ppltk::Label(0, y, 200, 30, "Soundtrack:"));
@@ -274,10 +275,10 @@ void LevelDialog::setupSoundtrackTab()
     tab->addChild(new ppltk::Label(0, y2, c2, 30, "additional:"));
     additional_soundtrack=new ppltk::ComboBox(c2, y2, w, 30);
     tab->addChild(additional_soundtrack);
-    add_soundtrack_button=new ppltk::Button(x3, y2, 30, 30, "", gfx->Toolbar.getDrawable(43));
+    add_soundtrack_button=new ppltk::Button(x3, y2, 30, 30, "", wm->Toolbar.getDrawable(43));
     add_soundtrack_button->setEventHandler(this);
     tab->addChild(add_soundtrack_button);
-    delete_soundtrack_button=new ppltk::Button(x3, y2 + 35 * 4, 30, 30, "", gfx->Toolbar.getDrawable(44));
+    delete_soundtrack_button=new ppltk::Button(x3, y2 + 35 * 4, 30, 30, "", wm->Toolbar.getDrawable(44));
     delete_soundtrack_button->setEventHandler(this);
     tab->addChild(delete_soundtrack_button);
     soundtrack_list=new ppltk::ListWidget(c2, y2 + 35, w, 35 * 4);

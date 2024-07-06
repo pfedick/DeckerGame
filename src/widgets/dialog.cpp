@@ -10,12 +10,13 @@ Dialog::Dialog(int width, int height, int buttons)
 	setTopmost(true);
 	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	ppltk::WindowManager* wm=ppltk::GetWindowManager();
+	setWindowIcon(wm->Toolbar.getDrawable(21));
 	myBackground=style.windowBackgroundColor * 1.4f;
 	myBackground.setAlpha(240);
 	ppltk::Window* gamewin=GetGameWindow();
 	create((gamewin->width() - width) / 2, (gamewin->height() - height) / 2, width, height);
 
-	ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+	//ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
 	ok_button=NULL;
 	copy_button=NULL;
 	paste_button=NULL;
@@ -34,14 +35,14 @@ Dialog::Dialog(int width, int height, int buttons)
 	int client_offset_y2=8;
 	if (buttons & Buttons::OK) {
 		ok_button=new ppltk::Button((width - 80) / 2, y, 80, 30, "OK");
-		ok_button->setIcon(gfx->Toolbar.getDrawable(24));
+		ok_button->setIcon(wm->Toolbar.getDrawable(24));
 		ok_button->setEventHandler(this);
 		ppltk::Widget::addChild(ok_button);
 		client_offset_y2=40 + 8;
 	}
 	if (buttons & Buttons::Paste) {
 		paste_button=new ppltk::Button(x - 32, y, 32, 32, "");
-		paste_button->setIcon(gfx->Toolbar.getDrawable(38));
+		paste_button->setIcon(wm->Toolbar.getDrawable(38));
 		paste_button->setEventHandler(this);
 		ppltk::Widget::addChild(paste_button);
 		x-=32;
@@ -50,7 +51,7 @@ Dialog::Dialog(int width, int height, int buttons)
 
 	if (buttons & Buttons::Copy) {
 		copy_button=new ppltk::Button(x - 32, y, 32, 32, "");
-		copy_button->setIcon(gfx->Toolbar.getDrawable(37));
+		copy_button->setIcon(wm->Toolbar.getDrawable(37));
 		copy_button->setEventHandler(this);
 		ppltk::Widget::addChild(copy_button);
 		x-=32;
@@ -60,7 +61,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	x=18;
 	if (buttons & Buttons::Reset) {
 		reset_button=new ppltk::Button(x, y, 80, 32, "Reset");
-		reset_button->setIcon(gfx->Toolbar.getDrawable(34));
+		reset_button->setIcon(wm->Toolbar.getDrawable(34));
 		reset_button->setEventHandler(this);
 		ppltk::Widget::addChild(reset_button);
 		x+=82;
@@ -68,7 +69,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	}
 	if (buttons & Buttons::Test) {
 		test_button=new ppltk::Button(x, y, 60, 32, "Test");
-		reset_button->setIcon(gfx->Toolbar.getDrawable(63));
+		reset_button->setIcon(wm->Toolbar.getDrawable(63));
 		test_button->setEventHandler(this);
 		ppltk::Widget::addChild(test_button);
 		x+=62;

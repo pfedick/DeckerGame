@@ -17,7 +17,8 @@ GradientWidget::Item::Item()
 GradientWidget::GradientWidget(int x, int y, int width, int height)
     : ppltk::Widget(x, y, width, height)
 {
-    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    //ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::WindowManager* wm=ppltk::GetWindowManager();
     max_items=8;
     max_id=0;
     selected_id=0;
@@ -25,10 +26,10 @@ GradientWidget::GradientWidget(int x, int y, int width, int height)
     drag_offset=0;
     gradient_y1=0;
     gradient_y2=0;
-    add_item_button=new ppltk::Button(width - 32, 2, 30, 30, "", gfx->Toolbar.getDrawable(43));
+    add_item_button=new ppltk::Button(width - 32, 2, 30, 30, "", wm->Toolbar.getDrawable(43));
     add_item_button->setEventHandler(this);
     addChild(add_item_button);
-    delete_item_button=new ppltk::Button(width - 32, height - 32, 30, 30, "", gfx->Toolbar.getDrawable(44));
+    delete_item_button=new ppltk::Button(width - 32, height - 32, 30, 30, "", wm->Toolbar.getDrawable(44));
     delete_item_button->setEventHandler(this);
     addChild(delete_item_button);
 }
