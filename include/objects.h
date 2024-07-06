@@ -71,7 +71,7 @@ public:
 		TouchPlateSwitch=37,
 		ButtonSwitch=38,
 		LightSignal=39,
-		Crate,
+		Crate=40,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,

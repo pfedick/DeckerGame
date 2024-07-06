@@ -589,6 +589,17 @@ private:
 	ppltk::ListWidget* soundtrack_list;
 	ppltk::CheckBox* soundtrack_random;
 
+	// Items & Options
+	ppltk::CheckBox* option_drain_battery;
+	ppltk::CheckBox* option_flashlite_on_on_level_start;
+	ppltk::DoubleHorizontalSlider* battery_drain_rate;
+	ppltk::ComboBox* available_items;
+	ppltk::Button* add_item_button;
+	ppltk::Button* delete_item_button;
+	ppltk::ListWidget* initial_items_list;
+	ppltk::Label* battery_empty_time;
+
+
 
 	ppltk::Button* ok_button;
 	ppltk::Button* cancel_button;
@@ -605,6 +616,7 @@ private:
 	void setupLevelTab();
 	void setupBackgroundTab();
 	void setupSoundtrackTab();
+	void setupItemsAndOptionsTab();
 
 public:
 	int custom_id;
@@ -623,6 +635,7 @@ public:
 	void mouseClickEvent(ppltk::MouseEvent* event) override;
 	void mouseDownEvent(ppltk::MouseEvent* event) override;
 	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	void valueChangedEvent(ppltk::Event* event, double value) override;
 	void keyDownEvent(ppltk::KeyEvent* event) override;
 	void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;
 	void closeEvent(ppltk::Event* event);

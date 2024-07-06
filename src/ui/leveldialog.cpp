@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "decker.h"
+#include "objects.h"
 #include "ui.h"
 #include "translate.h"
 
@@ -61,6 +62,7 @@ void LevelDialog::setupUi()
     setupLevelTab();
     setupBackgroundTab();
     setupSoundtrackTab();
+    setupItemsAndOptionsTab();
     tabwidget->setCurrentIndex(0);
     //ppltk::WindowManager* wm=ppltk::GetWindowManager();
     //wm->setKeyboardFocus(level_name);
@@ -296,6 +298,56 @@ void LevelDialog::setupSoundtrackTab()
 }
 
 
+void LevelDialog::setupItemsAndOptionsTab()
+{
+    ppl7::grafix::Grafix* gfx=ppl7::grafix::GetGrafix();
+    ppltk::Widget* tab=new ppltk::Widget();
+    tabwidget->addTab(tab, "Items & Options", gfx->Toolbar.getDrawable(55));
+    // ppl7::grafix::Size clientarea=tab->clientSize();
+    int y=0;
+
+    option_drain_battery=new ppltk::CheckBox(0, y, 150, 30, "drain battery");
+    option_drain_battery->setEventHandler(this);
+    tab->addChild(option_drain_battery);
+    tab->addChild(new ppltk::Label(150, y, 100, 30, "drain rate:"));
+    battery_drain_rate=new ppltk::DoubleHorizontalSlider(250, y, 300, 30);
+    battery_drain_rate->setLimits(0.0f, 5.0f);
+    battery_drain_rate->enableSpinBox(true, 0.1f, 3, 100);
+    battery_drain_rate->setEventHandler(this);
+    tab->addChild(battery_drain_rate);
+    battery_empty_time=new ppltk::Label(550, y, 200, 30, "empty in: 0 seconds");
+    tab->addChild(battery_empty_time);
+
+    y+=35;
+    option_flashlite_on_on_level_start=new ppltk::CheckBox(0, y, 300, 30, "enable flashlight on level start");
+    option_flashlite_on_on_level_start->setEventHandler(this);
+    tab->addChild(option_flashlite_on_on_level_start);
+
+    y+=35;
+    tab->addChild(new ppltk::Label(0, y, 100, 30, "Items:"));
+    available_items=new ppltk::ComboBox(100, y, 200, 30);
+    available_items->add("Flashlight", ppl7::ToString("%d", Decker::Objects::Type::Flashlight));
+    available_items->add("Cheese", ppl7::ToString("%d", Decker::Objects::Type::Cheese));
+    available_items->add("Hammer", ppl7::ToString("%d", Decker::Objects::Type::Hammer));
+    available_items->setEventHandler(this);
+    tab->addChild(available_items);
+
+    add_item_button=new ppltk::Button(300, y, 30, 30, "", gfx->Toolbar.getDrawable(43));
+    add_item_button->setEventHandler(this);
+    tab->addChild(add_item_button);
+
+    y+=35;
+    initial_items_list=new ppltk::ListWidget(100, y, 200, 35 * 6);
+    initial_items_list->setSortingEnabled(true);
+    tab->addChild(initial_items_list);
+
+
+    delete_item_button=new ppltk::Button(300, y + 35 * 5, 30, 30, "", gfx->Toolbar.getDrawable(44));
+    delete_item_button->setEventHandler(this);
+    tab->addChild(delete_item_button);
+
+}
+
 
 void LevelDialog::setGame(Game* game)
 {
@@ -379,6 +431,28 @@ void LevelDialog::loadValues(const LevelParameter& params)
         }
     }
 
+    // Options and Items
+    option_drain_battery->setChecked(params.drainBattery);
+    option_flashlite_on_on_level_start->setChecked(params.flashlightOnOnLevelStart);
+    battery_drain_rate->setValue(params.batteryDrainRate);
+    initial_items_list->setSortingEnabled(false);
+    initial_items_list->clear();
+    for (auto it=params.InitialItems.begin();it != params.InitialItems.end();++it) {
+        switch (*it) {
+            case Decker::Objects::Type::Flashlight:
+                initial_items_list->add("Flashlight", ppl7::ToString("%d", Decker::Objects::Type::Flashlight));
+                break;
+            case Decker::Objects::Type::Cheese:
+                initial_items_list->add("Cheese", ppl7::ToString("%d", Decker::Objects::Type::Cheese));
+                break;
+            case Decker::Objects::Type::Hammer:
+                initial_items_list->add("Hammer", ppl7::ToString("%d", Decker::Objects::Type::Hammer));
+                break;
+
+        }
+    }
+    initial_items_list->setSortingEnabled(true);
+
 }
 
 void LevelDialog::saveValues(LevelParameter& params) const
@@ -420,6 +494,15 @@ void LevelDialog::saveValues(LevelParameter& params) const
         params.SongPlaylist.push_back((*it).identifier);
     }
 
+
+    params.flashlightOnOnLevelStart=option_flashlite_on_on_level_start->checked();
+    params.drainBattery=option_drain_battery->checked();
+    params.batteryDrainRate=battery_drain_rate->value();
+    params.InitialItems.clear();
+    const std::list<ppltk::ListWidget::ListWidgetItem>& items=initial_items_list->getItems();
+    for (auto it=items.begin();it != items.end();++it) {
+        params.InitialItems.insert(it->identifier.toInt());
+    }
 }
 
 void LevelDialog::updateColorPreview()
@@ -470,6 +553,12 @@ void LevelDialog::mouseDownEvent(ppltk::MouseEvent* event)
         screenshot=new Screenshot(Screenshot::Mode::Memory);
         screenshot_timer_id=wm->startTimer(this, 100);
         game->TakeScreenshot(screenshot);
+    } else if (w == add_item_button) {
+        if (!initial_items_list->hasIdentifier(available_items->currentIdentifier())) {
+            initial_items_list->add(available_items->currentText(), available_items->currentIdentifier());
+        }
+    } else if (w == delete_item_button) {
+        initial_items_list->remove(initial_items_list->currentIdentifier());
     }
     Dialog::mouseDownEvent(event);
 }
@@ -511,6 +600,15 @@ void LevelDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
         updateColorPreview();
     }
 
+}
+
+void LevelDialog::valueChangedEvent(ppltk::Event* event, double value)
+{
+    ppltk::Widget* widget=event->widget();
+
+    if (widget == battery_drain_rate) {
+        battery_empty_time->setText(ppl7::ToString("empty in %d seconds", value * 60));
+    }
 }
 
 void LevelDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
