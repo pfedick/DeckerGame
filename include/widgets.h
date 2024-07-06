@@ -8,7 +8,7 @@
 
 class Game;
 class SpriteTexture;
-
+class LevelDescription;
 
 namespace Decker {
 namespace ui {
@@ -270,6 +270,22 @@ public:
 };
 
 
+class LevelSelectionItem : public ppltk::Widget
+{
+private:
+public:
+	LevelSelectionItem();
+	void setFilename(const ppl7::String& filename);
+	void setCustom(bool custom);
+	void setThumbnail(ppl7::grafix::Drawable& img);
+	void setThumbnail(ppl7::ByteArrayPtr& data);
+	void setLevelName(const ppl7::String& name);
+	void setDescription(const ppl7::String& description);
+	void setAuthor(const ppl7::String& author);
+	void set(const LevelDescription& descr);
+
+	void paint(ppl7::grafix::Drawable& draw) override;
+};
 
 
 }	// EOF namespace ui
