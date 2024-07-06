@@ -258,26 +258,6 @@ void Level::load(const ppl7::String& Filename)
 				objects->load(ba);
 			} else if (id == LevelChunkId::chunkWayNet) {
 				waynet.load(ba);
-#ifdef OLDCODE
-			} else if (id == LevelChunkId::chunkLightsHorizon) {
-				//HorizonLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
-			} else if (id == LevelChunkId::chunkLightsFar) {
-				//FarLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Horizon, static_cast<int>(LightPlayerPlaneMatrix::None));
-			} else if (id == LevelChunkId::chunkLightsMiddle) {
-				//MiddleLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Middle, static_cast<int>(LightPlayerPlaneMatrix::None));
-			} else if (id == LevelChunkId::chunkLightsPlayer) {
-				//PlayerLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Player) | static_cast<int>(LightPlayerPlaneMatrix::Back));
-			} else if (id == LevelChunkId::chunkLightsFront) {
-				//FrontLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Player, static_cast<int>(LightPlayerPlaneMatrix::Front));
-			} else if (id == LevelChunkId::chunkLightsNear) {
-				//NearLights.load(ba);
-				lights.loadLegacyLightLayer(ba, LightPlaneId::Near, static_cast<int>(LightPlayerPlaneMatrix::None));
-#endif
 			} else if (id == LevelChunkId::chunkLights) {
 				lights.load(ba);
 			}
@@ -285,7 +265,6 @@ void Level::load(const ppl7::String& Filename)
 			break;
 		}
 	}
-	//printf("Player plane is: %d x %d\n", PlayerPlane.getSize().width, PlayerPlane.getSize().height);
 	if (PlayerPlane.getSize().isEmpty()) PlayerPlane.create(512, 256);
 	if (HorizonPlane.getSize().isEmpty()) HorizonPlane.create(PlayerPlane.getSize().width, PlayerPlane.getSize().height);
 	if (MiddlePlane.getSize().isEmpty()) MiddlePlane.create(PlayerPlane.getSize().width, PlayerPlane.getSize().height);
@@ -297,40 +276,7 @@ void Level::load(const ppl7::String& Filename)
 
 	if (PlayerPlane.getSize().width != params.width) params.width=PlayerPlane.getSize().width;
 	if (PlayerPlane.getSize().height != params.height) params.height=PlayerPlane.getSize().height;
-	/*
-	// For performance-testing of sprite system
-	for (int i=0;i<1000000;i++) {
-		PlayerSprites[0].addSprite(ppl7::rand(0,50000), ppl7::rand(1000,50000), 0, 1, ppl7::rand(0,52*4), 1.0f);
-	}
-	*/
-#ifdef HACKME
-	ff.open("level/haunted.lvl", ppl7::File::READ);
-	ff.read(ba, 7);
-	buffer=ba.toCharPtr();
-	if (memcmp(buffer, "Decker", 7) != 0) {
-		printf("Invalid Fileformat\n");
-		return;
-	}
-	while (!ff.eof()) {
-		try {
-			size_t bytes_read=ff.read(ba, 5);
-			if (bytes_read != 5) break;
-			buffer=ba.toCharPtr();
-			size_t size=ppl7::Peek32(buffer);
-			int id=ppl7::Peek8(buffer + 4);
-			//printf ("load id=%d, size=%zd\n",id,size);
-			if (size <= 5) continue;
-			bytes_read=ff.read(ba, size - 5);
-			if (bytes_read != size - 5) break;
-			if (id == LevelChunkId::chunkLights) {
-				lights.load(ba);
-			}
 
-		} catch (const ppl7::EndOfFileException&) {
-			break;
-		}
-	}
-#endif
 }
 
 void Level::save(const ppl7::String& Filename)
