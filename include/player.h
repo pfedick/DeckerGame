@@ -179,6 +179,7 @@ public:
 	bool isSpeaking() const;
 	bool hasSpoken(uint16_t id) const;
 	bool isFlashlightOn() const;
+	void enableFlashlight(bool enable);
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 

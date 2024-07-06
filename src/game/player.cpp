@@ -1813,6 +1813,16 @@ void Player::toggleFlashlight()
 	}
 }
 
+void Player::enableFlashlight(bool enable)
+{
+	if (hasSpecialObject(Decker::Objects::Type::Flashlight)) {
+		flashlightOn=enable;
+		actionToggleCooldown=time + 0.2f;
+		ppl7::grafix::Point p(x, y);
+		getAudioPool().playOnce(AudioClip::light_switch1, p, 1600, 1.0f);
+	}
+}
+
 bool Player::isFlashlightOn() const {
 	return flashlightOn;
 }
