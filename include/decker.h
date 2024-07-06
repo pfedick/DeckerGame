@@ -604,6 +604,11 @@ public:
 	std::map<ppl7::String, ppl7::String> Description;
 	ppl7::ByteArray Thumbnail;
 
+	bool drainBattery;
+	float batteryDrainRate; // EnergyPointsPerSecond
+	bool flashlightOnOnLevelStart;
+	std::set<int>InitialItems;
+
 	LevelParameter();
 	void clear();
 	size_t size() const;

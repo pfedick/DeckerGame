@@ -1425,6 +1425,11 @@ void Game::startLevel(const ppl7::String& filename)
 		enableControls(false);
 	}
 	player->resetLevelObjects();
+	for (auto it=level.params.InitialItems.begin();it != level.params.InitialItems.end();++it) {
+		player->addSpecialObject((*it));
+	}
+	if (level.params.flashlightOnOnLevelStart) player->enableFlashlight(true);
+
 	player->stand();
 	soundtrack.playInitialSong();
 	background.setBackgroundType(level.params.backgroundType);

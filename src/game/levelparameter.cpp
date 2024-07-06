@@ -55,6 +55,10 @@ void LevelParameter::clear()
 	SongPlaylist.clear();
 	BackgroundImage.clear();
 	GlobalLighting.setColor(255, 255, 255, 255);
+	InitialItems.clear();
+	drainBattery=false;
+	batteryDrainRate=1.0f;
+	flashlightOnOnLevelStart=false;
 }
 
 
@@ -107,6 +111,18 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 	for (auto it=params.Description.begin();it != params.Description.end();++it) {
 		a.set("Description/" + it->first, it->second);
 	}
+
+	if (params.drainBattery) a.set("drainBattery", "true");
+	else a.set("drainBattery", "false");
+	a.setf("batteryDrainRate", "%0.3f", params.batteryDrainRate);
+
+	if (params.flashlightOnOnLevelStart) a.set("flashlightOnOnLevelStart", "true");
+	else a.set("flashlightOnOnLevelStart", "false");
+
+	for (auto it=params.InitialItems.begin();it != params.InitialItems.end();++it) {
+		a.setf("InitialItems/[]", "%d", (*it));
+	}
+
 
 	//a.list();
 
@@ -209,5 +225,17 @@ void LevelParameter::load(const ppl7::ByteArrayPtr& ba)
 		GlobalLighting.setAlpha(Tok[3].toInt());
 	}
 
+	Default="false";
+	if (a.exists("drainBattery")) drainBattery=a.getString("drainBattery", Default).toBool();
+	if (a.exists("flashlightOnOnLevelStart")) flashlightOnOnLevelStart=a.getString("flashlightOnOnLevelStart", Default).toBool();
+	Default="1.000";
+	if (a.exists("batteryDrainRate")) batteryDrainRate=a.getString("batteryDrainRate", Default).toFloat();
+	if (a.exists("InitialItems")) {
+		ppl7::AssocArray& itemlist=a.getAssocArray("InitialItems");
+		ppl7::AssocArray::const_iterator it;
+		for (it=itemlist.begin();it != itemlist.end();++it) {
+			InitialItems.insert((*it).second->toString().toInt());
+		}
+	}
 	//a.list("level::parameter::load");
 }
