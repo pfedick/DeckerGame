@@ -96,7 +96,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 			fade_state = 2;
 			fade_to_black=0;
 			gameState=GameState::BlendOut;
-			if (start_screen->getState() != StartScreen::State::ShowSettings)
+			if (start_screen->getState() != StartScreen::State::ShowSettings && start_screen->getState() != StartScreen::State::SelectLevel)
 				GeorgeDeckerTheme.fadeout(4.0f);
 		} else if (start_screen->getState() != StartScreen::State::None && fade_state == 3) {
 			break;
@@ -121,6 +121,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		case StartScreen::State::QuitGame: return GameState::QuitGame;
 		case StartScreen::State::StartGame: return GameState::StartGame;
 		case StartScreen::State::StartTutorial: return GameState::StartTutorial;
+		case StartScreen::State::SelectLevel: return GameState::SelectLevel;
 		case StartScreen::State::ShowSettings: return GameState::ShowSettings;
 		case StartScreen::State::StartEditor: return GameState::StartEditor;
 		default: return GameState::QuitGame;
@@ -137,6 +138,7 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	: game(g)
 {
 	settings_screen=NULL;
+	level_select_screen=NULL;
 	create(x, y, width, height);
 	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	ppl7::grafix::Font font=style.buttonFont;
@@ -163,6 +165,11 @@ StartScreen::StartScreen(Game& g, int x, int y, int width, int height)
 	start_game=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Start Game"));
 	start_game->setEventHandler(this);
 	menue->addChild(start_game);
+	yy+=100;
+
+	select_level=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Select Level"));
+	select_level->setEventHandler(this);
+	menue->addChild(select_level);
 	yy+=100;
 
 	settings=new Decker::ui::GameMenuArea(10, yy, 520, 90, translate("Settings"));
@@ -217,6 +224,7 @@ StartScreen::~StartScreen()
 {
 	//if (filedialog) delete filedialog;
 	if (settings_screen) delete settings_screen;
+	if (level_select_screen) delete level_select_screen;
 	delete version;
 	delete start_tutorial;
 	delete start_game;
@@ -233,6 +241,7 @@ void StartScreen::retranslateUi()
 	start_game->setText(translate("Start Game"));
 	settings->setText(translate("Settings"));
 	editor->setText(translate("Level editor"));
+	select_level->setText(translate("Select Level"));
 	end->setText(translate("Exit game"));
 
 }
@@ -260,6 +269,18 @@ void StartScreen::showSettings()
 	this->needsRedraw();
 }
 
+void StartScreen::showLevelSection()
+{
+	menue->setEnabled(false);
+	menue->setVisible(false);
+	if (!level_select_screen) {
+		level_select_screen=new LevelSelectScreen(game, 50, 50, this->width() - 100, this->height() - 100);
+		resizeSettingsScreen();
+	}
+	this->addChild(level_select_screen);
+	this->needsRedraw();
+}
+
 void StartScreen::paint(ppl7::grafix::Drawable& draw)
 {
 	draw.cls();
@@ -273,30 +294,43 @@ void StartScreen::mouseEnterEvent(ppltk::MouseEvent* event)
 	if (event->widget() == start_tutorial) {
 		start_tutorial->setSelected(true);
 		start_game->setSelected(false);
+		select_level->setSelected(false);
 		settings->setSelected(false);
 		editor->setSelected(false);
 		end->setSelected(false);
 	} else if (event->widget() == start_game) {
 		start_tutorial->setSelected(false);
 		start_game->setSelected(true);
+		select_level->setSelected(false);
+		settings->setSelected(false);
+		editor->setSelected(false);
+		end->setSelected(false);
+	} else if (event->widget() == select_level) {
+		start_tutorial->setSelected(false);
+		start_game->setSelected(false);
+		select_level->setSelected(true);
 		settings->setSelected(false);
 		editor->setSelected(false);
 		end->setSelected(false);
 	} else if (event->widget() == settings) {
 		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
+		select_level->setSelected(false);
 		settings->setSelected(true);
 		editor->setSelected(false);
 		end->setSelected(false);
+
 	} else if (event->widget() == editor) {
 		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
+		select_level->setSelected(false);
 		settings->setSelected(false);
 		editor->setSelected(true);
 		end->setSelected(false);
 	} else if (event->widget() == end) {
 		start_tutorial->setSelected(false);
 		start_game->setSelected(false);
+		select_level->setSelected(false);
 		settings->setSelected(false);
 		editor->setSelected(false);
 		end->setSelected(true);
@@ -314,7 +348,8 @@ void StartScreen::mouseClickEvent(ppltk::MouseEvent* event)
 		state=State::StartTutorial;
 	} else if (event->widget() == settings) {
 		showSettings();
-		//state=State::ShowSettings;
+	} else if (event->widget() == select_level) {
+		showLevelSection();
 	} else if (event->widget() == editor) {
 		state=State::StartEditor;
 	}
@@ -328,6 +363,9 @@ void StartScreen::handleKeyDownEvent(int key)
 			start_game->setSelected(true);
 		} else if (start_game->isSelected()) {
 			start_game->setSelected(false);
+			select_level->setSelected(true);
+		} else if (select_level->isSelected()) {
+			select_level->setSelected(false);
 			settings->setSelected(true);
 		} else if (settings->isSelected()) {
 			settings->setSelected(false);
@@ -343,9 +381,12 @@ void StartScreen::handleKeyDownEvent(int key)
 		} else if (editor->isSelected()) {
 			editor->setSelected(false);
 			settings->setSelected(true);
+		} else if (select_level->isSelected()) {
+			select_level->setSelected(false);
+			start_game->setSelected(true);
 		} else if (settings->isSelected()) {
 			settings->setSelected(false);
-			start_game->setSelected(true);
+			select_level->setSelected(true);
 		} else if (start_game->isSelected()) {
 			start_game->setSelected(false);
 			start_tutorial->setSelected(true);
@@ -353,6 +394,7 @@ void StartScreen::handleKeyDownEvent(int key)
 	} else if (key == ppltk::KeyEvent::KEY_RETURN) {
 		if (start_game->isSelected()) state=State::StartGame;
 		else if (settings->isSelected()) showSettings();
+		else if (select_level->isSelected()) showLevelSection();
 		else if (editor->isSelected()) state=State::StartEditor;
 		else if (end->isSelected()) state=State::QuitGame;
 		else if (start_tutorial->isSelected()) state=State::StartTutorial;
@@ -399,19 +441,18 @@ void StartScreen::closeEvent(ppltk::Event* event)
 		ppltk::GetWindowManager()->setGameControllerFocus(this);
 		needsRedraw();
 
+	} else if (event->widget() == level_select_screen) {
+		//ppl7::PrintDebug("StartScreen::closeEvent\n");
+		this->removeChild(level_select_screen);
+		delete level_select_screen;
+		level_select_screen=NULL;
+		menue->setEnabled(true);
+		menue->setVisible(true);
+		retranslateUi();
+		ppltk::GetWindowManager()->setKeyboardFocus(this);
+		ppltk::GetWindowManager()->setGameControllerFocus(this);
+		needsRedraw();
 	}
-	/*
-	if (event->widget()==filedialog) {
-		if (filedialog->state()==Decker::ui::FileDialog::DialogState::OK) {
-			printf ("we have a file: %s\n",(const char*)filedialog->filename());
-			fflush(stdout);
-		}
-		filedialog->deleteLater();
-		filedialog->setVisible(false);
-		filedialog=NULL;
-		redrawRequired();
-	}
-	*/
 }
 
 void StartScreen::resizeEvent(ppltk::ResizeEvent* event)
@@ -449,6 +490,8 @@ void StartScreen::resizeEvent(ppltk::ResizeEvent* event)
 	yy+=element_h + 10;
 	start_game->setPos(10, yy);				start_game->setSize(element_w, element_h);
 	yy+=element_h + 10;
+	select_level->setPos(10, yy);				select_level->setSize(element_w, element_h);
+	yy+=element_h + 10;
 	settings->setPos(10, yy);	settings->setSize(element_w, element_h);
 	yy+=element_h + 10;
 	editor->setPos(10, yy);	editor->setSize(element_w, element_h);
@@ -458,12 +501,14 @@ void StartScreen::resizeEvent(ppltk::ResizeEvent* event)
 
 	start_tutorial->setFontSize(font_size);
 	start_game->setFontSize(font_size);
+	select_level->setFontSize(font_size);
 	settings->setFontSize(font_size);
 	editor->setFontSize(font_size);
 	end->setFontSize(font_size);
 
 	start_tutorial->setBorderWidth(border_width);
 	start_game->setBorderWidth(border_width);
+	select_level->setBorderWidth(border_width);
 	settings->setBorderWidth(border_width);
 	editor->setBorderWidth(border_width);
 	end->setBorderWidth(border_width);
@@ -493,5 +538,22 @@ void StartScreen::resizeSettingsScreen()
 		settings_screen->setPos(p1);
 		settings_screen->resizeEvent(NULL);
 	}
+	if (level_select_screen) {
+		ppl7::grafix::Point p1(50, 50);
+		ppl7::grafix::Size s1(this->width() - 100, this->height() - 100);
+		if (height() < 600 || width() < 1280) {
+			p1.setPoint(30, 30);
+			s1.setSize(this->width() - 60, this->height() - 60);
+
+		}
+		if (height() < 500 || width() < 1024) {
+			p1.setPoint(30, 30);
+			s1.setSize(this->width() - 60, this->height() - 60);
+		}
+		level_select_screen->setSize(s1);
+		level_select_screen->setPos(p1);
+		level_select_screen->resizeEvent(NULL);
+	}
+
 	needsRedraw();
 }

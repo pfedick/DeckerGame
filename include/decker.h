@@ -839,7 +839,8 @@ enum class GameState {
 	BlendOut,
 	StartTutorial,
 	StartNextLevel,
-	BackToMenue
+	BackToMenue,
+	SelectLevel
 
 };
 

@@ -195,6 +195,27 @@ public:
 
 };
 
+class LevelSelectScreen : public ppltk::Widget
+{
+private:
+    Game& game;
+public:
+    LevelSelectScreen(Game& game, int x, int y, int width, int height);
+    ~LevelSelectScreen();
+
+    void paint(ppl7::grafix::Drawable& draw) override;
+
+    void keyDownEvent(ppltk::KeyEvent* event) override;
+    void mouseEnterEvent(ppltk::MouseEvent* event) override;
+    void mouseClickEvent(ppltk::MouseEvent* event) override;
+
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event) override;
+    void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event) override;
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event) override;
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event) override;
+
+};
+
 
 
 class StartScreen : public ppltk::Widget
@@ -207,17 +228,20 @@ public:
         StartGame,
         StartTutorial,
         ShowSettings,
-        StartEditor
+        StartEditor,
+        SelectLevel
     };
 
 private:
     Game& game;
     Decker::ui::GameMenuArea* start_tutorial;
     Decker::ui::GameMenuArea* start_game;
+    Decker::ui::GameMenuArea* select_level;
     Decker::ui::GameMenuArea* settings;
     Decker::ui::GameMenuArea* editor;
     Decker::ui::GameMenuArea* end;
     SettingsScreen* settings_screen;
+    LevelSelectScreen* level_select_screen;
 
     ppltk::Frame* menue;
     ppltk::Label* version;
@@ -240,6 +264,7 @@ public:
     void setState(State state);
 
     void showSettings();
+    void showLevelSection();
 
     virtual void paint(ppl7::grafix::Drawable& draw);
     virtual void mouseEnterEvent(ppltk::MouseEvent* event);
