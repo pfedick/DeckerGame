@@ -561,6 +561,7 @@ private:
 	ppltk::Button* thumb_load;
 	ppltk::Button* thumb_save;
 	Screenshot* screenshot;
+	ppltk::TextEdit* author;
 	ppl7::ByteArray compressed_screenshot;
 	int screenshot_timer_id;
 

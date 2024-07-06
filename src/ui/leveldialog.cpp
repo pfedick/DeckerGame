@@ -149,6 +149,11 @@ void LevelDialog::setupLevelTab()
     tab->addChild(thumb_load);
     tab->addChild(thumb_save);
     y+=190;
+    tab->addChild(new ppltk::Label(0, y, 100, 30, "Author:"));
+    author=new ppltk::TextEdit(100, y, clientarea.width - 100, 30);
+
+    tab->addChild(author);
+    y+=35;
 
     tstrings=new ppltk::TabWidget(0, y, clientarea.width, clientarea.height - y);
     tab->addChild(tstrings);
@@ -392,6 +397,8 @@ void LevelDialog::loadValues(const LevelParameter& params)
     level_width->setValue(params.width);
     level_height->setValue(params.height);
 
+    author->setText(params.Author);
+
     LevelSort->setValue(params.levelSort);
     part_of_story->setChecked(params.partOfStory);
     level_is_listed->setChecked(params.visibleInLevelSelection);
@@ -465,6 +472,8 @@ void LevelDialog::saveValues(LevelParameter& params) const
     params.partOfStory=part_of_story->checked();
     params.levelSort=LevelSort->value();
     params.Thumbnail=compressed_screenshot;
+    params.Author=author->text();
+    params.Author.trim();
 
     const Translator& translator=GetTranslator();
     for (auto it=translator.languages.begin();it != translator.languages.end();++it) {
@@ -652,7 +661,7 @@ void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
         else if (widget == color_green) wm->setKeyboardFocus(color_red);
         else if (widget == color_red) wm->setKeyboardFocus(level_height);
 
-    }
+}
 #endif
 }
 

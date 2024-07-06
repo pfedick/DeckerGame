@@ -27,6 +27,7 @@ void LevelDescription::clear()
 	LevelName.clear();
 	Description.clear();
 	Thumbnail.clear();
+	Author.clear();
 }
 
 void LevelDescription::loadFromAssocArray(const ppl7::AssocArray& a)
@@ -37,6 +38,7 @@ void LevelDescription::loadFromAssocArray(const ppl7::AssocArray& a)
 	if (a.exists("visibleInLevelSelection")) visibleInLevelSelection=a.getString("visibleInLevelSelection", Default).toBool();
 	if (a.exists("levelSort")) levelSort=a.getString("levelSort", Default).toInt();
 	if (a.exists("level_name")) LevelName["en"]=a.getString("level_name", Default);
+	if (a.exists("Author")) Author=a.getString("Author", Default);
 
 	if (a.exists("Thumbnail")) Thumbnail=a.get("Thumbnail").toByteArray();
 
@@ -238,7 +240,7 @@ static void storeParameters(ppl7::AssocArray& a, const LevelParameter& params)
 	for (auto it=params.Description.begin();it != params.Description.end();++it) {
 		a.set("Description/" + it->first, it->second);
 	}
-
+	a.set("Author", params.Author);
 	if (params.drainBattery) a.set("drainBattery", "true");
 	else a.set("drainBattery", "false");
 	a.setf("batteryDrainRate", "%0.3f", params.batteryDrainRate);

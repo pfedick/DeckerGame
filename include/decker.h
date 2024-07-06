@@ -594,6 +594,7 @@ public:
 	int  levelSort;
 	std::map<ppl7::String, ppl7::String> LevelName;
 	std::map<ppl7::String, ppl7::String> Description;
+	ppl7::String Author;
 	ppl7::ByteArray Thumbnail;
 
 	ppl7::String Filename;	// only for Level selection
