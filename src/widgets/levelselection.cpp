@@ -83,7 +83,11 @@ void LevelSelection::mouseClickEvent(ppltk::MouseEvent* event)
 {
     for (auto it=item_list.begin();it != item_list.end();++it) {
         if (event->widget() == (*it)) {
-            ppl7::PrintDebug("Level clicked: %s\n", (const char*)(*it)->filename);
+            //ppl7::PrintDebug("Level clicked: %s\n", (const char*)(*it)->filename);
+            ppltk::Event event(ppltk::Event::Close);
+            event.setWidget(this);
+            this->getParent()->textChangedEvent(&event, (*it)->filename);
+
         }
     }
 }

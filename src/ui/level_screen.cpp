@@ -111,3 +111,20 @@ void LevelSelectScreen::gameControllerDeviceRemoved(ppltk::GameControllerEvent* 
 {
     GetGame().gameControllerDeviceRemoved(event);
 }
+
+
+void LevelSelectScreen::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
+{
+    if (event->widget() == levelselection) {
+        selectedLevelFilename=text;
+        ppltk::Event event(ppltk::Event::Close);
+        event.setWidget(this);
+        this->getParent()->closeEvent(&event);
+    }
+}
+
+
+ppl7::String LevelSelectScreen::selectedLevel() const
+{
+    return selectedLevelFilename;
+}

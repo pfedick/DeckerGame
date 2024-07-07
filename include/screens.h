@@ -201,10 +201,13 @@ private:
     Game& game;
     Decker::ui::LevelSelection* levelselection;
     Decker::ui::GameMenuArea* back_button;
+    ppl7::String selectedLevelFilename;
 
 public:
     LevelSelectScreen(Game& game, int x, int y, int width, int height);
     ~LevelSelectScreen();
+
+    ppl7::String selectedLevel() const;
 
     void paint(ppl7::grafix::Drawable& draw) override;
 
@@ -212,6 +215,8 @@ public:
     void mouseEnterEvent(ppltk::MouseEvent* event) override;
     void mouseLeaveEvent(ppltk::MouseEvent* event) override;
     void mouseClickEvent(ppltk::MouseEvent* event) override;
+
+    void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;
 
     void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event) override;
     void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event) override;
@@ -233,11 +238,13 @@ public:
         StartTutorial,
         ShowSettings,
         StartEditor,
-        SelectLevel
+        SelectLevel,
+        StartLevel
     };
 
 private:
     Game& game;
+    ppl7::String selectedLevelFilename;
     Decker::ui::GameMenuArea* start_tutorial;
     Decker::ui::GameMenuArea* start_game;
     Decker::ui::GameMenuArea* select_level;
@@ -269,6 +276,7 @@ public:
 
     void showSettings();
     void showLevelSection();
+    ppl7::String selectedLevel() const;
 
     virtual void paint(ppl7::grafix::Drawable& draw);
     virtual void mouseEnterEvent(ppltk::MouseEvent* event);

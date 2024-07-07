@@ -98,6 +98,13 @@ void startNormal(Game& game)
 			game.resetPlayer();
 			game.openNewLevelDialog();
 			game.run();
+		} else if (state == GameState::StartLevel) {
+			game.showUi(false);
+			game.resetPlayer();
+			game.startLevel(game.selectedLevel());
+			game.enableControls(true);
+			game.run();
+			if (game.gameState == GameState::QuitGame) break;
 		} else if (state == GameState::ShowSettings) {
 		}
 	}

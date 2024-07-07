@@ -857,7 +857,8 @@ enum class GameState {
 	StartTutorial,
 	StartNextLevel,
 	BackToMenue,
-	SelectLevel
+	SelectLevel,
+	StartLevel
 
 };
 
@@ -1054,6 +1055,7 @@ private:
 	Metrics metrics;
 
 	ppl7::String nextLevelFile;
+	ppl7::String selectedLevelFilename;
 	float frame_rate_compensation;
 
 	void createWindow();
@@ -1155,6 +1157,8 @@ public:
 	void showUi(bool enable);
 	void enableControls(bool enable);
 	bool getControlsEnabled() const;
+
+	ppl7::String selectedLevel() const;
 
 	SDL_Renderer* getSDLRenderer();
 	SDL& getSDL();

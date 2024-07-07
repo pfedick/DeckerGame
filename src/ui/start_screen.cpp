@@ -115,6 +115,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	StartScreen::State state=start_screen->getState();
 	this->removeChild(start_screen);
 	sdl.destroyTexture(title_tex);
+	selectedLevelFilename=start_screen->selectedLevel();
 	delete start_screen;
 	start_screen=NULL;
 	switch (state) {
@@ -124,13 +125,17 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		case StartScreen::State::SelectLevel: return GameState::SelectLevel;
 		case StartScreen::State::ShowSettings: return GameState::ShowSettings;
 		case StartScreen::State::StartEditor: return GameState::StartEditor;
+		case StartScreen::State::StartLevel: return GameState::StartLevel;
 		default: return GameState::QuitGame;
 	}
 	return GameState::QuitGame;
 }
 
 
-
+ppl7::String Game::selectedLevel() const
+{
+	return selectedLevelFilename;
+}
 
 
 
@@ -233,6 +238,11 @@ StartScreen::~StartScreen()
 	delete end;
 	this->removeChild(menue);
 	delete menue;
+}
+
+ppl7::String StartScreen::selectedLevel() const
+{
+	return selectedLevelFilename;
 }
 
 void StartScreen::retranslateUi()
@@ -443,14 +453,23 @@ void StartScreen::closeEvent(ppltk::Event* event)
 
 	} else if (event->widget() == level_select_screen) {
 		//ppl7::PrintDebug("StartScreen::closeEvent\n");
+		selectedLevelFilename=level_select_screen->selectedLevel();
 		this->removeChild(level_select_screen);
 		delete level_select_screen;
 		level_select_screen=NULL;
-		menue->setEnabled(true);
-		menue->setVisible(true);
+		if (selectedLevelFilename.isEmpty()) {
+			menue->setEnabled(true);
+			menue->setVisible(true);
+		}
 		retranslateUi();
 		ppltk::GetWindowManager()->setKeyboardFocus(this);
 		ppltk::GetWindowManager()->setGameControllerFocus(this);
+
+
+		if (selectedLevelFilename.notEmpty()) {
+			state=State::StartLevel;
+		}
+
 		needsRedraw();
 	}
 }

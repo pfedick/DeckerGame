@@ -42,6 +42,30 @@ LevelSelectionItem::LevelSelectionItem(const LevelDescription& descr, bool hidde
 
 }
 
+void PrintDescription(ppl7::grafix::Drawable& draw, const ppl7::String& text, ppl7::grafix::Font& font)
+{
+    //draw.cls();
+    int x=0;
+    int y=0;
+    ppl7::grafix::Size space=font.measure(ppl7::ToString(" "));
+    ppl7::Array words(text, " ");
+    for (size_t i=0;i < words.size();i++) {
+        ppl7::String& word=words.get(i);
+        ppl7::grafix::Size s=font.measure(word);
+        if (x + s.width > draw.width()) {
+            x=0;
+            y+=space.height;
+        }
+
+        draw.print(font, x, y, word);
+        x+=s.width + space.width;
+    }
+
+
+
+
+}
+
 void LevelSelectionItem::paint(ppl7::grafix::Drawable& draw)
 {
     ppl7::grafix::Color bg(20, 15, 5, 220);
@@ -69,6 +93,11 @@ void LevelSelectionItem::paint(ppl7::grafix::Drawable& draw)
     ppl7::grafix::Drawable client=clientDrawable(draw);
 
     client.print(font, 0, 0, title);
+
+    font.setSize(20);
+    ppl7::grafix::Drawable printarea=client.getDrawable(10, 40, client.width() - 340, 160);
+    PrintDescription(printarea, description, font);
+    //client.print(font, 0, 40, description);
 
 
     font.setName("NotoSans");
