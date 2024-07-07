@@ -62,6 +62,9 @@ OBJECTS=compile/main.o \
 	compile/widgets_gradientwidget.o \
 	compile/widgets_gamemenuarea.o \
 	compile/widgets_controllerbuttonselector.o \
+	compile/widgets_gamescrollbar.o \
+	compile/widgets_levelselection.o \
+	compile/widgets_levelselectionitem.o \
 	compile/plane.o \
 	compile/tiletype.o \
 	compile/tile.o \
@@ -886,6 +889,18 @@ compile/widgets_gamemenuarea.o: src/widgets/gamemenuarea.cpp Makefile include/wi
 compile/widgets_controllerbuttonselector.o: src/widgets/controllerbuttonselector.cpp Makefile include/widgets.h
 	- @mkdir -p compile
 	$(CXX) -o compile/widgets_controllerbuttonselector.o -c src/widgets/controllerbuttonselector.cpp $(CFLAGS)
+
+compile/widgets_gamescrollbar.o: src/widgets/gamescrollbar.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_gamescrollbar.o -c src/widgets/gamescrollbar.cpp $(CFLAGS)
+
+compile/widgets_levelselection.o: src/widgets/levelselection.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_levelselection.o -c src/widgets/levelselection.cpp $(CFLAGS)
+
+compile/widgets_levelselectionitem.o: src/widgets/levelselectionitem.cpp Makefile include/widgets.h
+	- @mkdir -p compile
+	$(CXX) -o compile/widgets_levelselectionitem.o -c src/widgets/levelselectionitem.cpp $(CFLAGS)
 
 
 # Screens

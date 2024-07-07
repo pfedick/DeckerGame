@@ -272,19 +272,74 @@ public:
 
 class LevelSelectionItem : public ppltk::Widget
 {
+	friend class LevelSelection;
 private:
+	ppl7::grafix::Image artwork;
+	ppl7::String author;
+	ppl7::String title;
+	ppl7::String description;
+	ppl7::String filename;
+	bool hidden;
+	bool selected;
+
 public:
-	LevelSelectionItem();
-	void setFilename(const ppl7::String& filename);
-	void setCustom(bool custom);
-	void setThumbnail(ppl7::grafix::Drawable& img);
-	void setThumbnail(ppl7::ByteArrayPtr& data);
-	void setLevelName(const ppl7::String& name);
-	void setDescription(const ppl7::String& description);
-	void setAuthor(const ppl7::String& author);
-	void set(const LevelDescription& descr);
+	LevelSelectionItem(const LevelDescription& descr, bool hidden=false);
 
 	void paint(ppl7::grafix::Drawable& draw) override;
+	void mouseEnterEvent(ppltk::MouseEvent* event) override;
+	void mouseLeaveEvent(ppltk::MouseEvent* event) override;
+	//void mouseClickEvent(ppltk::MouseEvent* event) override;
+
+};
+
+class GameScrollbar : public ppltk::Widget
+{
+private:
+	int size;
+	int pos;
+	int visibleItems;
+
+	ppl7::grafix::Rect slider_pos;
+	bool drag_started;
+	int drag_offset;
+	ppl7::grafix::Point drag_start_pos;
+
+public:
+	GameScrollbar(int x, int y, int width, int height);
+	~GameScrollbar();
+	void setSize(int size);
+	void setPosition(int position);
+	void setVisibleItems(int items);
+	int position() const;
+	ppl7::String widgetType() const override;
+	void paint(ppl7::grafix::Drawable& draw) override;
+	//void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event) override;
+	//void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event) override;
+	void mouseDownEvent(ppltk::MouseEvent* event) override;
+	void mouseUpEvent(ppltk::MouseEvent* event) override;
+	void lostFocusEvent(ppltk::FocusEvent* event) override;
+	void mouseMoveEvent(ppltk::MouseEvent* event) override;
+	void mouseWheelEvent(ppltk::MouseEvent* event) override;
+};
+
+class LevelSelection : public ppltk::Widget
+{
+private:
+	GameScrollbar* scrollbar;
+	int current_start;
+
+
+	std::list<LevelSelectionItem*> item_list;
+	void updateChildItems();
+
+public:
+	LevelSelection(int x, int y, int width, int height);
+	~LevelSelection();
+	void addLevel(const LevelDescription& descr, bool hidden=false);
+	void paint(ppl7::grafix::Drawable& draw) override;
+	void valueChangedEvent(ppltk::Event* event, int value) override;
+	void mouseWheelEvent(ppltk::MouseEvent* event) override;
+	void mouseClickEvent(ppltk::MouseEvent* event) override;
 };
 
 

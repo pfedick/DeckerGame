@@ -8,8 +8,26 @@ LevelSelectScreen::LevelSelectScreen(Game& g, int x, int y, int width, int heigh
     : game(g)
 {
     create(x, y, width, height);
+    setClientOffset(10, 10, 10, 10);
     ppltk::GetWindowManager()->setGameControllerFocus(this);
     ppltk::GetWindowManager()->setKeyboardFocus(this);
+
+    levelselection=new Decker::ui::LevelSelection(300, 0, width - 300, height - 20);
+
+    addChild(levelselection);
+
+    back_button=new Decker::ui::GameMenuArea(0, height - 100, 280, 80, translate("Back (ESC)"));
+    back_button->setEventHandler(this);
+    addChild(back_button);
+
+    std::list<LevelDescription> level_list;
+    getLevelList(level_list);
+    for (auto it=level_list.begin();it != level_list.end();++it) {
+        if (it->visibleInLevelSelection) levelselection->addLevel((*it), false);
+    }
+    for (auto it=level_list.begin();it != level_list.end();++it) {
+        if (!it->visibleInLevelSelection) levelselection->addLevel((*it), false);
+    }
 
 
 }
@@ -46,12 +64,26 @@ void LevelSelectScreen::keyDownEvent(ppltk::KeyEvent* event)
 
 void LevelSelectScreen::mouseEnterEvent(ppltk::MouseEvent* event)
 {
+    if (event->widget() == back_button) {
+        back_button->setSelected(true);
+        //levelselection->setSelected(false);
+    }
+}
 
+void LevelSelectScreen::mouseLeaveEvent(ppltk::MouseEvent* event)
+{
+    if (event->widget() == back_button) {
+        back_button->setSelected(false);
+    }
 }
 
 void LevelSelectScreen::mouseClickEvent(ppltk::MouseEvent* event)
 {
-
+    if (event->widget() == back_button) {
+        ppltk::Event event(ppltk::Event::Close);
+        event.setWidget(this);
+        this->getParent()->closeEvent(&event);
+    }
 }
 
 void LevelSelectScreen::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)

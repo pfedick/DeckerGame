@@ -199,6 +199,9 @@ class LevelSelectScreen : public ppltk::Widget
 {
 private:
     Game& game;
+    Decker::ui::LevelSelection* levelselection;
+    Decker::ui::GameMenuArea* back_button;
+
 public:
     LevelSelectScreen(Game& game, int x, int y, int width, int height);
     ~LevelSelectScreen();
@@ -207,6 +210,7 @@ public:
 
     void keyDownEvent(ppltk::KeyEvent* event) override;
     void mouseEnterEvent(ppltk::MouseEvent* event) override;
+    void mouseLeaveEvent(ppltk::MouseEvent* event) override;
     void mouseClickEvent(ppltk::MouseEvent* event) override;
 
     void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event) override;

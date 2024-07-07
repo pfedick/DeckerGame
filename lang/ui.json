@@ -330,6 +330,18 @@
         },
         "rumble when player gets hurt": {
             "de": "vibrieren, wenn Spieler Schaden nimmt"
+        },
+        "unknown level": {
+            "de": "Unbekannter Level"
+        },
+        "no description": {
+            "de": "Keine Beschreibung"
+        },
+        "Author:": {
+            "de": "Autor:"
+        },
+        "Description:": {
+            "de": "Beschreibung:"
         }
     }
 }
