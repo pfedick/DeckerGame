@@ -252,7 +252,7 @@ void Game::createWindow()
 	} else {
 		setFlags(ppltk::Window::WaitVsync | ppltk::Window::FullscreenDesktop | ppltk::Window::Resizeable);
 	}
-	//setFlags(ppltk::Window::DefaultFullscreen);
+	//enableFixedUiSize(true, 1920, 1080);
 	setWindowTitle("George Decker");
 	ppl7::grafix::Image icon;
 	icon.load("res/icon_128.png");
