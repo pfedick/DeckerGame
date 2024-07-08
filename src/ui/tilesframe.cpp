@@ -93,7 +93,8 @@ void TilesFrame::mouseMoveEvent(ppltk::MouseEvent* event)
 void TilesFrame::setSelectedTile(int nr)
 {
 	if (tiles == NULL) return;
-	if (nr<0) nr=0;
+	//ppl7::PrintDebug("selcted tile: %d\n", nr);
+	if (nr < 0) nr=-1;
 	if (nr != selected_tile && nr < tiles->numSprites()) {
 		selected_tile=nr;
 		//ppl7::grafix::Rect client=this->clientRect();
