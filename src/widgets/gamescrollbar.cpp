@@ -71,11 +71,12 @@ int GameScrollbar::position() const
 
 void GameScrollbar::paint(ppl7::grafix::Drawable& draw)
 {
-    const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
-    ppl7::grafix::Color light=style.buttonBackgroundColor * 1.8f;
-    ppl7::grafix::Color shadow=style.buttonBackgroundColor * 0.4f;
-    ppl7::grafix::Color shade1=style.buttonBackgroundColor * 1.05f;
-    ppl7::grafix::Color shade2=style.buttonBackgroundColor * 0.85f;
+    //const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
+    ppl7::grafix::Color base(220, 180, 20, 255);
+    ppl7::grafix::Color light=base * 2.8f;
+    ppl7::grafix::Color shadow=base * 0.3f;
+    ppl7::grafix::Color shade1=base * 1.05f;
+    ppl7::grafix::Color shade2=base * 0.85f;
     ppl7::grafix::Drawable indicator=draw;
     int w=indicator.width() - 1;
     //int h=indicator.height()-1;
@@ -100,7 +101,8 @@ void GameScrollbar::paint(ppl7::grafix::Drawable& draw)
     slider_pos.y1+=23;
     slider_pos.y2+=23;
 
-    ppl7::grafix::Color scrollarea=style.windowBackgroundColor * 1.2f;
+    ppl7::grafix::Color scrollarea=base * 0.3f;
+    scrollarea.setAlpha(220);
     indicator.cls(scrollarea);
     indicator.colorGradient(r1, shade1, shade2, 1);
     indicator.line(0, r1.y1, w, r1.y1, light);
