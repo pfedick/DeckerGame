@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <map>
 
 #include "decker.h"
 #include "screens.h"
@@ -22,9 +23,27 @@ LevelSelectScreen::LevelSelectScreen(Game& g, int x, int y, int width, int heigh
 
     std::list<LevelDescription> level_list;
     getLevelList(level_list);
+
+    std::multimap<int, LevelDescription> sorted_list;
     for (auto it=level_list.begin();it != level_list.end();++it) {
-        if (it->visibleInLevelSelection) levelselection->addLevel((*it), false);
+        if (it->visibleInLevelSelection) {
+            //ppl7::PrintDebug("visible: %s\n", (const char*)it->Filename);
+            sorted_list.insert(std::pair<int, LevelDescription>(it->levelSort, (*it)));
+        }
     }
+
+    // Part of Story
+    for (auto it=sorted_list.begin();it != sorted_list.end();++it) {
+        //ppl7::PrintDebug("%s\n", (const char*)it->second.Filename);
+        if (it->second.partOfStory) levelselection->addLevel(it->second, false);
+    }
+
+    // Everything else
+    for (auto it=sorted_list.begin();it != sorted_list.end();++it) {
+        if (!it->second.partOfStory) levelselection->addLevel(it->second, false);
+    }
+
+
     /*
     for (auto it=level_list.begin();it != level_list.end();++it) {
         if (!it->visibleInLevelSelection) levelselection->addLevel((*it), false);
