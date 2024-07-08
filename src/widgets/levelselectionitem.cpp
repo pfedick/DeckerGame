@@ -10,8 +10,9 @@
 namespace Decker {
 namespace ui {
 
-LevelSelectionItem::LevelSelectionItem(const LevelDescription& descr, bool hidden)
+LevelSelectionItem::LevelSelectionItem(LevelSelection* levelselection, const LevelDescription& descr, bool hidden)
 {
+    this->levelselection=levelselection;
     author=descr.Author;
     filename=descr.Filename;
     this->hidden=hidden;
@@ -116,15 +117,21 @@ void LevelSelectionItem::paint(ppl7::grafix::Drawable& draw)
 
 void LevelSelectionItem::mouseEnterEvent(ppltk::MouseEvent* event)
 {
+    levelselection->clearSelection();
     selected=true;
+    ppltk::Event e(ppltk::Event::SelectionChanged);
+    e.setWidget(this);
+    this->getParent()->selectionChangedEvent(&e);
     needsRedraw();
 }
 
+/*
 void LevelSelectionItem::mouseLeaveEvent(ppltk::MouseEvent* event)
 {
     selected=false;
     needsRedraw();
 }
+*/
 
 
 

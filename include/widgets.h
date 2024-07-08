@@ -269,11 +269,13 @@ public:
 	virtual void mouseDownEvent(ppltk::MouseEvent* event);
 };
 
+class LevelSelection;
 
 class LevelSelectionItem : public ppltk::Widget
 {
 	friend class LevelSelection;
 private:
+	LevelSelection* levelselection;
 	ppl7::grafix::Image artwork;
 	ppl7::String author;
 	ppl7::String title;
@@ -283,11 +285,11 @@ private:
 	bool selected;
 
 public:
-	LevelSelectionItem(const LevelDescription& descr, bool hidden=false);
+	LevelSelectionItem(LevelSelection* levelselection, const LevelDescription& descr, bool hidden=false);
 
 	void paint(ppl7::grafix::Drawable& draw) override;
 	void mouseEnterEvent(ppltk::MouseEvent* event) override;
-	void mouseLeaveEvent(ppltk::MouseEvent* event) override;
+	//void mouseLeaveEvent(ppltk::MouseEvent* event) override;
 	//void mouseClickEvent(ppltk::MouseEvent* event) override;
 
 };
@@ -297,7 +299,7 @@ class GameScrollbar : public ppltk::Widget
 private:
 	int size;
 	int pos;
-	int visibleItems;
+	int numVisibleItems;
 
 	ppl7::grafix::Rect slider_pos;
 	bool drag_started;
@@ -310,7 +312,9 @@ public:
 	void setSize(int size);
 	void setPosition(int position);
 	void setVisibleItems(int items);
+	void makeVisible(int position);
 	int position() const;
+	int visibleItems() const;
 	ppl7::String widgetType() const override;
 	void paint(ppl7::grafix::Drawable& draw) override;
 	//void gameControllerAxisMotionEvent(ppltk::GameControllerAxisEvent* event) override;
@@ -326,7 +330,7 @@ class LevelSelection : public ppltk::Widget
 {
 private:
 	GameScrollbar* scrollbar;
-	int current_start;
+	int current_selection;
 
 
 	std::list<LevelSelectionItem*> item_list;
@@ -336,8 +340,19 @@ public:
 	LevelSelection(int x, int y, int width, int height);
 	~LevelSelection();
 	void addLevel(const LevelDescription& descr, bool hidden=false);
+
+	void setSelection(int item);
+	int currentSelection() const;
+	ppl7::String getSelectedFilename() const;
+
+	void clearSelection();
+
+
+
 	void paint(ppl7::grafix::Drawable& draw) override;
 	void valueChangedEvent(ppltk::Event* event, int value) override;
+	void selectionChangedEvent(ppltk::Event* event) override;
+
 	void mouseWheelEvent(ppltk::MouseEvent* event) override;
 	void mouseClickEvent(ppltk::MouseEvent* event) override;
 };

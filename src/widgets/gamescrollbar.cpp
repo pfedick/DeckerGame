@@ -15,7 +15,7 @@ GameScrollbar::GameScrollbar(int x, int y, int width, int height) // @suppress("
     setClientOffset(0, 0, 0, 0);
     size=0;
     pos=0;
-    visibleItems=0;
+    numVisibleItems=0;
     drag_started=false;
     drag_offset=0;
 }
@@ -47,13 +47,21 @@ void GameScrollbar::setPosition(int position)
     if (position != pos && position < size && position >= 0) {
         pos=position;
         needsRedraw();
+        ppltk::Event ev(ppltk::Event::ValueChanged);
+        ev.setWidget(this);
+        valueChangedEvent(&ev, pos);
     }
 }
 
 void GameScrollbar::setVisibleItems(int items)
 {
-    visibleItems=items;
+    numVisibleItems=items;
     needsRedraw();
+}
+
+int GameScrollbar::visibleItems() const
+{
+    return numVisibleItems;
 }
 
 int GameScrollbar::position() const
@@ -73,16 +81,16 @@ void GameScrollbar::paint(ppl7::grafix::Drawable& draw)
     //int h=indicator.height()-1;
     ppl7::grafix::Rect r1=indicator.rect();
 
-    if (visibleItems > 0 && visibleItems < size) {
+    if (numVisibleItems > 0 && numVisibleItems < size) {
         float pxi=(float)indicator.height() / (float)size;
-        int visible=pxi * visibleItems;
+        int visible=pxi * numVisibleItems;
         if (visible < 25) visible=25;
         int unvisible=indicator.height() - visible;
-        r1.y1=pos * unvisible / (size - visibleItems);
+        r1.y1=pos * unvisible / (size - numVisibleItems);
         r1.y2=r1.y1 + visible;
         /*
-        ppl7::PrintDebug("height: %d, pxi=%0.3f, size=%d, visibleItems=%d, visible=%d, unvisible=%d, y1=%d, y2=%d\n",
-            indicator.height(),pxi,size,visibleItems, visible, unvisible,r1.y1,r1.y2);
+        ppl7::PrintDebug("height: %d, pxi=%0.3f, size=%d, numVisibleItems=%d, visible=%d, unvisible=%d, y1=%d, y2=%d\n",
+            indicator.height(),pxi,size,numVisibleItems, visible, unvisible,r1.y1,r1.y2);
         */
         if (r1.y2 >= indicator.height() - 1) r1.y2=indicator.height() - 2;
 
@@ -114,7 +122,7 @@ void GameScrollbar::mouseDownEvent(ppltk::MouseEvent* event)
             drag_start_pos=event->p;
             ppltk::GetWindowManager()->grabMouse(this);
         } else if (event->p.y < slider_pos.y1 && pos>0) {
-            int d=visibleItems - 1;
+            int d=numVisibleItems - 1;
             if (d < 1) d=1;
             pos-=d;
             if (pos < 0) pos=0;
@@ -122,11 +130,11 @@ void GameScrollbar::mouseDownEvent(ppltk::MouseEvent* event)
             ppltk::Event ev(ppltk::Event::ValueChanged);
             ev.setWidget(this);
             valueChangedEvent(&ev, pos);
-        } else if (event->p.y > slider_pos.y2 && pos < size - visibleItems) {
-            int d=visibleItems - 1;
+        } else if (event->p.y > slider_pos.y2 && pos < size - numVisibleItems) {
+            int d=numVisibleItems - 1;
             if (d < 1) d=1;
             pos+=d;
-            if (pos >= size) pos=size - visibleItems;
+            if (pos >= size) pos=size - numVisibleItems;
             if (pos < 0) pos=0;
             needsRedraw();
             ppltk::Event ev(ppltk::Event::ValueChanged);
@@ -158,7 +166,7 @@ void GameScrollbar::mouseMoveEvent(ppltk::MouseEvent* event)
         if (drag_started) {
             int draw_range=height() - 46;
             int64_t v=(event->p.y - drag_offset) * size / draw_range;
-            if (v >= size - visibleItems) v=size - visibleItems;
+            if (v >= size - numVisibleItems) v=size - numVisibleItems;
             if (v < 0) v=0;
             pos=v;
             needsRedraw();
@@ -177,13 +185,13 @@ void GameScrollbar::mouseWheelEvent(ppltk::MouseEvent* event)
 {
     int d=1;
     if (event->keyModifier & ppltk::KeyEvent::KEYMOD_LEFTALT) { //TODO
-        d=visibleItems - 1;
+        d=numVisibleItems - 1;
         if (d < 1) d=1;
     }
 
     if (event->wheel.y < 0 && pos < size - 1) {
         pos+=d;
-        if (pos >= size - visibleItems) pos=size - visibleItems;
+        if (pos >= size - numVisibleItems) pos=size - numVisibleItems;
         if (pos < 0) pos=0;
         needsRedraw();
         ppltk::Event ev(ppltk::Event::ValueChanged);
@@ -200,6 +208,19 @@ void GameScrollbar::mouseWheelEvent(ppltk::MouseEvent* event)
     }
 }
 
+void GameScrollbar::makeVisible(int position)
+{
+    if (position > size) position=size - 1;
+    if (position < 0) position=0;
+    if (position >= pos && position < pos + numVisibleItems) return;
+    while (position >= pos + numVisibleItems) pos++;
+    while (position < pos) pos--;
+
+    needsRedraw();
+    ppltk::Event ev(ppltk::Event::ValueChanged);
+    ev.setWidget(this);
+    valueChangedEvent(&ev, pos);
+}
 
 }	// EOF namespace ui
 }	// EOF namespace Decker

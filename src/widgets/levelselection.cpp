@@ -17,7 +17,7 @@ LevelSelection::LevelSelection(int x, int y, int width, int height)
     scrollbar->setEventHandler(this);
     scrollbar->setVisibleItems((height - 14) / 210);
     addChild(scrollbar);
-    current_start=0;
+    current_selection=0;
 
 }
 
@@ -33,8 +33,9 @@ LevelSelection::~LevelSelection()
 
 void LevelSelection::addLevel(const LevelDescription& descr, bool hidden)
 {
-    LevelSelectionItem* item=new LevelSelectionItem(descr, hidden);
+    LevelSelectionItem* item=new LevelSelectionItem(this, descr, hidden);
     item->setEventHandler(this);
+    if (item_list.size() == 0) item->selected=true;
     item_list.push_back(item);
     scrollbar->setSize(item_list.size());
     updateChildItems();
@@ -90,6 +91,54 @@ void LevelSelection::mouseClickEvent(ppltk::MouseEvent* event)
 
         }
     }
+}
+
+void LevelSelection::clearSelection()
+{
+    for (auto it=item_list.begin();it != item_list.end();++it) {
+        (*it)->selected=false;
+    }
+    current_selection=0;
+    needsRedraw();
+}
+
+void LevelSelection::selectionChangedEvent(ppltk::Event* event)
+{
+    int c=0;
+    for (auto it=item_list.begin();it != item_list.end();++it) {
+        if ((*it)->selected) current_selection=c;
+        c++;
+    }
+}
+
+void LevelSelection::setSelection(int item)
+{
+    if (item < 0) item=0;
+    if (item >= (int)item_list.size()) item=(int)item_list.size() - 1;
+    clearSelection();
+    current_selection=item;
+    int c=0;
+    for (auto it=item_list.begin();it != item_list.end();++it) {
+        if (c == current_selection) (*it)->selected=true;
+        else (*it)->selected=false;
+        c++;
+    }
+    scrollbar->makeVisible(item);
+}
+
+int LevelSelection::currentSelection() const
+{
+    return current_selection;
+}
+
+ppl7::String LevelSelection::getSelectedFilename() const
+{
+    for (auto it=item_list.begin();it != item_list.end();++it) {
+        if ((*it)->selected) {
+            return (*it)->filename;
+        }
+    }
+    return ppl7::String();
 }
 
 }	// EOF namespace ui

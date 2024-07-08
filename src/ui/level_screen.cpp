@@ -25,9 +25,12 @@ LevelSelectScreen::LevelSelectScreen(Game& g, int x, int y, int width, int heigh
     for (auto it=level_list.begin();it != level_list.end();++it) {
         if (it->visibleInLevelSelection) levelselection->addLevel((*it), false);
     }
+    /*
     for (auto it=level_list.begin();it != level_list.end();++it) {
         if (!it->visibleInLevelSelection) levelselection->addLevel((*it), false);
     }
+    */
+    levelselection->setSelection(0);
 
 
 }
@@ -59,6 +62,17 @@ void LevelSelectScreen::keyDownEvent(ppltk::KeyEvent* event)
         ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         this->getParent()->closeEvent(&event);
+    } else if (key == ppltk::KeyEvent::KEY_DOWN) {
+        levelselection->setSelection(levelselection->currentSelection() + 1);
+    } else if (key == ppltk::KeyEvent::KEY_UP) {
+        levelselection->setSelection(levelselection->currentSelection() - 1);
+    } else if (key == ppltk::KeyEvent::KEY_RETURN) {
+        selectedLevelFilename=levelselection->getSelectedFilename();
+        if (selectedLevelFilename.notEmpty()) {
+            ppltk::Event event(ppltk::Event::Close);
+            event.setWidget(this);
+            this->getParent()->closeEvent(&event);
+        }
     }
 }
 
@@ -93,6 +107,17 @@ void LevelSelectScreen::gameControllerButtonDownEvent(ppltk::GameControllerButto
         ppltk::Event event(ppltk::Event::Close);
         event.setWidget(this);
         this->getParent()->closeEvent(&event);
+    } else if (b == GameControllerMapping::Button::MenuDown) {
+        levelselection->setSelection(levelselection->currentSelection() + 1);
+    } else if (b == GameControllerMapping::Button::MenuUp) {
+        levelselection->setSelection(levelselection->currentSelection() - 1);
+    } else if (b == GameControllerMapping::Button::Action) {
+        selectedLevelFilename=levelselection->getSelectedFilename();
+        if (selectedLevelFilename.notEmpty()) {
+            ppltk::Event event(ppltk::Event::Close);
+            event.setWidget(this);
+            this->getParent()->closeEvent(&event);
+        }
     }
 
 }
