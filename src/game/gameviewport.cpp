@@ -86,18 +86,28 @@ void GameViewport::translateMouseEvent(ppltk::MouseEvent* event)
 {
 	ppltk::MouseState mouse=ppltk::GetWindowManager()->getMouseState();
 	float factor=(float)render_size.width / (float)render_rect.w;
-	mouse.p.x=((float)mouse.p.x * factor) - render_rect.x;
-	mouse.p.y=((float)mouse.p.y * factor) - render_rect.y;
-	//ppl7::PrintDebugTime("%d:%d\n", mouse.p.x, mouse.p.y);
+	mouse.p.x=((float)(mouse.p.x - render_rect.x) * factor);
+	mouse.p.y=((float)(mouse.p.y - render_rect.y) * factor);
+	/*
+	ppl7::PrintDebugTime("translateMouseEvent, renderrect: %d:%d, %d:%d, mouse: %d:%d\n",
+		render_rect.x, render_rect.y, render_rect.w, render_rect.h,
+		mouse.p.x, mouse.p.y);
+	*/
 	event->p=mouse.p;
+
 }
 
 ppl7::grafix::Point GameViewport::translate(const ppl7::grafix::Point& coords) const
 {
 	float factor=(float)render_size.width / (float)render_rect.w;
 	ppl7::grafix::Point p;
-	p.x=((float)coords.x * factor) - render_rect.x;
-	p.y=((float)coords.y * factor) - render_rect.y;
+	p.x=((float)(coords.x - render_rect.x) * factor);
+	p.y=((float)(coords.y - render_rect.y) * factor);
+	/*
+	ppl7::PrintDebugTime("translate, renderrect: %d:%d, %d:%d, mouse: %d:%d\n",
+		render_rect.x, render_rect.y, render_rect.w, render_rect.h,
+		p.x, p.y);
+	*/
 	return p;
 }
 
