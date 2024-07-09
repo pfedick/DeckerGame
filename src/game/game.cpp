@@ -252,7 +252,7 @@ void Game::createWindow()
 	} else {
 		setFlags(ppltk::Window::WaitVsync | ppltk::Window::FullscreenDesktop | ppltk::Window::Resizeable);
 	}
-	//enableFixedUiSize(true, 1920, 1080);
+	enableFixedUiSize(true, 1920, 1080);
 	setWindowTitle("George Decker");
 	ppl7::grafix::Image icon;
 	icon.load("res/icon_128.png");
@@ -2031,15 +2031,18 @@ void Game::resizeEvent(ppltk::ResizeEvent* event)
 	*/
 	if (!bGameWindowCreated) return;
 	if (event != NULL && event->widget() == world_widget) return;
-	desktopSize=clientSize();
+	desktopSize=windowSize();
 	viewport=clientRect();
-	game_viewport.setRealViewport(clientSize());
+	//ppl7::PrintDebug("resize: %d, %d\n", desktopSize.width, desktopSize.height);
+	//viewport.setWidth(desktopSize.width);
+	//viewport.setHeight(desktopSize.height);
+	game_viewport.setRealViewport(windowSize());
 	resizeMenueAndStatusbar();
 	message_overlay.resize(desktopSize);
 	showUi(showui);
 	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
 	//if (start_screen) start_screen->resizeEvent(event);
-	if (settings_screen) settings_screen->resizeEvent(event);
+	//if (settings_screen) settings_screen->resizeEvent(event);
 
 }
 
@@ -2286,7 +2289,7 @@ void Game::drawRenderTargetToScreen()
 
 	//ppl7::grafix::Rect vp=clientRect();
 
-	game_viewport.setRealViewport(this->clientSize());
+	game_viewport.setRealViewport(this->windowSize());
 	// TODO: clear screen outside the viewport
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_Rect rr;
