@@ -2291,12 +2291,13 @@ void Game::drawRenderTargetToScreen()
 
 	game_viewport.setRealViewport(this->windowSize());
 	// TODO: clear screen outside the viewport
+	/*
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_Rect rr;
 	rr.x=1920 / 2 - 100;rr.y=1080 / 2 - 0;
 	rr.w=200;rr.h=200;
 	SDL_RenderFillRect(renderer, &rr);
-
+	*/
 
 
 
