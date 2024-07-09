@@ -44,7 +44,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	//title_rect.y=0;
 
 
-	StartScreen* start_screen=new StartScreen(*this, 0, title_rect.h, this->width(), this->height() - title_rect.h);
+	StartScreen* start_screen=new StartScreen(*this, 0, title_size.height, this->width(), this->height() - title_size.height);
 	this->addChild(start_screen);
 	wm->setKeyboardFocus(start_screen);
 	wm->setGameControllerFocus(start_screen);
