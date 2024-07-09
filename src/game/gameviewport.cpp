@@ -45,7 +45,7 @@ void GameViewport::update()
 	} else {
 		render_rect.y=0;
 	}
-	if (menu_offset_x) render_rect.x+=(menu_offset_x / 2);
+	//if (menu_offset_x) render_rect.x+=(menu_offset_x / 2);
 	//ppl7::PrintDebugTime("vp width=%d, height=%d\n", render_rect.w, render_rect.h);
 
 }
