@@ -154,7 +154,7 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			player->velocity_move.x=0;
 			updateBoundary();
 			*/
-			if (player->velocity_move.x < 0) velocity.x=-2.0f * collision.frame_rate_compensation;
+			if (player->velocity_move.x < 0.0f) velocity.x=-2.0f * collision.frame_rate_compensation;
 			col=true;
 		}
 
@@ -165,7 +165,7 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			else player->x--;
 			player->velocity_move.x=0;
 			*/
-			if (player->velocity_move.x > 0) velocity.x=2.0f * collision.frame_rate_compensation;
+			if (player->velocity_move.x > 0.0f) velocity.x=2.0f * collision.frame_rate_compensation;
 			col=true;
 		}
 	}
