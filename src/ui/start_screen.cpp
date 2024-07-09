@@ -7,23 +7,28 @@
 #include "translate.h"
 #include "player.h"
 
-
 static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
 {
-	float aspect=(float)img_size.width / (float)img_size.height;
+	const ppl7::grafix::Size& wSize=window.windowSize();
+
+	float aspect=(float)window.width() / (float)window.height();
+	float img_aspect=(float)img_size.width / (float)img_size.height;
 	dest.x=0;
 	dest.y=0;
-	//dest.w=img_size.width;
-	//dest.h=img_size.height;
-	dest.w=window.width();
+	dest.w=wSize.width;
+	dest.h=wSize.height;
+	if (dest.w > wSize.width) dest.w=wSize.width;
 	dest.h=dest.w / aspect;
-	if (dest.h > window.height()) {
-		dest.h=window.height();
+	if (dest.h > wSize.height) {
+		dest.h=wSize.height;
 		dest.w=dest.h * aspect;
 	}
-	dest.y=(window.height() - dest.h) / 2;
-	dest.x=(window.width() - dest.w) / 2;
+	dest.y=(wSize.height - dest.h) / 2;
+	dest.h=dest.w / img_aspect;
+	dest.x=(wSize.width - dest.w) / 2;
 }
+
+// const ppl7::grafix::Size& wSize=window.windowSize();
 
 GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 {
@@ -36,7 +41,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
 	SDL_Rect title_rect;
 	getDestinationRect(title_size, *this, title_rect);
-	title_rect.y=0;
+	//title_rect.y=0;
 
 
 	StartScreen* start_screen=new StartScreen(*this, 0, title_rect.h, this->width(), this->height() - title_rect.h);
@@ -60,7 +65,7 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 
 
 		getDestinationRect(title_size, *this, title_rect);
-		title_rect.y=0;
+		//title_rect.y=0;
 		SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
 
 		if (last_viewport != viewport) {
