@@ -7,8 +7,33 @@
 
 
 
+
+static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
+{
+	const ppl7::grafix::Size& wSize=window.windowSize();
+
+	float aspect=(float)window.width() / (float)window.height();
+	float img_aspect=(float)img_size.width / (float)img_size.height;
+	dest.x=0;
+	dest.y=0;
+	dest.w=wSize.width;
+	dest.h=wSize.height;
+	if (dest.w > wSize.width) dest.w=wSize.width;
+	dest.h=dest.w / aspect;
+	if (dest.h > wSize.height) {
+		dest.h=wSize.height;
+		dest.w=dest.h * aspect;
+	}
+	dest.y=(wSize.height - dest.h) / 2;
+	dest.h=dest.w / img_aspect;
+	dest.x=(wSize.width - dest.w) / 2;
+}
+
 static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_Rect& dest)
 {
+	ppl7::grafix::Size vSize(video.width(), video.height());
+	getDestinationRect(vSize, window, dest);
+	/*
 	float aspect=(float)video.width() / (float)video.height();
 	dest.x=0;
 	dest.y=0;
@@ -22,24 +47,7 @@ static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_R
 	}
 	dest.y=(window.height() - dest.h) / 2;
 	dest.x=(window.width() - dest.w) / 2;
-}
-
-
-static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
-{
-	float aspect=(float)img_size.width / (float)img_size.height;
-	dest.x=0;
-	dest.y=0;
-	dest.w=img_size.width;
-	dest.h=img_size.height;
-	if (dest.w > window.width()) dest.w=window.width();
-	dest.h=dest.w / aspect;
-	if (dest.h > window.height()) {
-		dest.h=window.height();
-		dest.w=dest.h * aspect;
-	}
-	dest.y=(window.height() - dest.h) / 2;
-	dest.x=(window.width() - dest.w) / 2;
+	*/
 }
 
 void Game::playIntroVideo()
@@ -123,7 +131,7 @@ void Game::playIntroVideo()
 				if (title_blend > 255.0f) title_blend=255.0f;
 				SDL_SetTextureAlphaMod(title_tex, title_blend);
 				getDestinationRect(title_size, *this, title_rect);
-				title_rect.y=0;
+				//title_rect.y=0;
 				SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
 			}
 			if (frame > 1800 && fade_to_black < 255.0f) {
