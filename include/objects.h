@@ -1893,7 +1893,38 @@ public:
 class ButtonSwitch : public Object
 {
 private:
+	double cooldown;
+	double last_collision;
+	bool touched;
+	void notify_targets();
+
 public:
+	enum class Style {
+		Style1=0,
+		Style2=1
+	};
+
+	enum class TargetState {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
+
+	class TargetObject
+	{
+	public:
+		TargetObject();
+		int object_id;
+		TargetState state;
+	};
+
+	TargetObject targets[10];
+
+	Style style;
+	int color_base;
+	int color_button;
+
+
 	ButtonSwitch();
 	~ButtonSwitch();
 	static Representation representation();
