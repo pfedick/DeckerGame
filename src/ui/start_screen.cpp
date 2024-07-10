@@ -64,9 +64,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 		drawRenderTargetToScreen();
 
 
-		getDestinationRect(title_size, *this, title_rect);
-		//title_rect.y=0;
-		SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
 
 		if (last_viewport != viewport) {
 			last_viewport=viewport;
@@ -75,8 +72,6 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 			start_screen->resizeEvent(NULL);
 		}
 
-		drawWidgets();
-		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
 
 		if (fade_state == 0) {
 			fade_to_black-=5 * frame_rate_compensation;
@@ -92,6 +87,12 @@ GameState Game::showStartScreen(AudioStream& GeorgeDeckerTheme)
 			}
 		}
 		if (fade_to_black > 0.0f) FadeToBlack(renderer, (int)fade_to_black);
+		drawWidgets();
+		getDestinationRect(title_size, *this, title_rect);
+		SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
+
+		resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
+
 		presentScreen();
 
 		if (quitGame == true && fade_state == 1) {
