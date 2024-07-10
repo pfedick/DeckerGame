@@ -23,9 +23,9 @@ LightSelection::LightSelection(int x, int y, int width, int height, Game* game)
 	this->addChild(new ppltk::Label(0, yy, client.width(), 30, "Global Lighting:"));
 	yy+=30;
 	global_lighting=new ColorSliderWidget(0, yy, client.width(), 100);
-	global_lighting->setEventHandler(this);
 	global_lighting->setColor(game->getLevel().params.GlobalLighting);
 	global_lighting->setColorPreviewSize(64, 90);
+	global_lighting->setEventHandler(this);
 	this->addChild(global_lighting);
 	yy+=110;
 
