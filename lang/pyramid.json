@@ -1,0 +1,24 @@
+{
+    "speech": {
+        "2200": {
+            "context": "George slides down a ramp",
+            "character": "george",
+            "en": {
+                "text": "Hui! That was steep, I won't come up here anymore!"
+            },
+            "de": {
+                "text": "Hui! Das war steil, da komme ich nicht mehr hoch!"
+            }
+        },
+        "2201": {
+            "context": "George lost is hammer",
+            "character": "george",
+            "en": {
+                "text": "I had this hammer! Where is it gone?"
+            },
+            "de": {
+                "text": "Ich hatte doch diesen Hammer! Wo ist der hin?"
+            }
+        }
+    }
+}
