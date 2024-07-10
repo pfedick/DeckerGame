@@ -75,11 +75,12 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			player.stand();
 		}
 	}
+	ppl7::grafix::PointF old_p=p;
 	p+=velocity;
 	if (velocity.x != 0.0f) velocity.x=0.0f;
 	blockcount=0;
 	for (int x=boundary.left();x < boundary.right();x+=8) {
-		if (ttplane.getType(ppl7::grafix::Point(x, p.y + 1)) == TileType::Blocking) blockcount++;
+		if (ttplane.getType(ppl7::grafix::Point(x, p.y)) == TileType::Blocking) blockcount++;
 	}
 	if (blockcount == 0) {
 		velocity.y+=0.2 * frame_rate_compensation;
@@ -91,7 +92,10 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			for (int x=boundary.left();x < boundary.right();x+=8) {
 				if (ttplane.getType(ppl7::grafix::Point(x, p.y)) == TileType::Blocking) blockcount++;
 			}
-			if (blockcount == 0) break;
+			if (blockcount == 0) {
+				p.y++;
+				break;
+			}
 			p.y--;
 		}
 	}
@@ -100,12 +104,32 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	std::list<Object*> object_list;
 	GetObjectSystem()->detectObjectCollision(this, object_list);
 	std::list<Object*>::iterator it;
+	ppl7::grafix::PointF movement=p - old_p;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		if ((*it)->type() == Decker::Objects::Type::Skeleton) {
 			if (velocity.y > 1) ((Decker::Objects::Skeleton*)(*it))->die();
 
-		}
+		} else if ((*it)->type() == Decker::Objects::Type::Crate) {
+			ObjectCollision col(this, (*it));
+			if (movement.y > 0.0f && col.objectBottom(10)) {
+				p.y=old_p.y;
+				velocity.y=0;
+				updateBoundary();
+				col.update();
 
+			}
+			/*
+			if (this->id == 188) {
+				ppl7::PrintDebug("crate movement: %0.3f:%0.3f, collision: bottom: %d, top: %d, left: %d, right: %d\n",
+					movement.x, movement.y, (int)col.objectBottom(10), (int)col.objectTop(10),
+					(int)col.objectLeft(10), (int)col.objectRight(10));
+			}
+			*/
+			if (movement.x < 0.0f && col.objectLeft(10)) p.x=old_p.x;
+			if (movement.x > 0.0f && col.objectRight(10)) p.x=old_p.x;
+			//p=old_p;
+			updateBoundary();
+		}
 	}
 }
 

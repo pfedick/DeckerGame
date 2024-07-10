@@ -81,6 +81,7 @@ OBJECTS=compile/main.o \
 	compile/gamecontroller.o \
 	compile/messageoverlay.o \
 	compile/objectsystem.o \
+	compile/collision.o \
 	compile/object.o \
 	compile/object_gem.o \
 	compile/object_coin.o \
@@ -497,6 +498,10 @@ compile/gamecontroller.o: src/game/gamecontroller.cpp Makefile include/gamecontr
 compile/objectsystem.o: src/game/objectsystem.cpp Makefile include/objects.h include/decker.h include/wallenstein.h include/player.h
 	- @mkdir -p compile
 	$(CXX) -o compile/objectsystem.o -c src/game/objectsystem.cpp $(CFLAGS)
+
+compile/collision.o: src/game/collision.cpp Makefile include/objects.h include/decker.h include/player.h
+	- @mkdir -p compile
+	$(CXX) -o compile/collision.o -c src/game/collision.cpp $(CFLAGS)
 
 compile/waynet.o: src/game/waynet.cpp Makefile include/waynet.h
 	- @mkdir -p compile

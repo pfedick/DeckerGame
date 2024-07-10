@@ -183,7 +183,25 @@ public:
 	bool playerBottom(int t) const;
 	bool playerLeft(int t) const;
 	bool playerRight(int t) const;
+};
 
+class ObjectCollision
+{
+private:
+	const Object* this_object;
+	const Object* other_object;
+
+public:
+	ppl7::grafix::Rect bounding_box_this_object;
+	ppl7::grafix::Rect bounding_box_other_object;
+	ppl7::grafix::Rect bounding_box_intersection;
+
+	ObjectCollision(const Object* this_object, const Object* other_object);
+	void update();
+	bool objectTop(int tolerance=1) const;
+	bool objectBottom(int tolerance=1) const;
+	bool objectLeft(int tolerance=1) const;
+	bool objectRight(int tolerance=1) const;
 };
 
 class Object
