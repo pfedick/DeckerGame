@@ -444,6 +444,7 @@ void Stamper::toggle(bool enabled, Object* source)
 {
 	AudioPool& audiopool=getAudioPool();
 	if (!auto_intervall) {
+		//ppl7::PrintDebug("Stamper::toggle %d, new state: %d\n", id, (int)enabled);
 		if (enabled) {
 			if (audio_drag_up) {
 				audiopool.stopInstace(audio_drag_up);
@@ -466,7 +467,9 @@ void Stamper::toggle(bool enabled, Object* source)
 
 void Stamper::trigger(Object* source)
 {
-	toggle(!enabled, source);
+	//ppl7::PrintDebug("Stamper %d was triggert, state was: %d\n", id, (int)state);
+	if (state == State::Opening || state == State::Open) toggle(true, source);
+	else toggle(false, source);
 }
 
 size_t Stamper::saveSize() const
