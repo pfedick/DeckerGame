@@ -102,7 +102,8 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 	std::list<Object*>::iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		if ((*it)->type() == Decker::Objects::Type::Skeleton) {
-			((Decker::Objects::Skeleton*)(*it))->die();
+			if (velocity.y > 1) ((Decker::Objects::Skeleton*)(*it))->die();
+
 		}
 
 	}
@@ -144,7 +145,8 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			col=true;
 		}
 	}
-	if (player->y > col_recheck.bounding_box_object.x1 + tolerance) {
+	//if (player->y > col_recheck.bounding_box_object.x1 + tolerance) {
+	if (!col) {
 
 		if (col_recheck.objectRight(tolerance)) {
 			player->x=col_recheck.bounding_box_object.x2 + 30;
