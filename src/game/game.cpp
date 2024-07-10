@@ -915,12 +915,13 @@ void Game::run()
 		// Widgets
 		SDL_SetRenderTarget(renderer, NULL);
 		drawRenderTargetToScreen();
+		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
 
 		drawWidgets();
 		// Mouse
 		if (settings_screen) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
 		else if (showui) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
-		if (fade_to_black) FadeToBlack(renderer, (int)fade_to_black);
+
 
 		metrics.time_draw_ui.stop();
 		AudioSystem::Metrics audio_metrics=audiosystem.getMetrics();
