@@ -351,9 +351,11 @@ public:
     void addTotal(const ppl7::String& caption, int points);
     void addLine(const ppl7::String& caption);
 
-    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event);
-    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event);
-    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event);
+    void mouseClickEvent(ppltk::MouseEvent* event) override;
+    void keyDownEvent(ppltk::KeyEvent* event) override;
+    void gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event) override;
+    void gameControllerDeviceAdded(ppltk::GameControllerEvent* event) override;
+    void gameControllerDeviceRemoved(ppltk::GameControllerEvent* event) override;
 
 };
 

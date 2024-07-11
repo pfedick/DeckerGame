@@ -227,9 +227,20 @@ void GameStatsScreen::gameControllerButtonDownEvent(ppltk::GameControllerButtonE
     if (b != GameControllerMapping::Button::Unknown) {
         closeWindow=true;
     }
-
-
 }
+
+void GameStatsScreen::mouseClickEvent(ppltk::MouseEvent* event)
+{
+    closeWindow=true;
+}
+
+void GameStatsScreen::keyDownEvent(ppltk::KeyEvent* event)
+{
+    if (event->key == ppltk::KeyEvent::KEY_SPACE || event->key == ppltk::KeyEvent::KEY_ESCAPE) {
+        closeWindow=true;
+    }
+}
+
 
 
 void GameStatsScreen::gameControllerDeviceAdded(ppltk::GameControllerEvent* event)
@@ -280,6 +291,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     int bonus=0;
     int total_bonus =0;
     wm->setGameControllerFocus(game_stats_screen);
+    wm->setKeyboardFocus(game_stats_screen);
     while (1) {
         double now=ppl7::GetMicrotime();
         float frame_rate_compensation=1.0f;
@@ -388,6 +400,7 @@ void Game::showStatsScreen(StatsScreenReason reason)
     delete game_stats_screen;
     game_stats_screen=NULL;
     wm->setGameControllerFocus(this);
+    wm->setKeyboardFocus(this);
     world_widget->setVisible(true);
     world_widget->setEnabled(true);
     showUi(save_ui_state);
