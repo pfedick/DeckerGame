@@ -313,7 +313,7 @@ void ObjectSelection::valueChangedEvent(ppltk::Event* event, int value)
 		game->setSpriteModeToDraw();
 	} else if (event->widget() == layer_selection) {
 		//ppl7::PrintDebugTime("ObjectSelection::valueChangedEvent\n");
-		game->updateLayerForSelectedObject(value);
+		game->updateLayerForSelectedObject(layer_selection->currentIdentifier().toInt());
 	}
 }
 void ObjectSelection::mouseDownEvent(ppltk::MouseEvent* event)
