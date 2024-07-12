@@ -2279,7 +2279,7 @@ void Game::updateLayerForSelectedObject(int layer)
 {
 	if (selected_object) {
 		selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(layer);
-		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
+		ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
 }
 
