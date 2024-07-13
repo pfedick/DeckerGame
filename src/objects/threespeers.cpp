@@ -130,8 +130,8 @@ ThreeSpeersDialog::ThreeSpeersDialog(ThreeSpeers* object)
 	setWindowTitle("Three Speers");
 	addChild(new ppltk::Label(0, 0, 120, 30, "Speer-Type: "));
 
-
-	speer_type=new ppltk::ComboBox(120, 0, 400, 30);
+	ppl7::grafix::Rect client=clientRect();
+	speer_type=new ppltk::ComboBox(120, 0, client.width() - 120, 30);
 	speer_type->add("Speers with Skeleton", "0");
 	speer_type->add("Speers only", "1");
 	speer_type->add("Speers from ceiling", "2");
