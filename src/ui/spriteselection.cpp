@@ -7,6 +7,7 @@ namespace Decker::ui {
 SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game)
 	: ppltk::Frame(x, y, width, height)
 {
+	notifies_enabled=false;
 	for (int i=0;i <= MAX_SPRITESETS;i++)
 		tilesets[i]=NULL;
 	tileset=1;
@@ -19,6 +20,20 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	tileset_combobox->setEventHandler(this);
 	this->addChild(tileset_combobox);
 	y1+=30;
+
+	this->addChild(new ppltk::Label(5, y1, 80, 30, "Plane: "));
+	plane_combobox=new ppltk::ComboBox(85, y1, client.width() - 85, 25);
+	plane_combobox->add("PlayerPlane", "0");
+	plane_combobox->add("FrontPlane", "1");
+	plane_combobox->add("FarPlane", "2");
+	plane_combobox->add("BackPlane", "3");
+	plane_combobox->add("MiddlePlane", "4");
+	plane_combobox->add("HorizonPlane", "5");
+	plane_combobox->add("NearPlane", "6");
+	plane_combobox->setEventHandler(this);
+	this->addChild(plane_combobox);
+	y1+=30;
+
 
 	this->addChild(new ppltk::Label(5, y1, 70, 20, "Layer: "));
 	layer0=new ppltk::RadioButton(60, y1, 110, 20, "before Tiles", true);
@@ -35,18 +50,39 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	z_axis->enableSpinBox(true, 1, 70);
 	z_axis->setEventHandler(this);
 	this->addChild(z_axis);
+	y1+=30;
+	this->addChild(new ppltk::Label(5, y1, 80, 30, "Scale: "));
+	scale_slider=new ppltk::DoubleHorizontalSlider(85, y1, client.width() - 85, 30);
+	scale_slider->setValue(1.0f);
+	scale_slider->setLimits(0.1f, 2.0f);
+	scale_slider->enableSpinBox(true, 0.05, 2, 70);
+	scale_slider->setEventHandler(this);
+	this->addChild(scale_slider);
+	y1+=30;
+
+	this->addChild(new ppltk::Label(5, y1, 80, 30, "Rotation: "));
+	rotation_slider=new ppltk::DoubleHorizontalSlider(85, y1, client.width() - 85, 30);
+	rotation_slider->setValue(0.0f);
+	rotation_slider->setLimits(0.0f, 360.0f);
+	rotation_slider->enableSpinBox(true, 5.0f, 0, 70);
+	rotation_slider->setEventHandler(this);
+	this->addChild(rotation_slider);
 
 	y1+=35;
 
 	tilesframe=new TilesFrame(5, y1, client.width() - 8, client.height() - 300 - y1, game);
 	this->addChild(tilesframe);
-	scale=1.0f;
-	rotation=0.0f;
 
 	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 8, 300, game->getLevel().palette);
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 	tilesframe->setColor(colorframe->color());
+	notifies_enabled=true;
+}
+
+void SpriteSelection::enableNotfies(bool enable)
+{
+	notifies_enabled=enable;
 }
 
 void SpriteSelection::setSelectedSprite(int nr)
@@ -99,27 +135,36 @@ void SpriteSelection::setSpriteSet(int id, const ppl7::String& name, SpriteTextu
 	SpriteDimensions[id]=dimensions;
 	tileset_combobox->add(name, ppl7::ToString("%d", id));
 	if (id == 1) setCurrentSpriteSet(1);
+}
 
+void SpriteSelection::setPlane(int plane)
+{
+	plane_combobox->setCurrentIdentifier(ppl7::ToString("%d", plane));
+}
+
+int SpriteSelection::plane() const
+{
+	return plane_combobox->currentIdentifier().toInt();
 }
 
 void SpriteSelection::setSpriteScale(float factor)
 {
-	if (factor >= 0.1f && factor <= 2.0f) scale=factor;
+	if (factor >= 0.1f && factor <= 2.0f) scale_slider->setValue(factor);
 }
 
 float SpriteSelection::spriteScale() const
 {
-	return scale;
+	return scale_slider->value();
 }
 
 void SpriteSelection::setSpriteRotation(float rotation)
 {
-	this->rotation=rotation;
+	rotation_slider->setValue(rotation);
 }
 
 float SpriteSelection::spriteRotation() const
 {
-	return rotation;
+	return rotation_slider->value();
 }
 
 int SpriteSelection::colorIndex() const
@@ -150,7 +195,9 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 		setCurrentSpriteSet(v);
 	} else if (event->widget() == colorframe) {
 		tilesframe->setColor(colorframe->color());
-		game->updateSpriteFromUi();
+		if (notifies_enabled) game->updateSpriteFromUi();
+	} else if (event->widget() == plane_combobox) {
+		if (notifies_enabled) game->updateSpriteFromUi();
 	}
 }
 
@@ -158,16 +205,25 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 void SpriteSelection::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
 	if (event->widget() == z_axis) {
-		game->updateSpriteFromUi();
+		if (notifies_enabled) game->updateSpriteFromUi();
 	}
 }
+
+void SpriteSelection::valueChangedEvent(ppltk::Event* event, double value)
+{
+	if (event->widget() == scale_slider || event->widget() == rotation_slider) {
+		if (notifies_enabled) game->updateSpriteFromUi();
+	}
+}
+
+
 
 void SpriteSelection::toggledEvent(ppltk::Event* event, bool checked)
 {
 	//ppl7::PrintDebug("SpriteSelection::toggledEvent\n");
 	if ((event->widget() == layer0 || event->widget() == layer1) && checked == true) {
 		//ppl7::PrintDebug("   SpriteSelection::toggledEvent => yes!\n");
-		game->updateSpriteFromUi();
+		if (notifies_enabled) game->updateSpriteFromUi();
 	}
 }
 

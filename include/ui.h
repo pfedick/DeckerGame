@@ -339,14 +339,17 @@ private:
 	ppltk::RadioButton* layer1;
 	ppltk::HorizontalSlider* z_axis;
 	ppltk::ComboBox* tileset_combobox;
+	ppltk::ComboBox* plane_combobox;
+	ppltk::DoubleHorizontalSlider* scale_slider;
+	ppltk::DoubleHorizontalSlider* rotation_slider;
 
 	ppl7::String tilesetName[MAX_SPRITESETS + 1];
 	SpriteTexture* tilesets[MAX_SPRITESETS + 1];
 	int SpriteDimensions[MAX_SPRITESETS + 1];
 
 	int tileset;
-	float scale;
-	float rotation;
+
+	bool notifies_enabled;
 
 
 
@@ -354,6 +357,7 @@ public:
 	SpriteSelection(int x, int y, int width, int height, Game* game);
 
 	//virtual void paint(Drawable &draw);
+	void enableNotfies(bool enable);
 
 	void setSelectedSprite(int nr);
 	int selectedSprite() const;
@@ -371,8 +375,11 @@ public:
 	void setColorIndex(int index);
 	void setZAxis(int z);
 	int zAxis() const;
+	void setPlane(int plane);
+	int plane() const;
 	void valueChangedEvent(ppltk::Event* event, int value)  override;
 	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	void valueChangedEvent(ppltk::Event* event, double value) override;
 	void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 

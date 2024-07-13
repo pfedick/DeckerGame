@@ -1769,7 +1769,7 @@ void Game::mouseWheelEvent(ppltk::MouseEvent* event)
 				if (event->wheel.y > 0) selected_sprite.rotation+=5;
 				if (selected_sprite.rotation <= 0) selected_sprite.rotation+=360;
 				if (selected_sprite.rotation >= 360) selected_sprite.rotation-=360;
-				//selected_light_system->modifyLight(selected_light);
+				sprite_selection->setSpriteRotation(selected_sprite.rotation);
 				selected_sprite_system->modifySprite(selected_sprite);
 			}
 
@@ -1784,6 +1784,7 @@ void Game::mouseWheelEvent(ppltk::MouseEvent* event)
 				if (event->wheel.y < 0 && selected_sprite.scale>0.1) selected_sprite.scale-=0.05;
 				else if (event->wheel.y > 0 && selected_sprite.scale < 2.0) selected_sprite.scale+=0.05;
 				selected_sprite_system->modifySprite(selected_sprite);
+				sprite_selection->setSpriteScale(selected_sprite.scale);
 			}
 		}
 	} else if (lights_selection != NULL && event->widget() == world_widget) {
@@ -1839,10 +1840,15 @@ void Game::selectSprite(const ppl7::grafix::Point& mouse)
 	if (level.findSprite(mouse, WorldCoords, selected_sprite, plane, layer)) {
 		//printf ("found Sprite on plane %d, layer %d\n",plane,layer);
 		mainmenue->setCurrentPlane(plane);
+		sprite_selection->enableNotfies(false);
+		sprite_selection->setPlane(plane);
 		sprite_selection->setCurrentLayer(layer);
 		sprite_selection->setCurrentSpriteSet(selected_sprite.sprite_set);
 		sprite_selection->setZAxis(selected_sprite.z);
+		sprite_selection->setSpriteScale(selected_sprite.scale);
+		sprite_selection->setSpriteRotation(selected_sprite.rotation);
 		sprite_selection->setColorIndex(selected_sprite.color_index);
+		sprite_selection->enableNotfies(true);
 
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
@@ -2327,8 +2333,10 @@ void Game::updateSpriteFromUi()
 	if (selected_sprite.id < 0) return;
 	selected_sprite.z=sprite_selection->zAxis();
 	selected_sprite.color_index=sprite_selection->colorIndex();
+	selected_sprite.rotation=sprite_selection->spriteRotation();
+	selected_sprite.scale=sprite_selection->spriteScale();
 
-	SpriteSystem& new_ss=level.spritesystem(mainmenue->currentPlane(), sprite_selection->currentLayer());
+	SpriteSystem& new_ss=level.spritesystem(sprite_selection->plane(), sprite_selection->currentLayer());
 	if (&new_ss != selected_sprite_system) {
 		selected_sprite_system->deleteSprite(selected_sprite.id);
 		int id=new_ss.addSprite(selected_sprite);
