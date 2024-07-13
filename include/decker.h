@@ -509,6 +509,9 @@ public:
 	SpriteTexture LightObjects;
 	SpriteTexture Sprites_White1D;
 	SpriteTexture uiSprites_White1D;
+	SpriteTexture Sprites_Decals;
+	SpriteTexture uiSpritesDecals;
+
 
 	SpriteTexture Waynet;
 

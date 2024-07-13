@@ -275,6 +275,10 @@ sprites_nature:
 	./texmaker -s lightwave/Render/sprites_nature/ -t res/sprites_nature.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_nature
 	./texmaker -s lightwave/Render/sprites_nature_ui/ -t res/sprites_nature_ui.tex -w 512 -h 512 -px 0 -py 0
 
+sprites_decals:
+	./texmaker -s lightwave/Render/sprites_decals/ -t res/sprites_decals.tex -w 1024 -h 1024 --pivot_detection lower_middle -x tmp/sprites_decals
+	./texmaker -s lightwave/Render/sprites_decals_ui/ -t res/sprites_decals_ui.tex -w 512 -h 512 -px 0 -py 0
+
 sprites_tropical:
 	./texmaker -s lightwave/Render/sprites_tropical/ -t res/sprites_tropical.tex -w 2048 -h 2048 --pivot_detection lower_middle -x tmp/sprites_tropical
 	./texmaker -s lightwave/Render/sprites_tropical_ui/ -t res/sprites_tropical_ui.tex -w 512 -h 512 -px 0 -py 0
@@ -340,7 +344,7 @@ lights:
 
 
 sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies lights \
-	sprites_white_1d
+	sprites_white_1d sprites_decals
 	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
 	./texmaker -s lightwave/Render/sprites_plants/ -t res/sprites_plants.tex -w 1024 -h 1024 --pivot_detection lower_middle

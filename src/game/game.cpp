@@ -159,6 +159,10 @@ void Game::loadGrafix()
 	resources.Sprites_White1D.enableMemoryBuffer(true);
 	resources.Sprites_White1D.load(sdl, "res/sprites_white_x1.tex");
 
+	resources.Sprites_Decals.enableOutlines(true);
+	resources.Sprites_Decals.enableMemoryBuffer(true);
+	resources.Sprites_Decals.load(sdl, "res/sprites_decals.tex");
+
 	resources.Lightmaps.enableOutlines(true);
 	resources.Lightmaps.enableMemoryBuffer(true);
 	resources.Lightmaps.setTextureBlendMode(SDL_BLENDMODE_ADD);
@@ -222,6 +226,10 @@ void Game::loadGrafix()
 	resources.uiSprites_White1D.enableSDLBuffer(false);
 	resources.uiSprites_White1D.enableMemoryBuffer(true);
 	resources.uiSprites_White1D.load(sdl, "res/sprites_white_x1_ui.tex");
+
+	resources.uiSpritesDecals.enableSDLBuffer(false);
+	resources.uiSpritesDecals.enableMemoryBuffer(true);
+	resources.uiSpritesDecals.load(sdl, "res/sprites_decals_ui.tex");
 
 	resources.uiSpritesTropical.enableSDLBuffer(false);
 	resources.uiSpritesTropical.enableMemoryBuffer(true);
@@ -505,6 +513,7 @@ void Game::init_grafix()
 	level.setSpriteset(9, &resources.Sprites_Tropical);
 	level.setSpriteset(10, &resources.Sprites_White1D);
 	level.setSpriteset(11, &resources.bricks[2].world);
+	level.setSpriteset(12, &resources.Sprites_Decals);
 
 	level.TileTypeMatrix.setTileTypesSprites(&resources.TileTypes);
 
@@ -1124,6 +1133,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(10, "Recolorable 1d", &resources.uiSprites_White1D, 1);
 		sprite_selection->setSpriteSet(9, "Tropical", &resources.uiSpritesTropical, 4);
 		sprite_selection->setSpriteSet(11, "Bricks", &resources.bricks[2].ui, 1);
+		sprite_selection->setSpriteSet(12, "Decals", &resources.uiSpritesDecals, 1);
 		this->addChild(sprite_selection);
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
