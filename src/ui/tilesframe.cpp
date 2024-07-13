@@ -40,6 +40,11 @@ void TilesFrame::setSprites(SpriteTexture* tiles)
 void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf ("selected_tile=%d\n",selected_tile);
+	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
+	ppl7::grafix::Color shade3=backgroundColor() * 1.6f;
+	ppl7::grafix::Color shade4=backgroundColor() * 1.3f;
+
+
 	Frame::paint(draw);
 	ppl7::grafix::Drawable client=clientDrawable(draw);
 	//int w=width()-1;
@@ -50,6 +55,10 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 	int sp=scrollbar->position();
 	try {
 		for (int i=sp * 4;i < tiles->numSprites();i++) {
+			ppl7::grafix::Drawable frame=client.getDrawable(x, y, x + 64, y + 64);
+			if (i == selected_tile) {
+				frame.colorGradient(frame.rect(), shade3, shade4, 1);
+			}
 			try {
 				tiles->draw(client, x, y, i, color);
 			} catch (...) {
