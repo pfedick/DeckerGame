@@ -337,6 +337,7 @@ private:
 	ColorSelectionFrame* colorframe;
 	ppltk::RadioButton* layer0;
 	ppltk::RadioButton* layer1;
+	ppltk::HorizontalSlider* z_axis;
 	ppltk::ComboBox* tileset_combobox;
 
 	ppl7::String tilesetName[MAX_SPRITESETS + 1];
@@ -368,7 +369,11 @@ public:
 	void setCurrentLayer(int layer);
 	int colorIndex() const;
 	void setColorIndex(int index);
+	void setZAxis(int z);
+	int zAxis() const;
 	void valueChangedEvent(ppltk::Event* event, int value)  override;
+	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 class ObjectsFrame : public ppltk::Frame

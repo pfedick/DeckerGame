@@ -9,6 +9,7 @@ TilesFrame::TilesFrame(int x, int y, int width, int height, Game* game)
 	selected_tile=-1;
 	this->game=game;
 	this->tiles=NULL;
+	//setClientOffset(2, 2, 2, 2);
 	//ppl7::grafix::Grafix *gfx=ppl7::grafix::GetGrafix();
 	setBorderStyle(ppltk::Frame::Inset);
 	setBackgroundColor(ppl7::grafix::Color(32, 32, 32, 255));
@@ -38,6 +39,7 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf ("selected_tile=%d\n",selected_tile);
 	Frame::paint(draw);
+	ppl7::grafix::Drawable client=clientDrawable(draw);
 	//int w=width()-1;
 	//int h=height()-1;
 	if (tiles == NULL) return;
@@ -47,12 +49,12 @@ void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 	try {
 		for (int i=sp * 4;i < tiles->numSprites();i++) {
 			try {
-				tiles->draw(draw, 2 + x, 2 + y, i, color);
+				tiles->draw(client, x, y, i, color);
 			} catch (...) {
 			}
 			if (i == selected_tile) {
-				draw.drawRect(2 + x, 2 + y, 66 + x, 66 + y, white);
-				draw.drawRect(3 + x, 3 + y, 65 + x, 65 + y, white);
+				client.drawRect(x, y, 64 + x, 64 + y, white);
+				client.drawRect(1 + x, 1 + y, 63 + x, 63 + y, white);
 			}
 			x+=64;
 			if (x > 255) {

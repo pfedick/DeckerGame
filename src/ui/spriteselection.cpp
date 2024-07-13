@@ -12,25 +12,38 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	tileset=1;
 	this->game=game;
 	ppl7::grafix::Rect client=this->clientRect();
+	int y1=5;
 
-	this->addChild(new ppltk::Label(5, 5, 80, 30, "Spriteset: "));
-	tileset_combobox=new ppltk::ComboBox(85, 5, client.width() - 85, 25);
+	this->addChild(new ppltk::Label(5, y1, 80, 30, "Spriteset: "));
+	tileset_combobox=new ppltk::ComboBox(85, y1, client.width() - 85, 25);
 	tileset_combobox->setEventHandler(this);
 	this->addChild(tileset_combobox);
+	y1+=30;
 
-	this->addChild(new ppltk::Label(5, 35, 70, 20, "Layer: "));
-	layer0=new ppltk::RadioButton(60, 35, 110, 20, "before Tiles", true);
+	this->addChild(new ppltk::Label(5, y1, 70, 20, "Layer: "));
+	layer0=new ppltk::RadioButton(60, y1, 110, 20, "before Tiles", true);
+	layer0->setEventHandler(this);
 	this->addChild(layer0);
 
-	layer1=new ppltk::RadioButton(170, 35, 110, 20, "behind Tiles");
+	layer1=new ppltk::RadioButton(170, y1, 110, 20, "behind Tiles");
+	layer1->setEventHandler(this);
 	this->addChild(layer1);
+	y1+=30;
+	this->addChild(new ppltk::Label(5, y1, 80, 30, "Z-Axis: "));
+	z_axis=new ppltk::HorizontalSlider(85, y1, client.width() - 85, 30);
+	z_axis->setLimits(0, 15);
+	z_axis->enableSpinBox(true, 1, 70);
+	z_axis->setEventHandler(this);
+	this->addChild(z_axis);
 
-	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 360, game);
+	y1+=35;
+
+	tilesframe=new TilesFrame(5, y1, client.width() - 8, client.height() - 300 - y1, game);
 	this->addChild(tilesframe);
 	scale=1.0f;
 	rotation=0.0f;
 
-	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
+	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 8, 300, game->getLevel().palette);
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 	tilesframe->setColor(colorframe->color());
@@ -119,6 +132,15 @@ void SpriteSelection::setColorIndex(int index)
 	colorframe->setColorIndex(index);
 }
 
+void SpriteSelection::setZAxis(int z)
+{
+	z_axis->setValue(z);
+}
+
+int SpriteSelection::zAxis() const
+{
+	return ((int)z_axis->value());
+}
 
 void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 {
@@ -128,9 +150,26 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 		setCurrentSpriteSet(v);
 	} else if (event->widget() == colorframe) {
 		tilesframe->setColor(colorframe->color());
+		game->updateSpriteFromUi();
 	}
 }
 
+
+void SpriteSelection::valueChangedEvent(ppltk::Event* event, int64_t value)
+{
+	if (event->widget() == z_axis) {
+		game->updateSpriteFromUi();
+	}
+}
+
+void SpriteSelection::toggledEvent(ppltk::Event* event, bool checked)
+{
+	//ppl7::PrintDebug("SpriteSelection::toggledEvent\n");
+	if ((event->widget() == layer0 || event->widget() == layer1) && checked == true) {
+		//ppl7::PrintDebug("   SpriteSelection::toggledEvent => yes!\n");
+		game->updateSpriteFromUi();
+	}
+}
 
 
 } //EOF namespace Decker::ui

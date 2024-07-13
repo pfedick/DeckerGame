@@ -315,7 +315,9 @@ public:
 	SpriteSystem(const ColorPalette& palette);
 	~SpriteSystem();
 	void clear();
-	void addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index);
+	int addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index);
+	int addSprite(const Item& sprite);
+	bool getSprite(int id, SpriteSystem::Item& sprite);
 	void deleteSprite(int id);
 	void modifySprite(const SpriteSystem::Item& item);
 	void setVisible(bool visible);
@@ -1196,6 +1198,7 @@ public:
 
 	void updateDifficultyForSelectedObject(uint8_t dificulty);
 	void updateLayerForSelectedObject(int layer);
+	void updateSpriteFromUi();
 
 	void updateLightFromUi();
 	SDL_Texture* getLightRenderTarget();

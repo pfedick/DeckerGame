@@ -56,7 +56,7 @@ void SpriteSystem::setSpriteset(int no, SpriteTexture* spriteset)
 	this->spriteset[no]=spriteset;
 }
 
-void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index)
+int SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index)
 {
 	//printf ("x=%d, y=%d\n",x,y);
 	SpriteSystem::Item item;
@@ -76,7 +76,24 @@ void SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, 
 		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no, sprite_scale, sprite_scale, sprite_rotation, x, y);
 	}
 	sprite_list.insert(std::pair<int, SpriteSystem::Item>(item.id, item));
+	return item.id;
+}
 
+int SpriteSystem::addSprite(const Item& sprite)
+{
+	return addSprite(sprite.x, sprite.y, sprite.z, sprite.sprite_set, sprite.sprite_no,
+		sprite.scale, sprite.rotation, sprite.color_index);
+}
+
+bool SpriteSystem::getSprite(int id, SpriteSystem::Item& sprite)
+{
+	auto it=sprite_list.find(id);
+	if (it != sprite_list.end()) {
+		sprite=it->second;
+		return true;
+	}
+	sprite.id=-1;
+	return false;
 }
 
 void SpriteSystem::updateVisibleSpriteList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
@@ -171,6 +188,7 @@ void SpriteSystem::modifySprite(const SpriteSystem::Item& item)
 		intitem.z=item.z;
 		intitem.scale=item.scale;
 		intitem.rotation=item.rotation;
+		intitem.color_index=item.color_index;
 		if (intitem.texture) {
 			intitem.boundary=intitem.texture->spriteBoundary(intitem.sprite_no,
 				intitem.scale, intitem.scale, intitem.rotation, intitem.x, intitem.y);

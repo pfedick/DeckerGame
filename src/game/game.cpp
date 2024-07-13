@@ -1572,6 +1572,7 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 		float scale=sprite_selection->spriteScale();
 		float rotation=sprite_selection->spriteRotation();
 		int layer=sprite_selection->currentLayer();
+		int z_axis=sprite_selection->zAxis();
 		if (layer < 0 || layer>1 || spriteset > MAX_SPRITESETS) return;
 		if (!level.spriteset[spriteset]) return;
 		int currentPlane=mainmenue->currentPlane();
@@ -1579,7 +1580,7 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
 		ss.addSprite(event->p.x + coords.x,
 			event->p.y + coords.y,
-			0,
+			z_axis,
 			spriteset, nr, scale, rotation, sprite_selection->colorIndex());
 	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
 		sprite_selection->setSelectedSprite(-1);
@@ -1830,6 +1831,9 @@ void Game::selectSprite(const ppl7::grafix::Point& mouse)
 		mainmenue->setCurrentPlane(plane);
 		sprite_selection->setCurrentLayer(layer);
 		sprite_selection->setCurrentSpriteSet(selected_sprite.sprite_set);
+		sprite_selection->setZAxis(selected_sprite.z);
+		sprite_selection->setColorIndex(selected_sprite.color_index);
+
 		wm->setKeyboardFocus(world_widget);
 		sprite_mode=SpriteModeEdit;
 		selected_sprite_system=selected_sprite.spritesystem;
@@ -2304,6 +2308,25 @@ void Game::drawRenderTargetToScreen()
 
 	SDL_RenderCopy(renderer, tex_render_target, NULL, &game_viewport.getRenderRect());
 
+}
+
+void Game::updateSpriteFromUi()
+{
+	if (!sprite_selection) return;
+	if (!selected_sprite_system) return;
+	if (selected_sprite.id < 0) return;
+	selected_sprite.z=sprite_selection->zAxis();
+	selected_sprite.color_index=sprite_selection->colorIndex();
+
+	SpriteSystem& new_ss=level.spritesystem(mainmenue->currentPlane(), sprite_selection->currentLayer());
+	if (&new_ss != selected_sprite_system) {
+		selected_sprite_system->deleteSprite(selected_sprite.id);
+		int id=new_ss.addSprite(selected_sprite);
+		selected_sprite_system=&new_ss;
+		selected_sprite_system->getSprite(id, selected_sprite);
+	} else {
+		selected_sprite_system->modifySprite(selected_sprite);
+	}
 }
 
 SDL_Texture* Game::getLightRenderTarget()
