@@ -32,11 +32,11 @@ TilesSelection::TilesSelection(int x, int y, int width, int height, Game* game)
 	layer3=new ppltk::RadioButton(210, 35, 50, 20, "3");
 	this->addChild(layer3);
 
-	tilesframe=new TilesFrame(5, 60, client.width() - 10, client.height() - 60 - 300, game);
+	tilesframe=new TilesFrame(5, 60, client.width() - 8, client.height() - 60 - 300, game);
 	this->addChild(tilesframe);
 
 
-	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 10, 300, game->getLevel().palette);
+	colorframe=new ColorSelectionFrame(5, client.height() - 300, client.width() - 8, 300, game->getLevel().palette);
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 	tilesframe->setColor(colorframe->color());
