@@ -373,18 +373,19 @@ FloaterDialog::FloaterDialog(Floater* object)
 	: Decker::ui::Dialog(400, 200)
 {
 	this->object=object;
+	ppl7::grafix::Rect client=clientRect();
 	setWindowTitle("Floater");
 	addChild(new ppltk::Label(0, 0, 120, 30, "Floater-Type: "));
 	addChild(new ppltk::Label(0, 40, 120, 30, "Initial state: "));
 
-	floater_type=new ppltk::ComboBox(120, 0, 400, 30);
+	floater_type=new ppltk::ComboBox(120, 0, client.width() - 120, 30);
 	floater_type->add("studded", "0");
 	floater_type->add("flat", "1");
 	floater_type->setCurrentIdentifier(ppl7::ToString("%d", object->floater_type));
 	floater_type->setEventHandler(this);
 	addChild(floater_type);
 
-	initial_state=new ppltk::CheckBox(120, 40, 400, 30, "enabled", object->initial_state);
+	initial_state=new ppltk::CheckBox(120, 40, client.width() - 120, 30, "enabled", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 
