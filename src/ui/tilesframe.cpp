@@ -30,6 +30,8 @@ void TilesFrame::setSprites(SpriteTexture* tiles)
 	this->tiles=tiles;
 	scrollbar->setSize(tiles->numSprites() / 4 + 1);
 	scrollbar->setVisibleItems(height() / 64);
+	if (scrollbar->size() <= scrollbar->visibleItems()) scrollbar->setVisible(false);
+	else scrollbar->setVisible(true);
 	setSelectedTile(-1);
 
 	needsRedraw();
