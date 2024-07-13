@@ -97,11 +97,13 @@ void TilesFrame::setSelectedTile(int nr)
 	if (tiles == NULL) return;
 	//ppl7::PrintDebug("selcted tile: %d\n", nr);
 	if (nr < 0) nr=-1;
+	if (nr < 0) scrollbar->setPosition(0);
 	if (nr != selected_tile && nr < tiles->numSprites()) {
 		selected_tile=nr;
-		//ppl7::grafix::Rect client=this->clientRect();
-		//int max_visible=client.height()/64;
-
+		if (nr >= 0) {
+			int p=nr / 4;
+			scrollbar->setPosition(p);
+		}
 		needsRedraw();
 	}
 }

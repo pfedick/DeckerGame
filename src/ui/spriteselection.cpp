@@ -119,7 +119,9 @@ void SpriteSelection::setCurrentSpriteSet(int id)
 	if (tilesets[id] == NULL) return;
 	tileset=id;
 	tilesframe->setSprites(tilesets[id]);
-	tileset_combobox->setCurrentIndex(id - 1);
+	tilesframe->setSelectedTile(-1);
+	//tileset_combobox->setCurrentIndex(id - 1);
+	tileset_combobox->setCurrentIdentifier(ppl7::ToString("%d", id));
 }
 
 int SpriteSelection::currentSpriteSet() const
@@ -191,7 +193,7 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == tileset_combobox) {
 		int v=tileset_combobox->currentIdentifier().toInt();
-		//printf("value=%d\n", v);
+		//ppl7::PrintDebug("value=%d, text=%s\n", v, (const char*)tileset_combobox->currentText());
 		setCurrentSpriteSet(v);
 	} else if (event->widget() == colorframe) {
 		tilesframe->setColor(colorframe->color());
