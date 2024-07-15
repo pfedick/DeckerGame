@@ -187,6 +187,12 @@ void LevelParameter::clear()
 	batteryDrainRate=1.0f;
 	flashlightOnOnLevelStart=false;
 	LevelDescription::clear();
+	enableBlur=true;
+	for (int i=0;i <= max_planeId;i++) blur_factor[i]=0.0f;
+	blur_factor[static_cast<int>(PlaneId::Middle)]=0.2f;
+	blur_factor[static_cast<int>(PlaneId::Far)]=0.4f;
+	blur_factor[static_cast<int>(PlaneId::Horizon)]=0.6f;
+	blur_factor[static_cast<int>(PlaneId::Near)]=0.6f;
 
 }
 

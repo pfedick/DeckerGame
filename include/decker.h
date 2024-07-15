@@ -57,6 +57,7 @@ EXCEPTION(SDLException, ppl7::Exception);
 
 const double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 
+const int max_planeId=6;
 enum class PlaneId {
 	Near=6,
 	Front=1,
@@ -623,11 +624,13 @@ public:
 	ppl7::String InitialSong;
 	std::vector<ppl7::String> SongPlaylist;
 	bool randomSong;
+	bool enableBlur;
 
 	bool drainBattery;
 	float batteryDrainRate; // EnergyPointsPerSecond
 	bool flashlightOnOnLevelStart;
 	std::set<int>InitialItems;
+	float blur_factor[max_planeId + 1];
 
 	LevelParameter();
 	void clear();
@@ -753,6 +756,7 @@ private:
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
+	SDL_Texture* tex_blur_layer;
 
 	bool editMode;
 	bool showSprites;
@@ -808,6 +812,8 @@ private:
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void prepareLayer(SDL_Renderer* renderer);
+	void drawLayerToTarget(SDL_Renderer* renderer, const PlaneId plane);
+
 public:
 
 
@@ -826,7 +832,7 @@ public:
 	void backup(const ppl7::String& Filename);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics);
 	void setViewport(const ppl7::grafix::Rect& r);
-	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
+	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer, SDL_Texture* tex_blur_layer);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
 	//LightLayer& lightsystem(int plane);
@@ -1018,6 +1024,7 @@ private:
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
+	SDL_Texture* tex_blur_layer;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;

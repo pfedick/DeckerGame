@@ -27,6 +27,7 @@ Level::Level()
 	tex_render_layer=NULL;
 	tex_render_lightmap=NULL;
 	tex_render_target=NULL;
+	tex_blur_layer=NULL;
 	screenshot=NULL;
 }
 
@@ -173,11 +174,12 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 	return PlayerSprites[layer];
 }
 
-void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer)
+void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer, SDL_Texture* tex_blur_layer)
 {
 	this->tex_render_target=tex_render_target;
 	this->tex_render_lightmap=tex_render_lightmap;
 	this->tex_render_layer=tex_render_layer;
+	this->tex_blur_layer=tex_blur_layer;
 }
 
 
@@ -407,11 +409,37 @@ void Level::prepareLayer(SDL_Renderer* renderer)
 		SDL_SetRenderTarget(renderer, tex_render_lightmap);
 		SDL_SetRenderDrawColor(renderer, runtimeParams.GlobalLighting.red(), runtimeParams.GlobalLighting.green(), runtimeParams.GlobalLighting.blue(), 255);
 		SDL_RenderClear(renderer);
-		SDL_SetRenderTarget(renderer, tex_render_layer);
+	}
+	SDL_SetRenderTarget(renderer, tex_render_layer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+}
+
+void Level::drawLayerToTarget(SDL_Renderer* renderer, const PlaneId plane)
+{
+	float factor=params.blur_factor[static_cast<int>(plane)];
+	if (factor > 1.0f) factor=1.0f;
+	if (factor <= 0.0f) {
+		SDL_SetRenderTarget(renderer, tex_render_target);
+		SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+	} else {
+		SDL_Rect t={ 0,0,1920,1080 };
+		float f=1.0f - factor;
+		float sx=1680.0f;
+		float sy=944.0f;
+		t.w=240 + sx * f;
+		t.h=134 + sy * f;
+
+		SDL_SetTextureScaleMode(tex_blur_layer, SDL_ScaleModeLinear);
+		SDL_SetTextureScaleMode(tex_render_layer, SDL_ScaleModeLinear);
+		SDL_SetRenderTarget(renderer, tex_blur_layer);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_RenderClear(renderer);
-	} else {
+
+		SDL_RenderCopy(renderer, tex_render_layer, NULL, &t);
+
 		SDL_SetRenderTarget(renderer, tex_render_target);
+		SDL_RenderCopy(renderer, tex_blur_layer, &t, NULL);
 	}
 }
 
@@ -428,8 +456,8 @@ void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerP
 	SDL_RenderCopy(renderer, tex_render_lightmap, NULL, NULL);
 	lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	if (screenshot) screenshot->save(plane, pplane, Screenshot::Type::Final, tex_render_layer);
-	SDL_SetRenderTarget(renderer, tex_render_target);
-	SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
+	//SDL_SetRenderTarget(renderer, tex_render_target);
+	//SDL_RenderCopy(renderer, tex_render_layer, NULL, NULL);
 	//lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	metrics.time_lights.stop();
 }
@@ -440,22 +468,26 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	prepareLayer(renderer);
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Horizon);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
 	//addLightmap(renderer, FarLights, worldcoords * planeFactor[2], metrics);
 	addLightmap(renderer, LightPlaneId::Far, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Far);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
 	//addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	addLightmap(renderer, LightPlaneId::Middle, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Middle);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::BackplaneBack, worldcoords * planeFactor[3], metrics);
 	drawNonePlayerPlane(renderer, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
 	drawParticles(renderer, Particle::Layer::BackplaneFront, worldcoords * planeFactor[3], metrics);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Back, worldcoords * planeFactor[static_cast<int>(PlaneId::Back)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Player);
 	prepareLayer(renderer);
 
 	if (PlayerPlane.isVisible()) {
@@ -500,7 +532,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		metrics.time_objects.stop();
 		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
 		addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Player, worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], metrics);
-
+		drawLayerToTarget(renderer, PlaneId::Player);
 		if (showObjects && editMode) {
 			metrics.time_objects.start();
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
@@ -517,11 +549,13 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawParticles(renderer, Particle::Layer::FrontplaneFront, worldcoords * planeFactor[1], metrics);
 	//addLightmap(renderer, FrontLights, worldcoords * planeFactor[1], metrics);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Front, worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Player);
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
+	drawLayerToTarget(renderer, PlaneId::Near);
 	if (screenshot) screenshot->save(Screenshot::Layer::Complete, Screenshot::Type::Final, tex_render_target);
 	screenshot=NULL;
 }
