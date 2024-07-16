@@ -387,22 +387,20 @@ void LaserBarrier::toggle(bool enable, Object* source)
 class LaserBarrierDialog : public Decker::ui::Dialog
 {
 private:
+	ppltk::CheckBox* initialStateEnabled, * currentState;
 	ppltk::ComboBox* color_scheme;
-	ppltk::ComboBox* on_start_state;
-	ppltk::CheckBox* initial_state;
 	ppltk::CheckBox* always_on;
 	ppltk::CheckBox* block_player;
-	ppltk::LineInput* time_on_min, * time_on_max;
-	ppltk::LineInput* time_off_min, * time_off_max;
+	ppltk::DoubleHorizontalSlider* time_on_min, * time_on_max;
+	ppltk::DoubleHorizontalSlider* time_off_min, * time_off_max;
 
 	LaserBarrier* object;
 
 public:
 	LaserBarrierDialog(LaserBarrier* object);
 	virtual void valueChangedEvent(ppltk::Event* event, int value);
-	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+	virtual void valueChangedEvent(ppltk::Event* event, double value);
 	virtual void toggledEvent(ppltk::Event* event, bool checked);
-	//virtual void mouseDownEvent(ppltk::MouseEvent *event);
 };
 
 void LaserBarrier::openUi()
@@ -414,15 +412,23 @@ void LaserBarrier::openUi()
 LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
 	: Decker::ui::Dialog(600, 400)
 {
+	//ppl7::grafix::Rect client=clientRect();
 	this->object=object;
-	setWindowTitle("LaserBarrier");
-	addChild(new ppltk::Label(0, 0, 120, 30, "Color-Scheme: "));
-	addChild(new ppltk::Label(0, 40, 120, 30, "Initial state: "));
-	addChild(new ppltk::Label(0, 80, 120, 30, "Flags: "));
-	addChild(new ppltk::Label(0, 200, 120, 30, "Time on: "));
-	addChild(new ppltk::Label(0, 240, 120, 30, "Time off: "));
+	setWindowTitle(ppl7::ToString("LaserBarrier, Object ID: %u", object->id));
+	int y=0;
+	//int sw=client.width() / 2;
+	initialStateEnabled=new ppltk::CheckBox(0, y, 120, 30, "initial state");
+	initialStateEnabled->setChecked(object->initial_state);
+	initialStateEnabled->setEventHandler(this);
+	addChild(initialStateEnabled);
+	currentState=new ppltk::CheckBox(120, y, 130, 30, "current state");
+	currentState->setChecked(object->enabled);
+	currentState->setEventHandler(this);
+	addChild(currentState);
+	y+=35;
 
-	color_scheme=new ppltk::ComboBox(120, 0, 300, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Color-Scheme: "));
+	color_scheme=new ppltk::ComboBox(120, y, 300, 30);
 	color_scheme->add("green", "0");
 	color_scheme->add("blue", "1");
 	color_scheme->add("red", "2");
@@ -431,40 +437,61 @@ LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
 	color_scheme->setCurrentIdentifier(ppl7::ToString("%d", object->color_scheme));
 	color_scheme->setEventHandler(this);
 	addChild(color_scheme);
+	y+=35;
 
-	on_start_state=new ppltk::ComboBox(120, 40, 80, 30);
-	on_start_state->add("on", "1");
-	on_start_state->add("off", "0");
-	on_start_state->setEventHandler(this);
-	addChild(on_start_state);
+	addChild(new ppltk::Label(0, y, 120, 30, "Flags: "));
 
-	initial_state=new ppltk::CheckBox(120, 80, 400, 30, "enabled", object->initial_state);
-	initial_state->setEventHandler(this);
-	addChild(initial_state);
-
-	always_on=new ppltk::CheckBox(120, 120, 400, 30, "always on", object->always_on);
+	always_on=new ppltk::CheckBox(120, y, 400, 30, "always on", object->always_on);
 	always_on->setEventHandler(this);
 	addChild(always_on);
+	y+=35;
 
-	block_player=new ppltk::CheckBox(120, 160, 400, 30, "block player", object->block_player);
+	block_player=new ppltk::CheckBox(120, y, 400, 30, "block player", object->block_player);
 	block_player->setEventHandler(this);
 	addChild(block_player);
+	y+=35;
 
-	time_on_min=new ppltk::LineInput(120, 200, 100, 30, ppl7::ToString("%0.3f", object->time_on_min));
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Time on: "));
+
+	addChild(new ppltk::Label(120, y, 50, 30, "min:"));
+	time_on_min=new ppltk::DoubleHorizontalSlider(170, y, 400, 30);
+	time_on_min->setLimits(0.0f, 5.0f);
+	time_on_min->setValue(object->time_on_min);
+	time_on_min->enableSpinBox(true, 0.1f, 3, 100);
 	time_on_min->setEventHandler(this);
 	addChild(time_on_min);
+	y+=35;
 
-	time_on_max=new ppltk::LineInput(225, 200, 100, 30, ppl7::ToString("%0.3f", object->time_on_max));
+	addChild(new ppltk::Label(120, y, 50, 30, "max:"));
+	time_on_max=new ppltk::DoubleHorizontalSlider(170, y, 400, 30);
+	time_on_max->setLimits(0.0f, 5.0f);
+	time_on_max->setValue(object->time_on_max);
+	time_on_max->enableSpinBox(true, 0.1f, 3, 100);
 	time_on_max->setEventHandler(this);
 	addChild(time_on_max);
+	y+=35;
 
-	time_off_min=new ppltk::LineInput(120, 240, 100, 30, ppl7::ToString("%0.3f", object->time_off_min));
+	addChild(new ppltk::Label(0, y, 120, 30, "Time off: "));
+
+	addChild(new ppltk::Label(120, y, 50, 30, "min:"));
+	time_off_min=new ppltk::DoubleHorizontalSlider(170, y, 400, 30);
+	time_off_min->setLimits(0.0f, 5.0f);
+	time_off_min->setValue(object->time_off_min);
+	time_off_min->enableSpinBox(true, 0.1f, 3, 100);
 	time_off_min->setEventHandler(this);
 	addChild(time_off_min);
+	y+=35;
 
-	time_off_max=new ppltk::LineInput(225, 240, 100, 30, ppl7::ToString("%0.3f", object->time_off_max));
+	addChild(new ppltk::Label(120, y, 50, 30, "max:"));
+	time_off_max=new ppltk::DoubleHorizontalSlider(170, y, 400, 30);
+	time_off_max->setLimits(0.0f, 5.0f);
+	time_off_max->setValue(object->time_off_max);
+	time_off_max->enableSpinBox(true, 0.1f, 3, 100);
 	time_off_max->setEventHandler(this);
 	addChild(time_off_max);
+	y+=35;
+
 
 }
 
@@ -473,16 +500,16 @@ void LaserBarrierDialog::valueChangedEvent(ppltk::Event* event, int value)
 	if (event->widget() == color_scheme) {
 		object->color_scheme=color_scheme->currentIdentifier().toInt();
 		object->init();
-	} else if (event->widget() == on_start_state) {
-
-
 	}
 }
 
 void LaserBarrierDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
-	if (event->widget() == initial_state) {
+	if (event->widget() == initialStateEnabled) {
 		object->initial_state=checked;
+		object->reset();
+	} else if (event->widget() == currentState) {
+		object->enabled=checked;
 		object->reset();
 	} else if (event->widget() == always_on) {
 		object->always_on=checked;
@@ -493,12 +520,23 @@ void LaserBarrierDialog::toggledEvent(ppltk::Event* event, bool checked)
 	}
 }
 
-void LaserBarrierDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
+void LaserBarrierDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
-	if (event->widget() == time_on_min) object->time_on_min=text.toFloat();
-	else if (event->widget() == time_on_max) object->time_on_max=text.toFloat();
-	else if (event->widget() == time_off_min) object->time_off_min=text.toFloat();
-	else if (event->widget() == time_off_max) object->time_off_max=text.toFloat();
+	if (event->widget() == time_on_min) {
+		object->time_on_min=value;
+		if (object->time_on_min > object->time_on_max) time_on_max->setValue(object->time_on_min);
+	} else if (event->widget() == time_on_max) {
+		object->time_on_max=value;
+		if (object->time_on_max < object->time_on_min) time_on_min->setValue(object->time_on_max);
+	} else if (event->widget() == time_off_min) {
+		object->time_off_min=value;
+		if (object->time_off_min > object->time_off_max) time_off_max->setValue(object->time_off_min);
+	} else if (event->widget() == time_off_max) {
+		object->time_off_max=value;
+		if (object->time_off_max < object->time_off_min) time_off_min->setValue(object->time_off_max);
+	}
+
+
 }
 
 
