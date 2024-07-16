@@ -194,6 +194,27 @@ void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Poin
 		}
 	}
 	Trap::drawEditMode(renderer, coords);
+	if (type() == Type::LaserBeamHorizontal) {
+		texture->drawScaled(renderer,
+		initial_p.x + coords.x+TILE_WIDTH,
+		initial_p.y + coords.y,
+		13, scale, color_mod);
+
+		texture->drawScaled(renderer,
+		initial_p.x + coords.x-TILE_WIDTH,
+		initial_p.y + coords.y,
+		12, scale, color_mod);
+	} else {
+		texture->drawScaled(renderer,
+		initial_p.x + coords.x,
+		initial_p.y + coords.y-TILE_HEIGHT,
+		11, scale, color_mod);
+
+		texture->drawScaled(renderer,
+		initial_p.x + coords.x,
+		initial_p.y + coords.y+TILE_HEIGHT,
+		10, scale, color_mod);
+	}
 
 }
 
