@@ -79,6 +79,9 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::GenericObjects]->setPivot(1, 128, 228);
 	spriteset[Spriteset::GenericObjects]->setPivot(2, 128, 228);
 
+	spriteset[Spriteset::GenericObjects]->setPivot(212, 128, 128);
+	spriteset[Spriteset::GenericObjects]->setPivot(213, 128, 128);
+
 
 
 	spriteset[Spriteset::ThreeSpeers]->enableOutlines(true);
