@@ -30,6 +30,7 @@ LaserBarrier::LaserBarrier(Type::ObjectType type)
 	start_state=(bool)state;
 	pixelExactCollision=false;
 	flicker=0;
+	does_flicker=true;
 	audio=NULL;
 	time_on_min=1.0f;
 	time_off_min=1.0f;
@@ -97,13 +98,14 @@ size_t LaserBarrier::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
 	int flags=0;
 	if (initial_state) flags|=1;
 	if (always_on) flags|=2;
 	if (block_player) flags|=4;
 	if (start_state) flags|=8;
+	if (does_flicker) flags|=16;
 
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke8(buffer + bytes + 2, color_scheme);
@@ -119,7 +121,7 @@ size_t LaserBarrier::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
+	if (version <1 || version>2) return 0;
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	color_scheme=(unsigned char)ppl7::Peek8(buffer + bytes + 2);
@@ -131,6 +133,7 @@ size_t LaserBarrier::load(const unsigned char* buffer, size_t size)
 	always_on=(bool)(flags & 2);
 	block_player=(bool)(flags & 4);
 	start_state=(bool)(flags & 8);
+	if (version>1) does_flicker=(bool)(flags & 16);
 	init();
 	return size;
 }
@@ -159,7 +162,7 @@ size_t LaserBarrier::load1(const unsigned char* buffer, size_t size)
 void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	if (state == 0) return;
-	if ((flicker & 7) == 0) return;
+	if ((flicker & 7) == 0  && does_flicker==true) return;
 	if (type() == Type::LaserBeamHorizontal) {
 		for (int i=start.x;i < end.x;i+=32)
 			texture->draw(renderer,
@@ -178,7 +181,7 @@ void LaserBarrier::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coord
 void LaserBarrier::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	ppl7::grafix::Color c(255, 255, 255, 192);
-	if (state != 0 && (flicker & 7) != 0) {
+	if (state != 0 && ((flicker & 7) != 0  || does_flicker==false)) {
 		if (type() == Type::LaserBeamHorizontal) {
 			for (int i=start.x;i < end.x;i+=32)
 				texture->draw(renderer,
@@ -308,7 +311,7 @@ void LaserBarrier::updateLightMaps()
 	clearLights();
 	//ppl7::PrintDebug("LaserBarrier::updateLightMaps, state: %d\n", state);
 	if (state == 0) return;
-	if ((flicker & 7) == 0) return;
+	if ((flicker & 7) == 0 && does_flicker==true) return;
 
 	LightSystem& lights=GetGame().getLightSystem();
 	if (type() == Type::LaserBeamHorizontal) {
@@ -412,6 +415,7 @@ private:
 	ppltk::ComboBox* color_scheme;
 	ppltk::CheckBox* always_on;
 	ppltk::CheckBox* block_player;
+	ppltk::CheckBox* does_flicker;
 	ppltk::DoubleHorizontalSlider* time_on_min, * time_on_max;
 	ppltk::DoubleHorizontalSlider* time_off_min, * time_off_max;
 
@@ -431,7 +435,7 @@ void LaserBarrier::openUi()
 }
 
 LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
-	: Decker::ui::Dialog(600, 400)
+	: Decker::ui::Dialog(600, 450)
 {
 	//ppl7::grafix::Rect client=clientRect();
 	this->object=object;
@@ -470,6 +474,11 @@ LaserBarrierDialog::LaserBarrierDialog(LaserBarrier* object)
 	block_player=new ppltk::CheckBox(120, y, 400, 30, "block player", object->block_player);
 	block_player->setEventHandler(this);
 	addChild(block_player);
+	y+=35;
+
+	does_flicker=new ppltk::CheckBox(120, y, 400, 30, "flicker", object->does_flicker);
+	does_flicker->setEventHandler(this);
+	addChild(does_flicker);
 	y+=35;
 
 
@@ -537,6 +546,9 @@ void LaserBarrierDialog::toggledEvent(ppltk::Event* event, bool checked)
 		object->reset();
 	} else if (event->widget() == block_player) {
 		object->block_player=checked;
+		object->reset();
+	} else if (event->widget() == does_flicker) {
+		object->does_flicker=checked;
 		object->reset();
 	}
 }

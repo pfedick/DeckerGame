@@ -713,6 +713,7 @@ public:
 	bool always_on;
 	bool block_player;
 	bool start_state;
+	bool does_flicker;
 
 
 	explicit LaserBarrier(Type::ObjectType type);
