@@ -943,7 +943,17 @@ private:
 	AnimationCycle animation;
 	double next_state, next_animation;
 	AudioInstance* audio;
-	int state;
+	enum class ActionState {
+		WaitLeft,
+		WalkLeft,
+		IdleLeft,
+		TurnRight,
+		WalkRight,
+		IdleRight,
+		TurnLeft,
+		Falling
+	};
+	ActionState state;
 	float speed;
 
 	void playAudio(int id, float volume);

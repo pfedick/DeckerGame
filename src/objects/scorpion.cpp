@@ -26,7 +26,7 @@ Scorpion::Scorpion()
 	type=0;
 	sprite_no=0;
 	sprite_no_representation=0;
-	state=0;
+	state=ActionState::WaitLeft;
 	collisionDetection=true;
 	next_animation=0.0f;
 	speed=2;
@@ -92,57 +92,56 @@ void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (dist < player_activation_distance && speed < max_speed_when_player_is_near) speed+=speed_acceleration * frame_rate_compensation;
 
-	if (state == 0) {	// do nothing, look to left
-		state=1;
+	if (state == ActionState::WaitLeft) {	// do nothing, look to left
+		state=ActionState::WalkLeft;
 		animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
 		speed=randf(minspeed, maxspeed);
 		playAudio(AudioClip::scorpion_run, 0.5f);
-	} else if (state == 1) {	// walk left
-		if (audio)
-
-			p.x-=speed * frame_rate_compensation;
+	} else if (state == ActionState::WalkLeft) {	// walk left
+		//if (audio)
+		p.x-=speed * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y - 12));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x - 60, p.y + 6));
 		if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || t2 != TileType::Blocking) {
-			state=ppl7::rand(2, 3);
-			if (state == 2) {
+			if (ppl7::rand(2, 3)==2) {
+				state=ActionState::IdleLeft;
 				animation.start(idle_left, sizeof(idle_left) / sizeof(int), true, 0);
 				next_state=time + (double)ppl7::rand(min_idle_time, max_idle_time);
 				playAudio(AudioClip::scorpion_breath, 0.2f);
 			} else {
-				state=3;
+				state=ActionState::TurnRight;
 				animation.start(turn_from_left_to_right, sizeof(turn_from_left_to_right) / sizeof(int), false, 63);
 			}
 		}
-	} else if (state == 2 && time > next_state) {	// idle left
-		state=3;
+	} else if (state == ActionState::IdleLeft && time > next_state) {	// idle left
+		state=ActionState::TurnRight;
 		animation.start(turn_from_left_to_right, sizeof(turn_from_left_to_right) / sizeof(int), false, 63);
-	} else if (state == 3 && animation.isFinished()) {	// turn from left to right
-		state=4;
+	} else if (state == ActionState::TurnRight && animation.isFinished()) {	// turn from left to right
+		state=ActionState::WalkRight;
 		animation.start(walk_cycle_right, sizeof(walk_cycle_right) / sizeof(int), true, 0);
 		speed=randf(minspeed, maxspeed);
 		playAudio(AudioClip::scorpion_run, 0.5f);
-	} else if (state == 4) {
+	} else if (state == ActionState::WalkRight) {
 		p.x+=speed * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y - 12));
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(p.x + 60, p.y + 6));
 		if (t1 == TileType::Blocking || t1 == TileType::EnemyBlocker || t2 != TileType::Blocking) {
-			state=ppl7::rand(5, 6);
-			if (state == 5) {
+			if (ppl7::rand(5, 6) == 5) {
+				state=ActionState::IdleRight;
 				animation.start(idle_right, sizeof(idle_right) / sizeof(int), true, 0);
 				next_state=time + (double)ppl7::rand(min_idle_time, max_idle_time);
 				playAudio(AudioClip::scorpion_breath, 0.2f);
 			} else {
-				state=6;
+				state=ActionState::TurnLeft;
 				animation.start(turn_from_right_to_left, sizeof(turn_from_right_to_left) / sizeof(int), false, 71);
 			}
 		}
-	} else if (state == 5 && time > next_state) {	// idle right
-		state=6;
+	} else if (state == ActionState::IdleRight && time > next_state) {	// idle right
+		state=ActionState::TurnLeft;
 		animation.start(turn_from_right_to_left, sizeof(turn_from_right_to_left) / sizeof(int), false, 71);
 
-	} else if (state == 6 && animation.isFinished()) {	// turn from left to right
-		state=1;
+	} else if (state == ActionState::TurnLeft && animation.isFinished()) {	// turn from left to right
+		state=ActionState::WalkLeft;
 		animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
 		speed=randf(minspeed, maxspeed);
 		playAudio(AudioClip::scorpion_run, 0.5f);
