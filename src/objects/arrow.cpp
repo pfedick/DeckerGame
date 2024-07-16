@@ -8,21 +8,7 @@
 namespace Decker::Objects {
 
 
-class ArrowDialog : public Decker::ui::Dialog
-{
-private:
-	ppltk::ComboBox* direction;
-	ppltk::LineInput* min_cooldown;
-	ppltk::LineInput* max_cooldown;
-	ppltk::LineInput* distance;
-	Arrow* arrow_trap;
 
-public:
-	ArrowDialog(Arrow* object);
-	~ArrowDialog();
-	virtual void valueChangedEvent(ppltk::Event* event, int value);
-	virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
-};
 
 class ArrowFired : public Object
 {
@@ -178,6 +164,25 @@ size_t Arrow::load(const unsigned char* buffer, size_t size)
 	return size;
 }
 
+
+class ArrowDialog : public Decker::ui::Dialog
+{
+private:
+	ppltk::ComboBox* direction;
+	ppltk::DoubleHorizontalSlider* min_cooldown;
+	ppltk::DoubleHorizontalSlider* max_cooldown;
+	ppltk::HorizontalSlider* distance;
+	Arrow* object;
+
+public:
+	ArrowDialog(Arrow* object);
+	~ArrowDialog();
+	virtual void valueChangedEvent(ppltk::Event* event, int value);
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
+	virtual void valueChangedEvent(ppltk::Event* event, double value);
+	//virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
+};
+
 void Arrow::openUi()
 {
 	ArrowDialog* dialog=new ArrowDialog(this);
@@ -186,35 +191,51 @@ void Arrow::openUi()
 
 
 ArrowDialog::ArrowDialog(Arrow* object)
-	: Decker::ui::Dialog(500, 200)
+	: Decker::ui::Dialog(510, 250)
 {
-	arrow_trap=object;
+	this->object=object;
 	setWindowTitle("Arrow Trap");
-	addChild(new ppltk::Label(0, 0, 120, 30, "Direction: "));
-	addChild(new ppltk::Label(0, 40, 120, 30, "Cooldown time: "));
-	addChild(new ppltk::Label(330, 40, 120, 30, "(min/max)"));
-	addChild(new ppltk::Label(0, 80, 120, 30, "player distance: "));
 
-	direction=new ppltk::ComboBox(120, 0, 360, 30);
+	int y=0;
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Direction: "));
+	direction=new ppltk::ComboBox(120, y, 360, 30);
 	direction->add("up", "0");
 	direction->add("right", "1");
 	direction->add("down", "2");
 	direction->add("left", "3");
-	direction->setCurrentIdentifier(ppl7::ToString("%d", arrow_trap->direction));
+	direction->setCurrentIdentifier(ppl7::ToString("%d", object->direction));
 	direction->setEventHandler(this);
 	addChild(direction);
+	y+=35;
 
-	min_cooldown=new ppltk::LineInput(120, 40, 100, 30);
-	min_cooldown->setText(ppl7::ToString("%0.3f", arrow_trap->min_cooldown_time));
+	addChild(new ppltk::Label(0, y, 120, 30, "Cooldown time: "));
+	addChild(new ppltk::Label(120, y, 50, 30, "min:"));
+	min_cooldown=new ppltk::DoubleHorizontalSlider(180, y, 300, 30);
+	min_cooldown->setLimits(0.0f, 16.0f);
+	min_cooldown->setValue(object->min_cooldown_time);
+	min_cooldown->enableSpinBox(true, 0.1f, 3, 100);
 	min_cooldown->setEventHandler(this);
 	addChild(min_cooldown);
-	max_cooldown=new ppltk::LineInput(225, 40, 100, 30);
-	max_cooldown->setText(ppl7::ToString("%0.3f", arrow_trap->max_cooldown_time));
+	y+=35;
+
+	addChild(new ppltk::Label(120, y, 50, 30, "max:"));
+	max_cooldown=new ppltk::DoubleHorizontalSlider(180, y, 300, 30);
+	max_cooldown->setLimits(0.0f, 16.0f);
+	max_cooldown->setValue(object->max_cooldown_time);
+	max_cooldown->enableSpinBox(true, 0.1f, 3, 100);
 	max_cooldown->setEventHandler(this);
 	addChild(max_cooldown);
+	y+=35;
 
-	distance=new ppltk::LineInput(120, 80, 100, 30);
-	distance->setText(ppl7::ToString("%d", arrow_trap->player_activation_distance));
+
+	addChild(new ppltk::Label(0, y, 120, 30, "player distance: "));
+
+
+	distance=new ppltk::HorizontalSlider(120, y, 360, 30);
+	distance->setLimits(0, 1000);
+	distance->setValue(object->player_activation_distance);
+	distance->enableSpinBox(true, 50, 100);
 	distance->setEventHandler(this);
 	addChild(distance);
 
@@ -228,29 +249,29 @@ ArrowDialog::~ArrowDialog()
 void ArrowDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == direction) {
-		arrow_trap->changeDirection(direction->currentIdentifier().toInt());
+		object->changeDirection(direction->currentIdentifier().toInt());
 	}
 }
 
-void ArrowDialog::textChangedEvent(ppltk::Event* event, const ppl7::String& text)
+void ArrowDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
-	//printf ("SpeakerDialog::textChangedEvent: >>%s<<",(const char*)text);
-	if (event->widget() == min_cooldown) {
-		float v=text.toFloat();
-		//printf ("new volume: %0.3f\n",volume);
-		if (v >= 0.1f && v <= 120.0f)
-			arrow_trap->min_cooldown_time=v;
-	} else if (event->widget() == max_cooldown) {
-		float v=text.toFloat();
-		//printf ("new volume: %0.3f\n",volume);
-		if (v >= 0.1f && v <= 120.0f)
-			arrow_trap->max_cooldown_time=v;
-
-	} else 	if (event->widget() == distance) {
-		int max_distance=text.toInt();
-		if (max_distance > 0 && max_distance < 65535)
-			arrow_trap->player_activation_distance=max_distance;
+	if (event->widget()==distance) {
+		object->player_activation_distance=value;
 	}
 }
+
+void ArrowDialog::valueChangedEvent(ppltk::Event* event, double value)
+{
+	if (event->widget()==min_cooldown) {
+		object->min_cooldown_time=value;
+		if (object->min_cooldown_time>object->max_cooldown_time) max_cooldown->setValue(value);
+
+	} else 	if (event->widget()==max_cooldown) {
+		object->max_cooldown_time=value;
+		if (object->max_cooldown_time<object->min_cooldown_time) min_cooldown->setValue(value);
+
+	}
+}
+
 
 }	// EOF namespace Decker::Objects
