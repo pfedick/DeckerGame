@@ -294,6 +294,8 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
 	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
 	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
+	object_type->add("Scorpion", ppl7::ToString("%d", Type::Scorpion));
+	object_type->add("Scarabeus", ppl7::ToString("%d", Type::Scarabeus));
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
