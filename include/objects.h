@@ -955,6 +955,7 @@ private:
 	};
 	ActionState state;
 	float speed;
+	ppl7::grafix::PointF velocity;
 
 	void playAudio(int id, float volume);
 public:

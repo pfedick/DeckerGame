@@ -26,7 +26,7 @@ Scorpion::Scorpion()
 	type=0;
 	sprite_no=0;
 	sprite_no_representation=0;
-	state=ActionState::WaitLeft;
+	state=ActionState::Falling;
 	collisionDetection=true;
 	next_animation=0.0f;
 	speed=2;
@@ -92,7 +92,27 @@ void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (dist < player_activation_distance && speed < max_speed_when_player_is_near) speed+=speed_acceleration * frame_rate_compensation;
 
-	if (state == ActionState::WaitLeft) {	// do nothing, look to left
+	if (state==ActionState::Falling) {
+		//TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
+		//if (t1 != TileType::NonBlocking) state=ActionState::WaitLeft;
+		//else {
+			if (velocity.y < 6.0f) {
+				velocity.y+=0.2 * frame_rate_compensation;
+				if (velocity.y > 6.0f) velocity.y=6.0f;
+			}
+			for (int yy=p.y;yy<=p.y+velocity.y;yy++) {
+				TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
+				if (t1 != TileType::NonBlocking) {
+					state=ActionState::WaitLeft;
+					p.y=yy-1;
+					break;
+				}
+			}
+			if (state==ActionState::Falling) p+=velocity;
+			updateBoundary();
+		//}
+
+	} else if (state == ActionState::WaitLeft) {	// do nothing, look to left
 		state=ActionState::WalkLeft;
 		animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
 		speed=randf(minspeed, maxspeed);
