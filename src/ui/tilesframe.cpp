@@ -40,7 +40,7 @@ void TilesFrame::setSprites(SpriteTexture* tiles)
 void TilesFrame::paint(ppl7::grafix::Drawable& draw)
 {
 	//printf ("selected_tile=%d\n",selected_tile);
-	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
+	//const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	ppl7::grafix::Color shade3=backgroundColor() * 1.6f;
 	ppl7::grafix::Color shade4=backgroundColor() * 1.3f;
 

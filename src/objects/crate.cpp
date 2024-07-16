@@ -52,7 +52,7 @@ size_t Crate::load(const unsigned char* buffer, size_t size)
 	if (version != 1) return 0;
 	sprite_no=ppl7::Peek8(buffer + bytes + 1);
 	sprite_no_representation=sprite_no;
-	int flags=ppl7::Peek8(buffer + bytes + 2);
+	//int flags=ppl7::Peek8(buffer + bytes + 2);  // not used yet
 	color_mod.setColor(ppl7::Peek32(buffer + bytes + 3));
 	updateBoundary();
 	return size;
