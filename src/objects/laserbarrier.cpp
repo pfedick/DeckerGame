@@ -258,14 +258,15 @@ void LaserBarrier::update(double time, TileTypePlane& ttplane, Player& player, f
 
 			}
 		} else {
-			if (always_on) return;
-			state=0;
-			if (audio) {
-				getAudioPool().stopInstace(audio);
+			if (!always_on) {
+				state=0;
+				if (audio) {
+					getAudioPool().stopInstace(audio);
+				}
+				//next_state=time+(double)ppl7::rand(2000,4000)/1000.f;
+				next_state=time + ppl7::randf(time_off_min, time_off_max);
+				collisionDetection=false;
 			}
-			//next_state=time+(double)ppl7::rand(2000,4000)/1000.f;
-			next_state=time + ppl7::randf(time_off_min, time_off_max);
-			collisionDetection=false;
 		}
 	}
 	updateLightMaps();
@@ -284,6 +285,7 @@ void LaserBarrier::clearLights()
 void LaserBarrier::updateLightMaps()
 {
 	clearLights();
+	//ppl7::PrintDebug("LaserBarrier::updateLightMaps, state: %d\n", state);
 	if (state == 0) return;
 	if ((flicker & 7) == 0) return;
 
