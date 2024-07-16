@@ -10,8 +10,8 @@ namespace Decker::Objects {
 
 Representation LaserBarrier::representation(Type::ObjectType type)
 {
-	if (type == Type::LaserBeamHorizontal) return Representation(Spriteset::Laser, 1);
-	return Representation(Spriteset::Laser, 0);
+	if (type == Type::LaserBeamHorizontal) return Representation(Spriteset::GenericObjects, 213);
+	return Representation(Spriteset::GenericObjects, 212);
 }
 
 LaserBarrier::LaserBarrier(Type::ObjectType type)
