@@ -939,10 +939,7 @@ public:
 
 class Scorpion : public Enemy
 {
-private:
-	AnimationCycle animation;
-	double next_state, next_animation;
-	AudioInstance* audio;
+	public:
 	enum class ActionState {
 		WaitLeft,
 		WalkLeft,
@@ -951,8 +948,14 @@ private:
 		WalkRight,
 		IdleRight,
 		TurnLeft,
-		Falling
+		FallingLeft,
+		FallingRight,
+		WaitRight
 	};
+private:
+	AnimationCycle animation;
+	double next_state, next_animation;
+	AudioInstance* audio;
 	ActionState state;
 	float speed;
 	ppl7::grafix::PointF velocity;
@@ -965,8 +968,9 @@ public:
 	float min_idle_time, max_idle_time;
 	float speed_acceleration;
 
-	Scorpion();
+	Scorpion(ActionState initial_state=ActionState::FallingLeft);
 	~Scorpion();
+	void setState(ActionState state);
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;

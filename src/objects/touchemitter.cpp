@@ -126,6 +126,15 @@ void TouchEmitter::emmitObject(double time)
 		case 3: particle->velocity.setPoint(-v1, v0); break;
 		default: particle->velocity.setPoint(v0, -v1); break;
 	}
+	if (emitted_object==Objects::Type::Scorpion) {
+		//ppl7::PrintDebug("Scorpion, direction=%d\n",direction);
+		if (direction==1) {
+
+			static_cast<Scorpion*>(particle->child)->setState(Scorpion::ActionState::FallingRight);
+
+		}
+
+	}
 	GetObjectSystem()->addObject(particle);
 }
 
@@ -220,11 +229,12 @@ TouchParticle::TouchParticle(Type::ObjectType type)
 	sprite_set=repr.sprite_set;
 	sprite_no_representation=sprite_no;
 	child=GetObjectSystem()->getInstance(type);
+	child->spawned=true;
 }
 
 TouchParticle::~TouchParticle()
 {
-	delete child;
+	//delete child;
 }
 
 Representation TouchParticle::representation()
@@ -238,11 +248,13 @@ void TouchParticle::update(double time, TileTypePlane& ttplane, Player& player, 
 	if (ppl7::grafix::Distance(p, initial_p) > max_distance) {
 		deleteDefered=true;
 		ObjectSystem* objs=GetObjectSystem();
+		/*
 		Object* object=objs->getInstance(emitted_object);
-		object->p=p;
-		object->initial_p=p;
-		object->spawned=true;
-		objs->addObject(object);
+		*/
+		child->p=p;
+		child->initial_p=p;
+		child->spawned=true;
+		objs->addObject(child);
 	} else {
 		child->update(time, ttplane, player, frame_rate_compensation);
 		sprite_no=child->sprite_no;

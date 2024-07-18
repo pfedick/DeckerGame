@@ -19,14 +19,19 @@ Representation Scorpion::representation()
 	return Representation(Spriteset::Scorpion, 0);
 }
 
-Scorpion::Scorpion()
+Scorpion::Scorpion(ActionState initial_state)
 	:Enemy(Type::ObjectType::Scorpion)
 {
 	sprite_set=Spriteset::Scorpion;
 	type=0;
 	sprite_no=0;
 	sprite_no_representation=0;
-	state=ActionState::Falling;
+	state=initial_state;
+	if (initial_state==ActionState::FallingRight) {
+		sprite_no=13;
+		sprite_no_representation=13;
+		animation.setStaticFrame(13);
+	}
 	collisionDetection=true;
 	next_animation=0.0f;
 	speed=2;
@@ -67,6 +72,19 @@ void Scorpion::playAudio(int id, float volume)
 	}
 }
 
+void Scorpion::setState(ActionState state)
+{
+	this->state=state;
+	sprite_no=0;
+	sprite_no_representation=0;
+	if (state==ActionState::FallingRight) {
+		sprite_no=13;
+		sprite_no_representation=13;
+		animation.setStaticFrame(13);
+	}
+	updateBoundary();
+}
+
 void Scorpion::handleCollision(Player* player, const Collision& collision)
 {
 	player->dropHealth(10);
@@ -92,7 +110,7 @@ void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float
 	double dist=ppl7::grafix::Distance(p, player.position());
 	if (dist < player_activation_distance && speed < max_speed_when_player_is_near) speed+=speed_acceleration * frame_rate_compensation;
 
-	if (state==ActionState::Falling) {
+	if (state==ActionState::FallingLeft || state==ActionState::FallingRight) {
 		//TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 2));
 		//if (t1 != TileType::NonBlocking) state=ActionState::WaitLeft;
 		//else {
@@ -103,18 +121,25 @@ void Scorpion::update(double time, TileTypePlane& ttplane, Player& player, float
 			for (int yy=p.y;yy<=p.y+velocity.y;yy++) {
 				TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
 				if (t1 != TileType::NonBlocking) {
-					state=ActionState::WaitLeft;
+					if (state==ActionState::FallingLeft)
+						state=ActionState::WaitLeft;
+						else state=ActionState::WaitRight;
 					p.y=yy-1;
 					break;
 				}
 			}
-			if (state==ActionState::Falling) p+=velocity;
+			if (state==ActionState::FallingLeft || state==ActionState::FallingRight) p+=velocity;
 			updateBoundary();
 		//}
 
 	} else if (state == ActionState::WaitLeft) {	// do nothing, look to left
 		state=ActionState::WalkLeft;
 		animation.start(walk_cycle_left, sizeof(walk_cycle_left) / sizeof(int), true, 0);
+		speed=randf(minspeed, maxspeed);
+		playAudio(AudioClip::scorpion_run, 0.5f);
+	} else if (state == ActionState::WaitRight) {	// do nothing, look to left
+		state=ActionState::WalkRight;
+		animation.start(walk_cycle_left, sizeof(walk_cycle_right) / sizeof(int), true, 0);
 		speed=randf(minspeed, maxspeed);
 		playAudio(AudioClip::scorpion_run, 0.5f);
 	} else if (state == ActionState::WalkLeft) {	// walk left
