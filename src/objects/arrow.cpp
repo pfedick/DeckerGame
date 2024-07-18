@@ -71,6 +71,8 @@ Arrow::Arrow()
 	visibleAtPlaytime=false;
 	direction=0;
 	state=0;
+	current_state_on=true;
+	initial_state_on=true;
 	player_activation_distance=200;
 	min_cooldown_time=15.0f;
 	max_cooldown_time=min_cooldown_time;
@@ -96,6 +98,7 @@ void Arrow::changeDirection(int new_direction)
 
 void Arrow::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	if (!current_state_on) return;
 	if (state == 0) {
 		double dist=ppl7::grafix::Distance(p, player.position());
 		if (next_state < time || (dist < player_activation_distance && min_cooldown_state < time)) {
@@ -132,22 +135,37 @@ void Arrow::fire()
 	getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.4f);
 }
 
+
+void Arrow::toggle(bool enable, Object* source)
+{
+	current_state_on=enable;
+}
+
+void Arrow::trigger(Object* source)
+{
+	current_state_on=!current_state_on;
+}
+
 size_t Arrow::saveSize() const
 {
-	return Object::saveSize() + 12;
+	return Object::saveSize() + 13;
 }
 
 size_t Arrow::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
 	ppl7::Poke8(buffer + bytes + 1, direction);
 	ppl7::Poke16(buffer + bytes + 2, player_activation_distance);
 	ppl7::PokeFloat(buffer + bytes + 4, min_cooldown_time);
 	ppl7::PokeFloat(buffer + bytes + 8, max_cooldown_time);
-	return bytes + 12;
+	int flags=0;
+	if (initial_state_on) flags|=1;
+	ppl7::Poke8(buffer + bytes + 12, flags);
+
+	return bytes + 13;
 }
 
 size_t Arrow::load(const unsigned char* buffer, size_t size)
@@ -155,12 +173,17 @@ size_t Arrow::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
-
+	if (version < 1) return 0;
+	initial_state_on=true;
 	changeDirection((int)ppl7::Peek8(buffer + bytes + 1));
 	player_activation_distance=ppl7::Peek16(buffer + bytes + 2);
 	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 4);
 	max_cooldown_time=ppl7::PeekFloat(buffer + bytes + 8);
+	if (version >= 2) {
+		int flags=ppl7::Peek8(buffer + bytes + 12);
+		initial_state_on=(flags & 1);
+	}
+	current_state_on=initial_state_on;
 	return size;
 }
 
@@ -168,6 +191,7 @@ size_t Arrow::load(const unsigned char* buffer, size_t size)
 class ArrowDialog : public Decker::ui::Dialog
 {
 private:
+	ppltk::CheckBox* initial_state, * current_state;
 	ppltk::ComboBox* direction;
 	ppltk::DoubleHorizontalSlider* min_cooldown;
 	ppltk::DoubleHorizontalSlider* max_cooldown;
@@ -180,6 +204,7 @@ public:
 	virtual void valueChangedEvent(ppltk::Event* event, int value);
 	virtual void valueChangedEvent(ppltk::Event* event, int64_t value);
 	virtual void valueChangedEvent(ppltk::Event* event, double value);
+	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 	//virtual void textChangedEvent(ppltk::Event* event, const ppl7::String& text);
 };
 
@@ -191,12 +216,27 @@ void Arrow::openUi()
 
 
 ArrowDialog::ArrowDialog(Arrow* object)
-	: Decker::ui::Dialog(510, 250)
+	: Decker::ui::Dialog(510, 290)
 {
 	this->object=object;
 	setWindowTitle("Arrow Trap");
-
+	ppl7::grafix::Rect client=clientRect();
 	int y=0;
+	int col1=100;
+	int w=client.width() - col1 - 10;
+	int col2=client.width() / 2;
+	int col3=col2 + 100;
+
+	addChild(new ppltk::Label(0, y, 100, 30, "initial State:"));
+	initial_state=new ppltk::CheckBox(col1, y, 120, 30, "enabled", object->initial_state_on);
+	initial_state->setEventHandler(this);
+	addChild(initial_state);
+	addChild(new ppltk::Label(col2, y, 100, 30, "current State:"));
+	current_state=new ppltk::CheckBox(col3, y, 120, 30, "enabled", object->current_state_on);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+	y+=35;
+
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Direction: "));
 	direction=new ppltk::ComboBox(120, y, 360, 30);
@@ -255,21 +295,30 @@ void ArrowDialog::valueChangedEvent(ppltk::Event* event, int value)
 
 void ArrowDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
-	if (event->widget()==distance) {
+	if (event->widget() == distance) {
 		object->player_activation_distance=value;
 	}
 }
 
 void ArrowDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
-	if (event->widget()==min_cooldown) {
+	if (event->widget() == min_cooldown) {
 		object->min_cooldown_time=value;
-		if (object->min_cooldown_time>object->max_cooldown_time) max_cooldown->setValue(value);
+		if (object->min_cooldown_time > object->max_cooldown_time) max_cooldown->setValue(value);
 
-	} else 	if (event->widget()==max_cooldown) {
+	} else 	if (event->widget() == max_cooldown) {
 		object->max_cooldown_time=value;
-		if (object->max_cooldown_time<object->min_cooldown_time) min_cooldown->setValue(value);
+		if (object->max_cooldown_time < object->min_cooldown_time) min_cooldown->setValue(value);
 
+	}
+}
+
+void ArrowDialog::toggledEvent(ppltk::Event* event, bool checked)
+{
+	if (event->widget() == initial_state) {
+		object->initial_state_on=checked;
+	} else if (event->widget() == current_state) {
+		object->current_state_on=checked;
 	}
 }
 

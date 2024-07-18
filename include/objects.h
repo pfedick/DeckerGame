@@ -817,6 +817,9 @@ private:
 public:
 	int direction;	// 0=up, 1=right, 2=down, 3=left
 	int player_activation_distance;
+	bool current_state_on;
+	bool initial_state_on;
+
 	float min_cooldown_time;
 	float max_cooldown_time;
 
@@ -827,6 +830,9 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+
 	void openUi() override;
 
 };
@@ -939,7 +945,7 @@ public:
 
 class Scorpion : public Enemy
 {
-	public:
+public:
 	enum class ActionState {
 		WaitLeft,
 		WalkLeft,
