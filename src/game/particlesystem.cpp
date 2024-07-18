@@ -23,6 +23,7 @@ ParticleSystem::ParticleSystem()
     }
     nextid=1;
     active_map=0;
+    update_thread.ps=this;
     update_thread.threadStart();
 }
 
@@ -210,9 +211,9 @@ ppl7::String ParticleSystem::layerName(Particle::Layer layer)
 }
 
 
-ParticleUpdateThread::ParticleUpdateThread(ParticleSystem& ps)
-    :ps(ps)
+ParticleUpdateThread::ParticleUpdateThread()
 {
+    ps=NULL;
     time=0.0f;
     ttplane=NULL;
     player=NULL;
@@ -269,7 +270,7 @@ void ParticleUpdateThread::run()
             float right=worldcoords.x + viewport.width() + 64;
             float bottom=worldcoords.y + viewport.height() + 64;
             std::map<uint64_t, Particle*>::iterator it;
-            for (it=ps.particle_map.begin();it != ps.particle_map.end();++it) {
+            for (it=ps->particle_map.begin();it != ps->particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
                     particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
@@ -282,7 +283,7 @@ void ParticleUpdateThread::run()
                         particle->visible=false;
                     }
                 } else {
-                    ps.particles_to_delete.push_back(it->first);
+                    ps->particles_to_delete.push_back(it->first);
                 }
             }
         }

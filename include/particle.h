@@ -158,7 +158,7 @@ class ParticleUpdateThread : public ppl7::Thread
 {
     friend class ParticleSystem;
 private:
-    ParticleSystem& ps;
+    ParticleSystem *ps;
     double time;
     TileTypePlane* ttplane;
     Player* player;
@@ -174,7 +174,7 @@ private:
 public:
     ppl7::Mutex mutex;
 
-    ParticleUpdateThread(ParticleSystem& ps);
+    ParticleUpdateThread();
     void run() override;
     bool isRunning() const;
     double getThreadDuration() const;
@@ -195,7 +195,7 @@ private:
     void deleteParticle(uint64_t id);
     void cleanupParticles();
     int active_map;
-    ParticleUpdateThread update_thread=ParticleUpdateThread(*this);
+    ParticleUpdateThread update_thread;
 public:
     ParticleSystem();
     ~ParticleSystem();
