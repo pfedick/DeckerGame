@@ -76,7 +76,7 @@ void TouchPlateSwitch::notify_targets()
                 else {
                     bool s=false;
                     if (target_state == TargetState::enable) s=true;
-                    if (!current_state) {
+                    if (!touched) {
                         s=!s;
                     }
                     target->toggle(s, this);
@@ -88,10 +88,10 @@ void TouchPlateSwitch::notify_targets()
 
 void TouchPlateSwitch::toggle(bool enable, Object* source)
 {
-    if (source == this) return;
+    //if (source == this) return;
     current_state=enable;
     init();
-    notify_targets();
+    //notify_targets();
 }
 
 void TouchPlateSwitch::trigger(Object* source)
@@ -101,6 +101,11 @@ void TouchPlateSwitch::trigger(Object* source)
 
 void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float)
 {
+    if (!current_state) {
+        if (plate_style == PlateStyle::Narrow) sprite_no=43;
+        else sprite_no=45;
+        return;
+    }
     std::list<Object*> object_list;
 
     GetObjectSystem()->detectObjectCollision(this, object_list);
@@ -110,14 +115,14 @@ void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float
 
     if (touched == false && last_collision > time - 0.1) {
         touched=true;
-        current_state=true;
+        //current_state=true;
         notify_targets();
         if (plate_style == PlateStyle::Narrow) sprite_no=43;
         else sprite_no=45;
 
     } else if (touched == true && last_collision < time - 0.1) {
         touched=false;
-        current_state=false;
+        //current_state=false;
         notify_targets();
         cooldown=time + 0.1;
         if (plate_style == PlateStyle::Narrow) sprite_no=42;
@@ -318,7 +323,8 @@ void TouchPlateSwitchDialog::toggledEvent(ppltk::Event* event, bool checked)
                 object->targets[i].state=TouchPlateSwitch::TargetState::trigger;
             }
         }
-    } else if (event->widget() == initial_state) object->initial_state=checked;
+    }
+    if (event->widget() == initial_state) object->initial_state=checked;
     else if (event->widget() == current_state) object->toggle(checked);
 
 }
