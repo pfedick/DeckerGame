@@ -1982,6 +1982,7 @@ public:
 	bool currentState;
 	bool dualColor;
 	bool blink;
+	bool hasLensflare;
 	ppl7::grafix::Color color_on;
 	ppl7::grafix::Color color_off;
 

@@ -26,6 +26,7 @@ LightSignal::LightSignal()
     sprite_no=2;
     sprite_no_representation=2;
     collisionDetection=false;
+    hasLensflare=true;
 
     led.sprite_no=0;
     led.scale_x=0.2f;
@@ -66,7 +67,7 @@ void LightSignal::update(double time, TileTypePlane& ttplane, Player& player, fl
         led.x=p.x;
         led.y=p.y;
         LightSystem& lights=GetGame().getLightSystem();
-        lights.addObjectLight(&led);
+        if (hasLensflare) lights.addObjectLight(&led);
         sprite_no=2;
         color_mod=color_on;
     } else if (dualColor) {
@@ -74,7 +75,7 @@ void LightSignal::update(double time, TileTypePlane& ttplane, Player& player, fl
         led.x=p.x;
         led.y=p.y;
         LightSystem& lights=GetGame().getLightSystem();
-        lights.addObjectLight(&led);
+        if (hasLensflare) lights.addObjectLight(&led);
         sprite_no=2;
         color_mod=color_off;
     } else {
@@ -105,11 +106,12 @@ size_t LightSignal::save(unsigned char* buffer, size_t size) const
 {
     size_t bytes=Object::save(buffer, size);
     if (!bytes) return 0;
-    ppl7::Poke8(buffer + bytes, 1);		// Object Version
+    ppl7::Poke8(buffer + bytes, 2);		// Object Version
     uint8_t flags=0;
     if (initialState) flags|=1;
     if (dualColor) flags|=2;
     if (blink) flags|=4;
+    if (hasLensflare) flags|=8;
     ppl7::Poke8(buffer + bytes + 1, flags);
     ppl7::Poke32(buffer + bytes + 2, color_on.color());
     ppl7::Poke32(buffer + bytes + 6, color_off.color());
@@ -123,12 +125,14 @@ size_t LightSignal::load(const unsigned char* buffer, size_t size)
     if (bytes == 0) return 0;
     if (size < bytes + 10) return 0;
     int version=ppl7::Peek8(buffer + bytes);
-    if (version != 1) return 0;
+    if (version < 1 || version>2) return 0;
     uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
     initialState=flags & 1;
     currentState=initialState;
     dualColor=flags & 2;
     blink=flags & 4;
+    hasLensflare=true;
+    if (version > 1) hasLensflare=flags & 8;
     color_on.setColor(ppl7::Peek32(buffer + bytes + 2));
     color_off.setColor(ppl7::Peek32(buffer + bytes + 6));
     return size;
@@ -139,7 +143,7 @@ class LightSignalDialog : public Decker::ui::Dialog
 {
 private:
     ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
-    ppltk::CheckBox* dual_color_checkbox, * blink_checkbox;
+    ppltk::CheckBox* dual_color_checkbox, * blink_checkbox, * lensflare_checkbox;
     Decker::ui::ColorSliderWidget* color_on;
     Decker::ui::ColorSliderWidget* color_off;
 
@@ -182,6 +186,11 @@ LightSignalDialog::LightSignalDialog(LightSignal* object)
     blink_checkbox=new ppltk::CheckBox(sw, y, sw, 30, "blink", object->blink);
     blink_checkbox->setEventHandler(this);
     addChild(blink_checkbox);
+    y+=35;
+    lensflare_checkbox=new ppltk::CheckBox(0, y, sw, 30, "lensflare", object->hasLensflare);
+    lensflare_checkbox->setEventHandler(this);
+    addChild(lensflare_checkbox);
+
     y+=40;
 
     addChild(new ppltk::Label(0, y, 80, 30, "Color On:"));
@@ -214,6 +223,9 @@ void LightSignalDialog::toggledEvent(ppltk::Event* event, bool checked)
         object->dualColor=checked;
     } else if (event->widget() == blink_checkbox) {
         object->blink=checked;
+    } else if (event->widget() == lensflare_checkbox) {
+        object->hasLensflare=checked;
+
     }
 }
 
