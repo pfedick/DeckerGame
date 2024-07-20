@@ -223,7 +223,7 @@ ArrowDialog::ArrowDialog(Arrow* object)
 	ppl7::grafix::Rect client=clientRect();
 	int y=0;
 	int col1=100;
-	int w=client.width() - col1 - 10;
+	//int w=client.width() - col1 - 10;
 	int col2=client.width() / 2;
 	int col3=col2 + 100;
 
