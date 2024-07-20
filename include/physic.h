@@ -95,6 +95,7 @@ public:
 	float gravity, acceleration_gravity;
 	float acceleration_airstream;
 	float acceleration_jump;
+	float acceleration_slide;
 	float acceleration_jump_sideways;
 	float speed_walk;
 	float speed_run;

@@ -19,6 +19,7 @@ Physic::Physic()
 	gravity=0.0f;
 	jump_climax=0.0f;
 	acceleration_jump=0.0f;
+	acceleration_slide=0.0f;
 	fallstart=0.0f;
 	time=0.0f;
 	for (int cy=0;cy < 6;cy++) {
@@ -52,6 +53,21 @@ Physic::PlayerMovement Physic::getMovement() const
 
 bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensation)
 {
+	if (movement == Slide && acceleration_slide < 4.0f) {
+		acceleration_slide+=0.03f * frame_rate_compensation;
+		if (acceleration_slide > 3.0f) acceleration_slide=4.0f;
+		//ppl7::PrintDebug("acc=%0.3f\n", acceleration_slide);
+
+		if (orientation == Left) {
+			velocity_move.x=-((float)TILE_WIDTH / 8.0f) * acceleration_slide * frame_rate_compensation;
+			velocity_move.y=((float)TILE_HEIGHT / 8.0f) * acceleration_slide * frame_rate_compensation;
+		} else {
+			velocity_move.x=+((float)TILE_WIDTH / 8.0f) * acceleration_slide * frame_rate_compensation;
+			velocity_move.y=((float)TILE_HEIGHT / 8.0f) * acceleration_slide * frame_rate_compensation;
+
+		}
+
+	}
 	if (movement == Jump || movement == Slide || movement == Dead) return false;
 	bool match=false;
 	bool inWater=false;
@@ -123,8 +139,9 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 	}
 	if (collision_at_pivoty[1] == TileType::SteepRampLeft && movement != Slide) {
 		// Start Slide
-		velocity_move.x=-((float)TILE_WIDTH / 4.0f) * frame_rate_compensation;
-		velocity_move.y=((float)TILE_HEIGHT / 4.0f) * frame_rate_compensation;
+		acceleration_slide=1.0f;
+		velocity_move.x=-((float)TILE_WIDTH / 8.0f) * acceleration_slide * frame_rate_compensation;
+		velocity_move.y=((float)TILE_HEIGHT / 8.0f) * acceleration_slide * frame_rate_compensation;
 		gravity=0.0f;
 		acceleration_gravity=0.0f;
 		movement=Slide;
@@ -132,8 +149,9 @@ bool Physic::updatePhysics(const TileTypePlane& world, float frame_rate_compensa
 		return true;
 	} else if (collision_at_pivoty[1] == TileType::SteepRampRight && movement != Slide) {
 		// Start Slide
-		velocity_move.x=((float)TILE_WIDTH / 4.0f) * frame_rate_compensation;
-		velocity_move.y=((float)TILE_HEIGHT / 4.0f) * frame_rate_compensation;
+		acceleration_slide=1.0f;
+		velocity_move.x=((float)TILE_WIDTH / 8.0f) * acceleration_slide * frame_rate_compensation;
+		velocity_move.y=((float)TILE_HEIGHT / 8.0f) * acceleration_slide * frame_rate_compensation;
 		gravity=0.0f;
 		acceleration_gravity=0.0f;
 		movement=Slide;
@@ -261,12 +279,15 @@ Physic::PlayerMovement Physic::checkCollisionWithWorld(const TileTypePlane& worl
 	if (movement == Dead) return new_movement;
 	if (movement == Slide) {
 		if (orientation == Left) {
-			if (collision_matrix[2][4] == TileType::Blocking || collision_matrix[3][4] == TileType::BlockFromTop) {
+			if (collision_matrix[2][4] == TileType::Blocking || collision_matrix[2][4] == TileType::BlockFromTop) {
 				new_movement=Stand;
+				//ppl7::PrintDebug("block left\n");
+
 			}
 		} else {
-			if (collision_matrix[2][4] == TileType::Blocking || collision_matrix[3][4] == TileType::BlockFromTop) {
+			if (collision_matrix[3][4] == TileType::Blocking || collision_matrix[3][4] == TileType::BlockFromTop) {
 				new_movement=Stand;
+				//ppl7::PrintDebug("block right\n");
 			}
 		}
 		while (world.getType(ppl7::grafix::Point(x, y - 1)) == TileType::Blocking) {
