@@ -95,7 +95,7 @@ void Trigger::notifyTargets() const
             if (target) {
                 if (triggerObjects[i].state == Trigger::TargetState::trigger) target->trigger();
                 else if (triggerObjects[i].state == Trigger::TargetState::enable) target->toggle(true);
-                else if (triggerObjects[i].state == Trigger::TargetState::disable) target->trigger(false);
+                else if (triggerObjects[i].state == Trigger::TargetState::disable) target->toggle(false);
             }
         }
     }
