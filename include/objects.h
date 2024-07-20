@@ -163,7 +163,7 @@ public:
 	float frame_rate_compensation;
 	Collision();
 	Collision(const Collision& other);
-	Collision(const Player* player, const Object* object, float frame_rate_compensation=1.0f);
+	Collision(const Player* player, const Object* object, float frame_rate_compensation);
 	void detect(Object* object, const std::list<ppl7::grafix::Point>& checkpoints, const Player& player);
 	const std::list<ppl7::grafix::Point>& getCollisionPoints() const;
 	Object* getObject() const;
@@ -1727,6 +1727,7 @@ private:
 	double triggerDeleayTime;
 	int trigger_count;
 	double last_collision_time;
+	uint64_t last_collision_frame;
 	void notifyTargets() const;
 public:
 	ppl7::grafix::Point range;

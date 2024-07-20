@@ -34,6 +34,7 @@ Trigger::Trigger()
     cooldown=0.0f;
     trigger_count=0;
     triggerDeleay=0.0f;
+    last_collision_frame=0;
     for (int i=0;i < 10;i++) {
         triggerObjects[i].object_id=0;
     }
@@ -68,21 +69,29 @@ void Trigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 void Trigger::handleCollision(Player* player, const Collision& collision)
 {
     if (!triggeredByCollision) return;
+    uint64_t frame_no=GetFrameNo();
+    if (frame_no == last_collision_frame + 1) {
+        //ppl7::PrintDebugTime("ongoing collision %llu => %llu\n", last_collision_frame, frame_no);
+        last_collision_frame=frame_no;
+        return;
+    }
+
+    //ppl7::PrintDebugTime("new collision %llu => %llu\n", last_collision_frame, frame_no);
+    last_collision_frame=frame_no;
     last_collision_time=player->time;
-    //ppl7::PrintDebugTime("set last_collision_time %d\n", id);
 
     if (multiTrigger == false && trigger_count > 0) return;
     if (multiTrigger == true && cooldown > player->time) return;
     if (state == State::waiting_for_activation) {
         state=State::activated;
-        enabled=false;
+        //enabled=false;
     }
 }
 
 void Trigger::test()
 {
     state=State::activated;
-    enabled=false;
+    //enabled=false;
 }
 
 void Trigger::notifyTargets() const
@@ -117,7 +126,7 @@ void Trigger::update(double time, TileTypePlane& ttplane, Player& player, float)
     if (state == State::finished && multiTrigger == true && last_collision_time + cooldownUntilNextTrigger < time) {
         //ppl7::PrintDebugTime("von vorne %d\n", id);
         state=State::waiting_for_activation;
-        enabled=true;
+        //enabled=true;
         cooldown=0.0f;
     }
 
