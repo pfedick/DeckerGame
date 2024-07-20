@@ -93,7 +93,9 @@ void Trigger::notifyTargets() const
         if (triggerObjects[i].object_id > 0) {
             Object* target=objs->getObject(triggerObjects[i].object_id);
             if (target) {
-                target->trigger();
+                if (triggerObjects[i].state == Trigger::TargetState::trigger) target->trigger();
+                else if (triggerObjects[i].state == Trigger::TargetState::enable) target->toggle(true);
+                else if (triggerObjects[i].state == Trigger::TargetState::disable) target->trigger(false);
             }
         }
     }
@@ -123,7 +125,7 @@ void Trigger::update(double time, TileTypePlane& ttplane, Player& player, float)
 
 size_t Trigger::saveSize() const
 {
-    size_t s=16 + 10 * 2;
+    size_t s=16 + 10 * 3;
     return Object::saveSize() + s;
 
 }
@@ -132,7 +134,7 @@ size_t Trigger::save(unsigned char* buffer, size_t size) const
 {
     size_t bytes=Object::save(buffer, size);
     if (!bytes) return 0;
-    ppl7::Poke8(buffer + bytes, 1);		// Object Version
+    ppl7::Poke8(buffer + bytes, 2);		// Object Version
     int flags=0;
     if (multiTrigger) flags|=1;
     if (triggeredByCollision) flags|=2;
@@ -147,7 +149,8 @@ size_t Trigger::save(unsigned char* buffer, size_t size) const
     int p=16;
     for (int i=0;i < 10;i++) {
         ppl7::Poke16(buffer + bytes + p, triggerObjects[i].object_id);
-        p+=2;
+        ppl7::Poke8(buffer + bytes + p + 2, static_cast<int>(triggerObjects[i].state));
+        p+=3;
     }
     return bytes + p;
 }
@@ -157,7 +160,7 @@ size_t Trigger::load(const unsigned char* buffer, size_t size)
     size_t bytes=Object::load(buffer, size);
     if (bytes == 0 || size < bytes + 1) return 0;
     int version=ppl7::Peek8(buffer + bytes);
-    if (version != 1) return 0;
+    if (version < 1 || version>2) return 0;
 
     int flags=ppl7::Peek8(buffer + bytes + 1);
     multiTrigger=false;
@@ -175,9 +178,18 @@ size_t Trigger::load(const unsigned char* buffer, size_t size)
     range.y=ppl7::Peek16(buffer + bytes + 12);
     maxTriggerCount=ppl7::Peek16(buffer + bytes + 14);
     int p=16;
-    for (int i=0;i < 10;i++) {
-        triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
-        p+=2;
+    if (version == 1) {
+        for (int i=0;i < 10;i++) {
+            triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
+            triggerObjects[i].state=TargetState::trigger;
+            p+=2;
+        }
+    } else {
+        for (int i=0;i < 10;i++) {
+            triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
+            triggerObjects[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + p + 2));
+            p+=3;
+        }
     }
     return size;
 }
@@ -229,6 +241,10 @@ private:
     ppltk::CheckBox* initialStateEnabled, * currentState;
     ppltk::CheckBox* multiTrigger, * triggeredByCollision;
     ppltk::SpinBox* target_id[10];
+    ppltk::RadioButton* target_state_on[10];
+    ppltk::RadioButton* target_state_off[10];
+    ppltk::RadioButton* target_state_trigger[10];
+
     Trigger* object;
 
 public:
@@ -328,25 +344,29 @@ TriggerDialog::TriggerDialog(Trigger* object)
 
     addChild(new ppltk::Label(0, y, 400, 30, "Trigger objects:"));
     y+=35;
-    for (int i=0;i < 5;i++) {
+    for (int i=0;i < 10;i++) {
         int x=0;
-        addChild(new ppltk::Label(x + 30, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-        target_id[i]=new ppltk::SpinBox(x + 110, y, 100, 30, object->triggerObjects[i].object_id);
+        addChild(new ppltk::Label(x + 10, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+        target_id[i]=new ppltk::SpinBox(x + 90, y, 100, 30, object->triggerObjects[i].object_id);
         target_id[i]->setLimits(0, 65535);
         target_id[i]->setEventHandler(this);
         addChild(target_id[i]);
-        x=300;
-        addChild(new ppltk::Label(x, y, 80, 30, ppl7::ToString("Object %d: ", i + 6)));
-        target_id[i + 5]=new ppltk::SpinBox(x + 80, y, 100, 30, object->triggerObjects[i + 5].object_id);
-        target_id[i + 5]->setLimits(0, 65535);
-        target_id[i + 5]->setEventHandler(this);
-        addChild(target_id[i + 5]);
-        /*
-        target_state[i]=new ppltk::CheckBox(325, y, 100, 30, "enable", object->triggerObjects[i].enable);
-        target_state[i]->setEventHandler(this);
-        addChild(target_state[i]);
-        */
-        y+=35;
+
+        ppltk::Frame* frame=new ppltk::Frame(x + 190, y, 210, 30, ppltk::Frame::BorderStyle::NoBorder);
+        frame->setTransparent(true);
+
+        target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->triggerObjects[i].state == Trigger::TargetState::enable);
+        target_state_on[i]->setEventHandler(this);
+        frame->addChild(target_state_on[i]);
+        target_state_off[i]=new ppltk::RadioButton(50, 0, 60, 30, "off", object->triggerObjects[i].state == Trigger::TargetState::disable);
+        target_state_off[i]->setEventHandler(this);
+        frame->addChild(target_state_off[i]);
+        target_state_trigger[i]=new ppltk::RadioButton(100, 0, 90, 30, "trigger", object->triggerObjects[i].state == Trigger::TargetState::trigger);
+        target_state_trigger[i]->setEventHandler(this);
+        frame->addChild(target_state_trigger[i]);
+        addChild(frame);
+
+        y+=30;
     }
     //current_state_checkbox->setChecked(object->current_state);
     //initial_state_checkbox->setChecked(object->flags & static_cast<int>(Speaker::Flags::initialStateEnabled));
@@ -371,6 +391,18 @@ void TriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
     } else if (event->widget() == currentState) {
         object->enabled=checked;
     }
+    if (checked) {
+        for (int i=0;i < 10;i++) {
+            if (event->widget() == target_state_on[i]) {
+                object->triggerObjects[i].state=Trigger::TargetState::enable;
+            } else 	if (event->widget() == target_state_off[i]) {
+                object->triggerObjects[i].state=Trigger::TargetState::disable;
+            } else 	if (event->widget() == target_state_trigger[i]) {
+                object->triggerObjects[i].state=Trigger::TargetState::trigger;
+            }
+        }
+    }
+
 }
 
 

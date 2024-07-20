@@ -1737,11 +1737,17 @@ public:
 	float triggerDeleay;
 	uint16_t maxTriggerCount;
 
+	enum class TargetState {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
 
 	class TargetObject
 	{
 	public:
 		uint16_t object_id=0;
+		TargetState state=TargetState::trigger;
 	};
 	TargetObject triggerObjects[10];
 
