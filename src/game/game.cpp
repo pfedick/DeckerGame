@@ -15,6 +15,13 @@ static Game* GameInstance=NULL;
 
 double game_start=0.0f;
 
+static uint64_t global_frame_no=0;
+
+uint64_t GetFrameNo()
+{
+	return global_frame_no;
+}
+
 void FadeToBlack(SDL_Renderer* renderer, int fade_to_black)
 {
 	if (fade_to_black > 0) {
@@ -666,6 +673,7 @@ ppl7::grafix::Point Game::getViewPos() const
 void Game::drawWorld(SDL_Renderer* renderer)
 {
 	metrics.time_draw_world.start();
+	global_frame_no++;
 	double now=ppl7::GetMicrotime();
 	frame_rate_compensation=1.0f;
 	if (last_frame_time > 0.0f) {

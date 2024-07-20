@@ -1216,6 +1216,7 @@ public:
 ppltk::Window* GetGameWindow();
 ColorPalette& GetColorPalette();
 Game& GetGame();
+uint64_t GetFrameNo();
 
 void FadeToBlack(SDL_Renderer* renderer, int fade_to_black);
 
