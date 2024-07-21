@@ -116,6 +116,7 @@ void Level::setSpriteset(int no, SpriteTexture* spriteset)
 	FarSprites[1].setSpriteset(no, spriteset);
 	PlayerSprites[0].setSpriteset(no, spriteset);
 	PlayerSprites[1].setSpriteset(no, spriteset);
+	PlayerSprites[2].setSpriteset(no, spriteset);
 	FrontSprites[0].setSpriteset(no, spriteset);
 	FrontSprites[1].setSpriteset(no, spriteset);
 	BackSprites[0].setSpriteset(no, spriteset);
@@ -228,6 +229,8 @@ void Level::load(const ppl7::String& Filename)
 				PlayerSprites[0].load(ba);
 			} else if (id == LevelChunkId::chunkPlayerSpritesLayer1) {
 				PlayerSprites[1].load(ba);
+			} else if (id == LevelChunkId::chunkPlayerSpritesLayer2) {
+				PlayerSprites[2].load(ba);
 			} else if (id == LevelChunkId::chunkFrontSpritesLayer0) {
 				FrontSprites[0].load(ba);
 			} else if (id == LevelChunkId::chunkFrontSpritesLayer1) {
@@ -298,6 +301,7 @@ void Level::save(const ppl7::String& Filename)
 	TileTypeMatrix.save(ff, LevelChunkId::chunkTileTypes);
 	PlayerSprites[0].save(ff, LevelChunkId::chunkPlayerSpritesLayer0);
 	PlayerSprites[1].save(ff, LevelChunkId::chunkPlayerSpritesLayer1);
+	PlayerSprites[2].save(ff, LevelChunkId::chunkPlayerSpritesLayer2);
 	FrontSprites[0].save(ff, LevelChunkId::chunkFrontSpritesLayer0);
 	FrontSprites[1].save(ff, LevelChunkId::chunkFrontSpritesLayer1);
 	FarSprites[0].save(ff, LevelChunkId::chunkFarSpritesLayer0);
@@ -484,21 +488,27 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		drawParticles(renderer, Particle::Layer::BehindPlayer, worldcoords * planeFactor[0], metrics);
 		metrics.time_objects.start();
 		if (showObjects) {	// Objects behind Player
-			metrics.time_objects.start();
+			//metrics.time_objects.start();
 			if (!editMode)
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
-			metrics.time_objects.stop();
+			//metrics.time_objects.stop();
 		}
 		// Player
 		player->draw(renderer, viewport, worldcoords * planeFactor[0]);
 		if (showObjects) {	// Objects before Player
-			metrics.time_objects.start();
+			//metrics.time_objects.start();
 			if (!editMode)
 				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
-			metrics.time_objects.stop();
+			//metrics.time_objects.stop();
 		}
 		metrics.time_objects.stop();
 		drawParticles(renderer, Particle::Layer::BeforePlayer, worldcoords * planeFactor[0], metrics);
+		if (showSprites) {
+			metrics.time_sprites.start();
+			PlayerSprites[2].draw(renderer, viewport, worldcoords * planeFactor[0]);
+			metrics.time_sprites.stop();
+		}
+
 		addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Player, worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], metrics);
 
 		if (showObjects && editMode) {
@@ -536,6 +546,7 @@ void Level::updateVisibleSpriteLists(const ppl7::grafix::Point& worldcoords, con
 	BackSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[3], viewport);
 	PlayerSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[0], viewport);
 	PlayerSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[0], viewport);
+	PlayerSprites[2].updateVisibleSpriteList(worldcoords * planeFactor[0], viewport);
 	FrontSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[1], viewport);
 	FrontSprites[1].updateVisibleSpriteList(worldcoords * planeFactor[1], viewport);
 	HorizonSprites[0].updateVisibleSpriteList(worldcoords * planeFactor[5], viewport);
@@ -562,6 +573,7 @@ size_t Level::countSprites() const
 	total+=BackSprites[1].count();
 	total+=PlayerSprites[0].count();
 	total+=PlayerSprites[1].count();
+	total+=PlayerSprites[2].count();
 	total+=FrontSprites[0].count();
 	total+=FrontSprites[1].count();
 	total+=HorizonSprites[0].count();
@@ -589,6 +601,7 @@ size_t Level::countVisibleSprites() const
 	if (PlayerPlane.isVisible()) {
 		total+=PlayerSprites[0].countVisible();
 		total+=PlayerSprites[1].countVisible();
+		total+=PlayerSprites[2].countVisible();
 	}
 	if (FrontPlane.isVisible()) {
 		total+=FrontSprites[0].countVisible();
@@ -646,6 +659,12 @@ bool Level::findSprite(const ppl7::grafix::Point& p, const ppl7::grafix::Point& 
 	}
 	if (PlayerPlane.isVisible()) {
 		ppl7::grafix::Point coords=p + worldcoords * planeFactor[0];
+		if (PlayerSprites[2].findMatchingSprite(coords, item)) {
+			plane=0;
+			layer=2;
+			return true;
+		}
+
 		if (PlayerSprites[1].findMatchingSprite(coords, item)) {
 			plane=0;
 			layer=1;

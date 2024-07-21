@@ -44,6 +44,11 @@ SpriteSelection::SpriteSelection(int x, int y, int width, int height, Game* game
 	layer1->setEventHandler(this);
 	this->addChild(layer1);
 	y1+=30;
+	layer2=new ppltk::RadioButton(60, y1, 130, 20, "before Objects");
+	layer2->setEventHandler(this);
+	this->addChild(layer2);
+	y1+=30;
+
 	this->addChild(new ppltk::Label(5, y1, 80, 30, "Z-Axis: "));
 	z_axis=new ppltk::HorizontalSlider(85, y1, client.width() - 85, 30);
 	z_axis->setLimits(0, 15);
@@ -99,6 +104,7 @@ int SpriteSelection::currentLayer() const
 {
 	if (layer0->checked()) return 1;
 	if (layer1->checked()) return 0;
+	if (layer2->checked()) return 2;
 	return 1;
 }
 
@@ -111,6 +117,10 @@ void SpriteSelection::setCurrentLayer(int layer)
 {
 	if (layer == 1) layer0->setChecked(true);
 	if (layer == 0) layer1->setChecked(true);
+	if (layer == 2) {
+		if (plane_combobox->currentIdentifier().toInt() == 0) layer2->setChecked(true);
+		else layer0->setChecked(true);
+	}
 }
 
 void SpriteSelection::setCurrentSpriteSet(int id)
@@ -142,6 +152,9 @@ void SpriteSelection::setSpriteSet(int id, const ppl7::String& name, SpriteTextu
 void SpriteSelection::setPlane(int plane)
 {
 	plane_combobox->setCurrentIdentifier(ppl7::ToString("%d", plane));
+	layer2->setEnabled(plane_combobox->currentIdentifier().toInt() == 0);
+	layer2->setVisible(plane_combobox->currentIdentifier().toInt() == 0);
+	if (plane != 0 && layer2->checked()) layer0->setChecked(true);
 }
 
 int SpriteSelection::plane() const
@@ -199,6 +212,8 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, int value)
 		tilesframe->setColor(colorframe->color());
 		if (notifies_enabled) game->updateSpriteFromUi();
 	} else if (event->widget() == plane_combobox) {
+		layer2->setEnabled(plane_combobox->currentIdentifier().toInt() == 0);
+		layer2->setVisible(plane_combobox->currentIdentifier().toInt() == 0);
 		if (notifies_enabled) game->updateSpriteFromUi();
 	}
 }
@@ -223,7 +238,7 @@ void SpriteSelection::valueChangedEvent(ppltk::Event* event, double value)
 void SpriteSelection::toggledEvent(ppltk::Event* event, bool checked)
 {
 	//ppl7::PrintDebug("SpriteSelection::toggledEvent\n");
-	if ((event->widget() == layer0 || event->widget() == layer1) && checked == true) {
+	if ((event->widget() == layer0 || event->widget() == layer1 || event->widget() == layer2) && checked == true) {
 		//ppl7::PrintDebug("   SpriteSelection::toggledEvent => yes!\n");
 		if (notifies_enabled) game->updateSpriteFromUi();
 	}

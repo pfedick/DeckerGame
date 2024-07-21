@@ -337,6 +337,7 @@ private:
 	ColorSelectionFrame* colorframe;
 	ppltk::RadioButton* layer0;
 	ppltk::RadioButton* layer1;
+	ppltk::RadioButton* layer2;
 	ppltk::HorizontalSlider* z_axis;
 	ppltk::ComboBox* tileset_combobox;
 	ppltk::ComboBox* plane_combobox;

@@ -58,7 +58,7 @@ void SpriteSystem::setSpriteset(int no, SpriteTexture* spriteset)
 
 int SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, float sprite_scale, float sprite_rotation, uint32_t color_index)
 {
-	//printf ("x=%d, y=%d\n",x,y);
+	//ppl7::PrintDebug("x=%d, y=%d\n", x, y);
 	SpriteSystem::Item item;
 	maxid++;
 	item.id=maxid;
@@ -76,6 +76,7 @@ int SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, f
 		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no, sprite_scale, sprite_scale, sprite_rotation, x, y);
 	}
 	sprite_list.insert(std::pair<int, SpriteSystem::Item>(item.id, item));
+	ppl7::PrintDebug("Number of Sprites: %d\n", (int)sprite_list.size());
 	return item.id;
 }
 

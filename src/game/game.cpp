@@ -1143,6 +1143,7 @@ void Game::showSpriteSelection()
 		sprite_selection->setSpriteSet(11, "Bricks", &resources.bricks[2].ui, 1);
 		sprite_selection->setSpriteSet(12, "Decals", &resources.uiSpritesDecals, 1);
 		this->addChild(sprite_selection);
+		sprite_selection->setPlane(mainmenue->currentPlane());
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		sprite_mode=spriteModeDraw;
@@ -1591,9 +1592,13 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 		float rotation=sprite_selection->spriteRotation();
 		int layer=sprite_selection->currentLayer();
 		int z_axis=sprite_selection->zAxis();
-		if (layer < 0 || layer>1 || spriteset > MAX_SPRITESETS) return;
+		int currentPlane=sprite_selection->plane();
+		ppl7::PrintDebug("plane: %d, layer: %d\n", currentPlane, layer);
+		if (spriteset > MAX_SPRITESETS) return;
+		if (currentPlane != 0 && (layer < 0 || layer>1)) return;
+		else if (layer < 0 || layer>2) return;
 		if (!level.spriteset[spriteset]) return;
-		int currentPlane=mainmenue->currentPlane();
+		ppl7::PrintDebug("OK\n");
 		SpriteSystem& ss=level.spritesystem(currentPlane, layer);
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
 		ss.addSprite(event->p.x + coords.x,

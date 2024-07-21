@@ -728,7 +728,7 @@ private:
 	SpriteSystem FarSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem MiddleSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem BackSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem PlayerSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem PlayerSprites[3]={ SpriteSystem(palette),SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
 
@@ -788,6 +788,7 @@ public:
 		chunkHorizonSpritesLayer1=22,
 		chunkNearSpritesLayer0=23,
 		chunkNearSpritesLayer1=24,
+		chunkPlayerSpritesLayer2=25,
 		chunkObjects=30,
 		chunkWayNet=31,
 		chunkLevelParameter=32,
