@@ -126,9 +126,9 @@ void TouchEmitter::emmitObject(double time)
 		case 3: particle->velocity.setPoint(-v1, v0); break;
 		default: particle->velocity.setPoint(v0, -v1); break;
 	}
-	if (emitted_object==Objects::Type::Scorpion) {
+	if (emitted_object == Objects::Type::Scorpion) {
 		//ppl7::PrintDebug("Scorpion, direction=%d\n",direction);
-		if (direction==1) {
+		if (direction == 1) {
 
 			static_cast<Scorpion*>(particle->child)->setState(Scorpion::ActionState::FallingRight);
 
@@ -308,6 +308,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
 	object_type->add("Scorpion", ppl7::ToString("%d", Type::Scorpion));
 	object_type->add("Scarabeus", ppl7::ToString("%d", Type::Scarabeus));
+	object_type->add("Spider", ppl7::ToString("%d", Type::Spider));
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
