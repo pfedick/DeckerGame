@@ -52,7 +52,8 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Skull, "Skull", 66);
 	addObject(Decker::Objects::Type::SkullMaster, "Skull Master", 67);
 	addObject(Decker::Objects::Type::Ghost, "Ghost", 60);
-	addObject(Decker::Objects::Type::HangingSpider, "hanging Spider", 6);
+	addObject(Decker::Objects::Type::HangingSpider, "Hanging Spider", 6);
+	addObject(Decker::Objects::Type::Spider, "Spider", 72);
 	addObject(Decker::Objects::Type::Mummy, "Mummy", 21);
 	addObject(Decker::Objects::Type::Skeleton, "Skeleton", 20);
 	addObject(Decker::Objects::Type::Mushroom, "Mushroom", 32);

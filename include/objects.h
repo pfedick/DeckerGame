@@ -97,7 +97,8 @@ public:
 		Zombie=122,
 		FireCannon=123,
 		Skull=124,
-		SkullMaster=125
+		SkullMaster=125,
+		Spider=126
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -136,6 +137,7 @@ public:
 		SkullMaster,
 		Switches,
 		Crates,
+		Spider,
 		MaxSpritesets
 	};
 };
@@ -1036,6 +1038,38 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
+};
+
+
+class Spider : public Enemy
+{
+private:
+	enum class SpiderState
+	{
+		Falling=0,
+		StandFront,
+		StandLeft,
+		StandRight,
+		WalkLeft,
+		WalkRight,
+		Dead,
+	};
+
+	AnimationCycle animation;
+	double next_animation;
+	double next_state_change;
+	double collision_cooldown;
+	SpiderState state;
+	AudioInstance* audio;
+	float velocity_falling;
+public:
+	float velocity;
+
+	Spider();
+	~Spider();
+	static Representation representation();
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
 
 

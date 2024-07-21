@@ -206,6 +206,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Crates]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Crates]->load(sdl, "res/crates.tex");
 
+	spriteset[Spriteset::Spider]->enableOutlines(true);
+	spriteset[Spriteset::Spider]->enableMemoryBuffer(true);
+	spriteset[Spriteset::Spider]->load(sdl, "res/spider.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -479,6 +483,7 @@ Representation getRepresentation(int object_type)
 		case Type::ButtonSwitch: return ButtonSwitch::representation();
 		case Type::TouchPlateSwitch: return TouchPlateSwitch::representation();
 		case Type::Crate: return Crate::representation();
+		case Type::Spider: return Spider::representation();
 
 		default: return Object::representation();
 	}
@@ -575,6 +580,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::TouchPlateSwitch: return new TouchPlateSwitch();
 		//case Type::ButtonSwitch: return new ButtonSwitch();
 		case Type::Crate: return new Crate();
+		case Type::Spider: return new Spider();
 
 	}
 	return NULL;
