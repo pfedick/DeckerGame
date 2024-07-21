@@ -37,10 +37,56 @@ Spider::~Spider()
 	}
 }
 
-
+static void splatterBlood(double time, const ppl7::grafix::PointF& p)
+{
+	if (GetGame().config.noBlood) return;
+	std::list<Particle::ScaleGradientItem>scale_gradient;
+	std::list<Particle::ColorGradientItem>color_gradient;
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.314));
+	scale_gradient.push_back(Particle::ScaleGradientItem(0.455, 1.000));
+	scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 0.010));
+	color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(0.342, ppl7::grafix::Color(137, 0, 0, 255)));
+	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(157, 0, 0, 0)));
+	ParticleSystem* ps=GetParticleSystem();
+	int new_particles=ppl7::rand(107, 135);
+	for (int i=0;i < new_particles;i++) {
+		Particle* particle=new Particle();
+		particle->birth_time=time;
+		particle->death_time=randf(0.293, 0.764) + time;
+		particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(49, 20), 0.000);
+		particle->layer=Particle::Layer::BeforePlayer;
+		particle->weight=randf(0.406, 0.642);
+		particle->gravity.setPoint(0.000, 0.377);
+		particle->velocity=calculateVelocity(randf(2.642, 5.849), 0.000 + randf(-54.340, 54.340));
+		particle->scale=randf(0.300, 0.622);
+		particle->color_mod.set(230, 0, 0, 255);
+		particle->initAnimation(Particle::Type::StaticParticle);
+		particle->initScaleGradient(scale_gradient, particle->scale);
+		particle->initColorGradient(color_gradient);
+		ps->addParticle(particle);
+	}
+}
 
 void Spider::handleCollision(Player* player, const Collision& collision)
 {
+	if (state == SpiderState::Dead) return;
+	if (player->velocity_move.y > 0.0f || player->gravity > 0.0f) {
+		collisionDetection=false;
+		splatterBlood(player->time, p);
+		state=SpiderState::Dead;
+		animation.startSequence(29, 34, false, 34);
+		next_state_change=player->time + 5.0f;
+		player->addPoints(50);
+		getAudioPool().playOnce(AudioClip::squash1, 0.3f);
+		if (audio) {
+			getAudioPool().stopInstace(audio);
+			delete audio;
+			audio=NULL;
+		}
+	}
+
+
 	if (collision_cooldown < player->time) {
 		player->dropHealth(5);
 		collision_cooldown=player->time + 0.5f;
@@ -110,6 +156,8 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 	} else if (state == SpiderState::StandRight && time > next_state_change) {
 		state=SpiderState::WalkLeft;
 		animation.startSequence(2, 14, true, 2);
+	} else if (state == SpiderState::Dead && next_state_change < time) {
+		enabled=false;
 	}
 	updateBoundary();
 	/*
