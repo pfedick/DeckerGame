@@ -1593,12 +1593,12 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 		int layer=sprite_selection->currentLayer();
 		int z_axis=sprite_selection->zAxis();
 		int currentPlane=sprite_selection->plane();
-		ppl7::PrintDebug("plane: %d, layer: %d\n", currentPlane, layer);
+		//ppl7::PrintDebug("plane: %d, layer: %d\n", currentPlane, layer);
 		if (spriteset > MAX_SPRITESETS) return;
 		if (currentPlane != 0 && (layer < 0 || layer>1)) return;
 		else if (layer < 0 || layer>2) return;
 		if (!level.spriteset[spriteset]) return;
-		ppl7::PrintDebug("OK\n");
+		//ppl7::PrintDebug("OK\n");
 		SpriteSystem& ss=level.spritesystem(currentPlane, layer);
 		ppl7::grafix::Point coords=WorldCoords * planeFactor[currentPlane];
 		ss.addSprite(event->p.x + coords.x,

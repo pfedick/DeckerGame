@@ -76,7 +76,7 @@ int SpriteSystem::addSprite(int x, int y, int z, int spriteset, int sprite_no, f
 		item.boundary=this->spriteset[item.sprite_set]->spriteBoundary(sprite_no, sprite_scale, sprite_scale, sprite_rotation, x, y);
 	}
 	sprite_list.insert(std::pair<int, SpriteSystem::Item>(item.id, item));
-	ppl7::PrintDebug("Number of Sprites: %d\n", (int)sprite_list.size());
+	//ppl7::PrintDebug("Number of Sprites: %d\n", (int)sprite_list.size());
 	return item.id;
 }
 
