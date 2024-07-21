@@ -58,7 +58,7 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 			sprite_no=animation.getFrame();
 		}
 	}
-	ppl7::PrintDebug("Spider state: %d\n", static_cast<int>(state));
+	//ppl7::PrintDebug("Spider state: %d\n", static_cast<int>(state));
 	if (state == SpiderState::StandFront && next_state_change < time) {
 		if (ppl7::rand(0, 1) == 0) {
 			state=SpiderState::WalkLeft;
@@ -69,11 +69,11 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 
 		}
 	} else if (state == SpiderState::Falling) {
-		if (velocity_falling < 6.0f) {
+		if (velocity_falling < 12.0f) {
 			velocity_falling+=0.2 * frame_rate_compensation;
-			if (velocity_falling > 6.0f) velocity_falling=6.0f;
+			if (velocity_falling > 12.0f) velocity_falling=12.0f;
 		}
-		ppl7::PrintDebug("Falling: %0.3f\n", velocity_falling);
+		//ppl7::PrintDebug("Falling: %0.3f\n", velocity_falling);
 		for (int yy=p.y;yy <= p.y + velocity_falling;yy++) {
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
 			if (t1 != TileType::NonBlocking) {
@@ -83,7 +83,7 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 				break;
 			}
 		}
-		if (state == SpiderState::Falling) p.y+=velocity;
+		if (state == SpiderState::Falling) p.y+=velocity_falling;
 
 	} else if (state == SpiderState::WalkLeft) {
 		p.x-=velocity * frame_rate_compensation;
