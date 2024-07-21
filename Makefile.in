@@ -376,6 +376,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/enemies/wallenstein/ -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/helena/ -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/yeti/ -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
+	./texmaker -s lightwave/Render/enemies/spider/ -t res/spider.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/bat/ -t res/bat.tex -w 256 -h 256 -px 64 -py 120
 	./texmaker -s lightwave/Render/enemies/skull/ -t res/skull.tex -w 1024 -h 512 -px 64 -py 64
 	./texmaker -s lightwave/Render/enemies/skull_master/ -t res/skull_master.tex -w 2048 -h 2048 -px 128 -py 128
