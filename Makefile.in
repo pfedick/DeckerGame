@@ -92,6 +92,7 @@ OBJECTS=compile/main.o \
 	compile/object_laserbarrier.o \
 	compile/object_enemy.o \
 	compile/object_rat.o \
+	compile/object_spider.o \
 	compile/object_bat.o \
 	compile/object_bird.o \
 	compile/object_scorpion.o \
@@ -376,7 +377,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/enemies/wallenstein/ -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/helena/ -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/yeti/ -t res/yeti.tex -w 2048 -h 2048 -px 128 -py 195
-	./texmaker -s lightwave/Render/enemies/spider/ -t res/spider.tex -w 1024 -h 1024 -px 128 -py 195
+	./texmaker -s lightwave/Render/enemies/spider/ -t res/spider.tex -w 1024 -h 1024 -px 128 -py 246
 	./texmaker -s lightwave/Render/enemies/bat/ -t res/bat.tex -w 256 -h 256 -px 64 -py 120
 	./texmaker -s lightwave/Render/enemies/skull/ -t res/skull.tex -w 1024 -h 512 -px 64 -py 64
 	./texmaker -s lightwave/Render/enemies/skull_master/ -t res/skull_master.tex -w 2048 -h 2048 -px 128 -py 128
@@ -583,6 +584,10 @@ compile/object_enemy.o: src/objects/enemy.cpp Makefile include/objects.h
 compile/object_rat.o: src/objects/rat.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_rat.o -c src/objects/rat.cpp $(CFLAGS)
+
+compile/object_spider.o: src/objects/spider.cpp Makefile include/objects.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_spider.o -c src/objects/spider.cpp $(CFLAGS)
 
 compile/object_hangingspider.o: src/objects/hangingspider.cpp Makefile include/objects.h
 	- @mkdir -p compile
