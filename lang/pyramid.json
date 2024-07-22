@@ -19,6 +19,16 @@
             "de": {
                 "text": "Ich hatte doch diesen Hammer! Wo ist der hin?"
             }
+        },
+        "2202": {
+            "context": "beginning of lava cave",
+            "character": "george",
+            "en": {
+                "text": "It gets quiet warm here."
+            },
+            "de": {
+                "text": "Es wird hier ganz schön warm."
+            }
         }
     }
 }
