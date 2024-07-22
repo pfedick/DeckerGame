@@ -119,6 +119,7 @@ void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float
         notify_targets();
         if (plate_style == PlateStyle::Narrow) sprite_no=43;
         else sprite_no=45;
+        getAudioPool().playOnce(AudioClip::touchplateswitch1, p, 1200, 0.7f);
 
     } else if (touched == true && last_collision < time - 0.1) {
         touched=false;
@@ -127,6 +128,8 @@ void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float
         cooldown=time + 0.1;
         if (plate_style == PlateStyle::Narrow) sprite_no=42;
         else sprite_no=44;
+        getAudioPool().playOnce(AudioClip::touchplateswitch2, p, 1200, 0.7f);
+
 
     }
 }
