@@ -271,6 +271,13 @@ void AudioPool::load()
 		sample[AudioClip::skullmaster_laugh2].load("res/audio/skullmaster_laugh2.mp3");
 		sample[AudioClip::skullmaster_laugh3].load("res/audio/skullmaster_laugh3.mp3");
 
+		sample[AudioClip::lavaloop1].load("res/audio/lavaloop1.mp3");
+		sample[AudioClip::lavaloop2].load("res/audio/lavaloop2.mp3");
+		sample[AudioClip::lavabubbles].load("res/audio/lavabubbles.mp3");
+
+		sample[AudioClip::touchplateswitch1].load("res/audio/touchplateswitch1.mp3");
+		sample[AudioClip::touchplateswitch2].load("res/audio/touchplateswitch2.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

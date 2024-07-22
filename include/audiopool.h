@@ -207,6 +207,11 @@ public:
 		skullmaster_laugh1,
 		skullmaster_laugh2,
 		skullmaster_laugh3,
+		lavaloop1,
+		lavaloop2,
+		lavabubbles,
+		touchplateswitch1,
+		touchplateswitch2,
 		// this must always be the last entry!
 		maxClips
 	};
