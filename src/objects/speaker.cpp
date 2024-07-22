@@ -182,6 +182,11 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Fire 3", ppl7::ToString("%d", AudioClip::fire3));
 	sample_name->add("Jungle 1", ppl7::ToString("%d", AudioClip::jungle1));
 	sample_name->add("Jungle 2", ppl7::ToString("%d", AudioClip::jungle2));
+
+	sample_name->add("Lava loop 1", ppl7::ToString("%d", AudioClip::lavaloop1));
+	sample_name->add("Lava loop 2", ppl7::ToString("%d", AudioClip::lavaloop2));
+	sample_name->add("Lava bubbles", ppl7::ToString("%d", AudioClip::lavabubbles));
+
 	sample_name->add("Night 1", ppl7::ToString("%d", AudioClip::night1));
 	sample_name->add("Night 2", ppl7::ToString("%d", AudioClip::night2));
 	sample_name->add("Night 3", ppl7::ToString("%d", AudioClip::night3));
@@ -210,6 +215,8 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Wind strong", ppl7::ToString("%d", AudioClip::wind_strong));
 	sample_name->add("Wind Howling", ppl7::ToString("%d", AudioClip::wind1));
 	sample_name->add("Wind Desert", ppl7::ToString("%d", AudioClip::wind2));
+
+
 
 
 
