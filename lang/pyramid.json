@@ -29,6 +29,46 @@
             "de": {
                 "text": "Es wird hier ganz schön warm."
             }
+        },
+        "2203": {
+            "context": "trapped before lasers",
+            "character": "george",
+            "en": {
+                "text": "What now? Am I trapped?"
+            },
+            "de": {
+                "text": "Und jetzt? Sitze ich in der Falle?"
+            }
+        },
+        "2204": {
+            "context": "George slides down the laser ramp",
+            "character": "george",
+            "en": {
+                "text": "Jippy!"
+            },
+            "de": {
+                "text": "Jippi!"
+            }
+        },
+        "2205": {
+            "context": "first laser goes off",
+            "character": "george",
+            "en": {
+                "text": "Hmm..."
+            },
+            "de": {
+                "text": "Hmm..."
+            }
+        },
+        "2206": {
+            "context": "George stands in front of the lava stream",
+            "character": "george",
+            "en": {
+                "text": "Oh shit! Lava!"
+            },
+            "de": {
+                "text": "Ach du scheiße! Lava!"
+            }
         }
     }
 }
