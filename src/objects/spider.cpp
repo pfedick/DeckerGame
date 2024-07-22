@@ -84,6 +84,7 @@ void Spider::handleCollision(Player* player, const Collision& collision)
 			delete audio;
 			audio=NULL;
 		}
+		return;
 	}
 
 
