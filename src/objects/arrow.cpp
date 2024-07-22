@@ -104,7 +104,7 @@ void Arrow::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		if (next_state < time || (dist < player_activation_distance && min_cooldown_state < time)) {
 			state++;
 			if (state == 1) {
-				next_state=time + ppl7::rand(min_cooldown_time * 1000, max_cooldown_time * 1000) / 1000;
+				next_state=time + ppl7::randf(min_cooldown_time, max_cooldown_time);
 				if (GetGame().config.difficulty == Config::DifficultyLevel::easy) min_cooldown_state=time + ppl7::randf(0.600, 1.400);
 				else min_cooldown_state=time + ppl7::randf(0.300, 0.800);
 				state=0;
@@ -139,11 +139,15 @@ void Arrow::fire()
 void Arrow::toggle(bool enable, Object* source)
 {
 	current_state_on=enable;
+	if (current_state_on) {
+		next_state=ppl7::GetMicrotime() + ppl7::randf(min_cooldown_time, max_cooldown_time);
+		state=0;
+	}
 }
 
 void Arrow::trigger(Object* source)
 {
-	current_state_on=!current_state_on;
+	toggle(!current_state_on, source);
 }
 
 size_t Arrow::saveSize() const
@@ -184,6 +188,7 @@ size_t Arrow::load(const unsigned char* buffer, size_t size)
 		initial_state_on=(flags & 1);
 	}
 	current_state_on=initial_state_on;
+	next_state=ppl7::GetMicrotime() + ppl7::randf(min_cooldown_time, max_cooldown_time);
 	return size;
 }
 
