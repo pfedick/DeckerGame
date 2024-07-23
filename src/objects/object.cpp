@@ -86,7 +86,7 @@ Object::Object(Type::ObjectType type)
 	deleteDefered=false;
 	myLayer=Layer::BehindPlayer;
 	scale=1.0f;
-	rotation=1.0f;
+	rotation=0.0f;
 	difficulty_matrix=255;
 	color_mod.set(255, 255, 255, 255);
 }
