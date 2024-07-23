@@ -284,6 +284,14 @@ void AudioPool::load()
 		sample[AudioClip::spider_spit_hit].load("res/audio/spider_spit_hit.mp3");
 		sample[AudioClip::spider_net_unfold].load("res/audio/spider_net_unfold.mp3");
 
+		sample[AudioClip::ladder_step1].load("res/audio/ladder_step1.mp3");
+		sample[AudioClip::ladder_step2].load("res/audio/ladder_step2.mp3");
+		sample[AudioClip::ladder_step3].load("res/audio/ladder_step3.mp3");
+		sample[AudioClip::ladder_step4].load("res/audio/ladder_step4.mp3");
+		sample[AudioClip::ladder_step5].load("res/audio/ladder_step5.mp3");
+		sample[AudioClip::ladder_step6].load("res/audio/ladder_step6.mp3");
+		sample[AudioClip::ladder_step7].load("res/audio/ladder_step7.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

@@ -216,6 +216,13 @@ public:
 		spider_spit,
 		spider_spit_hit,
 		spider_net_unfold,
+		ladder_step1,
+		ladder_step2,
+		ladder_step3,
+		ladder_step4,
+		ladder_step5,
+		ladder_step6,
+		ladder_step7,
 		// this must always be the last entry!
 		maxClips
 	};
