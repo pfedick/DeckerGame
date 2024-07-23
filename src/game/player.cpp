@@ -1849,6 +1849,7 @@ void Player::hitBySpiderWeb()
 	petrified=true;
 	petrifiedTimeout=time + 5.0f;
 	movement = PlayerMovement::Petrified;
+	getAudioPool().playOnce(AudioClip::spider_net_unfold, 1.0f);
 
 	animation_speed=0.036f;
 	if (orientation == PlayerOrientation::Front || orientation == PlayerOrientation::Back) {

@@ -212,6 +212,10 @@ public:
 		lavabubbles,
 		touchplateswitch1,
 		touchplateswitch2,
+		spider_walk_loop,
+		spider_spit,
+		spider_spit_hit,
+		spider_net_unfold,
 		// this must always be the last entry!
 		maxClips
 	};

@@ -55,8 +55,7 @@ void SpiderSpit::update(double time, TileTypePlane& ttplane, Player& player, flo
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + (i * mul), p.y));
 		if (t1 == TileType::Blocking) {
 			deleteDefered=true;
-			// TODO: flatsch
-			getAudioPool().playOnce(AudioClip::bullet_hits_wall, p, 1600, 0.4f);
+			getAudioPool().playOnce(AudioClip::spider_spit_hit, p, 1600, 1.0f);
 
 		} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
 			deleteDefered=true;
@@ -221,6 +220,7 @@ void Spider::handleCollision(Player* player, const Collision& collision)
 
 void Spider::updatePatrol(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& audiopool=getAudioPool();
 	if (state == ActionState::Stand && orientation == Orientation::Front && next_state_change < time) {
 		state=ActionState::Walk;
 		if (ppl7::rand(0, 1) == 0) {
@@ -229,7 +229,10 @@ void Spider::updatePatrol(double time, TileTypePlane& ttplane, Player& player, f
 		} else {
 			orientation=Orientation::Right;
 			animation.startSequence(16, 28, true, 16);
-
+		}
+		if (audio) {
+			audiopool.stopInstace(audio);
+			audiopool.playInstance(audio);
 		}
 	} else if (state == ActionState::Walk && orientation == Orientation::Left) {
 		p.x-=velocity * frame_rate_compensation;
@@ -238,6 +241,7 @@ void Spider::updatePatrol(double time, TileTypePlane& ttplane, Player& player, f
 		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			state=ActionState::Stand;
 			orientation=Orientation::Left;
+			if (audio) audiopool.stopInstace(audio);
 			animation.setStaticFrame(1);
 			next_state_change=time + randf(0.5, 5.0f);
 		}
@@ -250,28 +254,42 @@ void Spider::updatePatrol(double time, TileTypePlane& ttplane, Player& player, f
 			state=ActionState::Stand;
 			orientation=Orientation::Right;
 			animation.setStaticFrame(15);
+			if (audio) audiopool.stopInstace(audio);
 			next_state_change=time + randf(0.5, 5.0f);
 		}
 	} else if (state == ActionState::Stand && orientation == Orientation::Left && time > next_state_change) {
 		state=ActionState::Walk;
 		orientation = Orientation::Right;
 		animation.startSequence(16, 28, true, 16);
+		if (audio) {
+			audiopool.stopInstace(audio);
+			audiopool.playInstance(audio);
+		}
 	} else if (state == ActionState::Stand && orientation == Orientation::Right && time > next_state_change) {
 		state=ActionState::Walk;
 		orientation = Orientation::Left;
 		animation.startSequence(2, 14, true, 2);
+		if (audio) {
+			audiopool.stopInstace(audio);
+			audiopool.playInstance(audio);
+		}
 	}
 	updateBoundary();
 }
 
 void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
+	AudioPool& audiopool=getAudioPool();
 	double dist=ppl7::grafix::Distance(p, player.position());
 
 	if (player.x < p.x) {			// Go left
 		if (orientation != Orientation::Left) {
 			orientation=Orientation::Left;
 			animation.startSequence(2, 14, true, 2);
+			if (audio) {
+				audiopool.stopInstace(audio);
+				audiopool.playInstance(audio);
+			}
 		}
 		ppl7::grafix::PointF np=p;
 		np.x-=velocity_attack * frame_rate_compensation;
@@ -279,6 +297,7 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(np.x - 32, np.y + 6));
 		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			animation.setStaticFrame(1);
+			if (audio) audiopool.stopInstace(audio);
 		} else {
 			p=np;
 		}
@@ -286,6 +305,10 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 		if (orientation != Orientation::Right) {
 			orientation=Orientation::Right;
 			animation.startSequence(16, 28, true, 16);
+			if (audio) {
+				audiopool.stopInstace(audio);
+				audiopool.playInstance(audio);
+			}
 		}
 		ppl7::grafix::PointF np=p;
 		np.x+=velocity_attack * frame_rate_compensation;
@@ -293,6 +316,7 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(np.x + 32, np.y + 6));
 		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
 			animation.setStaticFrame(15);
+			if (audio) audiopool.stopInstace(audio);
 		} else {
 			p=np;
 		}
@@ -304,8 +328,16 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 
 void Spider::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	//AudioPool& audiopool=getAudioPool();
-
+	AudioPool& audiopool=getAudioPool();
+	if (!audio) {
+		audio=audiopool.getInstance(AudioClip::spider_walk_loop);
+		if (audio) {
+			audio->setVolume(1.0f);
+			audio->setAutoDelete(false);
+			audio->setLoop(true);
+			audio->setPositional(p, 1600);
+		}
+	}
 	if (time > next_animation) {
 		next_animation=time + 0.03f;
 		animation.update();
@@ -323,6 +355,7 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 		for (int yy=p.y;yy <= p.y + velocity_falling;yy++) {
 			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
 			if (t1 != TileType::NonBlocking) {
+				audiopool.playOnce(AudioClip::impact1, p, 1600, 0.3f);
 				state=ActionState::Stand;
 				orientation=Orientation::Front;
 				p.y=yy - 1;
@@ -335,7 +368,7 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 		double dist=ppl7::grafix::Distance(p, player.position());
 		if (state == ActionState::FollowPlayer) {
 			updateFollowPlayer(time, ttplane, player, frame_rate_compensation);
-			if (dist > 1200) {
+			if (dist > 800) {
 				state=ActionState::Stand;
 				orientation=Orientation::Front;
 				animation.setStaticFrame(0);
@@ -354,23 +387,10 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 		enabled=false;
 	}
 
-
-	//ppl7::PrintDebug("Spider state: %d\n", static_cast<int>(state));
-
-	/*
-	if (!audio) {
-		audio=audiopool.getInstance(AudioClip::crow_flying);
-		if (audio) {
-			audio->setVolume(1.0f);
-			audio->setAutoDelete(false);
-			audio->setLoop(true);
-			audio->setPositional(p, 1600);
-			audiopool.playInstance(audio);
-		}
-	} else if (audio) {
+	if (audio) {
 		audio->setPositional(p, 1600);
 	}
-	*/
+
 
 }
 
@@ -393,8 +413,7 @@ void Spider::attack(double time, Player& player)
 	}
 	particle->initial_p=particle->p;
 	GetObjectSystem()->addObject(particle);
-	//getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.8f);
-
+	getAudioPool().playOnce(AudioClip::spider_spit, p, 1600, 1.0f);
 }
 
 

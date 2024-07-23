@@ -279,6 +279,12 @@ void AudioPool::load()
 		sample[AudioClip::touchplateswitch2].load("res/audio/touchplateswitch2.mp3");
 
 
+		sample[AudioClip::spider_walk_loop].load("res/audio/spider_walk_loop.mp3");
+		sample[AudioClip::spider_spit].load("res/audio/spider_spit.mp3");
+		sample[AudioClip::spider_spit_hit].load("res/audio/spider_spit_hit.mp3");
+		sample[AudioClip::spider_net_unfold].load("res/audio/spider_net_unfold.mp3");
+
+
 	} catch (const ppl7::Exception& exp) {
 		exp.print();
 		throw;
