@@ -266,7 +266,7 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 				if (x > 0 && y > 0 && x < width && y < height) isVisible=true;
 			}
 			if (isVisible) {
-				uint32_t id=(uint32_t)(((uint32_t)object->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)object->p.x & 0xffff);
+				uint64_t id=(((uint64_t)object->p.y & 0xffff) << 48) | (uint64_t)(((uint64_t)object->p.x & 0xffff) << 32) | (uint64_t)object->id;
 				visible_object_map.insert(std::pair<uint32_t, Object*>(id, object));
 			}
 		}
@@ -291,7 +291,7 @@ void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, f
 
 void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
 {
-	std::map<uint32_t, Object*>::const_iterator it;
+	std::map<uint64_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	uint8_t dm=getDifficultyMatrix();
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
@@ -317,7 +317,7 @@ static void drawId(SDL_Renderer* renderer, SpriteTexture* spriteset, int x, int 
 
 void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
 {
-	std::map<uint32_t, Object*>::const_iterator it;
+	std::map<uint64_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		const Object* object=it->second;
@@ -339,7 +339,7 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
 {
 	Object* found_object=NULL;
-	std::map<uint32_t, Object*>::const_iterator it;
+	std::map<uint64_t, Object*>::const_iterator it;
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		Object* item=it->second;
 		if (p.inside(item->initial_boundary) == true && item->spawned == false) {
@@ -382,7 +382,7 @@ bool ObjectSystem::checkCollisionWithObject(const std::list<ppl7::grafix::Point>
 
 void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& checkpoints, std::list<Object*>& object_list)
 {
-	std::map<uint32_t, Object*>::const_iterator it;
+	std::map<uint64_t, Object*>::const_iterator it;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
 	uint8_t dm=getDifficultyMatrix();
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
@@ -721,7 +721,7 @@ void ObjectSystem::getObjectCounter(std::map<int, size_t>& object_counter) const
 bool ObjectSystem::findObjectsInRange(const ppl7::grafix::PointF& p, double range, std::list <Object*>& objects)
 {
 	objects.clear();
-	std::map<uint32_t, Object*>::const_iterator it;
+	std::map<uint64_t, Object*>::const_iterator it;
 	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
 		double dist=ppl7::grafix::Distance((*it).second->p, p);
 		if (dist < range) objects.push_back((*it).second);

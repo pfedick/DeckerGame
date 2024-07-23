@@ -2081,7 +2081,7 @@ private:
 	uint32_t next_spawn_id;
 	int player_start;
 	std::map<uint32_t, Object*> object_list;
-	std::map<uint32_t, Object*> visible_object_map;
+	std::map<uint64_t, Object*> visible_object_map;
 	SpriteTexture* spriteset[Spriteset::MaxSpritesets];
 	SpriteTexture* light_objects;
 	Waynet* waynet;
