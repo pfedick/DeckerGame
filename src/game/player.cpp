@@ -59,6 +59,7 @@ Player::FlashLightPivot::FlashLightPivot(int x, int y, float angle)
 Player::Player(Game* game)
 {
 	x=y=0;
+	last_animation_sound_played=-1;
 	sprite_resource=NULL;
 	tiletype_resource=NULL;
 	next_keycheck=0.0f;
@@ -87,7 +88,7 @@ Player::Player(Game* game)
 	expressionJump=false;
 	hackingObject=NULL;
 	hacking_end=0.0f;
-	animation_speed=0.056f;
+	animation.setDefaultSpeed(0.056f);
 	hackingState=0;
 	airStart=0.0f;
 	voice=NULL;
@@ -215,7 +216,8 @@ void Player::initFlashLightPivots()
 
 void Player::resetState()
 {
-	animation_speed=0.056f;
+	animation.resetSpeed();
+	last_animation_sound_played=-1;
 	points=0;
 	talkie=true;
 	health=100;
@@ -257,7 +259,8 @@ void Player::resetState()
 
 void Player::resetLevelObjects()
 {
-	animation_speed=0.056f;
+	last_animation_sound_played=-1;
+	animation.resetSpeed();
 	Inventory.clear();
 	object_counter.clear();
 	spokenText.clear();
@@ -750,14 +753,35 @@ static void play_step(AudioPool& ap)
 	}
 }
 
+static void play_ladder(AudioPool& ap)
+{
+	int r=ppl7::rand(1, 7);
+	switch (r) {
+		case 1: ap.playOnce(AudioClip::ladder_step1, 0.5f); break;
+		case 2: ap.playOnce(AudioClip::ladder_step2, 0.5f); break;
+		case 3: ap.playOnce(AudioClip::ladder_step3, 0.5f); break;
+		case 4: ap.playOnce(AudioClip::ladder_step4, 0.5f); break;
+		case 5: ap.playOnce(AudioClip::ladder_step5, 0.5f); break;
+		case 6: ap.playOnce(AudioClip::ladder_step6, 0.5f); break;
+		default: ap.playOnce(AudioClip::ladder_step7, 0.5f); break;
+	}
+}
+
+
+
+
 void Player::playSoundOnAnimationSprite()
 {
 	int sprite=animation.getFrame();
+	if (sprite == last_animation_sound_played) return;
+	last_animation_sound_played=sprite;
 	AudioPool& ap=getAudioPool();
 
 	if (sprite == 245 || sprite == 224)  ap.playOnce(AudioClip::hackstone, 1.0f);
 	if (sprite == 3 || sprite == 7 || sprite == 12 || sprite == 16 || sprite == 64 || sprite == 68
 		|| sprite == 73 || sprite == 77) play_step(ap);
+	if (movement == ClimbUp && (sprite == 91 || sprite == 96)) play_ladder(ap);
+	if (movement == ClimbDown && (sprite == 101 || sprite == 96)) play_ladder(ap);
 
 
 }
@@ -769,15 +793,14 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	this->time=time;
 	this->frame_rate_compensation=frame_rate_compensation;
 	if (time > next_animation) {
-		next_animation=time + animation_speed;
+		next_animation=time + animation.speed();
 		animation.update();
-		playSoundOnAnimationSprite();
 		if (phonetics.notEmpty()) playPhonetics();
-
 	}
+	playSoundOnAnimationSprite();
 	if (petrified == true && petrifiedTimeout < time) {
 		petrified=false;
-		animation_speed=0.056f;
+		animation.resetSpeed();
 		stand();
 		return;
 	}
@@ -953,6 +976,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 				movement=ClimbUp;
 				orientation=Back;
 				animation.start(climb_up_cycle, sizeof(climb_up_cycle) / sizeof(int), true, 0);
+				animation.setSpeed(0.03f);
 			}
 		} else {
 			if (movement != Jump) {
@@ -1013,6 +1037,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 					movement=ClimbDown;
 					orientation=Back;
 					animation.start(climb_down_cycle, sizeof(climb_down_cycle) / sizeof(int), true, 0);
+					animation.setSpeed(0.03f);
 				}
 			}
 		}
@@ -1508,7 +1533,7 @@ bool Player::hackingInProgress()
 {
 	if (hackingObject != NULL) {
 		movement=Hacking;
-		animation_speed=0.03f;
+		animation.setSpeed(0.03f);
 		if (time > hacking_end) {
 			if (hackingState == 1) {
 				Decker::Objects::BreakingWall* wall=static_cast<Decker::Objects::BreakingWall*>(hackingObject);
@@ -1520,7 +1545,7 @@ bool Player::hackingInProgress()
 				stand();
 				hackingObject=NULL;
 				hackingState=0;
-				animation_speed=0.056f;
+				animation.resetSpeed();
 			}
 		} else {
 			return true;
@@ -1851,7 +1876,7 @@ void Player::hitBySpiderWeb()
 	movement = PlayerMovement::Petrified;
 	getAudioPool().playOnce(AudioClip::spider_net_unfold, 1.0f);
 
-	animation_speed=0.036f;
+	animation.setSpeed(0.03f);
 	if (orientation == PlayerOrientation::Front || orientation == PlayerOrientation::Back) {
 		animation.startSequence(415, 419, false, 419);
 	} else if (orientation == PlayerOrientation::Left) {
