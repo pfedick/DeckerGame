@@ -1044,32 +1044,49 @@ public:
 class Spider : public Enemy
 {
 private:
-	enum class SpiderState
+	enum class Orientation
+	{
+		Front,
+		Left,
+		Right
+	};
+	enum class ActionState
 	{
 		Falling=0,
-		StandFront,
-		StandLeft,
-		StandRight,
-		WalkLeft,
-		WalkRight,
+		Stand,
+		Walk,
+		FollowPlayer,
 		Dead,
+		Attack
 	};
 
 	AnimationCycle animation;
 	double next_animation;
 	double next_state_change;
 	double collision_cooldown;
-	SpiderState state;
+	double next_attack_time;
+
+	Orientation orientation;
+	ActionState state;
 	AudioInstance* audio;
 	float velocity_falling;
+
+	void attack(double time, Player& player);
 public:
 	float velocity;
+	bool can_attack_player;
+	bool initial_state;
+	float attack_cooldown;
 
 	Spider();
 	~Spider();
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
 };
 
 
