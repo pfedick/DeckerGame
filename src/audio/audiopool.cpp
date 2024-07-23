@@ -292,6 +292,9 @@ void AudioPool::load()
 		sample[AudioClip::ladder_step6].load("res/audio/ladder_step6.mp3");
 		sample[AudioClip::ladder_step7].load("res/audio/ladder_step7.mp3");
 
+		sample[AudioClip::crate_loop].load("res/audio/crate_loop.mp3");
+		sample[AudioClip::crate_falling].load("res/audio/crate_falling.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

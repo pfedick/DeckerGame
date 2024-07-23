@@ -223,6 +223,8 @@ public:
 		ladder_step5,
 		ladder_step6,
 		ladder_step7,
+		crate_loop,
+		crate_falling,
 		// this must always be the last entry!
 		maxClips
 	};

@@ -2061,8 +2061,10 @@ class Crate : public Object
 {
 private:
 	ppl7::grafix::PointF velocity;
+	AudioInstance* audio;
 public:
 	Crate();
+	~Crate();
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;

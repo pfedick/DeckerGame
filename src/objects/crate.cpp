@@ -25,6 +25,16 @@ Crate::Crate()
 		ppl7::rand(220, 250),
 		255);
 	updateBoundary();
+	audio=NULL;
+}
+
+Crate::~Crate()
+{
+	if (audio) {
+		getAudioPool().stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
 }
 
 size_t Crate::save(unsigned char* buffer, size_t size) const
@@ -63,6 +73,7 @@ size_t Crate::load(const unsigned char* buffer, size_t size)
 void Crate::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	int blockcount=0;
+
 	if (velocity.x != 0.0f) {
 		int xx=0;
 		if (velocity.x < 0) xx=boundary.left() - 2;
@@ -75,6 +86,26 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			player.stand();
 		}
 	}
+	AudioPool& audiopool=getAudioPool();
+	if (velocity.x != 0.0f && audio == NULL) {
+		audio=audiopool.getInstance(AudioClip::crate_loop);
+		if (audio) {
+			audio->setVolume(0.6f);
+			audio->setAutoDelete(false);
+			audio->setLoop(true);
+			audio->setPositional(p, 1200);
+			audiopool.playInstance(audio);
+		}
+	} else if (velocity.x == 0.0f && audio != NULL) {
+		audiopool.stopInstace(audio);
+		delete audio;
+		audio=NULL;
+	}
+
+	if (audio) audio->setPositional(p, 1600);
+
+
+
 	ppl7::grafix::PointF old_p=p;
 	p+=velocity;
 	if (velocity.x != 0.0f) velocity.x=0.0f;
@@ -86,6 +117,9 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 		velocity.y+=0.2 * frame_rate_compensation;
 		if (velocity.y > 16.0f)velocity.y=16.0f;
 	} else {
+		if (velocity.y > 0.0f) {
+			audiopool.playOnce(AudioClip::crate_falling, p, 1600, 1.0f);
+		}
 		velocity.y=0.0f;
 		while (true) {
 			blockcount=0;
@@ -113,7 +147,9 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			ObjectCollision col(this, (*it));
 			if (movement.y > 0.0f && col.objectBottom(10)) {
 				p.y=old_p.y;
+				if (velocity.y > 1.0f) audiopool.playOnce(AudioClip::crate_falling, p, 1600, 1.0f);
 				velocity.y=0;
+
 				updateBoundary();
 				col.update();
 
