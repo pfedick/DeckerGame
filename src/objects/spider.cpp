@@ -485,7 +485,7 @@ SpiderDialog::SpiderDialog(Spider* object)
 	velocity_attack=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	velocity_attack->setLimits(1.0f, 10.0f);
 	velocity_attack->enableSpinBox(true, 0.1f, 1, 80);
-	velocity_attack->setValue(object->velocity);
+	velocity_attack->setValue(object->velocity_attack);
 	velocity_attack->setEventHandler(this);
 	addChild(velocity_attack);
 	y+=35;
