@@ -11,6 +11,8 @@ private:
 	int seq_start, seq_end;
 	bool loop;
 	bool finished;
+	float default_animation_speed;
+	float current_animation_speed;
 
 public:
 	AnimationCycle();
@@ -24,6 +26,11 @@ public:
 	int getFrame() const;
 	bool isFinished() const;
 	int getIndex() const;
+	void setSpeed(float seconds_per_frame);
+	void setDefaultSpeed(float seconds_per_frame);
+	void resetSpeed();
+	float speed() const;
+
 };
 
 

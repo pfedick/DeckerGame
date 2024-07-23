@@ -12,11 +12,14 @@ AnimationCycle::AnimationCycle()
 	finished=true;
 	seq_start=0;
 	seq_end=0;
+	default_animation_speed=0.056f;
+	current_animation_speed=default_animation_speed;
 }
 
 void AnimationCycle::start(int* cycle_array, int size, bool loop, int endframe)
 {
 	//printf("start\n");
+	current_animation_speed=default_animation_speed;
 	cycle=cycle_array;
 	this->size=size;
 	this->loop=loop;
@@ -27,6 +30,7 @@ void AnimationCycle::start(int* cycle_array, int size, bool loop, int endframe)
 
 void AnimationCycle::start(const AnimationCycle& other)
 {
+	current_animation_speed=default_animation_speed;
 	cycle=other.cycle;
 	index=other.index;
 	size=other.size;
@@ -57,6 +61,7 @@ void AnimationCycle::setStaticFrame(int nr)
 
 void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
 {
+	current_animation_speed=default_animation_speed;
 	cycle=NULL;
 	seq_start=start;
 	seq_end=end;
@@ -72,6 +77,7 @@ void AnimationCycle::startSequence(int start, int end, bool loop, int endframe)
 
 void AnimationCycle::startRandomSequence(int start, int end, bool loop, int endframe)
 {
+	current_animation_speed=default_animation_speed;
 	cycle=NULL;
 	seq_start=start;
 	seq_end=end;
@@ -127,4 +133,24 @@ int AnimationCycle::getIndex() const
 bool AnimationCycle::isFinished() const
 {
 	return finished;
+}
+
+void AnimationCycle::setSpeed(float seconds_per_frame)
+{
+	current_animation_speed=seconds_per_frame;
+}
+
+void AnimationCycle::setDefaultSpeed(float seconds_per_frame)
+{
+	default_animation_speed=seconds_per_frame;
+}
+
+void AnimationCycle::resetSpeed()
+{
+	current_animation_speed=default_animation_speed;
+}
+
+float AnimationCycle::speed() const
+{
+	return current_animation_speed;
 }
