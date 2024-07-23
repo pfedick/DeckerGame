@@ -232,6 +232,7 @@ public:
 	int sprite_no_representation;
 	uint8_t difficulty_matrix;
 	float scale;
+	float rotation;
 	bool collisionDetection;
 	bool visibleAtPlaytime;
 	bool enabled;
@@ -1072,8 +1073,12 @@ private:
 	float velocity_falling;
 
 	void attack(double time, Player& player);
+	void updatePatrol(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+	void updateFollowPlayer(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
+
 public:
 	float velocity;
+	float velocity_attack;
 	bool can_attack_player;
 	bool initial_state;
 	float attack_cooldown;

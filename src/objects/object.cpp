@@ -8,57 +8,57 @@ namespace Decker::Objects {
 ppl7::String Type::name(Type::ObjectType type)
 {
 	switch (type) {
-	case ObjectType::PlayerStartpoint: return ppl7::String("PlayerStartpoint");
-	case ObjectType::Savepoint: return ppl7::String("Savepoint");
-	case ObjectType::Medikit: return ppl7::String("Medikit");
+		case ObjectType::PlayerStartpoint: return ppl7::String("PlayerStartpoint");
+		case ObjectType::Savepoint: return ppl7::String("Savepoint");
+		case ObjectType::Medikit: return ppl7::String("Medikit");
 
-	case ObjectType::Crystal: return ppl7::String("Crystal");
-	case ObjectType::Diamond: return ppl7::String("Diamond");
-	case ObjectType::Coin: return ppl7::String("Coin");
-	case ObjectType::Cherry: return ppl7::String("Cherry");
-	case ObjectType::Apple: return ppl7::String("Apple");
-	case ObjectType::Key: return ppl7::String("Key");
-	case ObjectType::Door: return ppl7::String("Door");
-	case ObjectType::FloaterHorizontal: return ppl7::String("FloaterHorizontal");
-	case ObjectType::FloaterVertical: return ppl7::String("FloaterVertical");
-	case ObjectType::BreakingGround: return ppl7::String("BreakingGround");
+		case ObjectType::Crystal: return ppl7::String("Crystal");
+		case ObjectType::Diamond: return ppl7::String("Diamond");
+		case ObjectType::Coin: return ppl7::String("Coin");
+		case ObjectType::Cherry: return ppl7::String("Cherry");
+		case ObjectType::Apple: return ppl7::String("Apple");
+		case ObjectType::Key: return ppl7::String("Key");
+		case ObjectType::Door: return ppl7::String("Door");
+		case ObjectType::FloaterHorizontal: return ppl7::String("FloaterHorizontal");
+		case ObjectType::FloaterVertical: return ppl7::String("FloaterVertical");
+		case ObjectType::BreakingGround: return ppl7::String("BreakingGround");
 
-	case ObjectType::Fire: return ppl7::String("Fire");
-	case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
-	case ObjectType::RainEmitter: return ppl7::String("RainEmitter");
-	case ObjectType::ParticleEmitter: return ppl7::String("ParticleEmitter");
-	case ObjectType::Vent: return ppl7::String("Vent");
-	case ObjectType::Speaker: return ppl7::String("Speaker");
-	case ObjectType::Particle: return ppl7::String("Particle");
-	case ObjectType::TouchEmitter: return ppl7::String("TouchEmitter");
-	case ObjectType::TreasureChest: return ppl7::String("TreasureChest");
-	case ObjectType::WarpGate: return ppl7::String("WarpGate");
-	case ObjectType::ExtraLife: return ppl7::String("ExtraLife");
-	case ObjectType::Switch: return ppl7::String("Switch");
-	case ObjectType::LevelEnd: return ppl7::String("LevelEnd");
+		case ObjectType::Fire: return ppl7::String("Fire");
+		case ObjectType::WindEmitter: return ppl7::String("WindEmitter");
+		case ObjectType::RainEmitter: return ppl7::String("RainEmitter");
+		case ObjectType::ParticleEmitter: return ppl7::String("ParticleEmitter");
+		case ObjectType::Vent: return ppl7::String("Vent");
+		case ObjectType::Speaker: return ppl7::String("Speaker");
+		case ObjectType::Particle: return ppl7::String("Particle");
+		case ObjectType::TouchEmitter: return ppl7::String("TouchEmitter");
+		case ObjectType::TreasureChest: return ppl7::String("TreasureChest");
+		case ObjectType::WarpGate: return ppl7::String("WarpGate");
+		case ObjectType::ExtraLife: return ppl7::String("ExtraLife");
+		case ObjectType::Switch: return ppl7::String("Switch");
+		case ObjectType::LevelEnd: return ppl7::String("LevelEnd");
 
 
-	case ObjectType::Arrow: return ppl7::String("Arrow");
-	case ObjectType::ThreeSpeers: return ppl7::String("ThreeSpeers");
-	case ObjectType::Rat: return ppl7::String("Rat");
-	case ObjectType::HangingSpider: return ppl7::String("HangingSpider");
-	case ObjectType::Skeleton: return ppl7::String("Skeleton");
-	case ObjectType::Mummy: return ppl7::String("Mummy");
-	case ObjectType::LaserBeamHorizontal: return ppl7::String("LaserBeamHorizontal");
-	case ObjectType::LaserBeamVertical: return ppl7::String("LaserBeamVertical");
-	case ObjectType::Mushroom: return ppl7::String("Mushroom");
-	case ObjectType::Scarabeus: return ppl7::String("Scarabeus");
-	case ObjectType::Stamper: return ppl7::String("Stamper");
-	case ObjectType::Wallenstein: return ppl7::String("Wallenstein");
-	case ObjectType::Helena: return ppl7::String("Helena");
-	case ObjectType::Yeti: return ppl7::String("Yeti");
-	case ObjectType::Scorpion: return ppl7::String("Scorpion");
-	case ObjectType::Bat: return ppl7::String("Bat");
-	case ObjectType::Bird: return ppl7::String("Bird");
-	case ObjectType::AutoGeorge: return ppl7::String("AutoGeorge");
-	case ObjectType::Ostrich: return ppl7::String("Ostrich");
+		case ObjectType::Arrow: return ppl7::String("Arrow");
+		case ObjectType::ThreeSpeers: return ppl7::String("ThreeSpeers");
+		case ObjectType::Rat: return ppl7::String("Rat");
+		case ObjectType::HangingSpider: return ppl7::String("HangingSpider");
+		case ObjectType::Skeleton: return ppl7::String("Skeleton");
+		case ObjectType::Mummy: return ppl7::String("Mummy");
+		case ObjectType::LaserBeamHorizontal: return ppl7::String("LaserBeamHorizontal");
+		case ObjectType::LaserBeamVertical: return ppl7::String("LaserBeamVertical");
+		case ObjectType::Mushroom: return ppl7::String("Mushroom");
+		case ObjectType::Scarabeus: return ppl7::String("Scarabeus");
+		case ObjectType::Stamper: return ppl7::String("Stamper");
+		case ObjectType::Wallenstein: return ppl7::String("Wallenstein");
+		case ObjectType::Helena: return ppl7::String("Helena");
+		case ObjectType::Yeti: return ppl7::String("Yeti");
+		case ObjectType::Scorpion: return ppl7::String("Scorpion");
+		case ObjectType::Bat: return ppl7::String("Bat");
+		case ObjectType::Bird: return ppl7::String("Bird");
+		case ObjectType::AutoGeorge: return ppl7::String("AutoGeorge");
+		case ObjectType::Ostrich: return ppl7::String("Ostrich");
 
-	default: return ppl7::String("unknown object type: %d", static_cast<int>(type));
+		default: return ppl7::String("unknown object type: %d", static_cast<int>(type));
 	}
 }
 
@@ -86,6 +86,7 @@ Object::Object(Type::ObjectType type)
 	deleteDefered=false;
 	myLayer=Layer::BehindPlayer;
 	scale=1.0f;
+	rotation=1.0f;
 	difficulty_matrix=255;
 	color_mod.set(255, 255, 255, 255);
 }
@@ -181,24 +182,16 @@ void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coo
 
 void Object::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	if (scale == 1.0f)
+	if (scale == 1.0f && rotation == 0.0f)
 		texture->draw(renderer,
 			p.x + coords.x,
 			p.y + coords.y,
 			sprite_no, color_mod);
 	else
-		texture->drawScaled(renderer,
+		texture->drawScaledWithAngle(renderer,
 			p.x + coords.x,
 			p.y + coords.y,
-			sprite_no, scale, color_mod);
-
-	/*
-	SDL_SetRenderDrawColor(renderer,0,255,0,255);
-	texture->drawBoundingBox(renderer,
-			p.x+coords.x,
-			p.y+coords.y,
-			sprite_no);
-	*/
+			sprite_no, scale, scale, rotation, color_mod);
 }
 
 void Object::handleCollision(Player* player, const Collision& collision)
