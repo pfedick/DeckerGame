@@ -100,6 +100,8 @@ Player::Player(Game* game)
 	talkie=true;
 	last_fullspeed=0.0f;
 	frame_rate_compensation=0.0f;
+	petrifiedTimeout=0.0f;
+	petrified=false;
 	initFlashLightPivots();
 	initFlashLight();
 }
@@ -1825,4 +1827,10 @@ void Player::enableFlashlight(bool enable)
 
 bool Player::isFlashlightOn() const {
 	return flashlightOn;
+}
+
+
+void Player::hitBySpiderWeb()
+{
+
 }

@@ -61,7 +61,9 @@ private:
 	float frame_rate_compensation;
 	bool greetingPlayed;
 	bool flashlightOn;
+	bool petrified;
 	double actionToggleCooldown;
+	double petrifiedTimeout;
 
 	AudioInstance* ambient_sound;
 	AudioInstance* voice;
@@ -180,6 +182,7 @@ public:
 	bool hasSpoken(uint16_t id) const;
 	bool isFlashlightOn() const;
 	void enableFlashlight(bool enable);
+	void hitBySpiderWeb();
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 
