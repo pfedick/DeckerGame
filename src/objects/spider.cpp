@@ -33,7 +33,7 @@ SpiderSpit::SpiderSpit()
 	sprite_no=35;
 	sprite_no_representation=35;
 	spawned=true;
-	gravity=0.0f;
+	gravity=-5.0f;
 	angle=0.0f;
 }
 
@@ -64,6 +64,8 @@ void SpiderSpit::update(double time, TileTypePlane& ttplane, Player& player, flo
 	}
 	p.x+=update;
 	p.y+=gravity;
+	if (velocity.x > 0) rotation=gravity * 15.0f / 5.0f;
+	else rotation=-gravity * 15.0f / 5.0f;
 	updateBoundary();
 }
 
@@ -100,6 +102,7 @@ Spider::Spider()
 	audio=NULL;
 	collision_cooldown=0.0f;
 	velocity=2.0f;
+	velocity_attack=4.0f;
 	velocity_falling=0.0f;
 	next_attack_time=0.0f;
 	attack_cooldown=3.0f;
@@ -120,7 +123,7 @@ size_t Spider::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
 	uint8_t flags=0;
 	if (initial_state) flags|=1;
@@ -128,12 +131,13 @@ size_t Spider::save(unsigned char* buffer, size_t size) const
 	ppl7::Poke8(buffer + bytes + 1, flags);	// reserved
 	ppl7::PokeFloat(buffer + bytes + 2, velocity);
 	ppl7::PokeFloat(buffer + bytes + 6, attack_cooldown);
-	return bytes + 10;
+	ppl7::PokeFloat(buffer + bytes + 10, velocity_attack);
+	return bytes + 14;
 }
 
 size_t Spider::saveSize() const
 {
-	return Object::saveSize() + 10;
+	return Object::saveSize() + 14;
 }
 
 size_t Spider::load(const unsigned char* buffer, size_t size)
@@ -142,13 +146,16 @@ size_t Spider::load(const unsigned char* buffer, size_t size)
 	if (bytes == 0) return 0;
 	if (size < bytes + 1) return bytes;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
+	if (version < 1 || version>2) return 0;
 	uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
 	initial_state=(flags & 1);
 	can_attack_player=(flags & 2);
 	enabled=initial_state;
 	velocity=ppl7::PeekFloat(buffer + bytes + 2);
 	attack_cooldown=ppl7::PeekFloat(buffer + bytes + 6);
+	if (version >= 2) {
+		velocity_attack=ppl7::PeekFloat(buffer + bytes + 10);
+	}
 	return size;
 }
 
@@ -211,22 +218,9 @@ void Spider::handleCollision(Player* player, const Collision& collision)
 	}
 }
 
-void Spider::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+
+void Spider::updatePatrol(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	//AudioPool& audiopool=getAudioPool();
-
-	if (time > next_animation) {
-		next_animation=time + 0.03f;
-		animation.update();
-		if (animation.getFrame() != sprite_no) {
-			sprite_no=animation.getFrame();
-		}
-	}
-
-	double dist=ppl7::grafix::Distance(p, player.position());
-
-
-	//ppl7::PrintDebug("Spider state: %d\n", static_cast<int>(state));
 	if (state == ActionState::Stand && orientation == Orientation::Front && next_state_change < time) {
 		state=ActionState::Walk;
 		if (ppl7::rand(0, 1) == 0) {
@@ -237,24 +231,6 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 			animation.startSequence(16, 28, true, 16);
 
 		}
-	} else if (state == ActionState::Falling) {
-		if (velocity_falling < 12.0f) {
-			velocity_falling+=0.2 * frame_rate_compensation;
-			if (velocity_falling > 12.0f) velocity_falling=12.0f;
-		}
-		//ppl7::PrintDebug("Falling: %0.3f\n", velocity_falling);
-		for (int yy=p.y;yy <= p.y + velocity_falling;yy++) {
-			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
-			if (t1 != TileType::NonBlocking) {
-				state=ActionState::Stand;
-				orientation=Orientation::Front;
-				p.y=yy - 1;
-				next_state_change=ppl7::randf(0.1f, 2.0f);
-				break;
-			}
-		}
-		if (state == ActionState::Falling) p.y+=velocity_falling;
-
 	} else if (state == ActionState::Walk && orientation == Orientation::Left) {
 		p.x-=velocity * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y));
@@ -284,10 +260,103 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 		state=ActionState::Walk;
 		orientation = Orientation::Left;
 		animation.startSequence(2, 14, true, 2);
-	} else if (state == ActionState::Dead && next_state_change < time) {
-		enabled=false;
 	}
 	updateBoundary();
+}
+
+void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	double dist=ppl7::grafix::Distance(p, player.position());
+
+	if (player.x < p.x) {			// Go left
+		if (orientation != Orientation::Left) {
+			orientation=Orientation::Left;
+			animation.startSequence(2, 14, true, 2);
+		}
+		ppl7::grafix::PointF np=p;
+		np.x-=velocity_attack * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(np.x - 32, np.y));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(np.x - 32, np.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
+			animation.setStaticFrame(1);
+		} else {
+			p=np;
+		}
+	} else if (player.x > p.x) {	// Go right
+		if (orientation != Orientation::Right) {
+			orientation=Orientation::Right;
+			animation.startSequence(16, 28, true, 16);
+		}
+		ppl7::grafix::PointF np=p;
+		np.x+=velocity_attack * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(np.x + 32, np.y));
+		TileType::Type t2=ttplane.getType(ppl7::grafix::Point(np.x + 32, np.y + 6));
+		if (t1 != TileType::NonBlocking || t2 != TileType::Blocking) {
+			animation.setStaticFrame(15);
+		} else {
+			p=np;
+		}
+	}
+	if (dist < 500.0f && next_attack_time < time) attack(time, player);
+	updateBoundary();
+}
+
+
+void Spider::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	//AudioPool& audiopool=getAudioPool();
+
+	if (time > next_animation) {
+		next_animation=time + 0.03f;
+		animation.update();
+		if (animation.getFrame() != sprite_no) {
+			sprite_no=animation.getFrame();
+		}
+	}
+
+	if (state == ActionState::Falling) {
+		if (velocity_falling < 12.0f) {
+			velocity_falling+=0.2 * frame_rate_compensation;
+			if (velocity_falling > 12.0f) velocity_falling=12.0f;
+		}
+		//ppl7::PrintDebug("Falling: %0.3f\n", velocity_falling);
+		for (int yy=p.y;yy <= p.y + velocity_falling;yy++) {
+			TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, yy));
+			if (t1 != TileType::NonBlocking) {
+				state=ActionState::Stand;
+				orientation=Orientation::Front;
+				p.y=yy - 1;
+				next_state_change=ppl7::randf(0.1f, 2.0f);
+				break;
+			}
+		}
+		if (state == ActionState::Falling) p.y+=velocity_falling;
+	} else if (state != ActionState::Dead) {
+		double dist=ppl7::grafix::Distance(p, player.position());
+		if (state == ActionState::FollowPlayer) {
+			updateFollowPlayer(time, ttplane, player, frame_rate_compensation);
+			if (dist > 1200) {
+				state=ActionState::Stand;
+				orientation=Orientation::Front;
+				animation.setStaticFrame(0);
+				next_state_change=ppl7::randf(0.1f, 2.0f);
+			}
+		} else {
+			updatePatrol(time, ttplane, player, frame_rate_compensation);
+			if (dist < 600 && can_attack_player == true) {
+				orientation=Orientation::Front;
+				animation.setStaticFrame(0);
+				state=ActionState::FollowPlayer;
+				next_state_change=0.0f;
+			}
+		}
+	} else {
+		enabled=false;
+	}
+
+
+	//ppl7::PrintDebug("Spider state: %d\n", static_cast<int>(state));
+
 	/*
 	if (!audio) {
 		audio=audiopool.getInstance(AudioClip::crow_flying);
@@ -307,7 +376,24 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 
 void Spider::attack(double time, Player& player)
 {
-	attack_cooldown=time + 1.0f;
+	next_attack_time=time + attack_cooldown;
+	if (player.isPetrified()) return;
+	SpiderSpit* particle=new SpiderSpit();
+	particle->p.x=p.x;
+	particle->p.y=p.y - 10;
+	particle->spawned=true;
+	if (player.x < p.x) {
+		particle->velocity.x=-15;
+		particle->sprite_no=35;
+		particle->rotation=15.0f;
+	} else {
+		particle->velocity.x=15;
+		particle->sprite_no=36;
+		particle->rotation=-15.0f;
+	}
+	particle->initial_p=particle->p;
+	GetObjectSystem()->addObject(particle);
+	//getAudioPool().playOnce(AudioClip::arrow_swoosh, p, 1600, 0.8f);
 
 }
 
@@ -320,6 +406,7 @@ class SpiderDialog : public Decker::ui::Dialog
 {
 private:
 	ppltk::DoubleHorizontalSlider* velocity;
+	ppltk::DoubleHorizontalSlider* velocity_attack;
 	ppltk::DoubleHorizontalSlider* attack_cooldown;
 	ppltk::CheckBox* current_state;
 	ppltk::CheckBox* initial_state;
@@ -346,7 +433,7 @@ SpiderDialog::SpiderDialog(Spider* object)
 	setWindowTitle(ppl7::ToString("Spider, ID: %d", object->id));
 	ppl7::grafix::Rect client=clientRect();
 	int y=0;
-	int col1=100;
+	int col1=120;
 	int w=client.width() - col1 - 10;
 	int col2=client.width() / 2;
 	int col3=col2 + 100;
@@ -366,7 +453,7 @@ SpiderDialog::SpiderDialog(Spider* object)
 	addChild(can_attack_player);
 	y+=35;
 
-	addChild(new ppltk::Label(0, y, 100, 30, "Velocity:"));
+	addChild(new ppltk::Label(0, y, 120, 30, "Velocity:"));
 	velocity=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	velocity->setLimits(1.0f, 6.0f);
 	velocity->enableSpinBox(true, 0.1f, 1, 80);
@@ -375,7 +462,16 @@ SpiderDialog::SpiderDialog(Spider* object)
 	addChild(velocity);
 	y+=35;
 
-	addChild(new ppltk::Label(0, y, 100, 30, "Attack cooldown:"));
+	addChild(new ppltk::Label(0, y, 120, 30, "Velocity Attack:"));
+	velocity_attack=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
+	velocity_attack->setLimits(1.0f, 10.0f);
+	velocity_attack->enableSpinBox(true, 0.1f, 1, 80);
+	velocity_attack->setValue(object->velocity);
+	velocity_attack->setEventHandler(this);
+	addChild(velocity_attack);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Attack cooldown:"));
 	attack_cooldown=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
 	attack_cooldown->setLimits(0.0f, 10.0f);
 	attack_cooldown->enableSpinBox(true, 0.1f, 1, 100);
@@ -392,8 +488,9 @@ void SpiderDialog::valueChangedEvent(ppltk::Event* event, double value)
 		object->velocity=value;
 	} else 	if (event->widget() == attack_cooldown) {
 		object->attack_cooldown=value;
+	} else 	if (event->widget() == velocity_attack) {
+		object->velocity_attack=value;
 	}
-
 }
 
 void SpiderDialog::toggledEvent(ppltk::Event* event, bool checked)
