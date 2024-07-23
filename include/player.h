@@ -183,6 +183,7 @@ public:
 	bool isFlashlightOn() const;
 	void enableFlashlight(bool enable);
 	void hitBySpiderWeb();
+	bool isPetrified() const;
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 

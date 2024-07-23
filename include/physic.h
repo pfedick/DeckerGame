@@ -61,7 +61,8 @@ public:
 		Hacking,
 		Crouch,
 		Crawling,
-		CrawlTurn
+		CrawlTurn,
+		Petrified
 	};
 	enum PlayerOrientation {
 		Left,

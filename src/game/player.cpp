@@ -487,6 +487,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	k.matrix=0;
 	k.velocity_x=0;
 	k.velocity_y=0;
+	if (petrified) return k;
 
 	if (state[SDL_SCANCODE_LEFT]) k.matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) k.matrix|=KeyboardKeys::Left;
@@ -546,6 +547,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 
 void Player::stand()
 {
+	if (petrified) return;
 	waterSplashPlayed=false;
 	movement=Stand;
 	if (orientation == Left) animation.setStaticFrame(0);
@@ -773,6 +775,12 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 
 	}
+	if (petrified == true && petrifiedTimeout < time) {
+		petrified=false;
+		animation_speed=0.056f;
+		stand();
+		return;
+	}
 	if ((isSwimming() || isDiving()) && flashlightOn == true) {
 		toggleFlashlight();
 	}
@@ -810,6 +818,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects, frame_rate_compensation);
+	if (petrified) keys=getKeyboardMatrix(state);
 	if (movement == Hacking) return;
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
@@ -823,16 +832,18 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 			splashIntoWater(gravity);
 		}
 		*/
-		if (movement == Slide && orientation == Left) {
-			animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
-		} else if (movement == Slide && orientation == Right) {
-			animation.start(slide_right, sizeof(slide_right) / sizeof(int), false, 82);
-		} else if (movement == Swim && orientation == Left) {
-			animation.start(swimm_inplace_left, sizeof(swimm_inplace_left) / sizeof(int), true, 106);
-		} else if (movement == Swim && orientation == Right) {
-			animation.start(swimm_inplace_right, sizeof(swimm_inplace_right) / sizeof(int), true, 106);
-		} else if (movement == Swim) {
-			animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
+		if (!petrified) {
+			if (movement == Slide && orientation == Left) {
+				animation.start(slide_left, sizeof(slide_left) / sizeof(int), false, 86);
+			} else if (movement == Slide && orientation == Right) {
+				animation.start(slide_right, sizeof(slide_right) / sizeof(int), false, 82);
+			} else if (movement == Swim && orientation == Left) {
+				animation.start(swimm_inplace_left, sizeof(swimm_inplace_left) / sizeof(int), true, 106);
+			} else if (movement == Swim && orientation == Right) {
+				animation.start(swimm_inplace_right, sizeof(swimm_inplace_right) / sizeof(int), true, 106);
+			} else if (movement == Swim) {
+				animation.start(swimm_inplace_front, sizeof(swimm_inplace_front) / sizeof(int), true, 106);
+			}
 		}
 	}
 	//ppl7::PrintDebugTime("updatePhysics, gravity: %0.3f, acc y: %0.3f, velo y: %0.3f\n", gravity, acceleration.y, velocity_move.y);
@@ -864,6 +875,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	x+=velocity_move.x;
 	y+=velocity_move.y + gravity;
 
+	if (petrified) return;
 
 	if (movement == Turn) {
 		if (!animation.isFinished()) return;
@@ -1832,5 +1844,23 @@ bool Player::isFlashlightOn() const {
 
 void Player::hitBySpiderWeb()
 {
+	if (petrified) return;
+	if (isFlashlightOn()) enableFlashlight(false);
+	petrified=true;
+	petrifiedTimeout=time + 5.0f;
+	movement = PlayerMovement::Petrified;
 
+	animation_speed=0.036f;
+	if (orientation == PlayerOrientation::Front || orientation == PlayerOrientation::Back) {
+		animation.startSequence(415, 419, false, 419);
+	} else if (orientation == PlayerOrientation::Left) {
+		animation.startSequence(420, 425, false, 425);
+	} else if (orientation == PlayerOrientation::Right) {
+		animation.startSequence(426, 431, false, 431);
+	}
+}
+
+bool Player::isPetrified() const
+{
+	return petrified;
 }
