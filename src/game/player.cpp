@@ -824,6 +824,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	playSoundOnAnimationSprite();
 	if (petrified == true && petrifiedTimeout < time) {
 		petrified=false;
+		airStart=0.0f;
 		animation.resetSpeed();
 		stand();
 		return;
