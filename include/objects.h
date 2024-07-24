@@ -213,7 +213,11 @@ public:
 		BehindBricks=0,
 		BeforeBricks=1,
 		BeforePlayer=2,
-		BehindPlayer=1
+		BehindPlayer=1,
+		MiddlePlane=3,
+		FarPlane=4,
+		HorizonPlane=5,
+		NearPlane=6
 	};
 private:
 	Type::ObjectType myType;

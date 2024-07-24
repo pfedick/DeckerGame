@@ -519,9 +519,14 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 
 		if (showObjects && editMode) {
 			metrics.time_objects.start();
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[5], Decker::Objects::Object::Layer::HorizonPlane);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[2], Decker::Objects::Object::Layer::FarPlane);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[4], Decker::Objects::Object::Layer::MiddlePlane);
+
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+
 			metrics.time_objects.stop();
 		}
 	}
@@ -540,6 +545,13 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawParticles(renderer, Particle::Layer::NearPlaneFront, worldcoords * planeFactor[6], metrics);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
+	if (showObjects && editMode) {
+		metrics.time_objects.start();
+		objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[6], Decker::Objects::Object::Layer::NearPlane);
+		metrics.time_objects.stop();
+	}
+
+
 	if (screenshot) screenshot->save(Screenshot::Layer::Complete, Screenshot::Type::Final, tex_render_target);
 	screenshot=NULL;
 }

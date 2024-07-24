@@ -247,6 +247,12 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
+
+	layer_selection->add("Near Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::NearPlane)));
+	layer_selection->add("Middel Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::MiddlePlane)));
+	layer_selection->add("Far Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::FarPlane)));
+	layer_selection->add("Horizon Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::HorizonPlane)));
+
 	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->setEventHandler(this);
 	this->addChild(layer_selection);
