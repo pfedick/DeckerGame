@@ -107,6 +107,8 @@ Spider::Spider()
 	attack_cooldown=3.0f;
 	can_attack_player=false;
 	initial_state=true;
+	dont_attack_cooldown=0.0f;
+	last_follow_move=0.0f;
 }
 
 Spider::~Spider()
@@ -300,6 +302,7 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 			if (audio) audiopool.stopInstace(audio);
 		} else {
 			p=np;
+			last_follow_move=time;
 		}
 	} else if (player.x > p.x) {	// Go right
 		if (orientation != Orientation::Right) {
@@ -319,9 +322,20 @@ void Spider::updateFollowPlayer(double time, TileTypePlane& ttplane, Player& pla
 			if (audio) audiopool.stopInstace(audio);
 		} else {
 			p=np;
+			last_follow_move=time;
 		}
 	}
-	if (dist < 500.0f && next_attack_time < time) attack(time, player);
+	//ppl7::PrintDebug("Distance: %0.3f, delta: %0.3f\n", dist, time - last_follow_move);
+	if (dist < 500.0f && next_attack_time < time) {
+		attack(time, player);
+		last_follow_move=time + attack_cooldown + 1.0f;
+	} else if (dist > 400.0f && last_follow_move < time - 5.0f) {
+		state=ActionState::Stand;
+		orientation=Orientation::Front;
+		animation.setStaticFrame(0);
+		next_state_change=0.0f;
+		dont_attack_cooldown=time + 5.0f;
+	}
 	updateBoundary();
 }
 
@@ -376,7 +390,7 @@ void Spider::update(double time, TileTypePlane& ttplane, Player& player, float f
 			}
 		} else {
 			updatePatrol(time, ttplane, player, frame_rate_compensation);
-			if (dist < 600 && can_attack_player == true) {
+			if (dist < 600 && can_attack_player == true && dont_attack_cooldown < time) {
 				orientation=Orientation::Front;
 				animation.setStaticFrame(0);
 				state=ActionState::FollowPlayer;

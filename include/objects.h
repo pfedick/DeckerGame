@@ -1066,6 +1066,8 @@ private:
 	double next_state_change;
 	double collision_cooldown;
 	double next_attack_time;
+	double dont_attack_cooldown;
+	double last_follow_move;
 
 	Orientation orientation;
 	ActionState state;
