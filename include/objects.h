@@ -451,6 +451,7 @@ class Switch : public Object
 {
 private:
 	double cooldown;
+	bool switch_was_used;
 	//int state;
 
 	void notify_targets();

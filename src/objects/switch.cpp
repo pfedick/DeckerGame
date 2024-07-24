@@ -32,6 +32,7 @@ Switch::Switch()
 	sprite_no_representation=0;
 	initial_state=false;
 	one_time_switch=false;
+	switch_was_used=false;
 	auto_toggle_on_collision=false;
 	switch_style=SwitchStyle::SwitchWithLever;
 	color_base=7;
@@ -152,7 +153,9 @@ void Switch::notify_targets()
 void Switch::toggle(bool enable, Object* source)
 {
 	if (source == this) return;
+	if (one_time_switch == true && switch_was_used == true) return;
 	current_state=enable;
+	switch_was_used=true;
 	init();
 	notify_targets();
 }
@@ -171,19 +174,28 @@ void Switch::update(double, TileTypePlane&, Player&, float)
 void Switch::handleCollision(Player* player, const Collision& collision)
 {
 	if (auto_toggle_on_collision == true && current_state == false) {
-		current_state=true;
-		return;
+		if (one_time_switch == false || switch_was_used == false) {
+			current_state=true;
+			switch_was_used=true;
+			getAudioPool().playOnce(AudioClip::light_switch1, 0.7f);
+			init();
+			notify_targets();
+			cooldown=player->time + 0.2;
+			return;
+		}
 	}
 	Player::Keys keyboard=player->getKeyboardMatrix();
-	double now=ppl7::GetMicrotime();
-	if (cooldown < now && (keyboard.matrix & KeyboardKeys::Action)) {
-		//printf("switch\n");
-		if (current_state == true) current_state=false;
-		else current_state=true;
-		getAudioPool().playOnce(AudioClip::light_switch1, 0.7f);
-		init();
-		notify_targets();
-		cooldown=now + 0.2;
+	if (cooldown < player->time && (keyboard.matrix & KeyboardKeys::Action)) {
+		if (one_time_switch == false || switch_was_used == false) {
+			//printf("switch\n");
+			if (current_state == true) current_state=false;
+			else current_state=true;
+			switch_was_used=true;
+			getAudioPool().playOnce(AudioClip::light_switch1, 0.7f);
+			init();
+			notify_targets();
+			cooldown=player->time + 0.2;
+		}
 	}
 }
 
