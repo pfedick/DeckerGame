@@ -212,6 +212,29 @@ void Player::initFlashLightPivots()
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(399, FlashLightPivot(46, -9, 260.4f)));
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(400, FlashLightPivot(60, -10, 260.7f)));
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(401, FlashLightPivot(60, -10, 260.7f)));
+
+	// Spider Web
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(433, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(434, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(435, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(436, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(437, FlashLightPivot(-38, -61, -1.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(438, FlashLightPivot(-38, -61, -1.0f)));
+
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(439, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(440, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(441, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(442, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(443, FlashLightPivot(-45, -63, 90.7f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(444, FlashLightPivot(-45, -63, 90.7f)));
+
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(445, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(446, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(447, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(448, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(449, FlashLightPivot(44, -63, 268.6f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(450, FlashLightPivot(44, -63, 268.6f)));
+
 }
 
 void Player::resetState()
@@ -324,6 +347,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	if (flashlightOn) {
 		if (frame >= 0 && frame <= 78) frame+=314;
 		else if (frame >= 305 && frame <= 313) frame+=88;
+		else if (frame >= 415 && frame <= 432) frame+=18;
 	}
 	sprite_resource->draw(renderer, p.x, p.y + 1, frame, color_modulation);
 }
@@ -1870,7 +1894,6 @@ bool Player::isFlashlightOn() const {
 void Player::hitBySpiderWeb()
 {
 	if (petrified) return;
-	if (isFlashlightOn()) enableFlashlight(false);
 	petrified=true;
 	petrifiedTimeout=time + 5.0f;
 	movement = PlayerMovement::Petrified;
@@ -1878,11 +1901,11 @@ void Player::hitBySpiderWeb()
 
 	animation.setSpeed(0.03f);
 	if (orientation == PlayerOrientation::Front || orientation == PlayerOrientation::Back) {
-		animation.startSequence(415, 419, false, 419);
+		animation.startSequence(415, 420, false, 420);
 	} else if (orientation == PlayerOrientation::Left) {
-		animation.startSequence(420, 425, false, 425);
+		animation.startSequence(421, 426, false, 426);
 	} else if (orientation == PlayerOrientation::Right) {
-		animation.startSequence(426, 431, false, 431);
+		animation.startSequence(427, 432, false, 432);
 	}
 }
 
