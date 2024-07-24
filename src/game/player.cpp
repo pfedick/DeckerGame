@@ -235,6 +235,18 @@ void Player::initFlashLightPivots()
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(449, FlashLightPivot(44, -63, 268.6f)));
 	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(450, FlashLightPivot(44, -63, 268.6f)));
 
+	// Sliding right 317x130  Pivot: -px 256 -py 195 22°  => if (movement == Slide) p.y+=35;
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(451, FlashLightPivot(61, -30, 248.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(452, FlashLightPivot(61, -30, 248.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(453, FlashLightPivot(61, -30, 248.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(454, FlashLightPivot(61, -30, 248.0f)));
+
+	// Sliding left 198 x 130
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(455, FlashLightPivot(-58, -31, 111.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(456, FlashLightPivot(-58, -31, 111.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(457, FlashLightPivot(-58, -31, 111.0f)));
+	flashlight_pivots.insert(std::pair<int, FlashLightPivot>(458, FlashLightPivot(-58, -31, 111.0f)));
+
 }
 
 void Player::resetState()
@@ -346,6 +358,7 @@ void Player::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, co
 	int frame=animation.getFrame();
 	if (flashlightOn) {
 		if (frame >= 0 && frame <= 78) frame+=314;
+		else if (frame >= 79 && frame <= 86) frame+=372; // 451
 		else if (frame >= 305 && frame <= 313) frame+=88;
 		else if (frame >= 415 && frame <= 432) frame+=18;
 	}
@@ -397,6 +410,7 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 		frame=342;
 
 	} else if (frame >= 0 && frame <= 78) frame+=314;
+	else if (frame >= 79 && frame <= 86) frame+=372; // 451
 	else if (frame >= 305 && frame <= 313) frame+=88;
 	else if (frame >= 415 && frame <= 432) frame+=18;
 	//if ((frame >= 314 && frame <= 401) || (frame>=433 && frame<=450) ) {
