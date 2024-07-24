@@ -398,45 +398,46 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 
 	} else if (frame >= 0 && frame <= 78) frame+=314;
 	else if (frame >= 305 && frame <= 313) frame+=88;
-	if (frame >= 314 && frame <= 401) {
-		std::map<int, FlashLightPivot>::const_iterator it;
-		ppl7::grafix::Point pf(x, y);
-		it=flashlight_pivots.find(frame);
-		if (it != flashlight_pivots.end()) {
-			pf.x+=it->second.x;
-			pf.y+=it->second.y;
-			flashlight1.x=pf.x;
-			flashlight1.y=pf.y - 1;
-			flashlight2.x=pf.x;
-			flashlight2.y=pf.y + 1;
-			if (it->second.angle > 0.0f && frame != 342) {
-				flashlight3.x=pf.x;
-				flashlight3.y=pf.y;
-				flashlight3.angle=it->second.angle;
-				lights.addObjectLight(&flashlight3);
-				if (it->second.angle < 180) flashlight1.x -= 8;
-				if (it->second.angle > 180) flashlight1.x += 8;
-			}
-			if (frame == 342) {
-				flashlight2_ladder.x=pf.x;
-				flashlight2_ladder.y=pf.y + 1;
-
-				flashlight1.has_lensflare=false;
-				lights.addObjectLight(&flashlight2_ladder);
-			} else {
-				flashlight1.has_lensflare=true;
-				lights.addObjectLight(&flashlight2);
-			}
-			lights.addObjectLight(&flashlight1);
-
-
-		} else {
-			ppl7::PrintDebug("tracking for frame not found: %d\n", frame);
+	else if (frame >= 415 && frame <= 432) frame+=18;
+	//if ((frame >= 314 && frame <= 401) || (frame>=433 && frame<=450) ) {
+	std::map<int, FlashLightPivot>::const_iterator it;
+	ppl7::grafix::Point pf(x, y);
+	it=flashlight_pivots.find(frame);
+	if (it != flashlight_pivots.end()) {
+		pf.x+=it->second.x;
+		pf.y+=it->second.y;
+		flashlight1.x=pf.x;
+		flashlight1.y=pf.y - 1;
+		flashlight2.x=pf.x;
+		flashlight2.y=pf.y + 1;
+		if (it->second.angle > 0.0f && frame != 342) {
+			flashlight3.x=pf.x;
+			flashlight3.y=pf.y;
+			flashlight3.angle=it->second.angle;
+			lights.addObjectLight(&flashlight3);
+			if (it->second.angle < 180) flashlight1.x -= 8;
+			if (it->second.angle > 180) flashlight1.x += 8;
 		}
+		if (frame == 342) {
+			flashlight2_ladder.x=pf.x;
+			flashlight2_ladder.y=pf.y + 1;
+
+			flashlight1.has_lensflare=false;
+			lights.addObjectLight(&flashlight2_ladder);
+		} else {
+			flashlight1.has_lensflare=true;
+			lights.addObjectLight(&flashlight2);
+		}
+		lights.addObjectLight(&flashlight1);
+
 
 	} else {
-		ppl7::PrintDebug("frame out of range: %d\n", frame);
+		ppl7::PrintDebug("tracking for frame not found: %d\n", frame);
 	}
+
+//} else {
+//	ppl7::PrintDebug("frame out of range: %d\n", frame);
+//}
 
 }
 
