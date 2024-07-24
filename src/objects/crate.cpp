@@ -26,6 +26,9 @@ Crate::Crate()
 		255);
 	updateBoundary();
 	audio=NULL;
+	playerIsNearForDrag=false;
+	playerIsDragging=false;
+	last_drag_collision_frame=0;
 }
 
 Crate::~Crate()
@@ -69,12 +72,42 @@ size_t Crate::load(const unsigned char* buffer, size_t size)
 }
 
 
-
-void Crate::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+void Crate::handleDrag(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	int blockcount=0;
+	uint64_t this_frame=GetFrameNo();
+	//ppl7::PrintDebug("Crate::handleDrag, this frame: %llu, last col: %llu, diff: %llu\n", this_frame, last_drag_collision_frame, this_frame - last_drag_collision_frame);
 
-	if (velocity.x != 0.0f) {
+	if (this_frame - last_drag_collision_frame > 15 || player.velocity_move.y != 0.0f || (
+		player.movement != Player::PlayerMovement::Walk && player.movement != Player::PlayerMovement::Run)) {
+		playerIsDragging=false;
+		playerIsNearForDrag=false;
+		return;
+	}
+	if (player.velocity_move.x != 0.0f) {
+		if (player.x < p.x && player.velocity_move.x>0.0f) {
+			velocity.x=2.0f;
+			playerIsDragging=true;
+		} else if (player.x < p.x && player.velocity_move.x>0.0f) {
+			velocity.x=0;
+			playerIsDragging=false;
+			playerIsNearForDrag=false;
+		} else if (player.x > p.x && player.velocity_move.x < 0.0f) {
+			velocity.x=-2.0f;
+			playerIsDragging=true;
+		} else if (player.x > p.x && player.velocity_move.x > 0.0f) {
+			velocity.x=0;
+			playerIsDragging=false;
+			playerIsNearForDrag=false;
+		}
+	} else {
+		velocity.x=0;
+		playerIsDragging=false;
+		playerIsNearForDrag=false;
+	}
+
+
+	if (playerIsDragging) {
+		int blockcount=0;
 		int xx=0;
 		if (velocity.x < 0) xx=boundary.left() - 2;
 		else if (velocity.x > 0) xx=boundary.right() + 2;
@@ -82,12 +115,27 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			if (ttplane.getType(ppl7::grafix::Point(xx, y)) == TileType::Blocking) blockcount++;
 		}
 		if (blockcount > 0) {
+			ppl7::PrintDebug("crate is blocked [%d]\n", blockcount);
 			velocity.x=0.0f;
-			player.stand();
+			playerIsDragging=false;
+			//player.stand();
 		}
 	}
+
+}
+
+
+void Crate::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
+{
+	int blockcount=0;
+
+	if (playerIsNearForDrag) handleDrag(time, ttplane, player, frame_rate_compensation);
+
+
+
+
 	AudioPool& audiopool=getAudioPool();
-	if (velocity.x != 0.0f && audio == NULL) {
+	if (playerIsDragging == true && audio == NULL) {
 		audio=audiopool.getInstance(AudioClip::crate_loop);
 		if (audio) {
 			audio->setVolume(0.6f);
@@ -96,7 +144,7 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			audio->setPositional(p, 1200);
 			audiopool.playInstance(audio);
 		}
-	} else if (velocity.x == 0.0f && audio != NULL) {
+	} else if (playerIsDragging == false && audio != NULL) {
 		audiopool.stopInstace(audio);
 		delete audio;
 		audio=NULL;
@@ -108,7 +156,7 @@ void Crate::update(double time, TileTypePlane& ttplane, Player& player, float fr
 
 	ppl7::grafix::PointF old_p=p;
 	p+=velocity;
-	if (velocity.x != 0.0f) velocity.x=0.0f;
+	if (!playerIsDragging) velocity.x=0.0f;
 	blockcount=0;
 	for (int x=boundary.left();x < boundary.right();x+=8) {
 		if (ttplane.getType(ppl7::grafix::Point(x, p.y)) == TileType::Blocking) blockcount++;
@@ -185,6 +233,9 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 	*/
 
 	Collision col_recheck(collision);
+	// We set a fixed size bounding box for the player
+	col_recheck.bounding_box_player.x1=player->x - TILE_WIDTH;
+	col_recheck.bounding_box_player.x2=player->x + TILE_WIDTH;
 	//ppl7::PrintDebug("BoundingBox Player: %d:%d - %d:%d\n", col_recheck.bounding_box_player.x1, col_recheck.bounding_box_player.y1, col_recheck.bounding_box_player.x2, col_recheck.bounding_box_player.y2);
 	//ppl7::PrintDebug("BoundingBox Object: %d:%d - %d:%d\n", col_recheck.bounding_box_object.x1, col_recheck.bounding_box_object.y1, col_recheck.bounding_box_object.x2, col_recheck.bounding_box_object.y2);
 	//ppl7::PrintDebug("Intersection:       %d:%d - %d:%d\n", col_recheck.bounding_box_intersection.x1, col_recheck.bounding_box_intersection.y1, col_recheck.bounding_box_intersection.x2, col_recheck.bounding_box_intersection.y2);
@@ -216,7 +267,11 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			player->velocity_move.x=0;
 			updateBoundary();
 			*/
-			if (player->velocity_move.x < 0.0f) velocity.x=-2.0f * collision.frame_rate_compensation;
+			if (player->y > p.y - 48 && player->y < p.y + 32) {
+				playerIsNearForDrag=true;
+				last_drag_collision_frame=GetFrameNo();
+				//if (player->velocity_move.x < 0.0f) velocity.x=-2.0f * collision.frame_rate_compensation;
+			}
 			col=true;
 		}
 
@@ -227,7 +282,11 @@ void Crate::handleCollision(Player* player, const Collision& collision)
 			else player->x--;
 			player->velocity_move.x=0;
 			*/
-			if (player->velocity_move.x > 0.0f) velocity.x=2.0f * collision.frame_rate_compensation;
+			if (player->y > p.y - 48 && player->y < p.y + 32) {
+				playerIsNearForDrag=true;
+				last_drag_collision_frame=GetFrameNo();
+			}
+				//if (player->velocity_move.x > 0.0f) velocity.x=2.0f * collision.frame_rate_compensation;
 			col=true;
 		}
 	}

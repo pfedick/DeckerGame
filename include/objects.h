@@ -2064,6 +2064,11 @@ class Crate : public Object
 private:
 	ppl7::grafix::PointF velocity;
 	AudioInstance* audio;
+	uint64_t last_drag_collision_frame;
+	bool playerIsNearForDrag;
+	bool playerIsDragging;
+
+	void handleDrag(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 public:
 	Crate();
 	~Crate();
