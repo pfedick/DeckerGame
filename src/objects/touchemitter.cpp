@@ -248,15 +248,21 @@ void TouchParticle::update(double time, TileTypePlane& ttplane, Player& player, 
 	if (ppl7::grafix::Distance(p, initial_p) > max_distance) {
 		deleteDefered=true;
 		ObjectSystem* objs=GetObjectSystem();
-		/*
+		if (child) delete child;
+		child=NULL;
+
 		Object* object=objs->getInstance(emitted_object);
-		*/
+
+		object->p=p;
+		object->initial_p=p;
+		object->spawned=true;
+		objs->addObject(object);
+	} else {
 		child->p=p;
 		child->initial_p=p;
 		child->spawned=true;
-		objs->addObject(child);
-	} else {
 		child->update(time, ttplane, player, frame_rate_compensation);
+		sprite_set=child->sprite_set;
 		sprite_no=child->sprite_no;
 	}
 }
@@ -301,14 +307,19 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type=new ppltk::ComboBox(120, 120, 400, 30);
 	object_type->setEventHandler(this);
 	object_type->add("Medikit", ppl7::ToString("%d", Type::Medikit));
+	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
+	object_type->add("Savepoint", ppl7::ToString("%d", Type::Savepoint));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
-	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
 	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
 	object_type->add("Scorpion", ppl7::ToString("%d", Type::Scorpion));
 	object_type->add("Scarabeus", ppl7::ToString("%d", Type::Scarabeus));
 	object_type->add("Spider", ppl7::ToString("%d", Type::Spider));
+	object_type->add("Piranha", ppl7::ToString("%d", Type::Piranha));
+	object_type->add("Bat", ppl7::ToString("%d", Type::Bat));
+	object_type->add("Skeleton", ppl7::ToString("%d", Type::Skeleton));
+	object_type->add("Rat", ppl7::ToString("%d", Type::Rat));
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
