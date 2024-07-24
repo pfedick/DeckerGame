@@ -434,6 +434,17 @@ void ParticleEmitterDialog::setupParticleTab()
 	particle_layer->add("Backplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::BackplaneBack)));
 	particle_layer->add("Frontplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneFront)));
 	particle_layer->add("Frontplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FrontplaneBack)));
+	particle_layer->add("Nearplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::NearPlaneFront)));
+	particle_layer->add("Nearplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::NearPlaneBack)));
+	particle_layer->add("Middleplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::MiddlePlaneFront)));
+	particle_layer->add("Middleplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::MiddlePlaneBack)));
+	particle_layer->add("Farplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FarPlaneFront)));
+	particle_layer->add("Farplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::FarPlaneBack)));
+	particle_layer->add("Horizonplane Front", ppl7::ToString("%d", static_cast<int>(Particle::Layer::HorizonPlaneFront)));
+	particle_layer->add("Horizonplane Back", ppl7::ToString("%d", static_cast<int>(Particle::Layer::HorizonPlaneBack)));
+
+
+
 	particle_layer->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Particle::Layer::BehindPlayer)));
 	particle_layer->setEventHandler(this);
 	tab->addChild(particle_layer);
@@ -473,14 +484,14 @@ void ParticleEmitterDialog::setupParticleTab()
 	col1=150;
 	int w1=50;
 	int w3=70;
-	int col2=col1+w1;
-	int sw=(client.width() - col2-w3) / 2;
+	int col2=col1 + w1;
+	int sw=(client.width() - col2 - w3) / 2;
 	int w2=sw;
 	int w4=sw;
-	int col3=col2+w2+10;
-	int col4=col3+w3;
-	
-	
+	int col3=col2 + w2 + 10;
+	int col4=col3 + w3;
+
+
 
 	tab->addChild(new ppltk::Label(col0, y, w0, 30, "Emitter size (pixel):"));
 	tab->addChild(new ppltk::Label(col1, y, w1, 30, "width:"));
@@ -627,7 +638,7 @@ void ParticleEmitterDialog::setupParticleTab()
 	y+=35;
 
 	// State
-	initial_state_checkbox=new ppltk::CheckBox(0, y, w0+w1, 30, "initial State");
+	initial_state_checkbox=new ppltk::CheckBox(0, y, w0 + w1, 30, "initial State");
 	initial_state_checkbox->setEventHandler(this);
 	tab->addChild(initial_state_checkbox);
 	current_state_checkbox=new ppltk::CheckBox(col2, y, w2, 30, "current State");

@@ -442,16 +442,22 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 {
 	player->addFlashlightToLightSystem(lights);
 	prepareLayer(renderer);
+	drawParticles(renderer, Particle::Layer::HorizonPlaneBack, worldcoords * planeFactor[5], metrics);
 	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
+	drawParticles(renderer, Particle::Layer::HorizonPlaneFront, worldcoords * planeFactor[5], metrics);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);
 	prepareLayer(renderer);
 
+	drawParticles(renderer, Particle::Layer::FarPlaneBack, worldcoords * planeFactor[2], metrics);
 	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
+	drawParticles(renderer, Particle::Layer::FarPlaneFront, worldcoords * planeFactor[2], metrics);
 	//addLightmap(renderer, FarLights, worldcoords * planeFactor[2], metrics);
 	addLightmap(renderer, LightPlaneId::Far, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], metrics);
 	prepareLayer(renderer);
 
+	drawParticles(renderer, Particle::Layer::MiddlePlaneBack, worldcoords * planeFactor[4], metrics);
 	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
+	drawParticles(renderer, Particle::Layer::MiddlePlaneFront, worldcoords * planeFactor[4], metrics);
 	//addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	addLightmap(renderer, LightPlaneId::Middle, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], metrics);
 	prepareLayer(renderer);
@@ -529,7 +535,9 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Front, worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], metrics);
 	prepareLayer(renderer);
 
+	drawParticles(renderer, Particle::Layer::NearPlaneBack, worldcoords * planeFactor[6], metrics);
 	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
+	drawParticles(renderer, Particle::Layer::NearPlaneFront, worldcoords * planeFactor[6], metrics);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
 	if (screenshot) screenshot->save(Screenshot::Layer::Complete, Screenshot::Type::Final, tex_render_target);

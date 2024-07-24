@@ -53,6 +53,15 @@ public:
         BackplaneBack=4,
         FrontplaneFront=5,
         FrontplaneBack=6,
+        NearPlaneBack,
+        NearPlaneFront,
+        MiddlePlaneBack,
+        MiddlePlaneFront,
+        FarPlaneBack,
+        FarPlaneFront,
+        HorizonPlaneBack,
+        HorizonPlaneFront,
+
         maxLayer
     };
     enum class Type {
@@ -158,7 +167,7 @@ class ParticleUpdateThread : public ppl7::Thread
 {
     friend class ParticleSystem;
 private:
-    ParticleSystem *ps;
+    ParticleSystem* ps;
     double time;
     TileTypePlane* ttplane;
     Player* player;
