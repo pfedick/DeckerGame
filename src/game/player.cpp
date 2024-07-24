@@ -1909,6 +1909,9 @@ void Player::hitBySpiderWeb()
 	} else if (orientation == PlayerOrientation::Right) {
 		animation.startSequence(427, 432, false, 432);
 	}
+
+	if (!hasSpoken(23)) speak(23);
+
 }
 
 bool Player::isPetrified() const

@@ -244,6 +244,16 @@
             "de": {
                 "text": "Blockiert."
             }
+        },
+        "23": {
+            "context": "George gets petrified by a spider web",
+            "character": "george",
+            "en": {
+                "text": "I think I'm crazy!"
+            },
+            "de": {
+                "text": "Ich glaub' ich spinne!"
+            }
         }
     }
 }
