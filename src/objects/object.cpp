@@ -71,6 +71,7 @@ Representation::Representation(int sprite_set, int sprite_no)
 
 Object::Object(Type::ObjectType type)
 {
+	myPlane=PlaneId::Player;
 	myType=type;
 	sprite_set=0;
 	sprite_no=0;
@@ -129,19 +130,20 @@ void Object::update(double, TileTypePlane&, Player&, float)
 size_t Object::save(unsigned char* buffer, size_t size) const
 {
 	if (size < 17) return 0;
-	ppl7::Poke8(buffer + 0, 2);	// Object-Header-Version
+	ppl7::Poke8(buffer + 0, 3);	// Object-Header-Version
 	ppl7::Poke16(buffer + 1, myType);
 	ppl7::Poke8(buffer + 3, static_cast<int>(myLayer));
 	ppl7::Poke32(buffer + 4, id);
 	ppl7::Poke32(buffer + 8, initial_p.x);
 	ppl7::Poke32(buffer + 12, initial_p.y);
 	ppl7::Poke8(buffer + 16, difficulty_matrix);
+	ppl7::Poke8(buffer + 17, static_cast<int>(myPlane));
 	return 17;
 }
 
 size_t Object::saveSize() const
 {
-	return 17;
+	return 18;
 }
 
 size_t Object::load(const unsigned char* buffer, size_t size)
@@ -149,19 +151,21 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 
 	if (size < 16) return 0;
 	int version=ppl7::Peek8(buffer + 0);
-	if (version == 1 || version == 2) {
-		myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
-		id=ppl7::Peek32(buffer + 4);
-		initial_p.x=ppl7::Peek32(buffer + 8);
-		initial_p.y=ppl7::Peek32(buffer + 12);
-		p=initial_p;
-		if (version == 2) {
-			difficulty_matrix=ppl7::Peek8(buffer + 16);
-			return 17;
-		}
-		return 16;
+	if (version < 1 || version > 3) return 0;
+	myLayer=static_cast<Layer>(ppl7::Peek8(buffer + 3));
+	id=ppl7::Peek32(buffer + 4);
+	if (static_cast<int>(myLayer) > 2) {
+		ppl7::PrintDebug("Waring, found object with id %d and obsolete layer: %d\n", id, static_cast<int>(myLayer));
+		return 0;
 	}
-	return 0;
+	initial_p.x=ppl7::Peek32(buffer + 8);
+	initial_p.y=ppl7::Peek32(buffer + 12);
+	p=initial_p;
+	if (version == 1) return 16;
+	difficulty_matrix=ppl7::Peek8(buffer + 16);
+	if (version == 2) return 17;
+	myPlane=static_cast<PlaneId>(ppl7::Peek8(buffer + 17));
+	return 18;
 }
 
 void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const

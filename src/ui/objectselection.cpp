@@ -242,16 +242,29 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	ppl7::grafix::Rect client=this->clientRect();
 
 	int yy=0;
+	this->addChild(new ppltk::Label(0, yy, 80, 30, "Plane:"));
+	plane_combobox=new ppltk::ComboBox(85, yy, width - 90, 25);
+	plane_combobox->add("NearPlane", "6");
+	plane_combobox->add("PlayerPlane", "0");
+	plane_combobox->add("MiddlePlane", "4");
+	plane_combobox->add("FarPlane", "2");
+	plane_combobox->add("HorizonPlane", "5");
+	//plane_combobox->add("FrontPlane", "1");
+	//plane_combobox->add("BackPlane", "3");
+
+
+
+	plane_combobox->setEventHandler(this);
+	this->addChild(plane_combobox);
+
+	yy+=30;
+
 	this->addChild(new ppltk::Label(0, yy, 80, 30, "Layer:"));
 	layer_selection=new ppltk::ComboBox(80, yy, width - 90, 30);
 	layer_selection->add("Before Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforePlayer)));
 	layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 
-	layer_selection->add("Near Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::NearPlane)));
-	layer_selection->add("Middel Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::MiddlePlane)));
-	layer_selection->add("Far Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::FarPlane)));
-	layer_selection->add("Horizon Plane", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::HorizonPlane)));
 
 	layer_selection->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 	layer_selection->setEventHandler(this);
@@ -275,6 +288,16 @@ ObjectSelection::ObjectSelection(int x, int y, int width, int height, Game* game
 	objects_frame->setEventHandler(this);
 	this->addChild(objects_frame);
 
+}
+
+int ObjectSelection::currentPlane() const
+{
+	return plane_combobox->currentIdentifier().toInt();
+}
+
+void ObjectSelection::setPlane(int plane)
+{
+	plane_combobox->setCurrentIdentifier(ppl7::ToString("%d", plane));
 }
 
 int ObjectSelection::selectedObjectType() const
@@ -321,6 +344,9 @@ void ObjectSelection::valueChangedEvent(ppltk::Event* event, int value)
 	} else if (event->widget() == layer_selection) {
 		//ppl7::PrintDebugTime("ObjectSelection::valueChangedEvent\n");
 		game->updateLayerForSelectedObject(layer_selection->currentIdentifier().toInt());
+	} else if (event->widget() == plane_combobox) {
+		game->changePlane(plane_combobox->currentIdentifier().toInt());
+		game->updatePlaneForSelectedObject(plane_combobox->currentIdentifier().toInt());
 	}
 }
 void ObjectSelection::mouseDownEvent(ppltk::MouseEvent* event)

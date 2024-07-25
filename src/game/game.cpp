@@ -1165,6 +1165,7 @@ void Game::showObjectsSelection()
 	} else {
 		object_selection=new Decker::ui::ObjectSelection(0, 32, 300, statusbar->y() - 32, this);
 		object_selection->setSpriteSet(&resources.uiObjects);
+		object_selection->setPlane(mainmenue->currentPlane());
 		this->addChild(object_selection);
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
@@ -1671,8 +1672,10 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
 			object_selection->setObjectType(object->type());
+
 			object_selection->setObjectDifficulty(object->difficulty_matrix);
 			object_selection->setLayer(static_cast<int>(object->myLayer));
+			object_selection->setPlane(static_cast<int>(object->myPlane));
 			sprite_mode=SpriteModeEdit;
 			selected_object=object;
 			sprite_move_start=event->p;
@@ -1693,6 +1696,7 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 				object_selection->setObjectType(object->type());
 				object_selection->setObjectDifficulty(object->difficulty_matrix);
 				object_selection->setLayer(static_cast<int>(object->myLayer));
+				object_selection->setPlane(static_cast<int>(object->myPlane));
 			}
 			return;
 		}
@@ -1702,6 +1706,7 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 			ppl7::grafix::Point coords=WorldCoords;
 			selected_object->difficulty_matrix=object_selection->getDifficulty();
 			selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(object_selection->currentLayer());
+			selected_object->myPlane=static_cast<PlaneId>(object_selection->currentPlane());
 			selected_object->initial_p.setPoint(event->p.x + coords.x, event->p.y + coords.y);
 			selected_object->p=selected_object->initial_p;
 			level.objects->addObject(selected_object);
@@ -2314,6 +2319,19 @@ void Game::updateLayerForSelectedObject(int layer)
 		selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(layer);
 		ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
+}
+
+void Game::updatePlaneForSelectedObject(int plane)
+{
+	if (selected_object) {
+		selected_object->myPlane=static_cast<PlaneId>(plane);
+		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
+	}
+}
+
+void Game::changePlane(int plane)
+{
+	mainmenue->setCurrentPlane(plane);
 }
 
 

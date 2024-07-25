@@ -5,6 +5,7 @@
 #include <list>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
+#include "decker.h"
 #include "animation.h"
 #include "particle.h"
 #include "light.h"
@@ -214,16 +215,13 @@ public:
 		BeforeBricks=1,
 		BeforePlayer=2,
 		BehindPlayer=1,
-		MiddlePlane=3,
-		FarPlane=4,
-		HorizonPlane=5,
-		NearPlane=6
 	};
 private:
 	Type::ObjectType myType;
 
 public:
 	Layer myLayer;
+	PlaneId myPlane;
 
 	ppl7::grafix::PointF p;
 	ppl7::grafix::PointF initial_p;

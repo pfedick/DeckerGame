@@ -55,8 +55,6 @@ EXCEPTION(SDLException, ppl7::Exception);
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 38
 
-const double planeFactor[]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
-
 enum class PlaneId {
 	Near=6,
 	Front=1,
@@ -65,7 +63,14 @@ enum class PlaneId {
 	Middle=4,
 	Far=2,
 	Horizon=5,
+	// "MaxPlaneId" must always be the highest ID. It is used for defining
+	// dimensions of arrays
+	MaxPlaneId=7
 };
+
+// planeFactor Player, Front, Far, Back, Middle, Horizon, Near
+const double planeFactor[static_cast<int>(PlaneId::MaxPlaneId)]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
+
 
 namespace Decker::Objects {
 class ObjectSystem;
@@ -1164,6 +1169,8 @@ public:
 	void enableControls(bool enable);
 	bool getControlsEnabled() const;
 
+	void changePlane(int plane);
+
 	ppl7::String selectedLevel() const;
 
 	SDL_Renderer* getSDLRenderer();
@@ -1202,6 +1209,7 @@ public:
 
 	void updateDifficultyForSelectedObject(uint8_t dificulty);
 	void updateLayerForSelectedObject(int layer);
+	void updatePlaneForSelectedObject(int layer);
 	void updateSpriteFromUi();
 
 	void updateLightFromUi();

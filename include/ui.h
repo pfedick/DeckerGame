@@ -425,6 +425,7 @@ private:
 	//TilesFrame *tilesframe;
 	SpriteTexture* spriteset;
 	ppltk::Scrollbar* scrollbar;
+	ppltk::ComboBox* plane_combobox;
 	ppltk::ComboBox* layer_selection;
 	ppltk::CheckBox* difficulty_easy;
 	ppltk::CheckBox* difficulty_normal;
@@ -449,6 +450,8 @@ public:
 	int selectedObjectType() const;
 	int currentLayer() const;
 	void setLayer(int layer);
+	int currentPlane() const;
+	void setPlane(int plane);
 	void setObjectType(int type);
 	void setObjectDifficulty(uint8_t matrix);
 	uint8_t getDifficulty() const;
