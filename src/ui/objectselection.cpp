@@ -104,6 +104,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
 	addObject(Decker::Objects::Type::LevelModificator, "Level Modificator", 65);
+	scrollbar->setPosition(0);
 	scrollbar->setSize(object_map.size() / 2);
 	scrollbar->setVisibleItems((height() - 44) / 160 / 2);
 }
@@ -118,6 +119,7 @@ void ObjectsFrame::showNonPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::ParticleEmitter, "Particle emiter", 46);
 	addObject(Decker::Objects::Type::LightSignal, "Light signal", 68);
 
+	scrollbar->setPosition(0);
 	scrollbar->setSize(object_map.size() / 2);
 	scrollbar->setVisibleItems((height() - 44) / 160 / 2);
 }
