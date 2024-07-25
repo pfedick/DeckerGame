@@ -66,6 +66,7 @@ void LightSignal::update(double time, TileTypePlane& ttplane, Player& player, fl
         led.color=color_on;
         led.x=p.x;
         led.y=p.y;
+        led.plane=static_cast<uint8_t>(myPlane);
         LightSystem& lights=GetGame().getLightSystem();
         if (hasLensflare) lights.addObjectLight(&led);
         sprite_no=2;
@@ -74,6 +75,7 @@ void LightSignal::update(double time, TileTypePlane& ttplane, Player& player, fl
         led.color=color_off;
         led.x=p.x;
         led.y=p.y;
+        led.plane=static_cast<uint8_t>(myPlane);
         LightSystem& lights=GetGame().getLightSystem();
         if (hasLensflare) lights.addObjectLight(&led);
         sprite_no=2;
