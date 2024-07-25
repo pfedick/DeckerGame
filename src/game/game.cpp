@@ -1393,7 +1393,7 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 	if (!object_selection) return;
 	if (sprite_mode == SpriteModeEdit && selected_object != NULL) {
 		level.objects->drawSelectedSpriteOutline(renderer, game_viewport,
-			WorldCoords, selected_object->id);
+			WorldCoords * planeFactor[static_cast<int>(selected_object->myPlane)], selected_object->id);
 	} else if (sprite_mode == spriteModeDraw) {
 		if (!mouse.inside(game_viewport)) return;
 		int object_type=object_selection->selectedObjectType();
@@ -1668,7 +1668,7 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 
 	if (event->widget() == world_widget && (event->buttonMask == ppltk::MouseState::Middle
 		|| (event->buttonMask == ppltk::MouseState::Left && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LSHIFT]))) {
-		Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
+		Decker::Objects::Object* object=level.objects->findMatchingObject(WorldCoords, event->p);
 		if (object) {
 			wm->setKeyboardFocus(world_widget);
 			object_selection->setObjectType(object->type());
@@ -1685,7 +1685,7 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 		int object_type=object_selection->selectedObjectType();
 		if (object_type < 0 || sprite_mode == SpriteModeSelect || sprite_mode == SpriteModeEdit) {
 			sprite_mode=SpriteModeSelect;
-			Decker::Objects::Object* object=level.objects->findMatchingObject(event->p + WorldCoords);
+			Decker::Objects::Object* object=level.objects->findMatchingObject(WorldCoords, event->p);
 			if (object) {
 				//printf ("found Object with id %d\n", object->id);
 				wm->setKeyboardFocus(world_widget);
@@ -1703,10 +1703,10 @@ void Game::mouseDownEventOnObject(ppltk::MouseEvent* event)
 		if (sprite_mode != spriteModeDraw) return;
 		selected_object=level.objects->getInstance(object_type);
 		if (selected_object) {
-			ppl7::grafix::Point coords=WorldCoords;
 			selected_object->difficulty_matrix=object_selection->getDifficulty();
 			selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(object_selection->currentLayer());
 			selected_object->myPlane=static_cast<PlaneId>(object_selection->currentPlane());
+			ppl7::grafix::Point coords=WorldCoords * planeFactor[object_selection->currentPlane()];
 			selected_object->initial_p.setPoint(event->p.x + coords.x, event->p.y + coords.y);
 			selected_object->p=selected_object->initial_p;
 			level.objects->addObject(selected_object);
@@ -2317,7 +2317,7 @@ void Game::updateLayerForSelectedObject(int layer)
 {
 	if (selected_object) {
 		selected_object->myLayer=static_cast<Decker::Objects::Object::Layer>(layer);
-		ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
+		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
 }
 
@@ -2325,6 +2325,7 @@ void Game::updatePlaneForSelectedObject(int plane)
 {
 	if (selected_object) {
 		selected_object->myPlane=static_cast<PlaneId>(plane);
+		if (selected_object->myPlane != PlaneId::Player && static_cast<int>(selected_object->myLayer) > 1) selected_object->myLayer=Decker::Objects::Object::Layer::BeforeBricks;
 		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
 }

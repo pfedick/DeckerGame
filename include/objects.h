@@ -2093,11 +2093,13 @@ private:
 	uint32_t next_spawn_id;
 	int player_start;
 	std::map<uint32_t, Object*> object_list;
-	std::map<uint64_t, Object*> visible_object_map;
+	std::map<uint64_t, Object*> visible_object_map[static_cast<int>(PlaneId::MaxPlaneId)];
 	SpriteTexture* spriteset[Spriteset::MaxSpritesets];
 	SpriteTexture* light_objects;
 	Waynet* waynet;
 
+	void updateVisibleObjectsForPlane(PlaneId plane, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+	Object* findMatchingObjectOnPlane(PlaneId plane, const ppl7::grafix::Point& p) const;
 public:
 	ObjectSystem(Waynet* waynet);
 	~ObjectSystem();
@@ -2107,12 +2109,12 @@ public:
 	Object* getInstance(int object_type) const;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const;
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	Object* getObject(uint32_t object_id);
-	Object* findMatchingObject(const ppl7::grafix::Point& p) const;
+	Object* findMatchingObject(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Point& p) const;
 	//Object* detectCollision(const std::list<ppl7::grafix::Point>& player);
 	void detectCollision(const std::list<ppl7::grafix::Point>& checkpoints, std::list<Object*>& object_list);
 	static bool checkCollisionWithObject(const std::list<ppl7::grafix::Point>& checkpoints, const Object* object);

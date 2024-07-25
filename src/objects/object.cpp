@@ -138,7 +138,7 @@ size_t Object::save(unsigned char* buffer, size_t size) const
 	ppl7::Poke32(buffer + 12, initial_p.y);
 	ppl7::Poke8(buffer + 16, difficulty_matrix);
 	ppl7::Poke8(buffer + 17, static_cast<int>(myPlane));
-	return 17;
+	return 18;
 }
 
 size_t Object::saveSize() const

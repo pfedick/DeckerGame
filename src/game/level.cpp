@@ -378,9 +378,16 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 	}
 }
 
-void Level::drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
+void Level::drawNonePlayerPlane(SDL_Renderer* renderer, PlaneId planeid, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
 	if (!plane.isVisible()) return;
+	if (showObjects) {	// Objects behind Bricks
+		metrics.time_objects.start();
+		if (!editMode)
+			objects->draw(renderer, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BehindBricks);
+		metrics.time_objects.stop();
+	}
+
 	if (showSprites) {
 		metrics.time_sprites.start();
 		sprites1.draw(renderer, viewport, worldcoords);
@@ -394,6 +401,14 @@ void Level::drawNonePlayerPlane(SDL_Renderer* renderer, const Plane& plane, cons
 		sprites2.draw(renderer, viewport, worldcoords);
 		metrics.time_sprites.stop();
 	}
+
+	if (showObjects) {	// Objects before Bricks
+		metrics.time_objects.start();
+		if (!editMode)
+			objects->draw(renderer, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BeforeBricks);
+		metrics.time_objects.stop();
+	}
+
 }
 
 void Level::drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
@@ -443,27 +458,27 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	player->addFlashlightToLightSystem(lights);
 	prepareLayer(renderer);
 	drawParticles(renderer, Particle::Layer::HorizonPlaneBack, worldcoords * planeFactor[5], metrics);
-	drawNonePlayerPlane(renderer, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Horizon, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics);
 	drawParticles(renderer, Particle::Layer::HorizonPlaneFront, worldcoords * planeFactor[5], metrics);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::FarPlaneBack, worldcoords * planeFactor[2], metrics);
-	drawNonePlayerPlane(renderer, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Far, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics);
 	drawParticles(renderer, Particle::Layer::FarPlaneFront, worldcoords * planeFactor[2], metrics);
 	//addLightmap(renderer, FarLights, worldcoords * planeFactor[2], metrics);
 	addLightmap(renderer, LightPlaneId::Far, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::MiddlePlaneBack, worldcoords * planeFactor[4], metrics);
-	drawNonePlayerPlane(renderer, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Middle, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics);
 	drawParticles(renderer, Particle::Layer::MiddlePlaneFront, worldcoords * planeFactor[4], metrics);
 	//addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	addLightmap(renderer, LightPlaneId::Middle, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::BackplaneBack, worldcoords * planeFactor[3], metrics);
-	drawNonePlayerPlane(renderer, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Back, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics);
 	drawParticles(renderer, Particle::Layer::BackplaneFront, worldcoords * planeFactor[3], metrics);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Back, worldcoords * planeFactor[static_cast<int>(PlaneId::Back)], metrics);
 	prepareLayer(renderer);
@@ -477,7 +492,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		if (showObjects) {	// Objects behind Bricks
 			metrics.time_objects.start();
 			if (!editMode)
-				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindBricks);
 			metrics.time_objects.stop();
 		}
 		drawParticles(renderer, Particle::Layer::BehindBricks, worldcoords * planeFactor[0], metrics);
@@ -496,7 +511,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		if (showObjects) {	// Objects behind Player
 			//metrics.time_objects.start();
 			if (!editMode)
-				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindPlayer);
 			//metrics.time_objects.stop();
 		}
 		// Player
@@ -504,7 +519,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		if (showObjects) {	// Objects before Player
 			//metrics.time_objects.start();
 			if (!editMode)
-				objects->draw(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+				objects->draw(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BeforePlayer);
 			//metrics.time_objects.stop();
 		}
 		metrics.time_objects.stop();
@@ -519,14 +534,14 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 
 		if (showObjects && editMode) {
 			metrics.time_objects.start();
-			/*
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[5], Decker::Objects::Object::Layer::HorizonPlane);
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[2], Decker::Objects::Object::Layer::FarPlane);
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[4], Decker::Objects::Object::Layer::MiddlePlane);
-			*/
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindBricks);
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BehindPlayer);
-			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], Decker::Objects::Object::Layer::BeforePlayer);
+
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[5], PlaneId::Horizon, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[2], PlaneId::Far, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[4], PlaneId::Middle, Decker::Objects::Object::Layer::BehindBricks);
+
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindPlayer);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BeforePlayer);
 
 			metrics.time_objects.stop();
 		}
@@ -535,24 +550,24 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::FrontplaneBack, worldcoords * planeFactor[1], metrics);
-	drawNonePlayerPlane(renderer, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Front, FrontPlane, FrontSprites[0], FrontSprites[1], worldcoords * planeFactor[1], metrics);
 	drawParticles(renderer, Particle::Layer::FrontplaneFront, worldcoords * planeFactor[1], metrics);
 	//addLightmap(renderer, FrontLights, worldcoords * planeFactor[1], metrics);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Front, worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], metrics);
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::NearPlaneBack, worldcoords * planeFactor[6], metrics);
-	drawNonePlayerPlane(renderer, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
+	drawNonePlayerPlane(renderer, PlaneId::Near, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics);
 	drawParticles(renderer, Particle::Layer::NearPlaneFront, worldcoords * planeFactor[6], metrics);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
-	/* TODO
+
 	if (showObjects && editMode) {
 		metrics.time_objects.start();
-		objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[6], Decker::Objects::Object::Layer::NearPlane);
+		objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[6], PlaneId::Near, Decker::Objects::Object::Layer::BehindBricks);
 		metrics.time_objects.stop();
 	}
-	*/
+
 
 
 	if (screenshot) screenshot->save(Screenshot::Layer::Complete, Screenshot::Type::Final, tex_render_target);

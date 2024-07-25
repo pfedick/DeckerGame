@@ -50,7 +50,7 @@ ObjectSystem::~ObjectSystem()
 
 void ObjectSystem::clear()
 {
-	visible_object_map.clear();
+	for (int i=0;i < static_cast<int>(PlaneId::MaxPlaneId);i++) visible_object_map[i].clear();
 	std::map<uint32_t, Object*>::iterator it;
 	while ((it=object_list.begin()) != object_list.end()) {
 		Object* object=(it->second);
@@ -226,7 +226,6 @@ void ObjectSystem::addObject(Object* object)
 		object->texture=this->spriteset[object->sprite_set];
 		object->updateBoundary();
 	}
-
 	object_list.insert(std::pair<uint32_t, Object*>(object->id, object));
 }
 
@@ -241,9 +240,9 @@ void ObjectSystem::deleteObject(int id)
 	}
 }
 
-void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+
+void ObjectSystem::updateVisibleObjectsForPlane(PlaneId plane, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
 {
-	visible_object_map.clear();
 	std::map<uint32_t, Object*>::iterator it;
 	std::list<uint32_t> deleteme;
 	int width=viewport.width();
@@ -251,6 +250,7 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
+		if (object->myPlane != plane) continue;
 		if (object->deleteDefered) {
 			deleteme.push_back(it->first);
 		} else if (object->texture) {
@@ -267,7 +267,7 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 			}
 			if (isVisible) {
 				uint64_t id=(((uint64_t)object->p.y & 0xffff) << 48) | (uint64_t)(((uint64_t)object->p.x & 0xffff) << 32) | (uint64_t)object->id;
-				visible_object_map.insert(std::pair<uint32_t, Object*>(id, object));
+				visible_object_map[static_cast<int>(plane)].insert(std::pair<uint32_t, Object*>(id, object));
 			}
 		}
 	}
@@ -277,6 +277,16 @@ void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoord
 			deleteObject(*it);
 		}
 	}
+}
+
+void ObjectSystem::updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+{
+	for (int i=0;i < static_cast<int>(PlaneId::MaxPlaneId);i++) visible_object_map[i].clear();
+	updateVisibleObjectsForPlane(PlaneId::Player, worldcoords * planeFactor[0], viewport);
+	updateVisibleObjectsForPlane(PlaneId::Middle, worldcoords * planeFactor[4], viewport);
+	updateVisibleObjectsForPlane(PlaneId::Far, worldcoords * planeFactor[2], viewport);
+	updateVisibleObjectsForPlane(PlaneId::Horizon, worldcoords * planeFactor[5], viewport);
+	updateVisibleObjectsForPlane(PlaneId::Near, worldcoords * planeFactor[6], viewport);
 }
 
 void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
@@ -289,12 +299,12 @@ void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, f
 	}
 }
 
-void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
+void ObjectSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const
 {
 	std::map<uint64_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
 	uint8_t dm=getDifficultyMatrix();
-	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+	for (it=visible_object_map[static_cast<int>(plane)].begin();it != visible_object_map[static_cast<int>(plane)].end();++it) {
 		const Object* object=it->second;
 		if (object->texture != NULL && object->enabled == true && object->visibleAtPlaytime == true && object->myLayer == layer && (object->difficulty_matrix & dm)) {
 			object->draw(renderer, coords);
@@ -315,11 +325,11 @@ static void drawId(SDL_Renderer* renderer, SpriteTexture* spriteset, int x, int 
 	}
 }
 
-void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Object::Layer layer) const
+void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const
 {
 	std::map<uint64_t, Object*>::const_iterator it;
 	ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
-	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+	for (it=visible_object_map[static_cast<int>(plane)].begin();it != visible_object_map[static_cast<int>(plane)].end();++it) {
 		const Object* object=it->second;
 		if (object->type() == Decker::Objects::Type::Particle) {
 			if (object->texture != NULL && object->myLayer == layer) {
@@ -336,11 +346,11 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 }
 
 
-Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
+Object* ObjectSystem::findMatchingObjectOnPlane(PlaneId plane, const ppl7::grafix::Point& p) const
 {
 	Object* found_object=NULL;
 	std::map<uint64_t, Object*>::const_iterator it;
-	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+	for (it=visible_object_map[static_cast<int>(plane)].begin();it != visible_object_map[static_cast<int>(plane)].end();++it) {
 		Object* item=it->second;
 		if (p.inside(item->initial_boundary) == true && item->spawned == false) {
 			if (item->texture) {
@@ -357,6 +367,26 @@ Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& p) const
 		}
 	}
 	return found_object;
+}
+
+Object* ObjectSystem::findMatchingObject(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Point& p) const
+{
+	Object* found_object=NULL;
+	found_object=findMatchingObjectOnPlane(PlaneId::Near, p + worldcoords * planeFactor[6]);
+	if (found_object) return found_object;
+
+	found_object=findMatchingObjectOnPlane(PlaneId::Player, p + worldcoords * planeFactor[0]);
+	if (found_object) return found_object;
+
+	found_object=findMatchingObjectOnPlane(PlaneId::Middle, p + worldcoords * planeFactor[4]);
+	if (found_object) return found_object;
+
+	found_object=findMatchingObjectOnPlane(PlaneId::Far, p + worldcoords * planeFactor[2]);
+	if (found_object) return found_object;
+
+	found_object=findMatchingObjectOnPlane(PlaneId::Horizon, p + worldcoords * planeFactor[5]);
+	if (found_object) return found_object;
+	return NULL;
 }
 
 bool ObjectSystem::checkCollisionWithObject(const std::list<ppl7::grafix::Point>& checkpoints, const Object* object)
@@ -385,7 +415,7 @@ void ObjectSystem::detectCollision(const std::list<ppl7::grafix::Point>& checkpo
 	std::map<uint64_t, Object*>::const_iterator it;
 	std::list<ppl7::grafix::Point>::const_iterator p_it;
 	uint8_t dm=getDifficultyMatrix();
-	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+	for (it=visible_object_map[static_cast<int>(PlaneId::Player)].begin();it != visible_object_map[static_cast<int>(PlaneId::Player)].end();++it) {
 		Object* item=it->second;
 		if (item->texture != NULL && item->collisionDetection == true && item->enabled == true && (item->difficulty_matrix & dm)) {
 			if (ObjectSystem::checkCollisionWithObject(checkpoints, item)) object_list.push_back(item);
@@ -656,7 +686,7 @@ ppl7::grafix::Point ObjectSystem::findPlayerStart() const
 	std::map<uint32_t, Object*>::const_iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
-		if (object->type() == Decker::Objects::Type::PlayerStartpoint)
+		if (object->type() == Decker::Objects::Type::PlayerStartpoint && object->myPlane == PlaneId::Player)
 			return object->p;
 	}
 	return ppl7::grafix::Point(0, 0);
@@ -669,7 +699,7 @@ ppl7::grafix::Point ObjectSystem::nextPlayerStart()
 	std::map<uint32_t, Object*>::const_iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
-		if (object->type() == Decker::Objects::Type::PlayerStartpoint) {
+		if (object->type() == Decker::Objects::Type::PlayerStartpoint && object->myPlane == PlaneId::Player) {
 			if (c == player_start) {
 				return object->p;
 			}
@@ -692,7 +722,11 @@ size_t ObjectSystem::count() const
 
 size_t ObjectSystem::countVisible() const
 {
-	return visible_object_map.size();
+	size_t count=0;
+	for (int i=0;i < static_cast<int>(PlaneId::MaxPlaneId);i++) {
+		count+=visible_object_map[i].size();
+	}
+	return count;
 }
 
 Waynet& ObjectSystem::getWaynet()
@@ -722,7 +756,7 @@ bool ObjectSystem::findObjectsInRange(const ppl7::grafix::PointF& p, double rang
 {
 	objects.clear();
 	std::map<uint64_t, Object*>::const_iterator it;
-	for (it=visible_object_map.begin();it != visible_object_map.end();++it) {
+	for (it=visible_object_map[static_cast<int>(PlaneId::Player)].begin();it != visible_object_map[static_cast<int>(PlaneId::Player)].end();++it) {
 		double dist=ppl7::grafix::Distance((*it).second->p, p);
 		if (dist < range) objects.push_back((*it).second);
 	}
@@ -777,7 +811,7 @@ void ObjectSystem::detectObjectCollision(const Object* object, std::list<Object*
 	if (object->pixelExactCollision) getCheckPoints(object, checkpoints);
 	std::map<uint32_t, Object*>::const_iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
-		if (it->second != object && it->second->enabled == true && it->second->visibleAtPlaytime == true) {
+		if (it->second != object && it->second->enabled == true && it->second->visibleAtPlaytime == true && it->second->myPlane == object->myPlane) {
 			if (object->boundary.intersects(it->second->boundary)) {
 				if (checkCollision(object, checkpoints, it->second))
 					collision_object_list.push_back(it->second);
