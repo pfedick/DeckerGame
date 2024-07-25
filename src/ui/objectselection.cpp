@@ -18,11 +18,23 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	//setBorderStyle(ppltk::Frame::Inset);
 	selected_object=0;
 	spriteset=NULL;
+	playerPlaneObjectsVisible=false;
 
 	scrollbar=new ppltk::Scrollbar(client.width() - 25, 0, 24, client.height());
 	scrollbar->setName("objects-scrollbar");
 	scrollbar->setEventHandler(this);
 	this->addChild(scrollbar);
+
+	showPlayerPlaneObjects();
+
+}
+
+void ObjectsFrame::showPlayerPlaneObjects()
+{
+	if (playerPlaneObjectsVisible) return;
+	playerPlaneObjectsVisible=true;
+	object_map.clear();
+	selected_object=0;
 
 	addObject(Decker::Objects::Type::PlayerStartpoint, "Player startpoint", 19);
 	addObject(Decker::Objects::Type::Savepoint, "Savepoint", 10);
@@ -92,11 +104,22 @@ ObjectsFrame::ObjectsFrame(int x, int y, int width, int height)
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
 	addObject(Decker::Objects::Type::LevelModificator, "Level Modificator", 65);
+	scrollbar->setSize(object_map.size() / 2);
+	scrollbar->setVisibleItems((height() - 44) / 160 / 2);
+}
+void ObjectsFrame::showNonPlayerPlaneObjects()
+{
+	if (!playerPlaneObjectsVisible) return;
+	playerPlaneObjectsVisible=false;
+	selected_object=0;
+	object_map.clear();
 
-
+	addObject(Decker::Objects::Type::Fire, "Fire", 25);
+	addObject(Decker::Objects::Type::ParticleEmitter, "Particle emiter", 46);
+	addObject(Decker::Objects::Type::LightSignal, "Light signal", 68);
 
 	scrollbar->setSize(object_map.size() / 2);
-	scrollbar->setVisibleItems((height - 44) / 160 / 2);
+	scrollbar->setVisibleItems((height() - 44) / 160 / 2);
 }
 
 
@@ -303,12 +326,15 @@ void ObjectSelection::setPlane(int plane)
 		layer_selection->add("Behind Player", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindPlayer)));
 		layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 		layer_selection->setCurrentIdentifier(ppl7::ToString("%d", current_layer));
+		objects_frame->showPlayerPlaneObjects();
+
 	} else {
 		layer_selection->clear();
 		layer_selection->add("Before Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BeforeBricks)));
 		layer_selection->add("Behind Bricks", ppl7::ToString("%d", static_cast<int>(Decker::Objects::Object::Layer::BehindBricks)));
 		if (current_layer > 1) current_layer=1;
 		layer_selection->setCurrentIdentifier(ppl7::ToString("%d", current_layer));
+		objects_frame->showNonPlayerPlaneObjects();
 	}
 }
 

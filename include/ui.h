@@ -390,6 +390,7 @@ private:
 	SpriteTexture* spriteset;
 	ppltk::Scrollbar* scrollbar;
 	int selected_object;
+	bool playerPlaneObjectsVisible;
 	class Item
 	{
 	public:
@@ -404,6 +405,8 @@ private:
 public:
 	ObjectsFrame(int x, int y, int width, int height);
 
+	void showPlayerPlaneObjects();
+	void showNonPlayerPlaneObjects();
 
 
 	void setSpriteSet(SpriteTexture* texture);
@@ -442,7 +445,6 @@ private:
 		Item(int id, const ppl7::String& name, int sprite_no);
 	};
 	std::map<size_t, Item> object_map;
-	void addObject(int id, const ppl7::String& name, int sprite_no);
 
 public:
 	ObjectSelection(int x, int y, int width, int height, Game* game);
