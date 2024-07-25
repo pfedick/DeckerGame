@@ -116,45 +116,45 @@ void Particle::initAnimation(Particle::Type type)
 {
     sprite_set=ParticleSpriteset::GenericParticles;
     switch (type) {
-    case Particle::Type::RotatingParticleTransparent:
-        animation.startRandom(particle_transparent, sizeof(particle_transparent) / sizeof(int), true, 0);
-        break;
-    case Particle::Type::RotatingParticleWhite:
-        animation.startRandom(particle_white, sizeof(particle_white) / sizeof(int), true, 0);
-        break;
-    case Particle::Type::RotatingSnowflakeTransparent:
-        animation.startRandom(snowflake_transparent, sizeof(snowflake_transparent) / sizeof(int), true, 0);
-        break;
-    case Particle::Type::RotatingSnowflakeWhite:
-        animation.startRandom(snowflake_white, sizeof(snowflake_white) / sizeof(int), true, 0);
-        break;
-    case Particle::Type::RotatingCylinder:
-        animation.startRandom(disc_white, sizeof(disc_white) / sizeof(int), true, 0);
-        break;
-    case Particle::Type::StaticBulletSmall:
-        animation.setStaticFrame(1);
-        break;
-    case Particle::Type::StaticBulletBig:
-        animation.setStaticFrame(159);
-        break;
-    case Particle::Type::StaticParticle:
-        animation.setStaticFrame(161);
-        break;
-    case Particle::Type::StaticParticleBig:
-        animation.setStaticFrame(163);
-        break;
-    case Particle::Type::StaticCircle:
-        animation.setStaticFrame(157);
-        break;
-    case Particle::Type::StaticCircleBig:
-        animation.setStaticFrame(158);
-        break;
-    case Particle::Type::StaticStudSmall:
-        animation.setStaticFrame(160);
-        break;
-    case Particle::Type::StaticStudBig:
-        animation.setStaticFrame(162);
-        break;
+        case Particle::Type::RotatingParticleTransparent:
+            animation.startRandom(particle_transparent, sizeof(particle_transparent) / sizeof(int), true, 0);
+            break;
+        case Particle::Type::RotatingParticleWhite:
+            animation.startRandom(particle_white, sizeof(particle_white) / sizeof(int), true, 0);
+            break;
+        case Particle::Type::RotatingSnowflakeTransparent:
+            animation.startRandom(snowflake_transparent, sizeof(snowflake_transparent) / sizeof(int), true, 0);
+            break;
+        case Particle::Type::RotatingSnowflakeWhite:
+            animation.startRandom(snowflake_white, sizeof(snowflake_white) / sizeof(int), true, 0);
+            break;
+        case Particle::Type::RotatingCylinder:
+            animation.startRandom(disc_white, sizeof(disc_white) / sizeof(int), true, 0);
+            break;
+        case Particle::Type::StaticBulletSmall:
+            animation.setStaticFrame(1);
+            break;
+        case Particle::Type::StaticBulletBig:
+            animation.setStaticFrame(159);
+            break;
+        case Particle::Type::StaticParticle:
+            animation.setStaticFrame(161);
+            break;
+        case Particle::Type::StaticParticleBig:
+            animation.setStaticFrame(163);
+            break;
+        case Particle::Type::StaticCircle:
+            animation.setStaticFrame(157);
+            break;
+        case Particle::Type::StaticCircleBig:
+            animation.setStaticFrame(158);
+            break;
+        case Particle::Type::StaticStudSmall:
+            animation.setStaticFrame(160);
+            break;
+        case Particle::Type::StaticStudBig:
+            animation.setStaticFrame(162);
+            break;
 
     };
 }
@@ -272,11 +272,29 @@ ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const
 
 }
 
-
 bool emitterInPlayerRange(const ppl7::grafix::PointF& emitter, const Player& player)
 {
     double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
         player.WorldCoords.y + player.Viewport.height() / 2), emitter);
+    if (d > player.Viewport.width()) return false;
+    return true;
+}
+
+
+
+bool emitterInPlayerRange(int plane, const ppl7::grafix::PointF& emitter, const Player& player)
+{
+    if (plane == static_cast<int>(PlaneId::Player)) return emitterInPlayerRange(emitter, player);
+
+    //ppl7::PrintDebug("Emitter: %d:%d, World: %d:%d\n", (int)emitter.x, (int)emitter.y, player.WorldCoords.x, player.WorldCoords.y);
+
+    ppl7::grafix::PointF pos=emitter;
+
+    ppl7::grafix::Point coords=player.WorldCoords * planeFactor[plane];
+    ppl7::grafix::Point pp=ppl7::grafix::Point(emitter) - coords + player.WorldCoords;
+    pos=pp;
+    double d=ppl7::grafix::Distance(ppl7::grafix::PointF(player.WorldCoords.x + player.Viewport.width() / 2,
+        player.WorldCoords.y + player.Viewport.height() / 2), pos);
     if (d > player.Viewport.width()) return false;
     return true;
 }
