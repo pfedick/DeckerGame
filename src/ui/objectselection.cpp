@@ -116,6 +116,7 @@ void ObjectsFrame::showNonPlayerPlaneObjects()
 	object_map.clear();
 
 	addObject(Decker::Objects::Type::Fire, "Fire", 25);
+	addObject(Decker::Objects::Type::Speaker, "Speaker", 29);
 	addObject(Decker::Objects::Type::ParticleEmitter, "Particle emiter", 46);
 	addObject(Decker::Objects::Type::LightSignal, "Light signal", 68);
 
