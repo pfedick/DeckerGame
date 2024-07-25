@@ -2324,9 +2324,19 @@ void Game::updateLayerForSelectedObject(int layer)
 void Game::updatePlaneForSelectedObject(int plane)
 {
 	if (selected_object) {
-		selected_object->myPlane=static_cast<PlaneId>(plane);
-		if (selected_object->myPlane != PlaneId::Player && static_cast<int>(selected_object->myLayer) > 1) selected_object->myLayer=Decker::Objects::Object::Layer::BeforeBricks;
-		//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
+		if (static_cast<PlaneId>(plane) != selected_object->myPlane) {
+			int old_plane=static_cast<int>(selected_object->myPlane);
+			ppl7::grafix::Point coords=WorldCoords * planeFactor[old_plane];
+			ppl7::grafix::Point pp_initial=ppl7::grafix::Point(selected_object->initial_p) - coords;
+			ppl7::grafix::Point pp_current=ppl7::grafix::Point(selected_object->p) - coords;
+			coords=WorldCoords * planeFactor[plane];
+			selected_object->initial_p=pp_initial + coords;
+			selected_object->p=pp_current + coords;
+			selected_object->updateBoundary();
+			selected_object->myPlane=static_cast<PlaneId>(plane);
+			if (selected_object->myPlane != PlaneId::Player && static_cast<int>(selected_object->myLayer) > 1) selected_object->myLayer=Decker::Objects::Object::Layer::BeforeBricks;
+		}
+	//ppl7::PrintDebugTime("Update Layer to: %d\n", layer);
 	}
 }
 
