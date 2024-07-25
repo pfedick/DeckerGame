@@ -536,8 +536,11 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 			metrics.time_objects.start();
 
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[5], PlaneId::Horizon, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[5], PlaneId::Horizon, Decker::Objects::Object::Layer::BeforeBricks);
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[2], PlaneId::Far, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[2], PlaneId::Far, Decker::Objects::Object::Layer::BeforeBricks);
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[4], PlaneId::Middle, Decker::Objects::Object::Layer::BehindBricks);
+			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[4], PlaneId::Middle, Decker::Objects::Object::Layer::BeforeBricks);
 
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindBricks);
 			objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[0], PlaneId::Player, Decker::Objects::Object::Layer::BehindPlayer);
@@ -565,6 +568,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	if (showObjects && editMode) {
 		metrics.time_objects.start();
 		objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[6], PlaneId::Near, Decker::Objects::Object::Layer::BehindBricks);
+		objects->drawEditMode(renderer, viewport, worldcoords * planeFactor[6], PlaneId::Near, Decker::Objects::Object::Layer::BeforeBricks);
 		metrics.time_objects.stop();
 	}
 
