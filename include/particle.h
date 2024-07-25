@@ -216,7 +216,7 @@ public:
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;
     size_t count() const;
     size_t countVisible() const;
-    static ppl7::String layerName(Particle::Layer layer);
+    //static ppl7::String layerName(Particle::Layer layer);
 
 
 };

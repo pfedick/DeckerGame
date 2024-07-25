@@ -194,7 +194,7 @@ size_t ParticleSystem::countVisible() const
     return c;
 }
 
-
+/*
 ppl7::String ParticleSystem::layerName(Particle::Layer layer)
 {
     switch (layer) {
@@ -209,6 +209,7 @@ ppl7::String ParticleSystem::layerName(Particle::Layer layer)
     }
     return "unknown";
 }
+*/
 
 
 ParticleUpdateThread::ParticleUpdateThread()
@@ -245,11 +246,45 @@ bool ParticleUpdateThread::isRunning() const
     return thread_running;
 }
 
+
+class PlaneCoords
+{
+public:
+    void init(const ppl7::grafix::PointF& worldcoords, const ppl7::grafix::Rect& viewport, float factor);
+    float left;
+    float top;
+    float right;
+    float bottom;
+};
+
+void PlaneCoords::init(const ppl7::grafix::PointF& worldcoords, const ppl7::grafix::Rect& viewport, float factor)
+{
+    left=worldcoords.x * factor - 128;
+    top=worldcoords.y * factor - 128;
+    right=worldcoords.x * factor + viewport.width() + 128;
+    bottom=worldcoords.y * factor + viewport.height() + 128;
+}
+
+
 void ParticleUpdateThread::run()
 {
 #ifdef DEBUGOUT
     ppl7::PrintDebugTime("[%llu] ParticleUpdateThread STARTED\n", ppl7::ThreadID());
 #endif
+    float ParticlePlaneFactor[static_cast<int>(Particle::Layer::maxLayer)];
+    for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) ParticlePlaneFactor[i]=planeFactor[static_cast<int>(PlaneId::Player)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::NearPlaneBack)]=planeFactor[static_cast<int>(PlaneId::Near)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::NearPlaneFront)]=planeFactor[static_cast<int>(PlaneId::Near)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::MiddlePlaneBack)]=planeFactor[static_cast<int>(PlaneId::Middle)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::MiddlePlaneFront)]=planeFactor[static_cast<int>(PlaneId::Middle)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::FarPlaneBack)]=planeFactor[static_cast<int>(PlaneId::Far)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::FarPlaneFront)]=planeFactor[static_cast<int>(PlaneId::Far)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::HorizonPlaneBack)]=planeFactor[static_cast<int>(PlaneId::Horizon)];
+    ParticlePlaneFactor[static_cast<int>(Particle::Layer::HorizonPlaneFront)]=planeFactor[static_cast<int>(PlaneId::Horizon)];
+
+    PlaneCoords planec[static_cast<int>(Particle::Layer::maxLayer)];
+    for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) planec[i].init(worldcoords, viewport, ParticlePlaneFactor[i]);
+
     thread_running=false;
     while (!threadShouldStop()) {
 #ifdef DEBUGOUT
@@ -265,17 +300,22 @@ void ParticleUpdateThread::run()
 
         double thread_start_time=ppl7::GetMicrotime();
         if (visible_particle_map) {
-            float left=worldcoords.x - 64;
-            float top=worldcoords.y - 64;
-            float right=worldcoords.x + viewport.width() + 64;
-            float bottom=worldcoords.y + viewport.height() + 64;
+            for (int i=0;i < static_cast<int>(Particle::Layer::maxLayer);i++) planec[i].init(worldcoords, viewport, ParticlePlaneFactor[i]);
+            /*
+            float left=worldcoords.x - 128;
+            float top=worldcoords.y - 128;
+            float right=worldcoords.x + viewport.width() + 128;
+            float bottom=worldcoords.y + viewport.height() + 128;
+            */
+
             std::map<uint64_t, Particle*>::iterator it;
             for (it=ps->particle_map.begin();it != ps->particle_map.end();++it) {
                 Particle* particle=it->second;
                 if (time <= particle->death_time) {
                     particle->age=(time - particle->birth_time) / particle->life_time; // Rises from 0.0f to 1.0f
                     particle->update(time, frame_rate_compensation);
-                    if (particle->p.x > left && particle->p.y > top && particle->p.x < right && particle->p.y < bottom) {
+                    const PlaneCoords& pc=planec[static_cast<int>(particle->layer)];
+                    if (particle->p.x > pc.left && particle->p.y > pc.top && particle->p.x < pc.right && particle->p.y < pc.bottom) {
                         uint32_t id=(uint32_t)(((uint32_t)particle->p.y & 0xffff) << 16) | (uint32_t)((uint32_t)particle->p.x & 0xffff);
                         visible_particle_map[static_cast<int>(particle->layer)].insert(std::pair<uint32_t, Particle*>(id, particle));
                         particle->visible=true;
