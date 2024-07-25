@@ -82,7 +82,7 @@ void ParticleEmitter::update(double time, TileTypePlane& ttplane, Player& player
 	if (next_birth < time && current_state == true) {
 		ParticleSystem* ps=GetParticleSystem();
 		next_birth=time + randf(birth_time_min, birth_time_max);
-		if (!emitterInPlayerRange(p, player)) return;
+		if (!emitterInPlayerRange(static_cast<int>(myPlane), p, player)) return;
 		int new_particles=ppl7::rand(min_birth_per_cycle, max_birth_per_cycle);
 		for (int i=0;i < new_particles;i++) {
 			createParticle(ps, time);
