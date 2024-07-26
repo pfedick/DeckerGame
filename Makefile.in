@@ -335,6 +335,10 @@ george:
 phonetics:
 	./texmaker -s lightwave/Render/phonetics/ -t res/phonetics.tex -w 1024 -h 1024 -px 0 -py 0  -x tmp/phonetics
 
+
+hud:
+	./texmaker -s lightwave/Render/hud/ -t res/hud.tex -w 512 -h 256 -px 50 -py 98
+
 breakingwall:
 	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
 
