@@ -103,6 +103,8 @@ Player::Player(Game* game)
 	frame_rate_compensation=0.0f;
 	petrifiedTimeout=0.0f;
 	petrified=false;
+	energylevel=100.0f;
+	powercells=0;
 	initFlashLightPivots();
 	initFlashLight();
 }
@@ -254,6 +256,8 @@ void Player::resetState()
 	animation.resetSpeed();
 	last_animation_sound_played=-1;
 	points=0;
+	powercells=0;
+	energylevel=100.0f;
 	talkie=true;
 	health=100;
 	lifes=3;
@@ -305,6 +309,7 @@ void Player::resetLevelObjects()
 	hackingObject=NULL;
 	hacking_end=0.0f;
 	hackingState=0;
+	powercells=0;
 }
 
 
@@ -1931,4 +1936,9 @@ void Player::hitBySpiderWeb()
 bool Player::isPetrified() const
 {
 	return petrified;
+}
+
+void Player::addPowerCell()
+{
+
 }

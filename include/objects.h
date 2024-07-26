@@ -73,6 +73,7 @@ public:
 		ButtonSwitch=38,
 		LightSignal=39,
 		Crate=40,
+		PowerCell=41,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -563,6 +564,22 @@ public:
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
 };
+
+class PowerCell : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+
+public:
+	PowerCell();
+	static Representation representation();
+
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+};
+
+
 
 
 class GemReward : public Object

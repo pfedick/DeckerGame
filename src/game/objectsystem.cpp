@@ -514,6 +514,7 @@ Representation getRepresentation(int object_type)
 		case Type::TouchPlateSwitch: return TouchPlateSwitch::representation();
 		case Type::Crate: return Crate::representation();
 		case Type::Spider: return Spider::representation();
+		case Type::PowerCell: return PowerCell::representation();
 
 		default: return Object::representation();
 	}
@@ -611,6 +612,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		//case Type::ButtonSwitch: return new ButtonSwitch();
 		case Type::Crate: return new Crate();
 		case Type::Spider: return new Spider();
+		case Type::PowerCell: return new PowerCell();
 
 	}
 	return NULL;

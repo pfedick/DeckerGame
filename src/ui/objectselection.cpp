@@ -39,6 +39,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::PlayerStartpoint, "Player startpoint", 19);
 	addObject(Decker::Objects::Type::Savepoint, "Savepoint", 10);
 	addObject(Decker::Objects::Type::Medikit, "Medikit", 11);
+	addObject(Decker::Objects::Type::PowerCell, "Powercell", 73);
 	addObject(Decker::Objects::Type::Crystal, "Crystal", 0);
 	addObject(Decker::Objects::Type::Diamond, "Diamond", 1);
 	addObject(Decker::Objects::Type::Coin, "Coin", 12);

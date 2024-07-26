@@ -133,6 +133,7 @@ OBJECTS=compile/main.o \
 	compile/object_yeti.o \
 	compile/object_autogeorge.o \
 	compile/object_extralife.o \
+	compile/object_powercell.o \
 	compile/object_levelend.o \
 	compile/object_ostrich.o \
 	compile/object_oxygen.o \
@@ -760,6 +761,10 @@ compile/object_zombie.o: src/objects/zombie.cpp Makefile include/objects.h inclu
 compile/object_extralife.o: src/objects/extralife.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_extralife.o -c src/objects/extralife.cpp $(CFLAGS)
+
+compile/object_powercell.o: src/objects/powercell.cpp Makefile include/objects.h include/animation.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_powercell.o -c src/objects/powercell.cpp $(CFLAGS)
 
 compile/object_levelend.o: src/objects/levelend.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile

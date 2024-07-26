@@ -127,9 +127,11 @@ private:
 public:
 	float x, y;
 	int points, lifes;
+	int powercells;
 	float health;
 	float air;
 	float maxair;
+	float energylevel;
 
 	// is updated every frame
 	ppl7::grafix::Point WorldCoords;
@@ -184,6 +186,7 @@ public:
 	void enableFlashlight(bool enable);
 	void hitBySpiderWeb();
 	bool isPetrified() const;
+	void addPowerCell();
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 
