@@ -7,6 +7,7 @@
 #include "objects.h"
 #include "particle.h"
 #include "screens.h"
+#include "hud.h"
 
 //#define EVENTTRACKING 1
 
@@ -101,6 +102,7 @@ Game::Game()
 	frame_rate_compensation=1.0f;
 	game_speed=GameSpeed::Normal;
 	screenshot=NULL;
+	hud=NULL;
 }
 
 Game::~Game()
@@ -111,6 +113,7 @@ Game::~Game()
 	if (tex_render_target) sdl.destroyTexture(tex_render_target);
 	if (tex_render_lightmap) sdl.destroyTexture(tex_render_lightmap);
 	if (tex_render_layer) sdl.destroyTexture(tex_render_layer);
+	if (hud) delete hud;
 	if (screenshot != NULL && screenshot->mode() == Screenshot::Mode::File) delete screenshot;
 }
 
@@ -330,10 +333,12 @@ void Game::showUi(bool enable)
 	const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
 	world_widget->setShowUi(showui);
+	hud->setEditorMode(enable);
 	if (showui) {
 		viewport.y1=32;
 		viewport.y2=desktop.height - 32;
 		world_widget->setViewport(viewport);
+
 		mainmenue->setVisible(true);
 		mainmenue->fitMetrics(viewport);
 		statusbar->setVisible(true);
@@ -353,6 +358,7 @@ void Game::showUi(bool enable)
 		mainmenue->fitMetrics(viewport);
 		world_widget->setViewport(viewport);
 	}
+	hud->setViewport(viewport);
 }
 
 void Game::initUi()
@@ -454,6 +460,7 @@ void Game::init()
 	desktopSize=clientSize();
 	viewport=clientRect();
 	message_overlay.resize(viewport.size());
+	hud=new GameHUD(sdl);
 
 	gui_font.setName("Default");
 	gui_font.setSize(12);
@@ -634,6 +641,7 @@ void Game::updateUi(const ppltk::MouseState& mouse, const Metrics& last_metrics)
 
 	if (player) statusbar->setPlayerState(player->getState());
 	world_widget->updatePlayerStats(player);
+	hud->updatePlayerStats(player);
 	if (selected_object) {
 		statusbar->setSelectedObject(selected_object->id);
 	} else {
@@ -825,6 +833,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 				}
 				player->resetState();
 				world_widget->resetPlayerStats(player);
+				hud->resetPlayerStats(player);
 				startLevel(LevelFile);
 			} else if (gameState == GameState::BackToMenue || gameState == GameState::QuitGame) {
 				quitGame=true;
@@ -929,6 +938,7 @@ void Game::run()
 		// Grid
 		if (mainmenue->visibility_grid) drawGrid();
 		if (message_overlay.hasMessage()) message_overlay.draw(renderer, game_viewport);
+		hud->draw(renderer, tex_render_target, game_viewport.getRenderRect());
 		// Widgets
 		SDL_SetRenderTarget(renderer, NULL);
 		drawRenderTargetToScreen();
@@ -2123,6 +2133,7 @@ void Game::resetPlayer()
 	if (player) {
 		player->resetState();
 		if (world_widget) world_widget->resetPlayerStats(player);
+		if (hud) hud->resetPlayerStats(player);
 	}
 }
 

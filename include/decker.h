@@ -80,6 +80,7 @@ class Object;
 
 class SettingsScreen;
 class ParticleSystem;
+class GameHUD;
 
 class Config
 {
@@ -1028,6 +1029,7 @@ private:
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;
 	GameViewport game_viewport;
+	GameHUD* hud;
 	Decker::ui::MainMenue* mainmenue;
 	Decker::ui::StatusBar* statusbar;
 	Decker::ui::TilesSelection* tiles_selection;

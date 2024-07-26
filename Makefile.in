@@ -55,6 +55,7 @@ OBJECTS=compile/main.o \
 	compile/ui_waynetedit.o \
 	compile/ui_leveldialog.o \
 	compile/ui_lightmapselection.o \
+	compile/ui_hud.o \
 	compile/widgets_groupbox.o \
 	compile/widgets_dialog.o \
 	compile/widgets_filedialog.o \
@@ -421,7 +422,7 @@ compile/metrics.o: src/game/metrics.cpp Makefile include/decker.h
 	$(CXX) -o compile/metrics.o -c src/game/metrics.cpp $(CFLAGS)
 
 compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h \
-	include/translate.h include/particle.h include/screens.h include/gamecontroller.h
+	include/translate.h include/particle.h include/screens.h include/gamecontroller.h include/hud.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
 
@@ -829,6 +830,10 @@ compile/object_ghost.o: src/objects/ghost.cpp Makefile include/objects.h
 	$(CXX) -o compile/object_ghost.o -c src/objects/ghost.cpp $(CFLAGS)
 
 # Userinterface
+compile/ui_hud.o: src/ui/hud.cpp Makefile include/hud.h include/player.h include/decker.h include/decker_sdl.h
+	- @mkdir -p compile
+	$(CXX) -o compile/ui_hud.o -c src/ui/hud.cpp $(CFLAGS)
+
 compile/ui_statusbar.o: src/ui/statusbar.cpp Makefile include/ui.h include/version.h
 	- @mkdir -p compile
 	$(CXX) -o compile/ui_statusbar.o -c src/ui/statusbar.cpp $(CFLAGS)
