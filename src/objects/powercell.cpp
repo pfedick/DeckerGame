@@ -40,8 +40,8 @@ void PowerCell::handleCollision(Player* player, const Collision&)
 	if (spawned) deleteDefered=true;
 	player->countObject(type());
 	player->addSpecialObject(type());
-	//AudioPool& audio=getAudioPool();
-	//audio.playOnce(AudioClip::decker, 0.5f);
+	AudioPool& audio=getAudioPool();
+	audio.playOnce(AudioClip::powercell_collected, 0.8f);
 }
 
 

@@ -295,6 +295,10 @@ void AudioPool::load()
 		sample[AudioClip::crate_loop].load("res/audio/crate_loop.mp3");
 		sample[AudioClip::crate_falling].load("res/audio/crate_falling.mp3");
 
+		sample[AudioClip::powercell_collected].load("res/audio/powercell_collected.mp3");
+		sample[AudioClip::powercell_change].load("res/audio/powercell_change.mp3");
+		sample[AudioClip::powercells_depleted].load("res/audio/powercells_depleted.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

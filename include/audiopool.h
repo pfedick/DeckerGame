@@ -225,6 +225,9 @@ public:
 		ladder_step7,
 		crate_loop,
 		crate_falling,
+		powercell_collected,
+		powercell_change,
+		powercells_depleted,
 		// this must always be the last entry!
 		maxClips
 	};
