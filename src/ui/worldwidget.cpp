@@ -155,6 +155,11 @@ WorldWidget::WorldWidget()
 	stats_points=new StatsFrame(0, 0, 400, 70, translate("Points:"));
 	stats_oxygen=new OxygenFrame(0, 0, 400, 70, translate("Oxygen:"));
 	stats_oxygen->setVisible(false);
+	stats_health->setVisible(false);
+	stats_lifes->setVisible(false);
+	stats_points->setVisible(false);
+
+
 	this->addChild(stats_health);
 	this->addChild(stats_lifes);
 	this->addChild(stats_points);
@@ -258,7 +263,8 @@ void WorldWidget::updatePlayerStats(const Player* player)
 	} else {
 		oxygen_cooldown=now + 3.0f;
 		if (!stats_oxygen->isVisible()) {
-			stats_oxygen->setVisible(true);
+			stats_oxygen->setVisible(false);
+			//stats_oxygen->setVisible(true);
 			parentMustRedraw();
 		}
 	}
