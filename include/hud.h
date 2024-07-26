@@ -13,8 +13,11 @@ class SpriteTexture;
 class GameHUD
 {
 private:
-    int value_health, value_lifes, value_points;
-    int value_energy;
+    int value_lifes, value_points;
+    float value_health;
+    float value_energy;
+    float value_oxygen;
+    float maxair;
     int number_batteries;
     double oxygen_cooldown;
     bool editormode;
@@ -26,9 +29,15 @@ private:
     ppl7::grafix::Size hud_size;
     SDL& sdl;
     SpriteTexture* icons;
+    ppl7::grafix::Font label_font;
 
     void invalidate();
     void redraw();
+
+    void drawProgressBar(ppl7::grafix::Drawable& draw, int x, int y, int width, int height, float value, const ppl7::grafix::Color& color);
+
+    void drawMiddlePart(ppl7::grafix::Drawable& draw);
+    void drawPoints(ppl7::grafix::Drawable& draw);
 
 public:
     GameHUD(SDL& sdl);

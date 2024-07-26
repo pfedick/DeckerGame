@@ -1010,6 +1010,7 @@ void Game::closeTileTypeSelection()
 		tiletype_selection=NULL;
 		viewport.x1=0;
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		game_viewport.setMenuOffset(0);
 		mainmenue->setShowTileTypes(false);
 	}
@@ -1028,6 +1029,7 @@ void Game::closeTileSelection()
 		viewport.x1=0;
 		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1040,6 +1042,7 @@ void Game::closeSpriteSelection()
 		viewport.x1=0;
 		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1052,6 +1055,7 @@ void Game::closeObjectSelection()
 		viewport.x1=0;
 		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1064,6 +1068,7 @@ void Game::closeLightsSelection()
 		viewport.x1=0;
 		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1077,6 +1082,7 @@ void Game::closeWayNet()
 		viewport.x1=0;
 		game_viewport.setMenuOffset(0);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		mainmenue->setShowTileTypes(false);
 	}
 }
@@ -1105,6 +1111,7 @@ void Game::showTilesSelection()
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1123,6 +1130,7 @@ void Game::showTileTypeSelection()
 		this->addChild(tiletype_selection);
 		viewport.x1=300;
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		game_viewport.setMenuOffset(300);
 		mainmenue->setShowTileTypes(true);
 		mainmenue->setCurrentPlane(0);
@@ -1160,6 +1168,7 @@ void Game::showSpriteSelection()
 		selected_sprite.id=-1;
 		selected_sprite_system=NULL;
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 	}
 }
 
@@ -1180,6 +1189,7 @@ void Game::showObjectsSelection()
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		sprite_mode=SpriteModeSelect;
 		selected_object=NULL;
 	}
@@ -1202,6 +1212,7 @@ void Game::showWayNetEdit()
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		mainmenue->setShowTileTypes(true);
 	}
 }
@@ -1222,6 +1233,7 @@ void Game::showLightsSelection()
 		viewport.x1=300;
 		game_viewport.setMenuOffset(300);
 		world_widget->setViewport(viewport);
+		hud->setViewport(viewport);
 		sprite_mode=spriteModeDraw;
 		selected_light=NULL;
 		lights_selection->setLightId(0);
@@ -1456,6 +1468,9 @@ void Game::startLevel(const ppl7::String& filename)
 		enableControls(false);
 	}
 	player->resetLevelObjects();
+	if (level.params.drainBattery) player->setBatteryDrainRate(level.params.batteryDrainRate);
+	else player->setBatteryDrainRate(0.0f);
+
 	for (auto it=level.params.InitialItems.begin();it != level.params.InitialItems.end();++it) {
 		player->addSpecialObject((*it));
 	}

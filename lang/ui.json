@@ -162,6 +162,12 @@
         "Oxygen:": {
             "de": "Sauerstoff:"
         },
+        "Energy:": {
+            "de": "Energie:"
+        },
+        "Batteries:": {
+            "de": "Batterien:"
+        },
         "Start Tutorial": {
             "de": "Tutorial starten"
         },

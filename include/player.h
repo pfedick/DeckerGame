@@ -58,6 +58,7 @@ private:
 	double nextIdleSpeech;
 	double nextPhonetic;
 	float frame_rate_compensation;
+	float battery_drain_rate;
 	bool greetingPlayed;
 	bool flashlightOn;
 	bool petrified;
@@ -187,6 +188,8 @@ public:
 	void hitBySpiderWeb();
 	bool isPetrified() const;
 	void addPowerCell();
+	void drainBattery();
+	void setBatteryDrainRate(float rate);
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 

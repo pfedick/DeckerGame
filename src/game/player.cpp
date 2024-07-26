@@ -69,6 +69,7 @@ Player::Player(Game* game)
 	points=0;
 	health=100;
 	lifes=3;
+	battery_drain_rate=0.0f;
 	godmode=false;
 	this->game=game;
 	dead=false;
@@ -843,6 +844,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 		if (phonetics.notEmpty()) playPhonetics();
 	}
 	playSoundOnAnimationSprite();
+	drainBattery();
 	if (petrified == true && petrifiedTimeout < time) {
 		petrified=false;
 		airStart=0.0f;
@@ -1883,6 +1885,7 @@ void Player::playPhonetics()
 
 void Player::toggleFlashlight()
 {
+	if (energylevel <= 0.0f && battery_drain_rate > 0.0f && powercells == 0) return;
 	if (this->time > actionToggleCooldown) {
 		if (hasSpecialObject(Decker::Objects::Type::Flashlight)) {
 			flashlightOn=!flashlightOn;
@@ -1900,6 +1903,7 @@ void Player::toggleFlashlight()
 
 void Player::enableFlashlight(bool enable)
 {
+	if (energylevel <= 0.0f && battery_drain_rate > 0.0f && powercells == 0) return;
 	if (hasSpecialObject(Decker::Objects::Type::Flashlight)) {
 		flashlightOn=enable;
 		actionToggleCooldown=time + 0.2f;
@@ -1941,5 +1945,31 @@ bool Player::isPetrified() const
 
 void Player::addPowerCell()
 {
+	powercells++;
+}
+
+void Player::setBatteryDrainRate(float rate)
+{
+	battery_drain_rate=rate;
+}
+
+void Player::drainBattery()
+{
+	if (!flashlightOn) return;
+	if (battery_drain_rate > 0.0f) {
+		energylevel-=battery_drain_rate / 60.0f * frame_rate_compensation;
+		if (energylevel <= 0.0f) {
+			if (powercells > 0) {
+				powercells--;
+				energylevel=100.0f;
+				getAudioPool().playOnce(AudioClip::powercell_change, 1.0f);
+			} else {
+				energylevel=0.0f;
+				getAudioPool().playOnce(AudioClip::powercells_depleted, 1.0f);
+				flashlightOn=false;
+			}
+		}
+	}
+
 
 }
