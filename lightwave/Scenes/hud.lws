@@ -2651,7 +2651,7 @@ Channel 0
 Channel 1
 { Envelope
   2
-  Key 0 0 0 0 0 0 0 0 0
+  Key 0.00047999998787418007851 0 0 0 0 0 0 0 0
   Key -20 0.040000000000000000833 0 0 0 0 -19.862068965517238439 0 0
   Behaviors 1 1
 }
@@ -2686,21 +2686,21 @@ Channel 5
 Channel 6
 { Envelope
   2
-  Key 1 0 0 0 0 0 0 0 0
+  Key 0.83600097894668579102 0 0 0 0 0 0 0 0
   Key 1 0.040000000000000000833 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 7
 { Envelope
   2
-  Key 1 0 0 0 0 0 0 0 0
+  Key 0.83600097894668579102 0 0 0 0 0 0 0 0
   Key 1 0.040000000000000000833 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 8
 { Envelope
   2
-  Key 1 0 0 0 0 0 0 0 0
+  Key 0.83600097894668579102 0 0 0 0 0 0 0 0
   Key 1 0.040000000000000000833 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -4208,7 +4208,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 6
+CurrentObject 4
 CurrentLight 1
 CurrentCamera 0
 GraphEditorData
