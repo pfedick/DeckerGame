@@ -309,6 +309,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Medikit", ppl7::ToString("%d", Type::Medikit));
 	object_type->add("ExtraLife", ppl7::ToString("%d", Type::ExtraLife));
 	object_type->add("Savepoint", ppl7::ToString("%d", Type::Savepoint));
+	object_type->add("PowerCell", ppl7::ToString("%d", Type::PowerCell));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
