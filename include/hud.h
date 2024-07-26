@@ -8,6 +8,7 @@
 
 
 class Player;
+class SpriteTexture;
 
 class GameHUD
 {
@@ -24,6 +25,7 @@ private:
     SDL_Texture* message_texture;
     ppl7::grafix::Size hud_size;
     SDL& sdl;
+    SpriteTexture* icons;
 
     void invalidate();
     void redraw();
