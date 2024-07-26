@@ -337,7 +337,7 @@ phonetics:
 
 
 hud:
-	./texmaker -s lightwave/Render/hud/ -t res/hud.tex -w 512 -h 256 -px 50 -py 98
+	./texmaker -s lightwave/Render/hud/ -t res/hud.tex -w 512 -h 256 -px 50 -py 98 -x tmp/hud
 
 breakingwall:
 	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
@@ -355,7 +355,7 @@ bricks:
 
 
 sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies lights \
-	sprites_white_1d sprites_decals bricks
+	sprites_white_1d sprites_decals bricks hud
 	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
 	./texmaker -s lightwave/Render/sprites_plants/ -t res/sprites_plants.tex -w 1024 -h 1024 --pivot_detection lower_middle
