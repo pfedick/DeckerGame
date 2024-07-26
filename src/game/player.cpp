@@ -735,6 +735,7 @@ void Player::dropLifeAndResetToLastSavePoint()
 	dead=false;
 	lifes--;
 	health=100.0f;
+	air=maxair;
 	x=lastSavePoint.x;
 	y=lastSavePoint.y;
 	color_modulation.setColor(255, 255, 255, 255);
