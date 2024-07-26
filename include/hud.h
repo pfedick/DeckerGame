@@ -36,6 +36,7 @@ private:
 
     void drawProgressBar(ppl7::grafix::Drawable& draw, int x, int y, int width, int height, float value, const ppl7::grafix::Color& color);
 
+    void drawLeftPart(ppl7::grafix::Drawable& draw);
     void drawMiddlePart(ppl7::grafix::Drawable& draw);
     void drawPoints(ppl7::grafix::Drawable& draw);
 

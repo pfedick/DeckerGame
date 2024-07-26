@@ -20,7 +20,7 @@ GameHUD::GameHUD(SDL& sdl)
     maxair=0.0f;
     editormode=false;
     visible=true;
-    hud_size.setSize(1920, 100);
+    hud_size.setSize(1920, 110);
     my_viewport.setRect(0, 0, 1920, 1080);
     try {
         hud_texture=sdl.createStreamingTexture(hud_size.width, hud_size.height);
@@ -121,8 +121,8 @@ void GameHUD::updatePlayerStats(const Player* player)
         redraw_needed=true;
     }
     maxair=player->maxair;
-    if (value_oxygen != player->air * 100 / player->maxair) {
-        value_oxygen=player->air * 100 / player->maxair;
+    if (value_oxygen != player->air) {
+        value_oxygen+=calculatePointDiff(value_oxygen, player->air);
         redraw_needed=true;
     }
     if (value_lifes != player->lifes) {
@@ -167,21 +167,98 @@ void GameHUD::drawProgressBar(ppl7::grafix::Drawable& draw, int x, int y, int wi
     }
 }
 
+static void drawRect(ppl7::grafix::Drawable& draw)
+{
+    draw.cls(ppl7::grafix::Color(1, 1, 1, 128));
+    ppl7::grafix::Color black(0, 0, 0, 255);
+    ppl7::grafix::Color white(255, 255, 255, 255);
+    draw.drawRect(0, 0, draw.width(), draw.height(), black);
+    draw.drawRect(1, 1, draw.width() - 1, draw.height() - 1, black);
+    draw.drawRect(2, 2, draw.width() - 2, draw.height() - 2, white);
+    draw.drawRect(3, 3, draw.width() - 3, draw.height() - 3, white);
+}
+
+void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
+{
+    drawRect(draw);
+    ppl7::grafix::Color black(0, 0, 0, 255);
+    ppl7::grafix::Color white(255, 255, 255, 255);
+    label_font.setColor(ppl7::grafix::Color(210, 210, 210, 255));
+    label_font.setBold(false);
+    label_font.setSize(20);
+
+
+
+    int maxwidth=0;
+    int y=8;
+    ppl7::String labeltext=translate("Health:");
+    ppl7::grafix::Size s=label_font.measure(labeltext);
+    int lineheight=s.height + 2;
+    int y_health=y;
+    maxwidth=s.width;
+    icons->draw(draw, 25, y + lineheight, 0);
+    draw.print(label_font, 50, y, labeltext);
+    y+=lineheight;
+
+    int y_energy=y;
+    labeltext=translate("Energy:");
+    s=label_font.measure(labeltext);
+    if (s.width > maxwidth) maxwidth=s.width;
+    icons->draw(draw, 25, y + lineheight, 2);
+    draw.print(label_font, 50, y, labeltext);
+    y+=lineheight;
+
+    int y_oxygen=y;
+    labeltext=translate("Oxygen:");
+    s=label_font.measure(labeltext);
+    if (s.width > maxwidth) maxwidth=s.width;
+    icons->draw(draw, 25, y + lineheight, 1);
+    draw.print(label_font, 50, y, labeltext);
+
+    int w=700 - 60 - maxwidth;
+
+    drawProgressBar(draw, 60 + maxwidth, y_health, w, 20, value_health, ppl7::grafix::Color(220, 15, 0, 255));
+    drawProgressBar(draw, 60 + maxwidth, y_energy, w, 20, value_energy, ppl7::grafix::Color(15, 150, 20, 255));
+    drawProgressBar(draw, 60 + maxwidth, y_oxygen, w, 20, value_oxygen * 100.0f / maxair, ppl7::grafix::Color(15, 60, 220, 255));
+
+
+    label_font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
+    int x=70 + maxwidth + w;
+    ppl7::WideString value;
+    value.setf("%d %%", (int)value_health);
+    draw.print(label_font, x, y_health, value);
+
+    value.setf("%d %%", (int)value_energy);
+    draw.print(label_font, x, y_energy, value);
+
+    value.setf("%d s", (int)value_oxygen);
+    draw.print(label_font, x, y_oxygen, value);
+
+    //value.setf("%0.0f s", seconds_left);
+
+}
+
 void GameHUD::drawMiddlePart(ppl7::grafix::Drawable& draw)
 {
+    drawRect(draw);
     int y=10;
-
-    if (number_batteries == 0) y+=(hud_size.height - 10 - 40) / 2;
-    else y+=(hud_size.height - 10 - 80) / 2;
 
 
     label_font.setColor(ppl7::grafix::Color(210, 210, 210, 255));
+    label_font.setBold(false);
+    label_font.setSize(30);
 
     ppl7::String labeltext=translate("Lifes:");
     ppl7::grafix::Size s=label_font.measure(labeltext);
+
+    if (number_batteries == 0) y=(hud_size.height - s.height) / 2;
+    else y=(hud_size.height - 2 * s.height) / 2;
+
+
+
     int y_lifes=y;
     int maxwidth=s.width;
-    draw.print(label_font, 800, y, labeltext);
+    draw.print(label_font, 10, y, labeltext);
     y+=40;
     int y_powercells=0;
     if (number_batteries > 0) {
@@ -189,34 +266,34 @@ void GameHUD::drawMiddlePart(ppl7::grafix::Drawable& draw)
         ppl7::grafix::Size s=label_font.measure(labeltext);
         y_powercells=y;
         if (s.width > maxwidth) maxwidth=s.width;
-        draw.print(label_font, 800, y, labeltext);
+        draw.print(label_font, 10, y, labeltext);
     }
 
-    int x=800 + 20 + maxwidth;
-
+    int x=10 + 20 + maxwidth;
     for (int i=0;i < value_lifes;i++) {
-        icons->draw(draw, x + i * 35, y_lifes + 25, 3);
+        if (x + i * 30 + 20 < draw.width()) icons->draw(draw, x + i * 30, y_lifes + 31, 3);
     }
 
     for (int i=0;i < number_batteries;i++) {
-        icons->draw(draw, x + i * 35, y_powercells + 25, 4);
+        if (x + i * 30 + 20 < draw.width()) icons->draw(draw, x + i * 30, y_powercells + 31, 4);
     }
 
 }
 
 void GameHUD::drawPoints(ppl7::grafix::Drawable& draw)
 {
+    drawRect(draw);
     int y=0;
 
     label_font.setColor(ppl7::grafix::Color(210, 210, 210, 255));
     label_font.setBold(false);
-    label_font.setSize(30);
+    label_font.setSize(50);
 
     ppl7::String labeltext=translate("Points:");
     ppl7::grafix::Size s=label_font.measure(labeltext);
     y=(hud_size.height - s.height) / 2;
-    draw.print(label_font, 1400, y, labeltext);
-    int x=1400 + s.width + 10;
+    draw.print(label_font, 15, y, labeltext);
+    int x=15 + s.width + 10;
 
     label_font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
     label_font.setSize(50);
@@ -235,74 +312,25 @@ void GameHUD::redraw()
         ppl7::PrintDebug("GameHUD::redraw => ERROR: no hud_texture!\n");
         return;
     }
-    label_font.setBold(false);
-    label_font.setSize(20);
-
     redraw_needed=false;
-    ppl7::grafix::Color black(0, 0, 0, 255);
-    ppl7::grafix::Color white(255, 255, 255, 255);
-    label_font.setColor(ppl7::grafix::Color(210, 210, 210, 255));
-
-
     ppl7::grafix::Drawable draw=sdl.lockTexture(hud_texture);
-    draw.cls(ppl7::grafix::Color(1, 1, 1, 128));
-    draw.line(0, 0, hud_size.width, 0, black);
-    draw.line(0, 1, hud_size.width, 1, white);
-    draw.line(0, 2, hud_size.width, 2, white);
 
-    int maxwidth=0;
-    int y=5;
-    ppl7::String labeltext=translate("Health:");
-    ppl7::grafix::Size s=label_font.measure(labeltext);
-    int lineheight=s.height;
-    int y_health=y;
-    maxwidth=s.width;
-    icons->draw(draw, 20, y + lineheight, 0);
-    draw.print(label_font, 40, y, labeltext);
-    y+=lineheight;
-
-    int y_energy=y;
-    labeltext=translate("Energy:");
-    s=label_font.measure(labeltext);
-    if (s.width > maxwidth) maxwidth=s.width;
-    icons->draw(draw, 20, y + lineheight, 2);
-    draw.print(label_font, 40, y, labeltext);
-    y+=lineheight;
-
-    int y_oxygen=y;
-    labeltext=translate("Oxygen:");
-    s=label_font.measure(labeltext);
-    if (s.width > maxwidth) maxwidth=s.width;
-    icons->draw(draw, 20, y + lineheight, 1);
-    draw.print(label_font, 40, y, labeltext);
-
-    int w=700 - 50 - maxwidth;
-
-    drawProgressBar(draw, 50 + maxwidth, y_health, w, 20, value_health, ppl7::grafix::Color(240, 15, 0, 255));
-    drawProgressBar(draw, 50 + maxwidth, y_energy, w, 20, value_energy, ppl7::grafix::Color(15, 180, 20, 255));
-    drawProgressBar(draw, 50 + maxwidth, y_oxygen, w, 20, value_oxygen, ppl7::grafix::Color(15, 30, 255, 255));
-
-
-    label_font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
-    int x=50 + maxwidth + w + 5;
-    ppl7::WideString value;
-    value.setf("%d %%", (int)value_health);
-    draw.print(label_font, x, y_health, value);
-
-    value.setf("%d %%", (int)value_energy);
-    draw.print(label_font, x, y_energy, value);
-
-    value.setf("%d %%", (int)value_oxygen);
-    draw.print(label_font, x, y_oxygen, value);
-
-    //value.setf("%0.0f s", seconds_left);
-
-    drawMiddlePart(draw);
-    drawPoints(draw);
-
+    auto fragment=draw.getDrawable(10, 0, 800, 110);
+    drawLeftPart(fragment);
+    fragment=draw.getDrawable(850, 0, 1400, 110);
+    drawMiddlePart(fragment);
+    fragment=draw.getDrawable(1450, 0, 1910, 110);
+    drawPoints(fragment);
 
 
     sdl.unlockTexture(hud_texture);
+
+
+
+    /*
+
+
+    */
 }
 
 
@@ -313,7 +341,7 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
     //ppl7::PrintDebug("GameHUD::draw\n");
     SDL_Rect tr=render_rect;
     //tr.y=tr.h - hud_size.height;
-    tr.y= my_viewport.y2 - hud_size.height;
+    tr.y= my_viewport.y2 - hud_size.height - 5;
     tr.h=hud_size.height;
 
     SDL_SetRenderTarget(renderer, render_target);
