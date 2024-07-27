@@ -25,6 +25,7 @@ private:
     bool redraw_needed;
     bool visible;
     ppl7::grafix::Rect my_viewport;
+    ppl7::grafix::Rect last_drawn_viewport;
     SDL_Texture* hud_texture;
     SDL_Texture* message_texture;
     ppl7::grafix::Size hud_size;

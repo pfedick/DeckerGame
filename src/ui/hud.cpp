@@ -235,7 +235,7 @@ void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
         draw.print(label_font, 50, y, labeltext);
     }
 
-    int w=700 - 60 - maxwidth;
+    int w=draw.width() - 90 - 60 - maxwidth;
 
     drawProgressBar(draw, 60 + maxwidth, y_health, w, 20, value_health, ppl7::grafix::Color(220, 15, 0, 255));
     if (showEnergy) drawProgressBar(draw, 60 + maxwidth, y_energy, w, 20, value_energy, ppl7::grafix::Color(15, 150, 20, 255));
@@ -339,22 +339,29 @@ void GameHUD::redraw()
     redraw_needed=false;
     ppl7::grafix::Drawable draw=sdl.lockTexture(hud_texture);
 
-    auto fragment=draw.getDrawable(10, 0, 800, 110);
-    drawLeftPart(fragment);
-    fragment=draw.getDrawable(850, 0, 1400, 110);
-    drawMiddlePart(fragment);
-    fragment=draw.getDrawable(1450, 0, 1910, 110);
-    drawPoints(fragment);
+    if (my_viewport != last_drawn_viewport) draw.cls();
 
+
+    ppl7::grafix::Drawable fragment;
+    if (my_viewport.left() > 0) {
+        fragment=draw.getDrawable(my_viewport.left() + 10, 0, my_viewport.left() + 600, 110);
+        drawLeftPart(fragment);
+        fragment=draw.getDrawable(my_viewport.left() + 650, 0, 1400, 110);
+        drawMiddlePart(fragment);
+        fragment=draw.getDrawable(1450, 0, 1910, 110);
+        drawPoints(fragment);
+    } else {
+        fragment=draw.getDrawable(10, 0, 800, 110);
+        drawLeftPart(fragment);
+        fragment=draw.getDrawable(850, 0, 1400, 110);
+        drawMiddlePart(fragment);
+        fragment=draw.getDrawable(1450, 0, 1910, 110);
+        drawPoints(fragment);
+    }
+    last_drawn_viewport=my_viewport;
 
     sdl.unlockTexture(hud_texture);
 
-
-
-    /*
-
-
-    */
 }
 
 
@@ -366,7 +373,7 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
         redraw_needed=true;
         oxygen_cooldown=0.0f;
     }
-    if (redraw_needed) redraw();
+    if (redraw_needed || last_drawn_viewport != my_viewport) redraw();
     //ppl7::PrintDebug("GameHUD::draw\n");
     SDL_Rect tr=render_rect;
     //tr.y=tr.h - hud_size.height;
