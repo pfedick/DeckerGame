@@ -20,6 +20,7 @@ private:
     float maxair;
     int number_batteries;
     double oxygen_cooldown;
+    double time;
     bool editormode;
     bool redraw_needed;
     bool visible;

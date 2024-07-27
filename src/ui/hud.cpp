@@ -123,6 +123,7 @@ void GameHUD::updatePlayerStats(const Player* player)
     maxair=player->maxair;
     if (value_oxygen != player->air) {
         value_oxygen+=calculatePointDiff(value_oxygen, player->air);
+        oxygen_cooldown=player->time + 3.0f;
         redraw_needed=true;
     }
     if (value_lifes != player->lifes) {
@@ -145,6 +146,8 @@ void GameHUD::resetPlayerStats(const Player* player)
     value_lifes=player->lifes;
     value_points=player->points;
     value_energy=player->energylevel;
+    value_oxygen=player->air;
+    maxair=player->maxair;
     oxygen_cooldown=0.0f;
 
     invalidate();
@@ -187,10 +190,23 @@ void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
     label_font.setBold(false);
     label_font.setSize(20);
 
+    bool showOxygen=false;
+    bool showEnergy=false;
+    if (value_oxygen<maxair || oxygen_cooldown>time) showOxygen=true;
+    if (number_batteries > 0 || value_energy < 100.0f) showEnergy=true;
 
+    int count_items=1;
+    if (showOxygen) count_items++;
+    if (showEnergy) count_items++;
 
     int maxwidth=0;
     int y=8;
+
+    if (count_items == 1) y=40;
+    if (count_items == 2) y=20;
+
+
+
     ppl7::String labeltext=translate("Health:");
     ppl7::grafix::Size s=label_font.measure(labeltext);
     int lineheight=s.height + 2;
@@ -201,25 +217,29 @@ void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
     y+=lineheight;
 
     int y_energy=y;
-    labeltext=translate("Energy:");
-    s=label_font.measure(labeltext);
-    if (s.width > maxwidth) maxwidth=s.width;
-    icons->draw(draw, 25, y + lineheight, 2);
-    draw.print(label_font, 50, y, labeltext);
-    y+=lineheight;
+    if (showEnergy) {
+        labeltext=translate("Energy:");
+        s=label_font.measure(labeltext);
+        if (s.width > maxwidth) maxwidth=s.width;
+        icons->draw(draw, 25, y + lineheight, 2);
+        draw.print(label_font, 50, y, labeltext);
+        y+=lineheight;
+    }
 
     int y_oxygen=y;
-    labeltext=translate("Oxygen:");
-    s=label_font.measure(labeltext);
-    if (s.width > maxwidth) maxwidth=s.width;
-    icons->draw(draw, 25, y + lineheight, 1);
-    draw.print(label_font, 50, y, labeltext);
+    if (showOxygen) {
+        labeltext=translate("Oxygen:");
+        s=label_font.measure(labeltext);
+        if (s.width > maxwidth) maxwidth=s.width;
+        icons->draw(draw, 25, y + lineheight, 1);
+        draw.print(label_font, 50, y, labeltext);
+    }
 
     int w=700 - 60 - maxwidth;
 
     drawProgressBar(draw, 60 + maxwidth, y_health, w, 20, value_health, ppl7::grafix::Color(220, 15, 0, 255));
-    drawProgressBar(draw, 60 + maxwidth, y_energy, w, 20, value_energy, ppl7::grafix::Color(15, 150, 20, 255));
-    drawProgressBar(draw, 60 + maxwidth, y_oxygen, w, 20, value_oxygen * 100.0f / maxair, ppl7::grafix::Color(15, 60, 220, 255));
+    if (showEnergy) drawProgressBar(draw, 60 + maxwidth, y_energy, w, 20, value_energy, ppl7::grafix::Color(15, 150, 20, 255));
+    if (showOxygen) drawProgressBar(draw, 60 + maxwidth, y_oxygen, w, 20, value_oxygen * 100.0f / maxair, ppl7::grafix::Color(15, 60, 220, 255));
 
 
     label_font.setColor(ppl7::grafix::Color(255, 220, 0, 255));
@@ -228,11 +248,15 @@ void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
     value.setf("%d %%", (int)value_health);
     draw.print(label_font, x, y_health, value);
 
-    value.setf("%d %%", (int)value_energy);
-    draw.print(label_font, x, y_energy, value);
+    if (showEnergy) {
+        value.setf("%d %%", (int)value_energy);
+        draw.print(label_font, x, y_energy, value);
+    }
 
-    value.setf("%d s", (int)value_oxygen);
-    draw.print(label_font, x, y_oxygen, value);
+    if (showOxygen) {
+        value.setf("%d s", (int)value_oxygen);
+        draw.print(label_font, x, y_oxygen, value);
+    }
 
     //value.setf("%0.0f s", seconds_left);
 
@@ -337,6 +361,11 @@ void GameHUD::redraw()
 void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL_Rect& render_rect)
 {
     if (!visible) return;
+    time=ppl7::GetMicrotime();
+    if (oxygen_cooldown < time && oxygen_cooldown != 0.0f) {
+        redraw_needed=true;
+        oxygen_cooldown=0.0f;
+    }
     if (redraw_needed) redraw();
     //ppl7::PrintDebug("GameHUD::draw\n");
     SDL_Rect tr=render_rect;
