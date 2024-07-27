@@ -79,6 +79,26 @@
             "de": {
                 "text": "Ich muss wohl hier runter. Nur wie?"
             }
+        },
+        "2208": {
+            "context": "Lava Gap",
+            "character": "george",
+            "en": {
+                "text": "It doesn't go any further here."
+            },
+            "de": {
+                "text": "Hier geht's nicht weiter."
+            }
+        },
+        "2209": {
+            "context": "a crystal appears",
+            "character": "george",
+            "en": {
+                "text": "Well?"
+            },
+            "de": {
+                "text": "Nanu?"
+            }
         }
     }
 }
