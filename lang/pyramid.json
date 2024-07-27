@@ -69,6 +69,16 @@
             "de": {
                 "text": "Ach du scheiße! Lava!"
             }
+        },
+        "2207": {
+            "context": "George stands in front of a wall with arrows pointing down",
+            "character": "george",
+            "en": {
+                "text": "I guess I have to get down here. But how?"
+            },
+            "de": {
+                "text": "Ich muss wohl hier runter. Nur wie?"
+            }
         }
     }
 }
