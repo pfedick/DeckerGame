@@ -99,6 +99,7 @@ OBJECTS=compile/main.o \
 	compile/object_scorpion.o \
 	compile/object_hangingspider.o \
 	compile/object_savepoint.o \
+	compile/object_spawnpoint.o \
 	compile/object_medikit.o \
 	compile/object_key.o \
 	compile/object_arrow.o \
@@ -618,6 +619,10 @@ compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h inc
 compile/object_savepoint.o: src/objects/savepoint.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_savepoint.o -c src/objects/savepoint.cpp $(CFLAGS)
+
+compile/object_spawnpoint.o: src/objects/spawnpoint.cpp Makefile include/objects.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_spawnpoint.o -c src/objects/spawnpoint.cpp $(CFLAGS)
 
 compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include/animation.h \
 	include/player.h include/audiopool.h include/widgets.h include/decker.h

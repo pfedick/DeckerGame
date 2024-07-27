@@ -273,7 +273,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	: Decker::ui::Dialog(640, 480)
 {
 	this->object=object;
-	setWindowTitle("TouchEmitter");
+	setWindowTitle(ppl7::ToString("TouchEmitter, ID: %d", object->id));
 	addChild(new ppltk::Label(0, 0, 120, 30, "Touch-Type: "));
 	addChild(new ppltk::Label(0, 40, 120, 30, "Activation: "));
 	addChild(new ppltk::Label(0, 120, 120, 30, "Emitted object: "));

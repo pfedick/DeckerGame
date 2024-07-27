@@ -74,6 +74,7 @@ public:
 		LightSignal=39,
 		Crate=40,
 		PowerCell=41,
+		SpawnPoint=42,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -417,6 +418,37 @@ public:
 	void openUi() override;
 	void reset() override;
 };
+
+class SpawnPoint : public Object
+{
+private:
+	unsigned char toggle_count;
+	double next_touch_time;
+
+
+public:
+	int sample_id;
+	int max_distance;
+	float volume;
+	unsigned char max_toggles;
+	Type::ObjectType emitted_object;
+
+	SpawnPoint();
+	~SpawnPoint();
+	static Representation representation();
+	void init();
+	void emmitObject();
+	//void handleCollision(Player* player, const Collision& collision) override;
+	//void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void trigger(Object* source=NULL);
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+	void reset() override;
+};
+
+
 
 class Speaker : public Object
 {

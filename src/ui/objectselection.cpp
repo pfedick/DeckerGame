@@ -105,6 +105,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
 	addObject(Decker::Objects::Type::LevelModificator, "Level Modificator", 65);
+	addObject(Decker::Objects::Type::SpawnPoint, "SpawnPoint", 74);
 	scrollbar->setPosition(0);
 	scrollbar->setSize(object_map.size() / 2);
 	scrollbar->setVisibleItems((height() - 44) / 160 / 2);

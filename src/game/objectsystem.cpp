@@ -82,6 +82,8 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::GenericObjects]->setPivot(212, 128, 128);
 	spriteset[Spriteset::GenericObjects]->setPivot(213, 128, 128);
 
+	spriteset[Spriteset::GenericObjects]->setPivot(297, 128, 220);	// Spawnpoint
+
 
 
 	spriteset[Spriteset::ThreeSpeers]->enableOutlines(true);
@@ -515,6 +517,7 @@ Representation getRepresentation(int object_type)
 		case Type::Crate: return Crate::representation();
 		case Type::Spider: return Spider::representation();
 		case Type::PowerCell: return PowerCell::representation();
+		case Type::SpawnPoint: return SpawnPoint::representation();
 
 		default: return Object::representation();
 	}
@@ -613,6 +616,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::Crate: return new Crate();
 		case Type::Spider: return new Spider();
 		case Type::PowerCell: return new PowerCell();
+		case Type::SpawnPoint: return new SpawnPoint();
 
 	}
 	return NULL;
