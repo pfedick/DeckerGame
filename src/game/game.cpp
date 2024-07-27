@@ -1472,7 +1472,8 @@ void Game::startLevel(const ppl7::String& filename)
 	else player->setBatteryDrainRate(0.0f);
 
 	for (auto it=level.params.InitialItems.begin();it != level.params.InitialItems.end();++it) {
-		player->addSpecialObject((*it));
+		if ((*it) == Decker::Objects::Type::PowerCell) player->addPowerCell();
+		else player->addSpecialObject((*it));
 	}
 	if (level.params.flashlightOnOnLevelStart) player->enableFlashlight(true);
 
@@ -1566,7 +1567,20 @@ void Game::createNewLevel(const LevelParameter& params)
 	}
 	LevelFile.clear();
 	enableControls(false);
+	updateFromLevelParameters();
 	if (mainmenue) mainmenue->update();
+}
+
+void Game::updateFromLevelParameters()
+{
+	if (player) {
+		if (level.params.drainBattery) player->setBatteryDrainRate(level.params.batteryDrainRate);
+		else player->setBatteryDrainRate(0.0f);
+
+	}
+	level.runtimeParams=level.params;
+	level.runtimeParams.CurrentSong=level.params.InitialSong;
+
 }
 
 void Game::mouseDownEvent(ppltk::MouseEvent* event)

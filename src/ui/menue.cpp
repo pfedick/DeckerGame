@@ -252,6 +252,7 @@ void MainMenue::closeEvent(ppltk::Event* event)
 				delete(level_dialog);
 				level_dialog=NULL;
 				game->enableControls(controlsEnabled);
+				game->updateFromLevelParameters();
 			}
 		} else if (level_dialog->state() == LevelDialog::DialogState::Aborted) {
 			delete(level_dialog);

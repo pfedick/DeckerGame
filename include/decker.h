@@ -1189,6 +1189,7 @@ public:
 	void save(const ppl7::String& filename);
 	void load();
 	void createNewLevel(const LevelParameter& params);
+	void updateFromLevelParameters();
 	//void clearLevel(int width, int height);
 	void playerDied();
 	void resetPlayer();
