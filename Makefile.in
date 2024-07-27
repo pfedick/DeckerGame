@@ -87,6 +87,7 @@ OBJECTS=compile/main.o \
 	compile/object_gem.o \
 	compile/object_coin.o \
 	compile/object_apple.o \
+	compile/object_peach.o \
 	compile/object_cherry.o \
 	compile/object_trap.o \
 	compile/object_threespeers.o \
@@ -567,6 +568,10 @@ compile/object_coin.o: src/objects/coin.cpp Makefile include/objects.h include/a
 compile/object_apple.o: src/objects/apple.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_apple.o -c src/objects/apple.cpp $(CFLAGS)
+
+compile/object_peach.o: src/objects/peach.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_peach.o -c src/objects/peach.cpp $(CFLAGS)
 
 compile/object_cherry.o: src/objects/cherry.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile

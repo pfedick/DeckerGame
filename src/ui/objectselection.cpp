@@ -46,6 +46,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::ExtraLife, "Extra Life", 40);
 	addObject(Decker::Objects::Type::Apple, "Apple", 42);
 	addObject(Decker::Objects::Type::Cherry, "Cherry", 45);
+	addObject(Decker::Objects::Type::Peach, "Peach", 75);
 	addObject(Decker::Objects::Type::Key, "Key", 8);
 	addObject(Decker::Objects::Type::Oxygen, "Oxygen", 51);
 	addObject(Decker::Objects::Type::TreasureChest, "Treasure Chest", 33);

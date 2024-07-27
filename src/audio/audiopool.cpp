@@ -101,6 +101,7 @@ void AudioPool::load()
 		sample[AudioClip::fire2].load("res/audio/fire2.mp3");
 		sample[AudioClip::light_switch1].load("res/audio/light_switch_1.mp3");
 		sample[AudioClip::crystal].load("res/audio/crystal.mp3");
+		sample[AudioClip::peach].load("res/audio/peach.mp3");
 		sample[AudioClip::birds1].load("res/audio/birds.mp3");
 		sample[AudioClip::arrow_swoosh].load("res/audio/arrow-swoosh.mp3");
 		sample[AudioClip::fall].load("res/audio/fall.mp3");

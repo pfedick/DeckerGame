@@ -75,6 +75,7 @@ public:
 		Crate=40,
 		PowerCell=41,
 		SpawnPoint=42,
+		Peach=43,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -577,6 +578,20 @@ private:
 
 public:
 	CherryReward();
+	static Representation representation();
+
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+};
+
+class PeachReward : public Object
+{
+private:
+	double next_animation;
+	AnimationCycle animation;
+
+public:
+	PeachReward();
 	static Representation representation();
 
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;

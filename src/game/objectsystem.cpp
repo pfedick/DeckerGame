@@ -458,6 +458,7 @@ Representation getRepresentation(int object_type)
 		case Type::Crystal: return CrystalReward::representation();
 		case Type::Coin: return CoinReward::representation();
 		case Type::Apple: return AppleReward::representation();
+		case Type::Peach: return PeachReward::representation();
 		case Type::Cherry: return CherryReward::representation();
 		case Type::ExtraLife: return ExtraLife::representation();
 		case Type::Key: return KeyReward::representation();
@@ -553,6 +554,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::ThreeSpeers: return new ThreeSpeers();
 		case Type::Coin: return new CoinReward();
 		case Type::Apple: return new AppleReward();
+		case Type::Peach: return new PeachReward();
 		case Type::Cherry: return new CherryReward();
 		case Type::ExtraLife: return new ExtraLife();
 		case Type::Crystal: return new CrystalReward();
