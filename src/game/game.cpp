@@ -1473,6 +1473,8 @@ void Game::startLevel(const ppl7::String& filename)
 	if (level.params.drainBattery) player->setBatteryDrainRate(level.params.batteryDrainRate);
 	else player->setBatteryDrainRate(0.0f);
 
+	hud->resetPlayerStats(player);
+
 	for (auto it=level.params.InitialItems.begin();it != level.params.InitialItems.end();++it) {
 		if ((*it) == Decker::Objects::Type::PowerCell) player->addPowerCell();
 		else player->addSpecialObject((*it));
