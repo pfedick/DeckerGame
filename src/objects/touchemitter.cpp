@@ -312,6 +312,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("PowerCell", ppl7::ToString("%d", Type::PowerCell));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
+	object_type->add("Hammer", ppl7::ToString("%d", Type::Hammer));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
 	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
 	object_type->add("Scorpion", ppl7::ToString("%d", Type::Scorpion));
@@ -321,6 +322,7 @@ TouchEmitterDialog::TouchEmitterDialog(TouchEmitter* object)
 	object_type->add("Bat", ppl7::ToString("%d", Type::Bat));
 	object_type->add("Skeleton", ppl7::ToString("%d", Type::Skeleton));
 	object_type->add("Rat", ppl7::ToString("%d", Type::Rat));
+	object_type->sortItems();
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 

@@ -150,6 +150,7 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	object_type->add("Savepoint", ppl7::ToString("%d", Type::Savepoint));
 	object_type->add("PowerCell", ppl7::ToString("%d", Type::PowerCell));
 	object_type->add("Crystal", ppl7::ToString("%d", Type::Crystal));
+	object_type->add("Hammer", ppl7::ToString("%d", Type::Hammer));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
 	object_type->add("Cherry", ppl7::ToString("%d", Type::Cherry));
@@ -163,6 +164,9 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	object_type->add("Skeleton", ppl7::ToString("%d", Type::Skeleton));
 	object_type->add("Rat", ppl7::ToString("%d", Type::Rat));
 	object_type->add("Bird", ppl7::ToString("%d", Type::Bird));
+	object_type->add("Breaking Ground", ppl7::ToString("%d", Type::BreakingGround));
+	object_type->add("Breaking Wall", ppl7::ToString("%d", Type::BreakingWall));
+
 	object_type->sortItems();
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
