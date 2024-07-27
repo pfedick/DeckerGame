@@ -23,6 +23,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 	visibility_tiletypes=false;
 	visibility_collision=false;
 	visibility_lighting=true;
+	visibility_hud=true;
 	level_dialog=NULL;
 	metrics=NULL;
 	controlsEnabled=game->getControlsEnabled();
@@ -210,7 +211,15 @@ void MainMenue::mouseClickEvent(ppltk::MouseEvent* event)
 			ppltk::Widget* top=show_visibility_submenu_button->getTopmostParent();
 			ppl7::grafix::Point p=show_visibility_submenu_button->absolutePosition();
 			visibility=new VisibilitySubMenu(p.x, height(), this);
+
+
+			visibility->setTopmost(true);
+			visibility->setEventHandler(this);
+
 			top->addChild(visibility);
+			ppltk::GetWindowManager()->setMouseFocus(visibility);
+
+
 		}
 	} else if (event->widget() == show_metrics_submenu_button) {
 		showMetrics();
@@ -259,7 +268,8 @@ void MainMenue::closeEvent(ppltk::Event* event)
 			level_dialog=NULL;
 			game->enableControls(controlsEnabled);
 		}
-
+	} else if (event->widget() == visibility) {
+		visibility=NULL;
 	}
 }
 
@@ -322,8 +332,9 @@ void MainMenue::fitMetrics(const ppl7::grafix::Rect& viewport)
 	if (metrics) metrics->setPos(viewport.right() - metrics->width(), viewport.top());
 }
 
+
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
-	: ppltk::Frame(x, y, 140, 350)
+	: ppltk::Frame(x, y, 140, 370)
 {
 	this->menue=menue;
 	int y1=0;
@@ -365,6 +376,12 @@ VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
 	show_particles_checkbox->setEventHandler(this);
 	this->addChild(show_particles_checkbox);
 	y1+=20;
+
+	show_hud_checkbox=new ppltk::CheckBox(20, y1, 100, 20, "HUD", menue->visibility_hud);
+	show_hud_checkbox->setEventHandler(this);
+	this->addChild(show_hud_checkbox);
+	y1+=20;
+
 
 	y1+=20;
 	this->addChild(new ppltk::Label(0, y1, 100, 20, "visible Planes:"));
@@ -420,6 +437,8 @@ void VisibilitySubMenu::toggledEvent(ppltk::Event* event, bool checked)
 		menue->visibility_plane_player=checked;
 	} else if (widget == lighting_checkbox) {
 		menue->visibility_lighting=checked;
+	} else if (widget == show_hud_checkbox) {
+		menue->visibility_hud=checked;
 	} else if (widget == visible_plane_front_checkbox) {
 		menue->visibility_plane_front=checked;
 	} else if (widget == visible_plane_far_checkbox) {
@@ -445,6 +464,17 @@ void VisibilitySubMenu::toggledEvent(ppltk::Event* event, bool checked)
 	} else if (widget == show_particles_checkbox) {
 		menue->visibility_particles=checked;
 	};
+}
+
+void VisibilitySubMenu::lostFocusEvent(ppltk::FocusEvent* event)
+{
+	if (event->newWidget() != this && !event->newWidget()->isChildOf(this)) {
+		//ppl7::PrintDebug("VisibilitySubMenu::lostFocusEvent\n");
+		this->deleteLater();
+		ppltk::Event e(ppltk::Event::Type::Close);
+		e.setWidget(this);
+		menue->closeEvent(&e);
+	}
 }
 
 

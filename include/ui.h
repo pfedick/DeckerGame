@@ -79,6 +79,7 @@ private:
 	ppltk::CheckBox* show_sprites_checkbox;
 	ppltk::CheckBox* show_objects_checkbox;
 	ppltk::CheckBox* show_particles_checkbox;
+	ppltk::CheckBox* show_hud_checkbox;
 	ppltk::CheckBox* visible_plane_player_checkbox;
 	ppltk::CheckBox* visible_plane_front_checkbox;
 	ppltk::CheckBox* visible_plane_far_checkbox;
@@ -90,7 +91,8 @@ private:
 public:
 	VisibilitySubMenu(int x, int y, MainMenue* menue);
 	void setShowTileTypes(bool show);
-	virtual void toggledEvent(ppltk::Event* event, bool checked);
+	void toggledEvent(ppltk::Event* event, bool checked) override;
+	void lostFocusEvent(ppltk::FocusEvent* event) override;
 };
 
 class LevelDialog;
@@ -187,6 +189,7 @@ public:
 	bool visibility_tiletypes;
 	bool visibility_collision;
 	bool visibility_lighting;
+	bool visibility_hud;
 
 	void mouseClickEvent(ppltk::MouseEvent* event) override;
 	void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;

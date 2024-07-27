@@ -351,6 +351,7 @@ void Game::showUi(bool enable)
 		mainmenue->setShowTileTypes(false);
 		mainmenue->setWorldFollowsPlayer(true);
 		mainmenue->setVisible(false);
+		//mainmenue->visibility_hud=true;
 		statusbar->setVisible(false);
 		viewport.y1=0;
 		viewport.x1=0;
@@ -776,6 +777,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 
 	// Draw Planes and Sprites
 	metrics.time_draw_tsop.start();
+	hud->setVisible(mainmenue->visibility_hud);
 	level.FarPlane.setVisible(mainmenue->visibility_plane_far);
 	level.PlayerPlane.setVisible(mainmenue->visibility_plane_player);
 	level.FrontPlane.setVisible(mainmenue->visibility_plane_front);
