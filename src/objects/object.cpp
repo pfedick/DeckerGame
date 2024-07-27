@@ -170,10 +170,12 @@ size_t Object::load(const unsigned char* buffer, size_t size)
 
 void Object::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	texture->drawScaled(renderer,
-		initial_p.x + coords.x,
-		initial_p.y + coords.y,
-		sprite_no_representation, scale, color_mod);
+	if (!spawned) {
+		texture->drawScaled(renderer,
+			initial_p.x + coords.x,
+			initial_p.y + coords.y,
+			sprite_no_representation, scale, color_mod);
+	}
 
 	ppl7::grafix::Color c=color_mod;
 	c.setAlpha(90);

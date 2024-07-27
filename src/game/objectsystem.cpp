@@ -341,7 +341,7 @@ void ObjectSystem::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect
 			if (object->texture != NULL && object->myLayer == layer) {
 				object->drawEditMode(renderer, coords);
 				drawId(renderer, light_objects, object->p.x + coords.x, object->p.y + coords.y, object->id);
-				if (object->p != object->initial_p) drawId(renderer, light_objects, object->initial_p.x + coords.x, object->initial_p.y + coords.y, object->id);
+				if (object->p != object->initial_p && object->spawned == false) drawId(renderer, light_objects, object->initial_p.x + coords.x, object->initial_p.y + coords.y, object->id);
 			}
 		}
 	}
