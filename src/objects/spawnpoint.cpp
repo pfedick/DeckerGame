@@ -50,9 +50,10 @@ void SpawnPoint::emmitObject()
 	AudioPool& audio=getAudioPool();
 	if (sample_id != AudioClip::none) audio.playOnce(static_cast<AudioClip::Id>(sample_id), p, max_distance, volume);
 	//next_touch_time=time + ppl7::randf(0.1f, 1.0f);
-	toggle_count++;
+
 	Object* object=GetObjectSystem()->getInstance(emitted_object);
 	if (object) {
+		toggle_count++;
 		object->initial_p=p;
 		object->p=p;
 		object->spawned=true;
@@ -120,7 +121,7 @@ public:
 	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 	void valueChangedEvent(ppltk::Event* event, double value) override;
 	//void toggledEvent(ppltk::Event* event, bool checked) override;
-	void dialogButtonEvent(Dialog::Buttons button) override;
+	virtual void dialogButtonEvent(Dialog::Buttons button) override;
 	void mouseDownEvent(ppltk::MouseEvent* event) override;
 };
 
@@ -162,6 +163,7 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	object_type->add("Skeleton", ppl7::ToString("%d", Type::Skeleton));
 	object_type->add("Rat", ppl7::ToString("%d", Type::Rat));
 	object_type->add("Bird", ppl7::ToString("%d", Type::Bird));
+	object_type->sortItems();
 	object_type->setCurrentIdentifier(ppl7::ToString("%d", object->emitted_object));
 	addChild(object_type);
 
@@ -183,7 +185,7 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	audio_sample->add("Coin", ppl7::ToString("%d", AudioClip::coin1));
 	audio_sample->add("Touchplate", ppl7::ToString("%d", AudioClip::touchplateswitch1));
 	audio_sample->add("Explosion", ppl7::ToString("%d", AudioClip::explosion1));
-
+	audio_sample->sortItems();
 	audio_sample->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
 	audio_sample->setEventHandler(this);
 	addChild(audio_sample);
@@ -220,6 +222,7 @@ SpawnPointDialog::~SpawnPointDialog()
 
 void SpawnPointDialog::dialogButtonEvent(Dialog::Buttons button)
 {
+	//ppl7::PrintDebug("SpawnPointDialog::dialogButtonEvent: %d\n", (int)button);
 	if (button == Dialog::Buttons::Reset) object->reset();
 	else if (button == Dialog::Buttons::Test) object->emmitObject();
 }
@@ -255,6 +258,7 @@ void SpawnPointDialog::mouseDownEvent(ppltk::MouseEvent* event)
 	if (event->widget() == test_audio_button && object->sample_id != AudioClip::none) {
 		getAudioPool().playOnce(static_cast<AudioClip::Id>(object->sample_id), object->p, object->max_distance, object->volume);
 	}
+	Decker::ui::Dialog::mouseDownEvent(event);
 }
 
 
