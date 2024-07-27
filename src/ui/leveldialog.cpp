@@ -618,7 +618,8 @@ void LevelDialog::valueChangedEvent(ppltk::Event* event, double value)
     ppltk::Widget* widget=event->widget();
 
     if (widget == battery_drain_rate) {
-        battery_empty_time->setText(ppl7::ToString("empty in %d seconds", value * 60));
+        if (value > 0.0f) battery_empty_time->setText(ppl7::ToString("empty in %0.0f seconds", 100.0f / value));
+        else battery_empty_time->setText("disabled");
     }
 }
 
