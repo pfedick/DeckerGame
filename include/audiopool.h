@@ -229,6 +229,7 @@ public:
 		powercell_change,
 		powercells_depleted,
 		peach,
+		fireworks_loop,
 		// this must always be the last entry!
 		maxClips
 	};

@@ -180,6 +180,7 @@ SpeakerDialog::SpeakerDialog(Speaker* object)
 	sample_name->add("Fire 1", ppl7::ToString("%d", AudioClip::fire1));
 	sample_name->add("Fire 2", ppl7::ToString("%d", AudioClip::fire2));
 	sample_name->add("Fire 3", ppl7::ToString("%d", AudioClip::fire3));
+	sample_name->add("Fireworks loop", ppl7::ToString("%d", AudioClip::fireworks_loop));
 	sample_name->add("Jungle 1", ppl7::ToString("%d", AudioClip::jungle1));
 	sample_name->add("Jungle 2", ppl7::ToString("%d", AudioClip::jungle2));
 

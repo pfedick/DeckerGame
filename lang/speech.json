@@ -254,6 +254,36 @@
             "de": {
                 "text": "Ich glaub' ich spinne!"
             }
-        }
+        },
+        "24": {
+            "context": "George finds a peach",
+            "character": "george",
+            "en": {
+                "text": "Oh, there's a peach!"
+            },
+            "de": {
+                "text": "Oh, da ist ein Pfirsich!"
+            }
+        },
+        "25": {
+            "context": "George eats a peach",
+            "character": "george",
+            "en": {
+                "text": "Mmm, crispy!"
+            },
+            "de": {
+                "text": "Mhh, knackig!"
+            }
+        },
+        "26": {
+            "context": "George finds more peaches",
+            "character": "george",
+            "en": {
+                "text": "There are more!"
+            },
+            "de": {
+                "text": "Da sind noch mehr!"
+            }
+        },
     }
 }

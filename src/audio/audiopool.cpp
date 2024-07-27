@@ -300,6 +300,8 @@ void AudioPool::load()
 		sample[AudioClip::powercell_change].load("res/audio/powercell_change.mp3");
 		sample[AudioClip::powercells_depleted].load("res/audio/powercells_depleted.mp3");
 
+		sample[AudioClip::fireworks_loop].load("res/audio/fireworks_loop.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();
