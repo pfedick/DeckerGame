@@ -335,6 +335,7 @@ void LevelDialog::setupItemsAndOptionsTab()
     available_items->add("Flashlight", ppl7::ToString("%d", Decker::Objects::Type::Flashlight));
     available_items->add("Cheese", ppl7::ToString("%d", Decker::Objects::Type::Cheese));
     available_items->add("Hammer", ppl7::ToString("%d", Decker::Objects::Type::Hammer));
+    available_items->add("PowerCell", ppl7::ToString("%d", Decker::Objects::Type::PowerCell));
     available_items->setEventHandler(this);
     tab->addChild(available_items);
 
@@ -661,7 +662,7 @@ void LevelDialog::keyDownEvent(ppltk::KeyEvent* event)
         else if (widget == color_green) wm->setKeyboardFocus(color_red);
         else if (widget == color_red) wm->setKeyboardFocus(level_height);
 
-}
+    }
 #endif
 }
 
