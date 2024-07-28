@@ -145,6 +145,22 @@ void MagicGround::updateTransparency(double time, float frame_rate_compensation)
 				next_transparency_change=time + ppl7::randf(min_time_visible, max_time_visible);
 			}
 		}
+	} else {
+		if (current_state == State::appears && transparency > 0.0f) {
+			transparency-=0.03 * frame_rate_compensation;
+			if (transparency <= 0.0f) {
+				transparency=0.0f;
+				current_state=State::active;
+				next_transparency_change=time + ppl7::randf(min_time_visible, max_time_visible);
+			}
+		} else if (current_state == State::disappears && transparency < 1.0f) {
+			transparency+=0.03 * frame_rate_compensation;
+			if (transparency >= 1.0f) {
+				transparency=1.0f;
+				current_state=State::inactive;
+				next_transparency_change=time + ppl7::randf(min_time_visible, max_time_visible);
+			}
+		}
 	}
 }
 
@@ -227,6 +243,7 @@ void MagicGround::drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 
 void MagicGround::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
+	if (current_state == State::inactive) return;
 	drawCommon(renderer, coords, p, transparency);
 }
 
@@ -248,6 +265,7 @@ void MagicGround::handleCollision(Player* player, const Collision& collision)
 
 void MagicGround::toggle(bool enable, Object* source)
 {
+	//ppl7::PrintDebug("MagicGround::toggle: %d\n", (int)enable);
 	if (enable) current_state = State::appears;
 	else current_state = State::disappears;
 }
