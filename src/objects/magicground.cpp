@@ -173,6 +173,8 @@ void MagicGround::update(double time, TileTypePlane& ttplane, Player& player, fl
 	if (roundEdges) sprite_no_representation=graficset * 4 + 3;
 	else sprite_no_representation=graficset * 4 + 1;
 	updateBoundary();
+	if (current_state == State::active || transparency < 0.5f) enabled=true;
+	else enabled=false;
 }
 
 bool MagicGround::copyFromOtherMagicGround()
