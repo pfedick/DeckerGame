@@ -42,7 +42,23 @@ MagicGround::MagicGround()
 	max_time_invisible=4.0f;
 	next_transparency_change=0.0f;
 	linked_with_id=0;
+
+
+	randomizeDebris();
 	randomizeFloatState();
+}
+
+
+void MagicGround::randomizeDebris()
+{
+	for (int i=0;i < 16;i++) {
+		debris_sprites[i]=ppl7::rand(22, 26);
+	}
+	num_debris=ppl7::rand(1, 4);
+	for (int i=0;i < 4;i++) {
+		debris_pos[i]=ppl7::rand(0, 6) * TILE_WIDTH / 2;
+		debris_length[i]=ppl7::rand(1, max_debris_length);
+	}
 }
 
 void MagicGround::updateBoundary()
@@ -170,6 +186,16 @@ void MagicGround::drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 				pp.y + coords.y, 21, myColor);
 	}
 	if (hasDebris) {
+		int d=0;
+		for (int i=0;i < num_debris;i++) {
+			for (int yy=debris_length[i] - 1;yy >= 0;yy--) {
+				texture->draw(renderer,
+					pp.x + coords.x + debris_pos[i] - 48,
+					pp.y + TILE_HEIGHT + coords.y + yy * TILE_HEIGHT / 3, debris_sprites[d], myColor);
+				d++;
+				if (d > 15) d=0;
+			}
+		}
 		// TODO
 	}
 	int base=4 * graficset;
@@ -237,7 +263,7 @@ size_t MagicGround::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 2);		// Object Version
+	ppl7::Poke8(buffer + bytes, 3);		// Object Version
 
 	int flags=0;
 	if (initial_state == State::active) flags|=1;
@@ -258,12 +284,23 @@ size_t MagicGround::save(unsigned char* buffer, size_t size) const
 	ppl7::PokeFloat(buffer + bytes + 19, min_time_invisible);
 	ppl7::PokeFloat(buffer + bytes + 23, max_time_invisible);
 	ppl7::Poke32(buffer + bytes + 27, linked_with_id);
-	return bytes + 31;
+	ppl7::Poke8(buffer + bytes + 31, num_debris);
+	for (int i=0;i < 16;i++) {
+		ppl7::Poke8(buffer + bytes + 32 + i, debris_sprites[i]);
+	}
+	for (int i=0;i < 4;i++) {
+		ppl7::Poke8(buffer + bytes + 48 + i, debris_pos[i]);
+	}
+	for (int i=0;i < 4;i++) {
+		ppl7::Poke8(buffer + bytes + 52 + i, debris_length[i]);
+	}
+	return bytes + 56;
 }
 
 size_t MagicGround::saveSize() const
 {
-	return Object::saveSize() + 31;
+	int debris_size=16 + 1 + 4 + 4;
+	return Object::saveSize() + debris_size + 31;
 }
 
 size_t MagicGround::load(const unsigned char* buffer, size_t size)
@@ -271,7 +308,7 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version > 2) return 0;
+	if (version < 1 || version > 3) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	if (flags & 1) {
 		current_state=State::active;
@@ -299,7 +336,21 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 		max_time_invisible=ppl7::PeekFloat(buffer + bytes + 23);
 		linked_with_id=ppl7::Peek32(buffer + bytes + 27);
 	}
+	if (version < 3) {
+		randomizeDebris();
+	} else {
+		for (int i=0;i < 16;i++) {
+			debris_sprites[i]=ppl7::Peek8(buffer + bytes + 32 + i);
+		}
+		for (int i=0;i < 4;i++) {
+			debris_pos[i]=ppl7::Peek8(buffer + bytes + 48 + i);
+		}
+		for (int i=0;i < 4;i++) {
+			debris_length[i]=ppl7::Peek8(buffer + bytes + 52 + i);
+		}
+	}
 	randomizeFloatState();
+
 	return size;
 }
 
@@ -308,6 +359,7 @@ void MagicGround::reset()
 	//ppl7::PrintDebug("MagicGround::reset()\n");
 	p=initial_p;
 	randomizeFloatState();
+	randomizeDebris();
 }
 
 class MagicGroundDialog : public Decker::ui::Dialog
@@ -427,6 +479,16 @@ MagicGroundDialog::MagicGroundDialog(MagicGround* object)
 	verticalMovement->setEventHandler(this);
 	addChild(verticalMovement);
 	y1+=35;
+	addChild(new ppltk::Label(x1, y1, 120, 30, "Debris: "));
+	y1+=30;
+	max_debris_length=new ppltk::HorizontalSlider(x1 + 30, y1, w, 30);
+	max_debris_length->setLimits(1, 16);
+	max_debris_length->setValue(object->max_debris_length);
+	max_debris_length->enableSpinBox(true, 1, 80);
+	max_debris_length->setEventHandler(this);
+	addChild(max_debris_length);
+	y1+=35;
+
 
 	y+=305;
 
@@ -527,8 +589,10 @@ void MagicGroundDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 	if (event->widget() == movement_range) object->movement_range=value;
 	else if (event->widget() == width) object->width=value;
 	else if (event->widget() == graficset) object->graficset=value;
-	else if (event->widget() == max_debris_length) object->max_debris_length=value;
-	else if (event->widget() == linked_with_id) object->linked_with_id=value;
+	else if (event->widget() == max_debris_length) {
+		object->max_debris_length=value;
+		object->randomizeDebris();
+	} else if (event->widget() == linked_with_id) object->linked_with_id=value;
 }
 
 void MagicGroundDialog::valueChangedEvent(ppltk::Event* event, double value)
@@ -562,6 +626,7 @@ void MagicGroundDialog::toggledEvent(ppltk::Event* event, bool checked)
 		object->reset();
 	} else if (event->widget() == hasDebris) {
 		object->hasDebris=checked;
+		if (checked) object->randomizeDebris();
 	} else if (event->widget() == hasStuds) {
 		object->hasStuds=checked;
 	} else if (event->widget() == verticalMovement) {

@@ -1523,6 +1523,11 @@ private:
 	FloatState floatstate;
 	float transparency;
 	float float_offset;
+	uint8_t debris_sprites[16];
+	uint8_t num_debris;
+	uint8_t debris_pos[4];
+	uint8_t debris_length[4];
+
 	double next_transparency_change;
 
 	void updateVerticalMovement(double time, float frame_rate_compensation);
@@ -1571,6 +1576,7 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
+	void randomizeDebris();
 	void openUi() override;
 
 };

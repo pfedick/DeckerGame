@@ -2,7 +2,7 @@ LWSC
 8
 
 RenderRangeType 0
-FirstFrame 27
+FirstFrame 0
 LastFrame 27
 FrameStep 1
 RenderRangeObject 0
@@ -10990,7 +10990,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 28
+CurrentObject 22
 CurrentLight 0
 CurrentCamera 0
 GraphEditorData
