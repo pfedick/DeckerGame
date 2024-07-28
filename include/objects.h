@@ -1520,7 +1520,6 @@ private:
 
 	};
 	float current_speed;
-	State current_state;
 	FloatState floatstate;
 	float transparency;
 	float float_offset;
@@ -1530,8 +1529,11 @@ private:
 	void updateTransparency(double time, float frame_rate_compensation);
 	void randomizeFloatState();
 	void updateBoundary();
+	void drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& coords, const ppl7::grafix::Point& pp, float transp) const;
+	bool copyFromOtherMagicGround();
+
 public:
-	uint8_t type;
+	uint8_t graficset;
 	uint8_t width;
 	uint8_t movement_range;
 	uint8_t max_debris_length;
@@ -1551,6 +1553,7 @@ public:
 	float max_time_invisible;
 
 	State initial_state;
+	State current_state;
 
 
 
@@ -1559,10 +1562,12 @@ public:
 	MagicGround();
 	static Representation representation();
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void toggle(bool enable, Object* source=NULL) override;
 	void trigger(Object* source) override;
+	void reset();
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;

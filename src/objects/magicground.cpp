@@ -27,12 +27,12 @@ MagicGround::MagicGround()
 	verticalMovement=true;
 	roundEdges=true;
 	canDissolve=false;
-	movement_speed=2.0f;
+	movement_speed=1.0f;
 	float_offset=0.0f;
-	movement_range=16;
+	movement_range=2;
 	floatstate=FloatState::GoingUp;
 	current_speed=0;
-	type=0;
+	graficset=0;
 	width=1;
 	transparency=0.0f;
 	max_debris_length=8;
@@ -41,6 +41,7 @@ MagicGround::MagicGround()
 	min_time_invisible=2.0f;
 	max_time_invisible=4.0f;
 	next_transparency_change=0.0f;
+	linked_with_id=0;
 	randomizeFloatState();
 }
 
@@ -54,7 +55,6 @@ void MagicGround::updateBoundary()
 
 void MagicGround::randomizeFloatState()
 {
-	// TODO
 	float_offset=ppl7::randf(0, (float)movement_range);
 	if (ppl7::rand(0, 1) == 1) floatstate=FloatState::GoingUp;
 	else floatstate=FloatState::GoingDown;
@@ -73,26 +73,27 @@ void MagicGround::randomizeFloatState()
 
 void MagicGround::updateVerticalMovement(double time, float frame_rate_compensation)
 {
+	float factor=movement_speed / 50.0f;
 	if (floatstate == FloatState::GoingUp) {
-		if (current_speed < movement_speed) current_speed+=0.01f * frame_rate_compensation;
+		if (current_speed < movement_speed) current_speed+=factor * frame_rate_compensation;
 		if (current_speed > movement_speed) current_speed=movement_speed;
 		float_offset+=current_speed * frame_rate_compensation;
 		if (float_offset > (float)movement_range) floatstate=FloatState::BreakGoingUp;
 
 	} else if (floatstate == FloatState::BreakGoingUp) {
-		if (current_speed > 0.0f) current_speed-=0.02f * frame_rate_compensation;
+		if (current_speed > 0.0f) current_speed-=factor * frame_rate_compensation;
 		if (current_speed <= 0.0f) {
 			current_speed=0.0f;
 			floatstate=FloatState::GoingDown;
 		}
 		float_offset+=current_speed * frame_rate_compensation;
 	} else if (floatstate == FloatState::GoingDown) {
-		if (current_speed < movement_speed) current_speed+=0.01f * frame_rate_compensation;
+		if (current_speed < movement_speed) current_speed+=factor * frame_rate_compensation;
 		if (current_speed > movement_speed) current_speed=movement_speed;
 		float_offset-=current_speed * frame_rate_compensation;
 		if (float_offset < 0.0f) floatstate=FloatState::BreakGoingDown;
 	} else if (floatstate == FloatState::BreakGoingDown) {
-		if (current_speed > 0.0f) current_speed-=0.02f * frame_rate_compensation;
+		if (current_speed > 0.0f) current_speed-=factor * frame_rate_compensation;
 		if (current_speed <= 0.0f) {
 			current_speed=0.0f;
 			floatstate=FloatState::GoingUp;
@@ -133,33 +134,51 @@ void MagicGround::updateTransparency(double time, float frame_rate_compensation)
 
 void MagicGround::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	if (verticalMovement) updateVerticalMovement(time, frame_rate_compensation);
-	updateTransparency(time, frame_rate_compensation);
+	if (!copyFromOtherMagicGround()) {
+		if (verticalMovement) updateVerticalMovement(time, frame_rate_compensation);
+		updateTransparency(time, frame_rate_compensation);
+	}
+	if (roundEdges) sprite_no_representation=graficset * 4 + 3;
+	else sprite_no_representation=graficset * 4 + 1;
 	updateBoundary();
 }
 
-void MagicGround::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+bool MagicGround::copyFromOtherMagicGround()
+{
+	if (linked_with_id == 0) return false;
+	MagicGround* other=static_cast<MagicGround*>(GetObjectSystem()->getObject(linked_with_id));
+	if (!other || other->type() != Objects::Type::MagicGround) return false;
+	current_speed=other->current_speed;
+	floatstate=other->floatstate;
+	transparency=other->transparency;
+	float_offset=other->float_offset;
+	current_state=other->current_state;
+	p.y=initial_p.y - float_offset;
+	return true;
+}
+
+void MagicGround::drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& coords, const ppl7::grafix::Point& pp, float transp) const
 {
 	const ColorPalette& palette=GetColorPalette();
 	ppl7::grafix::Color myColor=palette.getColor(color);
-	myColor.setAlpha(255 - (transparency * 255.0f));
+	myColor.setAlpha(255 - (transp * 255.0f));
 
 	if (hasStuds) {
 		for (int i=0;i < width;i++)
 			texture->draw(renderer,
-				p.x + coords.x + i * 4 * TILE_WIDTH,
-				p.y + coords.y, 21, myColor);
+				pp.x + coords.x + i * 4 * TILE_WIDTH,
+				pp.y + coords.y, 21, myColor);
 	}
 	if (hasDebris) {
 		// TODO
 	}
-	int base=4 * type;
+	int base=4 * graficset;
 	if (width == 1) {
 		int g=base + 1;
 		if (roundEdges) g=base + 3;
 		texture->draw(renderer,
-			p.x + coords.x,
-			p.y + coords.y, g, myColor);
+			pp.x + coords.x,
+			pp.y + coords.y, g, myColor);
 	} else if (width > 1) {
 		int start=0;
 		int end=width - 1;
@@ -167,18 +186,30 @@ void MagicGround::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords
 			start++;
 			end--;
 			texture->draw(renderer,
-				p.x + coords.x,
-				p.y + coords.y, base, myColor);
+				pp.x + coords.x,
+				pp.y + coords.y, base, myColor);
 			texture->draw(renderer,
-				p.x + coords.x + (width - 1) * 4 * TILE_WIDTH,
-				p.y + coords.y, base + 2, myColor);
+				pp.x + coords.x + (width - 1) * 4 * TILE_WIDTH,
+				pp.y + coords.y, base + 2, myColor);
 		}
 		for (int i=start;i <= end;i++)
 			texture->draw(renderer,
-				p.x + coords.x + i * 4 * TILE_WIDTH,
-				p.y + coords.y, base + 1, myColor);
+				pp.x + coords.x + i * 4 * TILE_WIDTH,
+				pp.y + coords.y, base + 1, myColor);
 	}
 }
+
+void MagicGround::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	drawCommon(renderer, coords, p, transparency);
+}
+
+void MagicGround::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+{
+	drawCommon(renderer, coords, p, 0.5f);
+	drawCommon(renderer, coords, initial_p, 0.0f);
+}
+
 
 void MagicGround::handleCollision(Player* player, const Collision& collision)
 {
@@ -216,7 +247,7 @@ size_t MagicGround::save(unsigned char* buffer, size_t size) const
 	if (roundEdges) flags|=16;
 	if (canDissolve) flags|=32;
 	ppl7::Poke8(buffer + bytes + 1, flags);
-	ppl7::Poke8(buffer + bytes + 2, type);
+	ppl7::Poke8(buffer + bytes + 2, graficset);
 	ppl7::Poke8(buffer + bytes + 3, width);
 	ppl7::Poke8(buffer + bytes + 4, movement_range);
 	ppl7::Poke8(buffer + bytes + 5, color);
@@ -226,12 +257,13 @@ size_t MagicGround::save(unsigned char* buffer, size_t size) const
 	ppl7::PokeFloat(buffer + bytes + 15, max_time_visible);
 	ppl7::PokeFloat(buffer + bytes + 19, min_time_invisible);
 	ppl7::PokeFloat(buffer + bytes + 23, max_time_invisible);
-	return bytes + 27;
+	ppl7::Poke32(buffer + bytes + 27, linked_with_id);
+	return bytes + 31;
 }
 
 size_t MagicGround::saveSize() const
 {
-	return Object::saveSize() + 27;
+	return Object::saveSize() + 31;
 }
 
 size_t MagicGround::load(const unsigned char* buffer, size_t size)
@@ -239,7 +271,7 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version == 2) return 0;
+	if (version < 1 || version > 2) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	if (flags & 1) {
 		current_state=State::active;
@@ -253,9 +285,8 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 	verticalMovement=(bool)(flags & 8);
 	roundEdges=(bool)(flags & 16);
 	canDissolve=(bool)(flags & 32);
-	canDissolve=true;
 
-	type=ppl7::Peek8(buffer + bytes + 2);
+	graficset=ppl7::Peek8(buffer + bytes + 2);
 	width=ppl7::Peek8(buffer + bytes + 3);
 	movement_range=ppl7::Peek8(buffer + bytes + 4);
 	color=ppl7::Peek8(buffer + bytes + 5);
@@ -266,14 +297,285 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 		max_time_visible=ppl7::PeekFloat(buffer + bytes + 15);
 		min_time_invisible=ppl7::PeekFloat(buffer + bytes + 19);
 		max_time_invisible=ppl7::PeekFloat(buffer + bytes + 23);
+		linked_with_id=ppl7::Peek32(buffer + bytes + 27);
 	}
 	randomizeFloatState();
 	return size;
 }
 
+void MagicGround::reset()
+{
+	//ppl7::PrintDebug("MagicGround::reset()\n");
+	p=initial_p;
+	randomizeFloatState();
+}
+
+class MagicGroundDialog : public Decker::ui::Dialog
+{
+private:
+	ppltk::HorizontalSlider* graficset;
+	ppltk::HorizontalSlider* width;
+	ppltk::CheckBox* initial_state_checkbox, * current_state_checkbox;
+
+
+	ppltk::CheckBox* hasDebris;
+	ppltk::CheckBox* hasStuds;
+	ppltk::CheckBox* verticalMovement;
+	ppltk::CheckBox* roundEdges;
+	ppltk::CheckBox* canDissolve;
+
+	Decker::ui::ColorSelectionFrame* color;
+
+	ppltk::HorizontalSlider* movement_range;
+	ppltk::HorizontalSlider* max_debris_length;
+	ppltk::SpinBox* linked_with_id;
+
+	ppltk::DoubleHorizontalSlider* movement_speed;
+	ppltk::DoubleHorizontalSlider* min_time_visible;
+	ppltk::DoubleHorizontalSlider* max_time_visible;
+	ppltk::DoubleHorizontalSlider* min_time_invisible;
+	ppltk::DoubleHorizontalSlider* max_time_invisible;
+
+
+	MagicGround* object;
+
+public:
+	MagicGroundDialog(MagicGround* object);
+	~MagicGroundDialog();
+
+	void valueChangedEvent(ppltk::Event* event, int value) override;
+	void valueChangedEvent(ppltk::Event* event, int64_t value) override;
+	void valueChangedEvent(ppltk::Event* event, double value) override;
+	void toggledEvent(ppltk::Event* event, bool checked) override;
+	virtual void dialogButtonEvent(Dialog::Buttons button) override;
+	//void mouseDownEvent(ppltk::MouseEvent* event) override;
+};
+
+
 void MagicGround::openUi()
 {
+	MagicGroundDialog* dialog=new MagicGroundDialog(this);
+	GetGameWindow()->addChild(dialog);
+}
 
+
+MagicGroundDialog::MagicGroundDialog(MagicGround* object)
+	: Decker::ui::Dialog(640, 650, Buttons::OK | Buttons::Reset)
+{
+	ppl7::grafix::Rect client=clientRect();
+	this->object=object;
+	setWindowTitle(ppl7::ToString("MagicGround, ID: %d", object->id));
+	int y=0;
+	int sw=(client.width()) / 2;
+	int col1=150;
+	// State
+	initial_state_checkbox=new ppltk::CheckBox(0, y, sw, 30, "initial State", (bool)(object->initial_state == MagicGround::State::active));
+	initial_state_checkbox->setEventHandler(this);
+	addChild(initial_state_checkbox);
+	current_state_checkbox=new ppltk::CheckBox(sw, y, sw, 30, "current State", (bool)(object->current_state == MagicGround::State::active));
+	current_state_checkbox->setEventHandler(this);
+	addChild(current_state_checkbox);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Type: "));
+	graficset=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
+	graficset->setLimits(0, 4);
+	graficset->setValue(object->graficset);
+	graficset->enableSpinBox(true, 1, 80);
+	graficset->setEventHandler(this);
+	addChild(graficset);
+
+	addChild(new ppltk::Label(sw, y, 120, 30, "Width: "));
+	width=new ppltk::HorizontalSlider(sw + 120, y, client.width() - sw - 120, 30);
+	width->setLimits(1, 16);
+	width->setValue(object->width);
+	width->enableSpinBox(true, 1, 80);
+	width->setEventHandler(this);
+	addChild(width);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 80, 30, "Color:"));
+	ColorPalette& palette=GetColorPalette();
+	color=new Decker::ui::ColorSelectionFrame(120, y, 300, 300, palette);
+	color->setEventHandler(this);
+	color->setColorIndex(object->color);
+	this->addChild(color);
+
+	int y1=y;
+	int x1=120 + 305;
+	int w=client.width() - x1 - 30;
+
+	addChild(new ppltk::Label(x1, y1, 120, 30, "Flags: "));
+	y1+=30;
+	hasDebris=new ppltk::CheckBox(x1 + 30, y1, w, 30, "has debris", object->hasDebris);
+	hasDebris->setEventHandler(this);
+	addChild(hasDebris);
+	y1+=30;
+	hasStuds=new ppltk::CheckBox(x1 + 30, y1, w, 30, "has studs", object->hasStuds);
+	hasStuds->setEventHandler(this);
+	addChild(hasStuds);
+	y1+=30;
+	canDissolve=new ppltk::CheckBox(x1 + 30, y1, w, 30, "can dissolve", object->canDissolve);
+	canDissolve->setEventHandler(this);
+	addChild(canDissolve);
+	y1+=30;
+	roundEdges=new ppltk::CheckBox(x1 + 30, y1, w, 30, "round edges", object->roundEdges);
+	roundEdges->setEventHandler(this);
+	addChild(roundEdges);
+	y1+=30;
+	verticalMovement=new ppltk::CheckBox(x1 + 30, y1, w, 30, "moves vertical", object->verticalMovement);
+	verticalMovement->setEventHandler(this);
+	addChild(verticalMovement);
+	y1+=35;
+
+	y+=305;
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Movement:"));
+	movement_range=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
+	movement_range->setLimits(0, 255);
+	movement_range->setValue(object->movement_range);
+	movement_range->enableSpinBox(true, 1, 100);
+	movement_range->setEventHandler(this);
+	addChild(movement_range);
+
+	addChild(new ppltk::Label(sw, y, 60, 30, "Speed:"));
+	movement_speed=new ppltk::DoubleHorizontalSlider(sw + 60, y, client.width() - sw - 60, 30);
+	movement_speed->setLimits(0.1f, 10.0f);
+	movement_speed->setValue(object->movement_speed);
+	movement_speed->enableSpinBox(true, 0.1, 1, 100);
+	movement_speed->setEventHandler(this);
+	addChild(movement_speed);
+
+	y+=35;
+
+
+
+	int col0=0;
+	int w0=150;
+	int w1=50;
+	int w3=70;
+	int col2=col1 + w1;
+	sw=(client.width() - col2 - w3) / 2;
+	int w2=sw;
+	int w4=sw;
+	int col3=col2 + w2 + 10;
+	int col4=col3 + w3;
+
+
+	addChild(new ppltk::Label(col0, y, w0, 30, "Time visible:"));
+	addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	min_time_visible=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
+	min_time_visible->setEventHandler(this);
+	min_time_visible->setLimits(1.0f, 20.0f);
+	min_time_visible->setValue(object->min_time_visible);
+	min_time_visible->enableSpinBox(true, 0.1f, 1, 80);
+	addChild(min_time_visible);
+	addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	max_time_visible=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
+	max_time_visible->setEventHandler(this);
+	max_time_visible->setLimits(1.0f, 20.0f);
+	max_time_visible->setValue(object->max_time_visible);
+	max_time_visible->enableSpinBox(true, 0.1f, 1, 80);
+	addChild(max_time_visible);
+	y+=35;
+
+	addChild(new ppltk::Label(col0, y, w0, 30, "Time invisible:"));
+	addChild(new ppltk::Label(col1, y, w1, 30, "min:"));
+	min_time_invisible=new ppltk::DoubleHorizontalSlider(col2, y, w2, 30);
+	min_time_invisible->setEventHandler(this);
+	min_time_invisible->setLimits(1.0f, 20.0f);
+	min_time_invisible->setValue(object->min_time_invisible);
+	min_time_invisible->enableSpinBox(true, 0.1f, 1, 80);
+	addChild(min_time_invisible);
+	addChild(new ppltk::Label(col3, y, w3, 30, "max:"));
+	max_time_invisible=new ppltk::DoubleHorizontalSlider(col4, y, w4, 30);
+	max_time_invisible->setEventHandler(this);
+	max_time_invisible->setLimits(1.0f, 20.0f);
+	max_time_invisible->setValue(object->max_time_invisible);
+	max_time_invisible->enableSpinBox(true, 0.1f, 1, 80);
+	addChild(max_time_invisible);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 160, 30, "linked with Object ID:"));
+	linked_with_id=new ppltk::SpinBox(col2, y, 100, 30);
+	linked_with_id->setLimits(0, 65535);
+	linked_with_id->setValue(object->linked_with_id);
+	linked_with_id->setEventHandler(this);
+	addChild(linked_with_id);
+	y+=35;
+
+
+}
+
+
+MagicGroundDialog::~MagicGroundDialog()
+{
+
+}
+
+
+void MagicGroundDialog::valueChangedEvent(ppltk::Event* event, int value)
+{
+	if (event->widget() == color) {
+		object->color=value;
+
+	}
+}
+
+void MagicGroundDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
+{
+	if (event->widget() == movement_range) object->movement_range=value;
+	else if (event->widget() == width) object->width=value;
+	else if (event->widget() == graficset) object->graficset=value;
+	else if (event->widget() == max_debris_length) object->max_debris_length=value;
+	else if (event->widget() == linked_with_id) object->linked_with_id=value;
+}
+
+void MagicGroundDialog::valueChangedEvent(ppltk::Event* event, double value)
+{
+	if (event->widget() == movement_speed) {
+		object->movement_speed=value;
+	} else if (event->widget() == min_time_visible) {
+		object->min_time_visible=value;
+		if (object->min_time_visible > object->max_time_visible) max_time_visible->setValue(object->min_time_visible);
+	} else if (event->widget() == max_time_visible) {
+		object->max_time_visible=value;
+		if (object->max_time_visible < object->min_time_visible) min_time_visible->setValue(object->max_time_visible);
+	} else if (event->widget() == min_time_invisible) {
+		object->min_time_invisible=value;
+		if (object->min_time_invisible > object->max_time_invisible) max_time_invisible->setValue(object->min_time_invisible);
+	} else if (event->widget() == max_time_invisible) {
+		object->max_time_invisible=value;
+		if (object->max_time_invisible < object->min_time_invisible) min_time_invisible->setValue(object->max_time_invisible);
+	}
+}
+
+void MagicGroundDialog::toggledEvent(ppltk::Event* event, bool checked)
+{
+	if (event->widget() == initial_state_checkbox) {
+		if (checked) object->initial_state=MagicGround::State::active;
+		else object->initial_state=MagicGround::State::inactive;
+		object->reset();
+	} else if (event->widget() == current_state_checkbox) {
+		if (checked) object->current_state=MagicGround::State::active;
+		else object->current_state=MagicGround::State::inactive;
+		object->reset();
+	} else if (event->widget() == hasDebris) {
+		object->hasDebris=checked;
+	} else if (event->widget() == hasStuds) {
+		object->hasStuds=checked;
+	} else if (event->widget() == verticalMovement) {
+		object->verticalMovement=checked;
+	} else if (event->widget() == roundEdges) {
+		object->roundEdges=checked;
+	} else if (event->widget() == canDissolve) {
+		object->canDissolve=checked;
+	}
+}
+
+void MagicGroundDialog::dialogButtonEvent(Dialog::Buttons button)
+{
+	if (button == Dialog::Buttons::Reset) object->reset();
 }
 
 
