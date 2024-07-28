@@ -79,7 +79,8 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::Stamper, "Stamper", 36);
 	addObject(Decker::Objects::Type::FloaterHorizontal, "Floater horizontal", 13);
 	addObject(Decker::Objects::Type::FloaterVertical, "Floater vertical", 14);
-	addObject(Decker::Objects::Type::BreakingGround, "breaking Ground", 24);
+	addObject(Decker::Objects::Type::BreakingGround, "Breaking Ground", 24);
+	addObject(Decker::Objects::Type::MagicGround, "Magic Ground", 76);
 	addObject(Decker::Objects::Type::Fire, "Fire", 25);
 	addObject(Decker::Objects::Type::Vent, "Vent", 31);
 	addObject(Decker::Objects::Type::Speaker, "Speaker", 29);

@@ -212,6 +212,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::Spider]->enableMemoryBuffer(true);
 	spriteset[Spriteset::Spider]->load(sdl, "res/spider.tex");
 
+	spriteset[Spriteset::MagicGround]->enableOutlines(true);
+	spriteset[Spriteset::MagicGround]->enableMemoryBuffer(true);
+	spriteset[Spriteset::MagicGround]->load(sdl, "res/magicground.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -519,6 +523,7 @@ Representation getRepresentation(int object_type)
 		case Type::Spider: return Spider::representation();
 		case Type::PowerCell: return PowerCell::representation();
 		case Type::SpawnPoint: return SpawnPoint::representation();
+		case Type::MagicGround: return MagicGround::representation();
 
 		default: return Object::representation();
 	}
@@ -619,6 +624,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::Spider: return new Spider();
 		case Type::PowerCell: return new PowerCell();
 		case Type::SpawnPoint: return new SpawnPoint();
+		case Type::MagicGround: return new MagicGround();
 
 	}
 	return NULL;

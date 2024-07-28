@@ -152,6 +152,7 @@ OBJECTS=compile/main.o \
 	compile/object_trigger.o \
 	compile/object_light_trigger.o \
 	compile/object_ghost.o \
+	compile/object_magicground.o \
 	compile/object_level_modificator.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
@@ -381,6 +382,7 @@ sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_
 	./texmaker -s lightwave/Render/skeleton/ -t res/skeleton.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/objects/vent/ -t res/vent.tex -w 1024 -h 1024 --pivot_detection lower_middle
 	./texmaker -s lightwave/Render/enemies/mushroom/ -t res/mushroom.tex -w 1024 -h 1024 -px 52 -py 77
+	./texmaker -s lightwave/Render/magicground/ -t res/magicground.tex -w 512 -h 512 -px 127 -py 180
 	./texmaker -s lightwave/Render/enemies/scarabeus/ -t res/scarabeus.tex -w 256 -h 256 -px 32 -py 55
 	./texmaker -s lightwave/Render/enemies/wallenstein/ -t res/wallenstein.tex -w 1024 -h 1024 -px 128 -py 195
 	./texmaker -s lightwave/Render/enemies/helena/ -t res/helena.tex -w 1024 -h 1024 -px 128 -py 195
@@ -682,9 +684,14 @@ compile/object_scarabeus.o: src/objects/scarabeus.cpp Makefile include/objects.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_scarabeus.o -c src/objects/scarabeus.cpp $(CFLAGS)
 
-compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h
+compile/object_breakingground.o: src/objects/breakingground.cpp Makefile include/objects.h include/player.h \
+	include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_breakingground.o -c src/objects/breakingground.cpp $(CFLAGS)
+
+compile/object_magicground.o: src/objects/magicground.cpp Makefile include/objects.h include/player.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_magicground.o -c src/objects/magicground.cpp $(CFLAGS)
 
 compile/object_fire.o: src/objects/fire.cpp Makefile include/objects.h include/audiopool.h \
 	include/player.h

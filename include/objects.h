@@ -76,6 +76,7 @@ public:
 		PowerCell=41,
 		SpawnPoint=42,
 		Peach=43,
+		MagicGround=44,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -142,6 +143,7 @@ public:
 		Switches,
 		Crates,
 		Spider,
+		MagicGround,
 		MaxSpritesets
 	};
 };
@@ -1499,6 +1501,75 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
+
+class MagicGround : public Object
+{
+public:
+	enum class State {
+		inactive=0,
+		appears,
+		active,
+		disappears
+	};
+private:
+	enum class FloatState {
+		GoingUp,
+		BreakGoingUp,
+		GoingDown,
+		BreakGoingDown
+
+	};
+	float current_speed;
+	State current_state;
+	FloatState floatstate;
+	float transparency;
+	float float_offset;
+	double next_transparency_change;
+
+	void updateVerticalMovement(double time, float frame_rate_compensation);
+	void updateTransparency(double time, float frame_rate_compensation);
+	void randomizeFloatState();
+	void updateBoundary();
+public:
+	uint8_t type;
+	uint8_t width;
+	uint8_t movement_range;
+	uint8_t max_debris_length;
+	uint32_t linked_with_id;
+
+	bool hasDebris;
+	bool hasStuds;
+	bool verticalMovement;
+	bool roundEdges;
+	bool canDissolve;
+
+	int color;
+	float movement_speed;
+	float min_time_visible;
+	float max_time_visible;
+	float min_time_invisible;
+	float max_time_invisible;
+
+	State initial_state;
+
+
+
+
+
+	MagicGround();
+	static Representation representation();
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+
+};
+
 
 class BreakingWall : public Object
 {
