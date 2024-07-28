@@ -329,12 +329,13 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 	if (version < 1 || version > 3) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	if (flags & 1) {
-		current_state=State::active;
+		initial_state=State::active;
 		transparency=0.0f;
 	} else {
-		current_state=State::inactive;
+		initial_state=State::inactive;
 		transparency=1.0f;
 	}
+	current_state=initial_state;
 	hasDebris=(bool)(flags & 2);
 	hasStuds=(bool)(flags & 4);
 	verticalMovement=(bool)(flags & 8);
