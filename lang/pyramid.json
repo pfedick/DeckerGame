@@ -99,6 +99,26 @@
             "de": {
                 "text": "Nanu?"
             }
+        },
+        "2210": {
+            "context": "George lands on MagicGround over lava pid",
+            "character": "george",
+            "en": {
+                "text": "That's crazy!"
+            },
+            "de": {
+                "text": "Das ist verrückt!"
+            }
+        },
+        "2211": {
+            "context": "More MagicGround objects appear",
+            "character": "george",
+            "en": {
+                "text": "There are more! This is how I get out of here!"
+            },
+            "de": {
+                "text": "Da sind noch mehr! So komme ich hier wieder raus!"
+            }
         }
     }
 }
