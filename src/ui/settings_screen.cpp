@@ -956,7 +956,7 @@ void SettingsScreen::mouseClickEvent(ppltk::MouseEvent* event)
         dmode.refresh_rate=Tok[2].toInt();
         try {
             game.window().setWindowDisplayMode(dmode);
-            game.resizeEvent(NULL);
+            //game.resizeEvent(NULL);
             game.config.ScreenResolution.setSize(dmode.width, dmode.height);
             game.config.ScreenRefreshRate=dmode.refresh_rate;
             game.config.windowMode=mode;

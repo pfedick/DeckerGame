@@ -373,7 +373,9 @@ void Game::initUi()
 	Style.inputFont.setName("NotoSans");
 	wm->setWidgetStyle(Style);
 
-	const ppl7::grafix::Size& desktop=clientSize();
+	//const ppl7::grafix::Size& desktop=clientSize();
+	ppl7::grafix::Size desktop;
+	desktop.setSize(1920,1080);
 	//ppltk::Label *label;
 
 	resizeMenueAndStatusbar();
@@ -2100,31 +2102,6 @@ void Game::mouseMoveEvent(ppltk::MouseEvent* event)
 		game_viewport.translateMouseEvent(event);
 		handleMouseDrawInWorld(*event);
 	}
-
-}
-
-void Game::resizeEvent(ppltk::ResizeEvent* event)
-{
-	/*
-	if (tex_level_grid) {
-		sdl.destroyTexture(tex_level_grid);
-		tex_level_grid=NULL;
-	}
-	*/
-	if (!bGameWindowCreated) return;
-	if (event != NULL && event->widget() == world_widget) return;
-	desktopSize=windowSize();
-	viewport=clientRect();
-	//ppl7::PrintDebug("resize: %d, %d\n", desktopSize.width, desktopSize.height);
-	//viewport.setWidth(desktopSize.width);
-	//viewport.setHeight(desktopSize.height);
-	game_viewport.setRealViewport(windowSize());
-	resizeMenueAndStatusbar();
-	message_overlay.resize(desktopSize);
-	showUi(showui);
-	//printf("Game::resizeEvent, Window sagt: %d x %d\n", this->width(), this->height());
-	//if (start_screen) start_screen->resizeEvent(event);
-	//if (settings_screen) settings_screen->resizeEvent(event);
 
 }
 
