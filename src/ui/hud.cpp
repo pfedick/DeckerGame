@@ -375,10 +375,13 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
     }
     if (redraw_needed || last_drawn_viewport != my_viewport) redraw();
     //ppl7::PrintDebug("GameHUD::draw\n");
-    SDL_Rect tr=render_rect;
+    SDL_Rect tr;
     //tr.y=tr.h - hud_size.height;
+    tr.x=0;
+    tr.w=1920;
     tr.y= my_viewport.y2 - hud_size.height - 5;
     tr.h=hud_size.height;
+    //ppl7::PrintDebug("my_viewport.y2=%d\n", my_viewport.y2);
 
     SDL_SetRenderTarget(renderer, render_target);
     SDL_RenderCopy(renderer, hud_texture, NULL, &tr);
