@@ -81,6 +81,7 @@ class Object;
 class SettingsScreen;
 class ParticleSystem;
 class GameHUD;
+class Glimmer;
 
 class Config
 {
@@ -517,6 +518,7 @@ public:
 	SpriteTexture uiSprites_White1D;
 	SpriteTexture Sprites_Decals;
 	SpriteTexture uiSpritesDecals;
+	SpriteTexture Sprites_Glimmer;
 
 
 	SpriteTexture Waynet;
@@ -831,7 +833,7 @@ public:
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
 	void backup(const ppl7::String& Filename);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics);
+	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer);
 	void setViewport(const ppl7::grafix::Rect& r);
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
@@ -1112,6 +1114,7 @@ private:
 	void updateLevelModificator(double time);
 
 	Player* player;
+	Glimmer* glimmer;
 	float fade_to_black;
 	int death_state;
 

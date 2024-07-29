@@ -8,6 +8,7 @@
 #include "particle.h"
 #include "screens.h"
 #include "hud.h"
+#include "glimmer.h"
 
 //#define EVENTTRACKING 1
 
@@ -72,6 +73,7 @@ Game::Game()
 	ppltk::WidgetStyle s(ppltk::WidgetStyle::Dark);
 	Style=s;
 	player=NULL;
+	glimmer=NULL;
 	mainmenue=NULL;
 	statusbar=NULL;
 	tiles_selection=NULL;
@@ -109,6 +111,7 @@ Game::~Game()
 {
 	if (settings_screen) delete  settings_screen;
 	if (player) delete player;
+	if (glimmer) delete glimmer;
 	if (tex_level_grid) sdl.destroyTexture(tex_level_grid);
 	if (tex_render_target) sdl.destroyTexture(tex_render_target);
 	if (tex_render_lightmap) sdl.destroyTexture(tex_render_lightmap);
@@ -124,6 +127,10 @@ void Game::loadGrafix()
 
 	resources.Sprite_George_Adventure.enableMemoryBuffer(true);
 	resources.Sprite_George_Adventure.load(sdl, "res/george_adventure.tex");
+
+	resources.Sprites_Glimmer.enableMemoryBuffer(true);
+	resources.Sprites_Glimmer.load(sdl, "res/glimmer.tex");
+
 
 	resources.Cursor.load(sdl, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
@@ -375,7 +382,7 @@ void Game::initUi()
 
 	//const ppl7::grafix::Size& desktop=clientSize();
 	ppl7::grafix::Size desktop;
-	desktop.setSize(1920,1080);
+	desktop.setSize(1920, 1080);
 	//ppltk::Label *label;
 
 	resizeMenueAndStatusbar();
@@ -505,6 +512,10 @@ void Game::init_grafix()
 {
 	presentStartupScreen();
 	loadGrafix();
+
+	if (glimmer) delete glimmer;
+	glimmer=new Glimmer(*this);
+	glimmer->setSpriteResource(resources.Sprites_Glimmer, resources.Lightmaps);
 
 	if (player) delete player;
 	player=new Player(this);
@@ -719,7 +730,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.objects->updateVisibleObjectList(WorldCoords, game_viewport);
 	if (this->controlsEnabled || player->isAutoWalk())
 		player->update(now, level.TileTypeMatrix, level.objects, frame_rate_compensation);
-
+	glimmer->update(now, level.TileTypeMatrix, *player, *level.objects, frame_rate_compensation);
 	if (game_speed == GameSpeed::Normal || game_speed == GameSpeed::ManualStep) {
 		level.objects->update(now, level.TileTypeMatrix, *player, frame_rate_compensation);
 	}
@@ -798,7 +809,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
 	level.setShowParticles(mainmenue->visibility_particles);
-	level.draw(renderer, WorldCoords, player, metrics);
+	level.draw(renderer, WorldCoords, player, metrics, glimmer);
 	metrics.time_draw_tsop.stop();
 	if (screenshot) {
 		if (screenshot->mode() == Screenshot::Mode::File) {
@@ -1461,6 +1472,9 @@ void Game::startLevel(const ppl7::String& filename)
 	mainmenue->update();
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
 	mainmenue->setWorldFollowsPlayer(true);
+	glimmer->setEnabled(true);
+	glimmer->setBehavior(Glimmer::Behavior::FollowPlayer);
+	glimmer->setPosition(startpoint - ppl7::grafix::Point(200, 200));
 	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
@@ -1651,12 +1665,12 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 			event->p.y + coords.y,
 			z_axis,
 			spriteset, nr, scale, rotation, sprite_selection->colorIndex());
-	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
-		sprite_selection->setSelectedSprite(-1);
-		sprite_mode=spriteModeDraw;
-		selected_sprite.id=-1;
-		selected_sprite_system=NULL;
-	}
+} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
+	sprite_selection->setSelectedSprite(-1);
+	sprite_mode=spriteModeDraw;
+	selected_sprite.id=-1;
+	selected_sprite_system=NULL;
+}
 }
 
 void Game::mouseDownEventOnLight(ppltk::MouseEvent* event)
@@ -1696,12 +1710,12 @@ void Game::mouseDownEventOnLight(ppltk::MouseEvent* event)
 		light->typeParameter=lights_selection->lightTypeParameter();
 
 		level.lights.addLight(light);
-	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
-		lights_selection->setSelectedLight(-1);
-		sprite_mode=spriteModeDraw;
-		selected_light=NULL;
-		lights_selection->setLightId(0);
-	}
+} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
+	lights_selection->setSelectedLight(-1);
+	sprite_mode=spriteModeDraw;
+	selected_light=NULL;
+	lights_selection->setLightId(0);
+}
 }
 
 

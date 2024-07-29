@@ -8,6 +8,7 @@
 #include "objects.h"
 #include "particle.h"
 #include "light.h"
+#include "glimmer.h"
 
 Level::Level()
 {
@@ -457,7 +458,7 @@ void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerP
 	metrics.time_lights.stop();
 }
 
-void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics)
+void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer)
 {
 	player->addFlashlightToLightSystem(lights);
 	prepareLayer(renderer);
@@ -516,6 +517,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		}
 		// Player
 		player->draw(renderer, viewport, worldcoords * planeFactor[0]);
+		glimmer->draw(renderer, viewport, worldcoords * planeFactor[0]);
 		if (showObjects) {	// Objects before Player
 			//metrics.time_objects.start();
 			if (!editMode)
