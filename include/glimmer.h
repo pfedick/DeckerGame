@@ -14,6 +14,19 @@ public:
         FollowPlayer,
     };
 private:
+    class FollowPlayer {
+    public:
+        enum class State {
+            Start,
+            Wait,
+            Follow,
+            Stop
+        };
+        State state;
+    };
+
+    FollowPlayer follow_player;
+
     ppl7::grafix::Point tail_p[GLIMMER_TAIL_LENGTH];
     int last_tail_index;
     SpriteTexture* texture;
@@ -23,12 +36,17 @@ private:
     float frame_rate_compensation;
     double time;
     Game& game;
-    int streak_sprite;
     float streak_rotation;
     float streak_size;
+    float light_size;
+    float speed;
+    float direction;
+    ppl7::grafix::PointF velocity;
     LightObject light;
 
     void drawObject(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+
+    void updateFollowPlayer(Player& player);
 
 public:
 
