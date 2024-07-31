@@ -1474,7 +1474,7 @@ void Game::startLevel(const ppl7::String& filename)
 	mainmenue->setWorldFollowsPlayer(true);
 	glimmer->setEnabled(true);
 	glimmer->setBehavior(Glimmer::Behavior::FollowPlayer);
-	glimmer->setPosition(startpoint - ppl7::grafix::Point(200, 200));
+	glimmer->setPosition(startpoint - ppl7::grafix::Point(200, 400));
 	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
@@ -1665,12 +1665,12 @@ void Game::mouseDownEventOnSprite(ppltk::MouseEvent* event)
 			event->p.y + coords.y,
 			z_axis,
 			spriteset, nr, scale, rotation, sprite_selection->colorIndex());
-} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
-	sprite_selection->setSelectedSprite(-1);
-	sprite_mode=spriteModeDraw;
-	selected_sprite.id=-1;
-	selected_sprite_system=NULL;
-}
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
+		sprite_selection->setSelectedSprite(-1);
+		sprite_mode=spriteModeDraw;
+		selected_sprite.id=-1;
+		selected_sprite_system=NULL;
+	}
 }
 
 void Game::mouseDownEventOnLight(ppltk::MouseEvent* event)
@@ -1710,12 +1710,12 @@ void Game::mouseDownEventOnLight(ppltk::MouseEvent* event)
 		light->typeParameter=lights_selection->lightTypeParameter();
 
 		level.lights.addLight(light);
-} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
-	lights_selection->setSelectedLight(-1);
-	sprite_mode=spriteModeDraw;
-	selected_light=NULL;
-	lights_selection->setLightId(0);
-}
+	} else if (event->widget() == world_widget && event->buttonMask == ppltk::MouseState::Right) {
+		lights_selection->setSelectedLight(-1);
+		sprite_mode=spriteModeDraw;
+		selected_light=NULL;
+		lights_selection->setLightId(0);
+	}
 }
 
 

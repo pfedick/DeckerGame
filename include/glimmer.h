@@ -14,18 +14,15 @@ public:
         FollowPlayer,
     };
 private:
-    class FollowPlayer {
-    public:
-        enum class State {
-            Start,
-            Wait,
-            Follow,
-            Stop
-        };
-        State state;
-    };
 
-    FollowPlayer follow_player;
+    enum class MoveState {
+        Start,
+        Wait,
+        Move,
+        Stop
+    };
+    MoveState movestate;
+
 
     ppl7::grafix::Point tail_p[GLIMMER_TAIL_LENGTH];
     int last_tail_index;
@@ -41,6 +38,7 @@ private:
     float light_size;
     float speed;
     float direction;
+    float maxspeed;
     ppl7::grafix::PointF velocity;
     LightObject light;
 
@@ -61,7 +59,7 @@ public:
     void setPosition(const ppl7::grafix::Point& position);
     void setEnabled(bool enable);
     void setBehavior(Behavior behavior);
-    void moveTo(const ppl7::grafix::PointF &target);
+    void moveTo(const ppl7::grafix::PointF& target);
 
     void update(double time, const TileTypePlane& world, Player& player, Decker::Objects::ObjectSystem& objects, float frame_rate_compensation);
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;

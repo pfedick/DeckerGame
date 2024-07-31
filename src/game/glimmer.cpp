@@ -20,6 +20,7 @@ Glimmer::Glimmer(Game& game)
     light_size=1.0f;
     speed=0.0f;
     direction=0.0f;
+    maxspeed=15.0f;
 
     light.color.set(255, 255, 255, 255);
     light.sprite_no=0;
@@ -54,7 +55,7 @@ void Glimmer::setEnabled(bool enable)
 void Glimmer::setBehavior(Behavior behavior)
 {
     this->behavior=behavior;
-    if (behavior == Behavior::FollowPlayer) follow_player.state=FollowPlayer::State::Start;
+    if (behavior == Behavior::FollowPlayer) movestate=MoveState::Start;
 
 }
 
@@ -84,6 +85,8 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     this->frame_rate_compensation=frame_rate_compensation;
     this->time=time;
     if (behavior == Behavior::FollowPlayer) updateFollowPlayer(player);
+
+    p+=velocity;
 
     // Update Tail
     last_tail_index++;
@@ -119,26 +122,49 @@ void Glimmer::updateFollowPlayer(Player& player)
         }
     }
     double dist=ppl7::grafix::Distance(player_p, p);
+    maxspeed=dist / 40.0f;
+    if (movestate == MoveState::Wait && dist > 100.0f) {
+        movestate=MoveState::Move;
+    } else if (movestate == MoveState::Move && dist < 20.0f) movestate=MoveState::Stop;
+    moveTo(player_p);
+
+}
+
+
+void Glimmer::moveTo(const ppl7::grafix::PointF& target)
+{
 
     float acceleration=0.1f;
+    float c=ppl7::grafix::Distance(p, target);
+    float a=target.x - p.x;
+    float b=p.y - target.y;
+    float target_angle=0.0f;
+    if (a > 0.0f && b > 0.0f) {     // case 1 a+b are positive
+        target_angle = asin(a / c) / rad_pi;
+    } else if (a > 0.0f && b < 0.0f) {  // case 2
+        target_angle =90.0f + asin(fabsf(b) / c) / rad_pi;
+    } else if (a < 0.0f && b < 0.0f) {  // case 3, a+b are negative
+        target_angle =180.0f + asin(fabsf(a) / c) / rad_pi;
+    } else if (a < 0.0f && b>0.0f) {  // case 4
+        target_angle =270.0f + asin(b / c) / rad_pi;
+    }
+    if (speed == 0.0f) direction=target_angle;
 
-    float maxspeed=dist / 40.0f;
+
     if (maxspeed > 15.0f) maxspeed=15.0f;
+    if (maxspeed < 0.1f) maxspeed=0.1;
     acceleration=speed / 10.0f;
     if (acceleration > 2.0f) acceleration=20.0f;
     if (acceleration < 0.1) acceleration=0.1f;
 
-    if (follow_player.state == FollowPlayer::State::Start) {
+    if (movestate == MoveState::Start) {
         if (speed == 0.0f) {
-            follow_player.state=FollowPlayer::State::Wait;
+            movestate=MoveState::Wait;
         } else {
-            follow_player.state=FollowPlayer::State::Follow;
+            movestate=MoveState::Move;
         }
     }
-    if (follow_player.state == FollowPlayer::State::Wait && dist > 100.0f) {
-        follow_player.state=FollowPlayer::State::Follow;
-    }
-    if (follow_player.state == FollowPlayer::State::Follow) {
+    if (movestate == MoveState::Move) {
         if (speed < maxspeed) {
             speed+=acceleration * frame_rate_compensation;
             if (speed > maxspeed) speed=maxspeed;
@@ -146,32 +172,42 @@ void Glimmer::updateFollowPlayer(Player& player)
             speed-=acceleration * frame_rate_compensation;
             if (speed < maxspeed) speed=maxspeed;
         }
-        if (dist < 20.0f) follow_player.state=FollowPlayer::State::Stop;
     }
-    if (follow_player.state == FollowPlayer::State::Stop) {
+    if (movestate == MoveState::Stop) {
         if (speed > 0.0f) speed-=acceleration * frame_rate_compensation;
         if (speed < 0.0f) {
             speed=0.0f;
-            follow_player.state=FollowPlayer::State::Wait;
+            movestate=MoveState::Wait;
         }
     }
 
-    ppl7::PrintDebug("state: %d, speed: %0.3f, acceleration: %0.3f\n", (int)follow_player.state, speed, acceleration);
 
 
-    if (p.x < player_p.x) p.x+=speed;
-    if (p.x > player_p.x) p.x-=speed;
 
-    if (p.y < player_p.y) p.y+=speed;
-    if (p.y > player_p.y) p.y-=speed;
+    //ppl7::PrintDebug("state: %d, speed: %0.3f, acceleration: %0.3f, a=%0.3f, b=%0.3f, target_angle=%0.3f\n", (int)movestate, speed, acceleration, a, b, target_angle);
 
+    //ppl7::PrintDebug("my angle: %0.3f, target: %0.3f\n", direction, target_angle);
 
-}
+    /*
+    float g_angle=direction + 360;
+    target_angle+=360;
+    if (target_angle - g_angle < 180.0f) {
+        direction+=2.0f * frame_rate_compensation;
+    } else {
+        direction-=2.0f * frame_rate_compensation;
+    }
+    if (fabsf(target_angle - g_angle) < 2.0f) direction=target_angle - 360;
+    */
+    direction=target_angle;
 
+    updateVelocity();
+    /*
+    if (p.x < target.x) p.x+=speed;
+    if (p.x > target.x) p.x-=speed;
 
-void Glimmer::moveTo(const ppl7::grafix::PointF &target)
-{
-
+    if (p.y < target.y) p.y+=speed;
+    if (p.y > target.y) p.y-=speed;
+    */
 }
 
 
@@ -179,12 +215,12 @@ void Glimmer::updateVelocity()
 {
     if (direction < 0.0f) direction+=360.0f;
     if (direction >= 360.0f) direction-=360.0f;
-    if (speed==0.0f) {
+    if (speed == 0.0f) {
         velocity.x=0.0f;
         velocity.y=0.0f;
         return;
     }
-    
+
     if (direction == 0.0f) {
         velocity.x=0;
         velocity.y=-speed;
