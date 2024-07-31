@@ -32,6 +32,7 @@ LevelEnd::LevelEnd()
     color_details_arch=1;
     color_stairs=1;
     background_alpha=255;
+    warp_to_id=0;
 }
 
 LevelEnd::~LevelEnd()
@@ -70,41 +71,40 @@ void LevelEnd::handleCollision(Player* player, const Collision& collision)
     if (player->x > p.x - TILE_WIDTH * 2 && player->x < p.x + TILE_WIDTH * 2 &&
         player->y<p.y + TILE_HEIGHT && player->y>p.y - TILE_HEIGHT * 5) {
         double now=ppl7::GetMicrotime();
-        if ((static_cast<int>(flags) & static_cast<int>(Flags::transferOnCollision)) && cooldown < now) {
-            cooldown=now + 0.2;
-            if (!GetGame().nextLevel(next_level)) {
-                toggle(false);
-                return;
-            } else {
-                //printf("switch\n");
-                cooldown=now + 20000;
-            }
-        }
         Player::Keys keyboard=player->getKeyboardMatrix();
-
-        if (cooldown < now && (keyboard.matrix & KeyboardKeys::Action)) {
+        if (((static_cast<int>(flags) & static_cast<int>(Flags::transferOnCollision)) || (keyboard.matrix & KeyboardKeys::Action)) && cooldown < now) {
             cooldown=now + 0.2;
-            if (!GetGame().nextLevel(next_level)) {
-                toggle(false);
-                return;
-            } else {
-                //printf("switch\n");
-                cooldown=now + 20000;
+            if (next_level.notEmpty()) {
+                if (!GetGame().nextLevel(next_level)) {
+                    toggle(false);
+                    return;
+                } else {
+                    //printf("switch\n");
+                    cooldown=now + 20000;
+                }
+            } else if (warp_to_id > 0) {
+                LevelEnd* target=static_cast<LevelEnd*>(GetObjectSystem()->getObject(warp_to_id));
+                if (target != NULL && target->type() == Type::ObjectType::LevelEnd) {
+                    target->cooldown=now + 1.0f;
+                    player->move(target->p.x, target->p.y);
+                }
             }
         }
+
+
     }
 }
 
 size_t LevelEnd::saveSize() const
 {
-    return Object::saveSize() + 22 + next_level.size();
+    return Object::saveSize() + 26 + next_level.size();
 }
 
 size_t LevelEnd::save(unsigned char* buffer, size_t size) const
 {
     size_t bytes=Object::save(buffer, size);
     if (!bytes) return 0;
-    ppl7::Poke8(buffer + bytes, 3);		// Object Version
+    ppl7::Poke8(buffer + bytes, 4);		// Object Version
 
     ppl7::Poke16(buffer + bytes + 1, static_cast<int>(flags));
     ppl7::Poke16(buffer + bytes + 3, color_doorframe);
@@ -119,6 +119,9 @@ size_t LevelEnd::save(unsigned char* buffer, size_t size) const
     size_t p=21 + next_level.size();
     ppl7::Poke8(buffer + bytes + p, background_alpha);
     p++;
+    ppl7::Poke32(buffer + bytes + p, warp_to_id);
+    p+=4;
+
     return bytes + p;
 }
 
@@ -141,11 +144,14 @@ size_t LevelEnd::load(const unsigned char* buffer, size_t size)
     key_id=ppl7::Peek32(buffer + bytes + 15);
     size_t next_level_size=ppl7::Peek16(buffer + bytes + 19);
     next_level.set((const char*)(buffer + bytes + 21), next_level_size);
+    size_t p=21 + next_level_size;
     if (version > 2) {
-        size_t p=21 + next_level_size;
         background_alpha=ppl7::Peek8(buffer + bytes + p);
+        p++;
     }
-
+    if (version >= 4) {
+        warp_to_id=ppl7::Peek32(buffer + bytes + p);
+    }
     state=State::Inactive;
 
     if (static_cast<int>(flags) & static_cast<int>(Flags::initialStateActive)) toggle(true, NULL);
@@ -256,6 +262,7 @@ private:
     ppltk::CheckBox* transfer_on_collision;
     ppltk::LineInput* next_level;
     ppltk::SpinBox* key_id;
+    ppltk::SpinBox* warp_to_id;
     Decker::ui::ColorSelectionFrame* colorframe;
     ppltk::Button* button_color_background;
     ppltk::Button* button_color_doorframe;
@@ -348,6 +355,13 @@ LevelEndDialog::LevelEndDialog(LevelEnd* object)
     key_id->setLimits(0, 65535);
     key_id->setEventHandler(this);
     addChild(key_id);
+
+    addChild(new ppltk::Label(280, y, 150, 30, "transfer to object ID:"));
+    warp_to_id=new ppltk::SpinBox(430, y, 100, 30);
+    warp_to_id->setLimits(0, 65535);
+    warp_to_id->setValue(object->warp_to_id);
+    warp_to_id->setEventHandler(this);
+    addChild(warp_to_id);
     y+=40;
 
     addChild(new ppltk::Label(0, y, 80, 30, "Colors:"));
@@ -496,7 +510,8 @@ void LevelEndDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     ppltk::Widget* widget=event->widget();
     if (widget == key_id) object->key_id=value;
-    if (widget == background_alpha) object->background_alpha=value;
+    else if (widget == warp_to_id) object->warp_to_id=value;
+    else if (widget == background_alpha) object->background_alpha=value;
 }
 
 void LevelEndDialog::valueChangedEvent(ppltk::Event* event, int value)

@@ -1794,6 +1794,7 @@ public:
 		transferOnCollision=4,
 	};
 	uint32_t key_id;
+	uint32_t warp_to_id;
 	Flags flags;
 	State state;
 	ppl7::String next_level;

@@ -119,6 +119,16 @@
             "de": {
                 "text": "Da sind noch mehr! So komme ich hier wieder raus!"
             }
+        },
+        "2212": {
+            "context": "George found a hammer, after he found the breaking wall before",
+            "character": "george",
+            "en": {
+                "text": "I could have used that earlier!"
+            },
+            "de": {
+                "text": "Den hätte ich vorhin gut gebrauchen können!"
+            }
         }
     }
 }
