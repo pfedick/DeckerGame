@@ -37,6 +37,7 @@ void BreakingWall::update(double time, TileTypePlane& ttplane, Player& player, f
 			if (animation.isFinished()) {
 				state=2;
 				collisionDetection=false;
+				enabled=false;
 			}
 
 		}
