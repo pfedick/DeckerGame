@@ -177,6 +177,7 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
         if (speed > 0.0f) speed-=acceleration * frame_rate_compensation;
         if (speed < 0.0f) {
             speed=0.0f;
+            direction=0.0f;
             movestate=MoveState::Wait;
         }
     }
@@ -188,17 +189,19 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
 
     //ppl7::PrintDebug("my angle: %0.3f, target: %0.3f\n", direction, target_angle);
 
-    /*
-    float g_angle=direction + 360;
-    target_angle+=360;
-    if (target_angle - g_angle < 180.0f) {
-        direction+=2.0f * frame_rate_compensation;
-    } else {
-        direction-=2.0f * frame_rate_compensation;
+    if (movestate == MoveState::Move) {
+        float g_angle=direction + 360;
+        target_angle+=360;
+        if (fabsf(target_angle - g_angle) < 90.0f) {
+            if (target_angle < g_angle) direction-=2.0f * frame_rate_compensation;
+            else direction+=2.0f * frame_rate_compensation;
+        } else {
+            movestate = MoveState::Stop;
+        }
     }
-    if (fabsf(target_angle - g_angle) < 2.0f) direction=target_angle - 360;
-    */
-    direction=target_angle;
+
+
+    //direction=target_angle;
 
     updateVelocity();
     /*
