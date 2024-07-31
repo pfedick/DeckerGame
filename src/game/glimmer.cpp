@@ -1,6 +1,8 @@
 #include "glimmer.h"
 #include "player.h"
 
+static float rad_pi=3.1415926535f / 180.0f;
+
 Glimmer::Glimmer(Game& game)
     :game(game)
 {
@@ -118,8 +120,6 @@ void Glimmer::updateFollowPlayer(Player& player)
     }
     double dist=ppl7::grafix::Distance(player_p, p);
 
-    float dist_x=player_p.x - p.x;
-    float dist_y=player_p.y - p.y;
     float acceleration=0.1f;
 
     float maxspeed=dist / 40.0f;
@@ -166,6 +166,41 @@ void Glimmer::updateFollowPlayer(Player& player)
     if (p.y > player_p.y) p.y-=speed;
 
 
+}
+
+
+void Glimmer::moveTo(const ppl7::grafix::PointF &target)
+{
+
+}
+
+
+void Glimmer::updateVelocity()
+{
+    if (direction < 0.0f) direction+=360.0f;
+    if (direction >= 360.0f) direction-=360.0f;
+    if (speed==0.0f) {
+        velocity.x=0.0f;
+        velocity.y=0.0f;
+        return;
+    }
+    
+    if (direction == 0.0f) {
+        velocity.x=0;
+        velocity.y=-speed;
+    } else if (direction == 90.0f) {
+        velocity.x=speed;
+        velocity.y=0;
+    } else if (direction == 180.0f) {
+        velocity.x=0;
+        velocity.y=speed;
+    } else if (direction == 270.0f) {
+        velocity.x=-speed;
+        velocity.y=0;
+    } else {
+        velocity.y=-speed * sinf((90 - direction) * rad_pi);
+        velocity.x=speed * sinf(direction * rad_pi);
+    }
 }
 
 void Glimmer::drawObject(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
