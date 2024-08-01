@@ -153,6 +153,7 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	object_type->add("Hammer", ppl7::ToString("%d", Type::Hammer));
 	object_type->add("Diamond", ppl7::ToString("%d", Type::Diamond));
 	object_type->add("Coin", ppl7::ToString("%d", Type::Coin));
+	object_type->add("Cheese", ppl7::ToString("%d", Type::Cheese));
 	object_type->add("Cherry", ppl7::ToString("%d", Type::Cherry));
 	object_type->add("Apple", ppl7::ToString("%d", Type::Apple));
 	object_type->add("Mushroom", ppl7::ToString("%d", Type::Mushroom));
