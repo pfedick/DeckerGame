@@ -129,6 +129,26 @@
             "de": {
                 "text": "Den hätte ich vorhin gut gebrauchen können!"
             }
+        },
+        "2213": {
+            "context": "George recognizes, that he does not have cheese anymore",
+            "character": "george",
+            "en": {
+                "text": "Oh, crap! The cheese is gone!"
+            },
+            "de": {
+                "text": "Oh, Mist! Der Käse ist alle!"
+            }
+        },
+        "2214": {
+            "context": "George finds cheese",
+            "character": "george",
+            "en": {
+                "text": "Oh, there is cheese!"
+            },
+            "de": {
+                "text": "Oh, da ist ja Käse!"
+            }
         }
     }
 }
