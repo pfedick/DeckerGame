@@ -25,6 +25,7 @@ class Widget;
 }
 
 class AudioInstance;
+class Glimmer;
 
 namespace Decker::Objects {
 
@@ -77,6 +78,7 @@ public:
 		SpawnPoint=42,
 		Peach=43,
 		MagicGround=44,
+		GlimmerNode=45,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -2231,6 +2233,77 @@ public:
 	void openUi() override;
 };
 
+class GlimmerNode : public Object
+{
+private:
+	Glimmer* glimmer;
+	enum class State {
+		waiting_for_activation,
+		activated,
+		finished,
+		disabled
+	};
+	State state;
+	double cooldown;
+	double triggerDeleayTime;
+	int trigger_count;
+	double last_collision_time;
+	uint64_t last_collision_frame;
+	void notifyTargets() const;
+
+public:
+	enum class TargetState {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
+
+	class TargetObject
+	{
+	public:
+		uint16_t object_id=0;
+		TargetState state=TargetState::trigger;
+	};
+	enum class GlimmerAction {
+		Awaken=1,
+		Appear,
+		Disappear,
+		FollowPlayer,
+		FlyTo,
+		FlyToAndStop,
+		Wait
+	};
+
+	TargetObject triggerObjects[10];
+	ppl7::grafix::Point range;
+
+	bool initialStateEnabled;
+	bool triggeredByPlayerCollision;
+	bool triggeredByGlimmerCollision;
+
+	uint32_t next_node;
+	GlimmerAction action;
+	float maxSpeed;
+
+
+	GlimmerNode();
+	~GlimmerNode();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void handleCollisionByGlimmer(const Collision& collision);
+	void reset();
+	void test();
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void openUi() override;
+};
+
+
 
 
 class ObjectSystem
@@ -2266,6 +2339,8 @@ public:
 	void detectCollision(const std::list<ppl7::grafix::Point>& checkpoints, std::list<Object*>& object_list);
 	static bool checkCollisionWithObject(const std::list<ppl7::grafix::Point>& checkpoints, const Object* object);
 	void detectObjectCollision(const Object* object, std::list<Object*>& collision_object_list);
+	void detectObjectCollision(const ppl7::grafix::Rect& boundary, std::list<Object*>& collision_object_list);
+
 	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);

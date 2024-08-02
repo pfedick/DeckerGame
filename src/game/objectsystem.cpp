@@ -83,6 +83,7 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::GenericObjects]->setPivot(213, 128, 128);
 
 	spriteset[Spriteset::GenericObjects]->setPivot(297, 128, 220);	// Spawnpoint
+	spriteset[Spriteset::GenericObjects]->setPivot(3, 128, 180);	// GlimmerNode
 
 
 
@@ -524,6 +525,7 @@ Representation getRepresentation(int object_type)
 		case Type::PowerCell: return PowerCell::representation();
 		case Type::SpawnPoint: return SpawnPoint::representation();
 		case Type::MagicGround: return MagicGround::representation();
+		case Type::GlimmerNode: return GlimmerNode::representation();
 
 		default: return Object::representation();
 	}
@@ -625,6 +627,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::PowerCell: return new PowerCell();
 		case Type::SpawnPoint: return new SpawnPoint();
 		case Type::MagicGround: return new MagicGround();
+		case Type::GlimmerNode: return new GlimmerNode();
 
 	}
 	return NULL;
@@ -831,6 +834,19 @@ void ObjectSystem::detectObjectCollision(const Object* object, std::list<Object*
 			if (object->boundary.intersects(it->second->boundary)) {
 				if (checkCollision(object, checkpoints, it->second))
 					collision_object_list.push_back(it->second);
+			}
+		}
+	}
+}
+
+void ObjectSystem::detectObjectCollision(const ppl7::grafix::Rect& boundary, std::list<Object*>& collision_object_list)
+{
+	collision_object_list.clear();
+	std::map<uint32_t, Object*>::const_iterator it;
+	for (it=object_list.begin();it != object_list.end();++it) {
+		if (it->second->enabled == true && it->second->visibleAtPlaytime == true && it->second->myPlane == PlaneId::Player) {
+			if (boundary.intersects(it->second->boundary)) {
+				collision_object_list.push_back(it->second);
 			}
 		}
 	}

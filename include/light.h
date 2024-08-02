@@ -4,7 +4,6 @@
 #include "decker_sdl.h"
 class SpriteTexture;
 class LightLayer;
-class Object;
 
 enum class LightType {
     Static=0,

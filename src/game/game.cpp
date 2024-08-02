@@ -1472,9 +1472,8 @@ void Game::startLevel(const ppl7::String& filename)
 	mainmenue->update();
 	ppl7::grafix::Point startpoint=level.objects->findPlayerStart();
 	mainmenue->setWorldFollowsPlayer(true);
-	glimmer->setEnabled(true);
-	glimmer->setBehavior(Glimmer::Behavior::FollowPlayer);
-	glimmer->setPosition(startpoint - ppl7::grafix::Point(200, 400));
+	glimmer->setEnabled(false);
+	glimmer->setPosition(-1000, -1000);
 	if (startpoint.x > 0) {
 		player->move(startpoint.x, startpoint.y);
 		player->setSavePoint(startpoint);
@@ -2517,4 +2516,10 @@ void Game::updateLevelModificator(double time)
 void* Game::getLevelModificationObject() const
 {
 	return levelModificator.triggerobject;
+}
+
+
+Glimmer* Game::getGlimmer()
+{
+	return glimmer;
 }

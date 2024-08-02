@@ -1226,6 +1226,8 @@ public:
 	void TakeScreenshot();
 	void TakeScreenshot(Screenshot* screenshot);
 
+	Glimmer* getGlimmer();
+
 };
 
 ppltk::Window* GetGameWindow();

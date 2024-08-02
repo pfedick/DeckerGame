@@ -155,6 +155,7 @@ OBJECTS=compile/main.o \
 	compile/object_ghost.o \
 	compile/object_magicground.o \
 	compile/object_level_modificator.o \
+	compile/object_glimmernode.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -642,6 +643,11 @@ compile/object_arrow.o: src/objects/arrow.cpp Makefile include/objects.h include
 	include/player.h include/audiopool.h include/widgets.h include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_arrow.o -c src/objects/arrow.cpp $(CFLAGS)
+
+compile/object_glimmernode.o: src/objects/glimmernode.cpp Makefile include/objects.h \
+	include/player.h include/glimmer.h include/audiopool.h include/widgets.h include/decker.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_glimmernode.o -c src/objects/glimmernode.cpp $(CFLAGS)
 
 compile/object_firecannon.o: src/objects/firecannon.cpp Makefile include/objects.h include/animation.h \
 	include/player.h include/audiopool.h include/widgets.h include/decker.h
