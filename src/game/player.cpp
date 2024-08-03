@@ -311,6 +311,12 @@ void Player::resetLevelObjects()
 	hacking_end=0.0f;
 	hackingState=0;
 	powercells=0;
+	health=100;
+	lifes=3;
+	points=0;
+	powercells=0;
+	energylevel=100.0f;
+
 }
 
 
