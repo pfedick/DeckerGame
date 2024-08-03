@@ -164,6 +164,7 @@ public:
 	bool isDead() const;
 	void dropLifeAndResetToLastSavePoint();
 	void setGodMode(bool enabled);
+	bool godModeEnabled() const;
 	void setSavePoint(const ppl7::grafix::Point& p);
 	void setSpriteResource(const SpriteTexture& resource);
 	void setTileTypeResource(const SpriteTexture& resource);

@@ -95,6 +95,29 @@ public:
 	void lostFocusEvent(ppltk::FocusEvent* event) override;
 };
 
+class DebugSubMenu : public ppltk::Frame
+{
+private:
+	MainMenue* menue;
+	ppltk::CheckBox* godmode_checkbox;
+	ppltk::Button* pause_button;
+	ppltk::Button* step_button;
+	ppltk::Button* battery_button;
+	ppltk::Button* add_hammer_button;
+	ppltk::Button* add_flashlight_button;
+	ppltk::Button* add_cheese_button;
+	ppltk::Button* add_extralife_button;
+	ppltk::Button* add_medikit_button;
+	ppltk::Button* add_oxygen_button;
+
+
+public:
+	DebugSubMenu(int x, int y, MainMenue* menue);
+	void mouseClickEvent(ppltk::MouseEvent* event) override;
+	void lostFocusEvent(ppltk::FocusEvent* event) override;
+	void toggledEvent(ppltk::Event* event, bool checked) override;
+};
+
 class LevelDialog;
 
 class MetricsSubMenu : public ppltk::Frame
@@ -135,8 +158,9 @@ private:
 	ppltk::Button* show_visibility_submenu_button;
 	ppltk::Button* show_metrics_submenu_button;
 
-	ppltk::Button* pause_button;
-	ppltk::Button* step_button;
+	//ppltk::Button* pause_button;
+	//ppltk::Button* step_button;
+	ppltk::Button* debug_button;
 
 
 	ppltk::ComboBox* active_plane_combobox;
@@ -145,6 +169,7 @@ private:
 	ppltk::CheckBox* soundtrack_checkbox;
 	ppltk::CheckBox* godmode_checkbox;
 	VisibilitySubMenu* visibility;
+	DebugSubMenu* debug_submenu;
 	MetricsSubMenu* metrics;
 
 	LevelDialog* level_dialog;
@@ -174,7 +199,8 @@ public:
 
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;
-	bool godModeEnabled() const;
+	void setGodMode(bool enabled);
+	//bool godModeEnabled() const;
 	bool visibility_plane_player;
 	bool visibility_plane_front;
 	bool visibility_plane_back;
@@ -194,6 +220,7 @@ public:
 	void mouseClickEvent(ppltk::MouseEvent* event) override;
 	void textChangedEvent(ppltk::Event* event, const ppl7::String& text) override;
 	void closeEvent(ppltk::Event* event) override;
+	void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
 

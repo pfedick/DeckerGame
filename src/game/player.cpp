@@ -349,6 +349,11 @@ void Player::setGodMode(bool enabled)
 	godmode=enabled;
 }
 
+bool Player::godModeEnabled() const
+{
+	return godmode;
+}
+
 void Player::move(int x, int y)
 {
 	this->x=x;

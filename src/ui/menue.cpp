@@ -1,5 +1,7 @@
 #include "decker.h"
 #include "ui.h"
+#include "player.h"
+#include "objects.h"
 
 namespace Decker::ui {
 
@@ -9,6 +11,7 @@ MainMenue::MainMenue(int x, int y, int width, int height, Game* game)
 {
 	this->game=game;
 	visibility=NULL;
+	debug_submenu=NULL;
 	visibility_plane_player=true;
 	visibility_plane_front=true;
 	visibility_plane_back=true;
@@ -130,6 +133,12 @@ void MainMenue::setupUi()
 	show_metrics_submenu_button->setEventHandler(this);
 	this->addChild(show_metrics_submenu_button);
 
+	debug_button=new ppltk::Button(1249, 0, 70, s.height, "Debug");
+	//debug_button->setIcon(wm->Toolbar.getDrawable(65));
+	debug_button->setEventHandler(this);
+	this->addChild(debug_button);
+
+	/*
 	pause_button=new ppltk::Button(1249, 0, 70, s.height, "Pause");
 	pause_button->setIcon(wm->Toolbar.getDrawable(64));
 	pause_button->setEventHandler(this);
@@ -140,10 +149,11 @@ void MainMenue::setupUi()
 	step_button->setIcon(wm->Toolbar.getDrawable(65));
 	step_button->setEventHandler(this);
 	this->addChild(step_button);
-
+	*/
 
 
 	godmode_checkbox=new ppltk::CheckBox(width() - 520, 0, 100, s.height, "god mode", false);
+	godmode_checkbox->setEventHandler(this);
 	this->addChild(godmode_checkbox);
 
 	soundtrack_checkbox=new ppltk::CheckBox(width() - 420, 0, 150, s.height, "play soundtrack", true);
@@ -175,6 +185,19 @@ void MainMenue::openLevelDialog(bool new_flag)
 	level_dialog->setEventHandler(this);
 	if (!new_flag) level_dialog->loadValues(game->getLevel().params);
 	game->window().addChild(level_dialog);
+}
+
+void MainMenue::setGodMode(bool enabled)
+{
+	godmode_checkbox->setChecked(enabled);
+	game->getPlayer()->setGodMode(enabled);
+}
+
+void MainMenue::toggledEvent(ppltk::Event* event, bool checked)
+{
+	if (event->widget() == godmode_checkbox) {
+		game->getPlayer()->setGodMode(checked);
+	}
 }
 
 void MainMenue::mouseClickEvent(ppltk::MouseEvent* event)
@@ -221,13 +244,22 @@ void MainMenue::mouseClickEvent(ppltk::MouseEvent* event)
 
 
 		}
+	} else if (event->widget() == debug_button) {
+		if (debug_submenu) {
+			delete debug_submenu;
+			debug_submenu=NULL;
+		} else {
+			ppltk::Widget* top=debug_button->getTopmostParent();
+			ppl7::grafix::Point p=debug_button->absolutePosition();
+			debug_submenu=new DebugSubMenu(p.x, height(), this);
+
+			debug_submenu->setTopmost(true);
+			debug_submenu->setEventHandler(this);
+			top->addChild(debug_submenu);
+			ppltk::GetWindowManager()->setMouseFocus(debug_submenu);
+		}
 	} else if (event->widget() == show_metrics_submenu_button) {
 		showMetrics();
-	} else if (event->widget() == pause_button) {
-		game->pauseGame(pause_button->isChecked());
-	} else if (event->widget() == step_button) {
-		pause_button->setChecked(true);
-		game->stepFrame();
 
 	}
 }
@@ -270,6 +302,8 @@ void MainMenue::closeEvent(ppltk::Event* event)
 		}
 	} else if (event->widget() == visibility) {
 		visibility=NULL;
+	} else if (event->widget() == debug_submenu) {
+		debug_submenu=NULL;
 	}
 }
 
@@ -303,13 +337,6 @@ bool MainMenue::worldFollowsPlayer() const
 	if (world_follows_player_checkbox) return world_follows_player_checkbox->checked();
 	return true;
 }
-
-bool MainMenue::godModeEnabled() const
-{
-	if (godmode_checkbox) return godmode_checkbox->checked();
-	return false;
-}
-
 
 bool MainMenue::soundTrackEnabled() const
 {
@@ -477,6 +504,123 @@ void VisibilitySubMenu::lostFocusEvent(ppltk::FocusEvent* event)
 	}
 }
 
+
+
+DebugSubMenu::DebugSubMenu(int x, int y, MainMenue* menue)
+	: ppltk::Frame(x, y, 140, 300)
+{
+	this->menue=menue;
+	ppltk::WindowManager* wm=ppltk::GetWindowManager();
+	ppl7::grafix::Rect client=clientRect();
+	int y1=0;
+	godmode_checkbox=new ppltk::CheckBox(0, y1, client.width(), 29, "god mode", GetGame().getPlayer()->godModeEnabled());
+	godmode_checkbox->setEventHandler(this);
+	this->addChild(godmode_checkbox);
+	y1+=30;
+
+
+	battery_button=new ppltk::Button(0, y1, client.width(), 29, "add battery");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	battery_button->setEventHandler(this);
+	this->addChild(battery_button);
+	y1+=30;
+
+	add_flashlight_button=new ppltk::Button(0, y1, client.width(), 29, "add flashlight");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_flashlight_button->setEventHandler(this);
+	this->addChild(add_flashlight_button);
+	y1+=30;
+
+	add_hammer_button=new ppltk::Button(0, y1, client.width(), 29, "add hammer");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_hammer_button->setEventHandler(this);
+	this->addChild(add_hammer_button);
+	y1+=30;
+
+	add_cheese_button=new ppltk::Button(0, y1, client.width(), 29, "add cheese");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_cheese_button->setEventHandler(this);
+	this->addChild(add_cheese_button);
+	y1+=30;
+
+	add_extralife_button=new ppltk::Button(0, y1, client.width(), 29, "add life");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_extralife_button->setEventHandler(this);
+	this->addChild(add_extralife_button);
+	y1+=30;
+
+	add_medikit_button=new ppltk::Button(0, y1, client.width(), 29, "add medikit");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_medikit_button->setEventHandler(this);
+	this->addChild(add_medikit_button);
+	y1+=30;
+
+	add_oxygen_button=new ppltk::Button(0, y1, client.width(), 29, "add oxygen");
+	//battery_button->setIcon(wm->Toolbar.getDrawable(65));
+	add_oxygen_button->setEventHandler(this);
+	this->addChild(add_oxygen_button);
+	y1+=30;
+
+	y1+=10;
+	pause_button=new ppltk::Button(0, y1, client.width(), 29, "Pause");
+	pause_button->setIcon(wm->Toolbar.getDrawable(64));
+	pause_button->setEventHandler(this);
+	pause_button->setCheckable(true);
+	this->addChild(pause_button);
+	y1+=30;
+
+	step_button=new ppltk::Button(0, y1, client.width(), 29, "Step");
+	step_button->setIcon(wm->Toolbar.getDrawable(65));
+	step_button->setEventHandler(this);
+	this->addChild(step_button);
+	y1+=30;
+
+
+}
+
+
+void DebugSubMenu::mouseClickEvent(ppltk::MouseEvent* event)
+{
+	if (event->widget() == battery_button) {
+		GetGame().getPlayer()->addPowerCell();
+	} else if (event->widget() == pause_button) {
+		GetGame().pauseGame(pause_button->isChecked());
+	} else if (event->widget() == step_button) {
+		pause_button->setChecked(true);
+		GetGame().stepFrame();
+	} else if (event->widget() == add_hammer_button) {
+		GetGame().getPlayer()->addSpecialObject(Decker::Objects::Type::Hammer);
+	} else if (event->widget() == add_flashlight_button) {
+		GetGame().getPlayer()->addSpecialObject(Decker::Objects::Type::Flashlight);
+	} else if (event->widget() == add_cheese_button) {
+		GetGame().getPlayer()->addSpecialObject(Decker::Objects::Type::Cheese);
+	} else if (event->widget() == add_extralife_button) {
+		GetGame().getPlayer()->addLife(1);
+	} else if (event->widget() == add_medikit_button) {
+		GetGame().getPlayer()->addHealth(100);
+	} else if (event->widget() == add_oxygen_button) {
+		GetGame().getPlayer()->addAir(30.0f);
+
+	}
+}
+
+void DebugSubMenu::toggledEvent(ppltk::Event* event, bool checked)
+{
+	if (event->widget() == godmode_checkbox) {
+		menue->setGodMode(checked);
+	}
+}
+
+void DebugSubMenu::lostFocusEvent(ppltk::FocusEvent* event)
+{
+	if (event->newWidget() != this && !event->newWidget()->isChildOf(this)) {
+		//ppl7::PrintDebug("VisibilitySubMenu::lostFocusEvent\n");
+		this->deleteLater();
+		ppltk::Event e(ppltk::Event::Type::Close);
+		e.setWidget(this);
+		menue->closeEvent(&e);
+	}
+}
 
 
 } //EOF namespace Decker

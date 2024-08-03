@@ -723,7 +723,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.updateVisibleSpriteLists(WorldCoords, game_viewport);	// => TODO: own Thread
 	metrics.time_update_sprites.stop();
 	metrics.time_update_objects.start();
-	player->setGodMode(mainmenue->godModeEnabled());
+	//player->setGodMode(mainmenue->godModeEnabled());
 	player->WorldCoords=WorldCoords;
 	player->Viewport=game_viewport;
 	//printf("viewport: x1=%d, y1=%d, x2=%d, y2=%d\n", game_viewport.x1, game_viewport.y1, game_viewport.x2, game_viewport.y2);
