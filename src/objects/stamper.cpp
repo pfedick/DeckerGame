@@ -25,6 +25,7 @@ Stamper::Stamper()
 	visibleAtPlaytime=true;
 	sprite_no_representation=19;
 	pixelExactCollision=false;
+	collision_disabled=false;
 	next_state=0.0f;
 	state=State::Open;
 	if (ppl7::rand(0, 1) == 1) {
@@ -402,6 +403,7 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 
 void Stamper::handleCollision(Player* player, const Collision& collision)
 {
+	if (collision_disabled) return;
 	if (state == State::Closing) {
 		if (orientation == Orientation::down || orientation == Orientation::up) {
 			player->dropHealth(1000, Player::Smashed);
@@ -486,6 +488,7 @@ size_t Stamper::save(unsigned char* buffer, size_t size) const
 
 	int flags=0;
 	if (auto_intervall) flags|=1;
+	if (collision_disabled) flags|=2;
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke8(buffer + bytes + 2, initial_state);
 	ppl7::Poke8(buffer + bytes + 3, stamper_type);
@@ -509,6 +512,7 @@ size_t Stamper::load(const unsigned char* buffer, size_t size)
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	auto_intervall=(bool)(flags & 1);
+	collision_disabled=(bool)(flags & 2);
 	initial_state=ppl7::Peek8(buffer + bytes + 2);
 	stamper_type=ppl7::Peek8(buffer + bytes + 3);
 	time_active=ppl7::PeekFloat(buffer + bytes + 4);
@@ -533,6 +537,7 @@ private:
 	ppltk::ComboBox* orientation;
 	ppltk::CheckBox* initial_state;
 	ppltk::CheckBox* auto_intervall;
+	ppltk::CheckBox* collision_disabled;
 	ppltk::DoubleHorizontalSlider* time_active;
 	ppltk::DoubleHorizontalSlider* time_inactive;
 
@@ -654,6 +659,10 @@ StamperDialog::StamperDialog(Stamper* object)
 	auto_intervall=new ppltk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
+	y+=30;
+	collision_disabled=new ppltk::CheckBox(120, y, 200, 30, "collision disabled", object->collision_disabled);
+	collision_disabled->setEventHandler(this);
+	addChild(collision_disabled);
 	y+=35;
 
 
@@ -730,6 +739,7 @@ void StamperDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
 	if (event->widget() == initial_state) object->initial_state=(int)checked * 2;
 	else if (event->widget() == auto_intervall) object->auto_intervall=checked;
+	else if (event->widget() == collision_disabled) object->collision_disabled=checked;
 	//printf("object->initial_state=%d\n", object->initial_state);
 	object->init();
 
