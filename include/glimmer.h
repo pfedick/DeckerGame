@@ -17,7 +17,8 @@ public:
         Disappear,
         Awaken,
         FlyTo,
-        FlyToAndStop
+        FlyToAndStop,
+        FlyToPlayer
     };
 private:
 
@@ -65,6 +66,7 @@ private:
     void updateDisappear();
     void updateFlyTo();
     void updateWait();
+    void updateFlyToPlayer(Player& player);
 
     void checkCollisionWithOtherObjects();
 
@@ -92,6 +94,7 @@ public:
     void disappear();
     void wait(const ppl7::grafix::PointF& target);
     void setNextNode(uint32_t id);
+    void flyToPlayer(float maxSpeed);
 
 
 

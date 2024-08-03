@@ -154,11 +154,16 @@ void GlimmerNode::toggle(bool enable, Object* source)
 		state=State::activated;
 		enabled=true;
 	}
+	if (!enable) {
+		state=State::waiting_for_activation;
+	}
 }
 
 void GlimmerNode::trigger(Object* source)
 {
-	toggle(!enabled, source);
+	//toggle(!enabled, source);
+	state=State::activated;
+	enabled=true;
 }
 
 void GlimmerNode::reset()
@@ -204,6 +209,10 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 						glimmer->flyTo(target->p, maxSpeed, (bool)(action == GlimmerAction::FlyToAndStop));
 					}
 				}
+				break;
+			case GlimmerAction::FlyToPlayer:
+				glimmer->setNextNode(next_node);
+				glimmer->flyToPlayer(maxSpeed);
 				break;
 			case GlimmerAction::Wait:
 				glimmer->wait(p);
@@ -339,9 +348,10 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	action->add("Appear", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Appear)));
 	action->add("Disappear", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Disappear)));
 	action->add("FollowPlayer", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FollowPlayer)));
-	action->add("FlyTo", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyTo)));
-	action->add("FlyToAndStop", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyToAndStop)));
+	action->add("Fly to node", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyTo)));
+	action->add("Fly to node and stop", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyToAndStop)));
 	action->add("Wait", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Wait)));
+	action->add("Fly to player", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyToPlayer)));
 	action->sortItems();
 	action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
 	action->setEventHandler(this);

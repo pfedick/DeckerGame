@@ -101,6 +101,9 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
         case Behavior::Wait:
             updateWait();
             break;
+        case Behavior::FlyToPlayer:
+            updateFlyToPlayer(player);
+            break;
 
         case Behavior::Invisible:
             return;
@@ -290,8 +293,16 @@ void Glimmer::updateFlyTo()
 
 void Glimmer::updateWait()
 {
-    maxspeed=1.0f;
-    moveTo(target_coords);
+    if (movestate == MoveState::Start) {
+        double dist=ppl7::grafix::Distance(target_coords, p);
+        if (dist < 10.0f) {
+            movestate=MoveState::Wait;
+            velocity.setPoint(0.0f, 0.0f);
+            speed=0.0f;
+        }
+        maxspeed=1.0f;
+        moveTo(target_coords);
+    }
 }
 
 
@@ -317,6 +328,29 @@ void Glimmer::updateFollowPlayer(Player& player)
     moveTo(player_p);
 
 }
+
+void Glimmer::updateFlyToPlayer(Player& player)
+{
+    ppl7::grafix::PointF player_p(player.x, player.getBoundingBox().y1 + 1 * TILE_HEIGHT);
+    double dist=ppl7::grafix::Distance(player_p, p);
+    maxspeed=dist / 40.0f;
+    if (movestate == MoveState::Wait && dist > 100.0f) {
+        movestate=MoveState::Move;
+    } else if (movestate == MoveState::Move && dist < 20.0f) movestate=MoveState::Stop;
+    if (movestate == MoveState::Stop) {
+        if (next_node > 0) {
+            Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
+            Decker::Objects::Object* target=objs->getObject(next_node);
+            if (target) target->trigger();
+        } else {
+            behavior=Behavior::Wait;
+            movestate=MoveState::Start;
+        }
+    }
+    moveTo(player_p);
+
+}
+
 
 
 void Glimmer::moveTo(const ppl7::grafix::PointF& target)
@@ -497,6 +531,17 @@ void Glimmer::flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool sto
     action_start_time=0.0f;
     //ppl7::PrintDebug("fly to triggered\n");
 }
+
+void Glimmer::flyToPlayer(float maxSpeed)
+{
+    this->maxspeed=maxSpeed;
+    behavior=Behavior::FlyToPlayer;
+    movestate=MoveState::Start;
+    action_start_time=0.0f;
+    //ppl7::PrintDebug("fly to triggered\n");
+}
+
+
 
 void Glimmer::followPlayer()
 {

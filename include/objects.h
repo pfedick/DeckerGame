@@ -2272,7 +2272,8 @@ public:
 		FollowPlayer,
 		FlyTo,
 		FlyToAndStop,
-		Wait
+		Wait,
+		FlyToPlayer
 	};
 
 	TargetObject triggerObjects[10];
