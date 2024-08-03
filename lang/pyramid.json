@@ -114,10 +114,10 @@
             "context": "More MagicGround objects appear",
             "character": "george",
             "en": {
-                "text": "There are more! This is how I get out of here!"
+                "text": "There are more! This is how I move forward here!"
             },
             "de": {
-                "text": "Da sind noch mehr! So komme ich hier wieder raus!"
+                "text": "Da sind noch mehr! So komme ich hier weiter!"
             }
         },
         "2212": {
@@ -168,6 +168,46 @@
             },
             "de": {
                 "text": "Was ist das für ein Schrein?"
+            }
+        },
+        "2217": {
+            "context": "George has activated the portal",
+            "character": "george",
+            "en": {
+                "text": "Oh, a portal."
+            },
+            "de": {
+                "text": "Oh, ein Portal."
+            }
+        },
+        "2218": {
+            "context": "Glimmer appears before Lasers",
+            "character": "george",
+            "en": {
+                "text": "Hey, there you are again!"
+            },
+            "de": {
+                "text": "Hey, da bist Du ja wieder!"
+            }
+        },
+        "2219": {
+            "context": "Glimmer helps George to cross the lava",
+            "character": "george",
+            "en": {
+                "text": "Thanks, little flare!"
+            },
+            "de": {
+                "text": "Danke, kleine Leuchtkugel!"
+            }
+        },
+        "2220": {
+            "context": "Glimmer comes back",
+            "character": "george",
+            "en": {
+                "text": "You again!"
+            },
+            "de": {
+                "text": "Du schon wieder!"
             }
         }
     }
