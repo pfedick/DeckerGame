@@ -209,7 +209,7 @@ void GameHUD::drawLeftPart(ppl7::grafix::Drawable& draw)
 
     ppl7::String labeltext=translate("Health:");
     ppl7::grafix::Size s=label_font.measure(labeltext);
-    int lineheight=s.height + 2;
+    int lineheight=30;
     int y_health=y;
     maxwidth=s.width;
     icons->draw(draw, 25, y + lineheight, 0);
@@ -311,7 +311,7 @@ void GameHUD::drawPoints(ppl7::grafix::Drawable& draw)
 
     label_font.setColor(ppl7::grafix::Color(210, 210, 210, 255));
     label_font.setBold(false);
-    label_font.setSize(50);
+    label_font.setSize(30);
 
     ppl7::String labeltext=translate("Points:");
     ppl7::grafix::Size s=label_font.measure(labeltext);
