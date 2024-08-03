@@ -313,34 +313,31 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
     }
 
 
+    float diff_links=0.0f - (direction - target_angle);
+    if (diff_links >= 0.0f) diff_links=-360.0f + diff_links;
+    float diff_rechts=360.0f - fabsf(diff_links);
+    float diff_angle=0.0f;;
+    if (diff_rechts < fabsf(diff_links)) diff_angle=diff_rechts;
+    else diff_angle=diff_links;
 
-
-    //ppl7::PrintDebug("state: %d, speed: %0.3f, acceleration: %0.3f, a=%0.3f, b=%0.3f, target_angle=%0.3f\n", (int)movestate, speed, acceleration, a, b, target_angle);
-
-    //ppl7::PrintDebug("my angle: %0.3f, target: %0.3f\n", direction, target_angle);
+    //ppl7::PrintDebug("Glimmer: movestate=%d, speed=%5.2f, my angle: %6.2f, target: %6.2f, diff=%7.2f, links=%7.2f, rechts=%7.2f\n",
+    //    (int)movestate, speed, direction, target_angle, diff_angle, diff_links, diff_rechts);
 
     if (movestate == MoveState::Move) {
-        float g_angle=direction + 360;
-        target_angle+=360;
-        if (fabsf(target_angle - g_angle) < 90.0f) {
-            if (target_angle < g_angle) direction-=2.0f * frame_rate_compensation;
-            else direction+=2.0f * frame_rate_compensation;
+        if (fabsf(diff_angle) < 120.0f) {
+            float factor=fabsf(diff_angle) / 10.0f;
+            if (factor > 2.0f) factor=2.0f;
+            if (factor < 0.1f) factor=0.1f;
+
+            if (diff_angle < 0.0f) direction-=factor * frame_rate_compensation;
+            else direction+=factor * frame_rate_compensation;
         } else {
             movestate = MoveState::Stop;
         }
     }
 
-
-    //direction=target_angle;
-
     updateVelocity();
-    /*
-    if (p.x < target.x) p.x+=speed;
-    if (p.x > target.x) p.x-=speed;
 
-    if (p.y < target.y) p.y+=speed;
-    if (p.y > target.y) p.y-=speed;
-    */
 }
 
 
