@@ -35,7 +35,7 @@ GlimmerNode::GlimmerNode()
 	action=GlimmerAction::Wait;
 	next_node=0;
 	maxSpeed=15.0f;
-	range.setPoint(TILE_WIDTH * 6, TILE_HEIGHT * 6);
+	range.setPoint(TILE_WIDTH * 2, TILE_WIDTH * 2);
 	for (int i=0;i < 10;i++) {
 		triggerObjects[i].object_id=0;
 	}
@@ -208,7 +208,6 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 			case GlimmerAction::Wait:
 				glimmer->wait(p);
 				break;
-
 		}
 	}
 }
@@ -235,9 +234,20 @@ void GlimmerNode::test()
 }
 
 
-void GlimmerNode::handleCollisionByGlimmer(const Collision& collision)
+void GlimmerNode::handleCollisionByGlimmer()
 {
 	if (!triggeredByGlimmerCollision) return;
+	//ppl7::PrintDebug("GlimmerNode::handleCollisionByGlimmer\n");
+	uint64_t frame_no=GetFrameNo();
+	if (frame_no == last_collision_frame + 1) {
+		last_collision_frame=frame_no;
+		return;
+	}
+	last_collision_frame=frame_no;
+	last_collision_time=ppl7::GetMicrotime();
+	if (state == State::waiting_for_activation) {
+		state=State::activated;
+	}
 
 }
 

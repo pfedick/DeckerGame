@@ -15,6 +15,7 @@ Glimmer::Glimmer(Game& game)
     last_tail_index=0;
     texture=NULL;
     enabled=false;
+    draw_enabled=true;
     behavior=Behavior::Invisible;
     frame_rate_compensation=1.0f;
     streak_rotation=0.0f;
@@ -124,8 +125,13 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
         LightSystem& lights=game.getLightSystem();
         light.x=p.x;
         light.y=p.y;
-        light.scale_x=light_size * scale;
-        light.scale_y=light_size * scale;
+        float s=scale;
+        if (scale < 1.0f) {
+            s=scale * 2.0f;
+            if (s > 1.0f) s=1.0f;
+        }
+        light.scale_x=light_size * s;
+        light.scale_y=light_size * s;
         light.intensity=ftoi_clamp(light_size * scale, 255);
         light.flare_intensity=ftoi_clamp(light_size * scale, 127);
         lights.addObjectLight(&light);
@@ -138,12 +144,16 @@ void Glimmer::checkCollisionWithOtherObjects()
 {
     std::list<Decker::Objects::Object*> object_list;
     ppl7::grafix::Rect boundary((int)p.x - 16, (int)p.y - 16, 32, 32);
+    //ppl7::PrintDebug("Glimmer::checkCollisionWithOtherObjects: P: %d:%d, Rect: %d:%d - %d:%d\n", (int)p.x, (int)p.y, boundary.x1, boundary.y1, boundary.x2, boundary.y2);
     Decker::Objects::GetObjectSystem()->detectObjectCollision(boundary, object_list);
     std::list<Decker::Objects::Object*>::iterator it;
     for (it=object_list.begin();it != object_list.end();++it) {
         if ((*it)->type() == Decker::Objects::Type::GlimmerNode) {
-            ppl7::PrintDebug("collision with GlimmerNode\n");
-
+            //ppl7::PrintDebug("collision with GlimmerNode\n");
+            Decker::Objects::GlimmerNode* glimmernode=static_cast<Decker::Objects::GlimmerNode*>(*it);
+            glimmernode->handleCollisionByGlimmer();
+        } else {
+            //ppl7::PrintDebug("collision with other object\n");
         }
     }
 }
@@ -162,23 +172,24 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
     std::list<Particle::ScaleGradientItem>scale_gradient;
     std::list<Particle::ColorGradientItem>color_gradient;
     scale_gradient.push_back(Particle::ScaleGradientItem(0.000, 0.058));
-    scale_gradient.push_back(Particle::ScaleGradientItem(0.604, 1.000));
+    scale_gradient.push_back(Particle::ScaleGradientItem(0.140, 1.400));
+    scale_gradient.push_back(Particle::ScaleGradientItem(0.482, 0.184));
     scale_gradient.push_back(Particle::ScaleGradientItem(1.000, 0.010));
     color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 255, 255, 255)));
-    color_gradient.push_back(Particle::ColorGradientItem(0.595, ppl7::grafix::Color(255, 255, 255, 255)));
-    color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(255, 255, 255, 0)));
+    color_gradient.push_back(Particle::ColorGradientItem(0.279, ppl7::grafix::Color(255, 255, 255, 255)));
+    color_gradient.push_back(Particle::ColorGradientItem(0.766, ppl7::grafix::Color(255, 255, 255, 0)));
     ParticleSystem* ps=GetParticleSystem();
     int new_particles=ppl7::rand(135, 166);
     for (int i=0;i < new_particles;i++) {
         Particle* particle=new Particle();
         particle->birth_time=time;
-        particle->death_time=randf(0.448, 1.237) + time;
+        particle->death_time=randf(0.886, 1.149) + time;
         particle->p=p;
         particle->layer=Particle::Layer::BeforePlayer;
-        particle->weight=randf(0.105, 0.237);
-        //particle->gravity.setPoint(0.000, 0.211);
-        particle->velocity=calculateVelocity(randf(0.702, 1.754), 0.000 + randf(-180.000, 180.000));
-        particle->scale=randf(0.289, 0.404);
+        particle->weight=randf(0.246, 0.000);
+        particle->gravity.setPoint(0.000, 0.000);
+        particle->velocity=calculateVelocity(randf(4.737, 6.316), 0.000 + randf(-180.000, 180.000));
+        particle->scale=randf(0.237, 0.491);
         particle->color_mod.set(255, 255, 255, 255);
         particle->initAnimation(Particle::Type::StaticParticle);
         particle->initScaleGradient(scale_gradient, particle->scale);
@@ -192,28 +203,58 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 
 void Glimmer::updateAppear()
 {
-    if (action_start_time == 0.0f) {
+    if (movestate == MoveState::Start) {
         action_start_time=time;
         emmitParticles(time, p);
+        movestate=MoveState::Grow;
+        scale=0.01f;
     }
-    if (scale < 1.0f) scale+=0.02f * frame_rate_compensation;
-    if (scale >= 1.0f) {
-        scale=1.0f;
-        behavior=Behavior::Wait;
-        if (next_node > 0) {
-            Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
-            Decker::Objects::Object* target=objs->getObject(next_node);
-            if (target) target->trigger();
+    if (movestate == MoveState::Grow) {
+        if (scale < 2.0f) scale+=0.08f * frame_rate_compensation;
+        else {
+            movestate=MoveState::Shrink;
+        }
+    } else if (movestate == MoveState::Shrink) {
+        if (scale > 1.0f) scale-=0.08f * frame_rate_compensation;
+        else {
+            scale=1.0f;
+            movestate=MoveState::Start;
+            behavior=Behavior::Wait;
+            if (next_node > 0) {
+                Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
+                Decker::Objects::Object* target=objs->getObject(next_node);
+                if (target) target->trigger();
+            }
         }
     }
 }
 
 void Glimmer::updateDisappear()
 {
-    if (scale > 0.1f) scale-=0.02f * frame_rate_compensation;
-    if (scale <= 0.1f) {
-        scale=0.1f;
-        behavior=Behavior::Invisible;
+    //ppl7::PrintDebug("Glimmer::updateDisappear: movestate=%d, scale=%0.3f\n", (int)movestate, scale);
+    if (movestate == MoveState::Start) {
+        movestate=MoveState::Shrink;
+        action_start_time=time;
+
+    }
+    if (movestate == MoveState::Shrink) {
+        if (scale > 0.01f) scale-=(0.08f * frame_rate_compensation);
+        if (scale <= 0.01f) {
+            scale=0.1f;
+            velocity.setPoint(0.0f, 0.0f);
+            movestate=MoveState::Stop;
+            emmitParticles(time, p);
+            draw_enabled=false;
+        }
+    } else if (movestate == MoveState::Stop) {
+        if (scale < 1.0f) scale+=(0.08f * frame_rate_compensation);
+        if (scale > 1.0f) {
+            scale=1.0f;
+            enabled=false;
+            draw_enabled=true;
+            behavior=Behavior::Invisible;
+        }
+
     }
 }
 
@@ -223,8 +264,6 @@ void Glimmer::updateFlyTo()
     if (behavior == Behavior::FlyToAndStop) {
         maxspeed=dist / 40.0f;
     }
-    //ppl7::PrintDebug("Glimmer::updateFlyTo, dist=%0.3f, target=%0.0f:%0.0f, maxspeed=%0.3f, speed=%0.3f, movestate=%d\n",
-    //    dist, target_coords.x, target_coords.y, maxspeed, speed, (int)movestate);
     moveTo(target_coords);
     if (dist < 5.0f) wait(target_coords);
     if (dist > 5.0f && movestate == MoveState::Wait) movestate=MoveState::Move;
@@ -326,7 +365,7 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
     if (movestate == MoveState::Move) {
         if (fabsf(diff_angle) < 120.0f) {
             float factor=fabsf(diff_angle) / 10.0f;
-            if (factor > 2.0f) factor=2.0f;
+            if (factor > 5.0f) factor=5.0f;
             if (factor < 0.1f) factor=0.1f;
 
             if (diff_angle < 0.0f) direction-=factor * frame_rate_compensation;
@@ -411,6 +450,7 @@ void Glimmer::drawObject(SDL_Renderer* renderer, const ppl7::grafix::Point& coor
 void Glimmer::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
     if (!enabled) return;
+    if (!draw_enabled) return;
     ppl7::grafix::Point coords(viewport.x1 - worldcoords.x, viewport.y1 - worldcoords.y);
     texture->setTextureBlendMode(SDL_BLENDMODE_BLEND);
     drawObject(renderer, coords);
@@ -436,7 +476,7 @@ void Glimmer::flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool sto
     if (stop_at_target) behavior=Behavior::FlyToAndStop;
     else behavior=Behavior::FlyTo;
     action_start_time=0.0f;
-    ppl7::PrintDebug("fly to triggered\n");
+    //ppl7::PrintDebug("fly to triggered\n");
 }
 
 void Glimmer::followPlayer()
@@ -450,6 +490,7 @@ void Glimmer::appear()
 {
     if (!enabled) enabled=true;
     behavior=Behavior::Appear;
+    movestate=MoveState::Start;
     velocity.setPoint(0.0f, 0.0f);
     action_start_time=0.0f;
     scale=0.1f;
@@ -466,6 +507,7 @@ void Glimmer::awaken()
 void Glimmer::disappear()
 {
     behavior=Behavior::Disappear;
+    movestate=MoveState::Start;
     action_start_time=0.0f;
 }
 

@@ -2291,7 +2291,7 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void handleCollisionByGlimmer(const Collision& collision);
+	void handleCollisionByGlimmer();
 	void reset();
 	void test();
 	void toggle(bool enable, Object* source=NULL) override;

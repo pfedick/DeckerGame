@@ -25,7 +25,9 @@ private:
         Start,
         Wait,
         Move,
-        Stop
+        Stop,
+        Grow,
+        Shrink
     };
     MoveState movestate;
 
@@ -35,6 +37,7 @@ private:
     SpriteTexture* texture;
     const SpriteTexture* lightmaps;
     bool enabled;
+    bool draw_enabled;
     Behavior behavior;
     float frame_rate_compensation;
     double time;

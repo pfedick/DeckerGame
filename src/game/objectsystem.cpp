@@ -841,12 +841,17 @@ void ObjectSystem::detectObjectCollision(const Object* object, std::list<Object*
 
 void ObjectSystem::detectObjectCollision(const ppl7::grafix::Rect& boundary, std::list<Object*>& collision_object_list)
 {
+	//ppl7::PrintDebug("ObjectSystem::detectObjectCollision\n");
 	collision_object_list.clear();
 	std::map<uint32_t, Object*>::const_iterator it;
 	for (it=object_list.begin();it != object_list.end();++it) {
-		if (it->second->enabled == true && it->second->visibleAtPlaytime == true && it->second->myPlane == PlaneId::Player) {
-			if (boundary.intersects(it->second->boundary)) {
-				collision_object_list.push_back(it->second);
+		if (it->second->type() == Decker::Objects::Type::GlimmerNode) {
+			//ppl7::PrintDebug("checking against GlimmerNode: %d, rect: %d:%d - %d:%d\n", it->second->id,
+			//it->second->boundary.x1, it->second->boundary.y1, it->second->boundary.x2, it->second->boundary.y2);
+			if (it->second->enabled == true && it->second->myPlane == PlaneId::Player) {
+				if (boundary.intersects(it->second->boundary)) {
+					collision_object_list.push_back(it->second);
+				}
 			}
 		}
 	}
