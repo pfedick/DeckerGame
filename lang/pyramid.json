@@ -149,6 +149,26 @@
             "de": {
                 "text": "Oh, da ist ja Käse!"
             }
+        },
+        "2215": {
+            "context": "Glimmer disappears",
+            "character": "george",
+            "en": {
+                "text": "What was that?"
+            },
+            "de": {
+                "text": "Was war das?"
+            }
+        },
+        "2216": {
+            "context": "Glimmer disappears",
+            "character": "george",
+            "en": {
+                "text": "What kind of shrine is this?"
+            },
+            "de": {
+                "text": "Was ist das für ein Schrein?"
+            }
         }
     }
 }

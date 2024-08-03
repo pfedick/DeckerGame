@@ -158,14 +158,6 @@ void Glimmer::checkCollisionWithOtherObjects()
     }
 }
 
-void Glimmer::updateAwaken()
-{
-
-}
-
-
-
-
 
 static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 {
@@ -199,6 +191,33 @@ static void emmitParticles(double time, const ppl7::grafix::PointF& p)
 
 }
 
+void Glimmer::updateAwaken()
+{
+    if (movestate == MoveState::Start) {
+        action_start_time=time;
+        //emmitParticles(time, p);
+        movestate=MoveState::Grow;
+        scale=0.01f;
+    }
+    if (movestate == MoveState::Grow) {
+        if (scale < 2.0f) scale+=0.01f * frame_rate_compensation;
+        else {
+            movestate=MoveState::Shrink;
+        }
+    } else if (movestate == MoveState::Shrink) {
+        if (scale > 1.0f) scale-=0.01f * frame_rate_compensation;
+        else {
+            scale=1.0f;
+            movestate=MoveState::Start;
+            behavior=Behavior::Wait;
+            if (next_node > 0) {
+                Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
+                Decker::Objects::Object* target=objs->getObject(next_node);
+                if (target) target->trigger();
+            }
+        }
+    }
+}
 
 
 void Glimmer::updateAppear()
@@ -501,7 +520,9 @@ void Glimmer::awaken()
     if (!enabled) enabled=true;
     behavior=Behavior::Awaken;
     velocity.setPoint(0.0f, 0.0f);
+    movestate=MoveState::Start;
     action_start_time=0.0f;
+    scale=0.01f;
 }
 
 void Glimmer::disappear()
