@@ -14,10 +14,10 @@
             "context": "George lost is hammer",
             "character": "george",
             "en": {
-                "text": "I had this hammer! Where is it gone?"
+                "text": "Huh? I had this hammer! Where is it gone?"
             },
             "de": {
-                "text": "Ich hatte doch diesen Hammer! Wo ist der hin?"
+                "text": "Hä? Ich hatte doch diesen Hammer! Wo ist der hin?"
             }
         },
         "2202": {
@@ -104,10 +104,10 @@
             "context": "George lands on MagicGround over lava pid",
             "character": "george",
             "en": {
-                "text": "That's crazy!"
+                "text": "Phew, that's crazy!"
             },
             "de": {
-                "text": "Das ist verrückt!"
+                "text": "Puh, Das ist verrückt!"
             }
         },
         "2211": {
