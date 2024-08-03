@@ -419,6 +419,7 @@ void Player::addFlashlightToLightSystem(LightSystem& lights)
 	else if (frame >= 79 && frame <= 86) frame+=372; // 451
 	else if (frame >= 305 && frame <= 313) frame+=88;
 	else if (frame >= 415 && frame <= 432) frame+=18;
+	else if (frame >= 283 && frame <= 304) frame=341; // Phonetics
 	//if ((frame >= 314 && frame <= 401) || (frame>=433 && frame<=450) ) {
 	std::map<int, FlashLightPivot>::const_iterator it;
 	ppl7::grafix::Point pf(x, y);
