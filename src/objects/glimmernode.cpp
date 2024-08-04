@@ -206,7 +206,7 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 	boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
 	if (state == State::activated && (trigger_count < maxTriggerCount || unlimitedTrigger == true)) {
 		trigger_count++;
-		ppl7::PrintDebugTime("GlimmerNode %d update, activated, count is: %d\n", id, trigger_count);
+		//ppl7::PrintDebugTime("GlimmerNode %d update, activated, count is: %d\n", id, trigger_count);
 		state=State::finished;
 		notifyTargets();
 		switch (action) {
@@ -250,12 +250,12 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 	} else if (state == State::activated && trigger_count >= maxTriggerCount) {
 		state=State::disabled;
 		if (node_after_max_trigger > 0) {
-			ppl7::PrintDebugTime("node_after_max_trigger %d\n", id);
+			//ppl7::PrintDebugTime("node_after_max_trigger %d\n", id);
 			ObjectSystem* objs=GetObjectSystem();
 			Object* target=objs->getObject(node_after_max_trigger);
 			if (target->type() == Decker::Objects::Type::GlimmerNode) {
 				Decker::Objects::GlimmerNode* glimmernode=static_cast<Decker::Objects::GlimmerNode*>(target);
-				ppl7::PrintDebugTime("trigger it %d => %d\n", id, glimmernode->id);
+				//ppl7::PrintDebugTime("trigger it %d => %d\n", id, glimmernode->id);
 				glimmernode->trigger();
 			}
 		}
@@ -287,14 +287,14 @@ void GlimmerNode::test()
 void GlimmerNode::handleCollisionByGlimmer()
 {
 	if (!triggeredByGlimmerCollision) return;
-	ppl7::PrintDebugTime("GlimmerNode::handleCollisionByGlimmer %d\n", id);
+	//ppl7::PrintDebugTime("GlimmerNode::handleCollisionByGlimmer %d\n", id);
 	uint64_t frame_no=GetFrameNo();
 	if (frame_no < last_collision_frame + 5) {
 		last_collision_frame=frame_no;
-		ppl7::PrintDebugTime("  Node %d: same collision, count is: %d\n", id, trigger_count);
+		//ppl7::PrintDebugTime("  Node %d: same collision, count is: %d\n", id, trigger_count);
 		return;
 	}
-	ppl7::PrintDebugTime("Node %d: new collision, count is: %d\n", id, trigger_count);
+	//ppl7::PrintDebugTime("Node %d: new collision, count is: %d\n", id, trigger_count);
 	last_collision_frame=frame_no;
 	last_collision_time=ppl7::GetMicrotime();
 	if (state == State::waiting_for_activation) {
