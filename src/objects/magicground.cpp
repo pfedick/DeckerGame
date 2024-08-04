@@ -383,6 +383,8 @@ void MagicGround::reset()
 {
 	//ppl7::PrintDebug("MagicGround::reset()\n");
 	p=initial_p;
+	current_state=initial_state;
+
 	randomizeFloatState();
 	randomizeDebris();
 }
