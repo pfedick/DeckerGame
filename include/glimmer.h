@@ -18,7 +18,12 @@ public:
         Awaken,
         FlyTo,
         FlyToAndStop,
-        FlyToPlayer
+        FlyToPlayer,
+        Glimmer,
+        Agree,
+        Disagree,
+        IncreaseLight,
+        DecreaseLight
     };
 private:
 
@@ -60,6 +65,7 @@ private:
     ppl7::grafix::PointF target_coords;
     LightObject light;
     uint32_t next_node;
+    int emote_counter;
 
     void drawObject(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
     void updateVelocity();
@@ -72,6 +78,13 @@ private:
     void updateFlyTo();
     void updateWait();
     void updateFlyToPlayer(Player& player);
+    void updateGlimmer();
+    void updateAgree();
+    void updateDisagree();
+    void updateIncreaseLight();
+    void updateDecreaseLight();
+
+    void triggerNextNode();
 
     void checkCollisionWithOtherObjects();
     void emmitParticles(double time, const Player& player);
@@ -99,6 +112,11 @@ public:
     void appear();
     void awaken();
     void disappear();
+    void glimmer();
+    void agree();
+    void disagree();
+    void increaseLight();
+    void decreaseLight();
     void wait(const ppl7::grafix::PointF& target);
     void setNextNode(uint32_t id);
     void flyToPlayer(float maxSpeed);

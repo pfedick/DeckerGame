@@ -244,6 +244,27 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 			case GlimmerAction::Wait:
 				glimmer->wait(p);
 				break;
+			case GlimmerAction::Glimmer:
+				glimmer->setNextNode(next_node);
+				glimmer->glimmer();
+				break;
+			case GlimmerAction::Agree:
+				glimmer->setNextNode(next_node);
+				glimmer->agree();
+				break;
+			case GlimmerAction::Disagree:
+				glimmer->setNextNode(next_node);
+				glimmer->disagree();
+				break;
+			case GlimmerAction::IncreaseLight:
+				glimmer->setNextNode(next_node);
+				glimmer->increaseLight();
+				break;
+			case GlimmerAction::DecreaseLight:
+				glimmer->setNextNode(next_node);
+				glimmer->decreaseLight();
+				break;
+
 		}
 	} else if (state == State::finished) {
 		state=State::waiting_for_activation;

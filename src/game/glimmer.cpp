@@ -28,6 +28,7 @@ Glimmer::Glimmer(Game& game)
     direction=0.0f;
     maxspeed=10.0f;
     next_node=0;
+    emote_counter=0;
 
     light.color.set(255, 255, 255, 255);
     light.sprite_no=0;
@@ -128,6 +129,21 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
         case Behavior::Awaken:
             updateAwaken();
             break;
+        case Behavior::Glimmer:
+            updateGlimmer();
+            break;
+        case Behavior::Agree:
+            updateAgree();
+            break;
+        case Behavior::Disagree:
+            updateDisagree();
+            break;
+        case Behavior::IncreaseLight:
+            updateIncreaseLight();
+            break;
+        case Behavior::DecreaseLight:
+            updateDecreaseLight();
+            break;
     }
 
     p+=velocity;
@@ -173,6 +189,14 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     checkCollisionWithOtherObjects();
 
 }
+
+void Glimmer::triggerNextNode()
+{
+    Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
+    Decker::Objects::Object* target=objs->getObject(next_node);
+    if (target) target->trigger();
+}
+
 
 void Glimmer::checkCollisionWithOtherObjects()
 {
@@ -246,11 +270,7 @@ void Glimmer::updateAwaken()
             scale=1.0f;
             movestate=MoveState::Start;
             behavior=Behavior::Wait;
-            if (next_node > 0) {
-                Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
-                Decker::Objects::Object* target=objs->getObject(next_node);
-                if (target) target->trigger();
-            }
+            triggerNextNode();
         }
     }
 }
@@ -291,11 +311,7 @@ void Glimmer::updateAppear()
             scale=1.0f;
             movestate=MoveState::Start;
             behavior=Behavior::Wait;
-            if (next_node > 0) {
-                Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
-                Decker::Objects::Object* target=objs->getObject(next_node);
-                if (target) target->trigger();
-            }
+            triggerNextNode();
         }
     }
 }
@@ -389,15 +405,39 @@ void Glimmer::updateFlyToPlayer(Player& player)
     } else if (movestate == MoveState::Move && dist < 20.0f) movestate=MoveState::Stop;
     if (movestate == MoveState::Stop) {
         if (next_node > 0) {
-            Decker::Objects::ObjectSystem* objs=Decker::Objects::GetObjectSystem();
-            Decker::Objects::Object* target=objs->getObject(next_node);
-            if (target) target->trigger();
+            triggerNextNode();
         } else {
             behavior=Behavior::Wait;
             movestate=MoveState::Start;
         }
     }
     moveTo(player_p);
+
+}
+
+
+void Glimmer::updateGlimmer()
+{
+
+}
+
+void Glimmer::updateAgree()
+{
+
+}
+
+void Glimmer::updateDisagree()
+{
+
+}
+
+void Glimmer::updateIncreaseLight()
+{
+
+}
+
+void Glimmer::updateDecreaseLight()
+{
 
 }
 
@@ -639,6 +679,43 @@ void Glimmer::wait(const ppl7::grafix::PointF& target)
 void Glimmer::setNextNode(uint32_t id)
 {
     next_node=id;
+}
+
+void Glimmer::glimmer()
+{
+    behavior=Behavior::Glimmer;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
+}
+
+void Glimmer::agree()
+{
+    behavior=Behavior::Agree;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
+
+}
+
+void Glimmer::disagree()
+{
+    behavior=Behavior::Disagree;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
+
+}
+
+void Glimmer::increaseLight()
+{
+    behavior=Behavior::IncreaseLight;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
+}
+
+void Glimmer::decreaseLight()
+{
+    behavior=Behavior::DecreaseLight;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
 }
 
 
