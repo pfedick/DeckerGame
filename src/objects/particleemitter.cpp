@@ -312,6 +312,9 @@ ppl7::String ParticleEmitter::generateCode() const
 		case Particle::Type::StaticBulletBig: Tmp="StaticBulletBig"; break;
 		case Particle::Type::StaticStudSmall: Tmp="StaticStudSmall"; break;
 		case Particle::Type::StaticStudBig: Tmp="StaticStudBig"; break;
+		case Particle::Type::SoftGradientSmall: Tmp="SoftGradientSmall"; break;
+		case Particle::Type::SoftGradientMedium: Tmp="SoftGradientMedium"; break;
+		case Particle::Type::SoftGradientBig: Tmp="SoftGradientBig"; break;
 		default: Tmp="RotatingParticleWhite"; break;
 	}
 	code.appendf("            particle->initAnimation(Particle::Type::%s);\n", (const char*)Tmp);
@@ -475,6 +478,10 @@ void ParticleEmitterDialog::setupParticleTab()
 	particle_type->add("static bullet big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticBulletBig)));
 	particle_type->add("static stud small", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticStudSmall)));
 	particle_type->add("static stud big", ppl7::ToString("%d", static_cast<int>(Particle::Type::StaticStudBig)));
+	particle_type->add("soft gradient small", ppl7::ToString("%d", static_cast<int>(Particle::Type::SoftGradientSmall)));
+	particle_type->add("soft gradient medium", ppl7::ToString("%d", static_cast<int>(Particle::Type::SoftGradientMedium)));
+	particle_type->add("soft gradient big", ppl7::ToString("%d", static_cast<int>(Particle::Type::SoftGradientBig)));
+
 
 	tab->addChild(particle_type);
 	y+=35;

@@ -155,6 +155,15 @@ void Particle::initAnimation(Particle::Type type)
         case Particle::Type::StaticStudBig:
             animation.setStaticFrame(162);
             break;
+        case Particle::Type::SoftGradientSmall:
+            animation.setStaticFrame(166);
+            break;
+        case Particle::Type::SoftGradientMedium:
+            animation.setStaticFrame(167);
+            break;
+        case Particle::Type::SoftGradientBig:
+            animation.setStaticFrame(168);
+            break;
 
     };
 }

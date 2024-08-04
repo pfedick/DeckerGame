@@ -77,7 +77,10 @@ public:
         StaticBulletSmall,
         StaticBulletBig,
         StaticStudSmall,
-        StaticStudBig
+        StaticStudBig,
+        SoftGradientSmall,
+        SoftGradientMedium,
+        SoftGradientBig,
     };
 
 

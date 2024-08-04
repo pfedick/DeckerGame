@@ -651,15 +651,15 @@ void Glimmer::emmitParticles(double time, const Player& player)
         for (int i=0;i < new_particles;i++) {
             Particle* particle=new Particle();
             particle->birth_time=time;
-            particle->death_time=randf(0.273, 1.324) + time;
+            particle->death_time=randf(0.448, 1.587) + time;
             particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 9), 180.000);
             particle->layer=Particle::Layer::BehindPlayer;
             particle->weight=randf(0.000, 0.000);
             particle->gravity.setPoint(0.000, 0.000);
             particle->velocity=calculateVelocity(randf(1.053, 1.930), 180.000 + randf(-12.632, 12.632));
-            particle->scale=randf(0.062, 0.185);
+            particle->scale=randf(0.237, 0.491);
             particle->color_mod.set(255, 255, 255, 255);
-            particle->initAnimation(Particle::Type::StaticCircle);
+            particle->initAnimation(Particle::Type::SoftGradientSmall);
             ps->addParticle(particle);
         }
     }
