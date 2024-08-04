@@ -225,6 +225,12 @@ void Object::trigger(Object*)
 	enabled=!enabled;
 }
 
+bool Object::isEnabled() const
+{
+	return enabled;
+}
+
+
 void Object::updateSpriteset(int spriteset)
 {
 	if (spriteset != this->sprite_set) {

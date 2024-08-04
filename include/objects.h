@@ -266,6 +266,7 @@ public:
 	virtual void reset();
 	virtual void toggle(bool enable, Object* source=NULL);
 	virtual void trigger(Object* source=NULL);
+	virtual bool isEnabled() const;
 	static Representation representation();
 };
 
@@ -2203,9 +2204,9 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	//void handleCollision(Player* player, const Collision& collision) override;
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
-
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+	bool isEnabled() const override;
 
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
