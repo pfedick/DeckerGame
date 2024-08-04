@@ -25,6 +25,7 @@ GlimmerNode::GlimmerNode()
 	pixelExactCollision=false;
 	initialStateEnabled=true;
 	visibleAtPlaytime=false;
+	unlimitedTrigger=false;
 	enabled=initialStateEnabled;
 	triggeredByPlayerCollision=false;
 	triggeredByGlimmerCollision=false;
@@ -66,6 +67,7 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 	if (triggeredByPlayerCollision) flags|=2;
 	if (triggeredByGlimmerCollision) flags|=4;
 	if (!breakForDirectionChange) flags|=8;
+	if (unlimitedTrigger) flags|=16;
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke16(buffer + bytes + 2, range.x);
 	ppl7::Poke16(buffer + bytes + 4, range.y);
@@ -99,6 +101,7 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	triggeredByPlayerCollision=(bool)(flags & 2);
 	triggeredByGlimmerCollision=(bool)(flags & 4);
 	breakForDirectionChange=!(bool)(flags & 8);
+	unlimitedTrigger=(bool)(flags & 16);
 	enabled=initialStateEnabled;
 	range.x=ppl7::Peek16(buffer + bytes + 2);
 	range.y=ppl7::Peek16(buffer + bytes + 4);
@@ -201,7 +204,7 @@ void GlimmerNode::reset()
 void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
-	if (state == State::activated && trigger_count < maxTriggerCount) {
+	if (state == State::activated && (trigger_count < maxTriggerCount || unlimitedTrigger == true)) {
 		trigger_count++;
 		ppl7::PrintDebugTime("GlimmerNode %d update, activated, count is: %d\n", id, trigger_count);
 		state=State::finished;
@@ -313,7 +316,7 @@ private:
 	ppltk::ComboBox* action;
 	ppltk::CheckBox* initialStateEnabled, * currentState;
 	ppltk::CheckBox* triggeredByPlayer, * triggeredByGlimmer;
-	ppltk::CheckBox* breakForDirectionChange;
+	ppltk::CheckBox* breakForDirectionChange, * unlimitedTrigger;
 	ppltk::SpinBox* target_id[10];
 	ppltk::RadioButton* target_state_on[10];
 	ppltk::RadioButton* target_state_off[10];
@@ -372,6 +375,11 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	breakForDirectionChange->setEventHandler(this);
 	breakForDirectionChange->setChecked(object->breakForDirectionChange);
 	addChild(breakForDirectionChange);
+	unlimitedTrigger=new ppltk::CheckBox(sw, y, sw, 30, "unlimited Trigger");
+	unlimitedTrigger->setChecked(object->unlimitedTrigger);
+	unlimitedTrigger->setEventHandler(this);
+	addChild(unlimitedTrigger);
+
 	y+=35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
@@ -509,6 +517,8 @@ void GlimmerNodeDialog::toggledEvent(ppltk::Event* event, bool checked)
 		object->enabled=checked;
 	} else if (event->widget() == breakForDirectionChange) {
 		object->breakForDirectionChange=checked;
+	} else if (event->widget() == unlimitedTrigger) {
+		object->unlimitedTrigger=checked;
 	}
 	if (checked) {
 		for (int i=0;i < 10;i++) {
