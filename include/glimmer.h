@@ -31,6 +31,10 @@ private:
         Shrink
     };
     MoveState movestate;
+    AudioInstance* audio;
+
+    double next_birth;
+    std::list<Particle::ColorGradientItem>color_gradient;
 
 
     ppl7::grafix::Point tail_p[GLIMMER_TAIL_LENGTH];
@@ -70,6 +74,8 @@ private:
     void updateFlyToPlayer(Player& player);
 
     void checkCollisionWithOtherObjects();
+    void emmitParticles(double time, const Player& player);
+
 
 
 public:

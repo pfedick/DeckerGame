@@ -230,6 +230,18 @@ public:
 		powercells_depleted,
 		peach,
 		fireworks_loop,
+		glimmer_plopp1,
+		glimmer_plopp2,
+		glimmer_plopp3,
+		glimmer_plopp4,
+		glimmer_plopp5,
+		glimmer_plopp6,
+		glimmer_effect1,
+		glimmer_effect2,
+		glimmer_chimes_loop1,
+		glimmer_awakens,
+		glimmer_up,
+		glimmer_down,
 		// this must always be the last entry!
 		maxClips
 	};

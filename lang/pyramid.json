@@ -217,7 +217,27 @@
                 "text": "Uh, well I can't jump that far in my life!"
             },
             "de": {
-                "text": "Äh, also so weit kann ich im Leben nicht springen!"
+                "text": "Ähm, also so weit kann ich im Leben nicht springen!"
+            }
+        },
+        "2222": {
+            "context": "George had to trust glimmer and jump into the lava",
+            "character": "george",
+            "en": {
+                "text": "Uh you mean, I should just... uh..."
+            },
+            "de": {
+                "text": "Ähm, Du meinst, ich soll also einfach... ähm..."
+            }
+        },
+        "2223": {
+            "context": "George walks over the lava",
+            "character": "george",
+            "en": {
+                "text": "Oh man!"
+            },
+            "de": {
+                "text": "Oh, Mann!"
             }
         }
     }

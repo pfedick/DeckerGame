@@ -302,6 +302,19 @@ void AudioPool::load()
 
 		sample[AudioClip::fireworks_loop].load("res/audio/fireworks_loop.mp3");
 
+		sample[AudioClip::glimmer_plopp1].load("res/audio/glimmer/plopp1.mp3");
+		sample[AudioClip::glimmer_plopp2].load("res/audio/glimmer/plopp2.mp3");
+		sample[AudioClip::glimmer_plopp3].load("res/audio/glimmer/plopp3.mp3");
+		sample[AudioClip::glimmer_plopp4].load("res/audio/glimmer/plopp4.mp3");
+		sample[AudioClip::glimmer_plopp5].load("res/audio/glimmer/plopp5.mp3");
+		sample[AudioClip::glimmer_plopp6].load("res/audio/glimmer/plopp6.mp3");
+		sample[AudioClip::glimmer_effect1].load("res/audio/glimmer/effect1.mp3");
+		sample[AudioClip::glimmer_effect2].load("res/audio/glimmer/effect2.mp3");
+		sample[AudioClip::glimmer_chimes_loop1].load("res/audio/glimmer/chimes_loop1.mp3");
+		sample[AudioClip::glimmer_awakens].load("res/audio/glimmer/awakens.mp3");
+		sample[AudioClip::glimmer_up].load("res/audio/glimmer/up.mp3");
+		sample[AudioClip::glimmer_down].load("res/audio/glimmer/down.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

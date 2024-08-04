@@ -8,6 +8,7 @@ static float rad_pi=3.1415926535f / 180.0f;
 Glimmer::Glimmer(Game& game)
     :game(game)
 {
+    audio=NULL;
     for (int i=0;i < GLIMMER_TAIL_LENGTH;i++) {
         tail_p[i].x=-500.0f;
         tail_p[i].y=-500.0f;
@@ -39,11 +40,22 @@ Glimmer::Glimmer(Game& game)
     light.flarePlane=static_cast<int>(LightPlayerPlaneMatrix::Player);
     light.flare_intensity=255;
     light.flare_useLightColor=true;
+
+    next_birth=0.0f;
+    color_gradient.push_back(Particle::ColorGradientItem(0.000, ppl7::grafix::Color(255, 255, 255, 255)));
+    color_gradient.push_back(Particle::ColorGradientItem(0.554, ppl7::grafix::Color(255, 255, 255, 169)));
+    color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(255, 255, 255, 0)));
+
+
 }
 
 Glimmer::~Glimmer()
 {
-
+    if (audio) {
+        getAudioPool().stopInstace(audio);
+        delete audio;
+        audio=NULL;
+    }
 }
 
 void Glimmer::setSpriteResource(SpriteTexture& resource, const SpriteTexture& lightmaps)
@@ -81,6 +93,11 @@ static inline int ftoi_clamp(float value, int max)
 
 void Glimmer::update(double time, const TileTypePlane& world, Player& player, Decker::Objects::ObjectSystem& objects, float frame_rate_compensation)
 {
+    if (audio != NULL && (enabled == false || behavior == Behavior::Invisible)) {
+        getAudioPool().stopInstace(audio);
+        delete audio;
+        audio=NULL;
+    }
     if (!enabled) return;
     this->frame_rate_compensation=frame_rate_compensation;
     this->time=time;
@@ -113,9 +130,22 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
             break;
     }
 
-
-
     p+=velocity;
+    if (!audio && behavior != Behavior::Awaken) {
+        AudioPool& audiopool=getAudioPool();
+        audio=audiopool.getInstance(AudioClip::glimmer_chimes_loop1);
+        if (audio) {
+            audio->setVolume(1.0f);
+            audio->setAutoDelete(false);
+            audio->setLoop(true);
+            audio->setPositional(p, 1600);
+            audiopool.playInstance(audio);
+        }
+    }
+    if (audio) {
+        audio->setPositional(p, 1600);
+    }
+    emmitParticles(time, player);
 
     // Update Tail
     last_tail_index++;
@@ -163,7 +193,7 @@ void Glimmer::checkCollisionWithOtherObjects()
 }
 
 
-static void emmitParticles(double time, const ppl7::grafix::PointF& p)
+static void ploppParticles(double time, const ppl7::grafix::PointF& p)
 {
     std::list<Particle::ScaleGradientItem>scale_gradient;
     std::list<Particle::ColorGradientItem>color_gradient;
@@ -199,9 +229,9 @@ void Glimmer::updateAwaken()
 {
     if (movestate == MoveState::Start) {
         action_start_time=time;
-        //emmitParticles(time, p);
         movestate=MoveState::Grow;
         scale=0.01f;
+        getAudioPool().playOnce(AudioClip::glimmer_awakens, p, 1600, 1.0f);
     }
     if (movestate == MoveState::Grow) {
         if (scale < 2.0f) scale+=0.01f * frame_rate_compensation;
@@ -224,13 +254,29 @@ void Glimmer::updateAwaken()
 }
 
 
+static void GlimmerPlopp(AudioPool& audiopool, const ppl7::grafix::Point& p)
+{
+    int r=ppl7::rand(1, 5);
+    switch (r) {
+        case 1: audiopool.playOnce(AudioClip::glimmer_plopp1, p, 1600, 1.0f); break;
+        case 2: audiopool.playOnce(AudioClip::glimmer_plopp2, p, 1600, 1.0f); break;
+        case 3: audiopool.playOnce(AudioClip::glimmer_plopp3, p, 1600, 1.0f); break;
+        case 4: audiopool.playOnce(AudioClip::glimmer_plopp4, p, 1600, 1.0f); break;
+        case 5: audiopool.playOnce(AudioClip::glimmer_plopp5, p, 1600, 1.0f); break;
+    }
+}
+
 void Glimmer::updateAppear()
 {
     if (movestate == MoveState::Start) {
         action_start_time=time;
-        emmitParticles(time, p);
+        ploppParticles(time, p);
         movestate=MoveState::Grow;
         scale=0.01f;
+        AudioPool& audiopool=getAudioPool();
+        GlimmerPlopp(audiopool, p);
+        getAudioPool().playOnce(AudioClip::glimmer_effect1, p, 1600, 1.0f);
+        //getAudioPool().playOnce(AudioClip::glimmer_awakens, p, 1600, 1.0f);
     }
     if (movestate == MoveState::Grow) {
         if (scale < 2.0f) scale+=0.08f * frame_rate_compensation;
@@ -258,7 +304,8 @@ void Glimmer::updateDisappear()
     if (movestate == MoveState::Start) {
         movestate=MoveState::Shrink;
         action_start_time=time;
-
+        getAudioPool().playOnce(AudioClip::glimmer_plopp6, p, 1600, 1.0f);
+        getAudioPool().playOnce(AudioClip::glimmer_effect2, p, 1600, 1.0f);
     }
     if (movestate == MoveState::Shrink) {
         if (scale > 0.01f) scale-=(0.08f * frame_rate_compensation);
@@ -266,7 +313,7 @@ void Glimmer::updateDisappear()
             scale=0.1f;
             velocity.setPoint(0.0f, 0.0f);
             movestate=MoveState::Stop;
-            emmitParticles(time, p);
+            ploppParticles(time, p);
             draw_enabled=false;
         }
     } else if (movestate == MoveState::Stop) {
@@ -590,4 +637,30 @@ void Glimmer::wait(const ppl7::grafix::PointF& target)
 void Glimmer::setNextNode(uint32_t id)
 {
     next_node=id;
+}
+
+
+
+void Glimmer::emmitParticles(double time, const Player& player)
+{
+    if (next_birth < time) {
+        next_birth=time + randf(0.020, 0.045);
+        ParticleSystem* ps=GetParticleSystem();
+        if (!emitterInPlayerRange(p, player)) return;
+        int new_particles=ppl7::rand(1, 4);
+        for (int i=0;i < new_particles;i++) {
+            Particle* particle=new Particle();
+            particle->birth_time=time;
+            particle->death_time=randf(0.273, 1.324) + time;
+            particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 9), 180.000);
+            particle->layer=Particle::Layer::BehindPlayer;
+            particle->weight=randf(0.000, 0.000);
+            particle->gravity.setPoint(0.000, 0.000);
+            particle->velocity=calculateVelocity(randf(1.053, 1.930), 180.000 + randf(-12.632, 12.632));
+            particle->scale=randf(0.062, 0.185);
+            particle->color_mod.set(255, 255, 255, 255);
+            particle->initAnimation(Particle::Type::StaticCircle);
+            ps->addParticle(particle);
+        }
+    }
 }
