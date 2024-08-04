@@ -99,6 +99,11 @@ void LightSignal::trigger(Object* source)
     toggle(!currentState, source);
 }
 
+bool LightSignal::isEnabled() const
+{
+    return currentState;
+}
+
 size_t LightSignal::saveSize() const
 {
     return Object::saveSize() + 10;
