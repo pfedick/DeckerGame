@@ -254,10 +254,10 @@
             "context": "George arrives at the bottom of the abyss",
             "character": "george",
             "en": {
-                "text": "Oh God, water!"
+                "text": "Oh thank God, I landed in the water"
             },
             "de": {
-                "text": "Oh Gott, Wasser!"
+                "text": "Oh Gott sei dank, ich bin im Wasser gelandet!"
             }
         },
         "2226": {
@@ -274,10 +274,10 @@
             "context": "George realizes, that there is no way out of the abyss",
             "character": "george",
             "en": {
-                "text": "There doesn't seem to be a way out of here."
+                "text": "Damm it, there doesn't seem to be a way out of here."
             },
             "de": {
-                "text": "Es scheint hier keinen Weg raus zu geben."
+                "text": "Verdammt, es scheint hier keinen Weg raus zu geben."
             }
         },
         "2228": {
@@ -294,10 +294,10 @@
             "context": "George calls Glimmer 2",
             "character": "george",
             "en": {
-                "text": "I could use your help!"
+                "text": "I really could use your help!"
             },
             "de": {
-                "text": "Ich könnte Deine Hilfe gebrauchen!"
+                "text": "Ich könnte echt Deine Hilfe gebrauchen!"
             }
         },
         "2230": {
@@ -317,7 +317,87 @@
                 "text": "The hammer is also broken and the cheese is mushy!"
             },
             "de": {
-                "text": "Der Hammer ist auch zerbrochen, und der Käse ist Matsch!"
+                "text": "Der Hammer ist auch zerbrochen, und... ihhh, der Käse ist Matsch!"
+            }
+        },
+        "2232": {
+            "context": "Glimmer build a stairway to exit the abyss",
+            "character": "george",
+            "en": {
+                "text": "Great, I will get up there"
+            },
+            "de": {
+                "text": "Klasse! Da werd' ich hoch kommen."
+            }
+        },
+        "2233": {
+            "context": "George escaped the abyss",
+            "character": "george",
+            "en": {
+                "text": "Done! Thank you, you light ball!"
+            },
+            "de": {
+                "text": "Geschafft! Vielen Dank, du Leuchtkugel!"
+            }
+        },
+        "2234": {
+            "context": "George ask glimmer for his name",
+            "character": "george",
+            "en": {
+                "text": "Hmm, do you actually have a name?"
+            },
+            "de": {
+                "text": "Hmm, hast Du eigentlich einen Namen?"
+            }
+        },
+        "2235": {
+            "context": "George gives glimmer his name",
+            "character": "george",
+            "en": {
+                "text": "I think I'll call you Glimmer, what do you think?"
+            },
+            "de": {
+                "text": "Ich glaube, ich werde Dich Glimmer nennen, was meinst Du?"
+            }
+        },
+        "2236": {
+            "context": "Glimmer has his name",
+            "character": "george",
+            "en": {
+                "text": "OK, so it's Glimmer then!"
+            },
+            "de": {
+                "text": "Ok, also Glimmer!"
+            }
+        },
+        "2237": {
+            "context": "let's go on",
+            "character": "george",
+            "en": {
+                "text": "Then let's see how we get on here!"
+            },
+            "de": {
+                "text": "Dann schauen wir mal, wie wir hier weiter kommen."
+            }
+        },
+        "2238": {
+            "context": "george needs a new flashlight",
+            "character": "george",
+            "en": {
+                "text": "I definitely need a new flashlight."
+            },
+            "de": {
+                "text": "Ich brauch auf jeden Fall eine neue Taschenlampe."
+            }
+        },
+        "2239": {
+            "context": "glimmer increases it's light intensity",
+            "character": "george",
+            "en": {
+                "text": "Hey, that's great!"
+            },
+            "de": {
+                "text": "Hey, das ist toll!"
             }
         }
     }
