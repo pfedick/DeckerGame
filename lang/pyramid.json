@@ -239,6 +239,36 @@
             "de": {
                 "text": "Oh, Mann!"
             }
+        },
+        "2224": {
+            "context": "George falls into the abyss",
+            "character": "george",
+            "en": {
+                "text": "NOOOOOO!"
+            },
+            "de": {
+                "text": "NEEEEIN!"
+            }
+        },
+        "2225": {
+            "context": "George arrives at the bottom of the abyss",
+            "character": "george",
+            "en": {
+                "text": "Oh God, water!"
+            },
+            "de": {
+                "text": "Oh Gott, Wasser!"
+            }
+        },
+        "2226": {
+            "context": "Georges flashlight is broken",
+            "character": "george",
+            "en": {
+                "text": "Crap, the flashlight is broken!"
+            },
+            "de": {
+                "text": "Mist, die Taschenlampe ist kaputt!"
+            }
         }
     }
 }
