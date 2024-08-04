@@ -1982,6 +1982,21 @@ void Player::drainBattery()
 			}
 		}
 	}
+}
 
+void Player::drainBatteryCompletely()
+{
+	energylevel=0.0f;
+	drainBattery();
+}
 
+void Player::takeAllItems(int type)
+{
+	if (type == Decker::Objects::Type::ExtraLife) {
+		lifes=1;
+	} else if (type == Decker::Objects::Type::PowerCell) {
+		powercells=0;
+	} else {
+		SpecialObjects.erase(type);
+	}
 }

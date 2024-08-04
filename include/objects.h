@@ -79,6 +79,7 @@ public:
 		Peach=43,
 		MagicGround=44,
 		GlimmerNode=45,
+		ItemTaker=46,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -2236,6 +2237,31 @@ public:
 	void openUi() override;
 };
 
+class ItemTaker : public Object
+{
+private:
+public:
+	bool takeFlashlight;
+	bool takeHammer;
+	bool takeCheese;
+	bool takeEnergyCells;
+	bool takeExtralife;
+	bool takeEnergy;
+
+	ItemTaker();
+	~ItemTaker();
+	static Representation representation();
+
+	void trigger(Object* source=NULL) override;
+	void reset();
+	void test();
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void openUi() override;
+
+};
+
 class GlimmerNode : public Object
 {
 private:
@@ -2311,6 +2337,9 @@ public:
 	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 };
+
+
+
 
 
 

@@ -125,6 +125,8 @@ private:
 	void idleJokes(double time);
 	void playPhonetics();
 	void initFlashLight();
+	void drainBattery();
+
 public:
 	float x, y;
 	int points, lifes;
@@ -189,8 +191,9 @@ public:
 	void hitBySpiderWeb();
 	bool isPetrified() const;
 	void addPowerCell();
-	void drainBattery();
 	void setBatteryDrainRate(float rate);
+	void takeAllItems(int type);
+	void drainBatteryCompletely();
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 
