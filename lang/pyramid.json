@@ -244,10 +244,10 @@
             "context": "George falls into the abyss",
             "character": "george",
             "en": {
-                "text": "NOOOOOO!"
+                "text": "Ahhhhhhhhh!"
             },
             "de": {
-                "text": "NEEEEIN!"
+                "text": "Ahhhhhhhhh!"
             }
         },
         "2225": {
@@ -268,6 +268,56 @@
             },
             "de": {
                 "text": "Mist, die Taschenlampe ist kaputt!"
+            }
+        },
+        "2227": {
+            "context": "George realizes, that there is no way out of the abyss",
+            "character": "george",
+            "en": {
+                "text": "There doesn't seem to be a way out of here."
+            },
+            "de": {
+                "text": "Es scheint hier keinen Weg raus zu geben."
+            }
+        },
+        "2228": {
+            "context": "George calls Glimmer",
+            "character": "george",
+            "en": {
+                "text": "Hey, flare! Are you there?"
+            },
+            "de": {
+                "text": "He, Leuchtkugel! Bist Du da?"
+            }
+        },
+        "2229": {
+            "context": "George calls Glimmer 2",
+            "character": "george",
+            "en": {
+                "text": "I could use your help!"
+            },
+            "de": {
+                "text": "Ich könnte Deine Hilfe gebrauchen!"
+            }
+        },
+        "2230": {
+            "context": "Glimmer arrives",
+            "character": "george",
+            "en": {
+                "text": "Hey, there you are! Can you help me get out of here?"
+            },
+            "de": {
+                "text": "Hey, da bist Du ja! Kannst Du mir helfen hier raus zu kommen?"
+            }
+        },
+        "2231": {
+            "context": "Hammer and Cheese are also gone",
+            "character": "george",
+            "en": {
+                "text": "The hammer is also broken and the cheese is mushy!"
+            },
+            "de": {
+                "text": "Der Hammer ist auch zerbrochen, und der Käse ist Matsch!"
             }
         }
     }
