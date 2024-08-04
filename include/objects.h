@@ -2248,7 +2248,7 @@ private:
 	State state;
 	double cooldown;
 	double triggerDeleayTime;
-	int trigger_count;
+	uint8_t trigger_count;
 	double last_collision_time;
 	uint64_t last_collision_frame;
 	void notifyTargets() const;
@@ -2283,10 +2283,13 @@ public:
 	bool initialStateEnabled;
 	bool triggeredByPlayerCollision;
 	bool triggeredByGlimmerCollision;
+	bool breakForDirectionChange;
 
 	uint32_t next_node;
 	GlimmerAction action;
 	float maxSpeed;
+	float duration;
+	uint8_t maxTriggerCount;
 
 
 	GlimmerNode();

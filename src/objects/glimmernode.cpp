@@ -18,8 +18,10 @@ GlimmerNode::GlimmerNode()
 	glimmer=GetGame().getGlimmer();
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=3;
+	maxTriggerCount=1;
 	sprite_no_representation=3;
 	collisionDetection=true;
+	breakForDirectionChange=true;
 	pixelExactCollision=false;
 	initialStateEnabled=true;
 	visibleAtPlaytime=false;
@@ -29,12 +31,13 @@ GlimmerNode::GlimmerNode()
 	state=State::waiting_for_activation;
 	cooldown=0.0f;
 	triggerDeleayTime=0.0f;
+	duration=0.0f;
 	trigger_count=0;
 	last_collision_time=0.0f;
 	last_collision_frame=0;
 	action=GlimmerAction::Wait;
 	next_node=0;
-	maxSpeed=15.0f;
+	maxSpeed=10.0f;
 	range.setPoint(TILE_WIDTH * 2, TILE_WIDTH * 2);
 	for (int i=0;i < 10;i++) {
 		triggerObjects[i].object_id=0;
@@ -48,7 +51,7 @@ GlimmerNode::~GlimmerNode()
 
 size_t GlimmerNode::saveSize() const
 {
-	return Object::saveSize() + 15 + 10 * 3;;
+	return Object::saveSize() + 20 + 10 * 3;
 }
 
 
@@ -56,11 +59,12 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 	int flags=0;
 	if (initialStateEnabled) flags|=1;
 	if (triggeredByPlayerCollision) flags|=2;
 	if (triggeredByGlimmerCollision) flags|=4;
+	if (!breakForDirectionChange) flags|=8;
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke16(buffer + bytes + 2, range.x);
 	ppl7::Poke16(buffer + bytes + 4, range.y);
@@ -74,6 +78,10 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 		ppl7::Poke8(buffer + bytes + p + 2, static_cast<int>(triggerObjects[i].state));
 		p+=3;
 	}
+	ppl7::Poke8(buffer + bytes + p, maxTriggerCount);
+	p++;
+	ppl7::PokeFloat(buffer + bytes + p, duration);
+	p+=4;
 	return bytes + p;
 }
 
@@ -82,11 +90,12 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1 || size < bytes + 16) return 0;
+	if (version < 1 || version > 2) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	initialStateEnabled=(bool)(flags & 1);
 	triggeredByPlayerCollision=(bool)(flags & 2);
 	triggeredByGlimmerCollision=(bool)(flags & 4);
+	breakForDirectionChange=!(bool)(flags & 8);
 	enabled=initialStateEnabled;
 	range.x=ppl7::Peek16(buffer + bytes + 2);
 	range.y=ppl7::Peek16(buffer + bytes + 4);
@@ -99,6 +108,13 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 		triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
 		triggerObjects[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + p + 2));
 		p+=3;
+	}
+	if (version >= 2) {
+		maxTriggerCount=ppl7::Peek8(buffer + bytes + p);
+		trigger_count=0;
+		p++;
+		duration=ppl7::PeekFloat(buffer + bytes + p);
+		p+=4;
 	}
 	return size;
 
@@ -206,7 +222,7 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 					ObjectSystem* objs=GetObjectSystem();
 					Object* target=objs->getObject(next_node);
 					if (target) {
-						glimmer->flyTo(target->p, maxSpeed, (bool)(action == GlimmerAction::FlyToAndStop));
+						glimmer->flyTo(target->p, maxSpeed, (bool)(action == GlimmerAction::FlyToAndStop), breakForDirectionChange);
 					}
 				}
 				break;
@@ -267,10 +283,13 @@ private:
 	ppltk::HorizontalSlider* range_y;
 	//ppltk::HorizontalSlider* maxTriggerCount;
 	ppltk::DoubleHorizontalSlider* maxSpeed;
+	ppltk::DoubleHorizontalSlider* duration;
 	ppltk::SpinBox* next_node;
+	ppltk::SpinBox* maxTriggerCount;
 	ppltk::ComboBox* action;
 	ppltk::CheckBox* initialStateEnabled, * currentState;
 	ppltk::CheckBox* triggeredByPlayer, * triggeredByGlimmer;
+	ppltk::CheckBox* breakForDirectionChange;
 	ppltk::SpinBox* target_id[10];
 	ppltk::RadioButton* target_state_on[10];
 	ppltk::RadioButton* target_state_off[10];
@@ -298,7 +317,7 @@ void GlimmerNode::openUi()
 }
 
 GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
-	: Decker::ui::Dialog(700, 650, Buttons::OK | Buttons::Test | Buttons::Reset)
+	: Decker::ui::Dialog(700, 550, Buttons::OK | Buttons::Test | Buttons::Reset)
 {
 	ppl7::grafix::Rect client=clientRect();
 	this->object=object;
@@ -325,6 +344,11 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	triggeredByGlimmer->setEventHandler(this);
 	addChild(triggeredByGlimmer);
 	y+=35;
+	breakForDirectionChange=new ppltk::CheckBox(0, y, sw, 30, "Break for direction change");
+	breakForDirectionChange->setEventHandler(this);
+	breakForDirectionChange->setChecked(object->breakForDirectionChange);
+	addChild(breakForDirectionChange);
+	y+=35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
 	range_x=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
@@ -333,8 +357,8 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	range_x->enableSpinBox(true, 1, 80);
 	range_x->setEventHandler(this);
 	addChild(range_x);
-	addChild(new ppltk::Label(sw, y, 60, 30, "Range y:"));
-	range_y=new ppltk::HorizontalSlider(sw + 60, y, sw - 60, 30);
+	addChild(new ppltk::Label(sw, y, 70, 30, "Range y:"));
+	range_y=new ppltk::HorizontalSlider(sw + 70, y, sw - 70, 30);
 	range_y->setLimits(0, 1600);
 	range_y->setValue(object->range.y);
 	range_y->enableSpinBox(true, 1, 80);
@@ -356,6 +380,14 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
 	action->setEventHandler(this);
 	addChild(action);
+
+	addChild(new ppltk::Label(sw, y, 70, 30, "Duration:"));
+	duration=new ppltk::DoubleHorizontalSlider(sw + 70, y, sw - 70, 30);
+	duration->setLimits(0.0f, 10.0f);
+	duration->setValue(object->duration);
+	duration->enableSpinBox(true, 0.2f, 3, 80);
+	duration->setEventHandler(this);
+	addChild(duration);
 	y+=35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Next Node:"));
@@ -363,11 +395,17 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	next_node->setLimits(0, 65535);
 	next_node->setEventHandler(this);
 	addChild(next_node);
+
+	addChild(new ppltk::Label(sw, y, 135, 30, "Max Trigger count:"));
+	maxTriggerCount=new ppltk::SpinBox(sw + 135, y, 100, 30, object->maxTriggerCount);
+	maxTriggerCount->setLimits(1, 255);
+	maxTriggerCount->setEventHandler(this);
+	addChild(maxTriggerCount);
 	y+=35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Max speed:"));
 	maxSpeed=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
-	maxSpeed->setLimits(0.0f, 15.0f);
+	maxSpeed->setLimits(0.0f, 30.0f);
 	maxSpeed->setValue(object->maxSpeed);
 	maxSpeed->enableSpinBox(true, 0.2f, 3, 80);
 	maxSpeed->setEventHandler(this);
@@ -376,32 +414,37 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	y+=35;
 
 
-
+	y+=10;
 	addChild(new ppltk::Label(0, y, 400, 30, "Trigger objects:"));
 	y+=35;
+	int x=0;
+	int y1=y;
 	for (int i=0;i < 10;i++) {
-		int x=0;
-		addChild(new ppltk::Label(x + 10, y, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
-		target_id[i]=new ppltk::SpinBox(x + 90, y, 100, 30, object->triggerObjects[i].object_id);
+		if (i == 5) {
+			x=340;
+			y1=y;
+		}
+		addChild(new ppltk::Label(x, y1, 80, 30, ppl7::ToString("Object %d: ", i + 1)));
+		target_id[i]=new ppltk::SpinBox(x + 80, y1, 80, 28, object->triggerObjects[i].object_id);
 		target_id[i]->setLimits(0, 65535);
 		target_id[i]->setEventHandler(this);
 		addChild(target_id[i]);
 
-		ppltk::Frame* frame=new ppltk::Frame(x + 190, y, 210, 30, ppltk::Frame::BorderStyle::NoBorder);
+		ppltk::Frame* frame=new ppltk::Frame(x + 160, y1, 180, 30, ppltk::Frame::BorderStyle::NoBorder);
 		frame->setTransparent(true);
 
 		target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->triggerObjects[i].state == GlimmerNode::TargetState::enable);
 		target_state_on[i]->setEventHandler(this);
 		frame->addChild(target_state_on[i]);
-		target_state_off[i]=new ppltk::RadioButton(50, 0, 60, 30, "off", object->triggerObjects[i].state == GlimmerNode::TargetState::disable);
+		target_state_off[i]=new ppltk::RadioButton(50, 0, 50, 30, "off", object->triggerObjects[i].state == GlimmerNode::TargetState::disable);
 		target_state_off[i]->setEventHandler(this);
 		frame->addChild(target_state_off[i]);
-		target_state_trigger[i]=new ppltk::RadioButton(100, 0, 90, 30, "trigger", object->triggerObjects[i].state == GlimmerNode::TargetState::trigger);
+		target_state_trigger[i]=new ppltk::RadioButton(100, 0, 70, 30, "trigger", object->triggerObjects[i].state == GlimmerNode::TargetState::trigger);
 		target_state_trigger[i]->setEventHandler(this);
 		frame->addChild(target_state_trigger[i]);
 		addChild(frame);
 
-		y+=30;
+		y1+=30;
 	}
 
 }
@@ -432,6 +475,8 @@ void GlimmerNodeDialog::toggledEvent(ppltk::Event* event, bool checked)
 		object->initialStateEnabled=checked;
 	} else if (event->widget() == currentState) {
 		object->enabled=checked;
+	} else if (event->widget() == breakForDirectionChange) {
+		object->breakForDirectionChange=checked;
 	}
 	if (checked) {
 		for (int i=0;i < 10;i++) {
@@ -452,6 +497,8 @@ void GlimmerNodeDialog::valueChangedEvent(ppltk::Event* event, double value)
 
 	if (event->widget() == maxSpeed) {
 		object->maxSpeed=value;
+	} else if (event->widget() == duration) {
+		object->duration=value;
 	}
 }
 
@@ -473,6 +520,8 @@ void GlimmerNodeDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 		object->range.y=(int)value;
 	} else if (event->widget() == next_node) {
 		object->next_node=(uint32_t)value;
+	} else if (event->widget() == maxTriggerCount) {
+		object->maxTriggerCount=(uint8_t)value;
 	} else {
 		for (int i=0;i < 10;i++) {
 			if (event->widget() == target_id[i]) object->triggerObjects[i].object_id=(uint16_t)value;

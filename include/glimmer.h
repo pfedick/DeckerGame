@@ -39,6 +39,7 @@ private:
     const SpriteTexture* lightmaps;
     bool enabled;
     bool draw_enabled;
+    bool break_for_direction_change;
     Behavior behavior;
     float frame_rate_compensation;
     double time;
@@ -87,7 +88,7 @@ public:
     void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 
 
-    void flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool stop_at_target);
+    void flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool stop_at_target, bool break_for_direction_change);
     void followPlayer();
     void appear();
     void awaken();

@@ -16,6 +16,7 @@ Glimmer::Glimmer(Game& game)
     texture=NULL;
     enabled=false;
     draw_enabled=true;
+    break_for_direction_change=true;
     behavior=Behavior::Invisible;
     frame_rate_compensation=1.0f;
     streak_rotation=0.0f;
@@ -522,9 +523,10 @@ void Glimmer::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, c
 }
 
 
-void Glimmer::flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool stop_at_target)
+void Glimmer::flyTo(const ppl7::grafix::PointF& target, float maxSpeed, bool stop_at_target, bool break_for_direction_change)
 {
     this->maxspeed=maxSpeed;
+    this->break_for_direction_change=break_for_direction_change;
     target_coords=target;
     if (stop_at_target) behavior=Behavior::FlyToAndStop;
     else behavior=Behavior::FlyTo;
