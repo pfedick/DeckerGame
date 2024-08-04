@@ -2301,7 +2301,12 @@ public:
 		FlyTo,
 		FlyToAndStop,
 		Wait,
-		FlyToPlayer
+		FlyToPlayer,
+		Glimmer,
+		Agree,
+		Disagree,
+		IncreaseLight,
+		DecreaseLight
 	};
 
 	TargetObject triggerObjects[10];

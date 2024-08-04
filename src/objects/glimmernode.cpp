@@ -408,6 +408,11 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	action->add("Fly to node and stop", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyToAndStop)));
 	action->add("Wait", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Wait)));
 	action->add("Fly to player", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::FlyToPlayer)));
+	action->add("Glimmer", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Glimmer)));
+	action->add("Agree", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Agree)));
+	action->add("Disagree", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Disagree)));
+	action->add("Increase light", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::IncreaseLight)));
+	action->add("Decrease light", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::DecreaseLight)));
 	action->sortItems();
 	action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
 	action->setEventHandler(this);
