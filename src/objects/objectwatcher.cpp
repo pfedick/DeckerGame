@@ -66,7 +66,7 @@ void ObjectWatcher::update(double time, TileTypePlane& ttplane, Player& player, 
 			if (obj) {
 				//ppl7::PrintDebugTime("   Object %d has state: %d\n", obj->id, obj->enabled);
 				maxcount++;
-				if (obj->enabled == watchObjects[i].expectedState) {
+				if (obj->isEnabled() == watchObjects[i].expectedState) {
 					state_achived++;
 				}
 			}
