@@ -37,6 +37,7 @@ GlimmerNode::GlimmerNode()
 	last_collision_frame=0;
 	action=GlimmerAction::Wait;
 	next_node=0;
+	node_after_max_trigger=0;
 	maxSpeed=10.0f;
 	range.setPoint(TILE_WIDTH * 2, TILE_WIDTH * 2);
 	for (int i=0;i < 10;i++) {
@@ -51,7 +52,7 @@ GlimmerNode::~GlimmerNode()
 
 size_t GlimmerNode::saveSize() const
 {
-	return Object::saveSize() + 20 + 10 * 3;
+	return Object::saveSize() + 24 + 10 * 3;
 }
 
 
@@ -59,7 +60,7 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 2);		// Object Version
+	ppl7::Poke8(buffer + bytes, 3);		// Object Version
 	int flags=0;
 	if (initialStateEnabled) flags|=1;
 	if (triggeredByPlayerCollision) flags|=2;
@@ -82,6 +83,8 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 	p++;
 	ppl7::PokeFloat(buffer + bytes + p, duration);
 	p+=4;
+	ppl7::Poke32(buffer + bytes + p, node_after_max_trigger);
+	p+=4;
 	return bytes + p;
 }
 
@@ -90,7 +93,7 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version > 2) return 0;
+	if (version < 1 || version > 3) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	initialStateEnabled=(bool)(flags & 1);
 	triggeredByPlayerCollision=(bool)(flags & 2);
@@ -115,6 +118,9 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 		p++;
 		duration=ppl7::PeekFloat(buffer + bytes + p);
 		p+=4;
+	}
+	if (version >= 3) {
+		node_after_max_trigger=ppl7::Peek32(buffer + bytes + p);
 	}
 	return size;
 
@@ -195,7 +201,9 @@ void GlimmerNode::reset()
 void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
-	if (state == State::activated) {
+	if (state == State::activated && trigger_count < maxTriggerCount) {
+		trigger_count++;
+		ppl7::PrintDebugTime("GlimmerNode %d update, activated, count is: %d\n", id, trigger_count);
 		state=State::finished;
 		notifyTargets();
 		switch (action) {
@@ -234,6 +242,20 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 				glimmer->wait(p);
 				break;
 		}
+	} else if (state == State::finished) {
+		state=State::waiting_for_activation;
+	} else if (state == State::activated && trigger_count >= maxTriggerCount) {
+		state=State::disabled;
+		if (node_after_max_trigger > 0) {
+			ppl7::PrintDebugTime("node_after_max_trigger %d\n", id);
+			ObjectSystem* objs=GetObjectSystem();
+			Object* target=objs->getObject(node_after_max_trigger);
+			if (target->type() == Decker::Objects::Type::GlimmerNode) {
+				Decker::Objects::GlimmerNode* glimmernode=static_cast<Decker::Objects::GlimmerNode*>(target);
+				ppl7::PrintDebugTime("trigger it %d => %d\n", id, glimmernode->id);
+				glimmernode->trigger();
+			}
+		}
 	}
 }
 
@@ -241,7 +263,7 @@ void GlimmerNode::handleCollision(Player* player, const Collision& collision)
 {
 	if (!triggeredByPlayerCollision) return;
 	uint64_t frame_no=GetFrameNo();
-	if (frame_no == last_collision_frame + 1) {
+	if (frame_no < last_collision_frame + 5) {
 		last_collision_frame=frame_no;
 		return;
 	}
@@ -262,12 +284,14 @@ void GlimmerNode::test()
 void GlimmerNode::handleCollisionByGlimmer()
 {
 	if (!triggeredByGlimmerCollision) return;
-	//ppl7::PrintDebug("GlimmerNode::handleCollisionByGlimmer\n");
+	ppl7::PrintDebugTime("GlimmerNode::handleCollisionByGlimmer %d\n", id);
 	uint64_t frame_no=GetFrameNo();
-	if (frame_no == last_collision_frame + 1) {
+	if (frame_no < last_collision_frame + 5) {
 		last_collision_frame=frame_no;
+		ppl7::PrintDebugTime("  Node %d: same collision, count is: %d\n", id, trigger_count);
 		return;
 	}
+	ppl7::PrintDebugTime("Node %d: new collision, count is: %d\n", id, trigger_count);
 	last_collision_frame=frame_no;
 	last_collision_time=ppl7::GetMicrotime();
 	if (state == State::waiting_for_activation) {
@@ -284,7 +308,7 @@ private:
 	//ppltk::HorizontalSlider* maxTriggerCount;
 	ppltk::DoubleHorizontalSlider* maxSpeed;
 	ppltk::DoubleHorizontalSlider* duration;
-	ppltk::SpinBox* next_node;
+	ppltk::SpinBox* next_node, * node_after_max_trigger;
 	ppltk::SpinBox* maxTriggerCount;
 	ppltk::ComboBox* action;
 	ppltk::CheckBox* initialStateEnabled, * currentState;
@@ -317,7 +341,7 @@ void GlimmerNode::openUi()
 }
 
 GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
-	: Decker::ui::Dialog(700, 550, Buttons::OK | Buttons::Test | Buttons::Reset)
+	: Decker::ui::Dialog(700, 580, Buttons::OK | Buttons::Test | Buttons::Reset)
 {
 	ppl7::grafix::Rect client=clientRect();
 	this->object=object;
@@ -395,17 +419,25 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	next_node->setLimits(0, 65535);
 	next_node->setEventHandler(this);
 	addChild(next_node);
+	y+=35;
 
-	addChild(new ppltk::Label(sw, y, 135, 30, "Max Trigger count:"));
-	maxTriggerCount=new ppltk::SpinBox(sw + 135, y, 100, 30, object->maxTriggerCount);
+	addChild(new ppltk::Label(0, y, 120, 30, "Max Trigger:"));
+	maxTriggerCount=new ppltk::SpinBox(120, y, 100, 30, object->maxTriggerCount);
 	maxTriggerCount->setLimits(1, 255);
 	maxTriggerCount->setEventHandler(this);
 	addChild(maxTriggerCount);
+	addChild(new ppltk::Label(sw, y, 160, 30, "Node after max trigger:"));
+	node_after_max_trigger=new ppltk::SpinBox(sw + 160, y, 100, 30, object->node_after_max_trigger);
+	node_after_max_trigger->setLimits(0, 65535);
+	node_after_max_trigger->setEventHandler(this);
+	addChild(node_after_max_trigger);
+
+
 	y+=35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Max speed:"));
 	maxSpeed=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
-	maxSpeed->setLimits(0.0f, 30.0f);
+	maxSpeed->setLimits(0.0f, 20.0f);
 	maxSpeed->setValue(object->maxSpeed);
 	maxSpeed->enableSpinBox(true, 0.2f, 3, 80);
 	maxSpeed->setEventHandler(this);
@@ -522,6 +554,8 @@ void GlimmerNodeDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 		object->next_node=(uint32_t)value;
 	} else if (event->widget() == maxTriggerCount) {
 		object->maxTriggerCount=(uint8_t)value;
+	} else if (event->widget() == node_after_max_trigger) {
+		object->node_after_max_trigger=(uint32_t)value;
 	} else {
 		for (int i=0;i < 10;i++) {
 			if (event->widget() == target_id[i]) object->triggerObjects[i].object_id=(uint16_t)value;

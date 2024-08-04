@@ -2286,6 +2286,7 @@ public:
 	bool breakForDirectionChange;
 
 	uint32_t next_node;
+	uint32_t node_after_max_trigger;
 	GlimmerAction action;
 	float maxSpeed;
 	float duration;

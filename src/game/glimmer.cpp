@@ -25,7 +25,7 @@ Glimmer::Glimmer(Game& game)
     scale=1.0f;
     speed=0.0f;
     direction=0.0f;
-    maxspeed=15.0f;
+    maxspeed=10.0f;
     next_node=0;
 
     light.color.set(255, 255, 255, 255);
@@ -374,10 +374,10 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
     if (speed == 0.0f) direction=target_angle;
 
 
-    if (maxspeed > 15.0f) maxspeed=15.0f;
+    if (maxspeed > 20.0f) maxspeed=20.0f;
     if (maxspeed < 0.1f) maxspeed=0.1;
     acceleration=speed / 10.0f;
-    if (acceleration > 2.0f) acceleration=20.0f;
+    if (acceleration > 2.0f) acceleration=2.0f;
     if (acceleration < 0.1) acceleration=0.1f;
 
     if (movestate == MoveState::Start) {
@@ -417,7 +417,7 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
     //    (int)movestate, speed, direction, target_angle, diff_angle, diff_links, diff_rechts);
 
     if (movestate == MoveState::Move) {
-        if (fabsf(diff_angle) < 120.0f) {
+        if (fabsf(diff_angle) < 120.0f && break_for_direction_change == true) {
             float factor=fabsf(diff_angle) / 10.0f;
             if (factor > 5.0f) factor=5.0f;
             if (factor < 0.1f) factor=0.1f;
@@ -425,7 +425,8 @@ void Glimmer::moveTo(const ppl7::grafix::PointF& target)
             if (diff_angle < 0.0f) direction-=factor * frame_rate_compensation;
             else direction+=factor * frame_rate_compensation;
         } else {
-            movestate = MoveState::Stop;
+            if (break_for_direction_change) movestate = MoveState::Stop;
+            else direction=target_angle;
         }
     }
 
