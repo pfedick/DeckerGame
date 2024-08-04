@@ -209,6 +209,16 @@
             "de": {
                 "text": "Du schon wieder!"
             }
+        },
+        "2221": {
+            "context": "George coms to a lava river, where he can't jump over",
+            "character": "george",
+            "en": {
+                "text": "Uh, well I can't jump that far in my life!"
+            },
+            "de": {
+                "text": "Äh, also so weit kann ich im Leben nicht springen!"
+            }
         }
     }
 }
