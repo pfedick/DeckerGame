@@ -214,16 +214,18 @@ static void ploppParticles(double time, const ppl7::grafix::PointF& p)
         particle->layer=Particle::Layer::BeforePlayer;
         particle->weight=randf(0.246, 0.000);
         particle->gravity.setPoint(0.000, 0.000);
-        particle->velocity=calculateVelocity(randf(4.737, 6.316), 0.000 + randf(-180.000, 180.000));
-        particle->scale=randf(0.237, 0.491);
+        particle->velocity=calculateVelocity(randf(3.684, 5.263), 0.000 + randf(-180.000, 180.000));
+        particle->scale=randf(0.481, 0.710);
         particle->color_mod.set(255, 255, 255, 255);
-        particle->initAnimation(Particle::Type::StaticParticle);
+        particle->initAnimation(Particle::Type::SoftGradientMedium);
         particle->initScaleGradient(scale_gradient, particle->scale);
         particle->initColorGradient(color_gradient);
         ps->addParticle(particle);
     }
 
 }
+
+
 
 void Glimmer::updateAwaken()
 {
