@@ -1552,6 +1552,7 @@ public:
 	bool verticalMovement;
 	bool roundEdges;
 	bool canDissolve;
+	bool isInvisible;
 
 	int color;
 	float movement_speed;

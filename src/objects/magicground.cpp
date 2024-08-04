@@ -27,6 +27,7 @@ MagicGround::MagicGround()
 	verticalMovement=true;
 	roundEdges=true;
 	canDissolve=false;
+	isInvisible=false;
 	movement_speed=1.0f;
 	float_offset=0.0f;
 	movement_range=2;
@@ -245,13 +246,14 @@ void MagicGround::drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 
 void MagicGround::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
+	if (isInvisible) return;
 	if (current_state == State::inactive) return;
 	drawCommon(renderer, coords, p, transparency);
 }
 
 void MagicGround::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	drawCommon(renderer, coords, p, 0.5f);
+	if (!isInvisible) drawCommon(renderer, coords, p, 0.5f);
 	drawCommon(renderer, coords, initial_p, 0.0f);
 }
 
@@ -292,6 +294,7 @@ size_t MagicGround::save(unsigned char* buffer, size_t size) const
 	if (verticalMovement) flags|=8;
 	if (roundEdges) flags|=16;
 	if (canDissolve) flags|=32;
+	if (isInvisible) flags|=64;
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke8(buffer + bytes + 2, graficset);
 	ppl7::Poke8(buffer + bytes + 3, width);
@@ -343,6 +346,7 @@ size_t MagicGround::load(const unsigned char* buffer, size_t size)
 	verticalMovement=(bool)(flags & 8);
 	roundEdges=(bool)(flags & 16);
 	canDissolve=(bool)(flags & 32);
+	isInvisible=(bool)(flags & 64);
 
 	graficset=ppl7::Peek8(buffer + bytes + 2);
 	width=ppl7::Peek8(buffer + bytes + 3);
@@ -396,6 +400,7 @@ private:
 	ppltk::CheckBox* verticalMovement;
 	ppltk::CheckBox* roundEdges;
 	ppltk::CheckBox* canDissolve;
+	ppltk::CheckBox* isInvisible;
 
 	Decker::ui::ColorSelectionFrame* color;
 
@@ -499,6 +504,11 @@ MagicGroundDialog::MagicGroundDialog(MagicGround* object)
 	verticalMovement=new ppltk::CheckBox(x1 + 30, y1, w, 30, "moves vertical", object->verticalMovement);
 	verticalMovement->setEventHandler(this);
 	addChild(verticalMovement);
+	y1+=30;
+	isInvisible=new ppltk::CheckBox(x1 + 30, y1, w, 30, "is invisible", object->isInvisible);
+	isInvisible->setEventHandler(this);
+	addChild(isInvisible);
+
 	y1+=35;
 	addChild(new ppltk::Label(x1, y1, 120, 30, "Debris: "));
 	y1+=30;
@@ -656,6 +666,9 @@ void MagicGroundDialog::toggledEvent(ppltk::Event* event, bool checked)
 		object->roundEdges=checked;
 	} else if (event->widget() == canDissolve) {
 		object->canDissolve=checked;
+	} else if (event->widget() == isInvisible) {
+		object->isInvisible=checked;
+
 	}
 }
 
