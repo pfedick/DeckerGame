@@ -69,7 +69,7 @@ Dialog::Dialog(int width, int height, int buttons)
 	}
 	if (buttons & Buttons::Test) {
 		test_button=new ppltk::Button(x, y, 60, 32, "Test");
-		reset_button->setIcon(wm->Toolbar.getDrawable(63));
+		test_button->setIcon(wm->Toolbar.getDrawable(63));
 		test_button->setEventHandler(this);
 		ppltk::Widget::addChild(test_button);
 		x+=62;
