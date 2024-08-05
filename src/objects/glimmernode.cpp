@@ -32,7 +32,7 @@ GlimmerNode::GlimmerNode()
 	state=State::waiting_for_activation;
 	cooldown=0.0f;
 	trigger_delay=0.0f;
-	triggerDeleayTime=0.0f;
+	triggerDelayTime=0.0f;
 	duration=0.0f;
 	trigger_count=0;
 	last_collision_time=0.0f;
@@ -54,7 +54,7 @@ GlimmerNode::~GlimmerNode()
 
 size_t GlimmerNode::saveSize() const
 {
-	return Object::saveSize() + 24 + 10 * 3;
+	return Object::saveSize() + 28 + 10 * 3;
 }
 
 
@@ -62,7 +62,7 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 3);		// Object Version
+	ppl7::Poke8(buffer + bytes, 4);		// Object Version
 	int flags=0;
 	if (initialStateEnabled) flags|=1;
 	if (triggeredByPlayerCollision) flags|=2;
@@ -88,6 +88,8 @@ size_t GlimmerNode::save(unsigned char* buffer, size_t size) const
 	p+=4;
 	ppl7::Poke32(buffer + bytes + p, node_after_max_trigger);
 	p+=4;
+	ppl7::PokeFloat(buffer + bytes + p, trigger_delay);
+	p+=4;
 	return bytes + p;
 }
 
@@ -96,7 +98,7 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version > 3) return 0;
+	if (version < 1 || version > 4) return 0;
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	initialStateEnabled=(bool)(flags & 1);
 	triggeredByPlayerCollision=(bool)(flags & 2);
@@ -125,6 +127,11 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	}
 	if (version >= 3) {
 		node_after_max_trigger=ppl7::Peek32(buffer + bytes + p);
+		p+=4;
+	}
+	if (version >= 4) {
+		trigger_delay=ppl7::PeekFloat(buffer + bytes + p);
+		p+=4;
 	}
 	return size;
 
@@ -208,8 +215,15 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 	if (state == State::activated && (trigger_count < maxTriggerCount || unlimitedTrigger == true)) {
 		trigger_count++;
 		//ppl7::PrintDebugTime("GlimmerNode %d update, activated, count is: %d\n", id, trigger_count);
-		state=State::finished;
-		notifyTargets();
+
+		if (trigger_delay > 0.0f) {
+			triggerDelayTime=time + trigger_delay;
+			state=State::wait_for_trigger_delay;
+		} else {
+			state=State::finished;
+			notifyTargets();
+		}
+
 		switch (action) {
 			case GlimmerAction::Appear:
 				glimmer->setPosition(p);
@@ -282,6 +296,9 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 				glimmernode->trigger();
 			}
 		}
+	} else if (state == State::wait_for_trigger_delay && time >= triggerDelayTime) {
+		state=State::finished;
+		notifyTargets();
 	}
 }
 
@@ -334,6 +351,7 @@ private:
 	//ppltk::HorizontalSlider* maxTriggerCount;
 	ppltk::DoubleHorizontalSlider* maxSpeed;
 	ppltk::DoubleHorizontalSlider* duration;
+	ppltk::DoubleHorizontalSlider* trigger_delay;
 	ppltk::SpinBox* next_node, * node_after_max_trigger;
 	ppltk::SpinBox* maxTriggerCount;
 	ppltk::ComboBox* action;
@@ -367,7 +385,7 @@ void GlimmerNode::openUi()
 }
 
 GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
-	: Decker::ui::Dialog(700, 580, Buttons::OK | Buttons::Test | Buttons::Reset)
+	: Decker::ui::Dialog(700, 610, Buttons::OK | Buttons::Test | Buttons::Reset)
 {
 	ppl7::grafix::Rect client=clientRect();
 	this->object=object;
@@ -481,8 +499,18 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	addChild(new ppltk::Label(420, y, 120, 30, "Pixel/Frame"));
 	y+=35;
 
-
 	y+=10;
+	addChild(new ppltk::Label(0, y, 120, 30, "Trigger Delay:"));
+	trigger_delay=new ppltk::DoubleHorizontalSlider(120, y, 300, 30);
+	trigger_delay->setLimits(0.0f, 60.0f);
+	trigger_delay->setValue(object->trigger_delay);
+	trigger_delay->enableSpinBox(true, 0.2f, 3, 80);
+	trigger_delay->setEventHandler(this);
+	addChild(trigger_delay);
+	addChild(new ppltk::Label(420, y, 120, 30, "seconds"));
+	y+=35;
+
+
 	addChild(new ppltk::Label(0, y, 400, 30, "Trigger objects:"));
 	y+=35;
 	int x=0;
@@ -569,6 +597,8 @@ void GlimmerNodeDialog::valueChangedEvent(ppltk::Event* event, double value)
 		object->maxSpeed=value;
 	} else if (event->widget() == duration) {
 		object->duration=value;
+	} else if (event->widget() == trigger_delay) {
+		object->trigger_delay=value;
 	}
 }
 

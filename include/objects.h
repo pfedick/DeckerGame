@@ -2275,11 +2275,12 @@ private:
 		waiting_for_activation,
 		activated,
 		finished,
-		disabled
+		disabled,
+		wait_for_trigger_delay
 	};
 	State state;
 	double cooldown;
-	double triggerDeleayTime;
+	double triggerDelayTime;
 	uint32_t trigger_count;
 	double last_collision_time;
 	uint64_t last_collision_frame;
