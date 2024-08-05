@@ -802,6 +802,8 @@ void Glimmer::followPlayer()
 void Glimmer::appear()
 {
     if (!enabled) enabled=true;
+    light_size=1.0f;
+    streak_size=1.0f;
     behavior=Behavior::Appear;
     movestate=MoveState::Start;
     velocity.setPoint(0.0f, 0.0f);
@@ -812,6 +814,8 @@ void Glimmer::appear()
 void Glimmer::awaken()
 {
     if (!enabled) enabled=true;
+    light_size=1.0f;
+    streak_size=1.0f;
     behavior=Behavior::Awaken;
     velocity.setPoint(0.0f, 0.0f);
     movestate=MoveState::Start;
