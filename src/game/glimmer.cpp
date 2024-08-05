@@ -493,6 +493,8 @@ void Glimmer::updateAgree()
                 target_coords.setPoint(p.x + 2, p.y + 40);
             }
             if (emote_counter >= 8) {
+                velocity.setPoint(0.0f, 0.0f);
+                speed=0.0f;
                 movestate=MoveState::Wait;
                 target_coords=start_coords;
                 triggerNextNode();
@@ -537,6 +539,8 @@ void Glimmer::updateDisagree()
                 target_coords.setPoint(p.x + 40, p.y);
             }
             if (emote_counter >= 8) {
+                velocity.setPoint(0.0f, 0.0f);
+                speed=0.0f;
                 movestate=MoveState::Wait;
                 target_coords=start_coords;
                 triggerNextNode();
