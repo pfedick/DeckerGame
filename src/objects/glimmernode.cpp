@@ -31,6 +31,7 @@ GlimmerNode::GlimmerNode()
 	triggeredByGlimmerCollision=false;
 	state=State::waiting_for_activation;
 	cooldown=0.0f;
+	trigger_delay=0.0f;
 	triggerDeleayTime=0.0f;
 	duration=0.0f;
 	trigger_count=0;
@@ -243,7 +244,7 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 				break;
 			case GlimmerAction::Wait:
 				glimmer->setNextNode(next_node);
-				glimmer->wait(p,duration);
+				glimmer->wait(p, duration);
 				break;
 			case GlimmerAction::Glimmer:
 				glimmer->setNextNode(next_node);

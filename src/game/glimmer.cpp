@@ -161,7 +161,7 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     if (audio) {
         audio->setPositional(p, 1600);
     }
-    if (behavior!=Behavior::Glimmer) emmitParticles(time, player);
+    if (behavior != Behavior::Glimmer) emmitParticles(time, player);
     else glimmerParticles(time, player);
 
     // Update Tail
@@ -354,7 +354,7 @@ void Glimmer::updateFlyTo()
         maxspeed=dist / 40.0f;
     }
     moveTo(target_coords);
-    if (dist < 5.0f) wait(target_coords,0.0f);
+    if (dist < 5.0f) wait(target_coords, 0.0f);
     if (dist > 5.0f && movestate == MoveState::Wait) movestate=MoveState::Move;
 }
 
@@ -380,9 +380,9 @@ void Glimmer::updateWait()
         maxspeed=1.0f;
         moveTo(target_coords);
     } else if (movestate == MoveState::Wait) {
-        if (duration>0.0f && next_node!=0) {
-            if (action_timeout==0.0f) action_timeout=time+duration;
-            if (action_timeout<time) triggerNextNode();
+        if (duration > 0.0f && next_node != 0) {
+            if (action_timeout == 0.0f) action_timeout=time + duration;
+            if (action_timeout < time) triggerNextNode();
         }
 
     } else if (movestate == MoveState::Stop) {
@@ -439,27 +439,28 @@ void Glimmer::updateFlyToPlayer(Player& player)
 
 void Glimmer::updateGlimmer()
 {
-    if (movestate==MoveState::Start) {
+    if (movestate == MoveState::Start) {
         action_start_time=time;
         movestate=MoveState::Move;
         start_coords=p;
         velocity.setPoint(0.0f, 0.0f);
-        target_coords.setPoint(start_coords.x,start_coords.y-20.0f);
+        target_coords.setPoint(start_coords.x, start_coords.y - 20.0f);
         emote_counter=0;
         glimmer_angle=180.0f;
+        getAudioPool().playOnce(AudioClip::glimmer_awakens, p, 1600, 1.0f);
     }
-    if (movestate==MoveState::Move) {
-        glimmer_angle+=10.0f*frame_rate_compensation;
-        if (glimmer_angle>=540.0f) {
+    if (movestate == MoveState::Move) {
+        glimmer_angle+=10.0f * frame_rate_compensation;
+        if (glimmer_angle >= 540.0f) {
             emote_counter+=1;
             glimmer_angle-=360.0f;
-            if (emote_counter>3) {
+            if (emote_counter > 3) {
                 glimmer_angle=180.0f;
                 movestate=MoveState::Wait;
                 triggerNextNode();
             }
         }
-    } else if (movestate==MoveState::Wait) {
+    } else if (movestate == MoveState::Wait) {
         movestate=MoveState::Start;
         behavior=Behavior::Wait;
     }
@@ -467,40 +468,41 @@ void Glimmer::updateGlimmer()
 
 void Glimmer::updateAgree()
 {
-    if (movestate==MoveState::Start) {
+    if (movestate == MoveState::Start) {
         action_start_time=time;
         movestate=MoveState::Move;
         start_coords=p;
-        target_coords.setPoint(p.x+2,p.y+40);
+        target_coords.setPoint(p.x + 2, p.y + 40);
         velocity.setPoint(0.0f, 0.0f);
         speed=0.0f;
         emote_counter=0;
         maxspeed=5.0f;
         break_for_direction_change=false;
+        getAudioPool().playOnce(AudioClip::glimmer_effect2, p, 1600, 1.0f);
         //ppl7::PrintDebug("Glimmer::updateAgree, start: %d, ziel: %d\n", (int)start_coords.y, (int)target_coords.y);
     }
-    if (movestate==MoveState::Move) {
+    if (movestate == MoveState::Move) {
         moveTo(target_coords);
         double dist=ppl7::grafix::Distance(target_coords, p);
         //ppl7::PrintDebug("Glimmer::updateAgree Move, dist=%0.3f, current: %d, ziel: %d\n", dist,(int)p.y, (int)target_coords.y );
-        if (dist<2.0f) {
+        if (dist < 2.0f) {
             emote_counter++;
-            if (emote_counter&1) {
+            if (emote_counter & 1) {
                 target_coords=start_coords;
             } else {
-                target_coords.setPoint(p.x+2,p.y+40);
+                target_coords.setPoint(p.x + 2, p.y + 40);
             }
-            if (emote_counter>=8) {
+            if (emote_counter >= 8) {
                 movestate=MoveState::Wait;
                 target_coords=start_coords;
                 triggerNextNode();
             }
         }
-    } else if (movestate==MoveState::Wait) {
+    } else if (movestate == MoveState::Wait) {
         //ppl7::PrintDebug("Glimmer::updateAgree wait\n");
         movestate=MoveState::Start;
         behavior=Behavior::Wait;
-    } else if (movestate==MoveState::Stop) {
+    } else if (movestate == MoveState::Stop) {
         //ppl7::PrintDebug("Glimmer::updateAgree stop\n");
         movestate=MoveState::Move;
 
@@ -512,17 +514,84 @@ void Glimmer::updateAgree()
 
 void Glimmer::updateDisagree()
 {
+    if (movestate == MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Move;
+        start_coords=p;
+        target_coords.setPoint(p.x + 40, p.y);
+        velocity.setPoint(0.0f, 0.0f);
+        speed=0.0f;
+        emote_counter=0;
+        maxspeed=5.0f;
+        break_for_direction_change=false;
+        getAudioPool().playOnce(AudioClip::glimmer_effect2, p, 1600, 1.0f);
+    }
+    if (movestate == MoveState::Move) {
+        moveTo(target_coords);
+        double dist=ppl7::grafix::Distance(target_coords, p);
+        if (dist < 2.0f) {
+            emote_counter++;
+            if (emote_counter & 1) {
+                target_coords=start_coords;
+            } else {
+                target_coords.setPoint(p.x + 40, p.y);
+            }
+            if (emote_counter >= 8) {
+                movestate=MoveState::Wait;
+                target_coords=start_coords;
+                triggerNextNode();
+            }
+        }
+    } else if (movestate == MoveState::Wait) {
+        movestate=MoveState::Start;
+        behavior=Behavior::Wait;
+    } else if (movestate == MoveState::Stop) {
+        movestate=MoveState::Move;
+
+    }
 
 }
 
 void Glimmer::updateIncreaseLight()
 {
-
+    if (movestate == MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Grow;
+        getAudioPool().playOnce(AudioClip::glimmer_up, p, 1600, 1.0f);
+    }
+    if (movestate == MoveState::Grow) {
+        if (light_size < 1.5f) {
+            light_size+=0.05f * frame_rate_compensation;
+            streak_size=light_size;
+            if (light_size >= 1.5f) {
+                light_size=1.5f;
+                streak_size=1.5f;
+                movestate=MoveState::Wait;
+                triggerNextNode();
+            }
+        }
+    }
 }
 
 void Glimmer::updateDecreaseLight()
 {
-
+    if (movestate == MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Grow;
+        getAudioPool().playOnce(AudioClip::glimmer_down, p, 1600, 1.0f);
+    }
+    if (movestate == MoveState::Grow) {
+        if (light_size > 1.0f) {
+            light_size-=0.05f * frame_rate_compensation;
+            streak_size=light_size;
+            if (light_size <= 1.0f) {
+                light_size=1.0f;
+                streak_size=1.0f;
+                movestate=MoveState::Wait;
+                triggerNextNode();
+            }
+        }
+    }
 }
 
 
@@ -846,7 +915,7 @@ void Glimmer::glimmerParticles(double time, const Player& player)
             particle->layer=Particle::Layer::BeforePlayer;
             particle->weight=randf(0.100, 0.300);
             particle->gravity.setPoint(0.000, 0.020);
-            particle->velocity=calculateVelocity(randf(1.053, 1.930), glimmer_angle+ randf(-35.0f, +35.0f));
+            particle->velocity=calculateVelocity(randf(1.053, 1.930), glimmer_angle + randf(-35.0f, +35.0f));
             particle->scale=randf(0.237, 0.491);
             particle->color_mod.set(255, 255, 255, 255);
             particle->initAnimation(Particle::Type::SoftGradientSmall);
@@ -854,4 +923,3 @@ void Glimmer::glimmerParticles(double time, const Player& player)
         }
     }
 }
-
