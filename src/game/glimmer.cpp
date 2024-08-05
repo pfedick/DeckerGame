@@ -102,7 +102,7 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     if (!enabled) return;
     this->frame_rate_compensation=frame_rate_compensation;
     this->time=time;
-    //ppl7::PrintDebug("Glimmer state: %d\n", static_cast<int>(behavior));
+    //ppl7::PrintDebug("Glimmer behaviour: %d, state: %d\n", static_cast<int>(behavior), static_cast<int>(movestate));
     switch (behavior) {
         case Behavior::FollowPlayer:
             updateFollowPlayer(player);
@@ -161,7 +161,8 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     if (audio) {
         audio->setPositional(p, 1600);
     }
-    emmitParticles(time, player);
+    if (behavior!=Behavior::Glimmer) emmitParticles(time, player);
+    else glimmerParticles(time, player);
 
     // Update Tail
     last_tail_index++;
@@ -353,21 +354,41 @@ void Glimmer::updateFlyTo()
         maxspeed=dist / 40.0f;
     }
     moveTo(target_coords);
-    if (dist < 5.0f) wait(target_coords);
+    if (dist < 5.0f) wait(target_coords,0.0f);
     if (dist > 5.0f && movestate == MoveState::Wait) movestate=MoveState::Move;
 }
 
 void Glimmer::updateWait()
 {
     if (movestate == MoveState::Start) {
+        action_timeout=0.0f;
         double dist=ppl7::grafix::Distance(target_coords, p);
-        if (dist < 10.0f) {
+        if (dist < 5.0f) {
             movestate=MoveState::Wait;
             velocity.setPoint(0.0f, 0.0f);
             speed=0.0f;
         }
         maxspeed=1.0f;
         moveTo(target_coords);
+    } else if (movestate == MoveState::Move) {
+        double dist=ppl7::grafix::Distance(target_coords, p);
+        if (dist < 5.0f) {
+            movestate=MoveState::Wait;
+            velocity.setPoint(0.0f, 0.0f);
+            speed=0.0f;
+        }
+        maxspeed=1.0f;
+        moveTo(target_coords);
+    } else if (movestate == MoveState::Wait) {
+        if (duration>0.0f && next_node!=0) {
+            if (action_timeout==0.0f) action_timeout=time+duration;
+            if (action_timeout<time) triggerNextNode();
+        }
+
+    } else if (movestate == MoveState::Stop) {
+        movestate=MoveState::Wait;
+        velocity.setPoint(0.0f, 0.0f);
+        speed=0.0f;
     }
 }
 
@@ -418,11 +439,74 @@ void Glimmer::updateFlyToPlayer(Player& player)
 
 void Glimmer::updateGlimmer()
 {
-
+    if (movestate==MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Move;
+        start_coords=p;
+        velocity.setPoint(0.0f, 0.0f);
+        target_coords.setPoint(start_coords.x,start_coords.y-20.0f);
+        emote_counter=0;
+        glimmer_angle=180.0f;
+    }
+    if (movestate==MoveState::Move) {
+        glimmer_angle+=10.0f*frame_rate_compensation;
+        if (glimmer_angle>=540.0f) {
+            emote_counter+=1;
+            glimmer_angle-=360.0f;
+            if (emote_counter>3) {
+                glimmer_angle=180.0f;
+                movestate=MoveState::Wait;
+                triggerNextNode();
+            }
+        }
+    } else if (movestate==MoveState::Wait) {
+        movestate=MoveState::Start;
+        behavior=Behavior::Wait;
+    }
 }
 
 void Glimmer::updateAgree()
 {
+    if (movestate==MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Move;
+        start_coords=p;
+        target_coords.setPoint(p.x+2,p.y+40);
+        velocity.setPoint(0.0f, 0.0f);
+        speed=0.0f;
+        emote_counter=0;
+        maxspeed=5.0f;
+        break_for_direction_change=false;
+        //ppl7::PrintDebug("Glimmer::updateAgree, start: %d, ziel: %d\n", (int)start_coords.y, (int)target_coords.y);
+    }
+    if (movestate==MoveState::Move) {
+        moveTo(target_coords);
+        double dist=ppl7::grafix::Distance(target_coords, p);
+        //ppl7::PrintDebug("Glimmer::updateAgree Move, dist=%0.3f, current: %d, ziel: %d\n", dist,(int)p.y, (int)target_coords.y );
+        if (dist<2.0f) {
+            emote_counter++;
+            if (emote_counter&1) {
+                target_coords=start_coords;
+            } else {
+                target_coords.setPoint(p.x+2,p.y+40);
+            }
+            if (emote_counter>=8) {
+                movestate=MoveState::Wait;
+                target_coords=start_coords;
+                triggerNextNode();
+            }
+        }
+    } else if (movestate==MoveState::Wait) {
+        //ppl7::PrintDebug("Glimmer::updateAgree wait\n");
+        movestate=MoveState::Start;
+        behavior=Behavior::Wait;
+    } else if (movestate==MoveState::Stop) {
+        //ppl7::PrintDebug("Glimmer::updateAgree stop\n");
+        movestate=MoveState::Move;
+
+    } else {
+        //ppl7::PrintDebug("Glimmer::updateAgree unexpected\n");
+    }
 
 }
 
@@ -669,11 +753,14 @@ void Glimmer::disappear()
     action_start_time=0.0f;
 }
 
-void Glimmer::wait(const ppl7::grafix::PointF& target)
+void Glimmer::wait(const ppl7::grafix::PointF& target, float duration)
 {
     behavior=Behavior::Wait;
+    movestate=MoveState::Start;
     action_start_time=0.0f;
     target_coords=target;
+    this->duration=duration;
+    action_timeout=0.0f;
 }
 
 void Glimmer::setNextNode(uint32_t id)
@@ -732,7 +819,7 @@ void Glimmer::emmitParticles(double time, const Player& player)
             particle->birth_time=time;
             particle->death_time=randf(0.448, 1.587) + time;
             particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 9), 180.000);
-            particle->layer=Particle::Layer::BehindPlayer;
+            particle->layer=Particle::Layer::BeforePlayer;
             particle->weight=randf(0.000, 0.000);
             particle->gravity.setPoint(0.000, 0.000);
             particle->velocity=calculateVelocity(randf(1.053, 1.930), 180.000 + randf(-12.632, 12.632));
@@ -743,3 +830,28 @@ void Glimmer::emmitParticles(double time, const Player& player)
         }
     }
 }
+
+void Glimmer::glimmerParticles(double time, const Player& player)
+{
+    if (next_birth < time) {
+        next_birth=time + randf(0.020, 0.045);
+        ParticleSystem* ps=GetParticleSystem();
+        if (!emitterInPlayerRange(p, player)) return;
+        int new_particles=ppl7::rand(16, 64);
+        for (int i=0;i < new_particles;i++) {
+            Particle* particle=new Particle();
+            particle->birth_time=time;
+            particle->death_time=randf(0.448, 1.587) + time;
+            particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 9), 180.000);
+            particle->layer=Particle::Layer::BeforePlayer;
+            particle->weight=randf(0.100, 0.300);
+            particle->gravity.setPoint(0.000, 0.020);
+            particle->velocity=calculateVelocity(randf(1.053, 1.930), glimmer_angle+ randf(-35.0f, +35.0f));
+            particle->scale=randf(0.237, 0.491);
+            particle->color_mod.set(255, 255, 255, 255);
+            particle->initAnimation(Particle::Type::SoftGradientSmall);
+            ps->addParticle(particle);
+        }
+    }
+}
+

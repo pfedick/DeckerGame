@@ -242,7 +242,8 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 				glimmer->flyToPlayer(maxSpeed);
 				break;
 			case GlimmerAction::Wait:
-				glimmer->wait(p);
+				glimmer->setNextNode(next_node);
+				glimmer->wait(p,duration);
 				break;
 			case GlimmerAction::Glimmer:
 				glimmer->setNextNode(next_node);

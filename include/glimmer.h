@@ -33,7 +33,7 @@ private:
         Move,
         Stop,
         Grow,
-        Shrink
+        Shrink,
     };
     MoveState movestate;
     AudioInstance* audio;
@@ -53,6 +53,8 @@ private:
     float frame_rate_compensation;
     double time;
     double action_start_time;
+    double action_timeout;
+    float duration;
     Game& game;
     float streak_rotation;
     float streak_size;
@@ -61,8 +63,10 @@ private:
     float speed;
     float direction;
     float maxspeed;
+    float glimmer_angle;
     ppl7::grafix::PointF velocity;
     ppl7::grafix::PointF target_coords;
+    ppl7::grafix::PointF start_coords;
     LightObject light;
     uint32_t next_node;
     int emote_counter;
@@ -88,7 +92,7 @@ private:
 
     void checkCollisionWithOtherObjects();
     void emmitParticles(double time, const Player& player);
-
+    void glimmerParticles(double time, const Player& player);
 
 
 public:
@@ -117,7 +121,7 @@ public:
     void disagree();
     void increaseLight();
     void decreaseLight();
-    void wait(const ppl7::grafix::PointF& target);
+    void wait(const ppl7::grafix::PointF& target, float duration);
     void setNextNode(uint32_t id);
     void flyToPlayer(float maxSpeed);
 
