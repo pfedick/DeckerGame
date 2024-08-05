@@ -192,7 +192,7 @@ void Speaker::openUi()
 }
 
 SpeakerDialog::SpeakerDialog(Speaker* object)
-	: Decker::ui::Dialog(500, 230, Buttons::OK | Buttons::Test)
+	: Decker::ui::Dialog(500, 280, Buttons::OK | Buttons::Test)
 {
 	ppl7::grafix::Rect client=clientRect();
 	this->object=object;
