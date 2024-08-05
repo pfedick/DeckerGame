@@ -466,11 +466,14 @@ public:
 	int max_distance;
 	float volume;
 
-	int flags;
-	bool current_state;
-	enum class Flags {
-		initialStateEnabled=1
+	bool initial_state;
+
+	enum class SampleType {
+		AudioLoop=0,
+		Effect
 	};
+	SampleType sample_type;
+
 
 
 	Speaker();
@@ -483,6 +486,8 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+	void test();
 };
 
 class Switch : public Object
@@ -2323,6 +2328,7 @@ public:
 	GlimmerAction action;
 	float maxSpeed;
 	float duration;
+	float trigger_delay;
 	uint8_t maxTriggerCount;
 
 
