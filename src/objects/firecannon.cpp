@@ -199,6 +199,7 @@ FireCannon::FireCannon()
 	collisionDetection=false;
 	visibleAtPlaytime=false;
 	direction=90.0f;
+	variation=0.0f;
 	speed=12.0f;
 	initial_state_on=true;
 	current_state_on=true;
@@ -223,14 +224,15 @@ void FireCannon::update(double time, TileTypePlane& ttplane, Player& player, flo
 void FireCannon::fire()
 {
 	Fireball* particle=new Fireball();
+	float angle=direction + ppl7::randf(-variation, +variation);
 	particle->p=p;
 	particle->initial_p=p;
 	particle->spawned=true;
 	particle->sprite_no=300;
 	particle->sprite_set=sprite_set;
 	particle->sprite_no_representation=300;
-	particle->velocity=calculateVelocity(speed, direction);
-	particle->direction=180 + direction;
+	particle->velocity=calculateVelocity(speed, angle);
+	particle->direction=180 + angle;
 	particle->min_particles=min_particles;
 	particle->max_particles=max_particles;
 	GetObjectSystem()->addObject(particle);
@@ -250,14 +252,14 @@ void FireCannon::trigger(Object* source)
 
 size_t FireCannon::saveSize() const
 {
-	return Object::saveSize() + 20;
+	return Object::saveSize() + 24;
 }
 
 size_t FireCannon::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 2);		// Object Version
+	ppl7::Poke8(buffer + bytes, 3);		// Object Version
 
 	uint8_t flags=0;
 	if (initial_state_on) flags|=1;
@@ -269,7 +271,8 @@ size_t FireCannon::save(unsigned char* buffer, size_t size) const
 	ppl7::PokeFloat(buffer + bytes + 14, max_cooldown_time);
 	ppl7::Poke8(buffer + bytes + 18, min_particles);
 	ppl7::Poke8(buffer + bytes + 19, max_particles);
-	return bytes + 20;
+	ppl7::PokeFloat(buffer + bytes + 20, variation);
+	return bytes + 24;
 }
 
 size_t FireCannon::load(const unsigned char* buffer, size_t size)
@@ -277,7 +280,7 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1 || version>2) return 0;
+	if (version < 1 || version>3) return 0;
 	uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
 	initial_state_on=(flags & 1);
 	current_state_on=initial_state_on;
@@ -291,6 +294,9 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 		min_particles=ppl7::Peek8(buffer + bytes + 18);
 		max_particles=ppl7::Peek8(buffer + bytes + 19);
 	}
+	if (version >= 3) {
+		variation=ppl7::PeekFloat(buffer + bytes + 20);
+	}
 	return size;
 }
 
@@ -301,6 +307,7 @@ private:
 	ppltk::DoubleHorizontalSlider* direction;
 	ppltk::DoubleHorizontalSlider* min_cooldown;
 	ppltk::DoubleHorizontalSlider* max_cooldown;
+	ppltk::DoubleHorizontalSlider* variation;
 	ppltk::DoubleHorizontalSlider* speed;
 	ppltk::HorizontalSlider* min_particles;
 	ppltk::HorizontalSlider* max_particles;
@@ -354,6 +361,15 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	direction->setValue(object->direction);
 	direction->setEventHandler(this);
 	addChild(direction);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 100, 30, "Variation:"));
+	variation=new ppltk::DoubleHorizontalSlider(col1, y, w, 30);
+	variation->setLimits(0.0f, 180.0f);
+	variation->enableSpinBox(true, 1.0f, 0, 80);
+	variation->setValue(object->variation);
+	variation->setEventHandler(this);
+	addChild(variation);
 	y+=35;
 
 	addChild(new ppltk::Label(0, y, 100, 30, "Speed:"));
@@ -411,8 +427,12 @@ void FireCannonDialog::valueChangedEvent(ppltk::Event* event, double value)
 		object->speed=value;
 	} else 	if (event->widget() == min_cooldown) {
 		object->min_cooldown_time=value;
+		if (value > object->max_cooldown_time) max_cooldown->setValue(value);
 	} else 	if (event->widget() == max_cooldown) {
 		object->max_cooldown_time=value;
+		if (value < object->min_cooldown_time) min_cooldown->setValue(value);
+	} else 	if (event->widget() == variation) {
+		object->variation=value;
 	}
 
 }

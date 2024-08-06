@@ -957,6 +957,7 @@ private:
 	void fire();
 public:
 	float direction;
+	float variation;
 	float min_cooldown_time;
 	float max_cooldown_time;
 	float speed;
