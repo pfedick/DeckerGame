@@ -78,8 +78,8 @@ Representation Fireball::representation()
 
 void Fireball::emmitParticles(double time, const Player& player)
 {
-	//if (next_birth < time) {
-		//next_birth=time + randf(0.010, 0.111);
+	//if (time < next_birth) return;  // forget it, that looks awful! we need to emit particles every frame!
+	//next_birth=time + randf(0.010, 0.111);
 	ParticleSystem* ps=GetParticleSystem();
 	if (!emitterInPlayerRange(p, player)) return;
 	int new_particles=ppl7::rand(min_particles, max_particles);
@@ -130,7 +130,7 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 
 	emmitParticles(time, player);
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
-	if (t1 == TileType::Blocking) {
+	if (t1 == TileType::Blocking || t1 == TileType::Water) {
 		deleteDefered=true;
 		pool.stopInstace(audio);
 		pool.playOnce(AudioClip::fireball_impact, p, 1800, 1.0f);
@@ -202,9 +202,9 @@ FireCannon::FireCannon()
 	speed=12.0f;
 	initial_state_on=true;
 	current_state_on=true;
-	min_cooldown_time=3.0f;
-	max_cooldown_time=min_cooldown_time;
-	next_state=ppl7::GetMicrotime() + ppl7::randf(min_cooldown_time, max_cooldown_time);
+	min_cooldown_time=2.5f;
+	max_cooldown_time=3.5f;
+	next_state=ppl7::GetMicrotime() + ppl7::randf(0.0f, max_cooldown_time);
 }
 
 
@@ -279,6 +279,7 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 	direction=ppl7::PeekFloat(buffer + bytes + 6);
 	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 10);
 	max_cooldown_time=ppl7::PeekFloat(buffer + bytes + 14);
+	next_state=ppl7::GetMicrotime() + ppl7::randf(0.0f, max_cooldown_time);
 	return size;
 }
 
