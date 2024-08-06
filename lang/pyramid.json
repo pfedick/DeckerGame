@@ -399,6 +399,16 @@
             "de": {
                 "text": "Hey, das ist toll!"
             }
+        },
+        "2240": {
+            "context": "George arrives at the acid pid",
+            "character": "george",
+            "en": {
+                "text": "Ugh, that stinks! What kind of broth is this?"
+            },
+            "de": {
+                "text": "Ihh, das stinkt! Was ist das für eine Brühe?"
+            }
         }
     }
 }
