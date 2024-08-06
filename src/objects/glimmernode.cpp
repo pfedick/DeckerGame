@@ -240,6 +240,10 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 				glimmer->disappear();
 				break;
 			case GlimmerAction::FollowPlayer:
+				if (!glimmer->isEnabled()) {
+					glimmer->setEnabled(true);
+					glimmer->setPosition(p);
+				}
 				glimmer->followPlayer();
 				break;
 			case GlimmerAction::FlyToAndStop:

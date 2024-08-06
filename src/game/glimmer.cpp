@@ -67,7 +67,6 @@ void Glimmer::setSpriteResource(SpriteTexture& resource, const SpriteTexture& li
 
 void Glimmer::setEnabled(bool enable)
 {
-    //experimental
     this->enabled=enable;
 }
 
@@ -767,6 +766,12 @@ void Glimmer::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, c
 
     SDL_SetRenderTarget(renderer, rendertarget);
 
+}
+
+bool Glimmer::isEnabled() const
+{
+    if (enabled == true && behavior != Behavior::Invisible) return true;
+    return false;
 }
 
 

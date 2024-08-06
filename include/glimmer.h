@@ -124,6 +124,7 @@ public:
     void wait(const ppl7::grafix::PointF& target, float duration);
     void setNextNode(uint32_t id);
     void flyToPlayer(float maxSpeed);
+    bool isEnabled() const;
 
 
 
