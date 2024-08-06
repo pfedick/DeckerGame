@@ -183,6 +183,41 @@ public:
 	void dialogButtonEvent(Dialog::Buttons button) override;
 };
 
+void Speaker::fillComboBoxWithEffects(ppltk::ComboBox* combobox, int selected_sample)
+{
+	combobox->clear();
+	combobox->add("no sound", ppl7::ToString("%d", AudioClip::none));
+	combobox->add("impact", ppl7::ToString("%d", AudioClip::impact));
+	combobox->add("Big Crash", ppl7::ToString("%d", AudioClip::crash));
+	combobox->add("Trap 1", ppl7::ToString("%d", AudioClip::trap1));
+	combobox->add("Trap 1", ppl7::ToString("%d", AudioClip::trap2));
+	combobox->add("LightSwitch", ppl7::ToString("%d", AudioClip::light_switch1));
+	combobox->add("Crystal 1", ppl7::ToString("%d", AudioClip::crystal));
+	combobox->add("Crystal 2", ppl7::ToString("%d", AudioClip::crystal2));
+	combobox->add("Crystal 3", ppl7::ToString("%d", AudioClip::crystal3));
+	combobox->add("Coin", ppl7::ToString("%d", AudioClip::coin1));
+	combobox->add("Touchplate 1", ppl7::ToString("%d", AudioClip::touchplateswitch1));
+	combobox->add("Touchplate 2", ppl7::ToString("%d", AudioClip::touchplateswitch2));
+	combobox->add("Explosion", ppl7::ToString("%d", AudioClip::explosion1));
+	combobox->add("Crate falling", ppl7::ToString("%d", AudioClip::crate_falling));
+	combobox->add("Glimmer Plopp 1", ppl7::ToString("%d", AudioClip::glimmer_plopp1));
+	combobox->add("Glimmer Plopp 2", ppl7::ToString("%d", AudioClip::glimmer_plopp2));
+	combobox->add("Glimmer Plopp 3", ppl7::ToString("%d", AudioClip::glimmer_plopp3));
+	combobox->add("Glimmer Plopp 4", ppl7::ToString("%d", AudioClip::glimmer_plopp4));
+	combobox->add("Glimmer Plopp 5", ppl7::ToString("%d", AudioClip::glimmer_plopp5));
+	combobox->add("Glimmer Plopp 6", ppl7::ToString("%d", AudioClip::glimmer_plopp6));
+	combobox->add("Glimmer Effect 1", ppl7::ToString("%d", AudioClip::glimmer_effect1));
+	combobox->add("Glimmer Effect 2", ppl7::ToString("%d", AudioClip::glimmer_effect2));
+	combobox->add("Arrow swoosh", ppl7::ToString("%d", AudioClip::arrow_swoosh));
+	combobox->add("Bite into peach", ppl7::ToString("%d", AudioClip::peach));
+	combobox->add("Shoot", ppl7::ToString("%d", AudioClip::shoot));
+	combobox->add("Break", ppl7::ToString("%d", AudioClip::break1));
+	combobox->add("Squash", ppl7::ToString("%d", AudioClip::squash1));
+	combobox->add("Water bubble", ppl7::ToString("%d", AudioClip::water_bubble1));
+	combobox->add("Gas Spray bubble", ppl7::ToString("%d", AudioClip::gas_spray));
+	combobox->sortItems();
+	combobox->setCurrentIdentifier(ppl7::ToString("%d", selected_sample));
+}
 
 
 void Speaker::openUi()
@@ -318,40 +353,7 @@ void SpeakerDialog::setupAudioLoop()
 
 void SpeakerDialog::setupEffect()
 {
-	sample_name->clear();
-	sample_name->add("no sound", ppl7::ToString("%d", AudioClip::none));
-	sample_name->add("impact", ppl7::ToString("%d", AudioClip::impact));
-	sample_name->add("Big Crash", ppl7::ToString("%d", AudioClip::crash));
-	sample_name->add("Trap 1", ppl7::ToString("%d", AudioClip::trap1));
-	sample_name->add("Trap 1", ppl7::ToString("%d", AudioClip::trap2));
-	sample_name->add("LightSwitch", ppl7::ToString("%d", AudioClip::light_switch1));
-	sample_name->add("Crystal 1", ppl7::ToString("%d", AudioClip::crystal));
-	sample_name->add("Crystal 2", ppl7::ToString("%d", AudioClip::crystal2));
-	sample_name->add("Crystal 3", ppl7::ToString("%d", AudioClip::crystal3));
-	sample_name->add("Coin", ppl7::ToString("%d", AudioClip::coin1));
-	sample_name->add("Touchplate 1", ppl7::ToString("%d", AudioClip::touchplateswitch1));
-	sample_name->add("Touchplate 2", ppl7::ToString("%d", AudioClip::touchplateswitch2));
-	sample_name->add("Explosion", ppl7::ToString("%d", AudioClip::explosion1));
-	sample_name->add("Crate falling", ppl7::ToString("%d", AudioClip::crate_falling));
-	sample_name->add("Glimmer Plopp 1", ppl7::ToString("%d", AudioClip::glimmer_plopp1));
-	sample_name->add("Glimmer Plopp 2", ppl7::ToString("%d", AudioClip::glimmer_plopp2));
-	sample_name->add("Glimmer Plopp 3", ppl7::ToString("%d", AudioClip::glimmer_plopp3));
-	sample_name->add("Glimmer Plopp 4", ppl7::ToString("%d", AudioClip::glimmer_plopp4));
-	sample_name->add("Glimmer Plopp 5", ppl7::ToString("%d", AudioClip::glimmer_plopp5));
-	sample_name->add("Glimmer Plopp 6", ppl7::ToString("%d", AudioClip::glimmer_plopp6));
-	sample_name->add("Glimmer Effect 1", ppl7::ToString("%d", AudioClip::glimmer_effect1));
-	sample_name->add("Glimmer Effect 2", ppl7::ToString("%d", AudioClip::glimmer_effect2));
-	sample_name->add("Arrow swoosh", ppl7::ToString("%d", AudioClip::arrow_swoosh));
-	sample_name->add("Bite into peach", ppl7::ToString("%d", AudioClip::peach));
-	sample_name->add("Shoot", ppl7::ToString("%d", AudioClip::shoot));
-	sample_name->add("Break", ppl7::ToString("%d", AudioClip::break1));
-	sample_name->add("Squash", ppl7::ToString("%d", AudioClip::squash1));
-	sample_name->add("Water bubble", ppl7::ToString("%d", AudioClip::water_bubble1));
-	sample_name->add("Gas Spray bubble", ppl7::ToString("%d", AudioClip::gas_spray));
-
-
-	sample_name->sortItems();
-	sample_name->setCurrentIdentifier(ppl7::ToString("%d", AudioClip::none));
+	Speaker::fillComboBoxWithEffects(sample_name, static_cast<int>(AudioClip::none));
 	if (object->sample_type == Speaker::SampleType::Effect) sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
 }
 

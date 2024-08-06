@@ -474,7 +474,7 @@ public:
 	};
 	SampleType sample_type;
 
-
+	static void fillComboBoxWithEffects(ppltk::ComboBox* combobox, int selected_sample);
 
 	Speaker();
 	~Speaker();

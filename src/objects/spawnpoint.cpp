@@ -181,17 +181,7 @@ SpawnPointDialog::SpawnPointDialog(SpawnPoint* object)
 	y+=35;
 	addChild(new ppltk::Label(0, y, 120, 30, "Audio sample: "));
 	audio_sample=new ppltk::ComboBox(120, y, 400, 30);
-	audio_sample->add("None", ppl7::ToString("%d", AudioClip::none));
-	audio_sample->add("Impact", ppl7::ToString("%d", AudioClip::impact));
-	audio_sample->add("Big Crash", ppl7::ToString("%d", AudioClip::crash));
-	audio_sample->add("Trap", ppl7::ToString("%d", AudioClip::trap1));
-	audio_sample->add("LightSwitch", ppl7::ToString("%d", AudioClip::light_switch1));
-	audio_sample->add("Crystal", ppl7::ToString("%d", AudioClip::crystal));
-	audio_sample->add("Coin", ppl7::ToString("%d", AudioClip::coin1));
-	audio_sample->add("Touchplate", ppl7::ToString("%d", AudioClip::touchplateswitch1));
-	audio_sample->add("Explosion", ppl7::ToString("%d", AudioClip::explosion1));
-	audio_sample->sortItems();
-	audio_sample->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));
+	Speaker::fillComboBoxWithEffects(audio_sample, object->sample_id);
 	audio_sample->setEventHandler(this);
 	addChild(audio_sample);
 
