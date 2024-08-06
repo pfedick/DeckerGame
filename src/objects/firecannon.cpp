@@ -204,6 +204,9 @@ FireCannon::FireCannon()
 	current_state_on=true;
 	min_cooldown_time=2.5f;
 	max_cooldown_time=3.5f;
+	min_particles=79;
+	max_particles=169;
+
 	next_state=ppl7::GetMicrotime() + ppl7::randf(0.0f, max_cooldown_time);
 }
 
@@ -228,6 +231,8 @@ void FireCannon::fire()
 	particle->sprite_no_representation=300;
 	particle->velocity=calculateVelocity(speed, direction);
 	particle->direction=180 + direction;
+	particle->min_particles=min_particles;
+	particle->max_particles=max_particles;
 	GetObjectSystem()->addObject(particle);
 	getAudioPool().playOnce(AudioClip::skull_shoot, p, 1200, 0.7f);
 }
@@ -245,14 +250,14 @@ void FireCannon::trigger(Object* source)
 
 size_t FireCannon::saveSize() const
 {
-	return Object::saveSize() + 18;
+	return Object::saveSize() + 20;
 }
 
 size_t FireCannon::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
 	uint8_t flags=0;
 	if (initial_state_on) flags|=1;
@@ -262,7 +267,9 @@ size_t FireCannon::save(unsigned char* buffer, size_t size) const
 	ppl7::PokeFloat(buffer + bytes + 6, direction);
 	ppl7::PokeFloat(buffer + bytes + 10, min_cooldown_time);
 	ppl7::PokeFloat(buffer + bytes + 14, max_cooldown_time);
-	return bytes + 18;
+	ppl7::Poke8(buffer + bytes + 18, min_particles);
+	ppl7::Poke8(buffer + bytes + 19, max_particles);
+	return bytes + 20;
 }
 
 size_t FireCannon::load(const unsigned char* buffer, size_t size)
@@ -270,7 +277,7 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
+	if (version < 1 || version>2) return 0;
 	uint8_t flags=ppl7::Peek8(buffer + bytes + 1);
 	initial_state_on=(flags & 1);
 	current_state_on=initial_state_on;
@@ -280,6 +287,10 @@ size_t FireCannon::load(const unsigned char* buffer, size_t size)
 	min_cooldown_time=ppl7::PeekFloat(buffer + bytes + 10);
 	max_cooldown_time=ppl7::PeekFloat(buffer + bytes + 14);
 	next_state=ppl7::GetMicrotime() + ppl7::randf(0.0f, max_cooldown_time);
+	if (version >= 2) {
+		min_particles=ppl7::Peek8(buffer + bytes + 18);
+		max_particles=ppl7::Peek8(buffer + bytes + 19);
+	}
 	return size;
 }
 
@@ -291,6 +302,8 @@ private:
 	ppltk::DoubleHorizontalSlider* min_cooldown;
 	ppltk::DoubleHorizontalSlider* max_cooldown;
 	ppltk::DoubleHorizontalSlider* speed;
+	ppltk::HorizontalSlider* min_particles;
+	ppltk::HorizontalSlider* max_particles;
 	ppltk::CheckBox* current_state;
 	ppltk::CheckBox* initial_state;
 
@@ -299,6 +312,7 @@ private:
 public:
 	FireCannonDialog(FireCannon* object);
 	virtual void valueChangedEvent(ppltk::Event* event, double value) override;
+	virtual void valueChangedEvent(ppltk::Event* event, int64_t value) override;
 	virtual void toggledEvent(ppltk::Event* event, bool checked) override;
 };
 
@@ -311,7 +325,7 @@ void FireCannon::openUi()
 
 
 FireCannonDialog::FireCannonDialog(FireCannon* object)
-	: Decker::ui::Dialog(500, 300)
+	: Decker::ui::Dialog(500, 370)
 {
 	this->object=object;
 	setWindowTitle("Fire cannon Trap");
@@ -369,6 +383,23 @@ FireCannonDialog::FireCannonDialog(FireCannon* object)
 	addChild(max_cooldown);
 	y+=35;
 
+	addChild(new ppltk::Label(0, y, 100, 30, "Min Particles:"));
+	min_particles=new ppltk::HorizontalSlider(col1, y, w, 30);
+	min_particles->setLimits(0, 255);
+	min_particles->enableSpinBox(true, 1, 80);
+	min_particles->setValue(object->min_particles);
+	min_particles->setEventHandler(this);
+	addChild(min_particles);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 100, 30, "Max Particles:"));
+	max_particles=new ppltk::HorizontalSlider(col1, y, w, 30);
+	max_particles->setLimits(0, 255);
+	max_particles->enableSpinBox(true, 1, 80);
+	max_particles->setValue(object->max_particles);
+	max_particles->setEventHandler(this);
+	addChild(max_particles);
+
 }
 
 
@@ -384,6 +415,17 @@ void FireCannonDialog::valueChangedEvent(ppltk::Event* event, double value)
 		object->max_cooldown_time=value;
 	}
 
+}
+
+void FireCannonDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
+{
+	if (event->widget() == min_particles) {
+		object->min_particles=value;
+		if (value > object->max_particles) max_particles->setValue(value);
+	} else 	if (event->widget() == max_particles) {
+		object->max_particles=value;
+		if (value < object->min_particles) min_particles->setValue(value);
+	}
 }
 
 void FireCannonDialog::toggledEvent(ppltk::Event* event, bool checked)

@@ -962,6 +962,8 @@ public:
 	float speed;
 	bool current_state_on;
 	bool initial_state_on;
+	int min_particles;
+	int max_particles;
 
 	FireCannon();
 	static Representation representation();
