@@ -38,7 +38,7 @@ ItemTaker::~ItemTaker()
 
 void ItemTaker::trigger(Object* source)
 {
-    ppl7::PrintDebug("ItemTaker::trigger\n");
+    //ppl7::PrintDebug("ItemTaker::trigger\n");
     Player* player=GetGame().getPlayer();
     if (takeFlashlight) player->takeAllItems(Objects::Type::Flashlight);
     if (takeHammer) player->takeAllItems(Objects::Type::Hammer);
