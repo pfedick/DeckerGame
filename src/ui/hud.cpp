@@ -92,16 +92,16 @@ void GameHUD::retranslateUi()
     invalidate();
 }
 
-static int calculatePointDiff(int display, int player)
+static float calculatePointDiff(float display, float player)
 {
 
     if (display < player) {
-        int pdiff=(player - display) / 30;
-        if (pdiff < 1) pdiff=1;
+        float pdiff=(player - display) / 30;
+        if (pdiff < 1) pdiff=player - display;
         return pdiff;
     } else if (display > player) {
-        int pdiff=(display - player) / 30;
-        if (pdiff < 1) pdiff=1;
+        float pdiff=(display - player) / 30;
+        if (pdiff < 1) pdiff=display - player;
         return -pdiff;
     }
     return 0;
@@ -113,29 +113,44 @@ void GameHUD::updatePlayerStats(const Player* player)
 {
     //invalidate();
     if (value_health != player->health) {
+        int save=value_health;
         value_health+=calculatePointDiff(value_health, player->health);
-        redraw_needed=true;
+        if (save != (int)value_health) {
+            redraw_needed=true;
+            //ppl7::PrintDebugTime("redraw health\n");
+        }
     }
     if (value_energy != player->energylevel) {
+        int save=value_energy;
         value_energy+=calculatePointDiff(value_energy, player->energylevel);
-        redraw_needed=true;
+        if (save != (int)value_energy) {
+            redraw_needed=true;
+            //ppl7::PrintDebugTime("redraw energy\n");
+        }
     }
     maxair=player->maxair;
     if (value_oxygen != player->air) {
+        int save=value_oxygen;
         value_oxygen+=calculatePointDiff(value_oxygen, player->air);
         oxygen_cooldown=player->time + 3.0f;
-        redraw_needed=true;
+        if (save != (int)value_oxygen) {
+            //ppl7::PrintDebugTime("redraw oxygen\n");
+            redraw_needed=true;
+        }
     }
     if (value_lifes != player->lifes) {
         value_lifes=player->lifes;
+        //ppl7::PrintDebug("redraw lifes\n");
         redraw_needed=true;
     }
     if (number_batteries != player->powercells) {
         number_batteries=player->powercells;
         redraw_needed=true;
+        //ppl7::PrintDebug("redraw powercells\n");
     }
     if (value_points != player->points) {
         value_points=player->points;
+        //ppl7::PrintDebug("redraw points\n");
         redraw_needed=true;
     }
 }
@@ -370,6 +385,7 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
     if (!visible) return;
     time=ppl7::GetMicrotime();
     if (oxygen_cooldown < time && oxygen_cooldown != 0.0f) {
+        ppl7::PrintDebug("Oxygen Cooldown\n");
         redraw_needed=true;
         oxygen_cooldown=0.0f;
     }
