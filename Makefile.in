@@ -152,6 +152,7 @@ OBJECTS=compile/main.o \
 	compile/object_objectwatcher.o \
 	compile/object_trigger.o \
 	compile/object_light_trigger.o \
+	compile/object_damage_trigger.o \
 	compile/object_ghost.o \
 	compile/object_magicground.o \
 	compile/object_level_modificator.o \
@@ -868,6 +869,10 @@ compile/object_level_modificator.o: src/objects/level_modificator.cpp Makefile i
 compile/object_light_trigger.o: src/objects/light_trigger.cpp Makefile include/objects.h include/light.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_light_trigger.o -c src/objects/light_trigger.cpp $(CFLAGS)
+
+compile/object_damage_trigger.o: src/objects/damage_trigger.cpp Makefile include/objects.h include/player.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_damage_trigger.o -c src/objects/damage_trigger.cpp $(CFLAGS)
 
 compile/object_ghost.o: src/objects/ghost.cpp Makefile include/objects.h
 	- @mkdir -p compile

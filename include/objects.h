@@ -80,6 +80,7 @@ public:
 		MagicGround=44,
 		GlimmerNode=45,
 		ItemTaker=46,
+		DamageTrigger=47,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -1989,6 +1990,31 @@ public:
 	void openUi() override;
 
 	void test();
+};
+
+class DamageTrigger : public Object
+{
+	private:
+	public:
+		int damage_per_second_or_trigger;
+		int damage_type;
+		bool initial_state;
+		bool triggered_by_collision;
+		ppl7::grafix::Point range;
+
+		DamageTrigger();
+		~DamageTrigger();
+		static Representation representation();
+		void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+		void handleCollision(Player* player, const Collision& collision) override;
+		void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+		size_t save(unsigned char* buffer, size_t size) const override;
+		size_t saveSize() const override;
+		size_t load(const unsigned char* buffer, size_t size) override;
+		void trigger(Object* source=NULL) override;
+		void toggle(bool enable, Object* source=NULL) override;
+		void openUi() override;
+
 };
 
 class LightTrigger : public Object

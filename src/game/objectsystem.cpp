@@ -527,6 +527,7 @@ Representation getRepresentation(int object_type)
 		case Type::MagicGround: return MagicGround::representation();
 		case Type::GlimmerNode: return GlimmerNode::representation();
 		case Type::ItemTaker: return ItemTaker::representation();
+		case Type::DamageTrigger: return DamageTrigger::representation();
 
 		default: return Object::representation();
 	}
@@ -630,6 +631,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::MagicGround: return new MagicGround();
 		case Type::GlimmerNode: return new GlimmerNode();
 		case Type::ItemTaker: return new ItemTaker();
+		case Type::DamageTrigger: return new DamageTrigger();
 
 	}
 	return NULL;
