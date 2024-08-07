@@ -203,14 +203,14 @@ DamageTriggerDialog::DamageTriggerDialog(DamageTrigger* object)
 
     addChild(new ppltk::Label(0, y, 120, 30, "Collision Range x:"));
     range_x=new ppltk::HorizontalSlider(120, y, sw - 120, 30);
-    range_x->setLimits(0, 1600);
+    range_x->setLimits(0, 2000);
     range_x->setValue(object->range.x);
     range_x->enableSpinBox(true, 1, 80);
     range_x->setEventHandler(this);
     addChild(range_x);
     addChild(new ppltk::Label(sw, y, 60, 30, "Range y:"));
     range_y=new ppltk::HorizontalSlider(sw + 60, y, sw - 60, 30);
-    range_y->setLimits(0, 1600);
+    range_y->setLimits(0, 2000);
     range_y->setValue(object->range.y);
     range_y->enableSpinBox(true, 1, 80);
     range_y->setEventHandler(this);
