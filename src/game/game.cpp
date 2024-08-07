@@ -2018,6 +2018,11 @@ void Game::keyDownEvent(ppltk::KeyEvent* event)
 		player->stand();
 		player->setSavePoint(pos);
 	} else if (event->key == ppltk::KeyEvent::KEY_F3 && showui == true) {
+		closeTileTypeSelection();
+		closeTileSelection();
+		closeSpriteSelection();
+		closeObjectSelection();
+		closeWayNet();
 		level.load(LevelFile);
 		background.clear();
 		translator.load();
