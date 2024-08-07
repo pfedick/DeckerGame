@@ -35,6 +35,8 @@ class StatusBar : public ppltk::Frame
 {
 private:
 	ppltk::Label* fps_label;
+	ppltk::Label* frametime_label;
+	ppltk::Label* load_label;
 	ppltk::Label* mouse_coords;
 	ppltk::Label* world_coords;
 	ppltk::Label* player_coords;
@@ -55,6 +57,8 @@ public:
 	void resize(int x, int y, int width, int height);
 
 	void setFps(int fps);
+	void setLoad(float load);
+	void setFrameTime(float time);
 	void setMouse(const ppltk::MouseState& mouse);
 	void setWorldCoords(const ppl7::grafix::Point& p);
 	void setPlayerCoords(const ppl7::grafix::Point& p);

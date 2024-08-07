@@ -640,6 +640,8 @@ void Game::updateUi(const ppltk::MouseState& mouse, const Metrics& last_metrics)
 	fps.update();
 
 	statusbar->setFps(fps.getFPS());
+	statusbar->setLoad(last_metrics.time_total.get() * 100.0f / last_metrics.time_frame.get());
+	statusbar->setFrameTime(last_metrics.time_total.get() * 1000.0f);
 	statusbar->setMouse(mouse);
 	statusbar->setWorldCoords(WorldCoords);
 	if (player)

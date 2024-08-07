@@ -44,6 +44,20 @@ void StatusBar::setupUi()
 	this->addChild(fps_label);
 	x+=55;
 
+	this->addChild(new ppltk::Label(x, 0, 50, 32, "Load:"));
+	x+=50;
+	load_label=new ppltk::Label(x, 0, 60, 32, "?", ppltk::Frame::Inset);
+	load_label->setFont(font_bold);
+	this->addChild(load_label);
+	x+=65;
+
+	this->addChild(new ppltk::Label(x, 0, 80, 32, "FrameTime:"));
+	x+=80;
+	frametime_label=new ppltk::Label(x, 0, 80, 32, "?", ppltk::Frame::Inset);
+	frametime_label->setFont(font_bold);
+	this->addChild(frametime_label);
+	x+=85;
+
 	this->addChild(new ppltk::Label(x, 0, 55, 32, "Mouse:"));
 	x+=55;
 
@@ -105,6 +119,16 @@ void StatusBar::setupUi()
 void StatusBar::setFps(int fps)
 {
 	fps_label->setText(ppl7::ToString("%d", fps));
+}
+
+void StatusBar::setLoad(float load)
+{
+	load_label->setText(ppl7::ToString("%5.1f%%", load));
+}
+
+void StatusBar::setFrameTime(float time)
+{
+	frametime_label->setText(ppl7::ToString("%0.3f ms", time));
 }
 
 void StatusBar::setMouse(const ppltk::MouseState& mouse)
