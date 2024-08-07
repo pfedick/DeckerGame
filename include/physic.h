@@ -77,7 +77,8 @@ public:
 		Smashed,
 		Drowned,
 		Burned,
-		SmashedSideways
+		SmashedSideways,
+		Etched
 	};
 
 	class Keys {
