@@ -1950,6 +1950,12 @@ void Player::hitBySpiderWeb()
 
 }
 
+void Player::setPetrified(bool petrified, float timeout)
+{
+	this->petrified=petrified;
+	petrifiedTimeout=time + timeout;
+}
+
 bool Player::isPetrified() const
 {
 	return petrified;

@@ -189,6 +189,7 @@ public:
 	bool isFlashlightOn() const;
 	void enableFlashlight(bool enable);
 	void hitBySpiderWeb();
+	void setPetrified(bool petrified, float timeout=86400.0f);
 	bool isPetrified() const;
 	void addPowerCell();
 	void setBatteryDrainRate(float rate);

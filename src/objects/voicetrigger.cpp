@@ -108,6 +108,10 @@ void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, f
 		state=State::waiting_for_initial_delay;
 	}
 	if (state == State::waiting_for_initial_delay && time >= activeInitialDeleay) {
+		if (pauseWorld) {
+			player.stand();
+			player.setPetrified(true);
+		}
 		if (player.speak(speechId, volume)) {
 			state = State::speaking;
 			trigger_count++;
@@ -116,6 +120,7 @@ void VoiceTrigger::update(double time, TileTypePlane& ttplane, Player& player, f
 	}
 
 	if (state == State::speaking && !player.isSpeaking()) {
+		player.setPetrified(false);
 		activeInitialDeleay=time + triggerDeleay;
 		state=State::waiting_for_trigger_delay;
 	}
