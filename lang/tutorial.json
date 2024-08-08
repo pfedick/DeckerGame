@@ -14,14 +14,14 @@
             }
         },
         "1001": {
-            "context": "Tutorial start",
+            "context": "Tutorial start, how to controll with keyboard",
             "character": "george",
             "audiofile": "1001",
             "en": {
-                "text": "You control me with the cursor keys or the \"WASD\" keys on your keyboard. \"IJKL\" works, too."
+                "text": "You control me with the cursor keys or the \"WASD\" keys on your keyboard."
             },
             "de": {
-                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur. \"IJKL\" geht auch."
+                "text": "Du steuerst mich mit den Cursor-Tasten oder den Tasten \"WASD\" auf Deiner Tastatur."
             }
         },
         "1002": {
@@ -390,13 +390,23 @@
             }
         },
         "1300": {
-            "context": "Tutorial Greeting",
+            "context": "Tutorial Introduction",
             "character": "george",
             "en": {
-                "text": ""
+                "text": "I'll explain the basics to you now!"
             },
             "de": {
                 "text": "Ich werde Dir jetzt die grundlegenden Dinge erklären!"
+            }
+        },
+        "1301": {
+            "context": "Game Controller",
+            "character": "george",
+            "en": {
+                "text": "You can also control me with a game controller"
+            },
+            "de": {
+                "text": "Mit einem Game Controller kannst Du mich auch steuern."
             }
         }
     }
