@@ -679,7 +679,7 @@ void Game::updateWorldCoords()
 {
 	if (!player) return;
 	int mx=game_viewport.width() / 2;
-	int my=game_viewport.height() / 2 + 192;	//256
+	int my=game_viewport.height() / 2 + 100;	//192
 	WorldCoords.x=player->x - mx;
 	WorldCoords.y=player->y - my;
 	if (WorldCoords.x < 0) WorldCoords.x=0;
