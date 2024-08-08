@@ -60,18 +60,19 @@ void MessageOverlay::loadSprites()
 void MessageOverlay::resize(const ppl7::grafix::Size& size)
 {
 	if (overlay) sdl.destroyTexture(overlay);
-	overlay=sdl.createStreamingTexture(size.width - 100, 200);
+	overlay=sdl.createStreamingTexture(size.width - 100, 130);
 
 	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
 	font=style.buttonFont;
 
 	font.setName("NotoSansBlack");
 	font.setBold(false);
-	font.setSize(50);
+	font.setSize(40);
 	font.setOrientation(ppl7::grafix::Font::TOP);
-	font.setColor(ppl7::grafix::Color(5, 1, 1, 255));
-	//font.setBorderColor(ppl7::grafix::Color(0, 0, 0, 255));
-	//font.setDrawBorder(true);
+	//font.setColor(ppl7::grafix::Color(5, 1, 1, 255));
+	font.setColor(ppl7::grafix::Color(230, 220, 220, 255));
+	font.setBorderColor(ppl7::grafix::Color(0, 0, 0, 255));
+	font.setDrawBorder(true);
 
 	/*
 	font.setSize(30);
@@ -124,9 +125,9 @@ void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 
 	SDL_Rect target;
 	target.x=viewport.x1 + 50;
-	target.y=viewport.y1 + 10;
+	target.y=viewport.y1 + 50;
 	target.w=lastSize.width - 100;
-	target.h=200;
+	target.h=130;
 	//ppl7::PrintDebugTime("draw: %d:%d, %d:%d\n", target.x, target.y, target.w, target.h);
 	//SDL_SetTextureColorMod(overlay, 255, 255, 255);
 	//SDL_SetTextureAlphaMod(overlay, 255);
@@ -140,8 +141,9 @@ void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 	// eyes
 	source=spriteset.getSpriteSource(eyes);
 
+	//50+130=180
 	tr.x=viewport.x1 + 70;
-	tr.y=viewport.y1 + 210 - 5 - source.h;
+	tr.y=viewport.y1 + 180 - 5 - source.h;
 	source.h-=57;
 	tr.w=source.w;
 	tr.h=source.h;
@@ -151,7 +153,7 @@ void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 	source=spriteset.getSpriteSource(mouth);
 	source.y+=source.h - 57;
 	source.h=57;
-	tr.y=viewport.y1 + 210 - 5 - 57;
+	tr.y=viewport.y1 + 180 - 5 - 57;
 	tr.w=source.w;
 	tr.h=57;
 	spriteset.draw(renderer, mouth, source, tr);
@@ -162,22 +164,24 @@ void MessageOverlay::render()
 	if (!overlay) return;
 	ppl7::grafix::Drawable draw=sdl.lockTexture(overlay);
 	draw.cls(0);
+	ppl7::grafix::Color black(0, 0, 0, 255);
 	ppl7::grafix::Color border(255, 240, 0, 255);
-	ppl7::grafix::Color background(192, 192, 192, 128);
-	for (int i=0;i < 5;i++) {
+	ppl7::grafix::Color background(0, 0, 0, 128);
+	draw.drawRect(0, 0, draw.width(), draw.height(), black);
+	for (int i=1;i < 4;i++) {
 		draw.drawRect(0 + i, 0 + i, draw.width() - i, draw.height() - i, border);
 	}
 	draw.fillRect(5, 5, draw.width() - 5, draw.height() - 5, background);
 	ppl7::Array a(text, " ");
-	int x=140;
+	int x=160;
 	int y=10;
 	for (size_t i=0;i < a.size();i++) {
 		ppl7::String word=a[i];
 		word+=" ";
 		ppl7::grafix::Size size=font.measure(word);
 		if (x + size.width > draw.width() - 20) {
-			x=140;
-			y+=font.size();
+			x=160;
+			y+=size.height;
 		}
 		draw.print(font, x, y, word);
 		x+=size.width;
