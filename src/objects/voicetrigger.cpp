@@ -22,13 +22,13 @@ VoiceTrigger::VoiceTrigger()
 {
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=38;
-	collisionDetection=true;
+	collisionDetection=false;
 	pixelExactCollision=false;
 	visibleAtPlaytime=false;
 	sprite_no_representation=38;
 	volume=1.0f;
 	range.setPoint(300, 300);
-	triggeredByCollision=true;
+	triggeredByCollision=false;
 	singleTrigger=true;
 	cooldownUntilNextTrigger=5.0f;
 	cooldown=0.0f;
@@ -189,7 +189,7 @@ size_t VoiceTrigger::load(const unsigned char* buffer, size_t size)
 	if (flags & 8) pauseWorld=true;
 	if (flags & 16) initialStateEnabled=true;
 	if (!initialStateEnabled) enabled=false;
-	if (!triggeredByCollision) collisionDetection=false;
+	collisionDetection=triggeredByCollision;
 	cooldownUntilNextTrigger=ppl7::PeekFloat(buffer + bytes + 2);
 	volume=ppl7::PeekFloat(buffer + bytes + 6);
 	range.x=ppl7::Peek16(buffer + bytes + 10);
