@@ -27,6 +27,7 @@ TouchPlateSwitch::TouchPlateSwitch()
     visibleAtPlaytime=true;
     sprite_no_representation=0;
     initial_state=false;
+    alwaysUpdate=false;
     plate_style=PlateStyle::Wide;
     color_base=7;
     touched=false;

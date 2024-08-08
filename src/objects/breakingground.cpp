@@ -23,6 +23,7 @@ BreakingGround::BreakingGround()
 	collisionDetection=true;
 	fragment_y=0;
 	velocity=0.0f;
+	alwaysUpdate=false;
 }
 
 void BreakingGround::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)

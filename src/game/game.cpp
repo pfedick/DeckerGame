@@ -742,6 +742,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 		updateWorldCoords();
 	metrics.time_update_objects.stop();
 	metrics.time_update_lights.start();
+	player->addFlashlightToLightSystem(level.lights);
 	level.updateDynamicLightsLists(WorldCoords, game_viewport);
 	level.lights.update(now, frame_rate_compensation);
 

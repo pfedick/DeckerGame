@@ -22,6 +22,7 @@ ExtraLife::ExtraLife()
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=241;
+	alwaysUpdate=false;
 }
 
 void ExtraLife::update(double time, TileTypePlane&, Player&, float)

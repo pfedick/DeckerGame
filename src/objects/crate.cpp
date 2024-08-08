@@ -29,6 +29,7 @@ Crate::Crate()
 	playerIsNearForDrag=false;
 	playerIsDragging=false;
 	last_drag_collision_frame=0;
+	alwaysUpdate=false;
 }
 
 Crate::~Crate()

@@ -25,6 +25,7 @@ TreasureChest::TreasureChest()
 	next_animation=0;
 	state=0;
 	collisionDetection=true;
+	alwaysUpdate=false;
 }
 
 

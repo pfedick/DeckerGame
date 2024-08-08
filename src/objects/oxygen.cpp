@@ -18,6 +18,7 @@ OxygenTank::OxygenTank()
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=295;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=295;
 	next_birth=0.0f;
 	scale_gradient.push_back(Particle::ScaleGradientItem(0.005, 0.044));

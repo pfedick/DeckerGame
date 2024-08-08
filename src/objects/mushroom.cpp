@@ -58,12 +58,14 @@ void Mushroom::update(double time, TileTypePlane& ttplane, Player& player, float
 			updateBoundary();
 		}
 	}
-	lightmap.x=p.x;
-	lightmap.y=p.y;
-	lightmap.custom_texture=texture;
-	lightmap.sprite_no=sprite_no + 89;
-	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&lightmap);
+	if (isInViewport) {
+		lightmap.x=p.x;
+		lightmap.y=p.y;
+		lightmap.custom_texture=texture;
+		lightmap.sprite_no=sprite_no + 89;
+		LightSystem& lights=GetGame().getLightSystem();
+		lights.addObjectLight(&lightmap);
+	}
 
 	if (state == ActionState::Start && animation.isFinished()) {
 		state=ActionState::WalkLeft;

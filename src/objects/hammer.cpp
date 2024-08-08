@@ -19,6 +19,7 @@ Hammer::Hammer()
 	animation.startRandomSequence(407, 436, true, 407);
 	next_animation=0.0f;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=407;
 }
 

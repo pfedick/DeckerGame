@@ -18,6 +18,7 @@ PowerCell::PowerCell()
 	animation.startRandomSequence(468, 496, true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=468;
 }
 

@@ -22,6 +22,7 @@ Vent::Vent()
 	collisionDetection=false;
 	sprite_no_representation=0;
 	next_animation=0;
+	alwaysUpdate=false;
 	audio=NULL;
 }
 

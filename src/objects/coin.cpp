@@ -23,6 +23,7 @@ CoinReward::CoinReward()
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=84;
+	alwaysUpdate=false;
 }
 
 void CoinReward::update(double time, TileTypePlane&, Player&, float)

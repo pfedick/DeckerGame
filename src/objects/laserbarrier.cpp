@@ -308,6 +308,7 @@ void LaserBarrier::clearLights()
 
 void LaserBarrier::updateLightMaps()
 {
+	if (!isInViewport) return;
 	clearLights();
 	//ppl7::PrintDebug("LaserBarrier::updateLightMaps, state: %d\n", state);
 	if (state == 0) return;

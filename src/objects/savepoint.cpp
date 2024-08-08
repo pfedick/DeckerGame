@@ -23,6 +23,7 @@ SavePoint::SavePoint()
 	animation.startRandom(savepoint_animation, sizeof(savepoint_animation) / sizeof(int), true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=52;
 }
 

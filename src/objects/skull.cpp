@@ -150,6 +150,7 @@ void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, 
 	p+=velocity * frame_rate_compensation;
 	audio->setPositional(p, 1200);
 	updateBoundary();
+	
 	light_shine.x=p.x;
 	light_shine.y=p.y;
 	light_ball.x=p.x + 1;
@@ -157,6 +158,7 @@ void SkullFireball::update(double time, TileTypePlane& ttplane, Player& player, 
 	LightSystem& lights=GetGame().getLightSystem();
 	lights.addObjectLight(&light_shine);
 	lights.addObjectLight(&light_ball);
+
 
 
 	emmitParticles(time, player);
@@ -591,15 +593,17 @@ void Skull::update(double time, TileTypePlane& ttplane, Player& player, float fr
 			}
 		}
 	}
-	light.custom_texture=this->texture;
-	light.sprite_no=76 + sprite_no;
-	light.x=p.x;
-	light.y=p.y;
-	shine.x=p.x;
-	shine.y=p.y - 1;
-	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&shine);
-	lights.addObjectLight(&light);
+	if (isInViewport) {
+		light.custom_texture=this->texture;
+		light.sprite_no=76 + sprite_no;
+		light.x=p.x;
+		light.y=p.y;
+		shine.x=p.x;
+		shine.y=p.y - 1;
+		LightSystem& lights=GetGame().getLightSystem();
+		lights.addObjectLight(&shine);
+		lights.addObjectLight(&light);
+	}
 }
 
 void Skull::handleCollision(Player* player, const Collision& collision)

@@ -17,6 +17,7 @@ KeyReward::KeyReward()
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=272;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=272;
 	key_type=KeyType::silver;
 	color_modification=2;

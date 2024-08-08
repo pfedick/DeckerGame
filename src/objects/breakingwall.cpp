@@ -23,6 +23,7 @@ BreakingWall::BreakingWall()
 	collisionDetection=true;
 	pixelExactCollision=false;
 	myLayer=Layer::BeforePlayer;
+	alwaysUpdate=false;
 	color_mod=GetColorPalette().getColor(wall_color);
 }
 

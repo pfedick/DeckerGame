@@ -22,6 +22,7 @@ AppleReward::AppleReward()
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=335;
+	alwaysUpdate=false;
 }
 
 void AppleReward::update(double time, TileTypePlane&, Player&, float)

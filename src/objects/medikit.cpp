@@ -17,6 +17,7 @@ Medikit::Medikit()
 	sprite_set=Spriteset::GenericObjects;
 	sprite_no=83;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=83;
 }
 

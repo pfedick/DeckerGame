@@ -33,6 +33,7 @@ ThreeSpeers::ThreeSpeers()
 	state=0;
 	next_state=ppl7::GetMicrotime() + ppl7::randf(3.0f, 7.0f);
 	collisionDetection=false;
+	alwaysUpdate=false;
 	sprite_no_representation=0;
 	speer_type=0;
 }

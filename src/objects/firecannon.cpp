@@ -119,16 +119,17 @@ void Fireball::update(double time, TileTypePlane& ttplane, Player& player, float
 	velocity.y+=(gravity * frame_rate_compensation);
 	audio->setPositional(p, 1200);
 	updateBoundary();
-	light_shine.x=p.x;
-	light_shine.y=p.y;
-	light_ball.x=p.x + 1;
-	light_ball.y=p.y;
-	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&light_shine);
-	lights.addObjectLight(&light_ball);
 
-
-	emmitParticles(time, player);
+	if (isInViewport) {
+		light_shine.x=p.x;
+		light_shine.y=p.y;
+		light_ball.x=p.x + 1;
+		light_ball.y=p.y;
+		LightSystem& lights=GetGame().getLightSystem();
+		lights.addObjectLight(&light_shine);
+		lights.addObjectLight(&light_ball);
+		emmitParticles(time, player);
+	}
 	TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y));
 	if (t1 == TileType::Blocking || t1 == TileType::Water) {
 		deleteDefered=true;

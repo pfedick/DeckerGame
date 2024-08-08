@@ -26,6 +26,7 @@ LightSignal::LightSignal()
     sprite_no=2;
     sprite_no_representation=2;
     collisionDetection=false;
+    alwaysUpdate=false;
     hasLensflare=true;
 
     led.sprite_no=0;

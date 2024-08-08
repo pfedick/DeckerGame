@@ -22,6 +22,7 @@ CherryReward::CherryReward()
 	next_animation=0.0f;
 	collisionDetection=true;
 	sprite_no_representation=304;
+	alwaysUpdate=false;
 }
 
 void CherryReward::update(double time, TileTypePlane&, Player&, float)

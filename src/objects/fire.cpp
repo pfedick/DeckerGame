@@ -19,6 +19,7 @@ Fire::Fire()
 	sprite_no=185;
 	sprite_no_representation=185;
 	collisionDetection=true;
+	alwaysUpdate=false;
 }
 
 void Fire::update(double time, TileTypePlane& ttplane, Player& player, float)

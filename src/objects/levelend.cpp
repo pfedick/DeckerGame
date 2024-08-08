@@ -22,6 +22,7 @@ LevelEnd::LevelEnd()
     key_id=0;
     collisionDetection=false;
     pixelExactCollision=false;
+    alwaysUpdate=false;
     next_animation=0.0;
     cooldown=0.0f;
     audio=NULL;

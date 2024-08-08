@@ -81,6 +81,8 @@ Object::Object(Type::ObjectType type)
 	collisionDetection=false;
 	visibleAtPlaytime=true;
 	enabled=true;
+	isInViewport=false;
+	alwaysUpdate=true;
 	//save_size=14;
 	pixelExactCollision=true;
 	spawned=false;

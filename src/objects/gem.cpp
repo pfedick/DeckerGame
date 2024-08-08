@@ -35,6 +35,7 @@ GemReward::GemReward()
 	animation.startRandom(diamond_rotate, sizeof(diamond_rotate) / sizeof(int), true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	sprite_no_representation=4;
 	int r=ppl7::rand(0, 4);
 	light_glow.color.set(random_colors[r].r, random_colors[r].g, random_colors[r].b, 255);
@@ -50,6 +51,7 @@ GemReward::GemReward()
 void GemReward::update(double time, TileTypePlane&, Player&, float)
 {
 	if (!enabled) return;
+	if (!isInViewport) return;
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
 		animation.update();
@@ -96,6 +98,7 @@ CrystalReward::CrystalReward()
 	animation.startRandom(crystal_rotate, sizeof(crystal_rotate) / sizeof(int), true, 0);
 	next_animation=0.0f;
 	collisionDetection=true;
+	alwaysUpdate=false;
 	int r=ppl7::rand(0, 4);
 	light_glow.color.set(random_colors[r].r, random_colors[r].g, random_colors[r].b, 255);
 
@@ -111,6 +114,7 @@ CrystalReward::CrystalReward()
 void CrystalReward::update(double time, TileTypePlane&, Player&, float)
 {
 	if (!enabled) return;
+	if (!isInViewport) return;
 	if (time > next_animation) {
 		next_animation=time + 0.056f;
 		animation.update();

@@ -69,11 +69,13 @@ void HangingSpider::update(double time, TileTypePlane& ttplane, Player& player, 
 			next_state=time + (double)ppl7::rand(5, 20);
 		}
 	}
-	eyes_light.custom_texture=this->texture;
-	eyes_light.x=p.x;
-	eyes_light.y=p.y;
-	LightSystem& lights=GetGame().getLightSystem();
-	lights.addObjectLight(&eyes_light);
+	if (isInViewport) {
+		eyes_light.custom_texture=this->texture;
+		eyes_light.x=p.x;
+		eyes_light.y=p.y;
+		LightSystem& lights=GetGame().getLightSystem();
+		lights.addObjectLight(&eyes_light);
+	}
 
 }
 

@@ -218,6 +218,7 @@ public:
 
 class Object
 {
+	friend class ObjectSystem;
 public:
 	enum class Layer {
 		BehindBricks=0,
@@ -250,6 +251,8 @@ public:
 	bool pixelExactCollision;
 	bool spawned;	// not saved, deleted on collection
 	bool deleteDefered;
+	bool alwaysUpdate;
+	bool isInViewport; // not saved, indicates, if the object gets drawn in the current frame
 
 	explicit Object(Type::ObjectType type);
 	virtual ~Object();

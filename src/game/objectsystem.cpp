@@ -258,6 +258,7 @@ void ObjectSystem::updateVisibleObjectsForPlane(PlaneId plane, const ppl7::grafi
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
 		if (object->myPlane != plane) continue;
+		object->isInViewport=false;
 		if (object->deleteDefered) {
 			deleteme.push_back(it->first);
 		} else if (object->texture) {
@@ -273,6 +274,7 @@ void ObjectSystem::updateVisibleObjectsForPlane(PlaneId plane, const ppl7::grafi
 				if (x > 0 && y > 0 && x < width && y < height) isVisible=true;
 			}
 			if (isVisible) {
+				object->isInViewport=true;
 				uint64_t id=(((uint64_t)object->p.y & 0xffff) << 48) | (uint64_t)(((uint64_t)object->p.x & 0xffff) << 32) | (uint64_t)object->id;
 				visible_object_map[static_cast<int>(plane)].insert(std::pair<uint32_t, Object*>(id, object));
 			}
@@ -302,7 +304,9 @@ void ObjectSystem::update(double time, TileTypePlane& ttplane, Player& player, f
 	uint8_t dm=getDifficultyMatrix();
 	for (it=object_list.begin();it != object_list.end();++it) {
 		Object* object=it->second;
-		if (object->difficulty_matrix & dm) object->update(time, ttplane, player, frame_rate_compensation);
+		if (object->difficulty_matrix & dm) {
+			if (object->alwaysUpdate || object->isInViewport) object->update(time, ttplane, player, frame_rate_compensation);
+		}
 	}
 }
 

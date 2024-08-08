@@ -44,6 +44,7 @@ Door::Door()
 	warpside=WarpSide::left;
 	autowarp_when_open=false;
 	close_when_passed=false;
+	alwaysUpdate=false;
 	init();
 }
 
