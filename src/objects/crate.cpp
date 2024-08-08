@@ -116,7 +116,7 @@ void Crate::handleDrag(double time, TileTypePlane& ttplane, Player& player, floa
 			if (ttplane.getType(ppl7::grafix::Point(xx, y)) == TileType::Blocking) blockcount++;
 		}
 		if (blockcount > 0) {
-			ppl7::PrintDebug("crate is blocked [%d]\n", blockcount);
+			//ppl7::PrintDebug("crate is blocked [%d]\n", blockcount);
 			velocity.x=0.0f;
 			playerIsDragging=false;
 			//player.stand();
