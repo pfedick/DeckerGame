@@ -772,7 +772,7 @@ void ObjectSystem::getObjectCounter(std::map<int, size_t>& object_counter) const
 				object_counter[t]+=((const TouchEmitter*)obj)->max_toggles;
 			} else if (obj->type() == Type::ObjectType::SpawnPoint) {
 				int t=((const SpawnPoint*)obj)->emitted_object;
-				object_counter[t]+=((const TouchEmitter*)obj)->max_toggles;
+				object_counter[t]+=((const SpawnPoint*)obj)->max_toggles;
 			}
 		}
 	}
