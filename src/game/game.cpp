@@ -337,13 +337,13 @@ SDL& Game::getSDL()
 
 void Game::showUi(bool enable)
 {
-	const ppl7::grafix::Size& desktop=clientSize();
+	//const ppl7::grafix::Size& desktop=clientSize();
 	showui=enable;
 	world_widget->setShowUi(showui);
 	hud->setEditorMode(enable);
 	if (showui) {
 		viewport.y1=32;
-		viewport.y2=desktop.height - 32;
+		viewport.y2=1080 - 32;
 		world_widget->setViewport(viewport);
 
 		mainmenue->setVisible(true);
@@ -362,7 +362,7 @@ void Game::showUi(bool enable)
 		statusbar->setVisible(false);
 		viewport.y1=0;
 		viewport.x1=0;
-		viewport.y2=desktop.height;
+		viewport.y2=1080;
 		mainmenue->fitMetrics(viewport);
 		world_widget->setViewport(viewport);
 	}

@@ -385,7 +385,7 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
     if (!visible) return;
     time=ppl7::GetMicrotime();
     if (oxygen_cooldown < time && oxygen_cooldown != 0.0f) {
-        ppl7::PrintDebug("Oxygen Cooldown\n");
+        //ppl7::PrintDebug("Oxygen Cooldown\n");
         redraw_needed=true;
         oxygen_cooldown=0.0f;
     }
@@ -397,7 +397,8 @@ void GameHUD::draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL
     tr.w=1920;
     tr.y= my_viewport.y2 - hud_size.height - 5;
     tr.h=hud_size.height;
-    //ppl7::PrintDebug("my_viewport.y2=%d\n", my_viewport.y2);
+    //ppl7::PrintDebug("tr.x=%d, y=%d, w=%d, h=%d, viewport: x1=%d,y1=%d, x2=%d, y2=%d\n",
+    //    tr.x, tr.y, tr.w, tr.h, my_viewport.x1, my_viewport.y1, my_viewport.x2, my_viewport.y2);
 
     SDL_SetRenderTarget(renderer, render_target);
     SDL_RenderCopy(renderer, hud_texture, NULL, &tr);
