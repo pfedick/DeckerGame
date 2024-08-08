@@ -603,6 +603,11 @@ void Level::updateVisibleLightsLists(const ppl7::grafix::Point& worldcoords, con
 	lights.updateVisibleLightList(worldcoords, viewport);
 }
 
+void Level::updateDynamicLightsLists(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+{
+	lights.updateDynamicLightList(worldcoords, viewport);
+}
+
 
 size_t Level::countSprites() const
 {

@@ -91,6 +91,7 @@ class LightSystem
 private:
     uint32_t nextid;
     std::map<uint32_t, LightObject*> light_map;
+    std::list<LightObject*> dynamic_light_list;
     std::map<uint32_t, LightObject*> visible_light_map[static_cast<int>(LightPlaneId::Max)];
     SpriteTexture* lightmaps, * light_objects, * lensflares;
     double time;
@@ -105,6 +106,7 @@ public:
     void clear();
     void update(double time, float frame_rate_compensation);
     void updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
+    void updateDynamicLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
     void save(ppl7::FileObject& file, unsigned char id) const;
     void load(const ppl7::ByteArrayPtr& ba);
 

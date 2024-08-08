@@ -741,6 +741,10 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	if (mainmenue->worldFollowsPlayer())
 		updateWorldCoords();
 	metrics.time_update_objects.stop();
+	metrics.time_update_lights.start();
+	level.updateDynamicLightsLists(WorldCoords, game_viewport);
+	level.lights.update(now, frame_rate_compensation);
+
 
 	// Particles
 	metrics.time_update_particles.start();

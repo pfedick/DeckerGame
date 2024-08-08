@@ -296,6 +296,7 @@ void LightSystem::clear()
         delete it->second;
     }
     light_map.clear();
+    dynamic_light_list.clear();
     visible_light_map[static_cast<int>(LightPlaneId::Near)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Player)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
@@ -312,6 +313,7 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
     visible_light_map[static_cast<int>(LightPlaneId::Middle)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Far)].clear();
     visible_light_map[static_cast<int>(LightPlaneId::Horizon)].clear();
+    dynamic_light_list.clear();
 
     std::map<uint32_t, LightObject*>::const_iterator it;
     int width=viewport.width();
@@ -328,6 +330,25 @@ void LightSystem::updateVisibleLightList(const ppl7::grafix::Point& worldcoords,
             uint32_t id=(uint32_t)(((uint32_t)item->y & 0xffff) << 16) | (uint32_t)((uint32_t)item->x & 0xffff);
             visible_light_map[static_cast<int>(item->plane)].insert(std::pair<uint32_t, LightObject*>(id, item));
 
+        }
+    }
+}
+
+void LightSystem::updateDynamicLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport)
+{
+    std::list<LightObject*>::const_iterator it;
+    int width=viewport.width();
+    int height=viewport.height();
+    for (it=dynamic_light_list.begin();it != dynamic_light_list.end();++it) {
+        LightObject* item=(*it);
+        int x=item->x - worldcoords.x * planeFactor[item->plane];
+        int y=item->y - worldcoords.y * planeFactor[item->plane];
+        //ppl7::PrintDebugTime("found light at %d:%d, ", item.x, item.y);
+        if (x + item->boundary.width() > 0 && y + item->boundary.height() > 0
+            && x - item->boundary.width() < width && y - item->boundary.height() < height) {
+            //addObjectLight(item);
+            uint32_t id=(uint32_t)(((uint32_t)item->y & 0xffff) << 16) | (uint32_t)((uint32_t)item->x & 0xffff);
+            visible_light_map[static_cast<int>(item->plane)].insert(std::pair<uint32_t, LightObject*>(id, item));
         }
     }
 }
@@ -357,8 +378,9 @@ void LightSystem::addObjectLight(LightObject* light)
     //light->current_intensity=(float)light->intensity / 255.0f;
     light->update(time, frame_rate_compensation);
     light->boundary=lightmaps->spriteBoundary(light->sprite_no, light->scale_x, light->x, light->y);
-    uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
-    visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
+    //uint32_t id=(uint32_t)(((uint32_t)light->y & 0xffff) << 16) | (uint32_t)((uint32_t)light->x & 0xffff);
+    //visible_light_map[static_cast<int>(light->plane)].insert(std::pair<uint32_t, LightObject*>(id, light));
+    dynamic_light_list.push_back(light);
 }
 
 void LightSystem::addLight(LightObject* light)
