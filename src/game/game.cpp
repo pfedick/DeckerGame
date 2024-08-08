@@ -2040,7 +2040,8 @@ void Game::keyDownEvent(ppltk::KeyEvent* event)
 	} else if (event->key == ppltk::KeyEvent::KEY_F10) {
 		mainmenue->showMetrics();
 		mainmenue->fitMetrics(viewport);
-
+	} else if (event->key == ppltk::KeyEvent::KEY_F11) {
+		mainmenue->setShowHud(!mainmenue->visibility_hud);
 	} else if (event->key == ppltk::KeyEvent::KEY_RETURN && (event->modifier & ppltk::KeyEvent::KEYMOD_ALT) > 0) {
 		//printf("toggle fullscreen or back\n");
 		ppltk::WindowManager_SDL2* sdl2wm=(ppltk::WindowManager_SDL2*)wm;

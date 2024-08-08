@@ -360,6 +360,13 @@ void MainMenue::fitMetrics(const ppl7::grafix::Rect& viewport)
 }
 
 
+void MainMenue::setShowHud(bool visible)
+{
+	if (visibility) visibility->setShowHud(visible);
+	visibility_hud=visible;
+
+}
+
 VisibilitySubMenu::VisibilitySubMenu(int x, int y, MainMenue* menue)
 	: ppltk::Frame(x, y, 140, 370)
 {
@@ -504,6 +511,10 @@ void VisibilitySubMenu::lostFocusEvent(ppltk::FocusEvent* event)
 	}
 }
 
+void VisibilitySubMenu::setShowHud(bool show)
+{
+	show_hud_checkbox->setChecked(show);
+}
 
 
 DebugSubMenu::DebugSubMenu(int x, int y, MainMenue* menue)

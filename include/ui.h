@@ -95,6 +95,7 @@ private:
 public:
 	VisibilitySubMenu(int x, int y, MainMenue* menue);
 	void setShowTileTypes(bool show);
+	void setShowHud(bool show);
 	void toggledEvent(ppltk::Event* event, bool checked) override;
 	void lostFocusEvent(ppltk::FocusEvent* event) override;
 };
@@ -204,6 +205,7 @@ public:
 	bool worldFollowsPlayer() const;
 	bool soundTrackEnabled() const;
 	void setGodMode(bool enabled);
+	void setShowHud(bool visible);
 	//bool godModeEnabled() const;
 	bool visibility_plane_player;
 	bool visibility_plane_front;
