@@ -70,6 +70,7 @@ private:
     LightObject light;
     uint32_t next_node;
     int emote_counter;
+    bool teleport_to_player;
 
     void drawObject(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
     void updateVelocity();

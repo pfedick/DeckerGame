@@ -29,6 +29,7 @@ Glimmer::Glimmer(Game& game)
     maxspeed=10.0f;
     next_node=0;
     emote_counter=0;
+    teleport_to_player=false;
 
     light.color.set(255, 255, 255, 255);
     light.sprite_no=0;
@@ -311,7 +312,12 @@ void Glimmer::updateAppear()
             scale=1.0f;
             movestate=MoveState::Start;
             behavior=Behavior::Wait;
+            if (teleport_to_player) {
+                teleport_to_player=false;
+                followPlayer();
+            }
             triggerNextNode();
+
         }
     }
 }
@@ -341,6 +347,13 @@ void Glimmer::updateDisappear()
             enabled=false;
             draw_enabled=true;
             behavior=Behavior::Invisible;
+            speed=0.0f;
+            if (teleport_to_player) {
+                Player* player=GetGame().getPlayer();
+                setPosition(player->x, player->y - 5 * TILE_HEIGHT);
+                next_node=0;
+                appear();
+            }
         }
 
     }
@@ -407,6 +420,12 @@ void Glimmer::updateFollowPlayer(Player& player)
         }
     }
     double dist=ppl7::grafix::Distance(player_p, p);
+    if (dist > 2000.0f) {
+        teleport_to_player=true;
+        next_node=0;
+        disappear();
+        return;
+    }
     maxspeed=dist / 40.0f;
     if (movestate == MoveState::Wait && dist > 100.0f) {
         movestate=MoveState::Move;
