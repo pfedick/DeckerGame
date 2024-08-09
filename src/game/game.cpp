@@ -1492,6 +1492,7 @@ void Game::startLevel(const ppl7::String& filename)
 		enableControls(false);
 	}
 	player->resetLevelObjects();
+	player->setPetrified(false);
 	if (level.params.drainBattery) player->setBatteryDrainRate(level.params.batteryDrainRate);
 	else player->setBatteryDrainRate(0.0f);
 

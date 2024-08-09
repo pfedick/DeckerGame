@@ -7,13 +7,13 @@
 namespace Decker::Objects {
 
 
-Representation DamageTrigger::representation()
+Representation PlayerTrigger::representation()
 {
     return Representation(Spriteset::GenericObjects, 529);
 }
 
-DamageTrigger::DamageTrigger()
-    : Object(Type::ObjectType::DamageTrigger)
+PlayerTrigger::PlayerTrigger()
+    : Object(Type::ObjectType::PlayerTrigger)
 {
     sprite_set=Spriteset::GenericObjects;
     collisionDetection=true;
@@ -22,10 +22,10 @@ DamageTrigger::DamageTrigger()
     sprite_no=sprite_no_representation;
     visibleAtPlaytime=false;
     range.setPoint(TILE_WIDTH * 6, TILE_HEIGHT * 6);
-    damage_per_second_or_trigger=50;
+    damage_per_second_or_trigger=0;
     damage_type=Player::HealthDropReason::Unknown;
     initial_state=true;
-    triggered_by_collision=true;
+    triggered_by_collision=false;
     disable_player_control=false;
     enable_player_control=false;
     instant_death=false;
@@ -37,18 +37,18 @@ DamageTrigger::DamageTrigger()
     takeEnergy=false;
 }
 
-DamageTrigger::~DamageTrigger()
+PlayerTrigger::~PlayerTrigger()
 {
 
 }
 
-size_t DamageTrigger::saveSize() const
+size_t PlayerTrigger::saveSize() const
 {
     return Object::saveSize() + 10;
 
 }
 
-size_t DamageTrigger::save(unsigned char* buffer, size_t size) const
+size_t PlayerTrigger::save(unsigned char* buffer, size_t size) const
 {
     size_t bytes=Object::save(buffer, size);
     if (!bytes) return 0;
@@ -76,7 +76,7 @@ size_t DamageTrigger::save(unsigned char* buffer, size_t size) const
     return bytes + 10;
 }
 
-size_t DamageTrigger::load(const unsigned char* buffer, size_t size)
+size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
 {
     size_t bytes=Object::load(buffer, size);
     if (bytes == 0 || size < bytes + 1) return 0;
@@ -107,12 +107,12 @@ size_t DamageTrigger::load(const unsigned char* buffer, size_t size)
 }
 
 
-void DamageTrigger::update(double time, TileTypePlane&, Player&, float)
+void PlayerTrigger::update(double time, TileTypePlane&, Player&, float)
 {
     boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
 }
 
-void DamageTrigger::handleCollision(Player* player, const Collision& col)
+void PlayerTrigger::handleCollision(Player* player, const Collision& col)
 {
     if (!enabled) return;
     if (triggered_by_collision == true) {
@@ -125,7 +125,7 @@ void DamageTrigger::handleCollision(Player* player, const Collision& col)
 }
 
 
-void DamageTrigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
+void PlayerTrigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
     if (triggered_by_collision) {
         SDL_Rect r;
@@ -146,15 +146,16 @@ void DamageTrigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Poi
     Object::drawEditMode(renderer, coords);
 }
 
-void DamageTrigger::triggerFlags(Player *player)
+void PlayerTrigger::triggerFlags(Player *player)
 {
     if (instant_death) player->dropHealth(1000.0f,static_cast<Physic::HealthDropReason>(damage_type));
 
     if (disable_player_control) {
+        GetGame().enableControls(false);
         player->stand();
-        player->setPetrified(true,86400.0f);
+        //player->setPetrified(true,86400.0f);
     }
-    if (enable_player_control) player->setPetrified(false);
+    if (enable_player_control) GetGame().enableControls(true);
 
     if (takeFlashlight) player->takeAllItems(Objects::Type::Flashlight);
     if (takeHammer) player->takeAllItems(Objects::Type::Hammer);
@@ -164,7 +165,7 @@ void DamageTrigger::triggerFlags(Player *player)
     if (takeEnergy) player->drainBatteryCompletely();
 }
 
-void DamageTrigger::trigger(Object* source)
+void PlayerTrigger::trigger(Object* source)
 {
     if (!enabled) return;
     //if (triggered_by_collision) return;
@@ -176,12 +177,12 @@ void DamageTrigger::trigger(Object* source)
  
 }
 
-void DamageTrigger::toggle(bool enable, Object* source)
+void PlayerTrigger::toggle(bool enable, Object* source)
 {
     this->enabled=enable;
 }
 
-class DamageTriggerDialog : public Decker::ui::Dialog
+class PlayerTriggerDialog : public Decker::ui::Dialog
 {
 private:
     ppltk::HorizontalSlider* range_x;
@@ -196,10 +197,10 @@ private:
     ppltk::CheckBox* takeCheese, * takeEnergyCells, * takeExtralife;
     ppltk::CheckBox* takeEnergy;
 
-    DamageTrigger* object;
+    PlayerTrigger* object;
 
 public:
-    DamageTriggerDialog(DamageTrigger* object);
+    PlayerTriggerDialog(PlayerTrigger* object);
 
     void valueChangedEvent(ppltk::Event* event, int value) override;
     void valueChangedEvent(ppltk::Event* event, int64_t value) override;
@@ -209,18 +210,18 @@ public:
 };
 
 
-void DamageTrigger::openUi()
+void PlayerTrigger::openUi()
 {
-    DamageTriggerDialog* dialog=new DamageTriggerDialog(this);
+    PlayerTriggerDialog* dialog=new PlayerTriggerDialog(this);
     GetGameWindow()->addChild(dialog);
 }
 
-DamageTriggerDialog::DamageTriggerDialog(DamageTrigger* object)
+PlayerTriggerDialog::PlayerTriggerDialog(PlayerTrigger* object)
     : Decker::ui::Dialog(700, 440, Buttons::OK | Buttons::Test)
 {
     ppl7::grafix::Rect client=clientRect();
     this->object=object;
-    setWindowTitle(ppl7::ToString("DamageTrigger, Object ID: %u", object->id));
+    setWindowTitle(ppl7::ToString("PlayerTrigger, Object ID: %u", object->id));
     int y=0;
 
     int sw=client.width() / 2;
@@ -332,14 +333,14 @@ DamageTriggerDialog::DamageTriggerDialog(DamageTrigger* object)
 }
 
 
-void DamageTriggerDialog::valueChangedEvent(ppltk::Event* event, int value)
+void PlayerTriggerDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
     if (event->widget() == damage_type) {
         object->damage_type=damage_type->currentIdentifier().toInt();
     }
 }
 
-void DamageTriggerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
+void PlayerTriggerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
 {
     if (event->widget() == range_x) {
         object->range.x=(int)value;
@@ -350,12 +351,12 @@ void DamageTriggerDialog::valueChangedEvent(ppltk::Event* event, int64_t value)
     }
 }
 
-void DamageTriggerDialog::valueChangedEvent(ppltk::Event* event, double value)
+void PlayerTriggerDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
 
 }
 
-void DamageTriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
+void PlayerTriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
     if (event->widget() == triggered_by_collision && checked == true) {
         object->triggered_by_collision=true;
@@ -388,7 +389,7 @@ void DamageTriggerDialog::toggledEvent(ppltk::Event* event, bool checked)
     }
 }
 
-void DamageTriggerDialog::dialogButtonEvent(Dialog::Buttons button)
+void PlayerTriggerDialog::dialogButtonEvent(Dialog::Buttons button)
 {
     if (button & Buttons::Test) {
         object->trigger();

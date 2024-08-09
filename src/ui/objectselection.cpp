@@ -107,7 +107,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::ItemTaker, "ItemTaker", 78);
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
-	addObject(Decker::Objects::Type::DamageTrigger, "Damage Trigger", 79);
+	addObject(Decker::Objects::Type::PlayerTrigger, "Player Trigger", 79);
 	addObject(Decker::Objects::Type::LevelModificator, "Level Modificator", 65);
 	addObject(Decker::Objects::Type::SpawnPoint, "SpawnPoint", 74);
 	addObject(Decker::Objects::Type::GlimmerNode, "Glimmer Node", 77);

@@ -80,7 +80,7 @@ public:
 		MagicGround=44,
 		GlimmerNode=45,
 		ItemTaker=46,
-		DamageTrigger=47,
+		PlayerTrigger=47,
 		Arrow=100,
 		ThreeSpeers=101,
 		Rat=102,
@@ -1995,7 +1995,7 @@ public:
 	void test();
 };
 
-class DamageTrigger : public Object
+class PlayerTrigger : public Object
 {
 	private:
 		void triggerFlags(Player *player);
@@ -2018,8 +2018,8 @@ class DamageTrigger : public Object
 
 		ppl7::grafix::Point range;
 
-		DamageTrigger();
-		~DamageTrigger();
+		PlayerTrigger();
+		~PlayerTrigger();
 		static Representation representation();
 		void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 		void handleCollision(Player* player, const Collision& collision) override;
