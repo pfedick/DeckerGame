@@ -104,7 +104,7 @@ void ObjectsFrame::showPlayerPlaneObjects()
 	addObject(Decker::Objects::Type::BreakingWall, "Breaking Wall", 54);
 	addObject(Decker::Objects::Type::VoiceTrigger, "Voice", 57);
 	addObject(Decker::Objects::Type::ObjectWatcher, "ObjectWatcher", 58);
-	addObject(Decker::Objects::Type::ItemTaker, "ItemTaker", 78);
+	//addObject(Decker::Objects::Type::ItemTaker, "ItemTaker", 78);
 	addObject(Decker::Objects::Type::Trigger, "Trigger", 59);
 	addObject(Decker::Objects::Type::LightTrigger, "Light Trigger", 64);
 	addObject(Decker::Objects::Type::PlayerTrigger, "Player Trigger", 79);

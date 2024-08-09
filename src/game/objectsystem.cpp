@@ -530,7 +530,6 @@ Representation getRepresentation(int object_type)
 		case Type::SpawnPoint: return SpawnPoint::representation();
 		case Type::MagicGround: return MagicGround::representation();
 		case Type::GlimmerNode: return GlimmerNode::representation();
-		case Type::ItemTaker: return ItemTaker::representation();
 		case Type::PlayerTrigger: return PlayerTrigger::representation();
 
 		default: return Object::representation();
@@ -634,7 +633,6 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::SpawnPoint: return new SpawnPoint();
 		case Type::MagicGround: return new MagicGround();
 		case Type::GlimmerNode: return new GlimmerNode();
-		case Type::ItemTaker: return new ItemTaker();
 		case Type::PlayerTrigger: return new PlayerTrigger();
 
 	}

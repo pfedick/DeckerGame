@@ -79,7 +79,7 @@ public:
 		Peach=43,
 		MagicGround=44,
 		GlimmerNode=45,
-		ItemTaker=46,
+		Unused46=46,
 		PlayerTrigger=47,
 		Arrow=100,
 		ThreeSpeers=101,
@@ -1997,39 +1997,39 @@ public:
 
 class PlayerTrigger : public Object
 {
-	private:
-		void triggerFlags(Player *player);
-	public:
-		int8_t damage_per_second_or_trigger;
-		int damage_type;
-		bool initial_state;
-		bool triggered_by_collision;
-		bool disable_player_control;
-		bool enable_player_control;
-		bool instant_death;
+private:
+	void triggerFlags(Player* player);
+public:
+	int8_t damage_per_second_or_trigger;
+	int damage_type;
+	bool initial_state;
+	bool triggered_by_collision;
+	bool disable_player_control;
+	bool enable_player_control;
+	bool instant_death;
 
-		bool takeFlashlight;
-		bool takeHammer;
-		bool takeCheese;
-		bool takeEnergyCells;
-		bool takeExtralife;
-		bool takeEnergy;
+	bool takeFlashlight;
+	bool takeHammer;
+	bool takeCheese;
+	bool takeEnergyCells;
+	bool takeExtralife;
+	bool takeEnergy;
 
 
-		ppl7::grafix::Point range;
+	ppl7::grafix::Point range;
 
-		PlayerTrigger();
-		~PlayerTrigger();
-		static Representation representation();
-		void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-		void handleCollision(Player* player, const Collision& collision) override;
-		void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-		size_t save(unsigned char* buffer, size_t size) const override;
-		size_t saveSize() const override;
-		size_t load(const unsigned char* buffer, size_t size) override;
-		void trigger(Object* source=NULL) override;
-		void toggle(bool enable, Object* source=NULL) override;
-		void openUi() override;
+	PlayerTrigger();
+	~PlayerTrigger();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void openUi() override;
 
 };
 
@@ -2285,31 +2285,6 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-};
-
-class ItemTaker : public Object
-{
-private:
-public:
-	bool takeFlashlight;
-	bool takeHammer;
-	bool takeCheese;
-	bool takeEnergyCells;
-	bool takeExtralife;
-	bool takeEnergy;
-
-	ItemTaker();
-	~ItemTaker();
-	static Representation representation();
-
-	void trigger(Object* source=NULL) override;
-	void reset();
-	void test();
-	size_t save(unsigned char* buffer, size_t size) const override;
-	size_t saveSize() const override;
-	size_t load(const unsigned char* buffer, size_t size) override;
-	void openUi() override;
-
 };
 
 class GlimmerNode : public Object

@@ -157,7 +157,6 @@ OBJECTS=compile/main.o \
 	compile/object_magicground.o \
 	compile/object_level_modificator.o \
 	compile/object_glimmernode.o \
-	compile/object_itemtaker.o \
 	compile/audio_audiosystem.o \
 	compile/audio_audiostream.o \
 	compile/audio_audiosample.o \
@@ -624,10 +623,6 @@ compile/object_key.o: src/objects/key.cpp Makefile include/objects.h include/pla
 compile/object_door.o: src/objects/door.cpp Makefile include/objects.h include/animation.h include/player.h include/audiopool.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_door.o -c src/objects/door.cpp $(CFLAGS)
-
-compile/object_itemtaker.o: src/objects/itemtaker.cpp Makefile include/objects.h include/player.h include/audiopool.h
-	- @mkdir -p compile
-	$(CXX) -o compile/object_itemtaker.o -c src/objects/itemtaker.cpp $(CFLAGS)
 
 compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
