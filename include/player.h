@@ -62,6 +62,7 @@ private:
 	bool greetingPlayed;
 	bool flashlightOn;
 	bool petrified;
+	bool controlEnabled;
 	double actionToggleCooldown;
 	double petrifiedTimeout;
 	int last_animation_sound_played;
@@ -195,6 +196,9 @@ public:
 	void setBatteryDrainRate(float rate);
 	void takeAllItems(int type);
 	void drainBatteryCompletely();
+	void enableControl();
+	void disableControl();
+
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;
 

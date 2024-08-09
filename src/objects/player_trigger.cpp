@@ -150,12 +150,8 @@ void PlayerTrigger::triggerFlags(Player *player)
 {
     if (instant_death) player->dropHealth(1000.0f,static_cast<Physic::HealthDropReason>(damage_type));
 
-    if (disable_player_control) {
-        GetGame().enableControls(false);
-        player->stand();
-        //player->setPetrified(true,86400.0f);
-    }
-    if (enable_player_control) GetGame().enableControls(true);
+    if (disable_player_control) player->disableControl();
+    if (enable_player_control) player->enableControl();
 
     if (takeFlashlight) player->takeAllItems(Objects::Type::Flashlight);
     if (takeHammer) player->takeAllItems(Objects::Type::Hammer);

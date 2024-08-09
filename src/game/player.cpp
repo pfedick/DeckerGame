@@ -80,6 +80,7 @@ Player::Player(Game* game)
 	air=maxair;
 	flashlightOn=false;
 	actionToggleCooldown=0.0f;
+	controlEnabled=true;
 
 	particle_end_time=0.0f;
 	next_particle_birth=0.0f;
@@ -548,6 +549,7 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	k.velocity_x=0;
 	k.velocity_y=0;
 	if (petrified) return k;
+	if (!controlEnabled) return k;
 
 	if (state[SDL_SCANCODE_LEFT]) k.matrix|=KeyboardKeys::Left;
 	if (state[SDL_SCANCODE_J] || state[SDL_SCANCODE_A]) k.matrix|=KeyboardKeys::Left;
@@ -902,7 +904,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects, frame_rate_compensation);
-	if (petrified) keys=getKeyboardMatrix(state);
+	if (petrified || controlEnabled==false) keys=getKeyboardMatrix(state);
 	if (movement == Hacking) return;
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
@@ -960,6 +962,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	y+=velocity_move.y + gravity;
 
 	if (petrified) return;
+	if (!controlEnabled) return;
 
 	if (movement == Turn) {
 		if (!animation.isFinished()) return;
@@ -2006,4 +2009,18 @@ void Player::takeAllItems(int type)
 	} else {
 		SpecialObjects.erase(type);
 	}
+}
+
+void Player::enableControl ()
+{
+	controlEnabled=true;
+	airStart=0.0f;
+	animation.resetSpeed();
+	stand();
+}
+
+void Player::disableControl()
+{
+	stand();
+	controlEnabled=false;
 }
