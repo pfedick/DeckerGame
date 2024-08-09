@@ -409,6 +409,26 @@
             "de": {
                 "text": "Ihh, das stinkt! Was ist das für eine Brühe?"
             }
+        },
+        "2241": {
+            "context": "George finds a new flashlight",
+            "character": "george",
+            "en": {
+                "text": "Hey! A new flashlight!"
+            },
+            "de": {
+                "text": "Hey! Eine neue Taschenlampe!"
+            }
+        },
+        "2242": {
+            "context": "George picked up all items",
+            "character": "george",
+            "en": {
+                "text": "It was worth climbing up here!"
+            },
+            "de": {
+                "text": "Das hat sich gelohnt hier hoch zu klettern!"
+            }
         }
     }
 }
