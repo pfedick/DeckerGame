@@ -1998,11 +1998,24 @@ public:
 class DamageTrigger : public Object
 {
 	private:
+		void triggerFlags(Player *player);
 	public:
-		int damage_per_second_or_trigger;
+		int8_t damage_per_second_or_trigger;
 		int damage_type;
 		bool initial_state;
 		bool triggered_by_collision;
+		bool disable_player_control;
+		bool enable_player_control;
+		bool instant_death;
+
+		bool takeFlashlight;
+		bool takeHammer;
+		bool takeCheese;
+		bool takeEnergyCells;
+		bool takeExtralife;
+		bool takeEnergy;
+
+
 		ppl7::grafix::Point range;
 
 		DamageTrigger();
