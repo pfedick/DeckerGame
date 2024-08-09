@@ -429,6 +429,16 @@
             "de": {
                 "text": "Das hat sich gelohnt hier hoch zu klettern!"
             }
+        },
+        "2243": {
+            "context": "George meets Wallenstein",
+            "character": "george",
+            "en": {
+                "text": "WHAAAA! Wallenstein! Where does he come from?"
+            },
+            "de": {
+                "text": "WHAAAA! Wallenstein! Wo kommt der denn her?"
+            }
         }
     }
 }
