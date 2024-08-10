@@ -439,6 +439,26 @@
             "de": {
                 "text": "WHAAAA! Wallenstein! Wo kommt der denn her?"
             }
+        },
+        "2244": {
+            "context": "George feels fresh wind",
+            "character": "george",
+            "en": {
+                "text": "I feel a cool breeze."
+            },
+            "de": {
+                "text": "Ich spüre einen kühlen Luftzug."
+            }
+        },
+        "2245": {
+            "context": "George stands in front of a blocked door",
+            "character": "george",
+            "en": {
+                "text": "This has to be opened somewhere else."
+            },
+            "de": {
+                "text": "Das muss woanders aufgehen."
+            }
         }
     }
 }
