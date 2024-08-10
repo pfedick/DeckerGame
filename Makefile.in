@@ -108,6 +108,7 @@ OBJECTS=compile/main.o \
 	compile/object_firecannon.o \
 	compile/object_door.o \
 	compile/object_floater.o \
+	compile/object_elevator.o \
 	compile/object_playerstartpoint.o \
 	compile/object_breakingground.o \
 	compile/object_skeleton.o \
@@ -348,6 +349,10 @@ hud:
 breakingwall:
 	./texmaker -s lightwave/Render/enemies/breakingwall/ -t res/breakingwall.tex -w 2048 -h 2048 -px 384 -py 254 -x tmp/breakingwall
 
+elevator:
+	./texmaker -s lightwave/Render/objects/elevator/ -t res/elevator.tex -w 1024 -h 1024 -px 512 -py 896
+
+
 enemies: enemy_ostrich enemy_scorpion enemy_piranha trap_three_speers breakingwall enemy_ghost enemy_erik enemy_zombie
 
 lights:
@@ -363,7 +368,7 @@ glimmer:
 	./texmaker -s lightwave/Render/glimmer/ -t res/glimmer.tex -w 1024 -h 512 -px 64 -py 64
 
 sprites: george phonetics sprites_white sprites_nature sprites_tropical sprites_objects bricks_white interactive_objects objects_ui doors enemies lights \
-	sprites_white_1d sprites_decals bricks hud glimmer
+	sprites_white_1d sprites_decals bricks hud glimmer elevator
 	./texmaker -s res/tiletypes/ -t res/tiletypes.tex -w 256 -h 256 -px 0 -py 0 -x tmp/tiletypes
 	./texmaker -f res/cursor/cursor.lst -t res/cursor.tex -w 128 -h 128 -px 0 -py 0 -x tmp/cursor
 	./texmaker -s lightwave/Render/sprites_plants/ -t res/sprites_plants.tex -w 1024 -h 1024 --pivot_detection lower_middle
@@ -627,6 +632,10 @@ compile/object_door.o: src/objects/door.cpp Makefile include/objects.h include/a
 compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h include/animation.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)
+
+compile/object_elevator.o: src/objects/elevator.cpp Makefile include/objects.h include/lights.h
+	- @mkdir -p compile
+	$(CXX) -o compile/object_elevator.o -c src/objects/elevator.cpp $(CFLAGS)
 
 compile/object_medikit.o: src/objects/medikit.cpp Makefile include/objects.h include/player.h include/audiopool.h
 	- @mkdir -p compile

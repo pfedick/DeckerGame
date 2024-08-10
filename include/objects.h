@@ -79,7 +79,7 @@ public:
 		Peach=43,
 		MagicGround=44,
 		GlimmerNode=45,
-		Unused46=46,
+		GreatElevator=46,
 		PlayerTrigger=47,
 		Arrow=100,
 		ThreeSpeers=101,
@@ -148,6 +148,7 @@ public:
 		Crates,
 		Spider,
 		MagicGround,
+		GreatElevator,
 		MaxSpritesets
 	};
 };
@@ -2286,6 +2287,35 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 };
+
+class GreatElevator : public Object
+{
+private:
+	float velocity;
+	AudioInstance* audio;
+	LightObject light;
+
+public:
+	enum class State {
+		Wait,
+		GoingUp,
+		GoingDown
+	};
+	State state;
+	bool initial_state;
+	GreatElevator();
+	~GreatElevator();
+	static Representation representation();
+	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
+	void handleCollision(Player* player, const Collision& collision) override;
+	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source=NULL) override;
+	size_t save(unsigned char* buffer, size_t size) const override;
+	size_t saveSize() const override;
+	size_t load(const unsigned char* buffer, size_t size) override;
+	//void openUi() override;
+};
+
 
 class GlimmerNode : public Object
 {

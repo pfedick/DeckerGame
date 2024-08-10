@@ -217,6 +217,10 @@ void ObjectSystem::loadSpritesets(SDL& sdl)
 	spriteset[Spriteset::MagicGround]->enableMemoryBuffer(true);
 	spriteset[Spriteset::MagicGround]->load(sdl, "res/magicground.tex");
 
+	spriteset[Spriteset::GreatElevator]->enableOutlines(true);
+	spriteset[Spriteset::GreatElevator]->enableMemoryBuffer(true);
+	spriteset[Spriteset::GreatElevator]->load(sdl, "res/elevator.tex");
+
 }
 
 void ObjectSystem::addObject(Object* object)
@@ -531,6 +535,7 @@ Representation getRepresentation(int object_type)
 		case Type::MagicGround: return MagicGround::representation();
 		case Type::GlimmerNode: return GlimmerNode::representation();
 		case Type::PlayerTrigger: return PlayerTrigger::representation();
+		case Type::GreatElevator: return GreatElevator::representation();
 
 		default: return Object::representation();
 	}
@@ -634,6 +639,7 @@ Object* ObjectSystem::getInstance(int object_type) const
 		case Type::MagicGround: return new MagicGround();
 		case Type::GlimmerNode: return new GlimmerNode();
 		case Type::PlayerTrigger: return new PlayerTrigger();
+		case Type::GreatElevator: return new GreatElevator();
 
 	}
 	return NULL;
