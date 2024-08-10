@@ -22,11 +22,14 @@ GreatElevator::GreatElevator()
 	sprite_set=Spriteset::GreatElevator;
 	sprite_no=0;
 	state=State::Wait;
+	enabled=true;
+	visibleAtPlaytime=true;
 	collisionDetection=true;
 	pixelExactCollision=false;
 	audio=NULL;
 	initial_state=false;
-	enabled=true;
+	current_state=false;
+	next_state=0.0f;
 
 	light.color.set(255, 255, 255, 255);
 	light.sprite_no=0;
@@ -49,7 +52,46 @@ GreatElevator::~GreatElevator()
 
 void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	if (!enabled) return;
+	//ppl7::PrintDebug("current_state=%d, state=%d, velocity=%0.3f\n", (int)current_state,
+	//	(int)state, velocity);
+	boundary.setCoords(p.x - 3 * TILE_WIDTH, p.y, p.x + 3 * TILE_WIDTH, p.y + 2 * TILE_HEIGHT);
+	if (!current_state) {
+		if (state == State::GoingUp || state == State::BreakUp || state == State::AtTop) {
+			state=State::GoingDown;
+			//ppl7::PrintDebug("Going down\n");
+		}
+	}
+	if (state == State::Wait && next_state == 0.0f) next_state=time + 2.0f;
+	else if (state == State::Wait && next_state < time && current_state == true) {
+		state=State::GoingUp;
+		velocity=0.0f;
+	} else if (state == State::GoingUp) {
+		if (velocity > -6.0f) velocity-=0.2f * frame_rate_compensation;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 2 * TILE_HEIGHT));
+		if (t1 != TileType::NonBlocking) state=State::BreakUp;
+	} else if (state == State::BreakUp) {
+		if (velocity < -0.2f) velocity+=0.2f * frame_rate_compensation;
+		if (velocity > -0.2f) velocity=-0.2f;
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1 + TILE_HEIGHT));
+		if (t1 != TileType::NonBlocking) {
+			state=State::AtTop;
+			velocity=0.0f;
+		}
+	} else if (state == State::GoingDown) {
+		if (velocity < 6.0f) velocity+=0.2f * frame_rate_compensation;
+		if (p.y + 2 * TILE_HEIGHT >= initial_p.y) state=State::BreakDown;
+	} else if (state == State::BreakDown) {
+		if (velocity > 0.2f) velocity-=0.2f * frame_rate_compensation;
+		if (velocity < 0.2f) velocity=0.2f;
+		if (p.y >= initial_p.y) {
+			state=State::Wait;
+			next_state=2.0f;
+			velocity=0.0f;
+		}
+
+	}
+	p.y+=velocity * frame_rate_compensation;
+
 	/*
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
@@ -60,31 +102,40 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 	}
 	if (audio) audio->setPositional(p, 1800);
 	*/
-
-	//LightSystem& lights=GetGame().getLightSystem();
+	if (current_state || state != State::Wait) {
+		LightSystem& lights=GetGame().getLightSystem();
+		light.x=p.x;
+		light.y=p.y - 3 * TILE_HEIGHT;
+		lights.addObjectLight(&light);
+	}
 }
 
 
 void GreatElevator::handleCollision(Player* player, const Collision& collision)
 {
-	if (!enabled) return;
+	if (!current_state) return;
 	if (collision.onFoot()) {
 		//printf ("collision with player\n");
 		player->setStandingOnObject(this);
-		player->y+=(velocity * collision.frame_rate_compensation);
-		if (player->y > p.y - 58) player->y=p.y - 58;
+		//player->y+=(velocity * collision.frame_rate_compensation);
+		if (player->y > p.y) player->y=p.y;
+		if (player->x < p.x - 3 * TILE_WIDTH) player->x=p.x - 3 * TILE_WIDTH;
+		if (player->x > p.x + 3 * TILE_WIDTH) player->x=p.x + 3 * TILE_WIDTH;
 	}
 }
 
 void GreatElevator::toggle(bool enable, Object* source)
 {
-	this->enabled=enable;
-	//printf ("Floater::toggle %d: %d\n", id, (int)enable);
+	this->current_state=enable;
+	if (current_state) next_state=0.0f;
+	//ppl7::PrintDebug("GreatElevator::toggle, current_state=%d\n", (int)current_state);
 }
 
 void GreatElevator::trigger(Object* source)
 {
-	enabled=!enabled;
+	current_state=!current_state;
+	if (current_state) next_state=0.0f;
+	//ppl7::PrintDebug("GreatElevator::trigger, current_state=%d\n", (int)current_state);
 }
 
 
@@ -115,6 +166,7 @@ size_t GreatElevator::load(const unsigned char* buffer, size_t size)
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	initial_state=(bool)flags & 1;
+	current_state=initial_state;
 	enabled=true;
 	return size;
 }

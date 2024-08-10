@@ -2294,12 +2294,17 @@ private:
 	float velocity;
 	AudioInstance* audio;
 	LightObject light;
+	bool current_state;
+	double next_state;
 
 public:
 	enum class State {
 		Wait,
 		GoingUp,
-		GoingDown
+		BreakUp,
+		GoingDown,
+		BreakDown,
+		AtTop
 	};
 	State state;
 	bool initial_state;
