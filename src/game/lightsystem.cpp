@@ -277,6 +277,10 @@ void LightSystem::loadSpritesets(SDL& sdl)
     lightmaps->setPivot(15, 256, 27);
     lightmaps->setPivot(18, 256, 27);
     lightmaps->setPivot(19, 256, 27);
+    lightmaps->setPivot(20, 256, 27);
+    lightmaps->setPivot(21, 256, 27);
+    lightmaps->setPivot(22, 256, 27);
+
 
     light_objects->enableOutlines(true);
     light_objects->enableMemoryBuffer(true);

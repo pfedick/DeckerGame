@@ -3,16 +3,33 @@ LWSC
 
 RenderRangeType 0
 FirstFrame 19
-LastFrame 19
+LastFrame 22
 FrameStep 1
 RenderRangeObject 0
 RenderRangeArbitrary 0-120
 PreviewFirstFrame 0
-PreviewLastFrame 19
+PreviewLastFrame 23
 PreviewFrameStep 1
-CurrentFrame 19
+CurrentFrame 20
 FramesPerSecond 30
 AutoKeyFixedFrame 0
+Preferences
+{ Preferences
+  Ver 1
+  { Parameter
+    Key "/Current Scene/Color Space/Apply Color Space"
+    Value
+  }
+  { Parameter
+    Key "/Current Scene/Color Space/Convert Color Space to Linear"
+    Value
+  }
+  { Parameter
+    Key "/Current Scene/Viewport/Set Current Viewports as Default"
+    Value
+  }
+}
+EndAttribute
 ChangeScene 0
 Plugin ViewportObjectHandler 1 .VPR
 0
@@ -26,7 +43,7 @@ Plugin ViewportObjectHandler 1 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -43,7 +60,7 @@ Plugin ViewportObjectHandler 2 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -60,7 +77,7 @@ Plugin ViewportObjectHandler 3 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -77,7 +94,7 @@ Plugin ViewportObjectHandler 4 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -708,7 +725,7 @@ NoiseFilter
 EndAttribute
 NoiseFilterGlobal 0
 NavigationDesiredDevice Keyboard
-Plugin GlobalIlluminationHandler 1 MonteCarlo
+Plugin GlobalIlluminationHandler 1 BruteForce
 { Attributes
   { Metadata
     Version 1
@@ -716,7 +733,7 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
     { AttributeData
       { Attr
         Name "Intensity"
-        Flags 0
+        Flags 4
         Tag "ENVELOPE" "On"
         Tag "FORMAT" "Percent"
         { Value
@@ -728,244 +745,34 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
         }
       }
       { Attr
-        Name "Rays"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
         Name "Caustics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
-        }
-      }
-      { Attr
-        Name "Sample Backdrop"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "ISBG Sampling"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "ISBG Samples"
-        Flags 0
-        { Value
-          "int"
-          512
         }
       }
       { Attr
         Name "Affected By Volumetrics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
         }
       }
       { Attr
-        Name "Interpolated"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Primary Rays"
-        Flags 0
-        { Value
-          "int"
-          128
-        }
-      }
-      { Attr
-        Name "Secondary Rays"
-        Flags 0
-        { Value
-          "int"
-          64
-        }
-      }
-      { Attr
-        Name "Enable Caching"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Save After Each Frame"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Animation"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Frame Step"
-        Flags 0
+        Name "Rays"
+        Flags 4
         { Value
           "int"
           1
-        }
-      }
-      { Attr
-        Name "Cache File"
-        Flags 0
-        { Value
-          "text"
-          "InterpolatedGI.cache"
-        }
-      }
-      { Attr
-        Name "Use Bumps"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Behind Test"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "Show Octree"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Color Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Samples"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Render"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Second Bounce"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Behind Test"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Minimum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          2
-        }
-      }
-      { Attr
-        Name "Maximum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          64
-        }
-      }
-      { Attr
-        Name "Angular Tolerance"
-        Flags 0
-        Tag "FORMAT" "Angle"
-        { Value
-          "double"
-          0.3490658503988658401
-        }
-      }
-      { Attr
-        Name "Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Interpolation Softness"
-        Flags 0
-        Tag "FORMAT" "Percent"
-        { Value
-          "double"
-          0.5
         }
       }
     }
   }
 }
 EndPlugin
-Plugin GlobalIlluminationHandler 2 MonteCarlo
+Plugin GlobalIlluminationHandler 2 BruteForce
 { Attributes
   { Metadata
     Version 1
@@ -973,7 +780,7 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
     { AttributeData
       { Attr
         Name "Intensity"
-        Flags 0
+        Flags 4
         Tag "ENVELOPE" "On"
         Tag "FORMAT" "Percent"
         { Value
@@ -985,237 +792,27 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
         }
       }
       { Attr
-        Name "Rays"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
         Name "Caustics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
-        }
-      }
-      { Attr
-        Name "Sample Backdrop"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "ISBG Sampling"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "ISBG Samples"
-        Flags 0
-        { Value
-          "int"
-          512
         }
       }
       { Attr
         Name "Affected By Volumetrics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
         }
       }
       { Attr
-        Name "Interpolated"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Primary Rays"
-        Flags 0
-        { Value
-          "int"
-          128
-        }
-      }
-      { Attr
-        Name "Secondary Rays"
-        Flags 0
-        { Value
-          "int"
-          64
-        }
-      }
-      { Attr
-        Name "Enable Caching"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Save After Each Frame"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Animation"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Frame Step"
-        Flags 0
+        Name "Rays"
+        Flags 4
         { Value
           "int"
           1
-        }
-      }
-      { Attr
-        Name "Cache File"
-        Flags 0
-        { Value
-          "text"
-          "InterpolatedGI.cache"
-        }
-      }
-      { Attr
-        Name "Use Bumps"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Behind Test"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "Show Octree"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Color Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Samples"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Render"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Second Bounce"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Behind Test"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Minimum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          2
-        }
-      }
-      { Attr
-        Name "Maximum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          64
-        }
-      }
-      { Attr
-        Name "Angular Tolerance"
-        Flags 0
-        Tag "FORMAT" "Angle"
-        { Value
-          "double"
-          0.3490658503988658401
-        }
-      }
-      { Attr
-        Name "Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Interpolation Softness"
-        Flags 0
-        Tag "FORMAT" "Percent"
-        { Value
-          "double"
-          0.5
         }
       }
     }
@@ -1442,9 +1039,12 @@ Plugin VolumeIntegratorHandler 1 VolumeIntegrator
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 EndPlugin
@@ -1518,6 +1118,7 @@ Channel 8
   Key 1 0.033333333333333325932 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -1619,6 +1220,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -1657,6 +1259,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -1669,9 +1272,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -1724,6 +1330,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -1736,9 +1343,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -1822,6 +1432,7 @@ Channel 8
   Key 1 0.066666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -1923,6 +1534,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -1961,6 +1573,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -1973,9 +1586,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2028,6 +1644,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2040,9 +1657,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -2135,6 +1755,7 @@ Channel 8
   Key 1 0.10000000000000000555 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2236,6 +1857,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -2274,6 +1896,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -2286,9 +1909,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2341,6 +1967,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2353,9 +1980,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -2448,6 +2078,7 @@ Channel 8
   Key 1 0.13333333333333330373 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2549,6 +2180,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -2587,6 +2219,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -2599,9 +2232,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2654,6 +2290,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2666,9 +2303,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -2693,7 +2333,7 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.10000000000000000555 0 0 0 0 15.000000000000003553 0 0
+  Key -20 0.10000000000000000555 0 0 0 0 15.000000000000001776 0 0
   Key 0 0.13333333333333330373 0 0 0 0 0 0 0
   Key -20 0.16666666666666662966 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
@@ -2761,6 +2401,7 @@ Channel 8
   Key 1 0.16666666666666662966 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2862,6 +2503,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -2900,6 +2542,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -2912,9 +2555,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2967,6 +2613,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2979,9 +2626,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -3074,6 +2724,7 @@ Channel 8
   Key 1 0.2000000000000000111 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -3175,6 +2826,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -3213,6 +2865,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -3225,9 +2878,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -3280,6 +2936,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -3292,9 +2949,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -3387,6 +3047,7 @@ Channel 8
   Key 1 0.23333333333333328152 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -3488,6 +3149,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -3526,6 +3188,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -3538,9 +3201,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -3593,6 +3259,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -3605,9 +3272,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -3632,7 +3302,7 @@ Channel 1
 { Envelope
   4
   Key -2 0 0 0 0 0 0 0 0
-  Key -2 0.2000000000000000111 0 0 0 0 1.7142857142857148567 0 0
+  Key -2 0.2000000000000000111 0 0 0 0 1.7142857142857150787 0 0
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key -2 0.26666666666666660745 0 0 0 0 -1.9834710743801646782 0 0
   Behaviors 1 1
@@ -3700,6 +3370,7 @@ Channel 8
   Key 1 0.26666666666666660745 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -3801,6 +3472,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -3839,6 +3511,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -3851,9 +3524,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -3906,6 +3582,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -3918,9 +3595,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -3939,10 +3619,10 @@ Channel 0
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key 0 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 1
@@ -3952,10 +3632,10 @@ Channel 1
   Key -20 0.23333333333333328152 0 0 0 0 17.5 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key -20 0.2999999999999999889 0 0 0 0 -19.834710743801647226 -17.953360663519962515 0
-  Key -20.197530746459960938 0.56666666666666665186 0 0 0 0 17.777777777777778567 0 0
+  Key -20.197530746459960938 0.56666666666666654084 0 0 0 0 17.777777777777778567 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key -20 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key -20 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 2
@@ -3965,10 +3645,10 @@ Channel 2
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key 0 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -3978,10 +3658,10 @@ Channel 3
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key 0 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -3991,10 +3671,10 @@ Channel 4
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key 0 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 5
@@ -4004,10 +3684,10 @@ Channel 5
   Key 0 0.23333333333333328152 0 0 0 0 0 0 0
   Key 0 0.26666666666666660745 0 0 0 0 0 0 0
   Key 0 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 0 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 6
@@ -4017,10 +3697,10 @@ Channel 6
   Key 1 0.23333333333333328152 0 0 0 0 0 0 0
   Key 1 0.26666666666666660745 0 0 0 0 0 0 0
   Key 1 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 1 0.56666666666666665186 0 0 0 0 -0.82355555560853743735 0 0
-  Key 0.073499999940395355225 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 0.082999996840953826904 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.56666666666666654084 0 0 0 0 -0.82355555560853754837 0 0
+  Key 0.073499999940395341347 0.5999999999999999778 0 0 0 0 0 0 0
+  Key 0.082999996840953840782 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 7
@@ -4030,10 +3710,10 @@ Channel 7
   Key 1 0.23333333333333328152 0 0 0 0 0 0 0
   Key 1 0.26666666666666660745 0 0 0 0 0 0 0
   Key 1 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 1 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 1 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 1 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 8
@@ -4043,12 +3723,13 @@ Channel 8
   Key 1 0.23333333333333328152 0 0 0 0 0 0 0
   Key 1 0.26666666666666660745 0 0 0 0 0 0 0
   Key 1 0.2999999999999999889 0 0 0 0 0 0 0
-  Key 1 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 1 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1 0.5999999999999999778 0 0 0 0 0 0 0
-  Key 1 0.63333333333333330373 0 0 0 0 0 0 0
-  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.63333333333333319271 0 0 0 0 0 0 0
+  Key 1 0.66666666666666651864 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -4150,6 +3831,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -4188,6 +3870,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -4200,9 +3883,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -4255,6 +3941,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -4267,9 +3954,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -4362,6 +4052,7 @@ Channel 8
   Key 1 0.33333333333333325932 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -4463,6 +4154,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -4501,6 +4193,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -4513,9 +4206,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -4568,6 +4264,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -4580,9 +4277,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -4675,6 +4375,7 @@ Channel 8
   Key 1 0.36666666666666647423 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -4776,6 +4477,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -4814,6 +4516,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -4826,9 +4529,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -4881,6 +4587,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -4893,9 +4600,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -4920,7 +4630,7 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.33333333333333325932 0 0 0 0 18.181818181818186986 0 0
+  Key -20 0.33333333333333325932 0 0 0 0 18.181818181818183433 0 0
   Key 0 0.36666666666666647423 0 0 0 0 0 0 0
   Key -20 0.4000000000000000222 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
@@ -4988,6 +4698,7 @@ Channel 8
   Key 1 0.4000000000000000222 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -5089,6 +4800,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -5127,6 +4839,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -5139,9 +4852,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -5194,6 +4910,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -5206,9 +4923,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -5301,6 +5021,7 @@ Channel 8
   Key 1 0.43333333333333329263 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -5402,6 +5123,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -5440,6 +5162,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -5452,9 +5175,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -5507,6 +5233,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -5519,9 +5246,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -5548,7 +5278,7 @@ Channel 1
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.4000000000000000222 0 0 0 0 18.461538461538463451 0 0
   Key 0 0.43333333333333329263 0 0 0 0 0 0 0
-  Key -20 0.46666666666666656305 0 0 0 0 -19.834710743801650779 0 0
+  Key -20 0.46666666666666656305 0 0 0 0 -19.834710743801647226 0 0
   Behaviors 1 1
 }
 Channel 2
@@ -5614,6 +5344,7 @@ Channel 8
   Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -5715,6 +5446,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -5753,6 +5485,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -5765,9 +5498,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -5820,6 +5556,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -5832,9 +5569,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -5927,6 +5667,7 @@ Channel 8
   Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -6028,6 +5769,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -6066,6 +5808,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -6078,9 +5821,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -6133,6 +5879,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -6145,9 +5892,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -6163,8 +5913,8 @@ Channel 0
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6172,17 +5922,17 @@ Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.43333333333333334814 0 0 0 0 18.571428571428572951 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
-  Key -20 0.5 0 0 0 0 -19.834710743801654331 0 0
+  Key -20 0.43333333333333329263 0 0 0 0 18.571428571428569398 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
+  Key -20 0.5 0 0 0 0 -19.834710743801650779 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6190,8 +5940,8 @@ Channel 3
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6199,8 +5949,8 @@ Channel 4
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6208,8 +5958,8 @@ Channel 5
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6217,8 +5967,8 @@ Channel 6
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6226,8 +5976,8 @@ Channel 7
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6235,11 +5985,12 @@ Channel 8
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.43333333333333334814 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.43333333333333329263 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -6341,6 +6092,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -6379,6 +6131,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -6391,9 +6144,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -6446,6 +6202,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -6458,9 +6215,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -6476,83 +6236,84 @@ Channel 0
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 1
 { Envelope
   4
   Key -20 0 0 0 0 0 0 0 0
-  Key -20 0.46666666666666667407 0 0 0 0 18.666666666666667851 0 0
+  Key -20 0.46666666666666656305 0 0 0 0 18.666666666666671404 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key -20 0.53333333333333332593 0 0 0 0 -19.834710743801654331 0 0
+  Key -20 0.53333333333333321491 0 0 0 0 -19.834710743801650779 0 0
   Behaviors 1 1
 }
 Channel 2
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 4
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 5
 { Envelope
   4
   Key 0 0 0 0 0 0 0 0 0
-  Key 0 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 0 0.46666666666666656305 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 6
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
-  Key 1 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 7
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
-  Key 1 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 8
 { Envelope
   4
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.46666666666666667407 0 0 0 0 0 0 0
+  Key 1 0.46666666666666656305 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 0 0 0
-  Key 1 0.53333333333333332593 0 0 0 0 0 0 0
+  Key 1 0.53333333333333321491 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -6654,6 +6415,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -6692,6 +6454,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -6704,9 +6467,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -6759,6 +6525,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -6771,9 +6538,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -6790,8 +6560,8 @@ Channel 0
   5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6800,8 +6570,8 @@ Channel 1
   5
   Key -20 0 0 0 0 0 0 0 0
   Key -20 0.5 0 0 0 0 18.75 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 -15.023040007799863815 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 -15.023040007799865592 0
   Key -20 0.5999999999999999778 0 0 0 0 -6.6769066701332722147 -13.353813340266544429 0
   Behaviors 1 1
 }
@@ -6810,8 +6580,8 @@ Channel 2
   5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6820,8 +6590,8 @@ Channel 3
   5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6830,8 +6600,8 @@ Channel 4
   5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0 0.56666666666666654084 0 0 0 0 0 0 0
   Key 0 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6840,8 +6610,8 @@ Channel 5
   5
   Key 0 0 0 0 0 0 0 0 0
   Key 0 0.5 0 0 0 0 0 0 0
-  Key 0 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 1.5707963705062866211 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 1.5707963705062866211 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1.5707963705062866211 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6850,8 +6620,8 @@ Channel 6
   5
   Key 1 0 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 -0.46875 0 0
-  Key 0.5 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0.5 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0.5 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0.5 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6859,9 +6629,9 @@ Channel 7
 { Envelope
   5
   Key 1 0 0 0 0 0 0 0 0
-  Key 1 0.5 0 0 0 0 -0.40312500670552253723 0 0
-  Key 0.56999999284744262695 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0.5 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 1 0.5 0 0 0 0 -0.40312500670552242621 0 0
+  Key 0.56999999284744262695 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0.5 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
@@ -6870,11 +6640,12 @@ Channel 8
   5
   Key 1 0 0 0 0 0 0 0 0
   Key 1 0.5 0 0 0 0 -0.46875 0 0
-  Key 0.5 0.53333333333333332593 0 0 0 0 0 0 0
-  Key 0.5 0.56666666666666665186 0 0 0 0 0 0 0
+  Key 0.5 0.53333333333333321491 0 0 0 0 0 0 0
+  Key 0.5 0.56666666666666654084 0 0 0 0 0 0 0
   Key 1 0.5999999999999999778 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -6977,6 +6748,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -7015,6 +6787,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -7027,9 +6800,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -7082,6 +6858,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -7094,9 +6871,981 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000012 Objects/lightbeams/beam7.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key -20 0.69999999999999995559 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.63333333333333330373 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+RotationOrder 3
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+EndBones
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+        Color 5f 64 78
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+        Color 5f 64 78
+      }
+    }
+    { Connections
+    }
+    { Frames
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+      Color 5f 64 78
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+      Color 5f 64 78
+    }
+  }
+  { Connections
+  }
+  { Frames
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000013 Objects/lightbeams/beam8.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.66666666666666662966 0 0 0 0 19.04761904761904745 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key -20 0.73333333333333328152 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.66666666666666662966 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+RotationOrder 3
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+EndBones
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+        Color 5f 64 78
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+        Color 5f 64 78
+      }
+    }
+    { Connections
+    }
+    { Frames
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+      Color 5f 64 78
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+      Color 5f 64 78
+    }
+  }
+  { Connections
+  }
+  { Frames
+  }
+}
+Plugin PrimitiveHandler 1 MeshPrimitive
+EndPlugin
+
+LoadObjectLayer 1 10000014 Objects/lightbeams/beam9.lwo
+ChangeObject 0
+ShowObject 7 7
+Group 0
+ObjectMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 0 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  4
+  Key -20 0 0 0 0 0 0 0 0
+  Key -20 0.69999999999999995559 0 0 0 0 19.090909090909093493 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key -20 0.76666666666666671848 0 0 0 0 -19.834710743801654331 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 0 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 0 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 0 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  4
+  Key 0 0 0 0 0 0 0 0 0
+  Key 0 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 0 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 0 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 1 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 1 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  4
+  Key 1 0 0 0 0 0 0 0 0
+  Key 1 0.69999999999999995559 0 0 0 0 0 0 0
+  Key 1 0.73333333333333328152 0 0 0 0 0 0 0
+  Key 1 0.76666666666666671848 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+RotationOrder 3
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+SubPatchLevel 3 3
+APSDisplay
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+APSRender
+{ APS
+  Version 1
+  Method 0
+  { VParm
+    { ObjectLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonLevel
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          3
+          0
+        }
+      }
+    }
+    { PolygonPixelSize
+      0
+      { VariantParameter
+        3
+        0
+        { ParameterValue
+          256
+          0
+        }
+      }
+    }
+  }
+}
+BoneMode 2
+NumLimitedBones 4
+EndBones
+Plugin MeshDeformerHandler 1 _Morphing
+{ Morphing
+  Version 1
+  { MorphAmount
+    MorphAmountValue 0
+  }
+  MorphTarget 0
+  MorphSurfaces 0
+  MTSEMorphing 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 2 _Bones
+EndPlugin
+Plugin MeshModifierHandler 3 _Subdivision
+EndPlugin
+Plugin MeshDeformerHandler 4 _NodalDisplacement
+{ NodalDisplacement
+  Version 1
+  { Nodes
+    { Root
+      Location 0 0
+      Zoom 1
+      Disabled 1
+    }
+    Version 1
+    { Nodes
+      Server "Displacement"
+      { Tag
+        RealName "Displacement"
+        Name "Displacement"
+        Coordinates -10 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview ""
+        Placement 2
+        Color 5f 64 78
+      }
+      Server "Input"
+      { Tag
+        RealName "Input"
+        Name "Input"
+        Coordinates -30 -10
+        Mode 1
+        Selected 0
+        { Data
+        }
+        Preview "Object Position"
+        Placement 1
+        Color 5f 64 78
+      }
+    }
+    { Connections
+    }
+    { Frames
+    }
+  }
+  Mode 0
+  CurPosInWorld 1
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 5 _SurfaceDisplacement
+{ SurfaceDisplacement
+  Version 1
+  BumpDistance 0
+}
+EndPlugin
+PluginEnabled 0
+Plugin MeshDeformerHandler 6 _DisplacementMap
+{ DisplacementMap
+  Version 1
+}
+EndPlugin
+PluginEnabled 0
+UseObjGI 0
+ObjGIBruteForceRays 1
+ObjGIRadiosityRays 128
+ObjGISecondaryBounceRays 64
+ObjGIRadiosityTolerance 0.060307
+ObjGIMinPixelSpacing 2.000000
+ObjGIMaxPixelSpacing 64.000000
+ShadowOptions 7
+PolygonEdgeFlags 0
+PolygonEdgeThickness 1 1 1 1 1 1 1
+PolygonEdgeColor 0 0 0
+PolygonEdgesZScale 1
+NodeEdges 0
+{ NodalEdge_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Edge"
+    { Tag
+      RealName "Edge"
+      Name "Edge"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+      Color 5f 64 78
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Item ID"
+      Placement 1
+      Color 5f 64 78
+    }
+  }
+  { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -7124,6 +7873,7 @@ RadiosityUseGradients 0
 RadiosityUseBehindTest 0
 BlurRadiosity 0
 RadiosityEnable0 0
+RadiosityEnable1 0
 RadiosityFlags 0
 RadiosityCacheModulus 1
 RadiositySaveEachFrame 0
@@ -7142,7 +7892,7 @@ Plugin ExtRendererHandler 1 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -7210,6 +7960,7 @@ Channel 8
   Key 1 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -7255,6 +8006,7 @@ LightShader 1
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -7267,9 +8019,12 @@ LightShader 1
       }
       Preview "Direction"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 LightType 0
@@ -7345,6 +8100,7 @@ Channel 5
   Key 0 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -7440,6 +8196,7 @@ Channel 5
   Key 0 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -7556,7 +8313,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewCameraItem 30000000
 ViewFOVZoom 4
 DefineView 1
@@ -7567,7 +8324,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 DefineView 2
 ViewType 5
@@ -7577,7 +8334,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 DefineView 3
 ViewType 3
@@ -7587,7 +8344,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 0 23 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 
 GridNumber 80
@@ -7612,7 +8369,7 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 8
+CurrentObject 20
 CurrentLight 0
 CurrentCamera 0
 GraphEditorData
