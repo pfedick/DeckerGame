@@ -177,7 +177,7 @@ void PlayerTrigger::trigger(Object* source)
 void PlayerTrigger::toggle(bool enable, Object* source)
 {
     this->enabled=enable;
-    ppl7::PrintDebug("PlayerTrigger::toggle: %d [%d]\n", (int)enable, id);
+    //ppl7::PrintDebug("PlayerTrigger::toggle: %d [%d]\n", (int)enable, id);
 }
 
 class PlayerTriggerDialog : public Decker::ui::Dialog
