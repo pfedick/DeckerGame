@@ -97,7 +97,9 @@ void TouchPlateSwitch::toggle(bool enable, Object* source)
 
 void TouchPlateSwitch::trigger(Object* source)
 {
-    toggle(!current_state, source);
+    last_collision=ppl7::GetMicrotime();
+
+    //toggle(!current_state, source);
 }
 
 void TouchPlateSwitch::update(double time, TileTypePlane&, Player& player, float)
