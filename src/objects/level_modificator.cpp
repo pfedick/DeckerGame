@@ -68,8 +68,8 @@ void LevelModificator::handleCollision(Player* player, const Collision& collisio
 
 void LevelModificator::test()
 {
-    //state=State::activated;
-    //enabled=false;
+    state=State::in_transition;
+    GetGame().startLevelModification(ppl7::GetMicrotime(), this);
 }
 
 
