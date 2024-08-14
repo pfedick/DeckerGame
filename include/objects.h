@@ -1673,7 +1673,6 @@ private:
 	float particle_velocity_correction;
 	int state;
 	int flame_sprite1, flame_sprite2;
-	bool current_state;
 	ppl7::grafix::PointF velocity;
 	AnimationCycle animation;
 	AudioInstance* audio;
@@ -1685,6 +1684,8 @@ private:
 	void emmitParticles(double time, const Player& player, const ppl7::grafix::PointF p, float angle);
 public:
 	bool initial_state;
+	bool current_state;
+	bool start_direction_a;
 	unsigned char floater_type;
 
 	explicit Floater(Type::ObjectType type);

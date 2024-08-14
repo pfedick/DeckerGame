@@ -18,8 +18,9 @@ Floater::Floater(Type::ObjectType type)
 	flame_sprite1=152;
 	flame_sprite2=152;
 	audio=NULL;
-	initial_state=enabled;
-	current_state=enabled;
+	initial_state=true;
+	start_direction_a=false;
+	current_state=true;
 	floater_type=0;
 	/* Particles */
 	next_birth=0.0f;
@@ -77,6 +78,8 @@ void Floater::init()
 		sprite_no_representation+=2;
 		sprite_no+=2;
 	}
+	state=0;
+	if (start_direction_a) state=2;
 }
 
 
@@ -283,7 +286,9 @@ void Floater::reset()
 {
 	Object::reset();
 	current_state=initial_state;
+	p=initial_p;
 	state=0;
+	if (start_direction_a) state=2;
 	if (audio) {
 		AudioPool& pool=getAudioPool();
 		pool.stopInstace(audio);
@@ -303,7 +308,10 @@ size_t Floater::save(unsigned char* buffer, size_t size) const
 	ppl7::Poke8(buffer + bytes, 1);		// Object Version
 
 	ppl7::Poke8(buffer + bytes + 1, floater_type);
-	ppl7::Poke8(buffer + bytes + 2, initial_state);
+	int flags=0;
+	if (initial_state) flags|=1;
+	if (start_direction_a) flags|=2;
+	ppl7::Poke8(buffer + bytes + 2, flags);
 	return bytes + 3;
 }
 
@@ -315,7 +323,9 @@ size_t Floater::load(const unsigned char* buffer, size_t size)
 	if (version != 1) return 0;
 
 	floater_type=ppl7::Peek8(buffer + bytes + 1);
-	initial_state=(bool)(ppl7::Peek8(buffer + bytes + 2) & 1);
+	int flags=ppl7::Peek8(buffer + bytes + 2);
+	initial_state=(bool)(flags & 1);
+	start_direction_a=(bool)(flags & 2);
 	current_state=initial_state;
 	//printf("floater-type: %d, initial_state=%d\n", floater_type, initial_state);
 	init();
@@ -352,7 +362,9 @@ class FloaterDialog : public Decker::ui::Dialog
 {
 private:
 	ppltk::ComboBox* floater_type;
-	ppltk::CheckBox* initial_state;
+	ppltk::CheckBox* initial_state, * current_state;
+	ppltk::RadioButton* direction_a, * direction_b;
+
 	Floater* object;
 
 public:
@@ -370,24 +382,50 @@ void Floater::openUi()
 }
 
 FloaterDialog::FloaterDialog(Floater* object)
-	: Decker::ui::Dialog(400, 200)
+	: Decker::ui::Dialog(400, 230)
 {
 	this->object=object;
 	ppl7::grafix::Rect client=clientRect();
-	setWindowTitle("Floater");
-	addChild(new ppltk::Label(0, 0, 120, 30, "Floater-Type: "));
-	addChild(new ppltk::Label(0, 40, 120, 30, "Initial state: "));
+	setWindowTitle(ppl7::ToString("Floater, Object ID: %u", object->id));
+	int y=0;
+	int sw=client.width() / 2;
 
-	floater_type=new ppltk::ComboBox(120, 0, client.width() - 120, 30);
+	addChild(new ppltk::Label(0, y, 120, 30, "Floater-Type: "));
+	floater_type=new ppltk::ComboBox(120, y, client.width() - 120, 30);
 	floater_type->add("studded", "0");
 	floater_type->add("flat", "1");
 	floater_type->setCurrentIdentifier(ppl7::ToString("%d", object->floater_type));
 	floater_type->setEventHandler(this);
 	addChild(floater_type);
+	y+=35;
 
-	initial_state=new ppltk::CheckBox(120, 40, client.width() - 120, 30, "enabled", object->initial_state);
+
+	initial_state=new ppltk::CheckBox(0, y, sw, 30, "initial state");
 	initial_state->setEventHandler(this);
+	initial_state->setChecked(object->initial_state);
 	addChild(initial_state);
+	current_state=new ppltk::CheckBox(sw, y, sw, 30, "current state");
+	current_state->setEventHandler(this);
+	current_state->setChecked(object->current_state);
+	addChild(current_state);
+	y+=35;
+
+	addChild(new ppltk::Label(0, y, 120, 30, "Start direction: "));
+	ppltk::Frame* dirframe=new ppltk::Frame(120, y, client.width() - 120, 35, ppltk::Frame::BorderStyle::NoBorder);
+	addChild(dirframe);
+	ppl7::String label_a="left", label_b="right";
+	if (object->type() == Type::FloaterVertical) {
+		label_a="up";
+		label_b="down";
+	}
+	direction_a=new ppltk::RadioButton(0, 0, 70, 30, label_a, (object->start_direction_a == true));
+	direction_a->setEventHandler(this);
+	dirframe->addChild(direction_a);
+	direction_b=new ppltk::RadioButton(70, 0, 70, 30, label_b, (object->start_direction_a == false));
+	direction_b->setEventHandler(this);
+	dirframe->addChild(direction_b);
+	y+=35;
+
 
 }
 
@@ -405,7 +443,15 @@ void FloaterDialog::toggledEvent(ppltk::Event* event, bool checked)
 	if (event->widget() == initial_state) {
 		object->initial_state=checked;
 		object->reset();
-
+	} else if (event->widget() == current_state) {
+		object->current_state=checked;
+		object->reset();
+	} else if (event->widget() == direction_a && checked == true) {
+		object->start_direction_a=true;
+		object->reset();
+	} else if (event->widget() == direction_b && checked == true) {
+		object->start_direction_a=false;
+		object->reset();
 	}
 }
 
