@@ -85,6 +85,7 @@ size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
 
     int flags=ppl7::Peek8(buffer + bytes + 1);
     initial_state=(bool)(flags & 1);
+    enabled=initial_state;
     triggered_by_collision=(bool)(flags & 2);
     disable_player_control=(bool)(flags & 4);
     enable_player_control=(bool)(flags & 8);
@@ -95,7 +96,7 @@ size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
     damage_per_second_or_trigger=ppl7::Peek8(buffer + bytes + 6);
     damage_type=ppl7::Peek8(buffer + bytes + 7);
     int take_items=0;
-    if (version>=2) take_items=ppl7::Peek16(buffer + bytes + 8);
+    if (version >= 2) take_items=ppl7::Peek16(buffer + bytes + 8);
 
     takeFlashlight=take_items & 1;
     takeHammer=take_items & 2;
@@ -146,9 +147,9 @@ void PlayerTrigger::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Poi
     Object::drawEditMode(renderer, coords);
 }
 
-void PlayerTrigger::triggerFlags(Player *player)
+void PlayerTrigger::triggerFlags(Player* player)
 {
-    if (instant_death) player->dropHealth(1000.0f,static_cast<Physic::HealthDropReason>(damage_type));
+    if (instant_death) player->dropHealth(1000.0f, static_cast<Physic::HealthDropReason>(damage_type));
 
     if (disable_player_control) player->disableControl();
     if (enable_player_control) player->enableControl();
@@ -169,13 +170,14 @@ void PlayerTrigger::trigger(Object* source)
     if (damage_per_second_or_trigger != 0) GetGame().getPlayer()->dropHealth((float)damage_per_second_or_trigger,
         static_cast<Physic::HealthDropReason>(damage_type));
     triggerFlags(player);
-    
- 
+
+
 }
 
 void PlayerTrigger::toggle(bool enable, Object* source)
 {
     this->enabled=enable;
+    ppl7::PrintDebug("PlayerTrigger::toggle: %d [%d]\n", (int)enable, id);
 }
 
 class PlayerTriggerDialog : public Decker::ui::Dialog
@@ -185,7 +187,7 @@ private:
     ppltk::HorizontalSlider* range_y;
     ppltk::HorizontalSlider* damage_per_second_or_trigger;
     ppltk::CheckBox* initialStateEnabled, * currentState;
-    ppltk::CheckBox *disable_player_control, *enable_player_control, *instant_death;
+    ppltk::CheckBox* disable_player_control, * enable_player_control, * instant_death;
     ppltk::RadioButton* triggered_by_collision;
     ppltk::RadioButton* triggered_by_trigger;
     ppltk::ComboBox* damage_type;
