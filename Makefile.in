@@ -633,7 +633,7 @@ compile/object_floater.o: src/objects/floater.cpp Makefile include/objects.h inc
 	- @mkdir -p compile
 	$(CXX) -o compile/object_floater.o -c src/objects/floater.cpp $(CFLAGS)
 
-compile/object_elevator.o: src/objects/elevator.cpp Makefile include/objects.h include/lights.h
+compile/object_elevator.o: src/objects/elevator.cpp Makefile include/objects.h include/light.h
 	- @mkdir -p compile
 	$(CXX) -o compile/object_elevator.o -c src/objects/elevator.cpp $(CFLAGS)
 
