@@ -114,12 +114,12 @@ static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
 	//ap.playOnce(AudioClip::wallenstein_jump, position, 1600, 0.5f); return;
 	int r=ppl7::rand(1, 5);
 	switch (r) {
-	case 1: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
-	case 2: ap.playOnce(AudioClip::wallenstein_step2, position, 1600, 0.5f); break;
-	case 3: ap.playOnce(AudioClip::wallenstein_step3, position, 1600, 0.5f); break;
-	case 4: ap.playOnce(AudioClip::wallenstein_step4, position, 1600, 0.5f); break;
-	case 5: ap.playOnce(AudioClip::wallenstein_step5, position, 1600, 0.5f); break;
-	default: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
+		case 1: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
+		case 2: ap.playOnce(AudioClip::wallenstein_step2, position, 1600, 0.5f); break;
+		case 3: ap.playOnce(AudioClip::wallenstein_step3, position, 1600, 0.5f); break;
+		case 4: ap.playOnce(AudioClip::wallenstein_step4, position, 1600, 0.5f); break;
+		case 5: ap.playOnce(AudioClip::wallenstein_step5, position, 1600, 0.5f); break;
+		default: ap.playOnce(AudioClip::wallenstein_step1, position, 1600, 0.5f); break;
 	}
 }
 
@@ -238,11 +238,11 @@ void Wallenstein::update(double time, TileTypePlane& ttplane, Player& player, fl
 
 void Wallenstein::updateStatePatrol(double time, TileTypePlane& ttplane)
 {
-	//printf ("movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
-	//		keys, (int)time, (int)next_state);
+	//printf("movement=%s, keys=%d, time=%d, next_state=%d\n", (const char*)getState(),
+	//	keys, (int)time, (int)next_state);
 	if (movement == Turn) return;
 	if (movement == Stand && next_state < time && substate == 0) {
-		//printf ("next_state is turn\n");
+		//printf("next_state is turn\n");
 		if (orientation == Left) turn(Right);
 		else turn(Left);
 		substate=1;
@@ -252,9 +252,19 @@ void Wallenstein::updateStatePatrol(double time, TileTypePlane& ttplane)
 	}
 	substate=0;
 	if (orientation == Left) {
-		keys=KeyboardKeys::Left;
+		//ppl7::PrintDebug("Wallenstein left\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 1));
+		if (t1 != TileType::NonBlocking) {
+			stand();
+			next_state=time + ppl7::randf(0.2f, 1.5f);
+		} else keys=KeyboardKeys::Left;
 	} else {
-		keys=KeyboardKeys::Right;
+		//ppl7::PrintDebug("Wallenstein right\n");
+		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y - 1));
+		if (t1 != TileType::NonBlocking) {
+			stand();
+			next_state=time + ppl7::randf(0.2f, 1.5f);
+		} else keys=KeyboardKeys::Right;
 	}
 }
 
