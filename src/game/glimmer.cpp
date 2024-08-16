@@ -144,6 +144,10 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
         case Behavior::DecreaseLight:
             updateDecreaseLight();
             break;
+        case Behavior::Cry:
+            updateCry(player);
+            break;
+
     }
 
     p+=velocity;
@@ -161,8 +165,8 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     if (audio) {
         audio->setPositional(p, 1600);
     }
-    if (behavior != Behavior::Glimmer) emmitParticles(time, player);
-    else glimmerParticles(time, player);
+    if (behavior != Behavior::Glimmer && behavior != Behavior::Cry) emmitParticles(time, player);
+    if (behavior == Behavior::Glimmer) glimmerParticles(time, player);
 
     // Update Tail
     last_tail_index++;
@@ -617,6 +621,26 @@ void Glimmer::updateDecreaseLight()
 }
 
 
+void Glimmer::updateCry(const Player& player)
+{
+    if (movestate == MoveState::Start) {
+        action_start_time=time;
+        movestate=MoveState::Move;
+        speed=0.0f;
+        velocity.setPoint(0.0f, 0.0f);
+        action_timeout=time + duration;
+        getAudioPool().playOnce(AudioClip::glimmer_up, p, 1600, 1.0f);
+    }
+    if (movestate == MoveState::Move && action_timeout > time) {
+        cryParticles(time, player);
+    } else if (movestate == MoveState::Move && action_timeout <= time) {
+        movestate=MoveState::Start;
+        behavior=Behavior::Wait;
+        duration=0.0f;
+        triggerNextNode();
+    }
+}
+
 
 void Glimmer::moveTo(const ppl7::grafix::PointF& target)
 {
@@ -906,6 +930,16 @@ void Glimmer::decreaseLight()
     movestate=MoveState::Start;
 }
 
+void Glimmer::cry(float duration)
+{
+    ppl7::PrintDebug("Glimmer::cry\n");
+    behavior=Behavior::Cry;
+    action_start_time=0.0f;
+    movestate=MoveState::Start;
+    this->duration=duration;
+    action_timeout=0.0f;
+}
+
 
 
 void Glimmer::emmitParticles(double time, const Player& player)
@@ -926,6 +960,7 @@ void Glimmer::emmitParticles(double time, const Player& player)
             particle->velocity=calculateVelocity(randf(1.053, 1.930), 180.000 + randf(-12.632, 12.632));
             particle->scale=randf(0.237, 0.491);
             particle->color_mod.set(255, 255, 255, 255);
+            particle->initColorGradient(color_gradient);
             particle->initAnimation(Particle::Type::SoftGradientSmall);
             ps->addParticle(particle);
         }
@@ -950,6 +985,53 @@ void Glimmer::glimmerParticles(double time, const Player& player)
             particle->velocity=calculateVelocity(randf(1.053, 1.930), glimmer_angle + randf(-35.0f, +35.0f));
             particle->scale=randf(0.237, 0.491);
             particle->color_mod.set(255, 255, 255, 255);
+            particle->initColorGradient(color_gradient);
+            particle->initAnimation(Particle::Type::SoftGradientSmall);
+            ps->addParticle(particle);
+        }
+    }
+}
+
+
+void Glimmer::cryParticles(double time, const Player& player)
+{
+    if (next_birth < time) {
+        next_birth=time + randf(0.020, 0.045);
+        ParticleSystem* ps=GetParticleSystem();
+        if (!emitterInPlayerRange(p, player)) return;
+        // left
+
+        int new_particles=ppl7::rand(7, 20);
+        for (int i=0;i < new_particles;i++) {
+            Particle* particle=new Particle();
+            particle->birth_time=time;
+            particle->death_time=randf(0.448, 1.587) + time;
+            particle->p=p;
+            particle->layer=Particle::Layer::BeforePlayer;
+            particle->weight=randf(0.105, 0.202);
+            particle->gravity.setPoint(0.000, 0.526);
+            particle->velocity=calculateVelocity(randf(1.133, 2.110), 280.000 + randf(-12.632, 12.632));
+            particle->scale=randf(0.237, 0.491);
+            particle->color_mod.set(255, 255, 255, 255);
+            particle->initColorGradient(color_gradient);
+            particle->initAnimation(Particle::Type::SoftGradientSmall);
+            ps->addParticle(particle);
+        }
+
+        // right
+        new_particles=ppl7::rand(7, 20);
+        for (int i=0;i < new_particles;i++) {
+            Particle* particle=new Particle();
+            particle->birth_time=time;
+            particle->death_time=randf(0.448, 1.587) + time;
+            particle->p=p;
+            particle->layer=Particle::Layer::BeforePlayer;
+            particle->weight=randf(0.105, 0.202);
+            particle->gravity.setPoint(0.000, 0.526);
+            particle->velocity=calculateVelocity(randf(1.133, 2.110), 80.000 + randf(-12.632, 12.632));
+            particle->scale=randf(0.237, 0.491);
+            particle->color_mod.set(255, 255, 255, 255);
+            particle->initColorGradient(color_gradient);
             particle->initAnimation(Particle::Type::SoftGradientSmall);
             ps->addParticle(particle);
         }

@@ -1845,6 +1845,23 @@ public:
 
 };
 
+class TriggerTarget
+{
+public:
+	enum class State {
+		disable=0,
+		enable=1,
+		trigger=2
+	};
+
+	class Object
+	{
+	public:
+		uint16_t object_id=0;
+		State state=State::trigger;
+	};
+};
+
 
 class VoiceTrigger : public Object
 {
@@ -2343,18 +2360,6 @@ private:
 	void notifyTargets() const;
 
 public:
-	enum class TargetState {
-		disable=0,
-		enable=1,
-		trigger=2
-	};
-
-	class TargetObject
-	{
-	public:
-		uint16_t object_id=0;
-		TargetState state=TargetState::trigger;
-	};
 	enum class GlimmerAction {
 		Awaken=1,
 		Appear,
@@ -2368,10 +2373,11 @@ public:
 		Agree,
 		Disagree,
 		IncreaseLight,
-		DecreaseLight
+		DecreaseLight,
+		Cry
 	};
 
-	TargetObject triggerObjects[10];
+	TriggerTarget::Object triggerObjects[10];
 	ppl7::grafix::Point range;
 
 	bool initialStateEnabled;

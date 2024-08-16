@@ -115,7 +115,7 @@ size_t GlimmerNode::load(const unsigned char* buffer, size_t size)
 	int p=15;
 	for (int i=0;i < 10;i++) {
 		triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
-		triggerObjects[i].state=static_cast<TargetState>(ppl7::Peek8(buffer + bytes + p + 2));
+		triggerObjects[i].state=static_cast<TriggerTarget::State>(ppl7::Peek8(buffer + bytes + p + 2));
 		p+=3;
 	}
 	if (version >= 2) {
@@ -171,9 +171,9 @@ void GlimmerNode::notifyTargets() const
 		if (triggerObjects[i].object_id > 0) {
 			Object* target=objs->getObject(triggerObjects[i].object_id);
 			if (target) {
-				if (triggerObjects[i].state == GlimmerNode::TargetState::trigger) target->trigger();
-				else if (triggerObjects[i].state == GlimmerNode::TargetState::enable) target->toggle(true);
-				else if (triggerObjects[i].state == GlimmerNode::TargetState::disable) target->toggle(false);
+				if (triggerObjects[i].state == TriggerTarget::State::trigger) target->trigger();
+				else if (triggerObjects[i].state == TriggerTarget::State::enable) target->toggle(true);
+				else if (triggerObjects[i].state == TriggerTarget::State::disable) target->toggle(false);
 			}
 		}
 	}
@@ -283,6 +283,10 @@ void GlimmerNode::update(double time, TileTypePlane& ttplane, Player& player, fl
 			case GlimmerAction::DecreaseLight:
 				glimmer->setNextNode(next_node);
 				glimmer->decreaseLight();
+				break;
+			case GlimmerAction::Cry:
+				glimmer->setNextNode(next_node);
+				glimmer->cry(duration);
 				break;
 
 		}
@@ -458,6 +462,7 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 	action->add("Disagree", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Disagree)));
 	action->add("Increase light", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::IncreaseLight)));
 	action->add("Decrease light", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::DecreaseLight)));
+	action->add("Cry", ppl7::ToString("%d", static_cast<int>(GlimmerNode::GlimmerAction::Cry)));
 	action->sortItems();
 	action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
 	action->setEventHandler(this);
@@ -533,13 +538,13 @@ GlimmerNodeDialog::GlimmerNodeDialog(GlimmerNode* object)
 		ppltk::Frame* frame=new ppltk::Frame(x + 160, y1, 180, 30, ppltk::Frame::BorderStyle::NoBorder);
 		frame->setTransparent(true);
 
-		target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->triggerObjects[i].state == GlimmerNode::TargetState::enable);
+		target_state_on[i]=new ppltk::RadioButton(0, 0, 50, 30, "on", object->triggerObjects[i].state == TriggerTarget::State::enable);
 		target_state_on[i]->setEventHandler(this);
 		frame->addChild(target_state_on[i]);
-		target_state_off[i]=new ppltk::RadioButton(50, 0, 50, 30, "off", object->triggerObjects[i].state == GlimmerNode::TargetState::disable);
+		target_state_off[i]=new ppltk::RadioButton(50, 0, 50, 30, "off", object->triggerObjects[i].state == TriggerTarget::State::disable);
 		target_state_off[i]->setEventHandler(this);
 		frame->addChild(target_state_off[i]);
-		target_state_trigger[i]=new ppltk::RadioButton(100, 0, 70, 30, "trigger", object->triggerObjects[i].state == GlimmerNode::TargetState::trigger);
+		target_state_trigger[i]=new ppltk::RadioButton(100, 0, 70, 30, "trigger", object->triggerObjects[i].state == TriggerTarget::State::trigger);
 		target_state_trigger[i]->setEventHandler(this);
 		frame->addChild(target_state_trigger[i]);
 		addChild(frame);
@@ -583,11 +588,11 @@ void GlimmerNodeDialog::toggledEvent(ppltk::Event* event, bool checked)
 	if (checked) {
 		for (int i=0;i < 10;i++) {
 			if (event->widget() == target_state_on[i]) {
-				object->triggerObjects[i].state=GlimmerNode::TargetState::enable;
+				object->triggerObjects[i].state=TriggerTarget::State::enable;
 			} else 	if (event->widget() == target_state_off[i]) {
-				object->triggerObjects[i].state=GlimmerNode::TargetState::disable;
+				object->triggerObjects[i].state=TriggerTarget::State::disable;
 			} else 	if (event->widget() == target_state_trigger[i]) {
-				object->triggerObjects[i].state=GlimmerNode::TargetState::trigger;
+				object->triggerObjects[i].state=TriggerTarget::State::trigger;
 			}
 		}
 	}

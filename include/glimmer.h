@@ -23,7 +23,8 @@ public:
         Agree,
         Disagree,
         IncreaseLight,
-        DecreaseLight
+        DecreaseLight,
+        Cry
     };
 private:
 
@@ -88,13 +89,14 @@ private:
     void updateDisagree();
     void updateIncreaseLight();
     void updateDecreaseLight();
+    void updateCry(const Player& player);
 
     void triggerNextNode();
 
     void checkCollisionWithOtherObjects();
     void emmitParticles(double time, const Player& player);
     void glimmerParticles(double time, const Player& player);
-
+    void cryParticles(double time, const Player& player);
 
 public:
 
@@ -122,6 +124,7 @@ public:
     void disagree();
     void increaseLight();
     void decreaseLight();
+    void cry(float duration);
     void wait(const ppl7::grafix::PointF& target, float duration);
     void setNextNode(uint32_t id);
     void flyToPlayer(float maxSpeed);
