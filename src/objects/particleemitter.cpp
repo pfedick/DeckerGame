@@ -321,7 +321,7 @@ ppl7::String ParticleEmitter::generateCode() const
 	if (flags & static_cast<int>(Flags::useScaleGradient)) {
 		code +="            particle->initScaleGradient(scale_gradient, particle->scale);\n";
 	}
-	if (flags & static_cast<int>(Flags::useScaleGradient)) {
+	if (flags & static_cast<int>(Flags::useColorGradient)) {
 		code +="            particle->initColorGradient(color_gradient);\n";
 	}
 	code +="            ps->addParticle(particle);\n";
