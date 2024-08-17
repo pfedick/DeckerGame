@@ -198,6 +198,7 @@ public:
 	void drainBatteryCompletely();
 	void enableControl();
 	void disableControl();
+	void walkToNode(const ppl7::grafix::PointF& target, bool useWaynet=false);
 
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;

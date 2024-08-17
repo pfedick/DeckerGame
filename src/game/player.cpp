@@ -663,14 +663,14 @@ void Player::dropHealth(float points, HealthDropReason reason)
 	if (game->config.difficulty == Config::DifficultyLevel::easy) points*=0.5f;
 	else if (game->config.difficulty == Config::DifficultyLevel::hard) points*=2.0f;
 
-	if (orientation == Front && movement == Stand && points>0.0f) {
+	if (orientation == Front && movement == Stand && points > 0.0f) {
 		if (animation.getFrame() != 297) animation.setStaticFrame(297);
 	}
 
 	//game->controller.rumbleTrigger(0xffff, 0xffff, 16);
 	if (game->config.controller.use_rumble)	game->controller.rumble(0xffff, 0xffff, 100);
 	health-=(points * frame_rate_compensation);
-	if (health>100.0f) health=100.0f;
+	if (health > 100.0f) health=100.0f;
 	if (health <= 0.0f && movement != Dead) {
 		health=0;
 		flashlightOn=false;
@@ -699,7 +699,7 @@ void Player::dropHealth(float points, HealthDropReason reason)
 		} else {
 			animation.start(death_animation, sizeof(death_animation) / sizeof(int), false, 106);
 		}
-	} else if (health > 0.0f && movement != Dead && points>0.0f) {
+	} else if (health > 0.0f && movement != Dead && points > 0.0f) {
 		if (time > voiceDamageCooldown) {
 			int r=ppl7::rand(1, 4);
 			switch (r) {
@@ -904,7 +904,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	updateMovement(frame_rate_compensation);
 	player_stands_on_object=NULL;
 	checkCollisionWithObjects(objects, frame_rate_compensation);
-	if (petrified || controlEnabled==false) keys=getKeyboardMatrix(state);
+	if (petrified || controlEnabled == false) keys=getKeyboardMatrix(state);
 	if (movement == Hacking) return;
 	if (movement == Dead) return;
 	checkCollisionWithWorld(world);
@@ -2011,7 +2011,7 @@ void Player::takeAllItems(int type)
 	}
 }
 
-void Player::enableControl ()
+void Player::enableControl()
 {
 	controlEnabled=true;
 	airStart=0.0f;
@@ -2023,4 +2023,11 @@ void Player::disableControl()
 {
 	stand();
 	controlEnabled=false;
+}
+
+void Player::walkToNode(const ppl7::grafix::PointF& target, bool useWaynet)
+{
+	controlEnabled=false;
+
+
 }

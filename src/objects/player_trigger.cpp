@@ -193,6 +193,20 @@ void PlayerTrigger::update(double time, TileTypePlane&, Player& player, float)
             state=State::finished;
             notifyTargets();
         }
+        switch (action) {
+            case PlayerAction::WalkToNode:
+            case PlayerAction::WaynetToNode:
+                if (next_node > 0) {
+                    ObjectSystem* objs=GetObjectSystem();
+                    Object* target=objs->getObject(next_node);
+                    if (target) {
+                        player.disableControl();
+                        player.walkToNode(target->p, (bool)(action == PlayerAction::WaynetToNode));
+                    }
+                }
+                break;
+        }
+
     } else if (state == State::finished) {
         state=State::waiting_for_activation;
     } else if (state == State::activated && trigger_count >= maxTriggerCount) {
@@ -405,7 +419,7 @@ PlayerTriggerDialog::PlayerTriggerDialog(PlayerTrigger* object)
     action->add("Nothing", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Nothing)));
     action->add("WalkToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WalkToNode)));
     action->add("Wait", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Wait)));
-    //action->add("WaynetToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WaynetToNode)));
+    action->add("WaynetToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WaynetToNode)));
     action->sortItems();
     action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
     action->setEventHandler(this);
