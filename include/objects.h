@@ -2019,6 +2019,7 @@ class PlayerTrigger : public Object
 private:
 	void triggerFlags(Player* player);
 	void notifyTargets() const;
+	void triggerNextNode();
 	enum class State {
 		waiting_for_activation,
 		activated,
@@ -2039,6 +2040,7 @@ public:
 		WalkToNode,
 		Wait,
 		WaynetToNode,
+		Stop
 	};
 
 	int8_t damage_per_second_or_trigger;

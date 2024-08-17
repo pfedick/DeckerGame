@@ -21,6 +21,7 @@ class Representation;
 
 
 
+
 class Player : public Physic
 {
 private:
@@ -73,6 +74,20 @@ private:
 	AudioClip::Id ambient_playing;
 	LightObject flashlight1, flashlight2, flashlight3, flashlight2_ladder;
 
+	class AutoWalk
+	{
+	private:
+		ppl7::grafix::PointF target;
+		bool isEnabled;
+		bool use_waynet;
+	public:
+		AutoWalk();
+		bool enabled() const;
+		void getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix::PointF& player_p);
+		void setTarget(const ppl7::grafix::PointF& p, bool use_waynet=false);
+		void stop();
+	};
+	AutoWalk player_autowalk;
 	enum class ParticleReason
 	{
 		None=0,
@@ -199,6 +214,7 @@ public:
 	void enableControl();
 	void disableControl();
 	void walkToNode(const ppl7::grafix::PointF& target, bool useWaynet=false);
+	void stop();
 
 
 	const std::list<ppl7::grafix::Point>& getCollisionCheckpoints() const;

@@ -41,7 +41,7 @@ PlayerTrigger::PlayerTrigger()
     }
     next_node=0;
     node_after_max_trigger=0;
-    maxTriggerCount=0;
+    maxTriggerCount=1;
     trigger_delay=0.0f;
     action=PlayerAction::Nothing;
     state=State::waiting_for_activation;
@@ -152,6 +152,7 @@ size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
         trigger_delay=ppl7::PeekFloat(buffer + bytes + 18);
         action=static_cast<PlayerAction>(ppl7::Peek8(buffer + bytes + 22));
         maxTriggerCount=ppl7::Peek8(buffer + bytes + 23);
+        if (maxTriggerCount < 0) maxTriggerCount=1;
         int p=24;
         for (int i=0;i < 10;i++) {
             triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
@@ -179,6 +180,11 @@ void PlayerTrigger::notifyTargets() const
 }
 
 
+void PlayerTrigger::triggerNextNode()
+{
+
+}
+
 void PlayerTrigger::update(double time, TileTypePlane&, Player& player, float)
 {
     boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
@@ -196,14 +202,22 @@ void PlayerTrigger::update(double time, TileTypePlane&, Player& player, float)
         switch (action) {
             case PlayerAction::WalkToNode:
             case PlayerAction::WaynetToNode:
+                ppl7::PrintDebug("Player walk to %d\n", next_node);
                 if (next_node > 0) {
                     ObjectSystem* objs=GetObjectSystem();
                     Object* target=objs->getObject(next_node);
                     if (target) {
+                        ppl7::PrintDebug("Player walk los\n");
                         player.disableControl();
                         player.walkToNode(target->p, (bool)(action == PlayerAction::WaynetToNode));
                     }
                 }
+                break;
+            case PlayerAction::Stop:
+            case PlayerAction::Wait:
+                player.stop();
+                break;
+            case PlayerAction::Nothing:
                 break;
         }
 
@@ -294,6 +308,7 @@ void PlayerTrigger::trigger(Object* source)
         static_cast<Physic::HealthDropReason>(damage_type));
     state=State::activated;
     triggerFlags(player);
+
     //notifyTargets();
 
 
@@ -420,6 +435,7 @@ PlayerTriggerDialog::PlayerTriggerDialog(PlayerTrigger* object)
     action->add("WalkToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WalkToNode)));
     //action->add("Wait", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Wait)));
     action->add("WaynetToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WaynetToNode)));
+    action->add("Stop", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Stop)));
     action->sortItems();
     action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
     action->setEventHandler(this);

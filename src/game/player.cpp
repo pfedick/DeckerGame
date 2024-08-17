@@ -548,6 +548,10 @@ Player::Keys Player::getKeyboardMatrix(const Uint8* state)
 	k.matrix=0;
 	k.velocity_x=0;
 	k.velocity_y=0;
+	if (player_autowalk.enabled()) {
+		player_autowalk.getKeyboardMatrix(k, ppl7::grafix::PointF(x, y));
+		return k;
+	}
 	if (petrified) return k;
 	if (!controlEnabled) return k;
 
@@ -2028,6 +2032,55 @@ void Player::disableControl()
 void Player::walkToNode(const ppl7::grafix::PointF& target, bool useWaynet)
 {
 	controlEnabled=false;
+	player_autowalk.setTarget(target, useWaynet);
+
+}
+
+void Player::stop()
+{
+	player_autowalk.stop();
+}
 
 
+Player::AutoWalk::AutoWalk()
+{
+	isEnabled=false;
+	use_waynet=false;
+}
+
+bool Player::AutoWalk::enabled() const
+{
+	return isEnabled;
+}
+
+void Player::AutoWalk::getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix::PointF& player_p)
+{
+	if (use_waynet == false) {
+		float diff=abs(player_p.x - target.x);
+		if (diff < 5.0f) {
+			isEnabled=false;
+			return;
+		}
+		if (player_p.x < target.x) {
+			keys.matrix|=KeyboardKeys::Right;
+		} else if (player_p.x > target.x) {
+			keys.matrix|=KeyboardKeys::Left;
+		}
+		if (diff > 50.0f) keys.matrix|=KeyboardKeys::Shift;
+
+	} else {
+
+	}
+}
+
+void Player::AutoWalk::setTarget(const ppl7::grafix::PointF& p, bool use_waynet)
+{
+	this->use_waynet=use_waynet;
+	target=p;
+	isEnabled=true;
+}
+
+void Player::AutoWalk::stop()
+{
+	isEnabled=false;
 }
