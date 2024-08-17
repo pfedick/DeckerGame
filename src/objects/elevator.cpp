@@ -30,6 +30,7 @@ GreatElevator::GreatElevator()
 	initial_state=false;
 	current_state=false;
 	next_state=0.0f;
+	velocity=0.0f;
 
 	light.color.set(255, 255, 255, 255);
 	light.sprite_no=0;
@@ -52,8 +53,10 @@ GreatElevator::~GreatElevator()
 
 void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	//ppl7::PrintDebug("current_state=%d, state=%d, velocity=%0.3f\n", (int)current_state,
-	//	(int)state, velocity);
+	/*ppl7::PrintDebug("GreatElevator::update: current_state=%d, enabled=%d, state=%d, velocity=%0.3f\n", (int)current_state,
+		(int)enabled,
+		(int)state, velocity);
+		*/
 	boundary.setCoords(p.x - 3 * TILE_WIDTH, p.y, p.x + 3 * TILE_WIDTH, p.y + 2 * TILE_HEIGHT);
 	if (!current_state) {
 		if (state == State::GoingUp || state == State::BreakUp || state == State::AtTop) {
