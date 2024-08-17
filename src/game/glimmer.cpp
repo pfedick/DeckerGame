@@ -948,12 +948,12 @@ void Glimmer::emmitParticles(double time, const Player& player)
         next_birth=time + randf(0.020, 0.045);
         ParticleSystem* ps=GetParticleSystem();
         if (!emitterInPlayerRange(p, player)) return;
-        int new_particles=ppl7::rand(1, 4);
+        int new_particles=ppl7::rand(5, 12);
         for (int i=0;i < new_particles;i++) {
             Particle* particle=new Particle();
             particle->birth_time=time;
             particle->death_time=randf(0.448, 1.587) + time;
-            particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 9), 180.000);
+            particle->p=getBirthPosition(p, EmitterType::Rectangle, ppl7::grafix::Size(20, 20), 180.000);
             particle->layer=Particle::Layer::BeforePlayer;
             particle->weight=randf(0.000, 0.000);
             particle->gravity.setPoint(0.000, 0.000);
