@@ -418,7 +418,7 @@ PlayerTriggerDialog::PlayerTriggerDialog(PlayerTrigger* object)
     action=new ppltk::ComboBox(120, y, sw - 120, 30);
     action->add("Nothing", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Nothing)));
     action->add("WalkToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WalkToNode)));
-    action->add("Wait", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Wait)));
+    //action->add("Wait", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Wait)));
     action->add("WaynetToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WaynetToNode)));
     action->sortItems();
     action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
