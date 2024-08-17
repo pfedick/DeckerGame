@@ -2018,7 +2018,29 @@ class PlayerTrigger : public Object
 {
 private:
 	void triggerFlags(Player* player);
+	void notifyTargets() const;
+	enum class State {
+		waiting_for_activation,
+		activated,
+		waiting_for_trigger_delay,
+		finished,
+		disabled
+	};
+	State state;
+	double triggerDelayTime;
+	int trigger_count;
+	double last_collision_time;
+	uint64_t last_collision_frame;
+
+
 public:
+	enum class PlayerAction {
+		Nothing=0,
+		WalkToNode,
+		Wait,
+		WaynetToNode,
+	};
+
 	int8_t damage_per_second_or_trigger;
 	int damage_type;
 	bool initial_state;
@@ -2026,6 +2048,7 @@ public:
 	bool disable_player_control;
 	bool enable_player_control;
 	bool instant_death;
+	bool unlimitedTrigger;
 
 	bool takeFlashlight;
 	bool takeHammer;
@@ -2034,8 +2057,15 @@ public:
 	bool takeExtralife;
 	bool takeEnergy;
 
-
+	TriggerTarget::Object triggerObjects[10];
 	ppl7::grafix::Point range;
+
+	uint32_t next_node;
+	uint32_t node_after_max_trigger;
+	PlayerAction action;
+	float trigger_delay;
+	uint8_t maxTriggerCount;
+
 
 	PlayerTrigger();
 	~PlayerTrigger();
@@ -2049,6 +2079,7 @@ public:
 	void trigger(Object* source=NULL) override;
 	void toggle(bool enable, Object* source=NULL) override;
 	void openUi() override;
+	void reset();
 
 };
 
