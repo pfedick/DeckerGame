@@ -152,7 +152,7 @@ size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
         trigger_delay=ppl7::PeekFloat(buffer + bytes + 18);
         action=static_cast<PlayerAction>(ppl7::Peek8(buffer + bytes + 22));
         maxTriggerCount=ppl7::Peek8(buffer + bytes + 23);
-        if (maxTriggerCount < 0) maxTriggerCount=1;
+        if (maxTriggerCount < 1) maxTriggerCount=1;
         int p=24;
         for (int i=0;i < 10;i++) {
             triggerObjects[i].object_id=ppl7::Peek16(buffer + bytes + p);
@@ -160,7 +160,6 @@ size_t PlayerTrigger::load(const unsigned char* buffer, size_t size)
             p+=3;
         }
     }
-
     return size;
 }
 
@@ -202,12 +201,12 @@ void PlayerTrigger::update(double time, TileTypePlane&, Player& player, float)
         switch (action) {
             case PlayerAction::WalkToNode:
             case PlayerAction::WaynetToNode:
-                ppl7::PrintDebug("Player walk to %d\n", next_node);
+                //ppl7::PrintDebug("Player walk to %d\n", next_node);
                 if (next_node > 0) {
                     ObjectSystem* objs=GetObjectSystem();
                     Object* target=objs->getObject(next_node);
                     if (target) {
-                        ppl7::PrintDebug("Player walk los\n");
+                        //ppl7::PrintDebug("Player walk los\n");
                         player.disableControl();
                         player.walkToNode(target->p, (bool)(action == PlayerAction::WaynetToNode));
                     }
@@ -219,6 +218,13 @@ void PlayerTrigger::update(double time, TileTypePlane&, Player& player, float)
                 break;
             case PlayerAction::Nothing:
                 break;
+            case PlayerAction::TurnFlashlightOff:
+                player.enableFlashlight(false);
+                break;
+            case PlayerAction::TurnFlashlightOn:
+                player.enableFlashlight(true);
+                break;
+
         }
 
     } else if (state == State::finished) {
@@ -302,6 +308,7 @@ void PlayerTrigger::triggerFlags(Player* player)
 void PlayerTrigger::trigger(Object* source)
 {
     if (!enabled) return;
+    //ppl7::PrintDebug("PlayerTrigger::trigger: %d [%d]\n", (int)enabled, id);
     //if (triggered_by_collision) return;
     Player* player=GetGame().getPlayer();
     if (damage_per_second_or_trigger != 0) GetGame().getPlayer()->dropHealth((float)damage_per_second_or_trigger,
@@ -436,6 +443,8 @@ PlayerTriggerDialog::PlayerTriggerDialog(PlayerTrigger* object)
     //action->add("Wait", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Wait)));
     action->add("WaynetToNode", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::WaynetToNode)));
     action->add("Stop", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::Stop)));
+    action->add("Flashlight Off", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::TurnFlashlightOff)));
+    action->add("Flashlight On", ppl7::ToString("%d", static_cast<int>(PlayerTrigger::PlayerAction::TurnFlashlightOn)));
     action->sortItems();
     action->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->action)));
     action->setEventHandler(this);

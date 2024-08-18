@@ -2040,7 +2040,9 @@ public:
 		WalkToNode,
 		Wait,
 		WaynetToNode,
-		Stop
+		Stop,
+		TurnFlashlightOff,
+		TurnFlashlightOn,
 	};
 
 	int8_t damage_per_second_or_trigger;

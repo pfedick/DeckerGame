@@ -459,6 +459,76 @@
             "de": {
                 "text": "Das muss woanders aufgehen."
             }
+        },
+        "2246": {
+            "context": "George comes to the elevator",
+            "character": "george",
+            "en": {
+                "text": "Wicket! An elevator! He'll take us to the top."
+            },
+            "de": {
+                "text": "Verrückt! Ein Aufzug! Der wird uns nach oben bringen."
+            }
+        },
+        "2247": {
+            "context": "George asks glimmer, if there's something wrong",
+            "character": "george",
+            "en": {
+                "text": "What's wrong, Glimmer?"
+            },
+            "de": {
+                "text": "Was ist los, Glimmer?"
+            }
+        },
+        "2248": {
+            "context": "George asks glimmer, if he won't come with him",
+            "character": "george",
+            "en": {
+                "text": "Aren't you coming with me?"
+            },
+            "de": {
+                "text": "Kommst Du nicht mit?"
+            }
+        },
+        "2249": {
+            "context": "George won't come with Glimmer",
+            "character": "george",
+            "en": {
+                "text": "Oh, that's a shame."
+            },
+            "de": {
+                "text": "Oh, das ist schade."
+            }
+        },
+        "2250": {
+            "context": "George asks Glimmer, if the will ever meet again",
+            "character": "george",
+            "en": {
+                "text": "Will we ever meet again?"
+            },
+            "de": {
+                "text": "Werden wir uns jemals wiedersehen?"
+            }
+        },
+        "2251": {
+            "context": "George has hope to see Glimmer again",
+            "character": "george",
+            "en": {
+                "text": "That would be nice!"
+            },
+            "de": {
+                "text": "Das wäre schön!"
+            }
+        },
+        "2252": {
+            "context": "George says goodby to Glimmer",
+            "character": "george",
+            "en": {
+                "text": "Take care, Glimmer! And thank you for your help!"
+            },
+            "de": {
+                "text": "Mach's gut, Glimmer! Und danke für Deine Hilfe!"
+            }
         }
     }
 }

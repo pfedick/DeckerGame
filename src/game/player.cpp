@@ -109,6 +109,7 @@ Player::Player(Game* game)
 	powercells=0;
 	initFlashLightPivots();
 	initFlashLight();
+	player_autowalk.setPlayer(this);
 }
 
 Player::~Player()
@@ -966,7 +967,7 @@ void Player::update(double time, const TileTypePlane& world, Decker::Objects::Ob
 	y+=velocity_move.y + gravity;
 
 	if (petrified) return;
-	if (!controlEnabled) return;
+	if (!controlEnabled && player_autowalk.enabled() == false) return;
 
 	if (movement == Turn) {
 		if (!animation.isFinished()) return;
@@ -2046,6 +2047,12 @@ Player::AutoWalk::AutoWalk()
 {
 	isEnabled=false;
 	use_waynet=false;
+	player=NULL;
+}
+
+void Player::AutoWalk::setPlayer(Player* player)
+{
+	this->player=player;
 }
 
 bool Player::AutoWalk::enabled() const
@@ -2059,6 +2066,7 @@ void Player::AutoWalk::getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix:
 		float diff=abs(player_p.x - target.x);
 		if (diff < 5.0f) {
 			isEnabled=false;
+			player->stand();
 			return;
 		}
 		if (player_p.x < target.x) {
@@ -2066,7 +2074,8 @@ void Player::AutoWalk::getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix:
 		} else if (player_p.x > target.x) {
 			keys.matrix|=KeyboardKeys::Left;
 		}
-		if (diff > 50.0f) keys.matrix|=KeyboardKeys::Shift;
+		//if (diff > 100.0f) keys.matrix|=KeyboardKeys::Shift;
+		//ppl7::PrintDebug("Player::AutoWalk::getKeyboardMatrix, no waynet, result: %d, diff: %0.1f\n", keys.matrix, diff);
 
 	} else {
 

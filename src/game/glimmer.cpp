@@ -932,7 +932,6 @@ void Glimmer::decreaseLight()
 
 void Glimmer::cry(float duration)
 {
-    ppl7::PrintDebug("Glimmer::cry\n");
     behavior=Behavior::Cry;
     action_start_time=0.0f;
     movestate=MoveState::Start;

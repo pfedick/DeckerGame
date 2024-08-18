@@ -77,11 +77,13 @@ private:
 	class AutoWalk
 	{
 	private:
+		Player* player;
 		ppl7::grafix::PointF target;
 		bool isEnabled;
 		bool use_waynet;
 	public:
 		AutoWalk();
+		void setPlayer(Player* player);
 		bool enabled() const;
 		void getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix::PointF& player_p);
 		void setTarget(const ppl7::grafix::PointF& p, bool use_waynet=false);
