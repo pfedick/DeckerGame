@@ -80,7 +80,8 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 		audio->setPositional(p, 1800);
 		audio->setLoop(true);
 		pool.playInstance(audio);
-		GetGame().getSoundtrack().playSong("res/audio/Arnaud_Conde_-_Coming_Soon__Intro (CC BY-SA 3.0).mp3");
+		GetGame().getSoundtrack().fadeout(4.0f);
+		GetGame().getSoundtrack().playSong("res/audio/Arnaud_Conde_-_Coming_Soon__Intro Edit(CC BY-SA 3.0).mp3");
 
 	} else if (state == State::GoingUp) {
 		if (velocity > -6.0f) velocity-=0.2f * frame_rate_compensation;
