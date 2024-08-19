@@ -2493,6 +2493,11 @@ void Game::startLevelModification(double time, void* object)
 	} else {
 		background.setFadeTargetColor(levelModificator.end.BackgroundColor);
 	}
+	if (mod->changeSong) {
+		soundtrack.fadeout(mod->transitionTime);
+		soundtrack.playSong(mod->Song);
+
+	}
 
 	levelModificator.starttime=time;
 	levelModificator.triggerobject=object;
