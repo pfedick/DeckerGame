@@ -30,6 +30,7 @@ LevelModificator::LevelModificator()
     loadLevelDefault=true;
     changeBackground=false;
     changeGlobalLighting=false;
+    changeSong=false;
     transitionTime=0.0f;
 
 }
@@ -160,10 +161,13 @@ size_t LevelModificator::load(const unsigned char* buffer, size_t size)
     range.y=ppl7::Peek16(buffer + bytes + 15);
     int p=17;
     size_t s=ppl7::Peek16(buffer + bytes + p);
-    BackgroundImage.set((const char*)(buffer + bytes + p + 2), s);
     p+=2;
+    BackgroundImage.set((const char*)(buffer + bytes + p), s);
+    p+=s;
     s=ppl7::Peek16(buffer + bytes + p);
-    Song.set((const char*)(buffer + bytes + p + 2), s);
+    p+=2;
+    Song.set((const char*)(buffer + bytes + p), s);
+    p+=s;
     GetGame().texture_cache.get(BackgroundImage);
     return size;
 }
@@ -355,7 +359,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
     songFrame=new ppltk::Frame(40, y, client.width() - 40, 50);
     songFrame->addChild(new ppltk::Label(0, 0, 100, 30, "Song:"));
     songComboBox=new ppltk::ComboBox(100, 0, 300, 30);
-    songComboBox->add("no song", "");
+    songComboBox->add("no song", "-");
     AudioPool& pool=getAudioPool();
     {
         std::list<MusicTrack>::const_iterator it;
@@ -364,7 +368,7 @@ LevelModificatorDialog::LevelModificatorDialog(LevelModificator* object)
         }
     }
     songComboBox->setEventHandler(this);
-    if (object->Song.notEmpty()) songComboBox->setCurrentText(object->Song);
+    if (object->Song.notEmpty()) songComboBox->setCurrentIdentifier(object->Song);
     songFrame->addChild(songComboBox);
     songFrame->setEnabled(changeSong->checked());
     addChild(songFrame);
@@ -473,8 +477,8 @@ void LevelModificatorDialog::valueChangedEvent(ppltk::Event* event, int value)
         object->BackgroundImage=backgroundImage->currentText();
         if (backgroundImage->currentIndex() == 0) object->BackgroundImage.clear();
     } else if (event->widget() == songComboBox) {
-        object->Song=songComboBox->currentText();
-        if (songComboBox->currentIndex() == 0) object->Song.clear();
+        object->Song=songComboBox->currentIdentifier();
+        if (object->Song == "-") object->Song.clear();
     } else Decker::ui::Dialog::valueChangedEvent(event, value);
 
 }
