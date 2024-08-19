@@ -242,6 +242,9 @@ public:
 		glimmer_awakens,
 		glimmer_up,
 		glimmer_down,
+		elevator_start,
+		elevator_noiseloop,
+		elevator_exit,
 		// this must always be the last entry!
 		maxClips
 	};
@@ -290,7 +293,7 @@ class AudioPool
 private:
 	AudioSystem* audio;
 public:
-	AudioSample sample[AudioClip::maxClips + 1];
+	AudioSample sample[AudioClip::Id::maxClips + 1];
 	AudioSample voice_george[VoiceGeorge::maxClips + 1];
 
 	std::list<MusicTrack> musictracks;

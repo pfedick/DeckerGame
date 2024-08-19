@@ -2538,3 +2538,8 @@ Glimmer* Game::getGlimmer()
 {
 	return glimmer;
 }
+
+Soundtrack& Game::getSoundtrack()
+{
+	return soundtrack;
+}

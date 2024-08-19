@@ -315,6 +315,10 @@ void AudioPool::load()
 		sample[AudioClip::glimmer_up].load("res/audio/glimmer/up.mp3");
 		sample[AudioClip::glimmer_down].load("res/audio/glimmer/down.mp3");
 
+		sample[AudioClip::elevator_start].load("res/audio/elevator_start.mp3");
+		sample[AudioClip::elevator_noiseloop].load("res/audio/elevator_noiseloop.mp3");
+		sample[AudioClip::elevator_exit].load("res/audio/elevator_exit.mp3");
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

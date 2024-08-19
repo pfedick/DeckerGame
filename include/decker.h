@@ -1228,6 +1228,7 @@ public:
 	void TakeScreenshot(Screenshot* screenshot);
 
 	Glimmer* getGlimmer();
+	Soundtrack& getSoundtrack();
 
 };
 

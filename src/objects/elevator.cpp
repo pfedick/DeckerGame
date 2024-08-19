@@ -68,15 +68,38 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 	else if (state == State::Wait && next_state < time && current_state == true) {
 		state=State::GoingUp;
 		velocity=0.0f;
+		AudioPool& pool=getAudioPool();
+		pool.playOnce(AudioClip::elevator_start, 1.0f);
+		if (audio) {
+			pool.stopInstace(audio);
+			delete audio;
+			audio=NULL;
+		}
+		audio=pool.getInstance(AudioClip::elevator_noiseloop);
+		audio->setVolume(1.0f);
+		audio->setPositional(p, 1800);
+		audio->setLoop(true);
+		pool.playInstance(audio);
+		GetGame().getSoundtrack().playSong("res/audio/Arnaud_Conde_-_Coming_Soon__Intro (CC BY-SA 3.0).mp3");
+
 	} else if (state == State::GoingUp) {
 		if (velocity > -6.0f) velocity-=0.2f * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 2 * TILE_HEIGHT));
-		if (t1 != TileType::NonBlocking) state=State::BreakUp;
+		if (t1 != TileType::NonBlocking) {
+			state=State::BreakUp;
+			getAudioPool().playOnce(AudioClip::elevator_exit, 1.0f);
+		}
 	} else if (state == State::BreakUp) {
 		if (velocity < -0.2f) velocity+=0.2f * frame_rate_compensation;
 		if (velocity > -0.2f) velocity=-0.2f;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y + 1 + TILE_HEIGHT));
 		if (t1 != TileType::NonBlocking) {
+			AudioPool& pool=getAudioPool();
+			if (audio) {
+				pool.stopInstace(audio);
+				delete audio;
+				audio=NULL;
+			}
 			state=State::AtTop;
 			velocity=0.0f;
 		}
@@ -95,16 +118,9 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 	}
 	p.y+=velocity * frame_rate_compensation;
 
-	/*
-	AudioPool& pool=getAudioPool();
-	if (!audio) {
-		audio=pool.getInstance(AudioClip::thruster);
-		audio->setVolume(0.3f);
-		audio->setPositional(p, 1800);
-		audio->setLoop(true);
-	}
+
 	if (audio) audio->setPositional(p, 1800);
-	*/
+
 	if (current_state || state != State::Wait) {
 		LightSystem& lights=GetGame().getLightSystem();
 		light.x=p.x;
