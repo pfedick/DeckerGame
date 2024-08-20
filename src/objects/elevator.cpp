@@ -81,9 +81,13 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 		audio->setLoop(true);
 		pool.playInstance(audio);
 		GetGame().getSoundtrack().fadeout(4.0f);
-		GetGame().getSoundtrack().playSong("res/audio/Arnaud_Conde_-_Coming_Soon__Intro Edit(CC BY-SA 3.0).mp3");
+		next_state=time + 2.0f;
 
 	} else if (state == State::GoingUp) {
+		if (next_state < time) {
+			GetGame().getSoundtrack().playSong("res/audio/Arnaud_Conde_-_Coming_Soon__Intro Edit(CC BY-SA 3.0).mp3");
+			next_state=time + 10000.0f;
+		}
 		if (velocity > -6.0f) velocity-=0.2f * frame_rate_compensation;
 		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x, p.y - 2 * TILE_HEIGHT));
 		if (t1 != TileType::NonBlocking) {
@@ -112,7 +116,7 @@ void GreatElevator::update(double time, TileTypePlane& ttplane, Player& player, 
 		if (velocity < 0.2f) velocity=0.2f;
 		if (p.y >= initial_p.y) {
 			state=State::Wait;
-			next_state=2.0f;
+			next_state=time + 2.0f;
 			velocity=0.0f;
 		}
 
