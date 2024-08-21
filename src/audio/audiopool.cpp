@@ -319,6 +319,20 @@ void AudioPool::load()
 		sample[AudioClip::elevator_noiseloop].load("res/audio/elevator_noiseloop.mp3");
 		sample[AudioClip::elevator_exit].load("res/audio/elevator_exit.mp3");
 
+		sample[AudioClip::waves2].load("res/audio/waves2.mp3");
+		sample[AudioClip::waves3].load("res/audio/waves3.mp3");
+		sample[AudioClip::waves4].load("res/audio/waves4.mp3");
+		sample[AudioClip::gas1].load("res/audio/gas1.mp3");
+		sample[AudioClip::gas2].load("res/audio/gas2.mp3");
+		sample[AudioClip::gas3].load("res/audio/gas3.mp3");
+		sample[AudioClip::water_bubble2].load("res/audio/water_bubble2.mp3");
+		sample[AudioClip::water_bubble3].load("res/audio/water_bubble3.mp3");
+		sample[AudioClip::water_bubble4].load("res/audio/water_bubble4.mp3");
+		sample[AudioClip::water_bubble5].load("res/audio/water_bubble5.mp3");
+		sample[AudioClip::wind4].load("res/audio/wind4.mp3");
+		sample[AudioClip::wind5].load("res/audio/wind5.mp3");
+
+
 
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

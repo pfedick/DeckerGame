@@ -340,12 +340,29 @@ void SpeakerDialog::setupAudioLoop()
 	sample_name->add("Waterdrips in a cave", ppl7::ToString("%d", AudioClip::waterdrips));
 	sample_name->add("Waterdrips 2", ppl7::ToString("%d", AudioClip::waterdrips2));
 	sample_name->add("Waterdrips 3", ppl7::ToString("%d", AudioClip::waterdrips3));
+	sample_name->add("Water Bubbles 1", ppl7::ToString("%d", AudioClip::water_bubble1));
+	sample_name->add("Water Bubbles 2", ppl7::ToString("%d", AudioClip::water_bubble2));
+	sample_name->add("Water Bubbles 3", ppl7::ToString("%d", AudioClip::water_bubble3));
+	sample_name->add("Water Bubbles 4", ppl7::ToString("%d", AudioClip::water_bubble4));
+	sample_name->add("Water Bubbles 5", ppl7::ToString("%d", AudioClip::water_bubble5));
+
 	sample_name->add("Waves 1", ppl7::ToString("%d", AudioClip::waves1));
+	sample_name->add("Waves 2", ppl7::ToString("%d", AudioClip::waves2));
+	sample_name->add("Waves 3", ppl7::ToString("%d", AudioClip::waves3));
+	sample_name->add("Waves 4", ppl7::ToString("%d", AudioClip::waves4));
+
+	sample_name->add("Gas 1", ppl7::ToString("%d", AudioClip::gas1));
+	sample_name->add("Gas 2", ppl7::ToString("%d", AudioClip::gas2));
+	sample_name->add("Gas 3", ppl7::ToString("%d", AudioClip::gas3));
+
 
 	sample_name->add("Wind and grills", ppl7::ToString("%d", AudioClip::wind3));
 	sample_name->add("Wind strong", ppl7::ToString("%d", AudioClip::wind_strong));
 	sample_name->add("Wind Howling", ppl7::ToString("%d", AudioClip::wind1));
 	sample_name->add("Wind Desert", ppl7::ToString("%d", AudioClip::wind2));
+	sample_name->add("Wind soft 1", ppl7::ToString("%d", AudioClip::wind4));
+	sample_name->add("Wind soft 2", ppl7::ToString("%d", AudioClip::wind5));
+
 	sample_name->sortItems();
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", AudioClip::none));
 	if (object->sample_type == Speaker::SampleType::AudioLoop) sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));

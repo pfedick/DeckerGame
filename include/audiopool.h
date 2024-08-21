@@ -245,6 +245,19 @@ public:
 		elevator_start,
 		elevator_noiseloop,
 		elevator_exit,
+		waves2,
+		waves3,
+		waves4,
+		gas1,
+		gas2,
+		gas3,
+		water_bubble2,
+		water_bubble3,
+		water_bubble4,
+		water_bubble5,
+		wind4,
+		wind5,
+
 		// this must always be the last entry!
 		maxClips
 	};
