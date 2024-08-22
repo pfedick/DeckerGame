@@ -257,7 +257,8 @@ public:
 		water_bubble5,
 		wind4,
 		wind5,
-
+		earthquake,
+		rumble,
 		// this must always be the last entry!
 		maxClips
 	};

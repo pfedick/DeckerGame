@@ -363,6 +363,9 @@ void SpeakerDialog::setupAudioLoop()
 	sample_name->add("Wind soft 1", ppl7::ToString("%d", AudioClip::wind4));
 	sample_name->add("Wind soft 2", ppl7::ToString("%d", AudioClip::wind5));
 
+	sample_name->add("Earthquake", ppl7::ToString("%d", AudioClip::earthquake));
+	sample_name->add("Rumble", ppl7::ToString("%d", AudioClip::rumble));
+
 	sample_name->sortItems();
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", AudioClip::none));
 	if (object->sample_type == Speaker::SampleType::AudioLoop) sample_name->setCurrentIdentifier(ppl7::ToString("%d", object->sample_id));

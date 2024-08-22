@@ -332,6 +332,9 @@ void AudioPool::load()
 		sample[AudioClip::wind4].load("res/audio/wind4.mp3");
 		sample[AudioClip::wind5].load("res/audio/wind5.mp3");
 
+		sample[AudioClip::earthquake].load("res/audio/earthquake.mp3");
+		sample[AudioClip::rumble].load("res/audio/rumble.mp3");
+
 
 
 	} catch (const ppl7::Exception& exp) {
