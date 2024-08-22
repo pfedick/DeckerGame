@@ -334,6 +334,7 @@ void AudioPool::load()
 
 		sample[AudioClip::earthquake].load("res/audio/earthquake.mp3");
 		sample[AudioClip::rumble].load("res/audio/rumble.mp3");
+		sample[AudioClip::waterpuddle].load("res/audio/waterpuddle.mp3");
 
 
 

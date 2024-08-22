@@ -365,6 +365,7 @@ void SpeakerDialog::setupAudioLoop()
 
 	sample_name->add("Earthquake", ppl7::ToString("%d", AudioClip::earthquake));
 	sample_name->add("Rumble", ppl7::ToString("%d", AudioClip::rumble));
+	sample_name->add("Waterpuddle", ppl7::ToString("%d", AudioClip::waterpuddle));
 
 	sample_name->sortItems();
 	sample_name->setCurrentIdentifier(ppl7::ToString("%d", AudioClip::none));

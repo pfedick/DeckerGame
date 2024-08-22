@@ -259,6 +259,7 @@ public:
 		wind5,
 		earthquake,
 		rumble,
+		waterpuddle,
 		// this must always be the last entry!
 		maxClips
 	};
