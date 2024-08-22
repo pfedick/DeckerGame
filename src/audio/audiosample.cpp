@@ -25,7 +25,7 @@ void AudioSample::load(const ppl7::String& filename)
 	if (!ppl7::IdentAudioFile(ff, info)) {
 		throw UnknownAudioFormat("%s", (const char*)filename);
 	}
-	ppl7::PrintDebug("loading audio file: %s, format: %d\n", (const char*)filename, (int)info.Format);
+	//ppl7::PrintDebug("loading audio file: %s, format: %d\n", (const char*)filename, (int)info.Format);
 	ppl7::AudioDecoder* decoder=NULL;
 	if (info.Format == ppl7::AudioInfo::AIFF) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Aiff();
 	else if (info.Format == ppl7::AudioInfo::WAVE) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Wave();
