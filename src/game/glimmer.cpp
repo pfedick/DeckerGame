@@ -151,7 +151,7 @@ void Glimmer::update(double time, const TileTypePlane& world, Player& player, De
     }
 
     p+=velocity;
-    if (!audio && behavior != Behavior::Awaken) {
+    if (!audio && behavior != Behavior::Awaken && behavior != Behavior::Disappear) {
         AudioPool& audiopool=getAudioPool();
         audio=audiopool.getInstance(AudioClip::glimmer_chimes_loop1);
         if (audio) {
@@ -332,8 +332,9 @@ void Glimmer::updateDisappear()
     if (movestate == MoveState::Start) {
         movestate=MoveState::Shrink;
         action_start_time=time;
+        if (audio) audio->setVolume(0.0f);
         getAudioPool().playOnce(AudioClip::glimmer_plopp6, p, 1600, 1.0f);
-        getAudioPool().playOnce(AudioClip::glimmer_effect2, p, 1600, 1.0f);
+        //getAudioPool().playOnce(AudioClip::glimmer_effect2, p, 1600, 1.0f);
     }
     if (movestate == MoveState::Shrink) {
         if (scale > 0.01f) scale-=(0.08f * frame_rate_compensation);
