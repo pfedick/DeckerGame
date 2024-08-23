@@ -37,6 +37,7 @@ sinclude(pplib/autoconf/ax_check_compile_flag.m4)
 sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
 sinclude(pplib/autoconf/ax_gcc_archflag.m4)
 sinclude(pplib/autoconf/mpg123.m4)
+sinclude(pplib/autoconf/vorbis.m4)
 sinclude(autoconf/dav1d.m4)
 
 
@@ -52,6 +53,7 @@ report_have_sdl2="no"
 report_have_png="no"
 report_have_jpeg="no"
 report_have_nasm="no"
+report_have_libvorbis="no"
 report_use_address_sanitizer="no"
 
 
@@ -318,6 +320,13 @@ AC_CHECK_LIBMPG123([1.0.0],
             ,
             )
 
+XIPH_PATH_VORBIS(
+	AC_DEFINE(HAVE_LIBVORBIS, 1, [ Define if you have libvorbis. ])
+	report_have_libvorbis="yes"
+	, :)
+
+
+
 AC_CHECK_LIBDAV1D([1.4.0],
             AC_DEFINE(HAVE_DAV1D, 1, [ Define if you have dav1d library. ])
             report_have_dav1d="yes"
@@ -575,6 +584,7 @@ AC_MSG_RESULT([
 **   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
+**   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
 **
 ******************************************************************************
@@ -632,6 +642,13 @@ then
 	missing="$missing  - libmpg123 not found
 "
 fi
+
+if test "$report_have_libvorbis" != "yes"
+then
+	missing="$missing  - libvorbis not found
+"
+fi
+
 
 if test "$report_have_dav1d" != "yes"
 then

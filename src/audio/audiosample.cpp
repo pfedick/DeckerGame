@@ -30,7 +30,7 @@ void AudioSample::load(const ppl7::String& filename)
 	if (info.Format == ppl7::AudioInfo::AIFF) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Aiff();
 	else if (info.Format == ppl7::AudioInfo::WAVE) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Wave();
 	else if (info.Format == ppl7::AudioInfo::MP3) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_MP3();
-	//else if (info.Format == ppl7::AudioInfo::OGG) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Ogg();
+	else if (info.Format == ppl7::AudioInfo::OGG) decoder=(ppl7::AudioDecoder*)new ppl7::AudioDecoder_Ogg();
 	if (!decoder) throw UnknownAudioFormat("%s", (const char*)filename);
 	decoder->open(ff, &info);
 	ppl7::STEREOSAMPLE16* b=(ppl7::STEREOSAMPLE16*)buffer.malloc(info.Samples * sizeof(ppl7::STEREOSAMPLE16));

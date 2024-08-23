@@ -723,6 +723,10 @@ LTLIBICONV
 LIBICONV
 DAV1D_LIBS
 DAV1D_CFLAGS
+VORBISENC_LIBS
+VORBISFILE_LIBS
+VORBIS_LIBS
+VORBIS_CFLAGS
 MPG123_LIBS
 MPG123_CFLAGS
 TURBOJPEG_LIBS
@@ -867,6 +871,10 @@ with_libpng
 with_jpeg
 with_libjpegturbo
 with_mpg123
+with_vorbis
+with_vorbis_libraries
+with_vorbis_includes
+enable_vorbistest
 with_dav1d
 with_gnu_ld
 enable_rpath
@@ -1545,6 +1553,7 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --disable-largefile     omit support for large files
+  --disable-vorbistest    Do not try to compile and run a test Vorbis program
   --disable-rpath         do not hardcode runtime library paths
   --disable-sdltest       Do not try to compile and run a test SDL program
   --disable-sdlframework Do not search for SDL2.framework
@@ -1558,6 +1567,13 @@ Optional Packages:
   --with-jpeg[=PATH]     Prefix where libjpeg is installed (optional)
   --with-libjpegturbo[=PATH]     Prefix where libjpeg-turbo is installed (optional)
   --with-mpg123[=PATH]     Prefix where libmpg123 is installed (optional)
+  --with-vorbis=PFX       Prefix where libvorbis is installed (optional)
+  --with-vorbis-libraries=DIR
+                          Directory where libvorbis library is installed
+                          (optional)
+  --with-vorbis-includes=DIR
+                          Directory where libvorbis header files are installed
+                          (optional)
   --with-dav1d[=PATH]     Prefix where libdav1d is installed
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
@@ -2323,7 +2339,7 @@ else $as_nop
 #define $2 innocuous_$2
 
 /* System header to define __stub macros and hopefully few prototypes,
-   which can conflict with char $2 (); below.  */
+   which can conflict with char $2 (void); below.  */
 
 #include <limits.h>
 #undef $2
@@ -2334,7 +2350,7 @@ else $as_nop
 #ifdef __cplusplus
 extern "C"
 #endif
-char $2 ();
+char $2 (void);
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
@@ -2727,9 +2743,7 @@ struct stat;
 /* Most of the following tests are stolen from RCS 5.7 src/conf.sh.  */
 struct buf { int x; };
 struct buf * (*rcsopen) (struct buf *, struct stat *, int);
-static char *e (p, i)
-     char **p;
-     int i;
+static char *e (char **p, int i)
 {
   return p[i];
 }
@@ -2780,6 +2794,7 @@ extern int puts (const char *);
 extern int printf (const char *, ...);
 extern int dprintf (int, const char *, ...);
 extern void *malloc (size_t);
+extern void free (void *);
 
 // Check varargs macros.  These examples are taken from C99 6.10.3.5.
 // dprintf is used instead of fprintf to avoid needing to declare
@@ -4042,6 +4057,13 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 
 
 
+# Configure paths for libvorbis
+# Jack Moffitt <jack@icecast.org> 10-21-2000
+# Shamelessly stolen from Owen Taylor and Manish Singh
+# thomasvs added check for vorbis_bitrate_addblock which is new in rc3
+
+
+
 
 
 
@@ -4058,6 +4080,7 @@ report_have_sdl2="no"
 report_have_png="no"
 report_have_jpeg="no"
 report_have_nasm="no"
+report_have_libvorbis="no"
 report_use_address_sanitizer="no"
 
 
@@ -6328,11 +6351,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++11 features" >&5
 printf %s "checking for $CXX option to enable C++11 features... " >&6; }
-if test ${ac_cv_prog_cxx_cxx11+y}
+if test ${ac_cv_prog_cxx_11+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_cxx11=no
+  ac_cv_prog_cxx_11=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -6374,11 +6397,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++98 features" >&5
 printf %s "checking for $CXX option to enable C++98 features... " >&6; }
-if test ${ac_cv_prog_cxx_cxx98+y}
+if test ${ac_cv_prog_cxx_98+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_cxx98=no
+  ac_cv_prog_cxx_98=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -8330,8 +8353,14 @@ printf %s "checking for pthread_join in LIBS=$PTHREAD_LIBS with CFLAGS=$PTHREAD_
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char pthread_join ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_join (void);
 int
 main (void)
 {
@@ -8991,22 +9020,23 @@ unsigned short int ascii_mm[] =
 		int use_ebcdic (int i) {
 		  return ebcdic_mm[i] + ebcdic_ii[i];
 		}
-		extern int foo;
-
-int
-main (void)
-{
-return use_ascii (foo) == use_ebcdic (foo);
-  ;
-  return 0;
-}
+		int
+		main (int argc, char **argv)
+		{
+		  /* Intimidate the compiler so that it does not
+		     optimize the arrays away.  */
+		  char *p = argv[0];
+		  ascii_mm[1] = *p++; ebcdic_mm[1] = *p++;
+		  ascii_ii[1] = *p++; ebcdic_ii[1] = *p++;
+		  return use_ascii (argc) == use_ebcdic (*p);
+		}
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"
+if ac_fn_c_try_link "$LINENO"
 then :
-  if grep BIGenDianSyS conftest.$ac_objext >/dev/null; then
+  if grep BIGenDianSyS conftest$ac_exeext >/dev/null; then
 	      ac_cv_c_bigendian=yes
 	    fi
-	    if grep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
+	    if grep LiTTleEnDian conftest$ac_exeext >/dev/null ; then
 	      if test "$ac_cv_c_bigendian" = unknown; then
 		ac_cv_c_bigendian=no
 	      else
@@ -9015,7 +9045,8 @@ then :
 	      fi
 	    fi
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -11044,8 +11075,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char XOpenDisplay ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XOpenDisplay (void);
 int
 main (void)
 {
@@ -11071,8 +11108,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char dnet_ntoa ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dnet_ntoa (void);
 int
 main (void)
 {
@@ -11112,8 +11155,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char dnet_ntoa ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dnet_ntoa (void);
 int
 main (void)
 {
@@ -11173,8 +11222,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char gethostbyname ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gethostbyname (void);
 int
 main (void)
 {
@@ -11214,8 +11269,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char gethostbyname ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gethostbyname (void);
 int
 main (void)
 {
@@ -11271,8 +11332,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char connect ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char connect (void);
 int
 main (void)
 {
@@ -11321,8 +11388,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char remove ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char remove (void);
 int
 main (void)
 {
@@ -11371,8 +11444,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char shmat ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char shmat (void);
 int
 main (void)
 {
@@ -11423,8 +11502,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char IceConnectionNumber ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char IceConnectionNumber (void);
 int
 main (void)
 {
@@ -11726,7 +11811,7 @@ static const char *tz_strings[] = {
 /* Return 0 if mktime fails to convert a date in the spring-forward gap.
    Based on a problem report from Andreas Jaeger.  */
 static int
-spring_forward_gap ()
+spring_forward_gap (void)
 {
   /* glibc (up to about 1998-10-07) failed this test. */
   struct tm tm;
@@ -11763,7 +11848,7 @@ mktime_test (time_t now)
 }
 
 static int
-irix_6_4_bug ()
+irix_6_4_bug (void)
 {
   /* Based on code from Ariel Faigon.  */
   struct tm tm;
@@ -11805,7 +11890,7 @@ bigtime_test (int j)
 }
 
 static int
-year_2050_test ()
+year_2050_test (void)
 {
   /* The correct answer for 2050-02-01 00:00:00 in Pacific time,
      ignoring leap seconds.  */
@@ -12104,7 +12189,7 @@ static const char *tz_strings[] = {
 /* Return 0 if mktime fails to convert a date in the spring-forward gap.
    Based on a problem report from Andreas Jaeger.  */
 static int
-spring_forward_gap ()
+spring_forward_gap (void)
 {
   /* glibc (up to about 1998-10-07) failed this test. */
   struct tm tm;
@@ -12141,7 +12226,7 @@ mktime_test (time_t now)
 }
 
 static int
-irix_6_4_bug ()
+irix_6_4_bug (void)
 {
   /* Based on code from Ariel Faigon.  */
   struct tm tm;
@@ -12183,7 +12268,7 @@ bigtime_test (int j)
 }
 
 static int
-year_2050_test ()
+year_2050_test (void)
 {
   /* The correct answer for 2050-02-01 00:00:00 in Pacific time,
      ignoring leap seconds.  */
@@ -12482,8 +12567,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char strftime ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char strftime (void);
 int
 main (void)
 {
@@ -13197,8 +13288,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char pthread_set_name_np ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_set_name_np (void);
 int
 main (void)
 {
@@ -13238,8 +13335,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char pthread_setname_np ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_setname_np (void);
 int
 main (void)
 {
@@ -13536,8 +13639,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char png_sig_cmp ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char png_sig_cmp (void);
 int
 main (void)
 {
@@ -13695,8 +13804,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char jpeg_finish_decompress ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char jpeg_finish_decompress (void);
 int
 main (void)
 {
@@ -13769,8 +13884,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char jpeg_finish_decompress ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char jpeg_finish_decompress (void);
 int
 main (void)
 {
@@ -13946,8 +14067,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char tjInitDecompress ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char tjInitDecompress (void);
 int
 main (void)
 {
@@ -14026,8 +14153,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char tjInitDecompress ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char tjInitDecompress (void);
 int
 main (void)
 {
@@ -14176,8 +14309,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char mpg123_init ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char mpg123_init (void);
 int
 main (void)
 {
@@ -14235,6 +14374,202 @@ printf "%s\n" "no" >&6; }
 
 
 
+# Check whether --with-vorbis was given.
+if test ${with_vorbis+y}
+then :
+  withval=$with_vorbis; vorbis_prefix="$withval"
+else $as_nop
+  vorbis_prefix=""
+fi
+
+
+# Check whether --with-vorbis-libraries was given.
+if test ${with_vorbis_libraries+y}
+then :
+  withval=$with_vorbis_libraries; vorbis_libraries="$withval"
+else $as_nop
+  vorbis_libraries=""
+fi
+
+
+# Check whether --with-vorbis-includes was given.
+if test ${with_vorbis_includes+y}
+then :
+  withval=$with_vorbis_includes; vorbis_includes="$withval"
+else $as_nop
+  vorbis_includes=""
+fi
+
+# Check whether --enable-vorbistest was given.
+if test ${enable_vorbistest+y}
+then :
+  enableval=$enable_vorbistest;
+else $as_nop
+  enable_vorbistest=yes
+fi
+
+
+  if test "x$vorbis_libraries" != "x" ; then
+    VORBIS_LIBS="-L$vorbis_libraries"
+  elif test "x$vorbis_prefix" = "xno" || test "x$vorbis_prefix" = "xyes" ; then
+    VORBIS_LIBS=""
+  elif test "x$vorbis_prefix" != "x" ; then
+    VORBIS_LIBS="-L$vorbis_prefix/lib"
+  elif test "x$prefix" != "xNONE"; then
+    VORBIS_LIBS="-L$prefix/lib"
+  fi
+
+  if test "x$vorbis_prefix" != "xno" ; then
+    VORBIS_LIBS="$VORBIS_LIBS -lvorbis -lm"
+  fi
+  VORBISFILE_LIBS="-lvorbisfile"
+  VORBISENC_LIBS="-lvorbisenc"
+
+  if test "x$vorbis_includes" != "x" ; then
+    VORBIS_CFLAGS="-I$vorbis_includes"
+  elif test "x$vorbis_prefix" = "xno" || test "x$vorbis_prefix" = "xyes" ; then
+    VORBIS_CFLAGS=""
+  elif test "x$vorbis_prefix" != "x" ; then
+    VORBIS_CFLAGS="-I$vorbis_prefix/include"
+  elif test "x$prefix" != "xNONE"; then
+    VORBIS_CFLAGS="-I$prefix/include"
+  fi
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for Vorbis" >&5
+printf %s "checking for Vorbis... " >&6; }
+  if test "x$vorbis_prefix" = "xno" ; then
+    no_vorbis="disabled"
+    enable_vorbistest="no"
+  else
+    no_vorbis=""
+  fi
+
+
+  if test "x$enable_vorbistest" = "xyes" ; then
+    ac_save_CFLAGS="$CFLAGS"
+    ac_save_LIBS="$LIBS"
+    CFLAGS="$CFLAGS $VORBIS_CFLAGS $OGG_CFLAGS"
+    LIBS="$LIBS $VORBIS_LIBS $VORBISENC_LIBS $OGG_LIBS"
+      rm -f conf.vorbistest
+      if test "$cross_compiling" = yes
+then :
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else $as_nop
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <vorbis/codec.h>
+#include <vorbis/vorbisenc.h>
+
+int main ()
+{
+    vorbis_block 	vb;
+    vorbis_dsp_state	vd;
+    vorbis_info		vi;
+
+    vorbis_info_init (&vi);
+    vorbis_encode_init (&vi, 2, 44100, -1, 128000, -1);
+    vorbis_analysis_init (&vd, &vi);
+    vorbis_block_init (&vd, &vb);
+    /* this function was added in 1.0rc3, so this is what we're testing for */
+    vorbis_bitrate_addblock (&vb);
+
+    system("touch conf.vorbistest");
+    return 0;
+}
+
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+
+else $as_nop
+  no_vorbis=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+  fi
+
+  if test "x$no_vorbis" = "xdisabled" ; then
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+     :
+  elif test "x$no_vorbis" = "x" ; then
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+
+printf "%s\n" "#define HAVE_LIBVORBIS 1" >>confdefs.h
+
+	report_have_libvorbis="yes"
+
+  else
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+     if test -f conf.vorbistest ; then
+       :
+     else
+       echo "*** Could not run Vorbis test program, checking why..."
+       CFLAGS="$CFLAGS $VORBIS_CFLAGS"
+       LIBS="$LIBS $VORBIS_LIBS $OGG_LIBS"
+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <vorbis/codec.h>
+
+int
+main (void)
+{
+ return 0;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+   echo "*** The test program compiled, but did not run. This usually means"
+       echo "*** that the run-time linker is not finding Vorbis or finding the wrong"
+       echo "*** version of Vorbis. If it is not finding Vorbis, you'll need to set your"
+       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+       echo "*** is required on your system"
+       echo "***"
+       echo "*** If you have an old version installed, it is best to remove it, although"
+       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else $as_nop
+   echo "*** The test program failed to compile or link. See the file config.log for the"
+       echo "*** exact error that occured. This usually means Vorbis was incorrectly installed"
+       echo "*** or that you have moved Vorbis since it was installed."
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+     VORBIS_CFLAGS=""
+     VORBIS_LIBS=""
+     VORBISFILE_LIBS=""
+     VORBISENC_LIBS=""
+     :
+  fi
+
+
+
+
+  rm -f conf.vorbistest
+
+
+
+
+
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use libdav1d" >&5
 printf %s "checking if we should use libdav1d... " >&6; }
 
@@ -14287,8 +14622,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char dav1d_open ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dav1d_open (void);
 int
 main (void)
 {
@@ -15593,7 +15934,7 @@ report_have_bzip2="no"
          #include <bzlib.h>
          int main()
          {
-            char* source = "Hello World";
+            char* source;
             char* dest;
             unsigned int destLen = 1000;
             unsigned int sourceLen = 1000;
@@ -15704,8 +16045,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char inflateEnd ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char inflateEnd (void);
 int
 main (void)
 {
@@ -15796,8 +16143,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char sin ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sin (void);
 int
 main (void)
 {
@@ -15862,8 +16215,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char pcre_study ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pcre_study (void);
 int
 main (void)
 {
@@ -15918,8 +16277,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char pcre_compile ();
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pcre_compile (void);
 int
 main (void)
 {
@@ -18326,6 +18691,7 @@ fi
 **   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
+**   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
 **
 ******************************************************************************
@@ -18358,6 +18724,7 @@ printf "%s\n" "
 **   JPEG:                 $report_have_jpeg $jpeg_note
 **   SDL2 library:         $report_have_sdl2
 **   mpg123 library:       $report_have_mpg123
+**   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
 **
 ******************************************************************************
@@ -18414,6 +18781,13 @@ then
 	missing="$missing  - libmpg123 not found
 "
 fi
+
+if test "$report_have_libvorbis" != "yes"
+then
+	missing="$missing  - libvorbis not found
+"
+fi
+
 
 if test "$report_have_dav1d" != "yes"
 then
