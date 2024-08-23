@@ -310,7 +310,7 @@ void AudioPool::load()
 		sample[AudioClip::glimmer_plopp6].load("res/audio/glimmer/plopp6.mp3");
 		sample[AudioClip::glimmer_effect1].load("res/audio/glimmer/effect1.mp3");
 		sample[AudioClip::glimmer_effect2].load("res/audio/glimmer/effect2.mp3");
-		sample[AudioClip::glimmer_chimes_loop1].load("res/audio/glimmer/chimes_loop1.mp3");
+		sample[AudioClip::glimmer_chimes_loop1].load("res/audio/glimmer/chimes_loop1.ogg");
 		sample[AudioClip::glimmer_awakens].load("res/audio/glimmer/awakens.mp3");
 		sample[AudioClip::glimmer_up].load("res/audio/glimmer/up.mp3");
 		sample[AudioClip::glimmer_down].load("res/audio/glimmer/down.mp3");
@@ -319,9 +319,9 @@ void AudioPool::load()
 		sample[AudioClip::elevator_noiseloop].load("res/audio/elevator_noiseloop.mp3");
 		sample[AudioClip::elevator_exit].load("res/audio/elevator_exit.mp3");
 
-		sample[AudioClip::waves2].load("res/audio/waves2.mp3");
-		sample[AudioClip::waves3].load("res/audio/waves3.mp3");
-		sample[AudioClip::waves4].load("res/audio/waves4.mp3");
+		sample[AudioClip::waves2].load("res/audio/waves2.ogg");
+		sample[AudioClip::waves3].load("res/audio/waves3.ogg");
+		sample[AudioClip::waves4].load("res/audio/waves4.ogg");
 		sample[AudioClip::gas1].load("res/audio/gas1.mp3");
 		sample[AudioClip::gas2].load("res/audio/gas2.mp3");
 		sample[AudioClip::gas3].load("res/audio/gas3.mp3");
