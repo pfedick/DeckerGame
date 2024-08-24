@@ -137,17 +137,21 @@ The following Tools/Libraries are required:
 - png
 - mpg123
 - dav1d
+- libvorbis
+- lobogg
 
 #### Fedora
 ```bash
 sudo dnf install -y git gcc gcc-c++ make pcre-devel SDL2-devel zlib-devel \
-    bzip2-devel libpng-devel mpg123-devel libjpeg-turbo-devel libdav1d-devel
+    bzip2-devel libpng-devel mpg123-devel libjpeg-turbo-devel libdav1d-devel \
+    libvorbis-devel libogg-devel
 ```
 
 #### Ubuntu
 ```bash
 sudo apt-get install -y git gcc g++ libpcre3-dev libbz2-dev zlib1g-dev \
-    libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev
+    libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev \
+    libvorbis-dev libogg-dev
 ```
 
 #### Windows 10 with mingw64/msys
@@ -159,7 +163,8 @@ pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
     mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 \
     mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 \
     mingw-w64-ucrt-x86_64-pcre mingw-w64-ucrt-x86_64-libpng \
-    mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-dav1d
+    mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-dav1d \
+    mingw-w64-ucrt-x86_64-libvorbis mingw-w64-ucrt-x86_64-libogg
 ```
 
 ### Checkout and compile
