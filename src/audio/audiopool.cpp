@@ -104,7 +104,7 @@ void AudioPool::load()
 		sample[AudioClip::light_switch1].load("res/audio/light_switch_1.mp3");
 		sample[AudioClip::crystal].load("res/audio/crystal.mp3");
 		sample[AudioClip::peach].load("res/audio/peach.mp3");
-		sample[AudioClip::birds1].load("res/audio/birds.mp3");
+		sample[AudioClip::birds1].load("res/audio/birds1.ogg");
 		sample[AudioClip::arrow_swoosh].load("res/audio/arrow-swoosh.mp3");
 		sample[AudioClip::fall].load("res/audio/fall.mp3");
 		sample[AudioClip::break1].load("res/audio/break1.mp3");
@@ -134,11 +134,11 @@ void AudioPool::load()
 		sample[AudioClip::step2].load("res/audio/step2.mp3");
 		sample[AudioClip::step3].load("res/audio/step3.mp3");
 		sample[AudioClip::step4].load("res/audio/step4.mp3");
-		sample[AudioClip::jungle1].load("res/audio/jungle1.mp3");
-		sample[AudioClip::jungle2].load("res/audio/jungle2.mp3");
-		sample[AudioClip::waterflow1].load("res/audio/waterflow1.mp3");
-		sample[AudioClip::waterflow2].load("res/audio/waterflow2.mp3");
-		sample[AudioClip::waterflow3].load("res/audio/waterflow3.mp3");
+		sample[AudioClip::jungle1].load("res/audio/jungle1.ogg");
+		sample[AudioClip::jungle2].load("res/audio/jungle2.ogg");
+		sample[AudioClip::waterflow1].load("res/audio/waterflow1.ogg");
+		sample[AudioClip::waterflow2].load("res/audio/waterflow2.ogg");
+		sample[AudioClip::waterflow3].load("res/audio/waterflow3.ogg");
 		sample[AudioClip::watersplash1].load("res/audio/watersplash1.mp3");
 		sample[AudioClip::watersplash2].load("res/audio/watersplash2.mp3");
 		sample[AudioClip::watersplash3].load("res/audio/watersplash3.mp3");
@@ -150,12 +150,12 @@ void AudioPool::load()
 		sample[AudioClip::underwaterloop1].load("res/audio/underwaterloop1.ogg");
 		sample[AudioClip::crunch].load("res/audio/crunch.mp3");
 		sample[AudioClip::hackstone].load("res/audio/hackstone.mp3");
-		sample[AudioClip::birds2].load("res/audio/birds2.mp3");
-		sample[AudioClip::birds3].load("res/audio/birds3.mp3");
+		sample[AudioClip::birds2].load("res/audio/birds2.ogg");
+		sample[AudioClip::birds3].load("res/audio/birds3.ogg");
 		sample[AudioClip::rain1].load("res/audio/rain1.mp3");
 		sample[AudioClip::rain2].load("res/audio/rain2.mp3");
 		sample[AudioClip::rain3].load("res/audio/rain3.mp3");
-		sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.mp3");
+		sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.ogg");
 		sample[AudioClip::desert_at_night].load("res/audio/desert_at_night.mp3");
 		sample[AudioClip::wind3].load("res/audio/wind_grillen.ogg");
 
