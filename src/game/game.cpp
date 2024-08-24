@@ -2548,3 +2548,13 @@ Soundtrack& Game::getSoundtrack()
 {
 	return soundtrack;
 }
+
+const ppl7::grafix::Rect& Game::getViewport() const
+{
+	return game_viewport;
+}
+
+const ppl7::grafix::Point& Game::getWorldCoords() const
+{
+	return WorldCoords;
+}

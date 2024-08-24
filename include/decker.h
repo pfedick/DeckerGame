@@ -1230,6 +1230,9 @@ public:
 	Glimmer* getGlimmer();
 	Soundtrack& getSoundtrack();
 
+	const ppl7::grafix::Rect& getViewport() const;
+	const ppl7::grafix::Point& getWorldCoords() const;
+
 };
 
 ppltk::Window* GetGameWindow();

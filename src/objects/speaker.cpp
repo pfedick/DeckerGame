@@ -50,7 +50,15 @@ void Speaker::update(double time, TileTypePlane& ttplane, Player& player, float)
 			if (audio == NULL && sample_id != AudioClip::none) {
 				setSample(sample_id, volume, max_distance);
 			} else if (audio) {
-				audio->setPositional(p / planeFactor[static_cast<int>(myPlane)], max_distance);
+				double f=planeFactor[static_cast<int>(myPlane)];
+				if (f != 1.0f) {
+					const ppl7::grafix::Point& worldcoords=GetGame().getWorldCoords();
+					ppl7::grafix::Point coords=worldcoords * f;
+					ppl7::grafix::Point pp=ppl7::grafix::Point(p) - coords;
+					audio->setPositional(pp + worldcoords, max_distance);
+				} else {
+					audio->setPositional(p, max_distance);
+				}
 				audio->setVolume(volume);
 			}
 		}
