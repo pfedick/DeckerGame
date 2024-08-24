@@ -79,7 +79,7 @@ void startNormal(Game& game)
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
 			game.resetPlayer();
-			game.startLevel("level/haunted.lvl");
+			game.startLevel("level/pyramid.lvl");
 			game.enableControls(true);
 			game.run();
 			if (game.gameState == GameState::QuitGame) break;
