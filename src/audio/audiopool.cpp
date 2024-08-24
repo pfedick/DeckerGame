@@ -96,7 +96,7 @@ void AudioPool::load()
 		sample[AudioClip::trap2].load("res/audio/trap2.mp3");
 		sample[AudioClip::vent1].load("res/audio/vent1.mp3");
 		sample[AudioClip::vent2].load("res/audio/vent2.mp3");
-		sample[AudioClip::wind1].load("res/audio/wind1.mp3");
+		sample[AudioClip::wind1].load("res/audio/wind1.ogg");
 		sample[AudioClip::fire1].load("res/audio/fire1.mp3");
 		sample[AudioClip::fire2].load("res/audio/fire2.mp3");
 		sample[AudioClip::light_switch1].load("res/audio/light_switch_1.mp3");
@@ -106,7 +106,7 @@ void AudioPool::load()
 		sample[AudioClip::arrow_swoosh].load("res/audio/arrow-swoosh.mp3");
 		sample[AudioClip::fall].load("res/audio/fall.mp3");
 		sample[AudioClip::break1].load("res/audio/break1.mp3");
-		sample[AudioClip::thruster].load("res/audio/thruster.mp3");
+		sample[AudioClip::thruster].load("res/audio/thruster.ogg");
 		sample[AudioClip::scarabeus1].load("res/audio/scarabeus1.mp3");
 		sample[AudioClip::scarabeus2].load("res/audio/scarabeus2.mp3");
 		sample[AudioClip::scarabeus3].load("res/audio/scarabeus3.mp3");
@@ -125,7 +125,7 @@ void AudioPool::load()
 		sample[AudioClip::turkey_sound].load("res/audio/turkey-sound.mp3");
 		sample[AudioClip::turkey_gobble].load("res/audio/turkey-gobble.mp3");
 		sample[AudioClip::digging].load("res/audio/digging.mp3");
-		sample[AudioClip::wind2].load("res/audio/wind2.mp3");
+		sample[AudioClip::wind2].load("res/audio/wind2.ogg");
 		sample[AudioClip::scorpion_breath].load("res/audio/scorpion_breath.mp3");
 		sample[AudioClip::scorpion_run].load("res/audio/scorpion_run.mp3");
 		sample[AudioClip::step1].load("res/audio/step1.mp3");
@@ -155,7 +155,7 @@ void AudioPool::load()
 		sample[AudioClip::rain3].load("res/audio/rain3.mp3");
 		sample[AudioClip::birds_in_rain].load("res/audio/birds_in_the_rain.mp3");
 		sample[AudioClip::desert_at_night].load("res/audio/desert_at_night.mp3");
-		sample[AudioClip::wind3].load("res/audio/wind_grillen.mp3");
+		sample[AudioClip::wind3].load("res/audio/wind_grillen.ogg");
 
 		sample[AudioClip::crystal2].load("res/audio/crystal2.mp3");
 		sample[AudioClip::crystal3].load("res/audio/crystal3.mp3");
@@ -176,12 +176,17 @@ void AudioPool::load()
 		sample[AudioClip::bricks_falling2].load("res/audio/bricks_falling2.mp3");
 		sample[AudioClip::bricks_falling3].load("res/audio/bricks_falling3.mp3");
 		sample[AudioClip::hammer].load("res/audio/hammer.mp3");
-		sample[AudioClip::waves1].load("res/audio/waves1.mp3");
+		sample[AudioClip::waves1].load("res/audio/waves1.ogg");
+		sample[AudioClip::waves2].load("res/audio/waves2.ogg");
+		sample[AudioClip::waves3].load("res/audio/waves3.ogg");
+		sample[AudioClip::waves4].load("res/audio/waves4.ogg");
+
 		sample[AudioClip::waterdrips].load("res/audio/waterdrips.mp3");
-		sample[AudioClip::wind_strong].load("res/audio/wind_strong.mp3");
-		sample[AudioClip::cave1].load("res/audio/cave1.mp3");
-		sample[AudioClip::cave2].load("res/audio/cave2.mp3");
-		sample[AudioClip::cave3].load("res/audio/cave3.mp3");
+		sample[AudioClip::wind_strong].load("res/audio/wind_strong.ogg");
+		sample[AudioClip::cave1].load("res/audio/cave1.ogg");
+		sample[AudioClip::cave2].load("res/audio/cave2.ogg");
+		sample[AudioClip::cave3].load("res/audio/cave3.ogg");
+		sample[AudioClip::cave4].load("res/audio/cave4.ogg");
 		sample[AudioClip::breakingwall].load("res/audio/breakingwall.mp3");
 		sample[AudioClip::crow_flying].load("res/audio/crow_flying.mp3");
 		sample[AudioClip::crow_scream].load("res/audio/crow_scream.mp3");
@@ -230,7 +235,6 @@ void AudioPool::load()
 		sample[AudioClip::yeti_angry_growl2].load("res/audio/yeti/yeti_angry_growl2.mp3");
 		sample[AudioClip::yeti_angry_growl3].load("res/audio/yeti/yeti_angry_growl3.mp3");
 		sample[AudioClip::yeti_angry_growl4].load("res/audio/yeti/yeti_angry_growl4.mp3");
-		sample[AudioClip::cave4].load("res/audio/cave4.mp3");
 		sample[AudioClip::night1].load("res/audio/night1.mp3");
 		sample[AudioClip::night2].load("res/audio/night2.mp3");
 		sample[AudioClip::night3].load("res/audio/night3.mp3");
@@ -319,21 +323,18 @@ void AudioPool::load()
 		sample[AudioClip::elevator_noiseloop].load("res/audio/elevator_noiseloop.mp3");
 		sample[AudioClip::elevator_exit].load("res/audio/elevator_exit.mp3");
 
-		sample[AudioClip::waves2].load("res/audio/waves2.ogg");
-		sample[AudioClip::waves3].load("res/audio/waves3.ogg");
-		sample[AudioClip::waves4].load("res/audio/waves4.ogg");
-		sample[AudioClip::gas1].load("res/audio/gas1.mp3");
-		sample[AudioClip::gas2].load("res/audio/gas2.mp3");
-		sample[AudioClip::gas3].load("res/audio/gas3.mp3");
-		sample[AudioClip::water_bubble2].load("res/audio/water_bubble2.mp3");
-		sample[AudioClip::water_bubble3].load("res/audio/water_bubble3.mp3");
-		sample[AudioClip::water_bubble4].load("res/audio/water_bubble4.mp3");
-		sample[AudioClip::water_bubble5].load("res/audio/water_bubble5.mp3");
-		sample[AudioClip::wind4].load("res/audio/wind4.mp3");
-		sample[AudioClip::wind5].load("res/audio/wind5.mp3");
+		sample[AudioClip::gas1].load("res/audio/gas1.ogg");
+		sample[AudioClip::gas2].load("res/audio/gas2.ogg");
+		sample[AudioClip::gas3].load("res/audio/gas3.ogg");
+		sample[AudioClip::water_bubble2].load("res/audio/water_bubble2.ogg");
+		sample[AudioClip::water_bubble3].load("res/audio/water_bubble3.ogg");
+		sample[AudioClip::water_bubble4].load("res/audio/water_bubble4.ogg");
+		sample[AudioClip::water_bubble5].load("res/audio/water_bubble5.ogg");
+		sample[AudioClip::wind4].load("res/audio/wind4.ogg");
+		sample[AudioClip::wind5].load("res/audio/wind5.ogg");
 
-		sample[AudioClip::earthquake].load("res/audio/earthquake.mp3");
-		sample[AudioClip::rumble].load("res/audio/rumble.mp3");
+		sample[AudioClip::earthquake].load("res/audio/earthquake.ogg");
+		sample[AudioClip::rumble].load("res/audio/rumble.ogg");
 		sample[AudioClip::waterpuddle].load("res/audio/waterpuddle.ogg");
 
 
