@@ -94,11 +94,13 @@ void AudioPool::load()
 		sample[AudioClip::stone_drag_short].load("res/audio/stone_drag_short.mp3");
 		sample[AudioClip::trap1].load("res/audio/trap1.mp3");
 		sample[AudioClip::trap2].load("res/audio/trap2.mp3");
-		sample[AudioClip::vent1].load("res/audio/vent1.mp3");
-		sample[AudioClip::vent2].load("res/audio/vent2.mp3");
+		sample[AudioClip::vent1].load("res/audio/vent1.ogg");
+		sample[AudioClip::vent2].load("res/audio/vent2.ogg");
 		sample[AudioClip::wind1].load("res/audio/wind1.ogg");
-		sample[AudioClip::fire1].load("res/audio/fire1.mp3");
-		sample[AudioClip::fire2].load("res/audio/fire2.mp3");
+		sample[AudioClip::fire1].load("res/audio/fire1.ogg");
+		sample[AudioClip::fire2].load("res/audio/fire2.ogg");
+		sample[AudioClip::fire3].load("res/audio/fire3.ogg");
+		sample[AudioClip::fire4].load("res/audio/fire4.ogg");
 		sample[AudioClip::light_switch1].load("res/audio/light_switch_1.mp3");
 		sample[AudioClip::crystal].load("res/audio/crystal.mp3");
 		sample[AudioClip::peach].load("res/audio/peach.mp3");
@@ -145,7 +147,7 @@ void AudioPool::load()
 		sample[AudioClip::water_pouring2].load("res/audio/water_pouring2.mp3");
 		sample[AudioClip::water_bubble1].load("res/audio/water_bubble.mp3");
 		sample[AudioClip::gas_spray].load("res/audio/gas_spray.mp3");
-		sample[AudioClip::underwaterloop1].load("res/audio/underwaterloop1.mp3");
+		sample[AudioClip::underwaterloop1].load("res/audio/underwaterloop1.ogg");
 		sample[AudioClip::crunch].load("res/audio/crunch.mp3");
 		sample[AudioClip::hackstone].load("res/audio/hackstone.mp3");
 		sample[AudioClip::birds2].load("res/audio/birds2.mp3");
@@ -198,7 +200,7 @@ void AudioPool::load()
 		sample[AudioClip::george_step4].load("res/audio/george_step4.mp3");
 		sample[AudioClip::george_step5].load("res/audio/george_step5.mp3");
 		sample[AudioClip::george_jump_land].load("res/audio/george_jump_land.mp3");
-		sample[AudioClip::fire3].load("res/audio/fire3.mp3");
+
 		sample[AudioClip::cheese].load("res/audio/cheese.mp3");
 		sample[AudioClip::rat_squeek].load("res/audio/rat_squeek.mp3");
 		sample[AudioClip::shoot].load("res/audio/shoot.mp3");

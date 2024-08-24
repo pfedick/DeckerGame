@@ -260,6 +260,7 @@ public:
 		earthquake,
 		rumble,
 		waterpuddle,
+		fire4,
 		// this must always be the last entry!
 		maxClips
 	};
