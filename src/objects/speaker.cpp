@@ -70,7 +70,7 @@ size_t Speaker::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 1);		// Object Version
+	ppl7::Poke8(buffer + bytes, 2);		// Object Version
 
 	ppl7::Poke16(buffer + bytes + 1, sample_id);
 	ppl7::Poke16(buffer + bytes + 3, max_distance);
@@ -87,7 +87,7 @@ size_t Speaker::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version != 1) return 0;
+	if (version < 1 || version>2) return 0;
 
 	sample_id=0;
 	volume=1.0f;
@@ -96,9 +96,13 @@ size_t Speaker::load(const unsigned char* buffer, size_t size)
 	max_distance=ppl7::Peek16(buffer + bytes + 3);
 	volume=ppl7::PeekFloat(buffer + bytes + 5);
 	int flags=ppl7::Peek16(buffer + bytes + 9);
+	if (version == 1 && flags > 3) flags=flags & 1;
+	//ppl7::PrintDebug("Speaker::load, flags=%d\n", flags);
+
 	initial_state=(bool)flags & 1;
 	sample_type=SampleType::AudioLoop;
 	if (flags & 2) sample_type=SampleType::Effect;
+
 	enabled=initial_state;
 
 	if (audio) {
