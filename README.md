@@ -194,6 +194,7 @@ make
 
 
 ## Release History
+* [0.17.0](https://github.com/pfedick/DeckerGame/releases/tag/0.17.0) [2024-08-24]: Companion & Pyramid Update
 * [0.16.0](https://github.com/pfedick/DeckerGame/releases/tag/0.16.0) [2024-07-11]: UI overhaul
 * [0.15.1](https://github.com/pfedick/DeckerGame/releases/tag/0.15.1) [2024-03-10]: Skullmaster update
 * [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-03-04]: Light and Dark update
