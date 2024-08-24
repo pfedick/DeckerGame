@@ -130,6 +130,7 @@ void Speaker::setSample(int id, float volume, int max_distance)
 				audio->setAutoDelete(false);
 				audio->setLoop(true);
 				audio->setPositional(p, max_distance);
+				audio->startRandom();
 				pool.playInstance(audio);
 				sample_id=id;
 			}
