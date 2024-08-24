@@ -249,10 +249,10 @@ void AudioPool::load()
 		sample[AudioClip::stamper_up].load("res/audio/stamper_up.mp3");
 		sample[AudioClip::stamper_echo].load("res/audio/stamper_echo.mp3");
 		sample[AudioClip::stamper_squish].load("res/audio/stamper_squish.mp3");
-		sample[AudioClip::fireball_fly].load("res/audio/fireball_fly.mp3");
+		sample[AudioClip::fireball_fly].load("res/audio/fireball_fly.ogg");
 		sample[AudioClip::fireball_impact].load("res/audio/fireball_impact.mp3");
 		sample[AudioClip::flashlight_pickup].load("res/audio/flashlight_pickup.mp3");
-		sample[AudioClip::ghost_chains].load("res/audio/ghost_chains.mp3");
+		sample[AudioClip::ghost_chains].load("res/audio/ghost_chains.ogg");
 		sample[AudioClip::ghost_turn].load("res/audio/ghost_turn.mp3");
 		sample[AudioClip::ghost_land].load("res/audio/ghost_land.mp3");
 		sample[AudioClip::skull_voice1].load("res/audio/skull_voice1.mp3");
@@ -260,7 +260,7 @@ void AudioPool::load()
 		sample[AudioClip::skull_voice3].load("res/audio/skull_voice3.mp3");
 		sample[AudioClip::skull_hui].load("res/audio/skull_hui.mp3");
 		sample[AudioClip::skull_death].load("res/audio/skull_death.mp3");
-		sample[AudioClip::skull_fireball].load("res/audio/skull_fireball.mp3");
+		sample[AudioClip::skull_fireball].load("res/audio/skull_fireball.ogg");
 		sample[AudioClip::skull_impact].load("res/audio/skull_impact.mp3");
 		sample[AudioClip::skull_shoot].load("res/audio/skull_shoot.mp3");
 		sample[AudioClip::explosion1].load("res/audio/explosion1.mp3");
@@ -272,9 +272,9 @@ void AudioPool::load()
 		sample[AudioClip::skullmaster_laugh2].load("res/audio/skullmaster_laugh2.mp3");
 		sample[AudioClip::skullmaster_laugh3].load("res/audio/skullmaster_laugh3.mp3");
 
-		sample[AudioClip::lavaloop1].load("res/audio/lavaloop1.mp3");
-		sample[AudioClip::lavaloop2].load("res/audio/lavaloop2.mp3");
-		sample[AudioClip::lavabubbles].load("res/audio/lavabubbles.mp3");
+		sample[AudioClip::lavaloop1].load("res/audio/lavaloop1.ogg");
+		sample[AudioClip::lavaloop2].load("res/audio/lavaloop2.ogg");
+		sample[AudioClip::lavabubbles].load("res/audio/lavabubbles.ogg");
 
 		sample[AudioClip::touchplateswitch1].load("res/audio/touchplateswitch1.mp3");
 		sample[AudioClip::touchplateswitch2].load("res/audio/touchplateswitch2.mp3");
@@ -293,14 +293,14 @@ void AudioPool::load()
 		sample[AudioClip::ladder_step6].load("res/audio/ladder_step6.mp3");
 		sample[AudioClip::ladder_step7].load("res/audio/ladder_step7.mp3");
 
-		sample[AudioClip::crate_loop].load("res/audio/crate_loop.mp3");
+		sample[AudioClip::crate_loop].load("res/audio/crate_loop.ogg");
 		sample[AudioClip::crate_falling].load("res/audio/crate_falling.mp3");
 
 		sample[AudioClip::powercell_collected].load("res/audio/powercell_collected.mp3");
 		sample[AudioClip::powercell_change].load("res/audio/powercell_change.mp3");
 		sample[AudioClip::powercells_depleted].load("res/audio/powercells_depleted.mp3");
 
-		sample[AudioClip::fireworks_loop].load("res/audio/fireworks_loop.mp3");
+		sample[AudioClip::fireworks_loop].load("res/audio/fireworks_loop.ogg");
 
 		sample[AudioClip::glimmer_plopp1].load("res/audio/glimmer/plopp1.mp3");
 		sample[AudioClip::glimmer_plopp2].load("res/audio/glimmer/plopp2.mp3");
