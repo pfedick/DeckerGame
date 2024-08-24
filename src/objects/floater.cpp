@@ -90,7 +90,7 @@ void Floater::update(double time, TileTypePlane& ttplane, Player& player, float 
 	AudioPool& pool=getAudioPool();
 	if (!audio) {
 		audio=pool.getInstance(AudioClip::thruster);
-		audio->setVolume(0.3f);
+		audio->setVolume(1.0f);
 		audio->setPositional(p, 1800);
 		audio->setLoop(true);
 	}
