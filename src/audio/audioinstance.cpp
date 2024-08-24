@@ -59,7 +59,8 @@ void AudioInstance::setVolume(float volume)
 {
 	this->volume=volume;
 	if (this->volume < 0) this->volume=0.0f;
-	if (this->volume > 1.0) this->volume=1.0f;
+	//if (this->volume > 2.0) this->volume=2.0f;
+	//ppl7::PrintDebug("volume=%0.3f\n", this->volume);
 	fade_start=0;
 	this->fade_start_volume=this->volume;
 }
