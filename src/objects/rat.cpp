@@ -124,7 +124,7 @@ void Rat::handleCollision(Player* player, const Collision& collision)
 		}
 	} else {
 		if (player->hasSpecialObject(Type::ObjectType::Cheese)) {
-			if (!player->hasSpoken(9)) player->speak(9);
+			if (!player->hasSpoken(9)) player->speak(9, 1.0f);
 			return;
 		}
 		player->dropHealth(2);
