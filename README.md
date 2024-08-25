@@ -23,8 +23,8 @@ This game is completely free and open source! I provide finished binaries for Wi
 You can even fork the sourcecode and make your own modifications!
 
 ## Where can I download it?
-- Latest Release for Windows: [GeorgeDecker-0.17.0-Setup.exe](https://github.com/pfedick/DeckerGame/releases/download/0.17.0/GeorgeDecker-0.17.0-Setup.exe) (ca. 270 MB)
-- Sourcecode of latest release: [DeckerGame-0.17.0.tar.gz](https://github.com/pfedick/DeckerGame/archive/refs/tags/0.17.0.tar.gz) (ca. 829 MB)
+- Latest Release for Windows: [GeorgeDecker-0.17.1-Setup.exe](https://github.com/pfedick/DeckerGame/releases/download/0.17.0/GeorgeDecker-0.17.1-Setup.exe) (ca. 270 MB)
+- Sourcecode of latest release: [DeckerGame-0.17.1.tar.gz](https://github.com/pfedick/DeckerGame/archive/refs/tags/0.17.1.tar.gz) (ca. 829 MB)
 - GitHub: https://github.com/pfedick/DeckerGame
 
 
@@ -199,7 +199,7 @@ make
 
 
 ## Release History
-* [0.17.0](https://github.com/pfedick/DeckerGame/releases/tag/0.17.0) [2024-08-24]: Companion & Pyramid Update
+* [0.17.1](https://github.com/pfedick/DeckerGame/releases/tag/0.17.1) [2024-08-25]: Companion & Pyramid Update
 * [0.16.0](https://github.com/pfedick/DeckerGame/releases/tag/0.16.0) [2024-07-11]: UI overhaul
 * [0.15.1](https://github.com/pfedick/DeckerGame/releases/tag/0.15.1) [2024-03-10]: Skullmaster update
 * [0.15.0](https://github.com/pfedick/DeckerGame/releases/tag/0.15.0) [2024-03-04]: Light and Dark update
