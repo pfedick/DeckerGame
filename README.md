@@ -2,10 +2,7 @@
 [![Windows](https://github.com/pfedick/DeckerGame/actions/workflows/msys2.yml/badge.svg)](https://github.com/pfedick/DeckerGame/blob/main/.github/workflows/msys2.yml)
 
 # George Decker - The Game
-
-<p align="center">
-  <img src="https://github.com/pfedick/DeckerGame/raw/main/res/screenshots/Screenshot_20210724_193500.jpg" />
-</p>
+![decker-0 17 0](https://github.com/user-attachments/assets/4876b47a-f95d-4c0f-89d0-9dd1f3056a61)
 
 ## What is the game about?
 I always wanted to program a game, but never got very far with it. But I didn't give up and this is the result!
