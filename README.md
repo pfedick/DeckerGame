@@ -1,4 +1,5 @@
-[![C/C++ CI](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/pfedick/DeckerGame/actions/workflows/c-cpp.yml)
+[![Ubuntu](https://github.com/pfedick/DeckerGame/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/pfedick/DeckerGame/blob/main/.github/workflows/ubuntu.yml)
+[![Windows](https://github.com/pfedick/DeckerGame/actions/workflows/msys2.yml/badge.svg)](https://github.com/pfedick/DeckerGame/blob/main/.github/workflows/msys2.yml)
 
 # George Decker - The Game
 
