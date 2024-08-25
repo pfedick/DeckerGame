@@ -181,7 +181,7 @@ void GameHUD::drawProgressBar(ppl7::grafix::Drawable& draw, int x, int y, int wi
 {
     int w=width * value / 100 / 10;
     for (int i=0;i < w;i++) {
-        icons->draw(draw, x + i * 10, y + 24, 6, color);
+        icons->draw(draw, x + i * 10, y + 26, 6, color);
     }
 }
 
