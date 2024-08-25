@@ -856,7 +856,8 @@ public:
 	float time_active, time_inactive;
 	bool auto_intervall;
 	bool collision_disabled;
-	unsigned char initial_state;		// <=== Refactor to boolean and Flag
+	bool initial_state;
+	bool current_state;
 	unsigned char stamper_type;
 	unsigned char teeth_type;
 	Orientation orientation;

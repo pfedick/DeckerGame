@@ -32,7 +32,8 @@ Stamper::Stamper()
 		state=State::Closed;
 		sprite_no=5;
 	}
-	initial_state=static_cast<int>(state);
+	initial_state=true;
+	current_state=true;
 	stamper_type=0;
 	time_active=ppl7::randf(0.2f, 0.5f);
 	time_inactive=ppl7::randf(0.2f, 0.5f);
@@ -63,9 +64,14 @@ void Stamper::init()
 	state=State::Open;
 	position=0.0f;
 	acceleration=0.0f;
-	if (initial_state) {
-		state=State::Closed;
-		position=261.0f;
+	if (auto_intervall) {
+		state=State::Open;
+		if (ppl7::rand(0, 1) == 1) state=State::Closed;
+	} else {
+		if (current_state) {
+			state=State::Closed;
+			position=261.0f;
+		}
 	}
 	sprite_no=stamper_type * 20;
 	if (state == State::Closed) sprite_no+=5;
@@ -348,7 +354,7 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 			if (acceleration > 5.0f) acceleration=5.0f;
 		}
 
-		if (state == State::Open && time > next_state) {
+		if (state == State::Open && time > next_state && current_state == true) {
 			audiopool.playOnce(AudioClip::stamper_down, p, 1400, 0.7f);
 			state=State::Closing;
 			position=0;
@@ -464,6 +470,8 @@ void Stamper::toggle(bool enabled, Object* source)
 			state=State::Opening;
 			//position=0.0f;
 		}
+	} else {
+		current_state=enabled;
 	}
 }
 
@@ -484,13 +492,14 @@ size_t Stamper::save(unsigned char* buffer, size_t size) const
 {
 	size_t bytes=Object::save(buffer, size);
 	if (!bytes) return 0;
-	ppl7::Poke8(buffer + bytes, 2);		// Object Version
+	ppl7::Poke8(buffer + bytes, 3);		// Object Version
 
 	int flags=0;
 	if (auto_intervall) flags|=1;
 	if (collision_disabled) flags|=2;
+	if (initial_state) flags|=4;
 	ppl7::Poke8(buffer + bytes + 1, flags);
-	ppl7::Poke8(buffer + bytes + 2, initial_state);
+	ppl7::Poke8(buffer + bytes + 2, 0);
 	ppl7::Poke8(buffer + bytes + 3, stamper_type);
 	ppl7::PokeFloat(buffer + bytes + 4, time_active);
 	ppl7::PokeFloat(buffer + bytes + 8, time_inactive);
@@ -508,12 +517,17 @@ size_t Stamper::load(const unsigned char* buffer, size_t size)
 	size_t bytes=Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
 	int version=ppl7::Peek8(buffer + bytes);
-	if (version < 1) return 0;
+	if (version < 1 || version>3) return 0;
 
 	int flags=ppl7::Peek8(buffer + bytes + 1);
 	auto_intervall=(bool)(flags & 1);
 	collision_disabled=(bool)(flags & 2);
-	initial_state=ppl7::Peek8(buffer + bytes + 2);
+	if (version < 3) {
+		initial_state=ppl7::Peek8(buffer + bytes + 2);
+	} else {
+		// Byte 2 is unused and zero
+		initial_state=(bool)(flags & 4);
+	}
 	stamper_type=ppl7::Peek8(buffer + bytes + 3);
 	time_active=ppl7::PeekFloat(buffer + bytes + 4);
 	time_inactive=ppl7::PeekFloat(buffer + bytes + 8);
@@ -536,6 +550,7 @@ private:
 	ppltk::ComboBox* teeth_type;
 	ppltk::ComboBox* orientation;
 	ppltk::CheckBox* initial_state;
+	ppltk::CheckBox* current_state;
 	ppltk::CheckBox* auto_intervall;
 	ppltk::CheckBox* collision_disabled;
 	ppltk::DoubleHorizontalSlider* time_active;
@@ -656,6 +671,10 @@ StamperDialog::StamperDialog(Stamper* object)
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
 	y+=30;
+	current_state=new ppltk::CheckBox(120, y, 200, 30, "Current state", object->current_state);
+	current_state->setEventHandler(this);
+	addChild(current_state);
+	y+=30;
 	auto_intervall=new ppltk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
@@ -737,7 +756,8 @@ void StamperDialog::valueChangedEvent(ppltk::Event* event, double value)
 
 void StamperDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
-	if (event->widget() == initial_state) object->initial_state=(int)checked * 2;
+	if (event->widget() == initial_state) object->initial_state=checked;
+	else if (event->widget() == current_state) object->current_state=checked;
 	else if (event->widget() == auto_intervall) object->auto_intervall=checked;
 	else if (event->widget() == collision_disabled) object->collision_disabled=checked;
 	//printf("object->initial_state=%d\n", object->initial_state);
