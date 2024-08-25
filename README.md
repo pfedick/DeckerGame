@@ -5,6 +5,7 @@
 <p align="center">
   <img src="https://github.com/pfedick/DeckerGame/raw/main/res/screenshots/decker_0_17_0b.jpg" />
 </p>
+
 ## What is the game about?
 I always wanted to program a game, but never got very far with it. But I didn't give up and this is the result!
 
