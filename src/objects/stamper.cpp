@@ -66,7 +66,9 @@ void Stamper::init()
 	acceleration=0.0f;
 	if (auto_intervall) {
 		state=State::Open;
-		if (ppl7::rand(0, 1) == 1) state=State::Closed;
+		if (current_state) {
+			if (ppl7::rand(0, 1) == 1) state=State::Closed;
+		}
 	} else {
 		if (current_state) {
 			state=State::Closed;
@@ -528,6 +530,7 @@ size_t Stamper::load(const unsigned char* buffer, size_t size)
 		// Byte 2 is unused and zero
 		initial_state=(bool)(flags & 4);
 	}
+	current_state=initial_state;
 	stamper_type=ppl7::Peek8(buffer + bytes + 3);
 	time_active=ppl7::PeekFloat(buffer + bytes + 4);
 	time_inactive=ppl7::PeekFloat(buffer + bytes + 8);
