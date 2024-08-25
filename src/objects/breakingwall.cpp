@@ -72,7 +72,7 @@ void BreakingWall::handleCollision(Player* player, const Collision& collision)
 			if (player->x > p.x)player->x=p.x + 96;
 		}
 		if (!player->hasSpoken(4)) {
-			player->speak(4);
+			player->speak(4, 1.0f);
 		}
 
 	}
