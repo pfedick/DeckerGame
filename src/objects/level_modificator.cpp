@@ -32,6 +32,7 @@ LevelModificator::LevelModificator()
     changeGlobalLighting=false;
     changeSong=false;
     transitionTime=0.0f;
+    last_collision_frame=0;
 
 }
 
@@ -63,7 +64,15 @@ void LevelModificator::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::
 void LevelModificator::handleCollision(Player* player, const Collision& collision)
 {
     if (state != State::waiting_for_activation) return;
+    uint64_t frame_no=GetFrameNo();
+    if (frame_no == last_collision_frame + 1) {
+        //ppl7::PrintDebugTime("ongoing collision %llu => %llu\n", last_collision_frame, frame_no);
+        last_collision_frame=frame_no;
+        return;
+    }
+    enabled=false;
     state=State::in_transition;
+    //ppl7::PrintDebug("handleCollision\n");
     GetGame().startLevelModification(player->time, this);
 }
 
@@ -79,7 +88,10 @@ void LevelModificator::update(double time, TileTypePlane& ttplane, Player& playe
 {
     boundary.setRect(p.x - range.x / 2, p.y - range.y / 2, range.x, range.y);
     if (state == State::in_transition) {
-        if (GetGame().getLevelModificationObject() != this) state=State::waiting_for_activation;
+        if (GetGame().getLevelModificationObject() != this) {
+            //ppl7::PrintDebug("not same object?!\n");
+            state=State::waiting_for_activation;
+        }
     }
 
 

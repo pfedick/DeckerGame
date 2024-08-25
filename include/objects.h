@@ -2147,6 +2147,7 @@ private:
 		disabled
 	};
 	State state;
+	uint64_t last_collision_frame;
 public:
 	enum class BackgroundType {
 		Image,

@@ -54,7 +54,7 @@ void Soundtrack::playInitialSong()
 void Soundtrack::playSong(const ppl7::String& filename)
 {
     if (playing_song) {
-        if (currentSong == filename) return;
+        //if (currentSong == filename) return;
         playing_song->fadeout(4.0f);
         playing_song->setAutoDelete(true);
         playing_song=NULL;

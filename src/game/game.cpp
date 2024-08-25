@@ -2473,7 +2473,9 @@ void Game::updateLightFromUi()
 void Game::startLevelModification(double time, void* object)
 {
 	Decker::Objects::LevelModificator* mod=static_cast<Decker::Objects::LevelModificator*>(object);
+	//ppl7::PrintDebug("Game::startLevelModification\n");
 	if (mod == NULL || mod == levelModificator.triggerobject) return;
+	//ppl7::PrintDebug("Debug 1\n");
 	levelModificator.start=level.runtimeParams;
 	levelModificator.end=levelModificator.start;
 	if (mod->loadLevelDefault) {
@@ -2487,16 +2489,16 @@ void Game::startLevelModification(double time, void* object)
 		levelModificator.end.backgroundType=Background::Type::Color;
 		if (mod->backgroundType == Decker::Objects::LevelModificator::BackgroundType::Image) levelModificator.end.backgroundType=Background::Type::Image;
 	}
-	if (levelModificator.start == levelModificator.end) return;
+	if (mod->changeSong) {
+		//ppl7::PrintDebug("change song: %s\n", (const char*)mod->Song);
+		soundtrack.fadeout(mod->transitionTime);
+		soundtrack.playSong(mod->Song);
+	}
+	//if (levelModificator.start == levelModificator.end) return;
 	if (levelModificator.end.backgroundType == Background::Type::Image) {
 		background.setFadeTargetImage(levelModificator.end.BackgroundImage);
 	} else {
 		background.setFadeTargetColor(levelModificator.end.BackgroundColor);
-	}
-	if (mod->changeSong) {
-		soundtrack.fadeout(mod->transitionTime);
-		soundtrack.playSong(mod->Song);
-
 	}
 
 	levelModificator.starttime=time;
