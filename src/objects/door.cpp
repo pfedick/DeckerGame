@@ -204,10 +204,10 @@ void Door::handleCollision(Player* player, const Collision& collision)
 				if (key_id != 0 && player->isInInventory(key_id))  player->speak(20);
 				else if (key_id != 0) player->speak(6);
 				text_for_closed_door_said=true;
-			} else if (key_id != 0 && player->isInInventory(key_id) && player->time < cooldown_for_locked_door_text) {
+			} else if (key_id != 0 && player->isInInventory(key_id) && player->time > cooldown_for_locked_door_text) {
 				player->speak(7);
+				cooldown_for_locked_door_text=player->time + 20.0f;
 			}
-			cooldown_for_locked_door_text=player->time + 20.0f;
 		}
 	}
 
