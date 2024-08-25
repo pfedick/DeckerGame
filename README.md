@@ -23,7 +23,12 @@ This game is completely free and open source! I provide finished binaries for Wi
 You can even fork the sourcecode and make your own modifications!
 
 ## Where can I download it?
-I provide binaries for Windows for download on my [github page](https://github.com/pfedick/DeckerGame/releases).
+- Latest Release for Windows: [GeorgeDecker-0.17.0-Setup.exe](https://github.com/pfedick/DeckerGame/releases/download/0.17.0/GeorgeDecker-0.17.0-Setup.exe) (ca. 270 MB)
+- Sourcecode of latest release: [DeckerGame-0.17.0.tar.gz](https://github.com/pfedick/DeckerGame/archive/refs/tags/0.17.0.tar.gz) (ca. 829 MB)
+- GitHub: https://github.com/pfedick/DeckerGame
+
+
+I provide binaries for previous releases on my [github page](https://github.com/pfedick/DeckerGame/releases).
 
 
 ## Where can I find more information about the game?
