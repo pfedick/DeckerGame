@@ -593,9 +593,10 @@ void Physic::updateMovement(float frame_rate_compensation)
 		if (jump_climax > time) {
 			if (acceleration_jump < (4.0f * frame_rate_compensation)) acceleration_jump+=(acceleration_jump / 10.f * frame_rate_compensation);
 			if (acceleration_jump > (4.0f * frame_rate_compensation)) acceleration_jump=(4.0f * frame_rate_compensation);
-			//printf("under climax, accelerating %0.3f ", acceleration_jump);
 			velocity_move.y-=acceleration_jump;
 			if (velocity_move.y < (-12.0f * frame_rate_compensation)) velocity_move.y=-(12.0f * frame_rate_compensation);
+			if (gravity < 0.0f) gravity=0.0f;
+			//ppl7::PrintDebug("JUMP under climax, accelerating %0.3f, velocity.y=%0.3f\n", acceleration_jump, velocity_move.y);
 		} else {
 			if (acceleration_jump > 0) acceleration_jump-=(acceleration_jump / (10.0f * frame_rate_compensation));
 			if (acceleration_jump < 0.5f) {
