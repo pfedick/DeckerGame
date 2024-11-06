@@ -20,7 +20,7 @@ AC_CONFIG_HEADERS([ppltk/include/ppltk_config.h])
 # Includes
 ###############################################################################
 sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
-sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
+sinclude(pplib/autoconf/pcre2.m4)
 sinclude(pplib/autoconf/png.m4)
 sinclude(pplib/autoconf/jpeg.m4)
 sinclude(pplib/autoconf/libjpeg-turbo.m4)
@@ -48,7 +48,7 @@ report_have_dav1d="no"
 report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
-report_have_pcre="no"
+report_have_pcre2="no"
 report_have_sdl2="no"
 report_have_png="no"
 report_have_jpeg="no"
@@ -361,12 +361,12 @@ AX_CHECK_ZLIB(report_have_zlib="yes"
 dnl do we need to specify -lm explicitly?
 AC_CHECK_FUNC(sin,,[AC_CHECK_LIB(m,sin)])
 
-# PCRE vorhanden?
-AX_PATH_LIB_PCRE(
-            AC_DEFINE(HAVE_PCRE, 1, [ Define if you have pcre. ])
-            report_have_pcre="yes"
+# PCRE2 vorhanden?
+AC_CHECK_PCRE2(AC_DEFINE(HAVE_PCRE2, 1, [ Define if you have pcre2. ])
+            report_have_pcre2="yes"
             ,
             )
+
 
 dnl Check for SDL
 report_have_sdl2="no"
@@ -508,6 +508,8 @@ LIBCURL=""
 LIBCDIO_LDFLAGS=""
 LIBMICROHTTPD_LIBS=""
 LIBIDN_LIBS=""
+PCRE_CFLAGS=""
+PCRE_LIBS=""
 
 
 AC_SUBST(JPEG_CFLAGS)
@@ -537,6 +539,8 @@ AC_SUBST(LIBCURL)
 AC_SUBST(LIBCDIO_LDFLAGS)
 AC_SUBST(LIBMICROHTTPD_LIBS)
 AC_SUBST(LIBIDN_LIBS)
+AC_SUBST(PCRE_CFLAGS)
+AC_SUBST(PCRE_LIBS)
 
 LIBPPL7_CFLAGS=-I../pplib/include
 LIBPPL7_LIBS=""
@@ -578,7 +582,7 @@ AC_MSG_RESULT([
 ** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
@@ -606,9 +610,9 @@ then
 "
 fi
 
-if test "$report_have_pcre" != "yes"
+if test "$report_have_pcre2" != "yes"
 then
-	missing="$missing  - pcre not found
+	missing="$missing  - pcre2 not found
 "
 fi
 

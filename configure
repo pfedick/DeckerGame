@@ -658,6 +658,8 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBPPL7_LIBS
 LIBPPL7_CFLAGS
+PCRE_LIBS
+PCRE_CFLAGS
 LIBIDN_LIBS
 LIBMICROHTTPD_LIBS
 LIBCDIO_LDFLAGS
@@ -710,9 +712,15 @@ SDL2_CONFIG
 SDL2_FRAMEWORK
 SDL2_LIBS
 SDL2_CFLAGS
-PCRE_CFLAGS
-PCRE_LIBS
-PKGCONFIG
+PCRE2_CFLAGS
+PCRE2_LIBS
+PCRE2_WIDE32_LIBS
+PCRE2_WIDE32_CFLAGS
+PCRE2_WIDE16_LIBS
+PCRE2_WIDE16_CFLAGS
+PCRE2_8_LIBS
+PCRE2_8_CFLAGS
+pcre2config
 ZLIB_LIBS
 ZLIB_CFLAGS
 BZ2_LIBS
@@ -881,7 +889,7 @@ enable_rpath
 with_libiconv_prefix
 with_bzip2
 with_zlib
-with_pcre
+with_pcre2
 with_sdl_prefix
 with_sdl_exec_prefix
 enable_sdltest
@@ -910,6 +918,12 @@ JPEG_CFLAGS
 JPEG_LIBS
 TURBOJPEG_CFLAGS
 TURBOJPEG_LIBS
+PCRE2_8_CFLAGS
+PCRE2_8_LIBS
+PCRE2_WIDE16_CFLAGS
+PCRE2_WIDE16_LIBS
+PCRE2_WIDE32_CFLAGS
+PCRE2_WIDE32_LIBS
 SDL2_FRAMEWORK
 SDL2_CFLAGS
 SDL2_LIBS'
@@ -1582,7 +1596,7 @@ Optional Packages:
   --with-zlib=DIR         root directory path of zlib installation [defaults to
                           /usr/local or /usr if not found in /usr/local]
   --without-zlib          to disable zlib usage completely
-  --with-pcre[=prefix]    compile xmlpcre part (via libpcre check)
+  --with-pcre2[=PATH]     Prefix where libpcre2 is installed (optional)
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
   --with-nasm[=PATH]      Prefix where nasm is installed (optional)
@@ -1612,6 +1626,18 @@ Some influential environment variables:
               C compiler flags for TURBOJPEG, overriding pkg-config
   TURBOJPEG_LIBS
               linker flags for TURBOJPEG, overriding pkg-config
+  PCRE2_8_CFLAGS
+              C compiler flags for PCRE2_8, overriding pkg-config
+  PCRE2_8_LIBS
+              linker flags for PCRE2_8, overriding pkg-config
+  PCRE2_WIDE16_CFLAGS
+              C compiler flags for PCRE2_WIDE16, overriding pkg-config
+  PCRE2_WIDE16_LIBS
+              linker flags for PCRE2_WIDE16, overriding pkg-config
+  PCRE2_WIDE32_CFLAGS
+              C compiler flags for PCRE2_WIDE32, overriding pkg-config
+  PCRE2_WIDE32_LIBS
+              linker flags for PCRE2_WIDE32, overriding pkg-config
   SDL2_FRAMEWORK
               Path to SDL2.framework
   SDL2_CFLAGS C compiler flags for SDL2, overriding pkg-config
@@ -2339,7 +2365,7 @@ else $as_nop
 #define $2 innocuous_$2
 
 /* System header to define __stub macros and hopefully few prototypes,
-   which can conflict with char $2 (void); below.  */
+   which can conflict with char $2 (); below.  */
 
 #include <limits.h>
 #undef $2
@@ -2350,7 +2376,7 @@ else $as_nop
 #ifdef __cplusplus
 extern "C"
 #endif
-char $2 (void);
+char $2 ();
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
@@ -2743,7 +2769,9 @@ struct stat;
 /* Most of the following tests are stolen from RCS 5.7 src/conf.sh.  */
 struct buf { int x; };
 struct buf * (*rcsopen) (struct buf *, struct stat *, int);
-static char *e (char **p, int i)
+static char *e (p, i)
+     char **p;
+     int i;
 {
   return p[i];
 }
@@ -2794,7 +2822,6 @@ extern int puts (const char *);
 extern int printf (const char *, ...);
 extern int dprintf (int, const char *, ...);
 extern void *malloc (size_t);
-extern void free (void *);
 
 // Check varargs macros.  These examples are taken from C99 6.10.3.5.
 // dprintf is used instead of fprintf to avoid needing to declare
@@ -3520,56 +3547,9 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 
 
 
-# ===========================================================================
-#     http://www.gnu.org/software/autoconf-archive/ax_path_lib_pcre.html
-# ===========================================================================
-#
-# SYNOPSIS
-#
-#   AX_PATH_LIB_PCRE [(A/NA)]
-#
-# DESCRIPTION
-#
-#   check for pcre lib and set PCRE_LIBS and PCRE_CFLAGS accordingly.
-#
-#   also provide --with-pcre option that may point to the $prefix of the
-#   pcre installation - the macro will check $pcre/include and $pcre/lib to
-#   contain the necessary files.
-#
-#   the usual two ACTION-IF-FOUND / ACTION-IF-NOT-FOUND are supported and
-#   they can take advantage of the LIBS/CFLAGS additions.
-#
-# LICENSE
-#
-#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-#
-#   This program is free software; you can redistribute it and/or modify it
-#   under the terms of the GNU General Public License as published by the
-#   Free Software Foundation; either version 3 of the License, or (at your
-#   option) any later version.
-#
-#   This program is distributed in the hope that it will be useful, but
-#   WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-#   Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License along
-#   with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-#   As a special exception, the respective Autoconf Macro's copyright owner
-#   gives unlimited permission to copy, distribute and modify the configure
-#   scripts that are the output of Autoconf when processing the Macro. You
-#   need not follow the terms of the GNU General Public License when using
-#   or distributing such scripts, even though portions of the text of the
-#   Macro appear in them. The GNU General Public License (GPL) does govern
-#   all other use of the material that constitutes the Autoconf Macro.
-#
-#   This special exception to the GPL applies to versions of the Autoconf
-#   Macro released by the Autoconf Archive. When you make and distribute a
-#   modified version of the Autoconf Macro, you may extend this special
-#   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+
+
 
 
 
@@ -3728,7 +3708,8 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 
 
 
-# iconv.m4 serial AM7 (gettext-0.18)
+# iconv.m4 serial 19 (gettext-0.18.2)
+
 
 
 
@@ -4075,7 +4056,7 @@ report_have_dav1d="no"
 report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
-report_have_pcre="no"
+report_have_pcre2="no"
 report_have_sdl2="no"
 report_have_png="no"
 report_have_jpeg="no"
@@ -6351,11 +6332,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++11 features" >&5
 printf %s "checking for $CXX option to enable C++11 features... " >&6; }
-if test ${ac_cv_prog_cxx_11+y}
+if test ${ac_cv_prog_cxx_cxx11+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_11=no
+  ac_cv_prog_cxx_cxx11=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -6397,11 +6378,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++98 features" >&5
 printf %s "checking for $CXX option to enable C++98 features... " >&6; }
-if test ${ac_cv_prog_cxx_98+y}
+if test ${ac_cv_prog_cxx_cxx98+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_98=no
+  ac_cv_prog_cxx_cxx98=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -8353,14 +8334,8 @@ printf %s "checking for pthread_join in LIBS=$PTHREAD_LIBS with CFLAGS=$PTHREAD_
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pthread_join (void);
+   builtin and then its argument prototype would still apply.  */
+char pthread_join ();
 int
 main (void)
 {
@@ -9020,23 +8995,22 @@ unsigned short int ascii_mm[] =
 		int use_ebcdic (int i) {
 		  return ebcdic_mm[i] + ebcdic_ii[i];
 		}
-		int
-		main (int argc, char **argv)
-		{
-		  /* Intimidate the compiler so that it does not
-		     optimize the arrays away.  */
-		  char *p = argv[0];
-		  ascii_mm[1] = *p++; ebcdic_mm[1] = *p++;
-		  ascii_ii[1] = *p++; ebcdic_ii[1] = *p++;
-		  return use_ascii (argc) == use_ebcdic (*p);
-		}
+		extern int foo;
+
+int
+main (void)
+{
+return use_ascii (foo) == use_ebcdic (foo);
+  ;
+  return 0;
+}
 _ACEOF
-if ac_fn_c_try_link "$LINENO"
+if ac_fn_c_try_compile "$LINENO"
 then :
-  if grep BIGenDianSyS conftest$ac_exeext >/dev/null; then
+  if grep BIGenDianSyS conftest.$ac_objext >/dev/null; then
 	      ac_cv_c_bigendian=yes
 	    fi
-	    if grep LiTTleEnDian conftest$ac_exeext >/dev/null ; then
+	    if grep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
 	      if test "$ac_cv_c_bigendian" = unknown; then
 		ac_cv_c_bigendian=no
 	      else
@@ -9045,8 +9019,7 @@ then :
 	      fi
 	    fi
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -11075,14 +11048,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char XOpenDisplay (void);
+   builtin and then its argument prototype would still apply.  */
+char XOpenDisplay ();
 int
 main (void)
 {
@@ -11108,14 +11075,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dnet_ntoa (void);
+   builtin and then its argument prototype would still apply.  */
+char dnet_ntoa ();
 int
 main (void)
 {
@@ -11155,14 +11116,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dnet_ntoa (void);
+   builtin and then its argument prototype would still apply.  */
+char dnet_ntoa ();
 int
 main (void)
 {
@@ -11222,14 +11177,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gethostbyname (void);
+   builtin and then its argument prototype would still apply.  */
+char gethostbyname ();
 int
 main (void)
 {
@@ -11269,14 +11218,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gethostbyname (void);
+   builtin and then its argument prototype would still apply.  */
+char gethostbyname ();
 int
 main (void)
 {
@@ -11332,14 +11275,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char connect (void);
+   builtin and then its argument prototype would still apply.  */
+char connect ();
 int
 main (void)
 {
@@ -11388,14 +11325,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char remove (void);
+   builtin and then its argument prototype would still apply.  */
+char remove ();
 int
 main (void)
 {
@@ -11444,14 +11375,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char shmat (void);
+   builtin and then its argument prototype would still apply.  */
+char shmat ();
 int
 main (void)
 {
@@ -11502,14 +11427,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char IceConnectionNumber (void);
+   builtin and then its argument prototype would still apply.  */
+char IceConnectionNumber ();
 int
 main (void)
 {
@@ -11811,7 +11730,7 @@ static const char *tz_strings[] = {
 /* Return 0 if mktime fails to convert a date in the spring-forward gap.
    Based on a problem report from Andreas Jaeger.  */
 static int
-spring_forward_gap (void)
+spring_forward_gap ()
 {
   /* glibc (up to about 1998-10-07) failed this test. */
   struct tm tm;
@@ -11848,7 +11767,7 @@ mktime_test (time_t now)
 }
 
 static int
-irix_6_4_bug (void)
+irix_6_4_bug ()
 {
   /* Based on code from Ariel Faigon.  */
   struct tm tm;
@@ -11890,7 +11809,7 @@ bigtime_test (int j)
 }
 
 static int
-year_2050_test (void)
+year_2050_test ()
 {
   /* The correct answer for 2050-02-01 00:00:00 in Pacific time,
      ignoring leap seconds.  */
@@ -12189,7 +12108,7 @@ static const char *tz_strings[] = {
 /* Return 0 if mktime fails to convert a date in the spring-forward gap.
    Based on a problem report from Andreas Jaeger.  */
 static int
-spring_forward_gap (void)
+spring_forward_gap ()
 {
   /* glibc (up to about 1998-10-07) failed this test. */
   struct tm tm;
@@ -12226,7 +12145,7 @@ mktime_test (time_t now)
 }
 
 static int
-irix_6_4_bug (void)
+irix_6_4_bug ()
 {
   /* Based on code from Ariel Faigon.  */
   struct tm tm;
@@ -12268,7 +12187,7 @@ bigtime_test (int j)
 }
 
 static int
-year_2050_test (void)
+year_2050_test ()
 {
   /* The correct answer for 2050-02-01 00:00:00 in Pacific time,
      ignoring leap seconds.  */
@@ -12567,14 +12486,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char strftime (void);
+   builtin and then its argument prototype would still apply.  */
+char strftime ();
 int
 main (void)
 {
@@ -13288,14 +13201,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pthread_set_name_np (void);
+   builtin and then its argument prototype would still apply.  */
+char pthread_set_name_np ();
 int
 main (void)
 {
@@ -13335,14 +13242,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pthread_setname_np (void);
+   builtin and then its argument prototype would still apply.  */
+char pthread_setname_np ();
 int
 main (void)
 {
@@ -13639,14 +13540,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char png_sig_cmp (void);
+   builtin and then its argument prototype would still apply.  */
+char png_sig_cmp ();
 int
 main (void)
 {
@@ -13804,14 +13699,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char jpeg_finish_decompress (void);
+   builtin and then its argument prototype would still apply.  */
+char jpeg_finish_decompress ();
 int
 main (void)
 {
@@ -13884,14 +13773,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char jpeg_finish_decompress (void);
+   builtin and then its argument prototype would still apply.  */
+char jpeg_finish_decompress ();
 int
 main (void)
 {
@@ -14067,14 +13950,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char tjInitDecompress (void);
+   builtin and then its argument prototype would still apply.  */
+char tjInitDecompress ();
 int
 main (void)
 {
@@ -14153,14 +14030,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char tjInitDecompress (void);
+   builtin and then its argument prototype would still apply.  */
+char tjInitDecompress ();
 int
 main (void)
 {
@@ -14309,14 +14180,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char mpg123_init (void);
+   builtin and then its argument prototype would still apply.  */
+char mpg123_init ();
 int
 main (void)
 {
@@ -14622,14 +14487,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dav1d_open (void);
+   builtin and then its argument prototype would still apply.  */
+char dav1d_open ();
 int
 main (void)
 {
@@ -15665,14 +15524,16 @@ else $as_nop
     am_cv_lib_iconv=no
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #include <stdlib.h>
 #include <iconv.h>
+
 int
 main (void)
 {
 iconv_t cd = iconv_open("","");
-       iconv(cd,NULL,NULL,NULL,NULL);
-       iconv_close(cd);
+           iconv(cd,NULL,NULL,NULL,NULL);
+           iconv_close(cd);
   ;
   return 0;
 }
@@ -15688,14 +15549,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
       LIBS="$LIBS $LIBICONV"
       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #include <stdlib.h>
 #include <iconv.h>
+
 int
 main (void)
 {
 iconv_t cd = iconv_open("","");
-         iconv(cd,NULL,NULL,NULL,NULL);
-         iconv_close(cd);
+             iconv(cd,NULL,NULL,NULL,NULL);
+             iconv_close(cd);
   ;
   return 0;
 }
@@ -15721,41 +15584,90 @@ then :
   printf %s "(cached) " >&6
 else $as_nop
 
-            am_save_LIBS="$LIBS"
+                  am_save_LIBS="$LIBS"
       if test $am_cv_lib_iconv = yes; then
         LIBS="$LIBS $LIBICONV"
       fi
-      if test "$cross_compiling" = yes
+      am_cv_func_iconv_works=no
+      for ac_iconv_const in '' 'const'; do
+        if test "$cross_compiling" = yes
 then :
   case "$host_os" in
-           aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
-           *)            am_cv_func_iconv_works="guessing yes" ;;
-         esac
+             aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
+             *)            am_cv_func_iconv_works="guessing yes" ;;
+           esac
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #include <iconv.h>
 #include <string.h>
-int main ()
+
+#ifndef ICONV_CONST
+# define ICONV_CONST $ac_iconv_const
+#endif
+
+int
+main (void)
 {
+int result = 0;
   /* Test against AIX 5.1 bug: Failures are not distinguishable from successful
      returns.  */
   {
     iconv_t cd_utf8_to_88591 = iconv_open ("ISO8859-1", "UTF-8");
     if (cd_utf8_to_88591 != (iconv_t)(-1))
       {
-        static const char input[] = "\342\202\254"; /* EURO SIGN */
+        static ICONV_CONST char input[] = "\342\202\254"; /* EURO SIGN */
         char buf[10];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_utf8_to_88591,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if (res == 0)
-          return 1;
+          result |= 1;
+        iconv_close (cd_utf8_to_88591);
+      }
+  }
+  /* Test against Solaris 10 bug: Failures are not distinguishable from
+     successful returns.  */
+  {
+    iconv_t cd_ascii_to_88591 = iconv_open ("ISO8859-1", "646");
+    if (cd_ascii_to_88591 != (iconv_t)(-1))
+      {
+        static ICONV_CONST char input[] = "\263";
+        char buf[10];
+        ICONV_CONST char *inptr = input;
+        size_t inbytesleft = strlen (input);
+        char *outptr = buf;
+        size_t outbytesleft = sizeof (buf);
+        size_t res = iconv (cd_ascii_to_88591,
+                            &inptr, &inbytesleft,
+                            &outptr, &outbytesleft);
+        if (res == 0)
+          result |= 2;
+        iconv_close (cd_ascii_to_88591);
+      }
+  }
+  /* Test against AIX 6.1..7.1 bug: Buffer overrun.  */
+  {
+    iconv_t cd_88591_to_utf8 = iconv_open ("UTF-8", "ISO-8859-1");
+    if (cd_88591_to_utf8 != (iconv_t)(-1))
+      {
+        static ICONV_CONST char input[] = "\304";
+        static char buf[2] = { (char)0xDE, (char)0xAD };
+        ICONV_CONST char *inptr = input;
+        size_t inbytesleft = 1;
+        char *outptr = buf;
+        size_t outbytesleft = 1;
+        size_t res = iconv (cd_88591_to_utf8,
+                            &inptr, &inbytesleft,
+                            &outptr, &outbytesleft);
+        if (res != (size_t)(-1) || outptr - buf > 1 || buf[1] != (char)0xAD)
+          result |= 4;
+        iconv_close (cd_88591_to_utf8);
       }
   }
 #if 0 /* This bug could be worked around by the caller.  */
@@ -15764,17 +15676,18 @@ int main ()
     iconv_t cd_88591_to_utf8 = iconv_open ("utf8", "iso88591");
     if (cd_88591_to_utf8 != (iconv_t)(-1))
       {
-        static const char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
+        static ICONV_CONST char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
         char buf[50];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_88591_to_utf8,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if ((int)res > 0)
-          return 1;
+          result |= 8;
+        iconv_close (cd_88591_to_utf8);
       }
   }
 #endif
@@ -15788,20 +15701,23 @@ int main ()
       && iconv_open ("UTF-8", "IBM-eucJP") == (iconv_t)(-1)
       /* Try HP-UX names.  */
       && iconv_open ("utf8", "eucJP") == (iconv_t)(-1))
-    return 1;
+    result |= 16;
+  return result;
+
+  ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_run "$LINENO"
 then :
   am_cv_func_iconv_works=yes
-else $as_nop
-  am_cv_func_iconv_works=no
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
+        test "$am_cv_func_iconv_works" = no || break
+      done
       LIBS="$am_save_LIBS"
 
 fi
@@ -15849,7 +15765,7 @@ extern
 #ifdef __cplusplus
 "C"
 #endif
-#if defined(__STDC__) || defined(__cplusplus)
+#if defined(__STDC__) || defined(_MSC_VER) || defined(__cplusplus)
 size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
 #else
 size_t iconv();
@@ -15874,12 +15790,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
     am_cv_proto_iconv=`echo "$am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${ac_t:-
-         }$am_cv_proto_iconv" >&5
-printf "%s\n" "${ac_t:-
-         }$am_cv_proto_iconv" >&6; }
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result:
+         $am_cv_proto_iconv" >&5
+printf "%s\n" "
+         $am_cv_proto_iconv" >&6; }
 
 printf "%s\n" "#define ICONV_CONST $am_cv_proto_iconv_arg1" >>confdefs.h
+
 
   fi
 
@@ -16045,14 +15962,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char inflateEnd (void);
+   builtin and then its argument prototype would still apply.  */
+char inflateEnd ();
 int
 main (void)
 {
@@ -16143,14 +16054,8 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char sin (void);
+   builtin and then its argument prototype would still apply.  */
+char sin ();
 int
 main (void)
 {
@@ -16182,164 +16087,44 @@ fi
 fi
 
 
-# PCRE vorhanden?
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
+# PCRE2 vorhanden?
 
-# Check whether --with-pcre was given.
-if test ${with_pcre+y}
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
+printf %s "checking if we should use pcre2... " >&6; }
+
+
+# Check whether --with-pcre2 was given.
+if test ${with_pcre2+y}
 then :
-  withval=$with_pcre;
+  withval=$with_pcre2; libpcre2_prefix="$withval"
 else $as_nop
-  with_pcre="yes"
+  libpcre2_prefix="auto"
 fi
 
-if test ".$with_pcre" = ".no" ; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: disabled" >&5
-printf "%s\n" "disabled" >&6; }
 
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: (testing)" >&5
-printf "%s\n" "(testing)" >&6; }
-  OLDLIBS="$LIBS"
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_study in -lpcre" >&5
-printf %s "checking for pcre_study in -lpcre... " >&6; }
-if test ${ac_cv_lib_pcre_pcre_study+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+	if test "$libpcre2_prefix" != "no"
+	then
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+		am_save_CFLAGS="$CFLAGS"
+		am_save_CPPFLAGS="$CPPFLAGS"
+		am_save_LIBS="$LIBS"
+		am_save_LDFLAGS="$LDFLAGS"
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pcre_study (void);
-int
-main (void)
-{
-return pcre_study ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-  ac_cv_lib_pcre_pcre_study=yes
-else $as_nop
-  ac_cv_lib_pcre_pcre_study=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pcre_pcre_study" >&5
-printf "%s\n" "$ac_cv_lib_pcre_pcre_study" >&6; }
-if test "x$ac_cv_lib_pcre_pcre_study" = xyes
-then :
-  printf "%s\n" "#define HAVE_LIBPCRE 1" >>confdefs.h
 
-  LIBS="-lpcre $LIBS"
-
-fi
-
-  if test "$ac_cv_lib_pcre_pcre_study" = "yes" ; then
-     PCRE_LIBS="-lpcre"
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PCRE_LIBS" >&5
-printf "%s\n" "$PCRE_LIBS" >&6; }
-     printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
-
-            report_have_pcre="yes"
-
-  else
-     OLDLDFLAGS="$LDFLAGS" ; LDFLAGS="$LDFLAGS -L$with_pcre/lib"
-     OLDCPPFLAGS="$CPPFLAGS" ; CPPFLAGS="$CPPFLAGS -I$with_pcre/include"
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_compile in -lpcre" >&5
-printf %s "checking for pcre_compile in -lpcre... " >&6; }
-if test ${ac_cv_lib_pcre_pcre_compile+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pcre_compile (void);
-int
-main (void)
-{
-return pcre_compile ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-  ac_cv_lib_pcre_pcre_compile=yes
-else $as_nop
-  ac_cv_lib_pcre_pcre_compile=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pcre_pcre_compile" >&5
-printf "%s\n" "$ac_cv_lib_pcre_pcre_compile" >&6; }
-if test "x$ac_cv_lib_pcre_pcre_compile" = xyes
-then :
-  printf "%s\n" "#define HAVE_LIBPCRE 1" >>confdefs.h
-
-  LIBS="-lpcre $LIBS"
-
-fi
-
-     CPPFLAGS="$OLDCPPFLAGS"
-     LDFLAGS="$OLDLDFLAGS"
-     if test "$ac_cv_lib_pcre_pcre_compile" = "yes" ; then
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: .setting PCRE_LIBS -L$with_pcre/lib -lpcre" >&5
-printf "%s\n" ".setting PCRE_LIBS -L$with_pcre/lib -lpcre" >&6; }
-        PCRE_LIBS="-L$with_pcre/lib -lpcre"
-        test -d "$with_pcre/include" && PCRE_CFLAGS="-I$with_pcre/include"
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PCRE_LIBS" >&5
-printf "%s\n" "$PCRE_LIBS" >&6; }
-        printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
-
-            report_have_pcre="yes"
-
-     else
-        # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
+		if test "$libpcre2_prefix" = "yes" -o "$libpcre2_prefix" = "auto"
+		then
+			# Extract the first word of "pcre2-config", so it can be a program name with args.
+set dummy pcre2-config; ac_word=$2
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_path_PKGCONFIG+y}
+if test ${ac_cv_path_pcre2config+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  case $PKGCONFIG in
+  case $pcre2config in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKGCONFIG="$PKGCONFIG" # Let the user override the test with a path.
+  ac_cv_path_pcre2config="$pcre2config" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -16353,7 +16138,7 @@ do
   esac
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKGCONFIG="$as_dir$ac_word$ac_exec_ext"
+    ac_cv_path_pcre2config="$as_dir$ac_word$ac_exec_ext"
     printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -16361,41 +16146,339 @@ done
   done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_PKGCONFIG" && ac_cv_path_PKGCONFIG="no"
   ;;
 esac
 fi
-PKGCONFIG=$ac_cv_path_PKGCONFIG
-if test -n "$PKGCONFIG"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PKGCONFIG" >&5
-printf "%s\n" "$PKGCONFIG" >&6; }
+pcre2config=$ac_cv_path_pcre2config
+if test -n "$pcre2config"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $pcre2config" >&5
+printf "%s\n" "$pcre2config" >&6; }
 else
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 fi
 
 
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre found with $PKGCONFIG" >&5
-printf %s "checking lib pcre found with $PKGCONFIG... " >&6; }
-        if test "$PKGCONFIG" != "no" && `$PKGCONFIG --exists libpcre`
-        then
-          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-          PCRE_LIBS=`$PKGCONFIG --libs libpcre`
-          PCRE_CFLAGS=`$PKGCONFIG --cflags libpcre`
-          printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
 
-            report_have_pcre="yes"
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-8" >&5
+printf %s "checking for libpcre2-8... " >&6; }
 
-        else
-          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+if test -n "$PCRE2_8_CFLAGS"; then
+    pkg_cv_PCRE2_8_CFLAGS="$PCRE2_8_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_8_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-8" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_8_LIBS"; then
+    pkg_cv_PCRE2_8_LIBS="$PCRE2_8_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_8_LIBS=`$PKG_CONFIG --libs "libpcre2-8" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
-        fi
-     fi
-  fi
-  LIBS="$OLDLIBS"
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
 fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_8_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-8" 2>&1`
+        else
+                PCRE2_8_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-8" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_8_PKG_ERRORS" >&5
+
+        have_libpcre2="no"
+				PCRE2_LIBS=""
+				PCRE2_CFLAGS=""
+
+				if test  -x "$pcre2config"
+				then
+					have_libpng="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        have_libpcre2="no"
+				PCRE2_LIBS=""
+				PCRE2_CFLAGS=""
+
+				if test  -x "$pcre2config"
+				then
+					have_libpng="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+
+else
+        PCRE2_8_CFLAGS=$pkg_cv_PCRE2_8_CFLAGS
+        PCRE2_8_LIBS=$pkg_cv_PCRE2_8_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        have_libpcre2="yes"
+				PCRE2_LIBS="$PCRE2_8_LIBS"
+				PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
+				printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+
+fi
+			if test ${ac_cv_sizeof_wchar_t} -eq 2
+			then
+
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-16" >&5
+printf %s "checking for libpcre2-16... " >&6; }
+
+if test -n "$PCRE2_WIDE16_CFLAGS"; then
+    pkg_cv_PCRE2_WIDE16_CFLAGS="$PCRE2_WIDE16_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-16\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-16") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE16_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-16" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_WIDE16_LIBS"; then
+    pkg_cv_PCRE2_WIDE16_LIBS="$PCRE2_WIDE16_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-16\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-16") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE16_LIBS=`$PKG_CONFIG --libs "libpcre2-16" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_WIDE16_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-16" 2>&1`
+        else
+                PCRE2_WIDE16_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-16" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_WIDE16_PKG_ERRORS" >&5
+
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+
+else
+        PCRE2_WIDE16_CFLAGS=$pkg_cv_PCRE2_WIDE16_CFLAGS
+        PCRE2_WIDE16_LIBS=$pkg_cv_PCRE2_WIDE16_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE16_LIBS"
+					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+
+fi
+			fi
+			if test ${ac_cv_sizeof_wchar_t} -eq 4
+			then
+
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-32" >&5
+printf %s "checking for libpcre2-32... " >&6; }
+
+if test -n "$PCRE2_WIDE32_CFLAGS"; then
+    pkg_cv_PCRE2_WIDE32_CFLAGS="$PCRE2_WIDE32_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-32\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-32") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE32_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-32" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_WIDE32_LIBS"; then
+    pkg_cv_PCRE2_WIDE32_LIBS="$PCRE2_WIDE32_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-32\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-32") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE32_LIBS=`$PKG_CONFIG --libs "libpcre2-32" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_WIDE32_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-32" 2>&1`
+        else
+                PCRE2_WIDE32_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-32" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_WIDE32_PKG_ERRORS" >&5
+
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+
+
+else
+        PCRE2_WIDE32_CFLAGS=$pkg_cv_PCRE2_WIDE32_CFLAGS
+        PCRE2_WIDE32_LIBS=$pkg_cv_PCRE2_WIDE32_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE32_LIBS"
+					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+
+fi
+			fi
+		else
+			LIBS="-L$libpng_prefix/lib"
+			CFLAGS="-I$libpng_prefix/include"
+			CPPFLAGS="-I$libpng_prefix/include"
+			LDFLAGS="-L$libpng_prefix/lib"
+			PCRE2_LIBS="-L$libpcre2_prefix/lib -lpcre2-8"
+			PCRE2_CFLAGS="-I$libpcre2_prefix/include"
+			printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+		fi
+
+
+		LIBS="$am_save_LIBS"
+		LDFLAGS="$am_save_LDFLAGS"
+		CFLAGS="$am_save_CFLAGS"
+		CPPFLAGS="$am_save_CPPFLAGS"
+	else
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+	fi
+	if test $have_libpcre2 = "yes"
+	then
+
+printf "%s\n" "#define HAVE_PCRE2 1" >>confdefs.h
+
+            report_have_pcre2="yes"
+
+	else
+		PCRE2_LIBS=""
+		PCRE2_CFLAGS=""
+		:
+	fi
+
+
 
 
 
@@ -17156,6 +17239,10 @@ LIBCURL=""
 LIBCDIO_LDFLAGS=""
 LIBMICROHTTPD_LIBS=""
 LIBIDN_LIBS=""
+PCRE_CFLAGS=""
+PCRE_LIBS=""
+
+
 
 
 
@@ -18685,7 +18772,7 @@ fi
 ** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
@@ -18718,7 +18805,7 @@ printf "%s\n" "
 ** Libs:
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
@@ -18745,9 +18832,9 @@ then
 "
 fi
 
-if test "$report_have_pcre" != "yes"
+if test "$report_have_pcre2" != "yes"
 then
-	missing="$missing  - pcre not found
+	missing="$missing  - pcre2 not found
 "
 fi
 

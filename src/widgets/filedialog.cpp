@@ -209,7 +209,7 @@ bool FileDialog::matchFilter(const ppl7::String& filename) const
     std::list<ppl7::String>::const_iterator it;
     for (it=filter.begin();it != filter.end();++it) {
         //ppl7::PrintDebugTime("Match %s against rule %s\n", (const char*)filename, (const char*)(*it));
-        if (ppl7::PregMatch((*it), filename)) return true;
+        if (ppl7::RegEx::match((*it), filename)) return true;
     }
     return false;
 }
