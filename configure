@@ -16453,7 +16453,8 @@ fi
         if test  -x "$pcre2config"
 					then
 						have_libpcre2="yes"
-						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						libs16=`$pcre2config --libs16`
+						PCRE2_LIBS="$PCRE2_LIBS $libs16"
 						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
 
 					fi
@@ -16464,7 +16465,8 @@ printf "%s\n" "no" >&6; }
         if test  -x "$pcre2config"
 					then
 						have_libpcre2="yes"
-						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						libs16=`$pcre2config --libs16`
+						PCRE2_LIBS="$PCRE2_LIBS $libs16"
 						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
 
 					fi
@@ -16545,7 +16547,8 @@ fi
         if test  -x "$pcre2config"
 					then
 						have_libpcre2="yes"
-						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						libs32=`$pcre2config --libs32`
+						PCRE2_LIBS="$PCRE2_LIBS $libs32"
 						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
 
 					fi
@@ -16557,7 +16560,8 @@ printf "%s\n" "no" >&6; }
         if test  -x "$pcre2config"
 					then
 						have_libpcre2="yes"
-						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						libs32=`$pcre2config --libs32`
+						PCRE2_LIBS="$PCRE2_LIBS $libs32"
 						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
 
 					fi
@@ -16597,6 +16601,10 @@ printf "%s\n" "no" >&6; }
 	fi
 	if test $have_libpcre2 = "yes"
 	then
+		#echo "PCRE2_LIBS=$PCRE2_LIBS"
+
+
+
 
 printf "%s\n" "#define HAVE_PCRE2 1" >>confdefs.h
 
@@ -16607,8 +16615,6 @@ printf "%s\n" "#define HAVE_PCRE2 1" >>confdefs.h
 		PCRE2_CFLAGS=""
 		:
 	fi
-
-
 
 
 
