@@ -16,7 +16,7 @@ jobs:
       with:
           submodules: true
     - name: install packages
-      run: sudo apt-get update && sudo apt-get install -y nasm libpcre3-dev libbz2-dev zlib1g-dev libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev libvorbis-dev libogg-dev
+      run: sudo apt-get update && sudo apt-get install -y nasm libpcre2-dev libbz2-dev zlib1g-dev libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev libvorbis-dev libogg-dev
     - name: configure
       run: ./configure
     - name: make
