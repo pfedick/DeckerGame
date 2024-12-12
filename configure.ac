@@ -473,7 +473,7 @@ AC_SUBST(report_have_bzip2)
 AC_SUBST(report_have_png)
 AC_SUBST(report_have_jpeg)
 AC_SUBST(report_have_sdl2)
-AC_SUBST(report_have_pcre)
+AC_SUBST(report_have_pcre2)
 AC_SUBST(report_have_iconv)
 AC_SUBST(report_have_nasm)
 AC_SUBST(report_have_pthreads)
@@ -508,8 +508,6 @@ LIBCURL=""
 LIBCDIO_LDFLAGS=""
 LIBMICROHTTPD_LIBS=""
 LIBIDN_LIBS=""
-PCRE_CFLAGS=""
-PCRE_LIBS=""
 
 
 AC_SUBST(JPEG_CFLAGS)
@@ -539,8 +537,6 @@ AC_SUBST(LIBCURL)
 AC_SUBST(LIBCDIO_LDFLAGS)
 AC_SUBST(LIBMICROHTTPD_LIBS)
 AC_SUBST(LIBIDN_LIBS)
-AC_SUBST(PCRE_CFLAGS)
-AC_SUBST(PCRE_LIBS)
 
 LIBPPL7_CFLAGS=-I../pplib/include
 LIBPPL7_LIBS=""
