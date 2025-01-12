@@ -172,6 +172,14 @@ pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
     mingw-w64-ucrt-x86_64-libvorbis mingw-w64-ucrt-x86_64-libogg
 ```
 
+#### FreeBSD
+
+```bash
+pkg install pcre2 sdl2 bzip2 png mpg123 jpeg-turbo dav1d libvorbis libogg pkgconf gmake
+```
+
+Use "gmake" instead of "make" for compiling below!
+
 ### Checkout and compile
 You can download a release version [here](https://github.com/pfedick/DeckerGame/releases). If you want the newest version, you can check out the sources from github:
 
