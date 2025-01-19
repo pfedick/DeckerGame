@@ -169,7 +169,8 @@ pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
     mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 \
     mingw-w64-ucrt-x86_64-pcre2 mingw-w64-ucrt-x86_64-libpng \
     mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-dav1d \
-    mingw-w64-ucrt-x86_64-libvorbis mingw-w64-ucrt-x86_64-libogg
+    mingw-w64-ucrt-x86_64-libvorbis mingw-w64-ucrt-x86_64-libogg \
+    pkgconf
 ```
 
 #### FreeBSD
