@@ -4,20 +4,20 @@
 
 VideoPlayer::VideoPlayer(SDL_Renderer* renderer)
 {
-	this->renderer=renderer;
-	overlay=NULL;
-	num_frames=0;
-	fps[0]=0;
-	fps[1]=0;
-	timebase[0]=0;
-	timebase[1]=0;
+	this->renderer = renderer;
+	overlay = NULL;
+	num_frames = 0;
+	fps[0] = 0;
+	fps[1] = 0;
+	timebase[0] = 0;
+	timebase[1] = 0;
 	dav1d_default_settings(&lib_settings);
-	endreached=false;
-	frame_width=0;
-	frame_height=0;
-	video_framerate=0.0f;
-	context=NULL;
-	data.sz=0;
+	endreached = false;
+	frame_width = 0;
+	frame_height = 0;
+	video_framerate = 0.0f;
+	context = NULL;
+	data.sz = 0;
 }
 
 VideoPlayer::~VideoPlayer()
@@ -27,7 +27,7 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::setRenderer(SDL_Renderer* renderer)
 {
-	this->renderer=renderer;
+	this->renderer = renderer;
 }
 
 void VideoPlayer::clear()
@@ -40,9 +40,9 @@ void VideoPlayer::clear()
 	}
 	if (context) {
 		dav1d_close(&context);
-		context=NULL;
+		context = NULL;
 	}
-	data.sz=0;
+	data.sz = 0;
 }
 
 
@@ -50,25 +50,25 @@ bool VideoPlayer::load(const ppl7::String& filename)
 {
 	clear();
 	if (!renderer) return false;
-	num_frames=0;
-	fps[0]=0;
-	fps[1]=0;
-	timebase[0]=0;
-	timebase[1]=0;
+	num_frames = 0;
+	fps[0] = 0;
+	fps[1] = 0;
+	timebase[0] = 0;
+	timebase[1] = 0;
 	if (!demuxer.open(filename, fps, &num_frames, timebase)) {
 		ppl7::PrintDebugTime("could not open input video\n");
 		return false;
 	}
-	endreached=false;
-	frame_width=demuxer.width();
-	frame_height=demuxer.height();
-	video_framerate=(float)fps[0];
+	endreached = false;
+	frame_width = demuxer.width();
+	frame_height = demuxer.height();
+	video_framerate = (float)fps[0];
 
 	if (dav1d_open(&context, &lib_settings) != 0) {
 		ppl7::PrintDebugTime("Failed opening dav1d decoder\n");
 		return false;
 	}
-	int res=0;
+	int res = 0;
 	if ((res = demuxer.read(&data)) < 0) {
 		ppl7::PrintDebugTime("Failed demuxing input\n");
 		return false;
@@ -80,14 +80,14 @@ bool VideoPlayer::load(const ppl7::String& filename)
 
 bool VideoPlayer::nextFrame()
 {
-	Dav1dPicture* p=NULL;
+	Dav1dPicture* p = NULL;
 	while (1) {
 		if (decode_frame(&p)) {
 			if (p) {
 				dav1d_picture_unref(p);
 				free(p);
 			}
-			endreached=true;
+			endreached = true;
 			return false;
 		}
 		if (p) {
@@ -165,8 +165,6 @@ int VideoPlayer::sdl_update_texture(Dav1dPicture* dav1d_pic)
 
 	frame_width = dav1d_pic->p.w;
 	frame_height = dav1d_pic->p.h;
-	int tex_w = frame_width;
-	int tex_h = frame_height;
 
 	enum Dav1dPixelLayout dav1d_layout = dav1d_pic->p.layout;
 
@@ -176,8 +174,7 @@ int VideoPlayer::sdl_update_texture(Dav1dPicture* dav1d_pic)
 	}
 
 	if (overlay != NULL) {
-		SDL_QueryTexture(overlay, NULL, NULL, &tex_w, &tex_h);
-		if (tex_w != frame_width || tex_h != frame_height) {
+		if (overlay->w != frame_width || overlay->h != frame_height) {
 			SDL_DestroyTexture(overlay);
 			overlay = NULL;
 		}
@@ -197,10 +194,10 @@ int VideoPlayer::sdl_update_texture(Dav1dPicture* dav1d_pic)
 }
 
 
-void VideoPlayer::renderFrame(const SDL_Rect* dstrect)
+void VideoPlayer::renderFrame(const SDL_FRect* dstrect)
 {
 	if (!renderer || !overlay) return;
-	SDL_RenderCopy(renderer, overlay, NULL, dstrect);
+	SDL_RenderTexture(renderer, overlay, NULL, dstrect);
 }
 
 SDL_Texture* VideoPlayer::getVideoTexture()

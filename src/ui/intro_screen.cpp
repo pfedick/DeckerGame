@@ -8,28 +8,28 @@
 
 
 
-static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_Rect& dest)
+static void getDestinationRect(ppl7::grafix::Size img_size, ppltk::Window& window, SDL_FRect& dest)
 {
-	const ppl7::grafix::Size& wSize=window.windowSize();
+	const ppl7::grafix::Size& wSize = window.windowSize();
 
-	float aspect=(float)window.width() / (float)window.height();
-	float img_aspect=(float)img_size.width / (float)img_size.height;
-	dest.x=0;
-	dest.y=0;
-	dest.w=wSize.width;
-	dest.h=wSize.height;
-	if (dest.w > wSize.width) dest.w=wSize.width;
-	dest.h=dest.w / aspect;
+	float aspect = (float)window.width() / (float)window.height();
+	float img_aspect = (float)img_size.width / (float)img_size.height;
+	dest.x = 0;
+	dest.y = 0;
+	dest.w = wSize.width;
+	dest.h = wSize.height;
+	if (dest.w > wSize.width) dest.w = wSize.width;
+	dest.h = dest.w / aspect;
 	if (dest.h > wSize.height) {
-		dest.h=wSize.height;
-		dest.w=dest.h * aspect;
+		dest.h = wSize.height;
+		dest.w = dest.h * aspect;
 	}
-	dest.y=(wSize.height - dest.h) / 2;
-	dest.h=dest.w / img_aspect;
-	dest.x=(wSize.width - dest.w) / 2;
+	dest.y = (wSize.height - dest.h) / 2;
+	dest.h = dest.w / img_aspect;
+	dest.x = (wSize.width - dest.w) / 2;
 }
 
-static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_Rect& dest)
+static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_FRect& dest)
 {
 	ppl7::grafix::Size vSize(video.width(), video.height());
 	getDestinationRect(vSize, window, dest);
@@ -52,24 +52,24 @@ static void getVideoDestination(VideoPlayer& video, ppltk::Window& window, SDL_R
 
 void Game::playIntroVideo()
 {
-	controlsEnabled=false;
+	controlsEnabled = false;
 	world_widget->setVisible(false);
 	world_widget->setEnabled(false);
 	ppl7::grafix::Color black(0, 0, 0, 255);
-	SDL_Renderer* renderer=sdl.getRenderer();
-	IntroScreen* intro_widget=new IntroScreen(0, 0, this->width(), this->height());
+	SDL_Renderer* renderer = sdl.getRenderer();
+	IntroScreen* intro_widget = new IntroScreen(0, 0, this->width(), this->height());
 	VideoPlayer video(renderer);
 
 
-	ppl7::String filename="res/video/george_decker_game.ivf";
+	ppl7::String filename = "res/video/george_decker_game.ivf";
 	AudioStream IntroSequence("res/audio/IntroSequence.mp3", AudioClass::Music);
-	SDL_Texture* title_tex=sdl.createStreamingTexture("res/game_title.png");
+	SDL_Texture* title_tex = sdl.createStreamingTexture("res/game_title.png");
 
 
-	ppl7::grafix::Size title_size=sdl.getTextureSize(title_tex);
-	SDL_Rect title_rect;
+	ppl7::grafix::Size title_size = sdl.getTextureSize(title_tex);
+	SDL_FRect title_rect;
 	getDestinationRect(title_size, *this, title_rect);
-	float title_blend=0.0f;
+	float title_blend = 0.0f;
 
 	if (video.load(filename)) {
 		this->addChild(intro_widget);
@@ -79,46 +79,46 @@ void Game::playIntroVideo()
 		audiosystem.play(&IntroSequence);
 
 		audiosystem.setVolume(AudioClass::Music, 0.8f);
-		int frame=0;
-		float fade_to_black=255;
-		int fade_state=0;
+		int frame = 0;
+		float fade_to_black = 255;
+		int fade_state = 0;
 
-		SDL_Rect dest;
-		double next_video_frame=0.0f;
-		double video_frametime=1.0f / (double)video.framerate();
+		SDL_FRect dest;
+		double next_video_frame = 0.0f;
+		double video_frametime = 1.0f / (double)video.framerate();
 
 		while (1) {
 			if ((quitGame || intro_widget->stopSignal()) && fade_state != 3) {
-				fade_state=3;
+				fade_state = 3;
 				IntroSequence.fadeout(2.0f);
 				if (quitGame) gameState = GameState::QuitGame;
 			}
-			double now=ppl7::GetMicrotime();
-			frame_rate_compensation=1.0f;
+			double now = ppl7::GetMicrotime();
+			frame_rate_compensation = 1.0f;
 			if (last_frame_time > 0.0f) {
-				float frametime=now - last_frame_time;
-				frame_rate_compensation=frametime / (1.0f / 60.0f);
-				if (frame_rate_compensation > 2.0f) frame_rate_compensation=2.0f;
+				float frametime = now - last_frame_time;
+				frame_rate_compensation = frametime / (1.0f / 60.0f);
+				if (frame_rate_compensation > 2.0f) frame_rate_compensation = 2.0f;
 			}
-			last_frame_time=now;
+			last_frame_time = now;
 
 
-			if (next_video_frame == 0.0f) next_video_frame=now;
+			if (next_video_frame == 0.0f) next_video_frame = now;
 			wm->handleEvents();
 			sdl.startFrame(black);
-			ppltk::MouseState mouse=wm->getMouseState();
+			ppltk::MouseState mouse = wm->getMouseState();
 			//drawWidgets();
 			if (next_video_frame <= now) {
 				frame++;
-				next_video_frame+=video_frametime;
+				next_video_frame += video_frametime;
 				if (!video.nextFrame()) break;
 			}
 
 			if (fade_state == 0) {
-				fade_to_black-=5 * frame_rate_compensation;
+				fade_to_black -= 5 * frame_rate_compensation;
 				if (fade_to_black <= 0) {
-					fade_state=1;
-					fade_to_black=0.0f;
+					fade_state = 1;
+					fade_to_black = 0.0f;
 				}
 			}
 
@@ -127,20 +127,21 @@ void Game::playIntroVideo()
 			FadeToBlack(renderer, (int)fade_to_black);
 
 			if (frame > 1700) {
-				if (title_blend < 255.0f) title_blend+=8 * frame_rate_compensation;
-				if (title_blend > 255.0f) title_blend=255.0f;
+				if (title_blend < 255.0f) title_blend += 8 * frame_rate_compensation;
+				if (title_blend > 255.0f) title_blend = 255.0f;
 				SDL_SetTextureAlphaMod(title_tex, title_blend);
 				getDestinationRect(title_size, *this, title_rect);
 				//title_rect.y=0;
-				SDL_RenderCopy(renderer, title_tex, NULL, &title_rect);
+				SDL_RenderTexture(renderer, title_tex, NULL, &title_rect);
 			}
 			if (frame > 1800 && fade_to_black < 255.0f) {
-				fade_to_black+=4 * frame_rate_compensation;
-				if (fade_to_black > 255.0f) fade_to_black=255.0f;
-			} else if (fade_state == 3) {
-				fade_to_black+=4 * frame_rate_compensation;
+				fade_to_black += 4 * frame_rate_compensation;
+				if (fade_to_black > 255.0f) fade_to_black = 255.0f;
+			}
+			else if (fade_state == 3) {
+				fade_to_black += 4 * frame_rate_compensation;
 				if (fade_to_black > 255.0f) {
-					fade_to_black=255.0f;
+					fade_to_black = 255.0f;
 					break;
 				}
 			}
@@ -161,7 +162,7 @@ void Game::playIntroVideo()
 
 IntroScreen::IntroScreen(int x, int y, int width, int height)
 {
-	stop_playback=false;
+	stop_playback = false;
 	create(x, y, width, height);
 }
 
@@ -181,16 +182,16 @@ bool IntroScreen::stopSignal() const
 void IntroScreen::keyDownEvent(ppltk::KeyEvent* event)
 {
 	if (event->key == ppltk::KeyEvent::KEY_ESCAPE || event->key == ppltk::KeyEvent::KEY_SPACE) {
-		stop_playback=true;
+		stop_playback = true;
 
 	}
 }
 
 void IntroScreen::gameControllerButtonDownEvent(ppltk::GameControllerButtonEvent* event)
 {
-	GameControllerMapping::Button b=GetGame().controller.mapping.getButton(event);
+	GameControllerMapping::Button b = GetGame().controller.mapping.getButton(event);
 	if (b != GameControllerMapping::Button::Unknown) {
-		stop_playback=true;
+		stop_playback = true;
 	}
 
 

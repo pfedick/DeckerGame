@@ -33,8 +33,8 @@ extern "C" {
  // FIFO structure
 struct dp_fifo
 {
-    SDL_mutex* lock;
-    SDL_cond* cond_change;
+    SDL_Mutex* lock;
+    SDL_Condition* cond_change;
     size_t capacity;
     size_t count;
     void** entries;
@@ -96,7 +96,7 @@ typedef struct render_context
     void* rd_priv;
 
     // Lock to protect access to the context structure
-    SDL_mutex* lock;
+    SDL_Mutex* lock;
 
     // Timestamp of last displayed frame (in timebase unit)
     int64_t last_ts;
@@ -190,7 +190,7 @@ public:
     float framerate() const;
     bool eof() const;
 
-    void renderFrame(const SDL_Rect* dstrect = NULL);
+    void renderFrame(const SDL_FRect* dstrect = NULL);
     SDL_Texture* getVideoTexture();
 
 };
