@@ -134,9 +134,11 @@ public:
 
 private:
 	int device_id;
+	SDL_AudioStream* audio_stream;
 	ppl7::Mutex mutex;
 	std::set<Audio*> tracks;
 	ppl7::STEREOSAMPLE32* mixbuffer;
+	size_t mixbuffer_size;
 	float globalVolume;
 	float a_class_volume[5];
 
@@ -152,7 +154,7 @@ public:
 	void enumerateDrivers(std::list<ppl7::String>& driver_names) const;
 	void enumerateDevices(std::list<ppl7::String>& device_names) const;
 	void initDriver(const ppl7::String& driver_name);	// optional
-	void init(const ppl7::String& device = ppl7::String());
+	void init();	// default device
 	void play(Audio* audio);
 	void stop(Audio* audio);
 	bool isPlaying(Audio* audio);
@@ -163,7 +165,7 @@ public:
 	void setVolume(AudioClass a_class, float volume);
 	Metrics getMetrics(bool reset = true);
 
-	void callback(Uint8* stream, int len);
+	void callback(SDL_AudioStream* stream, int additional_amount, int total_amount);
 
 };
 
