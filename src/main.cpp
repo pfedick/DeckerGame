@@ -6,6 +6,7 @@
 #include <ppltk.h>
 #include "audio.h"
 #include <math.h>
+#include <unistd.h>
 #include "objects.h"
 
 #define DEBUGTIME
@@ -126,6 +127,7 @@ void start(int argc, char** argv)
 		throw std::exception();
 	}
 
+
 	if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
 		help();
 		return;
@@ -172,6 +174,11 @@ int WinMain()
 
 int main(int argc, char** argv)
 {
+	ppl7::String path=ppl7::File::getPath(ppl7::String(argv[0]));
+	ppl7::String testfile=path+"/res/george_adventure.tex";
+	if (ppl7::File::isFile(testfile)) {
+		chdir((const char*)path);
+	}
 
 	start(argc, argv);
 	return 0;
