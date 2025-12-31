@@ -1,7 +1,7 @@
 #ifndef INCLUDE_VIDEOPLAYER_H_
 #define INCLUDE_VIDEOPLAYER_H_
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <ppl7.h>
 #include <ppl7-grafix.h>
@@ -20,17 +20,17 @@ extern "C" {
  * this is usually filled by parsing arguments
  * from the console.
  */
-/*
-typedef struct {
-    const char* inputfile;
-    const char* renderer_name;
-    int highquality;
-    int untimed;
-    int zerocopy;
-    int gpugrain;
-} Dav1dPlaySettings;
-*/
-// FIFO structure
+ /*
+ typedef struct {
+     const char* inputfile;
+     const char* renderer_name;
+     int highquality;
+     int untimed;
+     int zerocopy;
+     int gpugrain;
+ } Dav1dPlaySettings;
+ */
+ // FIFO structure
 struct dp_fifo
 {
     SDL_mutex* lock;
@@ -179,7 +179,7 @@ private:
 
 
 public:
-    VideoPlayer(SDL_Renderer* renderer=NULL);
+    VideoPlayer(SDL_Renderer* renderer = NULL);
     ~VideoPlayer();
     void setRenderer(SDL_Renderer* renderer);
     void clear();
@@ -190,7 +190,7 @@ public:
     float framerate() const;
     bool eof() const;
 
-    void renderFrame(const SDL_Rect* dstrect=NULL);
+    void renderFrame(const SDL_Rect* dstrect = NULL);
     SDL_Texture* getVideoTexture();
 
 };

@@ -1,16 +1,16 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 
 Plane::Plane()
 {
-	tilematrix=NULL;
-	width=0;
-	height=0;
-	bTilesVisible=true;
-	tile_count=0;
+	tilematrix = NULL;
+	width = 0;
+	height = 0;
+	bTilesVisible = true;
+	tile_count = 0;
 }
 
 Plane::~Plane()
@@ -21,29 +21,29 @@ Plane::~Plane()
 void Plane::clear()
 {
 	if (tilematrix) {
-		for (int y=0;y < height;y++) {
-			for (int x=0;x < width;x++) {
+		for (int y = 0;y < height;y++) {
+			for (int x = 0;x < width;x++) {
 				if (tilematrix[y * width + x]) delete tilematrix[y * width + x];
 			}
 		}
 
 		free(tilematrix);
-		tilematrix=NULL;
+		tilematrix = NULL;
 	}
-	width=0;
-	height=0;
-	tile_count=0;
+	width = 0;
+	height = 0;
+	tile_count = 0;
 }
 
 void Plane::create(int width, int height)
 {
 	clear();
-	this->width=width;
-	this->height=height;
-	tilematrix=(Tile**)calloc(1, sizeof(Tile*) * (width + 1) * (height + 1));
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			tilematrix[y * width + x]=(Tile*)NULL;
+	this->width = width;
+	this->height = height;
+	tilematrix = (Tile**)calloc(1, sizeof(Tile*) * (width + 1) * (height + 1));
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			tilematrix[y * width + x] = (Tile*)NULL;
 		}
 	}
 }
@@ -59,7 +59,7 @@ void Plane::setTile(int x, int y, int z, int tileset, int tileno, int color_inde
 	if (z < 0 || z >= MAX_TILESETS) return;
 
 	if (tilematrix[y * width + x] == NULL) {
-		tilematrix[y * width + x]=new Tile();
+		tilematrix[y * width + x] = new Tile();
 	}
 	if (!tilematrix[y * width + x]->hasSprite(z)) tile_count++;
 	tilematrix[y * width + x]->setSprite(z, tileset, tileno, color_index, showStuds);
@@ -69,7 +69,7 @@ void Plane::setOccupation(int x, int y, int z, Tile::TileOccupation o, int origi
 {
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
 	if (tilematrix[y * width + x] == NULL) {
-		tilematrix[y * width + x]=new Tile();
+		tilematrix[y * width + x] = new Tile();
 	}
 	tilematrix[y * width + x]->setOccupation(z, o, origin_x, origin_y);
 }
@@ -78,17 +78,17 @@ void Plane::setBlockBackground(int x, int y, bool block)
 {
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
 	if (tilematrix[y * width + x] == NULL) {
-		tilematrix[y * width + x]=new Tile();
+		tilematrix[y * width + x] = new Tile();
 	}
-	tilematrix[y * width + x]->block_background=block;
+	tilematrix[y * width + x]->block_background = block;
 
 }
 
 void Plane::setOccupation(int x, int y, int z, const BrickOccupation::Matrix& matrix)
 {
 	BrickOccupation::Matrix::const_iterator it;
-	for (it=matrix.begin();it != matrix.end();++it) {
-		const BrickOccupation::Item& item=(*it);
+	for (it = matrix.begin();it != matrix.end();++it) {
+		const BrickOccupation::Item& item = (*it);
 		setOccupation(x + item.x, y - item.y, z, item.o, x, y);
 	}
 }
@@ -96,8 +96,8 @@ void Plane::setOccupation(int x, int y, int z, const BrickOccupation::Matrix& ma
 void Plane::clearOccupation(int x, int y, int z, const BrickOccupation::Matrix& matrix)
 {
 	BrickOccupation::Matrix::const_iterator it;
-	for (it=matrix.begin();it != matrix.end();++it) {
-		const BrickOccupation::Item& item=(*it);
+	for (it = matrix.begin();it != matrix.end();++it) {
+		const BrickOccupation::Item& item = (*it);
 		setOccupation(x + item.x, y - item.y, z, Tile::OccupationNone);
 	}
 	setOccupation(x, y, z, Tile::OccupationNone);
@@ -114,9 +114,9 @@ Tile::TileOccupation Plane::getOccupation(int x, int y, int z)
 bool Plane::isOccupied(int x, int y, int z, const BrickOccupation::Matrix& matrix)
 {
 	BrickOccupation::Matrix::const_iterator it;
-	for (it=matrix.begin();it != matrix.end();++it) {
-		const BrickOccupation::Item& item=(*it);
-		Tile::TileOccupation o=getOccupation(x + item.x, y - item.y, z);
+	for (it = matrix.begin();it != matrix.end();++it) {
+		const BrickOccupation::Item& item = (*it);
+		Tile::TileOccupation o = getOccupation(x + item.x, y - item.y, z);
 		if (o) return true;
 	}
 	return false;
@@ -144,7 +144,7 @@ const Tile* Plane::get(int x, int y) const
 int Plane::getTileNo(int x, int y, int z)
 {
 	if (z < 0 || z >= MAX_TILE_LAYER) return -1;
-	const Tile* t=get(x, y);
+	const Tile* t = get(x, y);
 	if (!t) return -1;
 	return t->layer[z].tileno;
 }
@@ -152,7 +152,7 @@ int Plane::getTileNo(int x, int y, int z)
 int Plane::getTileSet(int x, int y, int z)
 {
 	if (z < 0 || z >= MAX_TILE_LAYER) return -1;
-	const Tile* t=get(x, y);
+	const Tile* t = get(x, y);
 	if (!t) return -1;
 	return t->layer[z].tileset;
 }
@@ -160,7 +160,7 @@ int Plane::getTileSet(int x, int y, int z)
 int Plane::getColorIndex(int x, int y, int z)
 {
 	if (z < 0 || z >= MAX_TILE_LAYER) return -1;
-	const Tile* t=get(x, y);
+	const Tile* t = get(x, y);
 	if (!t) return -1;
 	return t->layer[z].color_index;
 }
@@ -168,14 +168,14 @@ int Plane::getColorIndex(int x, int y, int z)
 
 ppl7::grafix::Point Plane::getOccupationOrigin(int x, int y, int z)
 {
-	const Tile* t=get(x, y);
+	const Tile* t = get(x, y);
 	if (t == NULL || z < 0 || z >= MAX_TILE_LAYER) return ppl7::grafix::Point(-1, -1);
 	return ppl7::grafix::Point(t->layer[z].origin_x, t->layer[z].origin_y);
 }
 
 void Plane::setVisible(bool visible)
 {
-	bTilesVisible=visible;
+	bTilesVisible = visible;
 }
 
 bool Plane::isVisible() const
@@ -187,31 +187,31 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	if (tilematrix == NULL) return;
 	// calculate required size
-	size_t buffersize=10;
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			const Tile* t=tilematrix[y * width + x];
+	size_t buffersize = 10;
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			const Tile* t = tilematrix[y * width + x];
 			if (t) {
-				buffersize+=(5 + MAX_TILE_LAYER * 11);
+				buffersize += (5 + MAX_TILE_LAYER * 11);
 			}
 		}
 	}
-	unsigned char* buffer=(unsigned char*)malloc(buffersize);
+	unsigned char* buffer = (unsigned char*)malloc(buffersize);
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
 	ppl7::Poke8(buffer + 5, 1);		// Version
 	ppl7::Poke16(buffer + 6, width);
 	ppl7::Poke16(buffer + 8, height);
-	size_t p=10;
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			const Tile* t=tilematrix[y * width + x];
+	size_t p = 10;
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			const Tile* t = tilematrix[y * width + x];
 			if (t) {
 				ppl7::Poke16(buffer + p, x);
 				ppl7::Poke16(buffer + p + 2, y);
 				ppl7::Poke8(buffer + p + 4, (int)t->block_background);
-				p+=5;
-				for (int z=0;z < MAX_TILE_LAYER;z++) {
+				p += 5;
+				for (int z = 0;z < MAX_TILE_LAYER;z++) {
 					ppl7::Poke16(buffer + p, t->layer[z].tileset);
 					ppl7::Poke16(buffer + p + 2, t->layer[z].tileno);
 					ppl7::Poke16(buffer + p + 4, t->layer[z].origin_x);
@@ -219,7 +219,7 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 					ppl7::Poke8(buffer + p + 8, t->layer[z].occupation);
 					ppl7::Poke8(buffer + p + 9, t->layer[z].showStuds);
 					ppl7::Poke8(buffer + p + 10, t->layer[z].color_index);
-					p+=11;
+					p += 11;
 				}
 			}
 		}
@@ -232,36 +232,37 @@ void Plane::save(ppl7::FileObject& file, unsigned char id) const
 
 void Plane::load(const ppl7::ByteArrayPtr& ba)
 {
-	const char* buffer=ba.toCharPtr();
-	int version=ppl7::Peek8(buffer);
-	size_t p=1;
+	const char* buffer = ba.toCharPtr();
+	int version = ppl7::Peek8(buffer);
+	size_t p = 1;
 	if (version == 1) {
-		width=ppl7::Peek16(buffer + p);
-		height=ppl7::Peek16(buffer + p + 2);
-		p+=4;
+		width = ppl7::Peek16(buffer + p);
+		height = ppl7::Peek16(buffer + p + 2);
+		p += 4;
 		//printf ("width: %d, height: %d\n",width,height);
 		create(width, height);
 		while (p < ba.size()) {
-			int x=ppl7::Peek16(buffer + p);
-			int y=ppl7::Peek16(buffer + p + 2);
-			bool block_background=(bool)ppl7::Peek8(buffer + p + 4);
-			p+=5;
-			for (int z=0;z < MAX_TILE_LAYER;z++) {
-				int tileset=ppl7::Peek16(buffer + p);
-				int tileno=ppl7::Peek16(buffer + p + 2);
-				int origin_x=ppl7::Peek16(buffer + p + 4);
-				int origin_y=ppl7::Peek16(buffer + p + 6);
-				int occupation=ppl7::Peek8(buffer + p + 8);
-				bool showStuds=ppl7::Peek8(buffer + p + 9);
-				int color_index=ppl7::Peek8(buffer + p + 10);
-				if (tileset > 2) tileset=2;
+			int x = ppl7::Peek16(buffer + p);
+			int y = ppl7::Peek16(buffer + p + 2);
+			bool block_background = (bool)ppl7::Peek8(buffer + p + 4);
+			p += 5;
+			for (int z = 0;z < MAX_TILE_LAYER;z++) {
+				int tileset = ppl7::Peek16(buffer + p);
+				int tileno = ppl7::Peek16(buffer + p + 2);
+				int origin_x = ppl7::Peek16(buffer + p + 4);
+				int origin_y = ppl7::Peek16(buffer + p + 6);
+				int occupation = ppl7::Peek8(buffer + p + 8);
+				bool showStuds = ppl7::Peek8(buffer + p + 9);
+				int color_index = ppl7::Peek8(buffer + p + 10);
+				if (tileset > 2) tileset = 2;
 				setTile(x, y, z, tileset, tileno, color_index, showStuds);
 				setOccupation(x, y, z, (Tile::TileOccupation)occupation, origin_x, origin_y);
-				p+=11;
+				p += 11;
 			}
 			setBlockBackground(x, y, block_background);
 		}
-	} else {
+	}
+	else {
 		printf("Can't load Plane, unknown version! [%d]\n", version);
 	}
 	//printf("Plane hat %zd tiles\n", tileCount());
@@ -270,18 +271,18 @@ void Plane::load(const ppl7::ByteArrayPtr& ba)
 ppl7::grafix::Rect Plane::getOccupiedArea() const
 {
 	ppl7::grafix::Rect r;
-	r.x1=width;
-	r.y1=height;
-	r.x2=0;
-	r.y2=0;
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			const Tile* t=tilematrix[y * width + x];
+	r.x1 = width;
+	r.y1 = height;
+	r.x2 = 0;
+	r.y2 = 0;
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			const Tile* t = tilematrix[y * width + x];
 			if (t && t->hasSprite()) {
-				if (x > r.x2) r.x2=x;
-				if (x < r.x1) r.x1=x;
-				if (y > r.y2) r.y2=y;
-				if (y < r.y1) r.y1=y;
+				if (x > r.x2) r.x2 = x;
+				if (x < r.x1) r.x1 = x;
+				if (y > r.y2) r.y2 = y;
+				if (y < r.y1) r.y1 = y;
 			}
 		}
 	}

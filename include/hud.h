@@ -1,7 +1,7 @@
 #ifndef INCLUDE_HUD_H_
 #define INCLUDE_HUD_H_
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "decker_sdl.h"
@@ -58,7 +58,7 @@ public:
     void updatePlayerStats(const Player* player);
     void resetPlayerStats(const Player* player);
 
-    void draw(SDL_Renderer* renderer, SDL_Texture* render_target, const SDL_Rect& render_rect);
+    void draw(SDL_Renderer* renderer, SDL_Texture* render_target);
 };
 
 #endif

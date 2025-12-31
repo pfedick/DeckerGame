@@ -1,7 +1,7 @@
 #include "decker.h"
 //#include <stdio.h>
 //#include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 #include <ppltk.h>
 #include "audio.h"
@@ -50,10 +50,10 @@ void startDebug(Game& game)
 
 void startLevel(Game& game, int argc, char** argv)
 {
-	ppl7::String level=ppl7::GetArgv(argc, argv, "-l");
-	if (level.right(4) != ".lvl") level+=".lvl";
+	ppl7::String level = ppl7::GetArgv(argc, argv, "-l");
+	if (level.right(4) != ".lvl") level += ".lvl";
 	if (!ppl7::File::exists(level)) {
-		level="level/" + level;
+		level = "level/" + level;
 	}
 	if (ppl7::File::exists(level)) {
 		game.startLevel(level);
@@ -75,7 +75,7 @@ void startNormal(Game& game)
 	}
 	AudioStream GeorgeDeckerTheme("res/audio/PatrickF-George_Decker_Theme.mp3", AudioClass::Music);
 	while (1) {
-		GameState state=game.showStartScreen(GeorgeDeckerTheme);
+		GameState state = game.showStartScreen(GeorgeDeckerTheme);
 		if (state == GameState::QuitGame) break;
 		else if (state == GameState::StartGame) {
 			game.showUi(false);
@@ -84,29 +84,33 @@ void startNormal(Game& game)
 			game.enableControls(true);
 			game.run();
 			if (game.gameState == GameState::QuitGame) break;
-		} else if (state == GameState::StartTutorial) {
+		}
+		else if (state == GameState::StartTutorial) {
 			game.showUi(false);
 			game.resetPlayer();
 			game.startLevel("level/tutorial.lvl");
 			game.enableControls(true);
 			game.run();
-			game.config.tutorialPlayed=true;
+			game.config.tutorialPlayed = true;
 			game.config.save();
-		} else if (state == GameState::StartEditor) {
+		}
+		else if (state == GameState::StartEditor) {
 			game.showUi(true);
 			LevelParameter default_params;
 			game.createNewLevel(default_params);
 			game.resetPlayer();
 			game.openNewLevelDialog();
 			game.run();
-		} else if (state == GameState::StartLevel) {
+		}
+		else if (state == GameState::StartLevel) {
 			game.showUi(false);
 			game.resetPlayer();
 			game.startLevel(game.selectedLevel());
 			game.enableControls(true);
 			game.run();
 			if (game.gameState == GameState::QuitGame) break;
-		} else if (state == GameState::ShowSettings) {
+		}
+		else if (state == GameState::ShowSettings) {
 		}
 	}
 	game.audiosystem.stop(&GeorgeDeckerTheme);
@@ -134,10 +138,10 @@ void start(int argc, char** argv)
 	}
 
 
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO | SDL_INIT_EVENTS);
 
 	ppl7::grafix::Grafix gfx;
-	ppltk::WindowManager_SDL2 wm;
+	ppltk::WindowManager_SDL3 wm;
 	Game game;
 	game.init();
 	game.init_grafix();
@@ -145,11 +149,13 @@ void start(int argc, char** argv)
 #ifdef DEBUGTIME
 	if (ppl7::HaveArgv(argc, argv, "-d") && ppl7::File::exists("Makefile")) {
 		startDebug(game);
-	} else
+	}
+	else
 #endif
 		if (ppl7::HaveArgv(argc, argv, "-l")) {
 			startLevel(game, argc, argv);
-		} else {
+		}
+		else {
 			startNormal(game);
 		}
 	game.audiosystem.shutdown();
@@ -163,7 +169,8 @@ int WinMain()
 	try {
 		start(__argc, __argv);
 		return 0;
-	} catch (const ppl7::Exception& ex) {
+	}
+	catch (const ppl7::Exception& ex) {
 		ex.print();
 		throw;
 		return 1;
@@ -174,8 +181,8 @@ int WinMain()
 
 int main(int argc, char** argv)
 {
-	ppl7::String path=ppl7::File::getPath(ppl7::String(argv[0]));
-	ppl7::String testfile=path+"/res/george_adventure.tex";
+	ppl7::String path = ppl7::File::getPath(ppl7::String(argv[0]));
+	ppl7::String testfile = path + "/res/george_adventure.tex";
 	if (ppl7::File::isFile(testfile)) {
 		chdir((const char*)path);
 	}

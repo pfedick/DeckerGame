@@ -1,27 +1,27 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 
 
 ColorPaletteItem::ColorPaletteItem()
 {
-    ldraw_material=0;
+    ldraw_material = 0;
 }
 
 ColorPaletteItem::ColorPaletteItem(const ppl7::grafix::Color& color, const ppl7::String& name, int ldraw_material)
 {
-    this->color=color;
-    this->name=name;
-    this->ldraw_material=ldraw_material;
+    this->color = color;
+    this->name = name;
+    this->ldraw_material = ldraw_material;
 }
 
 void ColorPaletteItem::set(const ppl7::grafix::Color& color, const ppl7::String& name, int ldraw_material)
 {
-    this->color=color;
-    this->name=name;
-    this->ldraw_material=ldraw_material;
+    this->color = color;
+    this->name = name;
+    this->ldraw_material = ldraw_material;
 }
 
 ColorPalette::ColorPalette()
@@ -31,7 +31,7 @@ ColorPalette::ColorPalette()
 
 void ColorPalette::setDefaults()
 {
-    for (int i=0;i < 256;i++) {
+    for (int i = 0;i < 256;i++) {
         palette[i].set(ppl7::grafix::Color(0, 0, 0, 255), "undefined", 0);
     }
 
@@ -74,17 +74,17 @@ void ColorPalette::set(uint32_t index, const ppl7::grafix::Color& color, const p
 
 void ColorPalette::set(uint32_t index, const ColorPaletteItem& item)
 {
-    if (index < 256) palette[index]=item;
+    if (index < 256) palette[index] = item;
 }
 
 void ColorPalette::setColor(uint32_t index, const ppl7::grafix::Color& color)
 {
-    if (index < 256) palette[index].color=color;
+    if (index < 256) palette[index].color = color;
 }
 
 void ColorPalette::setName(uint32_t index, const ppl7::String& name)
 {
-    if (index < 256) palette[index].name=name;
+    if (index < 256) palette[index].name = name;
 }
 
 
@@ -125,15 +125,15 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
     //         6: 4-Byte Color: red,green,blue,alpha
     //        10: n-Byte name + finaly 0-Byte
     // Last entry contains only 2-Byte Entry size with value=0
-    size_t size=8;
-    for (int i=0;i < 256;i++) {
-        size+=10 + palette[i].name.size() + 1;
+    size_t size = 8;
+    for (int i = 0;i < 256;i++) {
+        size += 10 + palette[i].name.size() + 1;
     }
     //printf("Total size palette: %zd Byte\n", size);
     ppl7::ByteArray ba;
-    unsigned char* buffer=(unsigned char*)ba.malloc(size);
-    size_t p=6;
-    for (int i=0;i < 256;i++) {
+    unsigned char* buffer = (unsigned char*)ba.malloc(size);
+    size_t p = 6;
+    for (int i = 0;i < 256;i++) {
         ppl7::Poke16(buffer + p, 0);
         ppl7::Poke16(buffer + p + 2, i);
         ppl7::Poke16(buffer + p + 4, palette[i].ldraw_material);
@@ -144,10 +144,10 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
         memcpy(buffer + p + 10, palette[i].name.getPtr(), palette[i].name.size());
         ppl7::Poke8(buffer + p + 10 + palette[i].name.size(), 0);
         ppl7::Poke16(buffer + p, 11 + palette[i].name.size());
-        p+=11 + palette[i].name.size();
+        p += 11 + palette[i].name.size();
     }
     ppl7::Poke16(buffer + p, 0);
-    p+=2;
+    p += 2;
     ppl7::Poke32(buffer + 0, p);
     ppl7::Poke8(buffer + 4, id);
     ppl7::Poke8(buffer + 5, 1); // Version
@@ -158,24 +158,25 @@ void ColorPalette::save(ppl7::FileObject& file, unsigned char id) const
 void ColorPalette::load(const ppl7::ByteArrayPtr& ba)
 {
     setDefaults();
-    const unsigned char* buffer=(unsigned char*)ba.ptr();
-    int version=ppl7::Peek8(buffer);
-    size_t p=1;
+    const unsigned char* buffer = (unsigned char*)ba.ptr();
+    int version = ppl7::Peek8(buffer);
+    size_t p = 1;
     ppl7::grafix::Color color;
     ppl7::String name;
     if (version == 1) {
         while (1) {
-            size_t size=ppl7::Peek16(buffer + p + 0);
+            size_t size = ppl7::Peek16(buffer + p + 0);
             if (!size) break;
-            uint32_t index=ppl7::Peek16(buffer + p + 2);
-            int ldraw_material=ppl7::Peek16(buffer + p + 4);
+            uint32_t index = ppl7::Peek16(buffer + p + 2);
+            int ldraw_material = ppl7::Peek16(buffer + p + 4);
             color.set(ppl7::Peek8(buffer + p + 6), ppl7::Peek8(buffer + p + 7), ppl7::Peek8(buffer + p + 8), ppl7::Peek8(buffer + p + 9));
             name.set((const char*)(buffer + p + 10));
             set(index, color, name, ldraw_material);
-            p+=size;
+            p += size;
 
         }
-    } else {
+    }
+    else {
         printf("Can't load ColorPalette, unknown version! [%d]\n", version);
     }
     //ba.hexDump();

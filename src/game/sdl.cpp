@@ -1,17 +1,18 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 
-static ppl7::grafix::RGBFormat SDL2RGBFormat(const Uint32 f)
+// Map SDL pixel format to ppl7::grafix format
+static ppl7::grafix::RGBFormat SDL2RGBFormat(const SDL_PixelFormat  f)
 {
 	switch (f) {
 	case SDL_PIXELFORMAT_INDEX8: return ppl7::grafix::RGBFormat::Palette;
 	case SDL_PIXELFORMAT_RGB332: return ppl7::grafix::RGBFormat::R3G3B2;
-	case SDL_PIXELFORMAT_RGB444: return ppl7::grafix::RGBFormat::X4R4G4B4;
-	case SDL_PIXELFORMAT_RGB555: return ppl7::grafix::RGBFormat::X1R5G5B5;
-	case SDL_PIXELFORMAT_BGR555: return ppl7::grafix::RGBFormat::X1B5G5R5;
+	case SDL_PIXELFORMAT_XRGB4444: return ppl7::grafix::RGBFormat::X4R4G4B4;
+	case SDL_PIXELFORMAT_XRGB1555: return ppl7::grafix::RGBFormat::X1R5G5B5;
+	case SDL_PIXELFORMAT_XBGR1555: return ppl7::grafix::RGBFormat::X1B5G5R5;
 	case SDL_PIXELFORMAT_ARGB4444: return ppl7::grafix::RGBFormat::A4R4G4B4;
 	case SDL_PIXELFORMAT_ABGR4444: return ppl7::grafix::RGBFormat::A4B4G4R4;
 	case SDL_PIXELFORMAT_ARGB1555: return ppl7::grafix::RGBFormat::A1R5G5B5;
@@ -20,31 +21,17 @@ static ppl7::grafix::RGBFormat SDL2RGBFormat(const Uint32 f)
 	case SDL_PIXELFORMAT_BGR565: return ppl7::grafix::RGBFormat::B5G6R5;
 	case SDL_PIXELFORMAT_RGB24: return ppl7::grafix::RGBFormat::R8G8B8;
 	case SDL_PIXELFORMAT_BGR24: return ppl7::grafix::RGBFormat::B8G8R8;
-	case SDL_PIXELFORMAT_RGB888: return ppl7::grafix::RGBFormat::X8R8G8B8;
-	case SDL_PIXELFORMAT_BGR888: return ppl7::grafix::RGBFormat::X8B8G8R8;
+	case SDL_PIXELFORMAT_XRGB8888: return ppl7::grafix::RGBFormat::X8R8G8B8;
+	case SDL_PIXELFORMAT_XBGR8888: return ppl7::grafix::RGBFormat::X8B8G8R8;
 	case SDL_PIXELFORMAT_ARGB8888: return ppl7::grafix::RGBFormat::A8R8G8B8;
 	case SDL_PIXELFORMAT_ABGR8888: return ppl7::grafix::RGBFormat::A8B8G8R8;
+	default: break;
 	}
-	throw ppl7::grafix::UnsupportedColorFormatException();
-
-	switch (f) {
-	case SDL_PIXELFORMAT_RGB888: printf("SDL_PIXELFORMAT_RGB888\n"); break;
-	case SDL_PIXELFORMAT_RGBX8888: printf("SDL_PIXELFORMAT_RGBX8888\n"); break;
-	case SDL_PIXELFORMAT_BGR888: printf("SDL_PIXELFORMAT_BGR888\n"); break;
-	case SDL_PIXELFORMAT_BGRX8888: printf("SDL_PIXELFORMAT_BGRX8888\n"); break;
-	case SDL_PIXELFORMAT_ARGB8888: printf("SDL_PIXELFORMAT_ARGB8888\n"); break;
-	case SDL_PIXELFORMAT_RGBA8888: printf("SDL_PIXELFORMAT_RGBA8888\n"); break;
-	case SDL_PIXELFORMAT_ABGR8888: printf("SDL_PIXELFORMAT_ABGR8888\n"); break;
-	case SDL_PIXELFORMAT_BGRA8888: printf("SDL_PIXELFORMAT_BGRA8888\n"); break;
-	case SDL_PIXELFORMAT_ARGB2101010: printf("SDL_PIXELFORMAT_ARGB2101010\n"); break;
-	default: printf("Verdammt!\n"); break;
-
-	}
-
-	throw ppl7::grafix::UnsupportedColorFormatException("format=%d", f);
+	throw ppl7::grafix::UnsupportedColorFormatException("format=%d", (int)f);
 }
 
-static Uint32 RGBFormat2SDLFormat(const ppl7::grafix::RGBFormat& format)
+// Map ppl7::grafix format back to SDL pixel format
+static SDL_PixelFormat RGBFormat2SDLFormat(const ppl7::grafix::RGBFormat& format)
 {
 	switch (format) {
 	case ppl7::grafix::RGBFormat::Palette:
@@ -52,16 +39,15 @@ static Uint32 RGBFormat2SDLFormat(const ppl7::grafix::RGBFormat& format)
 	case ppl7::grafix::RGBFormat::A8R8G8B8:
 		return SDL_PIXELFORMAT_ARGB8888;
 	case ppl7::grafix::RGBFormat::X8R8G8B8:
-		return SDL_PIXELFORMAT_ARGB8888;
+		return SDL_PIXELFORMAT_XRGB8888;
 	case ppl7::grafix::RGBFormat::A8B8G8R8:
 		return SDL_PIXELFORMAT_ABGR8888;
 	case ppl7::grafix::RGBFormat::X8B8G8R8:
-		return SDL_PIXELFORMAT_ABGR8888;
-
+		return SDL_PIXELFORMAT_XBGR8888;
 	case ppl7::grafix::RGBFormat::R8G8B8:
-		return SDL_PIXELFORMAT_RGB888;
+		return SDL_PIXELFORMAT_XRGB8888;
 	case ppl7::grafix::RGBFormat::B8G8R8:
-		return SDL_PIXELFORMAT_BGR888;
+		return SDL_PIXELFORMAT_XBGR8888;
 	default:
 		throw ppl7::grafix::UnsupportedColorFormatException();
 	}
@@ -71,22 +57,16 @@ static Uint32 RGBFormat2SDLFormat(const ppl7::grafix::RGBFormat& format)
 
 SDL::VideoDisplay::VideoDisplay(int id, const ppl7::String& name)
 {
-	this->id=id;
-	this->name=name;
+	this->id = id;
+	this->name = name;
 }
 
 
 
 SDL::SDL()
 {
-	/*
-	if (0!=SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO)) {
-		throw InitializationFailed("SDL");
-	}
-	*/
-	//window=NULL;
-	renderer=NULL;
-	screensaver_enabled=SDL_IsScreenSaverEnabled();
+	renderer = NULL;
+	screensaver_enabled = SDL_ScreenSaverEnabled();
 	if (screensaver_enabled) {
 		SDL_DisableScreenSaver();
 	}
@@ -95,46 +75,15 @@ SDL::SDL()
 
 SDL::~SDL()
 {
-	//destroyWindow();
 	if (screensaver_enabled) {
 		SDL_EnableScreenSaver();
 	}
-	//SDL_Quit();
 }
-
-/*
-void SDL::destroyWindow()
-{
-	if (renderer)
-		SDL_DestroyRenderer(renderer);
-	if (window)
-		SDL_DestroyWindow(window);
-	renderer=NULL;
-	window=NULL;
-}
-
-void SDL::createWindow()
-{
-	SDL_Rect desktop;
-	SDL_GetDisplayBounds(0,&desktop);
-	window=SDL_CreateWindow("Decker", 0, 0,
-			desktop.w,
-			desktop.h,
-			SDL_WINDOW_FULLSCREEN);
-	if (!window) {
-		throw SDLException("Couldn't create window and renderer: %s", SDL_GetError());
-	}
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
-	//renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-
-}
-*/
 
 SDL_Texture* SDL::createStreamingTexture(int width, int height)
 {
 	SDL_Texture* texture;
-	texture=SDL_CreateTexture(renderer,
+	texture = SDL_CreateTexture(renderer,
 		SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_STREAMING,
 		width,
@@ -151,8 +100,8 @@ SDL_Texture* SDL::createStreamingTexture(const ppl7::String& filename)
 {
 	ppl7::grafix::Image img;
 	img.load(filename);
-	SDL_Texture* tex=createStreamingTexture(img.width(), img.height());
-	ppl7::grafix::Drawable draw=lockTexture(tex);
+	SDL_Texture* tex = createStreamingTexture(img.width(), img.height());
+	ppl7::grafix::Drawable draw = lockTexture(tex);
 	draw.blt(img);
 	unlockTexture(tex);
 	return tex;
@@ -161,7 +110,7 @@ SDL_Texture* SDL::createStreamingTexture(const ppl7::String& filename)
 SDL_Texture* SDL::createRenderTargetTexture(int width, int height)
 {
 	SDL_Texture* texture;
-	texture=SDL_CreateTexture(renderer,
+	texture = SDL_CreateTexture(renderer,
 		SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_TARGET,
 		width,
@@ -176,27 +125,26 @@ SDL_Texture* SDL::createRenderTargetTexture(int width, int height)
 
 SDL_Texture* SDL::createTexture(SDL_Renderer* renderer, const ppl7::grafix::Drawable& d)
 {
-	SDL_Surface* surface=SDL_CreateRGBSurfaceWithFormat(0,
+	SDL_Surface* surface = SDL_CreateSurface(
 		d.width(),
 		d.height(),
-		d.bitdepth(),
 		RGBFormat2SDLFormat(d.rgbformat()));
 	SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
 	SDL_LockSurface(surface);
 	ppl7::grafix::Drawable s(surface->pixels, surface->pitch,
-		surface->w, surface->h, SDL2RGBFormat(surface->format->format));
+		surface->w, surface->h, SDL2RGBFormat(surface->format));
 	s.blt(d);
 	//s.line(0,0,1024,1024,0xffffffff);
 	//s.drawRect(0,0,1024,1024,0xffffffff);
 	SDL_UnlockSurface(surface);
-	SDL_Texture* tex=SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
 	if (!tex) {
 		ppl7::String err(SDL_GetError());
-		SDL_FreeSurface(surface);
+		SDL_DestroySurface(surface);
 		throw SDLException("Couldn't create texture: " + err);
 	}
 	SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
-	SDL_FreeSurface(surface);
+	SDL_DestroySurface(surface);
 	return tex;
 }
 
@@ -210,18 +158,44 @@ void SDL::destroyTexture(SDL_Texture* texture)
 	if (texture) SDL_DestroyTexture(texture);
 }
 
+// Query display size using SDL3 display list API
 ppl7::grafix::Size SDL::getDisplaySize(int display_no) const
 {
-	SDL_Rect desktop;
-	SDL_GetDisplayBounds(display_no, &desktop);
-	return ppl7::grafix::Size(desktop.w, desktop.h);
+	int count = 0;
+	SDL_DisplayID* displays = SDL_GetDisplays(&count);
+	if (!displays || display_no < 0 || display_no >= count) {
+		if (displays) SDL_free(displays);
+		throw SDLException("Couldn't query displays (index %d)", display_no);
+	}
+	SDL_DisplayID display = displays[display_no];
+	SDL_free(displays);
+
+	const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(display);
+	if (mode) {
+		return ppl7::grafix::Size(mode->w, mode->h);
+	}
+	ppl7::String err(SDL_GetError());
+	throw SDLException("Couldn't determine display size for display %d: %s", display_no, (const char*)err);
 }
 
+// Query display bounds using SDL3 display ID
 ppl7::grafix::Rect SDL::getDisplayWindow(int display_no) const
 {
+	int count = 0;
+	SDL_DisplayID* displays = SDL_GetDisplays(&count);
+	if (!displays || display_no < 0 || display_no >= count) {
+		if (displays) SDL_free(displays);
+		throw SDLException("Couldn't query displays (index %d)", display_no);
+	}
+	SDL_DisplayID display = displays[display_no];
+	SDL_free(displays);
+
 	SDL_Rect desktop;
-	SDL_GetDisplayBounds(display_no, &desktop);
-	return ppl7::grafix::Rect(desktop.x, desktop.y, desktop.w, desktop.h);
+	if (SDL_GetDisplayBounds(display, &desktop) == 0) {
+		return ppl7::grafix::Rect(desktop.x, desktop.y, desktop.w, desktop.h);
+	}
+	ppl7::String err(SDL_GetError());
+	throw SDLException("Couldn't determine display bounds for display %d: %s", display_no, (const char*)err);
 }
 
 void SDL::startFrame(const ppl7::grafix::Color& background)
@@ -232,7 +206,7 @@ void SDL::startFrame(const ppl7::grafix::Color& background)
 
 void SDL::setRenderer(SDL_Renderer* r)
 {
-	renderer=r;
+	renderer = r;
 }
 
 SDL_Renderer* SDL::getRenderer()
@@ -245,38 +219,14 @@ void SDL::present()
 	SDL_RenderPresent(renderer);
 }
 
-/*
-void SDL::loop()
-{
-	SDL_Event event;
-	while (1) {
-		SDL_PollEvent(&event);
-		if (event.type == SDL_QUIT) {
-			break;
-		}
-		startFrame();
-		present();
-	}
-}
-*/
-
-
 ppl7::grafix::Drawable SDL::lockTexture(SDL_Texture* texture)
 {
 	void* pixels;
 	int pitch;
-	Uint32 format;
-	int access;
-	int width, height;
-
-	if (SDL_QueryTexture(texture, &format, &access, &width, &height)) {
-		throw SDLException("Couldn't query texture: %s", SDL_GetError());
-	}
 	if (SDL_LockTexture(texture, NULL, &pixels, &pitch)) {
 		throw SDLException("Couldn't lock texture: %s", SDL_GetError());
 	}
-	return ppl7::grafix::Drawable(pixels, pitch, width, height,
-		SDL2RGBFormat(format));
+	return ppl7::grafix::Drawable(pixels, pitch, texture->w, texture->h, SDL2RGBFormat(texture->format));
 }
 
 void SDL::unlockTexture(SDL_Texture* texture)
@@ -286,45 +236,65 @@ void SDL::unlockTexture(SDL_Texture* texture)
 
 ppl7::grafix::Size SDL::getTextureSize(SDL_Texture* texture)
 {
-	int width, height;
-	if (SDL_QueryTexture(texture, NULL, NULL, &width, &height)) {
-		throw SDLException("Couldn't query texture: %s", SDL_GetError());
+	if (!texture) {
+		throw SDLException("Couldn't get texture size as texture points to NULL");
 	}
-	return ppl7::grafix::Size(width, height);
+	return ppl7::grafix::Size(texture->w, texture->h);
 }
 
 
+// Current desktop display mode via SDL3 display ID
 SDL::DisplayMode SDL::desktopDisplayMode(int display_id)
 {
-	SDL_DisplayMode mode;
-	mode.driverdata=NULL;
-	if (SDL_GetDesktopDisplayMode(display_id, &mode) == 0) {
-		return SDL::DisplayMode(SDL2RGBFormat(mode.format),
-			mode.w, mode.h, mode.refresh_rate);
+	int count = 0;
+	SDL_DisplayID* displays = SDL_GetDisplays(&count);
+	if (!displays || display_id < 0 || display_id >= count) {
+		if (displays) SDL_free(displays);
+		throw SDLException("Couldn't query displays (index %d)", display_id);
+	}
+	SDL_DisplayID display = displays[display_id];
+	SDL_free(displays);
+
+	const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(display);
+	if (mode) {
+		return SDL::DisplayMode(SDL2RGBFormat(mode->format),
+			mode->w, mode->h, static_cast<int>(mode->refresh_rate));
 	}
 	ppl7::String err(SDL_GetError());
-	throw SDLException("Couldn't detrmine display mode for display %d: %s", display_id, (const char*)err);
+	throw SDLException("Couldn't determine display mode for display %d: %s", display_id, (const char*)err);
 }
 
 void SDL::getVideoDisplays(std::list<VideoDisplay>& display_list)
 {
-	int num_displays=SDL_GetNumVideoDisplays();
+	int count = 0;
+	SDL_DisplayID* displays = SDL_GetDisplays(&count);
 	display_list.clear();
-	for (int i=0;i < num_displays;i++) {
-		display_list.push_back(SDL::VideoDisplay(i, ppl7::String(SDL_GetDisplayName(i))));
+	if (!displays) return;
+	for (int i = 0;i < count;i++) {
+		const char* name = SDL_GetDisplayName(displays[i]);
+		display_list.push_back(SDL::VideoDisplay(i, ppl7::String(name ? name : "")));
 	}
+	SDL_free(displays);
 }
 
 void SDL::getDisplayModes(int display_id, std::list<DisplayMode>& mode_list)
 {
-	int numDispModes = SDL_GetNumDisplayModes(display_id);
+	int count = 0;
+	SDL_DisplayID* displays = SDL_GetDisplays(&count);
 	mode_list.clear();
-	SDL_DisplayMode mode;
-	for (int i=0;i < numDispModes;i++) {
-		mode.driverdata=NULL;
-		if (SDL_GetDisplayMode(display_id, i, &mode) == 0) {
-			mode_list.push_back(SDL::DisplayMode(SDL2RGBFormat(mode.format),
-				mode.w, mode.h, mode.refresh_rate));
-		}
+	if (!displays || display_id < 0 || display_id >= count) {
+		if (displays) SDL_free(displays);
+		return;
 	}
+	SDL_DisplayID display = displays[display_id];
+	SDL_free(displays);
+
+	int modesCount = 0;
+	SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(display, &modesCount);
+	for (int i = 0; modes && i < modesCount; i++) {
+		const SDL_DisplayMode* m = modes[i];
+		mode_list.push_back(SDL::DisplayMode(SDL2RGBFormat(m->format),
+			m->w, m->h, static_cast<int>(m->refresh_rate)));
+	}
+	if (modes) SDL_free(modes);
 }

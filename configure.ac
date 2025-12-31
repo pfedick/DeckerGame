@@ -19,13 +19,12 @@ AC_CONFIG_HEADERS([ppltk/include/ppltk_config.h])
 ###############################################################################
 # Includes
 ###############################################################################
-sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
+sinclude(pplib/autoconf/ax_cxx_compile_stdcxx_17.m4)
 sinclude(pplib/autoconf/pcre2.m4)
 sinclude(pplib/autoconf/png.m4)
 sinclude(pplib/autoconf/jpeg.m4)
 sinclude(pplib/autoconf/libjpeg-turbo.m4)
 sinclude(pplib/autoconf/ax_pthread.m4)
-sinclude(ppltk/autoconf/sdl2.m4)
 sinclude(pplib/autoconf/nasm.m4)
 sinclude(pplib/autoconf/lib-link.m4)
 sinclude(pplib/autoconf/iconv.m4)
@@ -39,6 +38,7 @@ sinclude(pplib/autoconf/ax_gcc_archflag.m4)
 sinclude(pplib/autoconf/mpg123.m4)
 sinclude(pplib/autoconf/vorbis.m4)
 sinclude(autoconf/dav1d.m4)
+sinclude(ppltk/autoconf/sdl3.m4)
 
 
 report_have_pthreads="no"
@@ -49,7 +49,7 @@ report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
 report_have_pcre2="no"
-report_have_sdl2="no"
+report_have_sdl3="no"
 report_have_png="no"
 report_have_jpeg="no"
 report_have_nasm="no"
@@ -368,13 +368,13 @@ AC_CHECK_PCRE2(AC_DEFINE(HAVE_PCRE2, 1, [ Define if you have pcre2. ])
             )
 
 
-dnl Check for SDL
-report_have_sdl2="no"
-AM_PATH_SDL2([2.0.0],
-            AC_DEFINE(HAVE_SDL2, 1, [ Define if you have libsdl2. ])
-            report_have_sdl2="yes"
-			AC_SUBST(SDL2_CFLAGS)
-			AC_SUBST(SDL2_LIBS)
+dnl Check for SDL3
+report_have_sdl3="no"
+AM_PATH_SDL3([3.2.28],
+            AC_DEFINE(HAVE_SDL3, 1, [ Define if you have libsdl3. ])
+            report_have_sdl3="yes"
+			AC_SUBST(SDL3_CFLAGS)
+			AC_SUBST(SDL3_LIBS)
             ,:)
 
 
@@ -472,7 +472,7 @@ AC_SUBST(report_have_zlib)
 AC_SUBST(report_have_bzip2)
 AC_SUBST(report_have_png)
 AC_SUBST(report_have_jpeg)
-AC_SUBST(report_have_sdl2)
+AC_SUBST(report_have_sdl3)
 AC_SUBST(report_have_pcre2)
 AC_SUBST(report_have_iconv)
 AC_SUBST(report_have_nasm)
@@ -582,7 +582,7 @@ AC_MSG_RESULT([
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
-**   SDL2 library:         $report_have_sdl2
+**   SDL3 library:         $report_have_sdl3
 **   mpg123 library:       $report_have_mpg123
 **   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
@@ -612,9 +612,9 @@ then
 "
 fi
 
-if test "$report_have_sdl2" != "yes"
+if test "$report_have_sdl3" != "yes"
 then
-	missing="$missing  - sdl2 not found
+	missing="$missing  - sdl3 not found
 "
 fi
 

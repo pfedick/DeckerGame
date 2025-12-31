@@ -1,6 +1,6 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "objects.h"
 #include "decker.h"
 
@@ -26,31 +26,31 @@ Representation WindEmitter::representation()
 WindEmitter::WindEmitter()
 	:Object(Type::ObjectType::WindEmitter)
 {
-	sprite_set=Spriteset::GenericObjects;
-	sprite_no=214;
-	collisionDetection=false;
-	visibleAtPlaytime=false;
-	sprite_no_representation=214;
-	next_birth=0.0f;
+	sprite_set = Spriteset::GenericObjects;
+	sprite_no = 214;
+	collisionDetection = false;
+	visibleAtPlaytime = false;
+	sprite_no_representation = 214;
+	next_birth = 0.0f;
 }
 
 void WindEmitter::update(double time, TileTypePlane& ttplane, Player&, float)
 {
 	if (next_birth < time) {
-		next_birth=time + (float)ppl7::rand(200, 1200) / 1000;
-		WindParticle* particle=new WindParticle();
-		particle->layer=Particle::Layer::BeforePlayer;
-		particle->birth_time=time;
-		particle->death_time=time + 20.0f;
-		particle->p.x=p.x;
-		particle->p.y=p.y;
-		particle->velocity.x=(float)(ppl7::rand(0, 200) - 100.0f) / 1000;
-		particle->velocity.y=-(float)ppl7::rand(2000, 2300) / 1000;
-		particle->end=particle->p;
+		next_birth = time + (float)ppl7::rand(200, 1200) / 1000;
+		WindParticle* particle = new WindParticle();
+		particle->layer = Particle::Layer::BeforePlayer;
+		particle->birth_time = time;
+		particle->death_time = time + 20.0f;
+		particle->p.x = p.x;
+		particle->p.y = p.y;
+		particle->velocity.x = (float)(ppl7::rand(0, 200) - 100.0f) / 1000;
+		particle->velocity.y = -(float)ppl7::rand(2000, 2300) / 1000;
+		particle->end = particle->p;
 		while (particle->end.y > 0 && ttplane.getType(particle->end) != TileType::AirStream)
-			particle->end.y-=TILE_HEIGHT;
+			particle->end.y -= TILE_HEIGHT;
 		while (particle->end.y > 0 && ttplane.getType(particle->end) == TileType::AirStream)
-			particle->end.y-=TILE_HEIGHT;
+			particle->end.y -= TILE_HEIGHT;
 		particle->initAnimation(Particle::Type::RotatingParticleTransparent);
 		GetParticleSystem()->addParticle(particle);
 	}
@@ -59,7 +59,7 @@ void WindEmitter::update(double time, TileTypePlane& ttplane, Player&, float)
 void WindParticle::update(double time, float frame_rate_compensation)
 {
 	Particle::update(time, frame_rate_compensation);
-	if (p.y < end.y) death_time=0;
+	if (p.y < end.y) death_time = 0;
 }
 
 

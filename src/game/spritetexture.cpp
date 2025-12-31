@@ -1,6 +1,7 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 
@@ -115,13 +116,13 @@ using namespace ppl7;
 
 SpriteTexture::SpriteTexture()
 {
-	bMemoryBufferd=false;
-	bOutlinesEnabled=false;
-	bCollisionDetectionEnabled=false;
-	bSDLBufferd=true;
-	defaultBlendMode=SDL_BLENDMODE_BLEND;
-	current_outline_texture=NULL;
-	current_outline_sprite_id=-1;
+	bMemoryBufferd = false;
+	bOutlinesEnabled = false;
+	bCollisionDetectionEnabled = false;
+	bSDLBufferd = true;
+	defaultBlendMode = SDL_BLENDMODE_BLEND;
+	current_outline_texture = NULL;
+	current_outline_sprite_id = -1;
 }
 
 SpriteTexture::~SpriteTexture()
@@ -131,33 +132,33 @@ SpriteTexture::~SpriteTexture()
 
 void SpriteTexture::enableMemoryBuffer(bool enabled)
 {
-	bMemoryBufferd=enabled;
+	bMemoryBufferd = enabled;
 }
 
 void SpriteTexture::enableSDLBuffer(bool enabled)
 {
-	bSDLBufferd=enabled;
+	bSDLBufferd = enabled;
 }
 
 void SpriteTexture::enableCollisionDetection(bool enabled)
 {
-	bCollisionDetectionEnabled=enabled;
+	bCollisionDetectionEnabled = enabled;
 }
 
 void SpriteTexture::enableOutlines(bool enabled)
 {
-	bOutlinesEnabled=enabled;
+	bOutlinesEnabled = enabled;
 }
 
 void SpriteTexture::clear()
 {
 	std::map<int, SDL_Texture*>::const_iterator it;
-	for (it=TextureMap.begin();it != TextureMap.end();++it) {
+	for (it = TextureMap.begin();it != TextureMap.end();++it) {
 		SDL_DestroyTexture(it->second);
 	}
 	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
-	current_outline_texture=NULL;
-	current_outline_sprite_id=-1;
+	current_outline_texture = NULL;
+	current_outline_sprite_id = -1;
 	TextureMap.clear();
 	InMemoryTextureMap.clear();
 	SpriteList.clear();
@@ -167,7 +168,7 @@ SDL_Texture* SpriteTexture::findTexture(int id) const
 {
 	if (bSDLBufferd) {
 		std::map<int, SDL_Texture*>::const_iterator it;
-		it=TextureMap.find(id);
+		it = TextureMap.find(id);
 		if (it != TextureMap.end()) return it->second;
 	}
 	return NULL;
@@ -177,7 +178,7 @@ const ppl7::grafix::Drawable* SpriteTexture::findInMemoryTexture(int id) const
 {
 	if (bMemoryBufferd) {
 		std::map<int, ppl7::grafix::Image>::const_iterator it;
-		it=InMemoryTextureMap.find(id);
+		it = InMemoryTextureMap.find(id);
 		if (it != InMemoryTextureMap.end()) return &it->second;
 	}
 	return NULL;
@@ -185,27 +186,27 @@ const ppl7::grafix::Drawable* SpriteTexture::findInMemoryTexture(int id) const
 
 void SpriteTexture::loadIndex(ppl7::PFPChunk* chunk)
 {
-	char* buffer=(char*)chunk->data();
-	int num=Peek32(buffer);		// Anzahl Einträge in der Tabelle
-	char* p=buffer + 4;
+	char* buffer = (char*)chunk->data();
+	int num = Peek32(buffer);		// Anzahl Einträge in der Tabelle
+	char* p = buffer + 4;
 	SpriteIndexItem item;
-	for (int i=0;i < num;i++) {
-		item.id=Peek32(p + 0);
-		item.textureId=Peek16(p + 4);
-		item.tex=findTexture(item.textureId);
+	for (int i = 0;i < num;i++) {
+		item.id = Peek32(p + 0);
+		item.textureId = Peek16(p + 4);
+		item.tex = findTexture(item.textureId);
 		//item.outlines=findOutlines(item.textureId);
-		item.drawable=findInMemoryTexture(item.textureId);
-		item.r.x=Peek16(p + 6 + 0);
-		item.r.y=Peek16(p + 6 + 2);
-		item.r.w=Peek16(p + 6 + 4) + 1 - item.r.x;
-		item.r.h=Peek16(p + 6 + 6) + 1 - item.r.y;
-		item.Pivot.x=Peek16(p + 14 + 0);
-		item.Pivot.y=Peek16(p + 14 + 2);
-		item.Offset.x=Peek16(p + 18 + 0);
-		item.Offset.y=Peek16(p + 18 + 2);
+		item.drawable = findInMemoryTexture(item.textureId);
+		item.r.x = Peek16(p + 6 + 0);
+		item.r.y = Peek16(p + 6 + 2);
+		item.r.w = Peek16(p + 6 + 4) + 1 - item.r.x;
+		item.r.h = Peek16(p + 6 + 6) + 1 - item.r.y;
+		item.Pivot.x = Peek16(p + 14 + 0);
+		item.Pivot.y = Peek16(p + 14 + 2);
+		item.Offset.x = Peek16(p + 18 + 0);
+		item.Offset.y = Peek16(p + 18 + 2);
 		SpriteList.insert(std::pair<int, SpriteIndexItem>(item.id, item));
 		//ppl7::PrintDebugTime("pivot x=%d, y=%d\n", item.Pivot.x, item.Pivot.y);
-		p+=22;
+		p += 22;
 	}
 }
 
@@ -213,52 +214,53 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 {
 	Compression Comp;
 	Comp.usePrefix(Compression::Prefix_V2);
-	char* buffer=(char*)chunk->data();
+	char* buffer = (char*)chunk->data();
 
 	// Zunächst lesen wir dem Header
-	int id=Peek16(buffer + 0);
+	int id = Peek16(buffer + 0);
 	ppl7::grafix::RGBFormat rgbformat;
 	switch (Peek8(buffer + 2)) {
-	case 9: rgbformat=grafix::RGBFormat::A8R8G8B8;
+	case 9: rgbformat = grafix::RGBFormat::A8R8G8B8;
 		break;
 	default:
 		throw grafix::UnsupportedColorFormatException();
 	}
 	//int bitdepth=Peek8(buffer+3);
-	int width=Peek16(buffer + 4);
-	int height=Peek16(buffer + 6);
+	int width = Peek16(buffer + 4);
+	int height = Peek16(buffer + 6);
 
 	// Nutzdaten dekomprimieren
 	ByteArray uncompressed;
 	Comp.uncompress(uncompressed, buffer + 8, chunk->size() - 8);
-	buffer=(char*)uncompressed.ptr();
+	buffer = (char*)uncompressed.ptr();
 
 	// Nun erstellen wir ein neues Image
 	ppl7::grafix::Image surface;
 	surface.create(width, height, rgbformat);
 	if (tint.rgb()) {
 		//printf ("tint\n");
-		for (int y=0;y < height;y++) {
-			for (int x=0;x < width;x++) {
+		for (int y = 0;y < height;y++) {
+			for (int x = 0;x < width;x++) {
 				ppl7::grafix::Color c(Peek8(buffer + 2), Peek8(buffer + 1), Peek8(buffer), Peek8(buffer + 3));
 				if (c.alpha()) {
-					int brightness=c.brightness();
+					int brightness = c.brightness();
 					ppl7::grafix::Color tinted(tint.red() * brightness / 255,
 						tint.green() * brightness / 255,
 						tint.blue() * brightness / 255,
 						c.alpha());
 					surface.putPixel(x, y, tinted);
 				}
-				buffer+=4;
+				buffer += 4;
 			}
 		}
-	} else {
+	}
+	else {
 		//printf ("no tint\n");
-		for (int y=0;y < height;y++) {
-			for (int x=0;x < width;x++) {
+		for (int y = 0;y < height;y++) {
+			for (int x = 0;x < width;x++) {
 				ppl7::grafix::Color c(Peek8(buffer + 2), Peek8(buffer + 1), Peek8(buffer), Peek8(buffer + 3));
 				surface.putPixel(x, y, c);
-				buffer+=4;
+				buffer += 4;
 			}
 		}
 	}
@@ -266,7 +268,7 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 		InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id, surface));
 	}
 	if (bSDLBufferd) {
-		SDL_Texture* tex=sdl.createTexture(surface);
+		SDL_Texture* tex = sdl.createTexture(surface);
 		SDL_SetTextureBlendMode(tex, defaultBlendMode);
 		TextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
 	}
@@ -297,14 +299,14 @@ void SpriteTexture::load(SDL& sdl, FileObject& ff, const ppl7::grafix::Color& ti
 	PFPChunk* chunk;
 	PFPFile::Iterator it;
 	File.reset(it);
-	while ((chunk=File.findNextChunk(it, "SURF"))) {
+	while ((chunk = File.findNextChunk(it, "SURF"))) {
 		//printf ("load SURF\n");
 		loadTexture(sdl, chunk, tint);
 	}
 	// Index Chunks laden
 	File.reset(it);
 	//printf ("DONE SURF\n");
-	while ((chunk=File.findNextChunk(it, "INDX"))) {
+	while ((chunk = File.findNextChunk(it, "INDX"))) {
 		//printf ("load INDX\n");
 		loadIndex(chunk);
 	}
@@ -314,9 +316,9 @@ void SpriteTexture::draw(ppl7::grafix::Drawable& target, int x, int y, int id) c
 {
 	if (!bMemoryBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	if (!item.drawable) return;
 	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
 	target.bltAlpha(*item.drawable, r, x + item.Offset.x - item.Pivot.x, y + item.Offset.y - item.Pivot.y);
@@ -326,9 +328,9 @@ void SpriteTexture::draw(ppl7::grafix::Drawable& target, int x, int y, int id, c
 {
 	if (!bMemoryBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	if (!item.drawable) return;
 	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
 	target.bltAlphaMod(*item.drawable, r, color_modulation, x + item.Offset.x - item.Pivot.x, y + item.Offset.y - item.Pivot.y);
@@ -340,12 +342,12 @@ const ppl7::grafix::Drawable SpriteTexture::getDrawable(int id) const
 	ppl7::grafix::Drawable draw;
 	if (!bMemoryBufferd) return draw;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return draw;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	if (!item.drawable) return draw;
 	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
-	draw=(*item.drawable).getDrawable(r);
+	draw = (*item.drawable).getDrawable(r);
 	return draw;
 }
 
@@ -353,49 +355,49 @@ void SpriteTexture::draw(SDL_Renderer* renderer, int x, int y, int id) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
-	tr.x=x + item.Offset.x - item.Pivot.x;
-	tr.y=y + item.Offset.y - item.Pivot.y;
-	tr.w=item.r.w;
-	tr.h=item.r.h;
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
+	tr.x = x + item.Offset.x - item.Pivot.x;
+	tr.y = y + item.Offset.y - item.Pivot.y;
+	tr.w = item.r.w;
+	tr.h = item.r.h;
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
 	SDL_SetTextureAlphaMod(item.tex, 255);
-	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
+	SDL_RenderTexture(renderer, item.tex, &item.r, &tr);
 }
 
 void SpriteTexture::draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
-	tr.x=x + item.Offset.x - item.Pivot.x;
-	tr.y=y + item.Offset.y - item.Pivot.y;
-	tr.w=item.r.w;
-	tr.h=item.r.h;
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
+	tr.x = x + item.Offset.x - item.Pivot.x;
+	tr.y = y + item.Offset.y - item.Pivot.y;
+	tr.w = item.r.w;
+	tr.h = item.r.h;
 	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
-	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
+	SDL_RenderTexture(renderer, item.tex, &item.r, &tr);
 }
 
 void SpriteTexture::drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
-	tr.x=x + item.Offset.x - item.Pivot.x;
-	tr.y=y + item.Offset.y - item.Pivot.y;
-	tr.w=item.r.w;
-	tr.h=item.r.h;
-	SDL_RenderDrawRect(renderer, &tr);
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
+	tr.x = x + item.Offset.x - item.Pivot.x;
+	tr.y = y + item.Offset.y - item.Pivot.y;
+	tr.w = item.r.w;
+	tr.h = item.r.h;
+	SDL_RenderRect(renderer, &tr);
 
 }
 
@@ -403,111 +405,113 @@ void SpriteTexture::drawBoundingBoxWithAngle(SDL_Renderer* renderer, int x, int 
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
 	//const SpriteIndexItem& item=it->second;
-	ppl7::grafix::Rect rr=spriteBoundary(id, scale_x, scale_y, angle, x, y);
+	ppl7::grafix::Rect rr = spriteBoundary(id, scale_x, scale_y, angle, x, y);
 
-	SDL_Rect tr;
-	tr.x=rr.x1;
-	tr.y=rr.y1;
-	tr.w=rr.width();
-	tr.h=rr.height();
+	SDL_FRect tr;
+	tr.x = rr.x1;
+	tr.y = rr.y1;
+	tr.w = rr.width();
+	tr.h = rr.height();
 	SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-	SDL_RenderDrawRect(renderer, &tr);
+	SDL_RenderRect(renderer, &tr);
 
 }
 
 
-void SpriteTexture::draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const
+void SpriteTexture::draw(SDL_Renderer* renderer, int id, const SDL_FRect& source, const SDL_FRect& target) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
 	SDL_SetTextureAlphaMod(item.tex, 255);
-	SDL_RenderCopy(renderer, item.tex, &source, &target);
+	SDL_RenderTexture(renderer, item.tex, &source, &target);
 }
 
 void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
 	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
 	if (scale_factor == 1.0) {
-		tr.x=x + item.Offset.x - item.Pivot.x;
-		tr.y=y + item.Offset.y - item.Pivot.y;
-		tr.w=item.r.w;
-		tr.h=item.r.h;
-	} else {
-		tr.x=x + (item.Offset.x - item.Pivot.x) * scale_factor;
-		tr.y=y + (item.Offset.y - item.Pivot.y) * scale_factor;
-		tr.w=(int)((float)item.r.w * scale_factor);
-		tr.h=(int)((float)item.r.h * scale_factor);
+		tr.x = x + item.Offset.x - item.Pivot.x;
+		tr.y = y + item.Offset.y - item.Pivot.y;
+		tr.w = item.r.w;
+		tr.h = item.r.h;
+	}
+	else {
+		tr.x = x + (item.Offset.x - item.Pivot.x) * scale_factor;
+		tr.y = y + (item.Offset.y - item.Pivot.y) * scale_factor;
+		tr.w = (int)((float)item.r.w * scale_factor);
+		tr.h = (int)((float)item.r.h * scale_factor);
 	}
 	SDL_SetTextureColorMod(item.tex, 255, 255, 255);
 	SDL_SetTextureAlphaMod(item.tex, 255);
-	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
+	SDL_RenderTexture(renderer, item.tex, &item.r, &tr);
 }
 
 void SpriteTexture::drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
 	if (scale_factor == 1.0) {
-		tr.x=x + item.Offset.x - item.Pivot.x;
-		tr.y=y + item.Offset.y - item.Pivot.y;
-		tr.w=item.r.w;
-		tr.h=item.r.h;
-	} else {
-		tr.x=x + (item.Offset.x - item.Pivot.x) * scale_factor;
-		tr.y=y + (item.Offset.y - item.Pivot.y) * scale_factor;
-		tr.w=(int)((float)item.r.w * scale_factor);
-		tr.h=(int)((float)item.r.h * scale_factor);
+		tr.x = x + item.Offset.x - item.Pivot.x;
+		tr.y = y + item.Offset.y - item.Pivot.y;
+		tr.w = item.r.w;
+		tr.h = item.r.h;
+	}
+	else {
+		tr.x = x + (item.Offset.x - item.Pivot.x) * scale_factor;
+		tr.y = y + (item.Offset.y - item.Pivot.y) * scale_factor;
+		tr.w = (int)((float)item.r.w * scale_factor);
+		tr.h = (int)((float)item.r.h * scale_factor);
 	}
 	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
-	SDL_RenderCopy(renderer, item.tex, &item.r, &tr);
+	SDL_RenderTexture(renderer, item.tex, &item.r, &tr);
 }
 
 void SpriteTexture::drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const
 {
 	if (!bSDLBufferd) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
-	SDL_Rect tr;
-	tr.x=x + (item.Offset.x - item.Pivot.x) * scale_x;
-	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
-	tr.w=(int)((float)item.r.w * scale_x);
-	tr.h=(int)((float)item.r.h * scale_y);
-	SDL_Point center;
-	center.x=(item.Pivot.x - item.Offset.x) * scale_x;
-	center.y=(item.Pivot.y - item.Offset.y) * scale_y;
+	const SpriteIndexItem& item = it->second;
+	SDL_FRect tr;
+	tr.x = x + (item.Offset.x - item.Pivot.x) * scale_x;
+	tr.y = y + (item.Offset.y - item.Pivot.y) * scale_y;
+	tr.w = (int)((float)item.r.w * scale_x);
+	tr.h = (int)((float)item.r.h * scale_y);
+	SDL_FPoint center;
+	center.x = (item.Pivot.x - item.Offset.x) * scale_x;
+	center.y = (item.Pivot.y - item.Offset.y) * scale_y;
 
 	SDL_SetTextureAlphaMod(item.tex, color_modulation.alpha());
 	SDL_SetTextureColorMod(item.tex, color_modulation.red(), color_modulation.green(), color_modulation.blue());
-	SDL_RenderCopyEx(renderer, item.tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, item.tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
 
-SDL_Rect SpriteTexture::getSpriteSource(int id) const
+SDL_FRect SpriteTexture::getSpriteSource(int id) const
 {
-	SDL_Rect r;
-	r.x=0;r.y=0;r.w=0;r.h=0;
+	SDL_FRect r;
+	r.x = 0;r.y = 0;r.w = 0;r.h = 0;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return r;
 	return (*it).second.r;
 }
@@ -517,55 +521,56 @@ void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, f
 {
 	if (!bOutlinesEnabled) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 
 	if (id != current_outline_sprite_id || current_outline_texture == NULL) {
-		current_outline_texture=postGenerateOutlines(renderer, id);
-		if (current_outline_texture) current_outline_sprite_id=id;
+		current_outline_texture = postGenerateOutlines(renderer, id);
+		if (current_outline_texture) current_outline_sprite_id = id;
 		else return;
 	}
 
-	SDL_Rect tr;
+	SDL_FRect tr;
 	//printf ("Sprite::drawScaled %0.1f\n", scale_factor);
 	if (scale_factor == 1.0) {
-		tr.x=x + item.Offset.x - item.Pivot.x;
-		tr.y=y + item.Offset.y - item.Pivot.y;
-		tr.w=item.r.w;
-		tr.h=item.r.h;
-	} else {
-		tr.x=x + (item.Offset.x - item.Pivot.x) * scale_factor;
-		tr.y=y + (item.Offset.y - item.Pivot.y) * scale_factor;
-		tr.w=(int)((float)item.r.w * scale_factor);
-		tr.h=(int)((float)item.r.h * scale_factor);
+		tr.x = x + item.Offset.x - item.Pivot.x;
+		tr.y = y + item.Offset.y - item.Pivot.y;
+		tr.w = item.r.w;
+		tr.h = item.r.h;
 	}
-	SDL_RenderCopy(renderer, current_outline_texture, NULL, &tr);
+	else {
+		tr.x = x + (item.Offset.x - item.Pivot.x) * scale_factor;
+		tr.y = y + (item.Offset.y - item.Pivot.y) * scale_factor;
+		tr.w = (int)((float)item.r.w * scale_factor);
+		tr.h = (int)((float)item.r.h * scale_factor);
+	}
+	SDL_RenderTexture(renderer, current_outline_texture, NULL, &tr);
 }
 
 void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle)
 {
 	if (!bOutlinesEnabled) return;
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 
 	if (id != current_outline_sprite_id || current_outline_texture == NULL) {
-		current_outline_texture=postGenerateOutlines(renderer, id);
-		if (current_outline_texture) current_outline_sprite_id=id;
+		current_outline_texture = postGenerateOutlines(renderer, id);
+		if (current_outline_texture) current_outline_sprite_id = id;
 		else return;
 	}
-	SDL_Rect tr;
-	tr.x=x + (item.Offset.x - item.Pivot.x) * scale_x;
-	tr.y=y + (item.Offset.y - item.Pivot.y) * scale_y;
-	tr.w=(int)((float)item.r.w * scale_x);
-	tr.h=(int)((float)item.r.h * scale_y);
-	SDL_Point center;
-	center.x=(item.Pivot.x - item.Offset.x) * scale_x;
-	center.y=(item.Pivot.y - item.Offset.y) * scale_y;
+	SDL_FRect tr;
+	tr.x = x + (item.Offset.x - item.Pivot.x) * scale_x;
+	tr.y = y + (item.Offset.y - item.Pivot.y) * scale_y;
+	tr.w = (int)((float)item.r.w * scale_x);
+	tr.h = (int)((float)item.r.h * scale_y);
+	SDL_FPoint center;
+	center.x = (item.Pivot.x - item.Offset.x) * scale_x;
+	center.y = (item.Pivot.y - item.Offset.y) * scale_y;
 
-	SDL_RenderCopyEx(renderer, current_outline_texture, NULL, &tr, angle, &center, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, current_outline_texture, NULL, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
 
@@ -573,69 +578,69 @@ void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, 
 ppl7::grafix::Size SpriteTexture::spriteSize(int id, float scale_factor) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	ppl7::grafix::Size s;
 	if (it == SpriteList.end()) return s;
-	const SpriteIndexItem& item=it->second;
-	s.width=(int)((float)item.r.w * scale_factor);
-	s.height=(int)((float)item.r.h * scale_factor);
+	const SpriteIndexItem& item = it->second;
+	s.width = (int)((float)item.r.w * scale_factor);
+	s.height = (int)((float)item.r.h * scale_factor);
 	return s;
 }
 
 ppl7::grafix::Rect SpriteTexture::spriteBoundary(int id, float scale_factor, int x, int y) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	ppl7::grafix::Rect r;
 	if (it == SpriteList.end()) return r;
-	const SpriteIndexItem& item=it->second;
-	r.x1=x + (item.Offset.x - item.Pivot.x) * scale_factor;
-	r.y1=y + (item.Offset.y - item.Pivot.y) * scale_factor;
-	r.x2=r.x1 + (int)((float)item.r.w * scale_factor);
-	r.y2=r.y1 + (int)((float)item.r.h * scale_factor);
+	const SpriteIndexItem& item = it->second;
+	r.x1 = x + (item.Offset.x - item.Pivot.x) * scale_factor;
+	r.y1 = y + (item.Offset.y - item.Pivot.y) * scale_factor;
+	r.x2 = r.x1 + (int)((float)item.r.w * scale_factor);
+	r.y2 = r.y1 + (int)((float)item.r.h * scale_factor);
 	return r;
 }
 
 ppl7::grafix::Point SpriteTexture::spriteOffset(int id) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	ppl7::grafix::Point p;
 	if (it == SpriteList.end()) return p;
-	const SpriteIndexItem& item=it->second;
-	p.x=(item.Offset.x - item.Pivot.x);
-	p.y=(item.Offset.y - item.Pivot.y);
+	const SpriteIndexItem& item = it->second;
+	p.x = (item.Offset.x - item.Pivot.x);
+	p.y = (item.Offset.y - item.Pivot.y);
 	return p;
 
 }
 
 static inline ppl7::grafix::Point rotate_point(const ppl7::grafix::Point& p, const ppl7::grafix::Point& pivot, float s, float c)
 {
-	ppl7::grafix::Point pr=p;
-	pr.x-=pivot.x;
-	pr.y-=pivot.y;
+	ppl7::grafix::Point pr = p;
+	pr.x -= pivot.x;
+	pr.y -= pivot.y;
 	// rotate point
 	float xnew = (float)pr.x * c - (float)pr.y * s;
 	float ynew = (float)pr.x * s + (float)pr.y * c;
-	pr.x=xnew + pivot.x;
-	pr.y=ynew + pivot.y;
+	pr.x = xnew + pivot.x;
+	pr.y = ynew + pivot.y;
 	return pr;
 }
 
 static inline int min_val(int v1, int v2, int v3, int v4)
 {
-	int v=v1;
-	if (v2 < v) v=v2;
-	if (v3 < v) v=v3;
-	if (v4 < v) v=v4;
+	int v = v1;
+	if (v2 < v) v = v2;
+	if (v3 < v) v = v3;
+	if (v4 < v) v = v4;
 	return v;
 }
 static inline int max_val(int v1, int v2, int v3, int v4)
 {
-	int v=v1;
-	if (v2 > v) v=v2;
-	if (v3 > v) v=v3;
-	if (v4 > v) v=v4;
+	int v = v1;
+	if (v2 > v) v = v2;
+	if (v3 > v) v = v3;
+	if (v4 > v) v = v4;
 	return v;
 }
 
@@ -645,14 +650,14 @@ static ppl7::grafix::Rect rotate(const ppl7::grafix::Rect& r, const ppl7::grafix
 	float s = sin(angle * M_PI / 180.0f);
 	float c = cos(angle * M_PI / 180.0f);
 
-	ppl7::grafix::Point p1=rotate_point(r.topLeft(), pivot, s, c);
-	ppl7::grafix::Point p2=rotate_point(r.topRight(), pivot, s, c);
-	ppl7::grafix::Point p3=rotate_point(r.bottomLeft(), pivot, s, c);
-	ppl7::grafix::Point p4=rotate_point(r.bottomRight(), pivot, s, c);
-	r2.x1=min_val(p1.x, p2.x, p3.x, p4.x);
-	r2.y1=min_val(p1.y, p2.y, p3.y, p4.y);
-	r2.x2=max_val(p1.x, p2.x, p3.x, p4.x);
-	r2.y2=max_val(p1.y, p2.y, p3.y, p4.y);
+	ppl7::grafix::Point p1 = rotate_point(r.topLeft(), pivot, s, c);
+	ppl7::grafix::Point p2 = rotate_point(r.topRight(), pivot, s, c);
+	ppl7::grafix::Point p3 = rotate_point(r.bottomLeft(), pivot, s, c);
+	ppl7::grafix::Point p4 = rotate_point(r.bottomRight(), pivot, s, c);
+	r2.x1 = min_val(p1.x, p2.x, p3.x, p4.x);
+	r2.y1 = min_val(p1.y, p2.y, p3.y, p4.y);
+	r2.x2 = max_val(p1.x, p2.x, p3.x, p4.x);
+	r2.y2 = max_val(p1.y, p2.y, p3.y, p4.y);
 	return r2;
 }
 
@@ -660,16 +665,16 @@ static ppl7::grafix::Rect rotate(const ppl7::grafix::Rect& r, const ppl7::grafix
 ppl7::grafix::Rect SpriteTexture::spriteBoundary(int id, float scale_factor_x, float scale_factor_y, float rotation, int x, int y) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	ppl7::grafix::Rect r;
 	if (it == SpriteList.end()) return r;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	// TODO: add rotation into calculation
-	r.x1= x + (item.Offset.x - item.Pivot.x) * scale_factor_x;
-	r.y1= y + (item.Offset.y - item.Pivot.y) * scale_factor_y;
-	r.x2=r.x1 + (int)((float)item.r.w * scale_factor_x);
-	r.y2=r.y1 + (int)((float)item.r.h * scale_factor_y);
-	ppl7::grafix::Rect r2=rotate(r, ppl7::grafix::Point(x, y), rotation);
+	r.x1 = x + (item.Offset.x - item.Pivot.x) * scale_factor_x;
+	r.y1 = y + (item.Offset.y - item.Pivot.y) * scale_factor_y;
+	r.x2 = r.x1 + (int)((float)item.r.w * scale_factor_x);
+	r.y2 = r.y1 + (int)((float)item.r.h * scale_factor_y);
+	ppl7::grafix::Rect r2 = rotate(r, ppl7::grafix::Point(x, y), rotation);
 	return r2;
 }
 
@@ -687,17 +692,17 @@ int SpriteTexture::numSprites() const
 void SpriteTexture::setTextureBlendMode(SDL_BlendMode blendMode)
 {
 	std::map<int, SDL_Texture*>::iterator it;
-	for (it=TextureMap.begin();it != TextureMap.end();++it) {
+	for (it = TextureMap.begin();it != TextureMap.end();++it) {
 		SDL_SetTextureBlendMode(it->second, blendMode);
 	}
-	defaultBlendMode=blendMode;
+	defaultBlendMode = blendMode;
 }
 
 SDL_BlendMode SpriteTexture::getTextureBlendMode() const
 {
 	std::map<int, SDL_Texture*>::const_iterator it;
-	SDL_BlendMode bm=defaultBlendMode;
-	for (it=TextureMap.begin();it != TextureMap.end();++it) {
+	SDL_BlendMode bm = defaultBlendMode;
+	for (it = TextureMap.begin();it != TextureMap.end();++it) {
 		SDL_GetTextureBlendMode(it->second, &bm);
 		return bm;
 	}
@@ -708,7 +713,7 @@ SDL_BlendMode SpriteTexture::getTextureBlendMode() const
 void SpriteTexture::setPivot(int id, int x, int y)
 {
 	std::map<int, SpriteIndexItem>::iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return;
 	it->second.Pivot.setPoint(x, y);
 }
@@ -716,7 +721,7 @@ void SpriteTexture::setPivot(int id, int x, int y)
 const SpriteTexture::SpriteIndexItem* SpriteTexture::getSpriteIndex(int id) const
 {
 	std::map<int, SpriteIndexItem>::const_iterator it;
-	it=SpriteList.find(id);
+	it = SpriteList.find(id);
 	if (it == SpriteList.end()) return NULL;
 	return &it->second;
 }
@@ -731,11 +736,11 @@ static inline void putOutlinePixel4x4(ppl7::grafix::Drawable& target, int x, int
 
 static inline bool isBorder(const ppl7::grafix::Drawable& src, int x, int y)
 {
-	ppl7::grafix::Color c=src.getPixel(x, y);
-	ppl7::grafix::Color cl=src.getPixel(x - 1, y);
-	ppl7::grafix::Color cr=src.getPixel(x + 1, y);
-	ppl7::grafix::Color cu=src.getPixel(x, y - 1);
-	ppl7::grafix::Color cd=src.getPixel(x, y + 1);
+	ppl7::grafix::Color c = src.getPixel(x, y);
+	ppl7::grafix::Color cl = src.getPixel(x - 1, y);
+	ppl7::grafix::Color cr = src.getPixel(x + 1, y);
+	ppl7::grafix::Color cu = src.getPixel(x, y - 1);
+	ppl7::grafix::Color cd = src.getPixel(x, y + 1);
 	if (c.alpha() > 128 && (cl.alpha() <= 128 || cr.alpha() <= 128 ||
 		cu.alpha() <= 128 || cd.alpha() <= 128)) {
 		return true;
@@ -754,31 +759,31 @@ static void generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7
 	}
 	ppl7::grafix::Color white(255, 255, 255, 255);
 	// Outlines at border of sprite
-	int y1=0;
-	int y2=source.height() - 1;
-	int x1=0;
-	int x2=source.width() - 1;
+	int y1 = 0;
+	int y2 = source.height() - 1;
+	int x1 = 0;
+	int x2 = source.width() - 1;
 	ppl7::grafix::Color c;
-	for (int x=0; x < source.width(); x++) {
+	for (int x = 0; x < source.width(); x++) {
 		// top line
-		c=source.getPixel(x, y1);
+		c = source.getPixel(x, y1);
 		if (c.alpha() > 128) putOutlinePixel4x4(target, x, y1, white);
 		// bottom line
-		c=source.getPixel(x, y2);
+		c = source.getPixel(x, y2);
 		if (c.alpha() > 128) putOutlinePixel4x4(target, x, y2 - 1, white);
 	}
-	for (int y=0; y < source.height(); y++) {
+	for (int y = 0; y < source.height(); y++) {
 		// left line
-		c=source.getPixel(x1, y);
+		c = source.getPixel(x1, y);
 		if (c.alpha() > 128) putOutlinePixel4x4(target, x1, y, white);
 		// right line
-		c=source.getPixel(x2, y);
+		c = source.getPixel(x2, y);
 		if (c.alpha() > 128) putOutlinePixel4x4(target, x2 - 1, y, white);
 	}
 
 	// Sprite interior
-	for (int y=1; y < y2;y++) {
-		for (int x=1; x < x2;x++) {
+	for (int y = 1; y < y2;y++) {
+		for (int x = 1; x < x2;x++) {
 			if (isBorder(source, x, y)) {
 				putOutlinePixel4x4(target, x, y, white);
 			}
@@ -792,18 +797,18 @@ SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int spr
 	//ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
 	//double start=ppl7::GetMicrotime();
 	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
-	current_outline_texture=NULL;
-	current_outline_sprite_id=-1;
+	current_outline_texture = NULL;
+	current_outline_sprite_id = -1;
 	std::map<int, SpriteIndexItem>::iterator it;
-	it=SpriteList.find(sprite_id);
+	it = SpriteList.find(sprite_id);
 	if (it == SpriteList.end()) return NULL;
-	const SpriteIndexItem& item=it->second;
+	const SpriteIndexItem& item = it->second;
 	ppl7::grafix::Image target(item.r.w, item.r.h, ppl7::grafix::RGBFormat::A8R8G8B8);
 
 	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
-	ppl7::grafix::Drawable source=item.drawable->getDrawable(r);
+	ppl7::grafix::Drawable source = item.drawable->getDrawable(r);
 	generateOutlinesForSprite(source, target);
-	SDL_Texture* tex=SDL::createTexture(renderer, target);
+	SDL_Texture* tex = SDL::createTexture(renderer, target);
 	//ppl7::PrintDebugTime("  ===> %0.6f s\n", ppl7::GetMicrotime() - start);
 	return tex;
 

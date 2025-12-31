@@ -1,7 +1,7 @@
 #ifndef INCLUDE_DECKER_SDL_H_
 #define INCLUDE_DECKER_SDL_H_
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppltk.h>
@@ -40,10 +40,10 @@ public:
 	SDL_Renderer* getRenderer();
 	void present();
 
-	ppl7::grafix::Size getDisplaySize(int display_no=0) const;
-	ppl7::grafix::Rect getDisplayWindow(int display_no=0) const;
+	ppl7::grafix::Size getDisplaySize(int display_no = 0) const;
+	ppl7::grafix::Rect getDisplayWindow(int display_no = 0) const;
 
-	static DisplayMode desktopDisplayMode(int display_id=0);
+	static DisplayMode desktopDisplayMode(int display_id = 0);
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);
 	static void getDisplayModes(int display_id, std::list<DisplayMode>& mode_list);
 
@@ -56,9 +56,9 @@ class SDLFont
 {
 private:
 	enum class FontFlags {
-		bold=1,
-		drawBorder=2,
-		monospace=4
+		bold = 1,
+		drawBorder = 2,
+		monospace = 4
 	};
 
 	class Font6Glyph
@@ -101,16 +101,16 @@ private:
 
 		SpriteIndexItem()
 		{
-			id=0;
-			textureId=0;
-			tex=NULL;
+			id = 0;
+			textureId = 0;
+			tex = NULL;
 		}
 		SpriteIndexItem(const SpriteIndexItem& other)
 			:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
 		{
-			id=other.id;
-			textureId=other.textureId;
-			tex=other.tex;
+			id = other.id;
+			textureId = other.textureId;
+			tex = other.tex;
 		}
 	};
 
@@ -142,7 +142,7 @@ public:
 	void setRotation(float degrees);
 
 	ppl7::grafix::Size measure(const ppl7::WideString& text) const;
-	ppl7::grafix::Rect boundary(const ppl7::WideString& text, int x=0, int y=0) const;
+	ppl7::grafix::Rect boundary(const ppl7::WideString& text, int x = 0, int y = 0) const;
 
 	void print(SDL_Renderer* renderer, int x, int y, const ppl7::String& text) const;
 	void printf(SDL_Renderer* renderer, int x, int y, const char* fmt, ...) const;

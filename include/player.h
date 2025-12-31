@@ -86,13 +86,13 @@ private:
 		void setPlayer(Player* player);
 		bool enabled() const;
 		void getKeyboardMatrix(Player::Keys& keys, const ppl7::grafix::PointF& player_p);
-		void setTarget(const ppl7::grafix::PointF& p, bool use_waynet=false);
+		void setTarget(const ppl7::grafix::PointF& p, bool use_waynet = false);
 		void stop();
 	};
 	AutoWalk player_autowalk;
 	enum class ParticleReason
 	{
-		None=0,
+		None = 0,
 		Drowned,
 		Burning,
 		Smashed,
@@ -164,7 +164,7 @@ public:
 	ppl7::grafix::PointF position() const;
 	void stand();
 	void jumpExpression();
-	Keys getKeyboardMatrix(const unsigned char* state=NULL);
+	Keys getKeyboardMatrix(const bool* state = NULL);
 	void resetState();
 	void resetLevelObjects();
 	void setZeroVelocity();
@@ -178,7 +178,7 @@ public:
 	bool hasSpecialObject(int type) const;
 	void countObject(int type);
 	size_t getObjectCount(int type) const;
-	void dropHealth(float points, HealthDropReason reason=HealthDropReason::Unknown);
+	void dropHealth(float points, HealthDropReason reason = HealthDropReason::Unknown);
 	void addInventory(int object_id, const Decker::Objects::Representation& repr);
 	bool isInInventory(int object_id) const;
 	bool isDead() const;
@@ -200,14 +200,14 @@ public:
 	void startHacking(Decker::Objects::Object* object);
 	void update(double time, const TileTypePlane& world, Decker::Objects::ObjectSystem* objects, float frame_rate_compensation);
 
-	void speak(VoiceGeorge::Id id, float volume=0.7f, const ppl7::String& text=ppl7::String(), const ppl7::String& phonetics=ppl7::String());
-	bool speak(uint16_t id, float volume=0.7f);
+	void speak(VoiceGeorge::Id id, float volume = 0.7f, const ppl7::String& text = ppl7::String(), const ppl7::String& phonetics = ppl7::String());
+	bool speak(uint16_t id, float volume = 0.7f);
 	bool isSpeaking() const;
 	bool hasSpoken(uint16_t id) const;
 	bool isFlashlightOn() const;
 	void enableFlashlight(bool enable);
 	void hitBySpiderWeb();
-	void setPetrified(bool petrified, float timeout=86400.0f);
+	void setPetrified(bool petrified, float timeout = 86400.0f);
 	bool isPetrified() const;
 	void addPowerCell();
 	void setBatteryDrainRate(float rate);
@@ -215,7 +215,7 @@ public:
 	void drainBatteryCompletely();
 	void enableControl();
 	void disableControl();
-	void walkToNode(const ppl7::grafix::PointF& target, bool useWaynet=false);
+	void walkToNode(const ppl7::grafix::PointF& target, bool useWaynet = false);
 	void stop();
 
 

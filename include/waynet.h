@@ -1,6 +1,6 @@
 #ifndef INCLUDE_WAYNET_H_
 #define INCLUDE_WAYNET_H_
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <list>
@@ -33,8 +33,8 @@ private:
 	void updateTotalCosts();
 public:
 	enum ConnectionType {
-		Invalid=0,
-		Walk=1,
+		Invalid = 0,
+		Walk = 1,
 		JumpUp,
 		JumpLeft,
 		JumpRight,
@@ -49,7 +49,7 @@ public:
 	float cost;
 	float total_costs;
 	Connection();
-	Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost=1.0f);
+	Connection(const WayPoint& source, const WayPoint& target, ConnectionType type, float cost = 1.0f);
 	void clear();
 	const char* name() const;
 };
@@ -91,7 +91,7 @@ private:
 
 	bool findBestWay(std::set<uint32_t>& visited_nodes, std::list<Connection>& way_list, const WayPoint& previous, const WayPoint& start, const WayPoint& target, int maxNodes) const;
 	uint32_t getAs(const Position& wp);
-	void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug=false) const;
+	void drawConnections(SDL_Renderer* renderer, ppl7::grafix::Point coords, const std::list<Connection>& connection_list, bool debug = false) const;
 
 
 	class WaySoFar
@@ -105,8 +105,8 @@ private:
 	{
 	public:
 		WayList waylist;
-		float total_costs=0.0f;
-		int depth=0;
+		float total_costs = 0.0f;
+		int depth = 0;
 	};
 
 	class Way

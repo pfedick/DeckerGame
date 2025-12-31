@@ -1,5 +1,5 @@
 #!/bin/sh
 
-aclocal
+aclocal -I autoconf --install
 automake --add-missing
 autoconf

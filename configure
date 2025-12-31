@@ -685,7 +685,7 @@ report_have_pthreads
 report_have_nasm
 report_have_iconv
 report_have_pcre2
-report_have_sdl2
+report_have_sdl3
 report_have_jpeg
 report_have_png
 report_have_bzip2
@@ -700,10 +700,10 @@ NASMDEBUGFLAGS
 NASMFLAGS
 NASM
 nasm
-SDL2_CONFIG
-SDL2_FRAMEWORK
-SDL2_LIBS
-SDL2_CFLAGS
+SDL3_CONFIG
+SDL3_FRAMEWORK
+SDL3_LIBS
+SDL3_CFLAGS
 PCRE2_CFLAGS
 PCRE2_LIBS
 PCRE2_WIDE32_LIBS
@@ -713,6 +713,7 @@ PCRE2_WIDE16_CFLAGS
 PCRE2_8_LIBS
 PCRE2_8_CFLAGS
 pcre2config
+PKGCONFIG
 ZLIB_LIBS
 ZLIB_CFLAGS
 BZ2_LIBS
@@ -915,9 +916,9 @@ PCRE2_WIDE16_CFLAGS
 PCRE2_WIDE16_LIBS
 PCRE2_WIDE32_CFLAGS
 PCRE2_WIDE32_LIBS
-SDL2_FRAMEWORK
-SDL2_CFLAGS
-SDL2_LIBS'
+SDL3_FRAMEWORK
+SDL3_CFLAGS
+SDL3_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1560,8 +1561,8 @@ Optional Features:
   --disable-largefile     omit support for large files
   --disable-vorbistest    Do not try to compile and run a test Vorbis program
   --disable-rpath         do not hardcode runtime library paths
-  --disable-sdltest       Do not try to compile and run a test SDL program
-  --disable-sdlframework Do not search for SDL2.framework
+  --disable-sdltest       Do not try to compile and run a test SDL3 program
+  --disable-sdlframework Do not search for SDL3.framework
   --enable-year2038       support timestamps after 2038
 
 Optional Packages:
@@ -1589,8 +1590,8 @@ Optional Packages:
                           /usr/local or /usr if not found in /usr/local]
   --without-zlib          to disable zlib usage completely
   --with-pcre2[=PATH]     Prefix where libpcre2 is installed (optional)
-  --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
-  --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
+  --with-sdl-prefix=PFX   Prefix where SDL3 is installed (optional)
+  --with-sdl-exec-prefix=PFX Exec prefix where SDL3 is installed (optional)
   --with-nasm[=PATH]      Prefix where nasm is installed (optional)
 
 Some influential environment variables:
@@ -1630,10 +1631,10 @@ Some influential environment variables:
               C compiler flags for PCRE2_WIDE32, overriding pkg-config
   PCRE2_WIDE32_LIBS
               linker flags for PCRE2_WIDE32, overriding pkg-config
-  SDL2_FRAMEWORK
-              Path to SDL2.framework
-  SDL2_CFLAGS C compiler flags for SDL2, overriding pkg-config
-  SDL2_LIBS   linker flags for SDL2, overriding pkg-config
+  SDL3_FRAMEWORK
+              Path to SDL3.framework
+  SDL3_CFLAGS C compiler flags for SDL3, overriding pkg-config
+  SDL3_LIBS   linker flags for SDL3, overriding pkg-config
 
 Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -3513,73 +3514,6 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 ###############################################################################
 # Includes
 ###############################################################################
-# ===========================================================================
-#  https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx.html
-# ===========================================================================
-#
-# SYNOPSIS
-#
-#   AX_CXX_COMPILE_STDCXX(VERSION, [ext|noext], [mandatory|optional])
-#
-# DESCRIPTION
-#
-#   Check for baseline language coverage in the compiler for the specified
-#   version of the C++ standard.  If necessary, add switches to CXX and
-#   CXXCPP to enable support.  VERSION may be '11' (for the C++11 standard)
-#   or '14' (for the C++14 standard).
-#
-#   The second argument, if specified, indicates whether you insist on an
-#   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
-#   -std=c++11).  If neither is specified, you get whatever works, with
-#   preference for an extended mode.
-#
-#   The third argument, if specified 'mandatory' or if left unspecified,
-#   indicates that baseline support for the specified C++ standard is
-#   required and that the macro should error out if no mode with that
-#   support is found.  If specified 'optional', then configuration proceeds
-#   regardless, after defining HAVE_CXX${VERSION} if and only if a
-#   supporting mode is found.
-#
-# LICENSE
-#
-#   Copyright (c) 2008 Benjamin Kosnik <bkoz@redhat.com>
-#   Copyright (c) 2012 Zack Weinberg <zackw@panix.com>
-#   Copyright (c) 2013 Roy Stogner <roystgnr@ices.utexas.edu>
-#   Copyright (c) 2014, 2015 Google Inc.; contributed by Alexey Sokolov <sokolov@google.com>
-#   Copyright (c) 2015 Paul Norman <penorman@mac.com>
-#   Copyright (c) 2015 Moritz Klammler <moritz@klammler.eu>
-#   Copyright (c) 2016, 2018 Krzesimir Nowak <qdlacz@gmail.com>
-#   Copyright (c) 2019 Enji Cooper <yaneurabeya@gmail.com>
-#
-#   Copying and distribution of this file, with or without modification, are
-#   permitted in any medium without royalty provided the copyright notice
-#   and this notice are preserved.  This file is offered as-is, without any
-#   warranty.
-
-#serial 11
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3700,20 +3634,6 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 # maintainer to run autoupdate.  We don't issue MESSAGE
 # from autoconf, because that's instructions for what
 # to do *after* running autoupdate.
-
-
-# Configure paths for SDL
-# Sam Lantinga 9/21/99
-# stolen from Manish Singh
-# stolen back from Frank Belew
-# stolen from Manish Singh
-# Shamelessly stolen from Owen Taylor
-#
-# Changelog:
-# * also look for SDL2.framework under Mac OS X
-
-# serial 1
-
 
 
 
@@ -4078,6 +3998,22 @@ ac_config_headers="$ac_config_headers ppltk/include/ppltk_config.h"
 
 
 
+# Configure paths for SDL3
+# Based on SDL2 detection macro
+# Sam Lantinga 9/21/99
+# stolen from Manish Singh
+# stolen back from Frank Belew
+# stolen from Manish Singh
+# Shamelessly stolen from Owen Taylor
+#
+# Changelog:
+# * Updated for SDL3
+# * also look for SDL3.framework under Mac OS X
+
+# serial 1
+
+
+
 
 
 report_have_pthreads="no"
@@ -4088,7 +4024,7 @@ report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
 report_have_pcre2="no"
-report_have_sdl2="no"
+report_have_sdl3="no"
 report_have_png="no"
 report_have_jpeg="no"
 report_have_nasm="no"
@@ -6651,19 +6587,13 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
   ac_success=no
 
-    if test x$ac_success = xno; then
-    for alternative in ${ax_cxx_compile_alternatives}; do
-      switch="-std=gnu++${alternative}"
-      cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
-printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
-if eval test \${$cachevar+y}
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features by default" >&5
+printf %s "checking whether $CXX supports C++17 features by default... " >&6; }
+if test ${ax_cv_cxx_compile_cxx17+y}
 then :
   printf %s "(cached) " >&6
 else case e in #(
-  e) ac_save_CXX="$CXX"
-         CXX="$CXX $switch"
-         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
@@ -6674,7 +6604,21 @@ else case e in #(
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201103L
+// MSVC always sets __cplusplus to 199711L in older versions; newer versions
+// only set it correctly if /Zc:__cplusplus is specified as well as a
+// /std:c++NN switch:
+//
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+//
+// The value __cplusplus ought to have is available in _MSVC_LANG since
+// Visual Studio 2015 Update 3:
+//
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros
+//
+// This was also the first MSVC version to support C++14 so we can't use the
+// value of either __cplusplus or _MSVC_LANG to quickly rule out MSVC having
+// C++11 or C++14 support, but we can check _MSVC_LANG for C++17 and later.
+#elif __cplusplus < 201103L && !defined _MSC_VER
 
 #error "This is not a C++11 compiler"
 
@@ -6961,7 +6905,7 @@ namespace cxx11
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201402L
+#elif __cplusplus < 201402L && !defined _MSC_VER
 
 #error "This is not a C++14 compiler"
 
@@ -7081,7 +7025,7 @@ namespace cxx14
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201703L
+#elif (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 #error "This is not a C++17 compiler"
 
@@ -7447,865 +7391,30 @@ namespace cxx17
 
 }  // namespace cxx17
 
-#endif  // __cplusplus < 201703L
+#endif  // (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 
 
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"
 then :
-  eval $cachevar=yes
+  ax_cv_cxx_compile_cxx17=yes
 else case e in #(
-  e) eval $cachevar=no ;;
+  e) ax_cv_cxx_compile_cxx17=no ;;
 esac
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
-         CXX="$ac_save_CXX" ;;
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
 esac
 fi
-eval ac_res=\$$cachevar
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-      if eval test x\$$cachevar = xyes; then
-        CXX="$CXX $switch"
-        if test -n "$CXXCPP" ; then
-          CXXCPP="$CXXCPP $switch"
-        fi
-        ac_success=yes
-        break
-      fi
-    done
-  fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ax_cv_cxx_compile_cxx17" >&5
+printf "%s\n" "$ax_cv_cxx_compile_cxx17" >&6; }
+    if test x$ax_cv_cxx_compile_cxx17 = xyes; then
+      ac_success=yes
+    fi
 
-    if test x$ac_success = xno; then
-                for alternative in ${ax_cxx_compile_alternatives}; do
-      for switch in -std=c++${alternative} +std=c++${alternative} "-h std=c++${alternative}"; do
-        cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
-printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
-if eval test \${$cachevar+y}
-then :
-  printf %s "(cached) " >&6
-else case e in #(
-  e) ac_save_CXX="$CXX"
-           CXX="$CXX $switch"
-           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
 
 
-// If the compiler admits that it is not ready for C++11, why torture it?
-// Hopefully, this will speed up the test.
 
-#ifndef __cplusplus
-
-#error "This is not a C++ compiler"
-
-#elif __cplusplus < 201103L
-
-#error "This is not a C++11 compiler"
-
-#else
-
-namespace cxx11
-{
-
-  namespace test_static_assert
-  {
-
-    template <typename T>
-    struct check
-    {
-      static_assert(sizeof(int) <= sizeof(T), "not big enough");
-    };
-
-  }
-
-  namespace test_final_override
-  {
-
-    struct Base
-    {
-      virtual ~Base() {}
-      virtual void f() {}
-    };
-
-    struct Derived : public Base
-    {
-      virtual ~Derived() override {}
-      virtual void f() override {}
-    };
-
-  }
-
-  namespace test_double_right_angle_brackets
-  {
-
-    template < typename T >
-    struct check {};
-
-    typedef check<void> single_type;
-    typedef check<check<void>> double_type;
-    typedef check<check<check<void>>> triple_type;
-    typedef check<check<check<check<void>>>> quadruple_type;
-
-  }
-
-  namespace test_decltype
-  {
-
-    int
-    f()
-    {
-      int a = 1;
-      decltype(a) b = 2;
-      return a + b;
-    }
-
-  }
-
-  namespace test_type_deduction
-  {
-
-    template < typename T1, typename T2 >
-    struct is_same
-    {
-      static const bool value = false;
-    };
-
-    template < typename T >
-    struct is_same<T, T>
-    {
-      static const bool value = true;
-    };
-
-    template < typename T1, typename T2 >
-    auto
-    add(T1 a1, T2 a2) -> decltype(a1 + a2)
-    {
-      return a1 + a2;
-    }
-
-    int
-    test(const int c, volatile int v)
-    {
-      static_assert(is_same<int, decltype(0)>::value == true, "");
-      static_assert(is_same<int, decltype(c)>::value == false, "");
-      static_assert(is_same<int, decltype(v)>::value == false, "");
-      auto ac = c;
-      auto av = v;
-      auto sumi = ac + av + 'x';
-      auto sumf = ac + av + 1.0;
-      static_assert(is_same<int, decltype(ac)>::value == true, "");
-      static_assert(is_same<int, decltype(av)>::value == true, "");
-      static_assert(is_same<int, decltype(sumi)>::value == true, "");
-      static_assert(is_same<int, decltype(sumf)>::value == false, "");
-      static_assert(is_same<int, decltype(add(c, v))>::value == true, "");
-      return (sumf > 0.0) ? sumi : add(c, v);
-    }
-
-  }
-
-  namespace test_noexcept
-  {
-
-    int f() { return 0; }
-    int g() noexcept { return 0; }
-
-    static_assert(noexcept(f()) == false, "");
-    static_assert(noexcept(g()) == true, "");
-
-  }
-
-  namespace test_constexpr
-  {
-
-    template < typename CharT >
-    unsigned long constexpr
-    strlen_c_r(const CharT *const s, const unsigned long acc) noexcept
-    {
-      return *s ? strlen_c_r(s + 1, acc + 1) : acc;
-    }
-
-    template < typename CharT >
-    unsigned long constexpr
-    strlen_c(const CharT *const s) noexcept
-    {
-      return strlen_c_r(s, 0UL);
-    }
-
-    static_assert(strlen_c("") == 0UL, "");
-    static_assert(strlen_c("1") == 1UL, "");
-    static_assert(strlen_c("example") == 7UL, "");
-    static_assert(strlen_c("another\0example") == 7UL, "");
-
-  }
-
-  namespace test_rvalue_references
-  {
-
-    template < int N >
-    struct answer
-    {
-      static constexpr int value = N;
-    };
-
-    answer<1> f(int&)       { return answer<1>(); }
-    answer<2> f(const int&) { return answer<2>(); }
-    answer<3> f(int&&)      { return answer<3>(); }
-
-    void
-    test()
-    {
-      int i = 0;
-      const int c = 0;
-      static_assert(decltype(f(i))::value == 1, "");
-      static_assert(decltype(f(c))::value == 2, "");
-      static_assert(decltype(f(0))::value == 3, "");
-    }
-
-  }
-
-  namespace test_uniform_initialization
-  {
-
-    struct test
-    {
-      static const int zero {};
-      static const int one {1};
-    };
-
-    static_assert(test::zero == 0, "");
-    static_assert(test::one == 1, "");
-
-  }
-
-  namespace test_lambdas
-  {
-
-    void
-    test1()
-    {
-      auto lambda1 = [](){};
-      auto lambda2 = lambda1;
-      lambda1();
-      lambda2();
-    }
-
-    int
-    test2()
-    {
-      auto a = [](int i, int j){ return i + j; }(1, 2);
-      auto b = []() -> int { return '0'; }();
-      auto c = [=](){ return a + b; }();
-      auto d = [&](){ return c; }();
-      auto e = [a, &b](int x) mutable {
-        const auto identity = [](int y){ return y; };
-        for (auto i = 0; i < a; ++i)
-          a += b--;
-        return x + identity(a + b);
-      }(0);
-      return a + b + c + d + e;
-    }
-
-    int
-    test3()
-    {
-      const auto nullary = [](){ return 0; };
-      const auto unary = [](int x){ return x; };
-      using nullary_t = decltype(nullary);
-      using unary_t = decltype(unary);
-      const auto higher1st = [](nullary_t f){ return f(); };
-      const auto higher2nd = [unary](nullary_t f1){
-        return [unary, f1](unary_t f2){ return f2(unary(f1())); };
-      };
-      return higher1st(nullary) + higher2nd(nullary)(unary);
-    }
-
-  }
-
-  namespace test_variadic_templates
-  {
-
-    template <int...>
-    struct sum;
-
-    template <int N0, int... N1toN>
-    struct sum<N0, N1toN...>
-    {
-      static constexpr auto value = N0 + sum<N1toN...>::value;
-    };
-
-    template <>
-    struct sum<>
-    {
-      static constexpr auto value = 0;
-    };
-
-    static_assert(sum<>::value == 0, "");
-    static_assert(sum<1>::value == 1, "");
-    static_assert(sum<23>::value == 23, "");
-    static_assert(sum<1, 2>::value == 3, "");
-    static_assert(sum<5, 5, 11>::value == 21, "");
-    static_assert(sum<2, 3, 5, 7, 11, 13>::value == 41, "");
-
-  }
-
-  // http://stackoverflow.com/questions/13728184/template-aliases-and-sfinae
-  // Clang 3.1 fails with headers of libstd++ 4.8.3 when using std::function
-  // because of this.
-  namespace test_template_alias_sfinae
-  {
-
-    struct foo {};
-
-    template<typename T>
-    using member = typename T::member_type;
-
-    template<typename T>
-    void func(...) {}
-
-    template<typename T>
-    void func(member<T>*) {}
-
-    void test();
-
-    void test() { func<foo>(0); }
-
-  }
-
-}  // namespace cxx11
-
-#endif  // __cplusplus >= 201103L
-
-
-
-
-// If the compiler admits that it is not ready for C++14, why torture it?
-// Hopefully, this will speed up the test.
-
-#ifndef __cplusplus
-
-#error "This is not a C++ compiler"
-
-#elif __cplusplus < 201402L
-
-#error "This is not a C++14 compiler"
-
-#else
-
-namespace cxx14
-{
-
-  namespace test_polymorphic_lambdas
-  {
-
-    int
-    test()
-    {
-      const auto lambda = [](auto&&... args){
-        const auto istiny = [](auto x){
-          return (sizeof(x) == 1UL) ? 1 : 0;
-        };
-        const int aretiny[] = { istiny(args)... };
-        return aretiny[0];
-      };
-      return lambda(1, 1L, 1.0f, '1');
-    }
-
-  }
-
-  namespace test_binary_literals
-  {
-
-    constexpr auto ivii = 0b0000000000101010;
-    static_assert(ivii == 42, "wrong value");
-
-  }
-
-  namespace test_generalized_constexpr
-  {
-
-    template < typename CharT >
-    constexpr unsigned long
-    strlen_c(const CharT *const s) noexcept
-    {
-      auto length = 0UL;
-      for (auto p = s; *p; ++p)
-        ++length;
-      return length;
-    }
-
-    static_assert(strlen_c("") == 0UL, "");
-    static_assert(strlen_c("x") == 1UL, "");
-    static_assert(strlen_c("test") == 4UL, "");
-    static_assert(strlen_c("another\0test") == 7UL, "");
-
-  }
-
-  namespace test_lambda_init_capture
-  {
-
-    int
-    test()
-    {
-      auto x = 0;
-      const auto lambda1 = [a = x](int b){ return a + b; };
-      const auto lambda2 = [a = lambda1(x)](){ return a; };
-      return lambda2();
-    }
-
-  }
-
-  namespace test_digit_separators
-  {
-
-    constexpr auto ten_million = 100'000'000;
-    static_assert(ten_million == 100000000, "");
-
-  }
-
-  namespace test_return_type_deduction
-  {
-
-    auto f(int& x) { return x; }
-    decltype(auto) g(int& x) { return x; }
-
-    template < typename T1, typename T2 >
-    struct is_same
-    {
-      static constexpr auto value = false;
-    };
-
-    template < typename T >
-    struct is_same<T, T>
-    {
-      static constexpr auto value = true;
-    };
-
-    int
-    test()
-    {
-      auto x = 0;
-      static_assert(is_same<int, decltype(f(x))>::value, "");
-      static_assert(is_same<int&, decltype(g(x))>::value, "");
-      return x;
-    }
-
-  }
-
-}  // namespace cxx14
-
-#endif  // __cplusplus >= 201402L
-
-
-
-
-// If the compiler admits that it is not ready for C++17, why torture it?
-// Hopefully, this will speed up the test.
-
-#ifndef __cplusplus
-
-#error "This is not a C++ compiler"
-
-#elif __cplusplus < 201703L
-
-#error "This is not a C++17 compiler"
-
-#else
-
-#include <initializer_list>
-#include <utility>
-#include <type_traits>
-
-namespace cxx17
-{
-
-  namespace test_constexpr_lambdas
-  {
-
-    constexpr int foo = [](){return 42;}();
-
-  }
-
-  namespace test::nested_namespace::definitions
-  {
-
-  }
-
-  namespace test_fold_expression
-  {
-
-    template<typename... Args>
-    int multiply(Args... args)
-    {
-      return (args * ... * 1);
-    }
-
-    template<typename... Args>
-    bool all(Args... args)
-    {
-      return (args && ...);
-    }
-
-  }
-
-  namespace test_extended_static_assert
-  {
-
-    static_assert (true);
-
-  }
-
-  namespace test_auto_brace_init_list
-  {
-
-    auto foo = {5};
-    auto bar {5};
-
-    static_assert(std::is_same<std::initializer_list<int>, decltype(foo)>::value);
-    static_assert(std::is_same<int, decltype(bar)>::value);
-  }
-
-  namespace test_typename_in_template_template_parameter
-  {
-
-    template<template<typename> typename X> struct D;
-
-  }
-
-  namespace test_fallthrough_nodiscard_maybe_unused_attributes
-  {
-
-    int f1()
-    {
-      return 42;
-    }
-
-    [[nodiscard]] int f2()
-    {
-      [[maybe_unused]] auto unused = f1();
-
-      switch (f1())
-      {
-      case 17:
-        f1();
-        [[fallthrough]];
-      case 42:
-        f1();
-      }
-      return f1();
-    }
-
-  }
-
-  namespace test_extended_aggregate_initialization
-  {
-
-    struct base1
-    {
-      int b1, b2 = 42;
-    };
-
-    struct base2
-    {
-      base2() {
-        b3 = 42;
-      }
-      int b3;
-    };
-
-    struct derived : base1, base2
-    {
-        int d;
-    };
-
-    derived d1 {{1, 2}, {}, 4};  // full initialization
-    derived d2 {{}, {}, 4};      // value-initialized bases
-
-  }
-
-  namespace test_general_range_based_for_loop
-  {
-
-    struct iter
-    {
-      int i;
-
-      int& operator* ()
-      {
-        return i;
-      }
-
-      const int& operator* () const
-      {
-        return i;
-      }
-
-      iter& operator++()
-      {
-        ++i;
-        return *this;
-      }
-    };
-
-    struct sentinel
-    {
-      int i;
-    };
-
-    bool operator== (const iter& i, const sentinel& s)
-    {
-      return i.i == s.i;
-    }
-
-    bool operator!= (const iter& i, const sentinel& s)
-    {
-      return !(i == s);
-    }
-
-    struct range
-    {
-      iter begin() const
-      {
-        return {0};
-      }
-
-      sentinel end() const
-      {
-        return {5};
-      }
-    };
-
-    void f()
-    {
-      range r {};
-
-      for (auto i : r)
-      {
-        [[maybe_unused]] auto v = i;
-      }
-    }
-
-  }
-
-  namespace test_lambda_capture_asterisk_this_by_value
-  {
-
-    struct t
-    {
-      int i;
-      int foo()
-      {
-        return [*this]()
-        {
-          return i;
-        }();
-      }
-    };
-
-  }
-
-  namespace test_enum_class_construction
-  {
-
-    enum class byte : unsigned char
-    {};
-
-    byte foo {42};
-
-  }
-
-  namespace test_constexpr_if
-  {
-
-    template <bool cond>
-    int f ()
-    {
-      if constexpr(cond)
-      {
-        return 13;
-      }
-      else
-      {
-        return 42;
-      }
-    }
-
-  }
-
-  namespace test_selection_statement_with_initializer
-  {
-
-    int f()
-    {
-      return 13;
-    }
-
-    int f2()
-    {
-      if (auto i = f(); i > 0)
-      {
-        return 3;
-      }
-
-      switch (auto i = f(); i + 4)
-      {
-      case 17:
-        return 2;
-
-      default:
-        return 1;
-      }
-    }
-
-  }
-
-  namespace test_template_argument_deduction_for_class_templates
-  {
-
-    template <typename T1, typename T2>
-    struct pair
-    {
-      pair (T1 p1, T2 p2)
-        : m1 {p1},
-          m2 {p2}
-      {}
-
-      T1 m1;
-      T2 m2;
-    };
-
-    void f()
-    {
-      [[maybe_unused]] auto p = pair{13, 42u};
-    }
-
-  }
-
-  namespace test_non_type_auto_template_parameters
-  {
-
-    template <auto n>
-    struct B
-    {};
-
-    B<5> b1;
-    B<'a'> b2;
-
-  }
-
-  namespace test_structured_bindings
-  {
-
-    int arr[2] = { 1, 2 };
-    std::pair<int, int> pr = { 1, 2 };
-
-    auto f1() -> int(&)[2]
-    {
-      return arr;
-    }
-
-    auto f2() -> std::pair<int, int>&
-    {
-      return pr;
-    }
-
-    struct S
-    {
-      int x1 : 2;
-      volatile double y1;
-    };
-
-    S f3()
-    {
-      return {};
-    }
-
-    auto [ x1, y1 ] = f1();
-    auto& [ xr1, yr1 ] = f1();
-    auto [ x2, y2 ] = f2();
-    auto& [ xr2, yr2 ] = f2();
-    const auto [ x3, y3 ] = f3();
-
-  }
-
-  namespace test_exception_spec_type_system
-  {
-
-    struct Good {};
-    struct Bad {};
-
-    void g1() noexcept;
-    void g2();
-
-    template<typename T>
-    Bad
-    f(T*, T*);
-
-    template<typename T1, typename T2>
-    Good
-    f(T1*, T2*);
-
-    static_assert (std::is_same_v<Good, decltype(f(g1, g2))>);
-
-  }
-
-  namespace test_inline_variables
-  {
-
-    template<class T> void f(T)
-    {}
-
-    template<class T> inline T g(T)
-    {
-      return T{};
-    }
-
-    template<> inline void f<>(int)
-    {}
-
-    template<> int g<>(int)
-    {
-      return 5;
-    }
-
-  }
-
-}  // namespace cxx17
-
-#endif  // __cplusplus < 201703L
-
-
-
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"
-then :
-  eval $cachevar=yes
-else case e in #(
-  e) eval $cachevar=no ;;
-esac
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
-           CXX="$ac_save_CXX" ;;
-esac
-fi
-eval ac_res=\$$cachevar
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-        if eval test x\$$cachevar = xyes; then
-          CXX="$CXX $switch"
-          if test -n "$CXXCPP" ; then
-            CXXCPP="$CXXCPP $switch"
-          fi
-          ac_success=yes
-          break
-        fi
-      done
-      if test x$ac_success = xyes; then
-        break
-      fi
-    done
-  fi
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -16454,7 +15563,7 @@ fi
 
 # PCRE2 vorhanden?
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
 printf %s "checking if we should use pcre2... " >&6; }
 
 
@@ -16468,6 +15577,10 @@ esac
 fi
 
 
+	have_libpcre2="no"
+	PCRE2_LIBS=""
+	PCRE2_CFLAGS=""
+
 	if test "$libpcre2_prefix" != "no"
 	then
 		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -16476,6 +15589,53 @@ printf "%s\n" "yes" >&6; }
 		am_save_CPPFLAGS="$CPPFLAGS"
 		am_save_LIBS="$LIBS"
 		am_save_LDFLAGS="$LDFLAGS"
+		# Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_path_PKGCONFIG+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) case $PKGCONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKGCONFIG="$PKGCONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKGCONFIG="$as_dir$ac_word$ac_exec_ext"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKGCONFIG" && ac_cv_path_PKGCONFIG="no"
+  ;;
+esac ;;
+esac
+fi
+PKGCONFIG=$ac_cv_path_PKGCONFIG
+if test -n "$PKGCONFIG"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PKGCONFIG" >&5
+printf "%s\n" "$PKGCONFIG" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
 
 
 		if test "$libpcre2_prefix" = "yes" -o "$libpcre2_prefix" = "auto"
@@ -16526,6 +15686,8 @@ printf "%s\n" "no" >&6; }
 fi
 
 
+			if test "$PKGCONFIG" != "no"
+			then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-8" >&5
@@ -16585,49 +15747,57 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_8_PKG_ERRORS" >&5
 
-        have_libpcre2="no"
-				PCRE2_LIBS=""
-				PCRE2_CFLAGS=""
+        as_fn_error $? "Package requirements (libpcre2-8) were not met:
 
-				if test  -x "$pcre2config"
-				then
-					have_libpcre2="yes"
-					PCRE2_LIBS=`$pcre2config --libs8`
-					PCRE2_CFLAGS=`$pcre2config --cflags`
-					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+$PCRE2_8_PKG_ERRORS
 
-				fi
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
+Alternatively, you may set the environment variables PCRE2_8_CFLAGS
+and PCRE2_8_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        have_libpcre2="no"
-				PCRE2_LIBS=""
-				PCRE2_CFLAGS=""
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-				if test  -x "$pcre2config"
-				then
-					have_libpcre2="yes"
-					PCRE2_LIBS=`$pcre2config --libs8`
-					PCRE2_CFLAGS=`$pcre2config --cflags`
-					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+Alternatively, you may set the environment variables PCRE2_8_CFLAGS
+and PCRE2_8_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_8_CFLAGS=$pkg_cv_PCRE2_8_CFLAGS
         PCRE2_8_LIBS=$pkg_cv_PCRE2_8_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         have_libpcre2="yes"
-				PCRE2_LIBS="$PCRE2_8_LIBS"
-				PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
-				printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+					PCRE2_LIBS="$PCRE2_8_LIBS"
+					PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
 
 
 fi
+			else
+				if test  -x "$pcre2config"
+				then
+					have_libpcre2="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+			fi
 			if test ${ac_cv_sizeof_wchar_t} -eq 2
 			then
+				if test "$PKGCONFIG" != "no"
+				then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-16" >&5
@@ -16687,41 +15857,57 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_WIDE16_PKG_ERRORS" >&5
 
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs16=`$pcre2config --libs16`
-						PCRE2_LIBS="$PCRE2_LIBS $libs16"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+        as_fn_error $? "Package requirements (libpcre2-16) were not met:
 
-					fi
+$PCRE2_WIDE16_PKG_ERRORS
 
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables PCRE2_WIDE16_CFLAGS
+and PCRE2_WIDE16_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs16=`$pcre2config --libs16`
-						PCRE2_LIBS="$PCRE2_LIBS $libs16"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-					fi
+Alternatively, you may set the environment variables PCRE2_WIDE16_CFLAGS
+and PCRE2_WIDE16_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_WIDE16_CFLAGS=$pkg_cv_PCRE2_WIDE16_CFLAGS
         PCRE2_WIDE16_LIBS=$pkg_cv_PCRE2_WIDE16_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE16_LIBS"
-					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
-					printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+						PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
 
 
 fi
+				else
+					if test  -x "$pcre2config"
+					then
+						have_libpcre2="yes"
+						libs16=`$pcre2config --libs16`
+						PCRE2_LIBS="$PCRE2_LIBS $libs16"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+				fi
 			fi
 			if test ${ac_cv_sizeof_wchar_t} -eq 4
 			then
+				if test "$PKGCONFIG" != "no"
+				then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-32" >&5
@@ -16781,40 +15967,52 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_WIDE32_PKG_ERRORS" >&5
 
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs32=`$pcre2config --libs32`
-						PCRE2_LIBS="$PCRE2_LIBS $libs32"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+        as_fn_error $? "Package requirements (libpcre2-32) were not met:
 
-					fi
+$PCRE2_WIDE32_PKG_ERRORS
 
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
+Alternatively, you may set the environment variables PCRE2_WIDE32_CFLAGS
+and PCRE2_WIDE32_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs32=`$pcre2config --libs32`
-						PCRE2_LIBS="$PCRE2_LIBS $libs32"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-					fi
+Alternatively, you may set the environment variables PCRE2_WIDE32_CFLAGS
+and PCRE2_WIDE32_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_WIDE32_CFLAGS=$pkg_cv_PCRE2_WIDE32_CFLAGS
         PCRE2_WIDE32_LIBS=$pkg_cv_PCRE2_WIDE32_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE32_LIBS"
-					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
-					printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+						PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
 
 
 fi
+				else
+					if test  -x "$pcre2config"
+					then
+						have_libpcre2="yes"
+						libs32=`$pcre2config --libs32`
+						PCRE2_LIBS="$PCRE2_LIBS $libs32"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+				fi
 			fi
 		else
 			LIBS="-L$libpng_prefix/lib"
@@ -16856,7 +16054,7 @@ printf "%s\n" "#define HAVE_PCRE2 1" >>confdefs.h
 
 
 
-report_have_sdl2="no"
+report_have_sdl3="no"
 
 # Check whether --with-sdl-prefix was given.
 if test ${with_sdl_prefix+y}
@@ -16898,24 +16096,24 @@ fi
 
 
 
-  min_sdl_version=2.0.0
+  min_sdl_version=3.2.28
 
   if test "x$sdl_prefix$sdl_exec_prefix" = x ; then
 
 pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for sdl2 >= $min_sdl_version" >&5
-printf %s "checking for sdl2 >= $min_sdl_version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for sdl3 >= $min_sdl_version" >&5
+printf %s "checking for sdl3 >= $min_sdl_version... " >&6; }
 
-if test -n "$SDL2_CFLAGS"; then
-    pkg_cv_SDL2_CFLAGS="$SDL2_CFLAGS"
+if test -n "$SDL3_CFLAGS"; then
+    pkg_cv_SDL3_CFLAGS="$SDL3_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= \$min_sdl_version\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "sdl2 >= $min_sdl_version") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl3 >= \$min_sdl_version\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sdl3 >= $min_sdl_version") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_SDL2_CFLAGS=`$PKG_CONFIG --cflags "sdl2 >= $min_sdl_version" 2>/dev/null`
+  pkg_cv_SDL3_CFLAGS=`$PKG_CONFIG --cflags "sdl3 >= $min_sdl_version" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -16923,16 +16121,16 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$SDL2_LIBS"; then
-    pkg_cv_SDL2_LIBS="$SDL2_LIBS"
+if test -n "$SDL3_LIBS"; then
+    pkg_cv_SDL3_LIBS="$SDL3_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= \$min_sdl_version\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "sdl2 >= $min_sdl_version") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl3 >= \$min_sdl_version\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sdl3 >= $min_sdl_version") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_SDL2_LIBS=`$PKG_CONFIG --libs "sdl2 >= $min_sdl_version" 2>/dev/null`
+  pkg_cv_SDL3_LIBS=`$PKG_CONFIG --libs "sdl3 >= $min_sdl_version" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -16953,12 +16151,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-                SDL2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
+                SDL3_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "sdl3 >= $min_sdl_version" 2>&1`
         else
-                SDL2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "sdl2 >= $min_sdl_version" 2>&1`
+                SDL3_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "sdl3 >= $min_sdl_version" 2>&1`
         fi
         # Put the nasty error message in config.log where it belongs
-        echo "$SDL2_PKG_ERRORS" >&5
+        echo "$SDL3_PKG_ERRORS" >&5
 
         sdl_pc=no
 elif test $pkg_failed = untried; then
@@ -16966,8 +16164,8 @@ elif test $pkg_failed = untried; then
 printf "%s\n" "no" >&6; }
         sdl_pc=no
 else
-        SDL2_CFLAGS=$pkg_cv_SDL2_CFLAGS
-        SDL2_LIBS=$pkg_cv_SDL2_LIBS
+        SDL3_CFLAGS=$pkg_cv_SDL3_CFLAGS
+        SDL3_LIBS=$pkg_cv_SDL3_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         sdl_pc=yes
@@ -16976,37 +16174,37 @@ fi
     sdl_pc=no
     if test x$sdl_exec_prefix != x ; then
       sdl_config_args="$sdl_config_args --exec-prefix=$sdl_exec_prefix"
-      if test x${SDL2_CONFIG+set} != xset ; then
-        SDL2_CONFIG=$sdl_exec_prefix/bin/sdl2-config
+      if test x${SDL3_CONFIG+set} != xset ; then
+        SDL3_CONFIG=$sdl_exec_prefix/bin/sdl3-config
       fi
     fi
     if test x$sdl_prefix != x ; then
       sdl_config_args="$sdl_config_args --prefix=$sdl_prefix"
-      if test x${SDL2_CONFIG+set} != xset ; then
-        SDL2_CONFIG=$sdl_prefix/bin/sdl2-config
+      if test x${SDL3_CONFIG+set} != xset ; then
+        SDL3_CONFIG=$sdl_prefix/bin/sdl3-config
       fi
     fi
   fi
 
   if test "x$sdl_pc" = xyes ; then
     no_sdl=""
-    SDL2_CONFIG="pkg-config sdl2"
+    SDL3_CONFIG="pkg-config sdl3"
   else
     as_save_PATH="$PATH"
     if test "x$prefix" != xNONE && test "$cross_compiling" != yes; then
       PATH="$prefix/bin:$prefix/usr/bin:$PATH"
     fi
-    # Extract the first word of "sdl2-config", so it can be a program name with args.
-set dummy sdl2-config; ac_word=$2
+    # Extract the first word of "sdl3-config", so it can be a program name with args.
+set dummy sdl3-config; ac_word=$2
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_path_SDL2_CONFIG+y}
+if test ${ac_cv_path_SDL3_CONFIG+y}
 then :
   printf %s "(cached) " >&6
 else case e in #(
-  e) case $SDL2_CONFIG in
+  e) case $SDL3_CONFIG in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_SDL2_CONFIG="$SDL2_CONFIG" # Let the user override the test with a path.
+  ac_cv_path_SDL3_CONFIG="$SDL3_CONFIG" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -17020,7 +16218,7 @@ do
   esac
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_path_SDL2_CONFIG="$as_dir$ac_word$ac_exec_ext"
+    ac_cv_path_SDL3_CONFIG="$as_dir$ac_word$ac_exec_ext"
     printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -17028,15 +16226,15 @@ done
   done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_SDL2_CONFIG" && ac_cv_path_SDL2_CONFIG="no"
+  test -z "$ac_cv_path_SDL3_CONFIG" && ac_cv_path_SDL3_CONFIG="no"
   ;;
 esac ;;
 esac
 fi
-SDL2_CONFIG=$ac_cv_path_SDL2_CONFIG
-if test -n "$SDL2_CONFIG"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $SDL2_CONFIG" >&5
-printf "%s\n" "$SDL2_CONFIG" >&6; }
+SDL3_CONFIG=$ac_cv_path_SDL3_CONFIG
+if test -n "$SDL3_CONFIG"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $SDL3_CONFIG" >&5
+printf "%s\n" "$SDL3_CONFIG" >&6; }
 else
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
@@ -17046,15 +16244,15 @@ fi
     PATH="$as_save_PATH"
     no_sdl=""
 
-    if test "$SDL2_CONFIG" = "no" -a "x$search_sdl_framework" = "xyes"; then
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SDL2.framework" >&5
-printf %s "checking for SDL2.framework... " >&6; }
-      if test "x$SDL2_FRAMEWORK" != x; then
-        sdl_framework=$SDL2_FRAMEWORK
+    if test "$SDL3_CONFIG" = "no" -a "x$search_sdl_framework" = "xyes"; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SDL3.framework" >&5
+printf %s "checking for SDL3.framework... " >&6; }
+      if test "x$SDL3_FRAMEWORK" != x; then
+        sdl_framework=$SDL3_FRAMEWORK
       else
         for d in / ~/ /System/; do
-          if test -d "$dLibrary/Frameworks/SDL2.framework"; then
-            sdl_framework="$dLibrary/Frameworks/SDL2.framework"
+          if test -d "$dLibrary/Frameworks/SDL3.framework"; then
+            sdl_framework="$dLibrary/Frameworks/SDL3.framework"
           fi
         done
       fi
@@ -17063,34 +16261,34 @@ printf %s "checking for SDL2.framework... " >&6; }
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $sdl_framework" >&5
 printf "%s\n" "$sdl_framework" >&6; }
         sdl_framework_dir=`dirname $sdl_framework`
-        SDL2_CFLAGS="-F$sdl_framework_dir -Wl,-framework,SDL2 -I$sdl_framework/include"
-        SDL2_LIBS="-F$sdl_framework_dir -Wl,-framework,SDL2"
+        SDL3_CFLAGS="-F$sdl_framework_dir -Wl,-framework,SDL3 -I$sdl_framework/include"
+        SDL3_LIBS="-F$sdl_framework_dir -Wl,-framework,SDL3"
       else
         no_sdl=yes
       fi
     fi
 
-    if test "$SDL2_CONFIG" != "no"; then
+    if test "$SDL3_CONFIG" != "no"; then
       if test "x$sdl_pc" = "xno"; then
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SDL - version >= $min_sdl_version" >&5
-printf %s "checking for SDL - version >= $min_sdl_version... " >&6; }
-        SDL2_CFLAGS=`$SDL2_CONFIG $sdl_config_args --cflags`
-        SDL2_LIBS=`$SDL2_CONFIG $sdl_config_args --libs`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for SDL3 - version >= $min_sdl_version" >&5
+printf %s "checking for SDL3 - version >= $min_sdl_version... " >&6; }
+        SDL3_CFLAGS=`$SDL3_CONFIG $sdl_config_args --cflags`
+        SDL3_LIBS=`$SDL3_CONFIG $sdl_config_args --libs`
       fi
 
-      sdl_major_version=`$SDL2_CONFIG $sdl_config_args --version | \
+      sdl_major_version=`$SDL3_CONFIG $sdl_config_args --version | \
              sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-      sdl_minor_version=`$SDL2_CONFIG $sdl_config_args --version | \
+      sdl_minor_version=`$SDL3_CONFIG $sdl_config_args --version | \
              sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-      sdl_micro_version=`$SDL2_CONFIG $sdl_config_args --version | \
+      sdl_micro_version=`$SDL3_CONFIG $sdl_config_args --version | \
              sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
       if test "x$enable_sdltest" = "xyes" ; then
         ac_save_CFLAGS="$CFLAGS"
         ac_save_CXXFLAGS="$CXXFLAGS"
         ac_save_LIBS="$LIBS"
-        CFLAGS="$CFLAGS $SDL2_CFLAGS"
-        CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS"
-        LIBS="$LIBS $SDL2_LIBS"
+        CFLAGS="$CFLAGS $SDL3_CFLAGS"
+        CXXFLAGS="$CXXFLAGS $SDL3_CFLAGS"
+        LIBS="$LIBS $SDL3_LIBS"
       rm -f conf.sdltest
       if test "$cross_compiling" = yes
 then :
@@ -17102,7 +16300,7 @@ else case e in #(
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "SDL.h"
+#include <SDL3/SDL.h>
 
 char*
 my_strdup (char *str)
@@ -17125,7 +16323,7 @@ int main (int argc, char *argv[])
   int major, minor, micro;
   char *tmp_version;
 
-  /* This hangs on some systems (?)
+  /* This hangs on some systems (?
   system ("touch conf.sdltest");
   */
   { FILE *fp = fopen("conf.sdltest", "a"); if ( fp ) fclose(fp); }
@@ -17145,11 +16343,11 @@ int main (int argc, char *argv[])
     }
   else
     {
-      printf("\n*** 'sdl2-config --version' returned %d.%d.%d, but the minimum version\n", $sdl_major_version, $sdl_minor_version, $sdl_micro_version);
-      printf("*** of SDL required is %d.%d.%d. If sdl2-config is correct, then it is\n", major, minor, micro);
+      printf("\n*** 'sdl3-config --version' returned %d.%d.%d, but the minimum version\n", $sdl_major_version, $sdl_minor_version, $sdl_micro_version);
+      printf("*** of SDL3 required is %d.%d.%d. If sdl3-config is correct, then it is\n", major, minor, micro);
       printf("*** best to upgrade to the required version.\n");
-      printf("*** If sdl2-config was wrong, set the environment variable SDL2_CONFIG\n");
-      printf("*** to point to the correct copy of sdl2-config, and remove the file\n");
+      printf("*** If sdl3-config was wrong, set the environment variable SDL3_CONFIG\n");
+      printf("*** to point to the correct copy of sdl3-config, and remove the file\n");
       printf("*** config.cache before re-running configure\n");
       return 1;
     }
@@ -17185,37 +16383,37 @@ printf "%s\n" "yes" >&6; }
       fi
     fi
   fi
-  if test "$SDL2_CONFIG" = "no"; then
+  if test "$SDL3_CONFIG" = "no"; then
     no_sdl="yes"
   fi
 
   if test "x$no_sdl" = x ; then
 
-printf "%s\n" "#define HAVE_SDL2 1" >>confdefs.h
+printf "%s\n" "#define HAVE_SDL3 1" >>confdefs.h
 
-            report_have_sdl2="yes"
+            report_have_sdl3="yes"
 
 
 
   else
-     if test "$SDL2_CONFIG" = "no" ; then
-       echo "*** The sdl2-config script installed by SDL could not be found"
-       echo "*** If SDL was installed in PREFIX, make sure PREFIX/bin is in"
-       echo "*** your path, or set the SDL2_CONFIG environment variable to the"
-       echo "*** full path to sdl2-config."
+     if test "$SDL3_CONFIG" = "no" ; then
+       echo "*** The sdl3-config script installed by SDL3 could not be found"
+       echo "*** If SDL3 was installed in PREFIX, make sure PREFIX/bin is in"
+       echo "*** your path, or set the SDL3_CONFIG environment variable to the"
+       echo "*** full path to sdl3-config."
      else
        if test -f conf.sdltest ; then
         :
        else
-          echo "*** Could not run SDL test program, checking why..."
-          CFLAGS="$CFLAGS $SDL2_CFLAGS"
-          CXXFLAGS="$CXXFLAGS $SDL2_CFLAGS"
-          LIBS="$LIBS $SDL2_LIBS"
+          echo "*** Could not run SDL3 test program, checking why..."
+          CFLAGS="$CFLAGS $SDL3_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL3_CFLAGS"
+          LIBS="$LIBS $SDL3_LIBS"
           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #include <stdio.h>
-#include "SDL.h"
+#include <SDL3/SDL.h>
 
 int main(int argc, char *argv[])
 { return 0; }
@@ -17233,19 +16431,19 @@ _ACEOF
 if ac_fn_c_try_link "$LINENO"
 then :
    echo "*** The test program compiled, but did not run. This usually means"
-          echo "*** that the run-time linker is not finding SDL or finding the wrong"
-          echo "*** version of SDL. If it is not finding SDL, you'll need to set your"
+          echo "*** that the run-time linker is not finding SDL3 or finding the wrong"
+          echo "*** version of SDL3. If it is not finding SDL3, you'll need to set your"
           echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
           echo "*** to the installed location  Also, make sure you have run ldconfig if that"
           echo "*** is required on your system"
-	  echo "***"
+      echo "***"
           echo "*** If you have an old version installed, it is best to remove it, although"
           echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
 else case e in #(
   e)  echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occured. This usually means SDL was incorrectly installed"
-          echo "*** or that you have moved SDL since it was installed. In the latter case, you"
-          echo "*** may want to edit the sdl2-config script: $SDL2_CONFIG"  ;;
+          echo "*** exact error that occured. This usually means SDL3 was incorrectly installed"
+          echo "*** or that you have moved SDL3 since it was installed. In the latter case, you"
+          echo "*** may want to edit the sdl3-config script: $SDL3_CONFIG"  ;;
 esac
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
@@ -17255,8 +16453,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
           LIBS="$ac_save_LIBS"
        fi
      fi
-     SDL2_CFLAGS=""
-     SDL2_LIBS=""
+     SDL3_CFLAGS=""
+     SDL3_LIBS=""
      :
   fi
 
@@ -19169,7 +18367,7 @@ fi
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
-**   SDL2 library:         $report_have_sdl2
+**   SDL3 library:         $report_have_sdl3
 **   mpg123 library:       $report_have_mpg123
 **   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
@@ -19202,7 +18400,7 @@ printf "%s\n" "
 **   ICONV:                $report_have_iconv
 **   PNG:                  $report_have_png
 **   JPEG:                 $report_have_jpeg $jpeg_note
-**   SDL2 library:         $report_have_sdl2
+**   SDL3 library:         $report_have_sdl3
 **   mpg123 library:       $report_have_mpg123
 **   ogg vorbis library:   $report_have_libvorbis
 **   dav1d library:        $report_have_dav1d
@@ -19231,9 +18429,9 @@ then
 "
 fi
 
-if test "$report_have_sdl2" != "yes"
+if test "$report_have_sdl3" != "yes"
 then
-	missing="$missing  - sdl2 not found
+	missing="$missing  - sdl3 not found
 "
 fi
 

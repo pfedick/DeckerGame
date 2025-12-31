@@ -1,15 +1,15 @@
 #include "decker.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 
 
 TileTypePlane::TileTypePlane()
 {
-	tiletypes=NULL;
-	tilematrix=NULL;
-	width=height=0;
+	tiletypes = NULL;
+	tilematrix = NULL;
+	width = height = 0;
 }
 
 TileTypePlane::~TileTypePlane()
@@ -25,20 +25,20 @@ ppl7::grafix::Size TileTypePlane::size() const
 void TileTypePlane::clear()
 {
 	free(tilematrix);
-	tilematrix=NULL;
-	width=0;
-	height=0;
+	tilematrix = NULL;
+	width = 0;
+	height = 0;
 }
 
 void TileTypePlane::create(int width, int height)
 {
 	clear();
-	this->width=width;
-	this->height=height;
-	tilematrix=(TileType::Type*)calloc(1, sizeof(TileType::Type) * (width + 1) * (height + 1));
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			tilematrix[y * width + x]=TileType::Type::NonBlocking;
+	this->width = width;
+	this->height = height;
+	tilematrix = (TileType::Type*)calloc(1, sizeof(TileType::Type) * (width + 1) * (height + 1));
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			tilematrix[y * width + x] = TileType::Type::NonBlocking;
 		}
 	}
 }
@@ -46,7 +46,7 @@ void TileTypePlane::create(int width, int height)
 void TileTypePlane::setType(int x, int y, TileType::Type type)
 {
 	if (x < 0 || x >= width || y < 0 || y >= height || tilematrix == NULL) return;
-	tilematrix[y * width + x]=type;
+	tilematrix[y * width + x] = type;
 }
 
 TileType::Type TileTypePlane::getType(int x, int y) const
@@ -57,22 +57,22 @@ TileType::Type TileTypePlane::getType(int x, int y) const
 
 TileType::Type TileTypePlane::getType(const ppl7::grafix::Point& player) const
 {
-	int tx=player.x / TILE_WIDTH;
-	int ty=player.y / TILE_HEIGHT;
+	int tx = player.x / TILE_WIDTH;
+	int ty = player.y / TILE_HEIGHT;
 	return getType(tx, ty);
 }
 
 int TileTypePlane::getPlayerGround(const ppl7::grafix::Point& player) const
 {
-	int tx=player.x / TILE_WIDTH;
-	int ty=player.y / TILE_HEIGHT;
-	TileType::Type type=getType(tx, ty);
+	int tx = player.x / TILE_WIDTH;
+	int ty = player.y / TILE_HEIGHT;
+	TileType::Type type = getType(tx, ty);
 	if (type != TileType::Type::NonBlocking) {
 		if (type == TileType::Type::SteepRampLeft) {
 			//int x=player.x%TILE_WIDTH;
 		}
 	}
-	type=getType(tx, ty + 1);
+	type = getType(tx, ty + 1);
 	if (type != TileType::Type::NonBlocking) {
 
 	}
@@ -81,24 +81,24 @@ int TileTypePlane::getPlayerGround(const ppl7::grafix::Point& player) const
 
 void TileTypePlane::setTileTypesSprites(SpriteTexture* sprites)
 {
-	this->tiletypes=sprites;
+	this->tiletypes = sprites;
 }
 
 void TileTypePlane::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
 	if (!tiletypes) return;
-	int tiles_width=viewport.width() / TILE_WIDTH + 2;
-	int tiles_height=viewport.height() / TILE_HEIGHT + 2;
-	int offset_x=worldcoords.x % TILE_WIDTH;
-	int offset_y=worldcoords.y % TILE_HEIGHT;
-	int start_x=worldcoords.x / TILE_WIDTH;
-	int start_y=worldcoords.y / TILE_HEIGHT;
-	int x1=viewport.x1 - offset_x;
-	int y1=viewport.y1 - offset_y;
+	int tiles_width = viewport.width() / TILE_WIDTH + 2;
+	int tiles_height = viewport.height() / TILE_HEIGHT + 2;
+	int offset_x = worldcoords.x % TILE_WIDTH;
+	int offset_y = worldcoords.y % TILE_HEIGHT;
+	int start_x = worldcoords.x / TILE_WIDTH;
+	int start_y = worldcoords.y / TILE_HEIGHT;
+	int x1 = viewport.x1 - offset_x;
+	int y1 = viewport.y1 - offset_y;
 
-	for (int y=0;y < tiles_height;y++) {
-		for (int x=0;x < tiles_width;x++) {
-			TileType::Type type=getType(x + start_x, y + start_y);
+	for (int y = 0;y < tiles_height;y++) {
+		for (int x = 0;x < tiles_width;x++) {
+			TileType::Type type = getType(x + start_x, y + start_y);
 			if (type > 0) {
 				tiletypes->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, type);
 			}
@@ -110,21 +110,21 @@ void TileTypePlane::save(ppl7::FileObject& file, unsigned char id) const
 {
 	// We only save tiles with type>0
 	if (tilematrix == NULL) return;
-	unsigned char* buffer=(unsigned char*)malloc(10 + (width * height * 5));
+	unsigned char* buffer = (unsigned char*)malloc(10 + (width * height * 5));
 	ppl7::Poke32(buffer + 0, 0);
 	ppl7::Poke8(buffer + 4, id);
 	ppl7::Poke8(buffer + 5, 1);		// Version
 	ppl7::Poke16(buffer + 6, width);
 	ppl7::Poke16(buffer + 8, height);
-	size_t p=10;
-	for (int y=0;y < height;y++) {
-		for (int x=0;x < width;x++) {
-			TileType::Type type=tilematrix[y * width + x];
+	size_t p = 10;
+	for (int y = 0;y < height;y++) {
+		for (int x = 0;x < width;x++) {
+			TileType::Type type = tilematrix[y * width + x];
 			if ((int)type > 0) {
 				ppl7::Poke16(buffer + p, x);
 				ppl7::Poke16(buffer + p + 2, y);
 				ppl7::Poke8(buffer + p + 4, (int)type);
-				p+=5;
+				p += 5;
 			}
 		}
 	}
@@ -135,23 +135,24 @@ void TileTypePlane::save(ppl7::FileObject& file, unsigned char id) const
 
 void TileTypePlane::load(const ppl7::ByteArrayPtr& ba)
 {
-	size_t p=0;
-	const char* buffer=ba.toCharPtr();
-	int version=ppl7::Peek8(buffer);
-	p+=1;
-	width=ppl7::Peek16(buffer + p);
-	height=ppl7::Peek16(buffer + p + 2);
+	size_t p = 0;
+	const char* buffer = ba.toCharPtr();
+	int version = ppl7::Peek8(buffer);
+	p += 1;
+	width = ppl7::Peek16(buffer + p);
+	height = ppl7::Peek16(buffer + p + 2);
 	create(width, height);
-	p+=4;
+	p += 4;
 	if (version == 1) {
 		while (p < ba.size()) {
-			int x=ppl7::Peek16(buffer + p);
-			int y=ppl7::Peek16(buffer + p + 2);
-			int type=ppl7::Peek8(buffer + p + 4);
+			int x = ppl7::Peek16(buffer + p);
+			int y = ppl7::Peek16(buffer + p + 2);
+			int type = ppl7::Peek8(buffer + p + 4);
 			setType(x, y, (TileType::Type)type);
-			p+=5;
+			p += 5;
 		}
-	} else {
+	}
+	else {
 		printf("Can't load TileTypePlane, unknown version! [%d]\n", version);
 	}
 }
@@ -161,21 +162,22 @@ ppl7::grafix::Rect TileTypePlane::getOccupiedArea() const
 {
 	ppl7::grafix::Rect r;
 	if (tilematrix) {
-		size_t count=0;
-		for (int y=0;y < height;y++) {
-			for (int x=0;x < width;x++) {
-				TileType::Type type=tilematrix[y * width + x];
+		size_t count = 0;
+		for (int y = 0;y < height;y++) {
+			for (int x = 0;x < width;x++) {
+				TileType::Type type = tilematrix[y * width + x];
 				if ((int)type > 0) {
 					if (!count) {
-						r.x1=x;
-						r.y1=y;
-						r.x2=x;
-						r.y2=y;
-					} else {
-						if (x > r.x2) r.x2=x;
-						if (x < r.x1) r.x1=x;
-						if (y > r.y2) r.y2=y;
-						if (y < r.y1) r.y1=y;
+						r.x1 = x;
+						r.y1 = y;
+						r.x2 = x;
+						r.y2 = y;
+					}
+					else {
+						if (x > r.x2) r.x2 = x;
+						if (x < r.x1) r.x1 = x;
+						if (y > r.y2) r.y2 = y;
+						if (y < r.y1) r.y1 = y;
 					}
 					count++;
 				}

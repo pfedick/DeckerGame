@@ -1,6 +1,6 @@
 //#include <stdio.h>
 //#include <stdlib.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7-grafix.h>
 #include <ppl7-tk.h>
 #include "decker_sdl.h"
@@ -96,7 +96,8 @@ int WinMain()
 	try {
 		start(__argc, __argv);
 		return 0;
-	} catch (const ppl7::Exception& ex) {
+	}
+	catch (const ppl7::Exception& ex) {
 		ex.print();
 		throw;
 		return 1;
@@ -115,9 +116,9 @@ int main(int argc, char** argv)
 
 VPlay::VPlay()
 {
-	wm=ppl7::tk::GetWindowManager();
-	quitPlayer=false;
-	renderer=NULL;
+	wm = ppl7::tk::GetWindowManager();
+	quitPlayer = false;
+	renderer = NULL;
 }
 
 VPlay::~VPlay()
@@ -136,14 +137,14 @@ void VPlay::init()
 	setBackgroundColor(ppl7::grafix::Color(0, 0, 0, 0));
 	setSize(1920, 1080);
 	wm->createWindow(*this);
-	renderer=(SDL_Renderer*)getRenderer();
+	renderer = (SDL_Renderer*)getRenderer();
 	sdl.setRenderer(renderer);
 	SDL_ShowCursor(SDL_DISABLE);
 	uifont.setAntialias(true);
 	uifont.setBold(true);
 	uifont.setColor(ppl7::grafix::Color(255, 255, 255, 255));
 
-	metrics=new ppl7::tk::Label(10, 0, 400, 30, "Test");
+	metrics = new ppl7::tk::Label(10, 0, 400, 30, "Test");
 	metrics->setFont(uifont);
 	metrics->setColor(ppl7::grafix::Color(255, 255, 255, 255));
 	addChild(metrics);
@@ -157,30 +158,30 @@ void VPlay::init()
 
 void VPlay::run()
 {
-	double frame_time=0.0f;
-	double next_video_frame=0.0f;
-	double video_frametime=1.0f / (double)player.framerate();
-	size_t video_frame_count=0;
-	ppl7::ppl_time_t last_second=ppl7::GetTime();
+	double frame_time = 0.0f;
+	double next_video_frame = 0.0f;
+	double video_frametime = 1.0f / (double)player.framerate();
+	size_t video_frame_count = 0;
+	ppl7::ppl_time_t last_second = ppl7::GetTime();
 	wm->setKeyboardFocus(this);
 
 	while (!quitPlayer) {
-		double frame_start=ppl7::GetMicrotime();
-		if (next_video_frame == 0.0f) next_video_frame=frame_start;
+		double frame_start = ppl7::GetMicrotime();
+		if (next_video_frame == 0.0f) next_video_frame = frame_start;
 		fps.update();
-		ppl7::ppl_time_t current_second=ppl7::GetTime();
+		ppl7::ppl_time_t current_second = ppl7::GetTime();
 		if (current_second > last_second) {
-			last_second=current_second;
+			last_second = current_second;
 			metrics->setText(ppl7::ToString("%d fps, frametime: %0.3f ms", fps.getFPS(), frame_time / fps.getFPS() * 1000.0f));
-			frame_time=0.0f;
+			frame_time = 0.0f;
 		}
 		wm->handleEvents();
 		if (next_video_frame <= frame_start) {
 			//ppl7::PrintDebugTime("nextframe: %zd\n", video_frame_count);
-			if (player.eof()) quitPlayer=true;
+			if (player.eof()) quitPlayer = true;
 			player.nextFrame();
 			video_frame_count++;
-			next_video_frame+=video_frametime;
+			next_video_frame += video_frametime;
 		}
 
 
@@ -190,7 +191,7 @@ void VPlay::run()
 		player.renderFrame();
 
 		drawWidgets();
-		frame_time+=(ppl7::GetMicrotime() - frame_start);
+		frame_time += (ppl7::GetMicrotime() - frame_start);
 		presentScreen();
 		if (player.eof()) break;
 	}
@@ -198,11 +199,11 @@ void VPlay::run()
 
 void VPlay::loadvideo()
 {
-	unsigned int fps[2], num_frames=0, timebase[2];
-	fps[0]=0;
-	fps[1]=0;
-	timebase[0]=0;
-	timebase[1]=0;
+	unsigned int fps[2], num_frames = 0, timebase[2];
+	fps[0] = 0;
+	fps[1] = 0;
+	timebase[0] = 0;
+	timebase[1] = 0;
 	/*
 	if (!demuxer.open("M:/Decker2/av1/george_decker_game.ivf", fps, &num_frames, timebase)) {
 		ppl7::PrintDebugTime("could not open input video\n");
@@ -218,12 +219,12 @@ void VPlay::loadvideo()
 
 void VPlay::quitEvent(ppl7::tk::Event* e)
 {
-	quitPlayer=true;
+	quitPlayer = true;
 }
 
 void VPlay::closeEvent(ppl7::tk::Event* e)
 {
-	quitPlayer=true;
+	quitPlayer = true;
 }
 
 
@@ -234,10 +235,10 @@ void VPlay::resizeEvent(ppl7::tk::ResizeEvent* event)
 
 void VPlay::mouseDownEvent(ppl7::tk::MouseEvent* event)
 {
-	quitPlayer=true;
+	quitPlayer = true;
 }
 
 void VPlay::keyDownEvent(ppl7::tk::KeyEvent* event)
 {
-	quitPlayer=true;
+	quitPlayer = true;
 }

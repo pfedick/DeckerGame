@@ -1,7 +1,7 @@
 #ifndef INCLUDE_DECKER_H_
 #define INCLUDE_DECKER_H_
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <ppltk.h>
@@ -56,20 +56,20 @@ EXCEPTION(SDLException, ppl7::Exception);
 #define TILE_HEIGHT 38
 
 enum class PlaneId {
-	Near=6,
-	Front=1,
-	Player=0,
-	Back=3,
-	Middle=4,
-	Far=2,
-	Horizon=5,
+	Near = 6,
+	Front = 1,
+	Player = 0,
+	Back = 3,
+	Middle = 4,
+	Far = 2,
+	Horizon = 5,
 	// "MaxPlaneId" must always be the highest ID. It is used for defining
 	// dimensions of arrays
-	MaxPlaneId=7
+	MaxPlaneId = 7
 };
 
 // planeFactor Player, Front, Far, Back, Middle, Horizon, Near
-const double planeFactor[static_cast<int>(PlaneId::MaxPlaneId)]={ 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
+const double planeFactor[static_cast<int>(PlaneId::MaxPlaneId)] = { 1.0f, 1.0f, 0.5f, 1.0f, 0.8f, 0.3f, 1.3f };
 
 
 namespace Decker::Objects {
@@ -90,12 +90,12 @@ private:
 public:
 	enum class DifficultyLevel
 	{
-		easy=1,
-		normal=2,
-		hard=3
+		easy = 1,
+		normal = 2,
+		hard = 3
 	};
 	typedef ppltk::Window::WindowMode WindowMode;
-		// Video
+	// Video
 	int					videoDevice;
 	ppl7::grafix::Size	ScreenResolution;
 	int 				ScreenRefreshRate;
@@ -183,7 +183,7 @@ private:
 public:
 	ColorPalette();
 	void setDefaults();
-	void set(uint32_t index, const ppl7::grafix::Color& color, const ppl7::String& name=ppl7::String(), int ldraw_material=0);
+	void set(uint32_t index, const ppl7::grafix::Color& color, const ppl7::String& name = ppl7::String(), int ldraw_material = 0);
 	void set(uint32_t index, const ColorPaletteItem& item);
 	void setColor(uint32_t index, const ppl7::grafix::Color& color);
 	void setName(uint32_t index, const ppl7::String& name);
@@ -209,24 +209,24 @@ public:
 		int textureId;
 		SDL_Texture* tex;
 		const ppl7::grafix::Drawable* drawable;
-		SDL_Rect r;
+		SDL_FRect r;
 		ppl7::grafix::Point Pivot;
 		ppl7::grafix::Point Offset;
 
 		SpriteIndexItem()
 		{
-			id=0;
-			textureId=0;
-			tex=NULL;
-			drawable=NULL;
+			id = 0;
+			textureId = 0;
+			tex = NULL;
+			drawable = NULL;
 		}
 		SpriteIndexItem(const SpriteIndexItem& other)
 			:r(other.r), Pivot(other.Pivot), Offset(other.Offset)
 		{
-			id=other.id;
-			textureId=other.textureId;
-			tex=other.tex;
-			drawable=other.drawable;
+			id = other.id;
+			textureId = other.textureId;
+			tex = other.tex;
+			drawable = other.drawable;
 		}
 	};
 private:
@@ -252,8 +252,8 @@ private:
 public:
 	SpriteTexture();
 	~SpriteTexture();
-	void load(SDL& sdl, const ppl7::String& filename, const ppl7::grafix::Color& tint=ppl7::grafix::Color());
-	void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint=ppl7::grafix::Color());
+	void load(SDL& sdl, const ppl7::String& filename, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
+	void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
 	void clear();
 	void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
 	void draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
@@ -262,7 +262,7 @@ public:
 	void draw(SDL_Renderer* renderer, int x, int y, int id, const SDL_Color& color_modulation) const;
 	void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
 	void drawBoundingBoxWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle) const;
-	void draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const;
+	void draw(SDL_Renderer* renderer, int id, const SDL_FRect& source, const SDL_FRect& target) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
 	void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
 	void drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
@@ -284,7 +284,7 @@ public:
 	SDL_BlendMode getTextureBlendMode() const;
 	void setPivot(int id, int x, int y);
 
-	SDL_Rect getSpriteSource(int id) const;
+	SDL_FRect getSpriteSource(int id) const;
 	const SpriteIndexItem* getSpriteIndex(int id) const;
 	ppl7::grafix::Point spriteOffset(int id) const;
 };
@@ -369,7 +369,7 @@ public:
 	void setSprite(int z, int tileset, int tileno, int color_index, bool showStuds);
 	bool hasSprite(int z) const;
 	bool hasSprite() const;
-	void setOccupation(int z, TileOccupation o, int origin_x=-1, int origin_y=-1);
+	void setOccupation(int z, TileOccupation o, int origin_x = -1, int origin_y = -1);
 };
 
 class BrickOccupation
@@ -411,9 +411,9 @@ public:
 	void clear();
 	void create(int width, int height);
 	ppl7::grafix::Size getSize() const;
-	void setTile(int x, int y, int z, int tileset, int tileno, int color_index, bool showStuds=true);
+	void setTile(int x, int y, int z, int tileset, int tileno, int color_index, bool showStuds = true);
 	void setBlockBackground(int x, int y, bool block);
-	void setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x=-1, int origin_y=-1);
+	void setOccupation(int x, int y, int z, Tile::TileOccupation o, int origin_x = -1, int origin_y = -1);
 	Tile::TileOccupation getOccupation(int x, int y, int z);
 	ppl7::grafix::Point getOccupationOrigin(int x, int y, int z);
 	void setOccupation(int x, int y, int z, const BrickOccupation::Matrix& matrix);
@@ -676,7 +676,7 @@ class Screenshot
 {
 public:
 	enum class Layer {
-		Background=0,
+		Background = 0,
 		Horizon,
 		Far,
 		Middle,
@@ -687,13 +687,13 @@ public:
 		Complete
 	};
 	enum class Type {
-		Color=0,
+		Color = 0,
 		Lightmap,
 		Final
 	};
 
 	enum class Mode {
-		File=0,
+		File = 0,
 		Memory
 	};
 private:
@@ -705,10 +705,10 @@ private:
 public:
 
 
-	Screenshot(Mode m=Mode::File);
+	Screenshot(Mode m = Mode::File);
 	void setPath(const ppl7::String& path);
-	void save(Layer layer, Type type, SDL_Texture* texture);
-	void save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type type, SDL_Texture* texture);
+	void save(Layer layer, Type type);
+	void save(LightPlaneId lplane, LightPlayerPlaneMatrix pplane, Type type);
 
 	const ppl7::grafix::Drawable& image() const;
 	bool isDone() const;
@@ -732,13 +732,13 @@ private:
 	Plane HorizonPlane;
 	Plane NearPlane;
 	TileTypePlane TileTypeMatrix;
-	SpriteSystem HorizonSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem FarSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem MiddleSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem BackSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem PlayerSprites[3]={ SpriteSystem(palette),SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem FrontSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
-	SpriteSystem NearSprites[2]={ SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem HorizonSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem FarSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem MiddleSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem BackSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem PlayerSprites[3] = { SpriteSystem(palette),SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem FrontSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
+	SpriteSystem NearSprites[2] = { SpriteSystem(palette),SpriteSystem(palette) };
 
 	/*
 	LightLayer HorizonLights=LightLayer(palette);
@@ -774,41 +774,41 @@ private:
 
 public:
 	enum LevelChunkId {
-		chunkPlayerPlane=1,
-		chunkFrontPlane=2,
-		chunkFarPlane=3,
-		chunkBackPlane=4,
-		chunkMiddlePlane=5,
-		chunkNearPlane=6,
-		chunkHorizonPlane=7,
-		chunkPlayerSpritesLayer0=10,
-		chunkPlayerSpritesLayer1=11,
-		chunkFrontSpritesLayer0=12,
-		chunkFrontSpritesLayer1=13,
-		chunkFarSpritesLayer0=14,
-		chunkFarSpritesLayer1=15,
-		chunkBackSpritesLayer0=16,
-		chunkBackSpritesLayer1=17,
-		chunkMiddleSpritesLayer0=18,
-		chunkMiddleSpritesLayer1=19,
-		chunkTileTypes=20,
-		chunkHorizonSpritesLayer0=21,
-		chunkHorizonSpritesLayer1=22,
-		chunkNearSpritesLayer0=23,
-		chunkNearSpritesLayer1=24,
-		chunkPlayerSpritesLayer2=25,
-		chunkObjects=30,
-		chunkWayNet=31,
-		chunkLevelParameter=32,
-		chunkColorPalette=33,
-		chunkLightsHorizon=40,
-		chunkLightsFar=41,
-		chunkLightsMiddle=42,
-		chunkLightsBack=43,
-		chunkLightsPlayer=44,
-		chunkLightsFront=45,
-		chunkLightsNear=46,
-		chunkLights=47,
+		chunkPlayerPlane = 1,
+		chunkFrontPlane = 2,
+		chunkFarPlane = 3,
+		chunkBackPlane = 4,
+		chunkMiddlePlane = 5,
+		chunkNearPlane = 6,
+		chunkHorizonPlane = 7,
+		chunkPlayerSpritesLayer0 = 10,
+		chunkPlayerSpritesLayer1 = 11,
+		chunkFrontSpritesLayer0 = 12,
+		chunkFrontSpritesLayer1 = 13,
+		chunkFarSpritesLayer0 = 14,
+		chunkFarSpritesLayer1 = 15,
+		chunkBackSpritesLayer0 = 16,
+		chunkBackSpritesLayer1 = 17,
+		chunkMiddleSpritesLayer0 = 18,
+		chunkMiddleSpritesLayer1 = 19,
+		chunkTileTypes = 20,
+		chunkHorizonSpritesLayer0 = 21,
+		chunkHorizonSpritesLayer1 = 22,
+		chunkNearSpritesLayer0 = 23,
+		chunkNearSpritesLayer1 = 24,
+		chunkPlayerSpritesLayer2 = 25,
+		chunkObjects = 30,
+		chunkWayNet = 31,
+		chunkLevelParameter = 32,
+		chunkColorPalette = 33,
+		chunkLightsHorizon = 40,
+		chunkLightsFar = 41,
+		chunkLightsMiddle = 42,
+		chunkLightsBack = 43,
+		chunkLightsPlayer = 44,
+		chunkLightsFront = 45,
+		chunkLightsNear = 46,
+		chunkLights = 47,
 	};
 
 private:
@@ -858,7 +858,7 @@ public:
 };
 
 enum class GameState {
-	None=0,
+	None = 0,
 	QuitGame,
 	StartGame,
 	ShowSettings,
@@ -910,7 +910,7 @@ class MessageOverlay
 {
 public:
 	enum class Character {
-		George=0
+		George = 0
 	};
 private:
 	SDL& sdl;
@@ -936,7 +936,7 @@ public:
 	void loadSprites();
 	void resize(const ppl7::grafix::Size& size);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport);
-	void setText(Character c, const ppl7::String& text, const ppl7::String& phonetics, float timeout=0.0f);
+	void setText(Character c, const ppl7::String& text, const ppl7::String& phonetics, float timeout = 0.0f);
 	bool hasMessage() const;
 	void clear();
 
@@ -950,7 +950,7 @@ private:
 	ppl7::grafix::Size render_size;
 	bool scaling_enabled;
 	bool allow_upscale;
-	SDL_Rect render_rect;
+	SDL_FRect render_rect;
 	void update();
 
 public:
@@ -963,8 +963,8 @@ public:
 	ppl7::grafix::Point translate(const ppl7::grafix::Point& coords) const;
 
 	void translateMouseEvent(ppltk::MouseEvent* event);
-	void getRenderRect(SDL_Rect& rect) const;
-	const SDL_Rect& getRenderRect() const;
+	void getRenderRect(SDL_FRect& rect) const;
+	const SDL_FRect& getRenderRect() const;
 };
 
 class LevelModificator
@@ -977,9 +977,9 @@ public:
 	void* triggerobject;
 
 	LevelModificator() {
-		duration=0.0f;
-		starttime=0.0f;
-		triggerobject=NULL;
+		duration = 0.0f;
+		starttime = 0.0f;
+		triggerobject = NULL;
 	}
 
 };
@@ -1001,10 +1001,10 @@ private:
 
 		RememberMe() { clear(); };
 		void clear() {
-			lastTileset=2;
-			lastTile=0;
-			lastTileColor=2;
-			lastTileLayer=0;
+			lastTileset = 2;
+			lastTile = 0;
+			lastTileColor = 2;
+			lastTileLayer = 0;
 		};
 
 	};
@@ -1023,7 +1023,7 @@ private:
 	AudioPool audiopool;
 	Resources resources;
 	Level level;
-	Background background=Background(sdl);
+	Background background = Background(sdl);
 	SDL_Texture* tex_level_grid;
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
@@ -1066,7 +1066,7 @@ private:
 	RememberMe remember;
 
 	// Soundtrack
-	Soundtrack soundtrack=Soundtrack(audiosystem, level.params);
+	Soundtrack soundtrack = Soundtrack(audiosystem, level.params);
 
 	Metrics metrics;
 
@@ -1139,8 +1139,8 @@ private:
 public:
 	Config config;
 	GameState gameState;
-	MessageOverlay message_overlay=MessageOverlay(sdl);
-	TextureCache texture_cache=TextureCache(sdl);
+	MessageOverlay message_overlay = MessageOverlay(sdl);
+	TextureCache texture_cache = TextureCache(sdl);
 
 	Game();
 	~Game();
