@@ -2109,14 +2109,14 @@ void Game::keyDownEvent(ppltk::KeyEvent* event)
 	}
 	else if (event->key == ppltk::KeyEvent::KEY_RETURN && (event->modifier & ppltk::KeyEvent::KEYMOD_ALT) > 0) {
 		//printf("toggle fullscreen or back\n");
-		ppltk::WindowManager_SDL2* sdl2wm = (ppltk::WindowManager_SDL2*)wm;
-		Window::WindowMode mode = sdl2wm->getWindowMode(*this);
+		ppltk::WindowManager_SDL3* sdl3wm = (ppltk::WindowManager_SDL3*)wm;
+		Window::WindowMode mode = sdl3wm->getWindowMode(*this);
 		if (mode == Window::WindowMode::Window) {
 			windowedSize.setSize(width(), height());
 			//printf("Aktueller mode ist Window mit %d x %d\n", windowedSize.width, windowedSize.height);
 			ppl7::grafix::Size s = sdl.getDisplaySize(config.videoDevice);
 			//printf("switche zu FullscreenDesktop %d x %d\n", s.width, s.height);
-			sdl2wm->changeWindowMode(*this, Window::WindowMode::FullscreenDesktop);
+			sdl3wm->changeWindowMode(*this, Window::WindowMode::FullscreenDesktop);
 			ppltk::Window::DisplayMode dmode;
 			dmode.format = rgbFormat();
 			dmode.width = s.width;
@@ -2128,7 +2128,7 @@ void Game::keyDownEvent(ppltk::KeyEvent* event)
 		else if (mode == Window::WindowMode::FullscreenDesktop) {
 			if (windowedSize.width == 0 || windowedSize.height == 0) windowedSize = config.ScreenResolution;
 			//printf("Aktueller mode ist FullscreenDesktop, switche zu Fenster %d x %d\n", windowedSize.width, windowedSize.height);
-			sdl2wm->changeWindowMode(*this, Window::WindowMode::Window);
+			sdl3wm->changeWindowMode(*this, Window::WindowMode::Window);
 			ppltk::Window::DisplayMode dmode;
 			dmode.format = rgbFormat();
 			dmode.width = windowedSize.width;

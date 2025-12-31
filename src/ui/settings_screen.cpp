@@ -968,7 +968,7 @@ void SettingsScreen::mouseClickEvent(ppltk::MouseEvent* event)
     else if (event->widget() == save_video_settings_button) {
         Config::WindowMode mode = static_cast<Config::WindowMode>(windowmode_combobox->currentIdentifier().toInt());
 
-        ppltk::WindowManager_SDL2* wm = (ppltk::WindowManager_SDL2*)ppltk::GetWindowManager();
+        ppltk::WindowManager_SDL3* wm = (ppltk::WindowManager_SDL3*)ppltk::GetWindowManager();
         wm->changeWindowMode(game.window(), mode);
         ppltk::Window::DisplayMode dmode;
         dmode.format = game.window().rgbFormat();
