@@ -30,35 +30,34 @@ void GameController::open(SDL_JoystickID sdl_id)
         return;
     }
     has_axis = 0;
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_LEFTX)) has_axis |= static_cast<uint32_t>(Axis::leftx);
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_LEFTY)) has_axis |= static_cast<uint32_t>(Axis::lefty);
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_RIGHTX)) has_axis |= static_cast<uint32_t>(Axis::rightx);
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_RIGHTY)) has_axis |= static_cast<uint32_t>(Axis::righty);
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_TRIGGERLEFT)) has_axis |= static_cast<uint32_t>(Axis::triggerx);
-    if (SDL_GamepadHasAxis(gc, SDL_CONTROLLER_AXIS_TRIGGERRIGHT)) has_axis |= static_cast<uint32_t>(Axis::triggery);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_LEFTX)) has_axis |= static_cast<uint32_t>(Axis::leftx);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_LEFTY)) has_axis |= static_cast<uint32_t>(Axis::lefty);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_RIGHTX)) has_axis |= static_cast<uint32_t>(Axis::rightx);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_RIGHTY)) has_axis |= static_cast<uint32_t>(Axis::righty);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_LEFT_TRIGGER)) has_axis |= static_cast<uint32_t>(Axis::triggerx);
+    if (SDL_GamepadHasAxis(gc, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER)) has_axis |= static_cast<uint32_t>(Axis::triggery);
 
     has_button = 0;
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_A)) has_button |= static_cast<uint32_t>(Button::a);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_B)) has_button |= static_cast<uint32_t>(Button::b);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_X)) has_button |= static_cast<uint32_t>(Button::x);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_Y)) has_button |= static_cast<uint32_t>(Button::y);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_BACK)) has_button |= static_cast<uint32_t>(Button::back);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_GUIDE)) has_button |= static_cast<uint32_t>(Button::guide);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_START)) has_button |= static_cast<uint32_t>(Button::start);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_LEFTSTICK)) has_button |= static_cast<uint32_t>(Button::leftstick);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_RIGHTSTICK)) has_button |= static_cast<uint32_t>(Button::rightstick);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) has_button |= static_cast<uint32_t>(Button::leftshoulder);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) has_button |= static_cast<uint32_t>(Button::rightshoulder);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_DPAD_UP)) has_button |= static_cast<uint32_t>(Button::dpad_up);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_DPAD_DOWN)) has_button |= static_cast<uint32_t>(Button::dpad_down);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) has_button |= static_cast<uint32_t>(Button::dpad_left);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) has_button |= static_cast<uint32_t>(Button::dpad_right);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_MISC1)) has_button |= static_cast<uint32_t>(Button::misc1);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE1)) has_button |= static_cast<uint32_t>(Button::paddle1);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE2)) has_button |= static_cast<uint32_t>(Button::paddle2);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE3)) has_button |= static_cast<uint32_t>(Button::paddle3);
-    if (SDL_GamepadHasButton(gc, SDL_CONTROLLER_BUTTON_PADDLE4)) has_button |= static_cast<uint32_t>(Button::paddle4);
-
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_SOUTH)) has_button |= static_cast<uint32_t>(Button::a);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_EAST)) has_button |= static_cast<uint32_t>(Button::b);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_WEST)) has_button |= static_cast<uint32_t>(Button::x);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_NORTH)) has_button |= static_cast<uint32_t>(Button::y);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_BACK)) has_button |= static_cast<uint32_t>(Button::back);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_GUIDE)) has_button |= static_cast<uint32_t>(Button::guide);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_START)) has_button |= static_cast<uint32_t>(Button::start);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_LEFT_STICK)) has_button |= static_cast<uint32_t>(Button::leftstick);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_RIGHT_STICK)) has_button |= static_cast<uint32_t>(Button::rightstick);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_LEFT_SHOULDER)) has_button |= static_cast<uint32_t>(Button::leftshoulder);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER)) has_button |= static_cast<uint32_t>(Button::rightshoulder);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_DPAD_UP)) has_button |= static_cast<uint32_t>(Button::dpad_up);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_DPAD_DOWN)) has_button |= static_cast<uint32_t>(Button::dpad_down);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_DPAD_LEFT)) has_button |= static_cast<uint32_t>(Button::dpad_left);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_DPAD_RIGHT)) has_button |= static_cast<uint32_t>(Button::dpad_right);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_MISC1)) has_button |= static_cast<uint32_t>(Button::misc1);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_RIGHT_PADDLE1)) has_button |= static_cast<uint32_t>(Button::paddle1);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_LEFT_PADDLE1)) has_button |= static_cast<uint32_t>(Button::paddle2);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_RIGHT_PADDLE2)) has_button |= static_cast<uint32_t>(Button::paddle3);
+    if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_LEFT_PADDLE2)) has_button |= static_cast<uint32_t>(Button::paddle4);
 
     has_led = SDL_GamepadControllerHasLED(gc);
     has_rumble = SDL_GameControllerHasRumble(gc);
@@ -92,20 +91,20 @@ int GameController::deadzone() const
 ppl7::String GameController::name() const
 {
     if (gc) return "";
-    return SDL_GameControllerName(gc);
+    return SDL_GetGamepadName(gc);
 }
 
 
 int GameController::getButtonState(int button) const
 {
-    if (gc) return SDL_GameControllerGetButton(gc, (SDL_GameControllerButton)button);
+    if (gc) return SDL_GetGamepadButton(gc, (SDL_GamepadButton)button);
     return 0;
 }
 
 int GameController::getAxisState(int axis) const
 {
     if (gc) {
-        int value = SDL_GameControllerGetAxis(gc, (SDL_GameControllerAxis)axis);
+        int value = SDL_GetGamepadAxis(gc, (SDL_GamepadAxis)axis);
         if (value > -axis_deadzone && value < axis_deadzone) value = 0;
         return value;
     }
