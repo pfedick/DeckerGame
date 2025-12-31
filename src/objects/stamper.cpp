@@ -18,34 +18,34 @@ Representation Stamper::representation()
 Stamper::Stamper()
 	:Trap(Type::ObjectType::Stamper)
 {
-	sprite_set=Spriteset::StamperV2;
-	sprite_no=0;
-	collisionDetection=true;
-	visibleAtPlaytime=true;
-	sprite_no_representation=19;
-	pixelExactCollision=false;
-	collision_disabled=false;
-	next_state=0.0f;
-	state=State::Open;
+	sprite_set = Spriteset::StamperV2;
+	sprite_no = 0;
+	collisionDetection = true;
+	visibleAtPlaytime = true;
+	sprite_no_representation = 19;
+	pixelExactCollision = false;
+	collision_disabled = false;
+	next_state = 0.0f;
+	state = State::Open;
 	if (ppl7::rand(0, 1) == 1) {
-		state=State::Closed;
-		sprite_no=5;
+		state = State::Closed;
+		sprite_no = 5;
 	}
-	initial_state=true;
-	current_state=true;
-	stamper_type=0;
-	time_active=ppl7::randf(0.2f, 0.5f);
-	time_inactive=ppl7::randf(0.2f, 0.5f);
+	initial_state = true;
+	current_state = true;
+	stamper_type = 0;
+	time_active = ppl7::randf(0.2f, 0.5f);
+	time_inactive = ppl7::randf(0.2f, 0.5f);
 	//printf("Stamper Initial: %0.3f, %0.3f\n", time_active, time_inactive);
-	auto_intervall=true;
-	next_animation=0.0f;
-	color_stamper=7;
-	color_teeth=9;
-	orientation=Orientation::down;
-	teeth_type=6;
+	auto_intervall = true;
+	next_animation = 0.0f;
+	color_stamper = 7;
+	color_teeth = 9;
+	orientation = Orientation::down;
+	teeth_type = 6;
 	//texture=GetObjectSystem()->getTexture(Spriteset::StamperV2);
-	audio_drag_up=NULL;
-	myLayer=Decker::Objects::Object::Layer::BehindBricks;
+	audio_drag_up = NULL;
+	myLayer = Decker::Objects::Object::Layer::BehindBricks;
 	init();
 }
 
@@ -54,34 +54,35 @@ Stamper::~Stamper()
 	if (audio_drag_up) {
 		getAudioPool().stopInstace(audio_drag_up);
 		delete audio_drag_up;
-		audio_drag_up=NULL;
+		audio_drag_up = NULL;
 	}
 }
 
 void Stamper::init()
 {
-	state=State::Open;
-	position=0.0f;
-	acceleration=0.0f;
+	state = State::Open;
+	position = 0.0f;
+	acceleration = 0.0f;
 	if (auto_intervall) {
-		state=State::Open;
+		state = State::Open;
 		if (current_state) {
-			if (ppl7::rand(0, 1) == 1) state=State::Closed;
-		}
-	} else {
-		if (current_state) {
-			state=State::Closed;
-			position=261.0f;
+			if (ppl7::rand(0, 1) == 1) state = State::Closed;
 		}
 	}
-	sprite_no=stamper_type * 20;
-	if (state == State::Closed) sprite_no+=5;
+	else {
+		if (current_state) {
+			state = State::Closed;
+			position = 261.0f;
+		}
+	}
+	sprite_no = stamper_type * 20;
+	if (state == State::Closed) sprite_no += 5;
 	animation.setStaticFrame(sprite_no);
 	switch (orientation) {
-		case Orientation::down: sprite_no_representation=19; break;
-		case Orientation::up: sprite_no_representation=20; break;
-		case Orientation::right: sprite_no_representation=21; break;
-		case Orientation::left: sprite_no_representation=22; break;
+	case Orientation::down: sprite_no_representation = 19; break;
+	case Orientation::up: sprite_no_representation = 20; break;
+	case Orientation::right: sprite_no_representation = 21; break;
+	case Orientation::left: sprite_no_representation = 22; break;
 	}
 	//printf ("sprite_no=%d, state=%d\n",sprite_no, state);
 	updateBoundary();
@@ -92,45 +93,45 @@ void Stamper::init()
 void Stamper::updateStamperBoundary()
 {
 	if (!texture) return;
-	const SpriteTexture::SpriteIndexItem* stamper_item=texture->getSpriteIndex(stamper_type);
+	const SpriteTexture::SpriteIndexItem* stamper_item = texture->getSpriteIndex(stamper_type);
 	if (!stamper_item) return;
 
-	int s=teeth_type;
-	if (stamper_type == 0) s+=7;
-	const SpriteTexture::SpriteIndexItem* teeth_item=texture->getSpriteIndex(s + 5);
+	int s = teeth_type;
+	if (stamper_type == 0) s += 7;
+	const SpriteTexture::SpriteIndexItem* teeth_item = texture->getSpriteIndex(s + 5);
 
 	switch (orientation) {
-		case Orientation::down:
-			this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
-			this->boundary.y1=p.y + (stamper_item->Offset.y - stamper_item->Pivot.y);
-			this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
-			this->boundary.y2=this->boundary.y1 + stamper_item->r.h - 261 + position;
-			if (teeth_item) this->boundary.y2+=teeth_item->r.h - 7;
-			break;
-		case Orientation::up:
-			this->boundary.x1=p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
-			this->boundary.y1=p.y + 261 - position;
-			this->boundary.x2=this->boundary.x1 + stamper_item->r.w;
-			this->boundary.y2=p.y + stamper_item->r.h;
-			if (teeth_item) this->boundary.y1-=(teeth_item->r.h - 7);
-			break;
-		case Orientation::right:
-			this->boundary.x1=p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
-			this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
-			this->boundary.x2=this->boundary.x1 + stamper_item->r.h - 261 + position;
-			this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-			if (teeth_item) this->boundary.x2+=(teeth_item->r.h - 7);
-			break;
-		case Orientation::left:
-			this->boundary.x1=p.x + 261 - position;
-			this->boundary.y1=p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
-			this->boundary.x2=p.x + 261;
-			this->boundary.y2=this->boundary.y1 + stamper_item->r.w;
-			if (teeth_item) this->boundary.x1-=(teeth_item->r.h - 7);
-			break;
+	case Orientation::down:
+		this->boundary.x1 = p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.y1 = p.y + (stamper_item->Offset.y - stamper_item->Pivot.y);
+		this->boundary.x2 = this->boundary.x1 + stamper_item->r.w;
+		this->boundary.y2 = this->boundary.y1 + stamper_item->r.h - 261 + position;
+		if (teeth_item) this->boundary.y2 += teeth_item->r.h - 7;
+		break;
+	case Orientation::up:
+		this->boundary.x1 = p.x + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.y1 = p.y + 261 - position;
+		this->boundary.x2 = this->boundary.x1 + stamper_item->r.w;
+		this->boundary.y2 = p.y + stamper_item->r.h;
+		if (teeth_item) this->boundary.y1 -= (teeth_item->r.h - 7);
+		break;
+	case Orientation::right:
+		this->boundary.x1 = p.x + (stamper_item->Offset.y - stamper_item->Pivot.y);
+		this->boundary.y1 = p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.x2 = this->boundary.x1 + stamper_item->r.h - 261 + position;
+		this->boundary.y2 = this->boundary.y1 + stamper_item->r.w;
+		if (teeth_item) this->boundary.x2 += (teeth_item->r.h - 7);
+		break;
+	case Orientation::left:
+		this->boundary.x1 = p.x + 261 - position;
+		this->boundary.y1 = p.y + (stamper_item->Offset.x - stamper_item->Pivot.x);
+		this->boundary.x2 = p.x + 261;
+		this->boundary.y2 = this->boundary.y1 + stamper_item->r.w;
+		if (teeth_item) this->boundary.x1 -= (teeth_item->r.h - 7);
+		break;
 
-		default:
-			this->boundary.setRect(0, 0, 0, 0);
+	default:
+		this->boundary.setRect(0, 0, 0, 0);
 	}
 
 }
@@ -138,165 +139,165 @@ void Stamper::updateStamperBoundary()
 
 void Stamper::drawDown(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	const ColorPalette& palette=GetColorPalette();
-	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	const ColorPalette& palette = GetColorPalette();
+	const SpriteTexture::SpriteIndexItem* spi_item = texture->getSpriteIndex(stamper_type);
 	if (!spi_item) return;
-	int s=teeth_type;
-	if (stamper_type == 0) s+=7;
+	int s = teeth_type;
+	if (stamper_type == 0) s += 7;
 
-	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
-	int x=p.x + coords.x;
-	int y=p.y + coords.y;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth = texture->getSpriteIndex(s + 5);
+	int x = p.x + coords.x;
+	int y = p.y + coords.y;
 
 
-	SDL_Rect tr;
-	SDL_Rect sr=spi_item->r;
+	SDL_FRect tr;
+	SDL_FRect sr = spi_item->r;
 
-	sr.h=position;
-	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x);
-	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
-	tr.w=spi_item->r.w;
-	tr.h=position;
+	sr.h = position;
+	tr.x = x + (spi_item->Offset.x - spi_item->Pivot.x);
+	tr.y = y + (spi_item->Offset.y - spi_item->Pivot.y);
+	tr.w = spi_item->r.w;
+	tr.h = position;
 	SDL_SetTextureAlphaMod(spi_item->tex, 255);
-	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	ppl7::grafix::Color c = palette.getColor(color_stamper);
 	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
-	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 180, NULL, SDL_FLIP_HORIZONTAL);
+	SDL_RenderTextureRotated(renderer, spi_item->tex, &sr, &tr, 180, NULL, SDL_FLIP_HORIZONTAL);
 
 
 	if (!spi_item_teeth) return;
-	c=palette.getColor(color_teeth);
+	c = palette.getColor(color_teeth);
 	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
-	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
-	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + position - 7 - 261;
-	tr.w=spi_item_teeth->r.w;
-	tr.h=spi_item_teeth->r.h;
-	SDL_Point center;
-	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
-	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
-	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 180, &center, SDL_FLIP_HORIZONTAL);
+	tr.x = x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
+	tr.y = y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + position - 7 - 261;
+	tr.w = spi_item_teeth->r.w;
+	tr.h = spi_item_teeth->r.h;
+	SDL_FPoint center;
+	center.x = (spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y = (spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderTextureRotated(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 180, &center, SDL_FLIP_HORIZONTAL);
 }
 
 void Stamper::drawUp(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	const SpriteTexture::SpriteIndexItem* spi_item = texture->getSpriteIndex(stamper_type);
 	if (!spi_item) return;
-	int s=teeth_type;
-	if (stamper_type == 0) s+=7;
-	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
+	int s = teeth_type;
+	if (stamper_type == 0) s += 7;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth = texture->getSpriteIndex(s + 5);
 
-	const ColorPalette& palette=GetColorPalette();
-	int x=p.x + coords.x;
-	int y=p.y + coords.y;
+	const ColorPalette& palette = GetColorPalette();
+	int x = p.x + coords.x;
+	int y = p.y + coords.y;
 
-	SDL_Rect tr;
-	SDL_Rect sr=spi_item->r;
-	sr.h=position;
-	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x);
-	tr.y=y + 261 * 2 + (spi_item->Offset.y - spi_item->Pivot.y) - position;
-	tr.w=spi_item->r.w;
-	tr.h=position;
+	SDL_FRect tr;
+	SDL_FRect sr = spi_item->r;
+	sr.h = position;
+	tr.x = x + (spi_item->Offset.x - spi_item->Pivot.x);
+	tr.y = y + 261 * 2 + (spi_item->Offset.y - spi_item->Pivot.y) - position;
+	tr.w = spi_item->r.w;
+	tr.h = position;
 	SDL_SetTextureAlphaMod(spi_item->tex, 255);
-	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	ppl7::grafix::Color c = palette.getColor(color_stamper);
 	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
-	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 0, NULL, SDL_FLIP_NONE);
+	SDL_RenderTextureRotated(renderer, spi_item->tex, &sr, &tr, 0, NULL, SDL_FLIP_NONE);
 
 	if (!spi_item_teeth) return;
-	c=palette.getColor(color_teeth);
+	c = palette.getColor(color_teeth);
 	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
-	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
-	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + 261 - position + 7;
-	tr.w=spi_item_teeth->r.w;
-	tr.h=spi_item_teeth->r.h;
-	SDL_Point center;
-	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
-	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
-	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 0, &center, SDL_FLIP_NONE);
+	tr.x = x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x);
+	tr.y = y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y) + 261 - position + 7;
+	tr.w = spi_item_teeth->r.w;
+	tr.h = spi_item_teeth->r.h;
+	SDL_FPoint center;
+	center.x = (spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y = (spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderTextureRotated(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 0, &center, SDL_FLIP_NONE);
 
 }
 
 void Stamper::drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	const SpriteTexture::SpriteIndexItem* spi_item = texture->getSpriteIndex(stamper_type);
 	if (!spi_item) return;
-	int s=teeth_type;
-	if (stamper_type == 0) s+=7;
-	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
+	int s = teeth_type;
+	if (stamper_type == 0) s += 7;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth = texture->getSpriteIndex(s + 5);
 
-	const ColorPalette& palette=GetColorPalette();
-	int x=p.x + coords.x;
-	int y=p.y + coords.y;
+	const ColorPalette& palette = GetColorPalette();
+	int x = p.x + coords.x;
+	int y = p.y + coords.y;
 
-	SDL_Rect tr;
-	SDL_Rect sr=spi_item->r;
-	sr.h=position;
-	SDL_Point center;
-	center.x=(spi_item->Pivot.x - spi_item->Offset.x);
-	center.y=(spi_item->Pivot.y - spi_item->Offset.y);
+	SDL_FRect tr;
+	SDL_FRect sr = spi_item->r;
+	sr.h = position;
+	SDL_FPoint center;
+	center.x = (spi_item->Pivot.x - spi_item->Offset.x);
+	center.y = (spi_item->Pivot.y - spi_item->Offset.y);
 
-	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x) - 2 * 261 + position;
-	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
-	tr.w=spi_item->r.w;
-	tr.h=position;
+	tr.x = x + (spi_item->Offset.x - spi_item->Pivot.x) - 2 * 261 + position;
+	tr.y = y + (spi_item->Offset.y - spi_item->Pivot.y);
+	tr.w = spi_item->r.w;
+	tr.h = position;
 
 	SDL_SetTextureAlphaMod(spi_item->tex, 255);
-	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	ppl7::grafix::Color c = palette.getColor(color_stamper);
 	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
-	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 90, &center, SDL_FLIP_HORIZONTAL);
+	SDL_RenderTextureRotated(renderer, spi_item->tex, &sr, &tr, 90, &center, SDL_FLIP_HORIZONTAL);
 
 	if (!spi_item_teeth) return;
-	c=palette.getColor(color_teeth);
+	c = palette.getColor(color_teeth);
 	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
-	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) - 261 + position - 7;
-	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
-	tr.w=spi_item_teeth->r.w;
-	tr.h=spi_item_teeth->r.h;
+	tr.x = x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) - 261 + position - 7;
+	tr.y = y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
+	tr.w = spi_item_teeth->r.w;
+	tr.h = spi_item_teeth->r.h;
 	//SDL_Point center;
-	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
-	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
-	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 90, &center, SDL_FLIP_NONE);
+	center.x = (spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y = (spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderTextureRotated(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 90, &center, SDL_FLIP_NONE);
 
 }
 
 void Stamper::drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
-	const SpriteTexture::SpriteIndexItem* spi_item=texture->getSpriteIndex(stamper_type);
+	const SpriteTexture::SpriteIndexItem* spi_item = texture->getSpriteIndex(stamper_type);
 	if (!spi_item) return;
-	int s=teeth_type;
-	if (stamper_type == 0) s+=7;
-	const SpriteTexture::SpriteIndexItem* spi_item_teeth=texture->getSpriteIndex(s + 5);
+	int s = teeth_type;
+	if (stamper_type == 0) s += 7;
+	const SpriteTexture::SpriteIndexItem* spi_item_teeth = texture->getSpriteIndex(s + 5);
 
-	const ColorPalette& palette=GetColorPalette();
-	int x=p.x + coords.x;
-	int y=p.y + coords.y;
+	const ColorPalette& palette = GetColorPalette();
+	int x = p.x + coords.x;
+	int y = p.y + coords.y;
 
 
-	SDL_Rect tr;
-	SDL_Rect sr=spi_item->r;
-	sr.h=position;
-	SDL_Point center;
-	center.x=(spi_item->Pivot.x - spi_item->Offset.x);
-	center.y=(spi_item->Pivot.y - spi_item->Offset.y);
+	SDL_FRect tr;
+	SDL_FRect sr = spi_item->r;
+	sr.h = position;
+	SDL_FPoint center;
+	center.x = (spi_item->Pivot.x - spi_item->Offset.x);
+	center.y = (spi_item->Pivot.y - spi_item->Offset.y);
 
-	tr.x=x + (spi_item->Offset.x - spi_item->Pivot.x) + 2 * 261 - position;
-	tr.y=y + (spi_item->Offset.y - spi_item->Pivot.y);
-	tr.w=spi_item->r.w;
-	tr.h=position;
+	tr.x = x + (spi_item->Offset.x - spi_item->Pivot.x) + 2 * 261 - position;
+	tr.y = y + (spi_item->Offset.y - spi_item->Pivot.y);
+	tr.w = spi_item->r.w;
+	tr.h = position;
 
 	SDL_SetTextureAlphaMod(spi_item->tex, 255);
-	ppl7::grafix::Color c=palette.getColor(color_stamper);
+	ppl7::grafix::Color c = palette.getColor(color_stamper);
 	SDL_SetTextureColorMod(spi_item->tex, c.red(), c.green(), c.blue());
-	SDL_RenderCopyEx(renderer, spi_item->tex, &sr, &tr, 270, &center, SDL_FLIP_HORIZONTAL);
+	SDL_RenderTextureRotated(renderer, spi_item->tex, &sr, &tr, 270, &center, SDL_FLIP_HORIZONTAL);
 
 	if (!spi_item_teeth) return;
-	c=palette.getColor(color_teeth);
+	c = palette.getColor(color_teeth);
 	SDL_SetTextureColorMod(spi_item_teeth->tex, c.red(), c.green(), c.blue());
-	tr.x=x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) + 261 - position + 7;
-	tr.y=y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
-	tr.w=spi_item_teeth->r.w;
-	tr.h=spi_item_teeth->r.h;
-	center.x=(spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
-	center.y=(spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
-	SDL_RenderCopyEx(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 270, &center, SDL_FLIP_NONE);
+	tr.x = x + (spi_item_teeth->Offset.x - spi_item_teeth->Pivot.x) + 261 - position + 7;
+	tr.y = y + (spi_item_teeth->Offset.y - spi_item_teeth->Pivot.y);
+	tr.w = spi_item_teeth->r.w;
+	tr.h = spi_item_teeth->r.h;
+	center.x = (spi_item_teeth->Pivot.x - spi_item_teeth->Offset.x);
+	center.y = (spi_item_teeth->Pivot.y - spi_item_teeth->Offset.y);
+	SDL_RenderTextureRotated(renderer, spi_item_teeth->tex, &spi_item_teeth->r, &tr, 270, &center, SDL_FLIP_NONE);
 }
 
 void Stamper::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
@@ -335,9 +336,9 @@ void Stamper::drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& co
 
 void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	AudioPool& audiopool=getAudioPool();
+	AudioPool& audiopool = getAudioPool();
 	if (!audio_drag_up) {
-		audio_drag_up=audiopool.getInstance(AudioClip::stamper_up);
+		audio_drag_up = audiopool.getInstance(AudioClip::stamper_up);
 		if (audio_drag_up) {
 			audio_drag_up->setVolume(0.7f);
 			audio_drag_up->setAutoDelete(false);
@@ -347,56 +348,63 @@ void Stamper::update(double time, TileTypePlane& ttplane, Player& player, float 
 	}
 	if (auto_intervall) {
 		if (state == State::Closing) {
-			position+=acceleration * frame_rate_compensation;
-			acceleration=acceleration * (1.7 * frame_rate_compensation);
-		} else if (state == State::Opening) {
-			position-=acceleration * frame_rate_compensation;
-			acceleration+=(0.2 * frame_rate_compensation);
-			if (acceleration > 5.0f) acceleration=5.0f;
+			position += acceleration * frame_rate_compensation;
+			acceleration = acceleration * (1.7 * frame_rate_compensation);
+		}
+		else if (state == State::Opening) {
+			position -= acceleration * frame_rate_compensation;
+			acceleration += (0.2 * frame_rate_compensation);
+			if (acceleration > 5.0f) acceleration = 5.0f;
 		}
 
 		if (state == State::Open && time > next_state && current_state == true) {
 			audiopool.playOnce(AudioClip::stamper_down, p, 1400, 0.7f);
-			state=State::Closing;
-			position=0;
-			acceleration=2.0f;
-		} else if (state == State::Closing && position >= 261.0f) {
-			position=261.0f;
-			state=State::Closed;
-			next_state=time + time_active;
-			acceleration=0.0f;
-		} else if (state == State::Closed && time > next_state) {
-			state=State::Opening;
-			acceleration=1.0f;
+			state = State::Closing;
+			position = 0;
+			acceleration = 2.0f;
+		}
+		else if (state == State::Closing && position >= 261.0f) {
+			position = 261.0f;
+			state = State::Closed;
+			next_state = time + time_active;
+			acceleration = 0.0f;
+		}
+		else if (state == State::Closed && time > next_state) {
+			state = State::Opening;
+			acceleration = 1.0f;
 			if (audio_drag_up) {
 				audiopool.playInstance(audio_drag_up);
 			}
-		} else if (state == State::Opening && position <= 0.0f) {
-			state=State::Open;
-			position=0.0f;
-			next_state=time + time_inactive;
+		}
+		else if (state == State::Opening && position <= 0.0f) {
+			state = State::Open;
+			position = 0.0f;
+			next_state = time + time_inactive;
 			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
 			audiopool.playOnce(AudioClip::stamper_echo, p, 1200, 0.7f);
-			if (GetGame().config.difficulty == Config::DifficultyLevel::easy) next_state+=time_inactive;
+			if (GetGame().config.difficulty == Config::DifficultyLevel::easy) next_state += time_inactive;
 		}
-	} else {
+	}
+	else {
 		if (state == State::Closing) {
-			position+=acceleration * frame_rate_compensation;
-			acceleration+=(0.2 * frame_rate_compensation);
-		} else if (state == State::Opening) {
-			position-=acceleration * frame_rate_compensation;
-			acceleration+=(0.2 * frame_rate_compensation);
-			if (acceleration > 5.0f) acceleration=5.0f;
+			position += acceleration * frame_rate_compensation;
+			acceleration += (0.2 * frame_rate_compensation);
+		}
+		else if (state == State::Opening) {
+			position -= acceleration * frame_rate_compensation;
+			acceleration += (0.2 * frame_rate_compensation);
+			if (acceleration > 5.0f) acceleration = 5.0f;
 		}
 		if (state == State::Closing && position >= 261.0f) {
-			position=261.0f;
-			state=State::Closed;
-			acceleration=0.0f;
+			position = 261.0f;
+			state = State::Closed;
+			acceleration = 0.0f;
 			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
 			audiopool.playOnce(AudioClip::stamper_echo, p, 1200, 0.7f);
-		} else if (state == State::Opening && position <= 0.0f) {
-			state=State::Open;
-			position=0.0f;
+		}
+		else if (state == State::Opening && position <= 0.0f) {
+			state = State::Open;
+			position = 0.0f;
 			if (audio_drag_up) audiopool.stopInstace(audio_drag_up);
 			audiopool.playOnce(AudioClip::stamper_echo, p, 1200, 0.7f);
 		}
@@ -414,9 +422,10 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 	if (state == State::Closing) {
 		if (orientation == Orientation::down || orientation == Orientation::up) {
 			player->dropHealth(1000, Player::Smashed);
-			player->y=p.y;
-		} else {
-			player->x=p.x;
+			player->y = p.y;
+		}
+		else {
+			player->x = p.x;
 			player->dropHealth(1000, Player::SmashedSideways);
 		}
 		return;
@@ -425,10 +434,11 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 		player->setZeroVelocity();
 		if (player->x < p.x) player->x--;
 		if (player->x > p.x) player->x++;
-	} else if (orientation == Orientation::left || orientation == Orientation::right) {
+	}
+	else if (orientation == Orientation::left || orientation == Orientation::right) {
 		if (player->y < p.y) {
-			player->fallstart=0.0f;
-			player->y=boundary.y1;
+			player->fallstart = 0.0f;
+			player->y = boundary.y1;
 			/* this leads to a strange effect
 			if (orientation == Orientation::left) {
 				if (state == State::Opening) player->x+=acceleration * collision.frame_rate_compensation;
@@ -451,7 +461,7 @@ void Stamper::handleCollision(Player* player, const Collision& collision)
 
 void Stamper::toggle(bool enabled, Object* source)
 {
-	AudioPool& audiopool=getAudioPool();
+	AudioPool& audiopool = getAudioPool();
 	if (!auto_intervall) {
 		//ppl7::PrintDebug("Stamper::toggle %d, new state: %d\n", id, (int)enabled);
 		if (enabled) {
@@ -459,20 +469,22 @@ void Stamper::toggle(bool enabled, Object* source)
 				audiopool.stopInstace(audio_drag_up);
 				audiopool.playInstance(audio_drag_up);
 			}
-			acceleration=0.0f;
-			state=State::Closing;
+			acceleration = 0.0f;
+			state = State::Closing;
 			//position=261.0f;
-		} else {
+		}
+		else {
 			if (audio_drag_up) {
 				audiopool.stopInstace(audio_drag_up);
 				audiopool.playInstance(audio_drag_up);
 			}
-			acceleration=0.0f;
-			state=State::Opening;
+			acceleration = 0.0f;
+			state = State::Opening;
 			//position=0.0f;
 		}
-	} else {
-		current_state=enabled;
+	}
+	else {
+		current_state = enabled;
 	}
 }
 
@@ -491,14 +503,14 @@ size_t Stamper::saveSize() const
 
 size_t Stamper::save(unsigned char* buffer, size_t size) const
 {
-	size_t bytes=Object::save(buffer, size);
+	size_t bytes = Object::save(buffer, size);
 	if (!bytes) return 0;
 	ppl7::Poke8(buffer + bytes, 3);		// Object Version
 
-	int flags=0;
-	if (auto_intervall) flags|=1;
-	if (collision_disabled) flags|=2;
-	if (initial_state) flags|=4;
+	int flags = 0;
+	if (auto_intervall) flags |= 1;
+	if (collision_disabled) flags |= 2;
+	if (initial_state) flags |= 4;
 	ppl7::Poke8(buffer + bytes + 1, flags);
 	ppl7::Poke8(buffer + bytes + 2, 0);
 	ppl7::Poke8(buffer + bytes + 3, stamper_type);
@@ -515,30 +527,31 @@ size_t Stamper::save(unsigned char* buffer, size_t size) const
 
 size_t Stamper::load(const unsigned char* buffer, size_t size)
 {
-	size_t bytes=Object::load(buffer, size);
+	size_t bytes = Object::load(buffer, size);
 	if (bytes == 0 || size < bytes + 1) return 0;
-	int version=ppl7::Peek8(buffer + bytes);
+	int version = ppl7::Peek8(buffer + bytes);
 	if (version < 1 || version>3) return 0;
 
-	int flags=ppl7::Peek8(buffer + bytes + 1);
-	auto_intervall=(bool)(flags & 1);
-	collision_disabled=(bool)(flags & 2);
+	int flags = ppl7::Peek8(buffer + bytes + 1);
+	auto_intervall = (bool)(flags & 1);
+	collision_disabled = (bool)(flags & 2);
 	if (version < 3) {
-		initial_state=ppl7::Peek8(buffer + bytes + 2);
-	} else {
-		// Byte 2 is unused and zero
-		initial_state=(bool)(flags & 4);
+		initial_state = ppl7::Peek8(buffer + bytes + 2);
 	}
-	current_state=initial_state;
-	stamper_type=ppl7::Peek8(buffer + bytes + 3);
-	time_active=ppl7::PeekFloat(buffer + bytes + 4);
-	time_inactive=ppl7::PeekFloat(buffer + bytes + 8);
-	teeth_type=6;
+	else {
+		// Byte 2 is unused and zero
+		initial_state = (bool)(flags & 4);
+	}
+	current_state = initial_state;
+	stamper_type = ppl7::Peek8(buffer + bytes + 3);
+	time_active = ppl7::PeekFloat(buffer + bytes + 4);
+	time_inactive = ppl7::PeekFloat(buffer + bytes + 8);
+	teeth_type = 6;
 	if (version > 1) {
-		teeth_type=ppl7::Peek8(buffer + bytes + 12);
-		color_stamper=ppl7::Peek8(buffer + bytes + 13);
-		color_teeth=ppl7::Peek8(buffer + bytes + 14);
-		orientation=static_cast<Orientation>(ppl7::Peek8(buffer + bytes + 15));
+		teeth_type = ppl7::Peek8(buffer + bytes + 12);
+		color_stamper = ppl7::Peek8(buffer + bytes + 13);
+		color_teeth = ppl7::Peek8(buffer + bytes + 14);
+		orientation = static_cast<Orientation>(ppl7::Peek8(buffer + bytes + 15));
 	}
 	//myLayer=Decker::Objects::Object::Layer::BehindBricks;
 	init();
@@ -589,23 +602,23 @@ public:
 
 void Stamper::openUi()
 {
-	StamperDialog* dialog=new StamperDialog(this);
+	StamperDialog* dialog = new StamperDialog(this);
 	GetGameWindow()->addChild(dialog);
 }
 
 StamperDialog::StamperDialog(Stamper* object)
 	: Decker::ui::Dialog(700, 560)
 {
-	current_element=Element::Stamper;
-	current_element_color_frame=NULL;
-	color_target=NULL;
+	current_element = Element::Stamper;
+	current_element_color_frame = NULL;
+	color_target = NULL;
 
-	this->object=object;
+	this->object = object;
 	setWindowTitle(ppl7::ToString("Stamper, Object-ID: %d", object->id));
-	int y=0;
-	ppl7::grafix::Rect client=clientRect();
+	int y = 0;
+	ppl7::grafix::Rect client = clientRect();
 	addChild(new ppltk::Label(0, y, 120, 30, "Stamper-Type: "));
-	stamper_type=new ppltk::ComboBox(120, y, 400, 30);
+	stamper_type = new ppltk::ComboBox(120, y, 400, 30);
 	stamper_type->add("4 Tiles", "0");
 	stamper_type->add("2 Tiles", "1");
 	stamper_type->add("2 Tiles bricks", "2");
@@ -614,9 +627,9 @@ StamperDialog::StamperDialog(Stamper* object)
 	stamper_type->setCurrentIdentifier(ppl7::ToString("%d", object->stamper_type));
 	stamper_type->setEventHandler(this);
 	addChild(stamper_type);
-	y+=35;
+	y += 35;
 	addChild(new ppltk::Label(0, y, 120, 30, "Teeth-Type: "));
-	teeth_type=new ppltk::ComboBox(120, y, 400, 30);
+	teeth_type = new ppltk::ComboBox(120, y, 400, 30);
 	teeth_type->add("plate with rounds", "0");
 	teeth_type->add("plate with peaks", "1");
 	teeth_type->add("peaks", "2");
@@ -627,10 +640,10 @@ StamperDialog::StamperDialog(Stamper* object)
 	teeth_type->setCurrentIdentifier(ppl7::ToString("%d", object->teeth_type));
 	teeth_type->setEventHandler(this);
 	addChild(teeth_type);
-	y+=35;
+	y += 35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Orientation: "));
-	orientation=new ppltk::ComboBox(120, y, 400, 30);
+	orientation = new ppltk::ComboBox(120, y, 400, 30);
 	orientation->add("down", "0");
 	orientation->add("up", "1");
 	orientation->add("left", "2");
@@ -638,72 +651,72 @@ StamperDialog::StamperDialog(Stamper* object)
 	orientation->setCurrentIdentifier(ppl7::ToString("%d", static_cast<int>(object->orientation)));
 	orientation->setEventHandler(this);
 	addChild(orientation);
-	y+=35;
+	y += 35;
 
 
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Colors: "));
-	current_element_label=new ppltk::Label(client.width() - 300, y, 300, 30, "Stamper");
+	current_element_label = new ppltk::Label(client.width() - 300, y, 300, 30, "Stamper");
 	addChild(current_element_label);
-	y+=35;
-	ColorPalette& palette=GetColorPalette();
-	colorframe=new Decker::ui::ColorSelectionFrame(client.width() - 300, y, 300, 300, palette);
+	y += 35;
+	ColorPalette& palette = GetColorPalette();
+	colorframe = new Decker::ui::ColorSelectionFrame(client.width() - 300, y, 300, 300, palette);
 	colorframe->setEventHandler(this);
 	this->addChild(colorframe);
 
-	button_color_stamper=new ppltk::Button(30, y, 100, 30, "Stamper");
+	button_color_stamper = new ppltk::Button(30, y, 100, 30, "Stamper");
 	button_color_stamper->setEventHandler(this);
 	addChild(button_color_stamper);
-	frame_color_stamper=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
+	frame_color_stamper = new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_stamper->setBackgroundColor(palette.getColor(object->color_stamper));
 	addChild(frame_color_stamper);
-	y+=35;
+	y += 35;
 
-	button_color_teeth=new ppltk::Button(30, y, 100, 30, "Teeth");
+	button_color_teeth = new ppltk::Button(30, y, 100, 30, "Teeth");
 	button_color_teeth->setEventHandler(this);
 	addChild(button_color_teeth);
-	frame_color_teeth=new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
+	frame_color_teeth = new ppltk::Frame(135, y, 60, 30, ppltk::Frame::Inset);
 	frame_color_teeth->setBackgroundColor(palette.getColor(object->color_teeth));
 	addChild(frame_color_teeth);
-	y+=35;
+	y += 35;
 
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Flags: "));
-	initial_state=new ppltk::CheckBox(120, y, 200, 30, "Initial state", object->initial_state);
+	initial_state = new ppltk::CheckBox(120, y, 200, 30, "Initial state", object->initial_state);
 	initial_state->setEventHandler(this);
 	addChild(initial_state);
-	y+=30;
-	current_state=new ppltk::CheckBox(120, y, 200, 30, "Current state", object->current_state);
+	y += 30;
+	current_state = new ppltk::CheckBox(120, y, 200, 30, "Current state", object->current_state);
 	current_state->setEventHandler(this);
 	addChild(current_state);
-	y+=30;
-	auto_intervall=new ppltk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
+	y += 30;
+	auto_intervall = new ppltk::CheckBox(120, y, 200, 30, "Auto Intervall", object->auto_intervall);
 	auto_intervall->setEventHandler(this);
 	addChild(auto_intervall);
-	y+=30;
-	collision_disabled=new ppltk::CheckBox(120, y, 200, 30, "collision disabled", object->collision_disabled);
+	y += 30;
+	collision_disabled = new ppltk::CheckBox(120, y, 200, 30, "collision disabled", object->collision_disabled);
 	collision_disabled->setEventHandler(this);
 	addChild(collision_disabled);
-	y+=35;
+	y += 35;
 
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Time active:"));
-	time_active=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
+	time_active = new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
 	time_active->setValue(object->time_active);
 	time_active->setEventHandler(this);
 	time_active->setLimits(0.0f, 10.0f);
 	time_active->enableSpinBox(true, 0.01, 2, 80);
 	this->addChild(time_active);
-	y+=35;
+	y += 35;
 
 	addChild(new ppltk::Label(0, y, 120, 30, "Time inactive:"));
-	time_inactive=new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
+	time_inactive = new ppltk::DoubleHorizontalSlider(120, y, client.width() - 300 - 130, 30);
 	time_inactive->setValue(object->time_inactive);
 	time_inactive->setEventHandler(this);
 	time_inactive->setLimits(0.0f, 10.0f);
 	time_inactive->enableSpinBox(true, 0.01, 2, 80);
 	this->addChild(time_inactive);
-	y+=35;
+	y += 35;
 
 
 
@@ -713,18 +726,18 @@ StamperDialog::StamperDialog(Stamper* object)
 
 void StamperDialog::setCurrentElement(Element element)
 {
-	current_element=element;
+	current_element = element;
 	switch (element) {
-		case Element::Stamper:
-			current_element_label->setText("Stamper");
-			current_element_color_frame=frame_color_stamper;
-			color_target=&object->color_stamper;
-			break;
-		case Element::Teeth:
-			current_element_label->setText("Teeth");
-			current_element_color_frame=frame_color_teeth;
-			color_target=&object->color_teeth;
-			break;
+	case Element::Stamper:
+		current_element_label->setText("Stamper");
+		current_element_color_frame = frame_color_stamper;
+		color_target = &object->color_stamper;
+		break;
+	case Element::Teeth:
+		current_element_label->setText("Teeth");
+		current_element_color_frame = frame_color_teeth;
+		color_target = &object->color_teeth;
+		break;
 	}
 
 	colorframe->setColorIndex(*color_target);
@@ -734,16 +747,19 @@ void StamperDialog::setCurrentElement(Element element)
 void StamperDialog::valueChangedEvent(ppltk::Event* event, int value)
 {
 	if (event->widget() == stamper_type) {
-		object->stamper_type=stamper_type->currentIdentifier().toInt();
+		object->stamper_type = stamper_type->currentIdentifier().toInt();
 		object->init();
-	} else if (event->widget() == teeth_type) {
-		object->teeth_type=teeth_type->currentIdentifier().toInt();
+	}
+	else if (event->widget() == teeth_type) {
+		object->teeth_type = teeth_type->currentIdentifier().toInt();
 		object->init();
-	} else if (event->widget() == orientation) {
-		object->orientation=static_cast<Stamper::Orientation>(orientation->currentIdentifier().toInt());
+	}
+	else if (event->widget() == orientation) {
+		object->orientation = static_cast<Stamper::Orientation>(orientation->currentIdentifier().toInt());
 		object->init();
-	} else if (event->widget() == colorframe && color_target != NULL) {
-		*color_target=value;
+	}
+	else if (event->widget() == colorframe && color_target != NULL) {
+		*color_target = value;
 		if (current_element_color_frame)
 			current_element_color_frame->setBackgroundColor(GetColorPalette().getColor(value));
 	}
@@ -751,17 +767,17 @@ void StamperDialog::valueChangedEvent(ppltk::Event* event, int value)
 
 void StamperDialog::valueChangedEvent(ppltk::Event* event, double value)
 {
-	if (event->widget() == time_active) object->time_active=value;
-	else if (event->widget() == time_inactive) object->time_inactive=value;
+	if (event->widget() == time_active) object->time_active = value;
+	else if (event->widget() == time_inactive) object->time_inactive = value;
 	//printf("Stamper valueChangedEvent: %0.3f, %0.3f\n", object->time_active, object->time_inactive);
 }
 
 void StamperDialog::toggledEvent(ppltk::Event* event, bool checked)
 {
-	if (event->widget() == initial_state) object->initial_state=checked;
-	else if (event->widget() == current_state) object->current_state=checked;
-	else if (event->widget() == auto_intervall) object->auto_intervall=checked;
-	else if (event->widget() == collision_disabled) object->collision_disabled=checked;
+	if (event->widget() == initial_state) object->initial_state = checked;
+	else if (event->widget() == current_state) object->current_state = checked;
+	else if (event->widget() == auto_intervall) object->auto_intervall = checked;
+	else if (event->widget() == collision_disabled) object->collision_disabled = checked;
 	//printf("object->initial_state=%d\n", object->initial_state);
 	object->init();
 
@@ -769,7 +785,7 @@ void StamperDialog::toggledEvent(ppltk::Event* event, bool checked)
 
 void StamperDialog::mouseDownEvent(ppltk::MouseEvent* event)
 {
-	ppltk::Widget* widget=event->widget();
+	ppltk::Widget* widget = event->widget();
 	if (widget == button_color_stamper || widget == frame_color_stamper) setCurrentElement(Element::Stamper);
 	else if (widget == button_color_teeth || widget == frame_color_teeth) setCurrentElement(Element::Teeth);
 	else Dialog::mouseDownEvent(event);

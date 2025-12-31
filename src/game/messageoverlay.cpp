@@ -6,13 +6,13 @@
 MessageOverlay::MessageOverlay(SDL& sdl)
 	:sdl(sdl)
 {
-	overlay=NULL;
-	timeout=0.0f;
-	nextBlink=0.0f;
-	nextPhonetic=0.0f;
-	character=Character::George;
-	mouth=8;
-	eyes=0;
+	overlay = NULL;
+	timeout = 0.0f;
+	nextBlink = 0.0f;
+	nextPhonetic = 0.0f;
+	character = Character::George;
+	mouth = 8;
+	eyes = 0;
 	phonetics_map.insert(std::pair<int, int>(' ', 8));
 	phonetics_map.insert(std::pair<int, int>(',', 8));
 	phonetics_map.insert(std::pair<int, int>('a', 0));
@@ -49,7 +49,7 @@ MessageOverlay::MessageOverlay(SDL& sdl)
 MessageOverlay::~MessageOverlay()
 {
 	if (overlay) sdl.destroyTexture(overlay);
-	overlay=NULL;
+	overlay = NULL;
 }
 
 void MessageOverlay::loadSprites()
@@ -60,10 +60,10 @@ void MessageOverlay::loadSprites()
 void MessageOverlay::resize(const ppl7::grafix::Size& size)
 {
 	if (overlay) sdl.destroyTexture(overlay);
-	overlay=sdl.createStreamingTexture(size.width - 100, 130);
+	overlay = sdl.createStreamingTexture(size.width - 100, 130);
 
-	const ppltk::WidgetStyle& style=ppltk::GetWidgetStyle();
-	font=style.buttonFont;
+	const ppltk::WidgetStyle& style = ppltk::GetWidgetStyle();
+	font = style.buttonFont;
 
 	font.setName("NotoSansBlack");
 	font.setBold(false);
@@ -81,7 +81,7 @@ void MessageOverlay::resize(const ppl7::grafix::Size& size)
 	//ppl7::PrintDebugTime("resize: %d,%d\n", size.width, size.height);
 
 
-	lastSize=size;
+	lastSize = size;
 
 }
 
@@ -91,29 +91,30 @@ void MessageOverlay::resize(const ppl7::grafix::Size& size)
 void MessageOverlay::updatePhonetics()
 {
 	if (phonetics.isEmpty()) {
-		mouth=8;
+		mouth = 8;
 		return;
 	}
-	double time=ppl7::GetMicrotime();
+	double time = ppl7::GetMicrotime();
 	if (time < nextPhonetic) return;
-	ppl7::String p=phonetics.left(1);
+	ppl7::String p = phonetics.left(1);
 	phonetics.chopLeft();
-	if (phonetics.isEmpty() && p != "-") phonetics="-";
+	if (phonetics.isEmpty() && p != "-") phonetics = "-";
 	if (p == "-") {
-		mouth=8;
-	} else {
-		std::map<int, int>::const_iterator it=phonetics_map.find(p[0]);
-		if (it != phonetics_map.end() && (*it).second >= 0) mouth=(*it).second;
+		mouth = 8;
+	}
+	else {
+		std::map<int, int>::const_iterator it = phonetics_map.find(p[0]);
+		if (it != phonetics_map.end() && (*it).second >= 0) mouth = (*it).second;
 
 	}
-	nextPhonetic=time + 0.08f;
+	nextPhonetic = time + 0.08f;
 }
 
 void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport)
 {
 	if (!overlay) return;
 	if (timeout < ppl7::GetMicrotime()) {
-		timeout=0.0f;
+		timeout = 0.0f;
 		return;
 	}
 	updatePhonetics();
@@ -123,68 +124,68 @@ void MessageOverlay::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& view
 		render();
 	}
 
-	SDL_Rect target;
-	target.x=viewport.x1 + 50;
-	target.y=viewport.y1 + 50;
-	target.w=lastSize.width - 100;
-	target.h=130;
+	SDL_FRect target;
+	target.x = viewport.x1 + 50;
+	target.y = viewport.y1 + 50;
+	target.w = lastSize.width - 100;
+	target.h = 130;
 	//ppl7::PrintDebugTime("draw: %d:%d, %d:%d\n", target.x, target.y, target.w, target.h);
 	//SDL_SetTextureColorMod(overlay, 255, 255, 255);
 	//SDL_SetTextureAlphaMod(overlay, 255);
 
-	SDL_RenderCopy(renderer, overlay, NULL, &target);
+	SDL_RenderTexture(renderer, overlay, NULL, &target);
 	// void SpriteTexture::draw(SDL_Renderer* renderer, int id, const SDL_Rect& source, const SDL_Rect& target) const
-	SDL_Rect tr;
-	SDL_Rect source;
+	SDL_FRect tr;
+	SDL_FRect source;
 
 	//ppl7::PrintDebugTime("eyes=%d, mouth=%d\n", eyes, mouth);
 	// eyes
-	source=spriteset.getSpriteSource(eyes);
+	source = spriteset.getSpriteSource(eyes);
 
 	//50+130=180
-	tr.x=viewport.x1 + 70;
-	tr.y=viewport.y1 + 180 - 5 - source.h;
-	source.h-=57;
-	tr.w=source.w;
-	tr.h=source.h;
+	tr.x = viewport.x1 + 70;
+	tr.y = viewport.y1 + 180 - 5 - source.h;
+	source.h -= 57;
+	tr.w = source.w;
+	tr.h = source.h;
 	spriteset.draw(renderer, eyes, source, tr);
 
 	// mouth
-	source=spriteset.getSpriteSource(mouth);
-	source.y+=source.h - 57;
-	source.h=57;
-	tr.y=viewport.y1 + 180 - 5 - 57;
-	tr.w=source.w;
-	tr.h=57;
+	source = spriteset.getSpriteSource(mouth);
+	source.y += source.h - 57;
+	source.h = 57;
+	tr.y = viewport.y1 + 180 - 5 - 57;
+	tr.w = source.w;
+	tr.h = 57;
 	spriteset.draw(renderer, mouth, source, tr);
 }
 
 void MessageOverlay::render()
 {
 	if (!overlay) return;
-	ppl7::grafix::Drawable draw=sdl.lockTexture(overlay);
+	ppl7::grafix::Drawable draw = sdl.lockTexture(overlay);
 	draw.cls(0);
 	ppl7::grafix::Color black(0, 0, 0, 255);
 	ppl7::grafix::Color border(255, 240, 0, 255);
 	ppl7::grafix::Color background(0, 0, 0, 128);
 	draw.drawRect(0, 0, draw.width(), draw.height(), black);
-	for (int i=1;i < 4;i++) {
+	for (int i = 1;i < 4;i++) {
 		draw.drawRect(0 + i, 0 + i, draw.width() - i, draw.height() - i, border);
 	}
 	draw.fillRect(5, 5, draw.width() - 5, draw.height() - 5, background);
 	ppl7::Array a(text, " ");
-	int x=160;
-	int y=10;
-	for (size_t i=0;i < a.size();i++) {
-		ppl7::String word=a[i];
-		word+=" ";
-		ppl7::grafix::Size size=font.measure(word);
+	int x = 160;
+	int y = 10;
+	for (size_t i = 0;i < a.size();i++) {
+		ppl7::String word = a[i];
+		word += " ";
+		ppl7::grafix::Size size = font.measure(word);
 		if (x + size.width > draw.width() - 20) {
-			x=160;
-			y+=size.height;
+			x = 160;
+			y += size.height;
 		}
 		draw.print(font, x, y, word);
-		x+=size.width;
+		x += size.width;
 	}
 	sdl.unlockTexture(overlay);
 }
@@ -192,18 +193,18 @@ void MessageOverlay::render()
 void MessageOverlay::setText(Character c, const ppl7::String& text, const ppl7::String& phonetics, float timeout)
 {
 	if (timeout == 0.0f) {
-		timeout=((float)text.size()) * 0.07f;
-		if (timeout < 2.0f) timeout=2.0f;
+		timeout = ((float)text.size()) * 0.07f;
+		if (timeout < 2.0f) timeout = 2.0f;
 	}
-	this->timeout=ppl7::GetMicrotime() + timeout;
-	this->text=text;
-	this->phonetics=phonetics;
-	if (phonetics.isEmpty()) this->phonetics=text;
-	character=c;
-	nextBlink=0.0f;
-	nextPhonetic=0.0f;
-	eyes=0;
-	mouth=8;
+	this->timeout = ppl7::GetMicrotime() + timeout;
+	this->text = text;
+	this->phonetics = phonetics;
+	if (phonetics.isEmpty()) this->phonetics = text;
+	character = c;
+	nextBlink = 0.0f;
+	nextPhonetic = 0.0f;
+	eyes = 0;
+	mouth = 8;
 	render();
 }
 
@@ -216,7 +217,7 @@ bool MessageOverlay::hasMessage() const
 
 void MessageOverlay::clear()
 {
-	timeout=0.0f;
-	nextBlink=0.0f;
-	nextPhonetic=0.0f;
+	timeout = 0.0f;
+	nextBlink = 0.0f;
+	nextPhonetic = 0.0f;
 }

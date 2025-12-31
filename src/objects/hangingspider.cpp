@@ -88,9 +88,9 @@ void HangingSpider::update(double time, TileTypePlane& ttplane, Player& player, 
 void HangingSpider::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const
 {
 	SDL_SetRenderDrawColor(renderer, 204, 204, 204, 255);
-	SDL_RenderDrawLine(renderer, initial_p.x + coords.x, initial_p.y + coords.y - 20,
+	SDL_RenderLine(renderer, initial_p.x + coords.x, initial_p.y + coords.y - 20,
 		p.x + coords.x, p.y + coords.y - 20);
-	SDL_RenderDrawLine(renderer, initial_p.x + coords.x + 1, initial_p.y + coords.y - 20,
+	SDL_RenderLine(renderer, initial_p.x + coords.x + 1, initial_p.y + coords.y - 20,
 		p.x + coords.x + 1, p.y + coords.y - 20);
 
 	Object::draw(renderer, coords);

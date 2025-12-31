@@ -64,8 +64,6 @@ void ObjectSystem::clear()
 
 void ObjectSystem::loadSpritesets(SDL& sdl)
 {
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-
 	light_objects->enableOutlines(true);
 	light_objects->enableMemoryBuffer(true);
 	light_objects->load(sdl, "res/lightobjects.tex");

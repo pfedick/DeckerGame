@@ -1,3 +1,4 @@
+#include <math.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "helena.h"
@@ -25,12 +26,12 @@ public:
 BulletFired::BulletFired()
 	:Object(Type::ObjectType::Arrow)
 {
-	collisionDetection=true;
-	pixelExactCollision=false;
-	sprite_set=Spriteset::GenericObjects;
-	sprite_no=240;
-	sprite_no_representation=240;
-	spawned=true;
+	collisionDetection = true;
+	pixelExactCollision = false;
+	sprite_set = Spriteset::GenericObjects;
+	sprite_no = 240;
+	sprite_no_representation = 240;
+	spawned = true;
 }
 
 Representation BulletFired::representation()
@@ -41,22 +42,23 @@ Representation BulletFired::representation()
 
 void BulletFired::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
-	float update=velocity.x * frame_rate_compensation;
-	float mul=1.0f;
-	if (update < 0) mul=-1.0f;
+	float update = velocity.x * frame_rate_compensation;
+	float mul = 1.0f;
+	if (update < 0) mul = -1.0f;
 
 
-	for (float i=0.0f;i < fabs(update);i+=16.0f) {
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + (i * mul), p.y));
+	for (float i = 0.0f;i < fabs(update);i += 16.0f) {
+		TileType::Type t1 = ttplane.getType(ppl7::grafix::Point(p.x + (i * mul), p.y));
 		if (t1 == TileType::Blocking) {
-			deleteDefered=true;
+			deleteDefered = true;
 			getAudioPool().playOnce(AudioClip::bullet_hits_wall, p, 1600, 0.4f);
 
-		} else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
-			deleteDefered=true;
+		}
+		else if (p.x < 0 || p.x>65535 || p.y < 0 || p.y>65535) {
+			deleteDefered = true;
 		}
 	}
-	p.x+=update;
+	p.x += update;
 	updateBoundary();
 
 }
@@ -69,18 +71,18 @@ static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
 	color_gradient.push_back(Particle::ColorGradientItem(0.428, ppl7::grafix::Color(156, 0, 0, 255)));
 	color_gradient.push_back(Particle::ColorGradientItem(1.000, ppl7::grafix::Color(156, 0, 0, 0)));
 
-	ParticleSystem* ps=GetParticleSystem();
-	int new_particles=ppl7::rand(30, 90);
-	for (int i=0;i < new_particles;i++) {
-		Particle* particle=new Particle();
-		particle->birth_time=time;
-		particle->death_time=randf(0.293, 0.293) + time;
-		particle->p=p;
-		particle->layer=Particle::Layer::BehindPlayer;
-		particle->weight=randf(0.123, 0.774);
+	ParticleSystem* ps = GetParticleSystem();
+	int new_particles = ppl7::rand(30, 90);
+	for (int i = 0;i < new_particles;i++) {
+		Particle* particle = new Particle();
+		particle->birth_time = time;
+		particle->death_time = randf(0.293, 0.293) + time;
+		particle->p = p;
+		particle->layer = Particle::Layer::BehindPlayer;
+		particle->weight = randf(0.123, 0.774);
 		particle->gravity.setPoint(0.000, 1.000);
-		particle->velocity=calculateVelocity(randf(4.000, 7.300), degree + randf(-18.679, 18.679));
-		particle->scale=randf(0.066, 0.481);
+		particle->velocity = calculateVelocity(randf(4.000, 7.300), degree + randf(-18.679, 18.679));
+		particle->scale = randf(0.066, 0.481);
 		particle->color_mod.set(183, 0, 0, 255);
 		particle->initAnimation(Particle::Type::RotatingParticleWhite);
 		ps->addParticle(particle);
@@ -89,7 +91,7 @@ static void issueBlood(const ppl7::grafix::PointF& p, float degree, double time)
 
 void BulletFired::handleCollision(Player* player, const Collision& collision)
 {
-	deleteDefered=true;
+	deleteDefered = true;
 	player->dropHealth(10);
 	if (velocity.x < 0)issueBlood(p, 54.0f, player->time);
 	else issueBlood(p, 306.0f, player->time);
@@ -104,18 +106,18 @@ Representation Helena::representation()
 Helena::Helena()
 	:AiEnemy(Type::ObjectType::Helena)
 {
-	sprite_set=Spriteset::Helena;
-	sprite_no=27;
-	next_state=ppl7::GetMicrotime() + 2.0f;
-	state=StatePatrol;
+	sprite_set = Spriteset::Helena;
+	sprite_no = 27;
+	next_state = ppl7::GetMicrotime() + 2.0f;
+	state = StatePatrol;
 	animation.setStaticFrame(27);
-	keys=0;
-	substate=0;
-	speed_walk=2.0f;
-	speed_run=4.5f;
-	shoot_cooldown=0.0f;
-	attack=false;
-	magazine=8;
+	keys = 0;
+	substate = 0;
+	speed_walk = 2.0f;
+	speed_run = 4.5f;
+	shoot_cooldown = 0.0f;
+	attack = false;
+	magazine = 8;
 }
 
 
@@ -128,19 +130,20 @@ void Helena::handleCollision(Player* player, const Collision& collision)
 
 void Helena::toggle(bool enable, Object* source)
 {
-	if (enable && state == StateWaitForEnable) state=StatePatrol;
+	if (enable && state == StateWaitForEnable) state = StatePatrol;
 }
 
 void Helena::switchAttackMode(bool enable)
 {
-	attack=enable;
+	attack = enable;
 	if (attack) {
 		getAudioPool().playOnce(AudioClip::holster_pistol, p, 1600, 0.7f);
 		anicycleStandLeft.setStaticFrame(144);
 		anicycleStandRight.setStaticFrame(153);
 		anicycleRunLeft.startSequence(107, 115, true, 0);
 		anicycleRunRight.startSequence(116, 124, true, 0);
-	} else {
+	}
+	else {
 		getAudioPool().playOnce(AudioClip::fabric, p, 1600, 0.7f);
 		anicycleRunLeft.startSequence(61, 68, true, 0);
 		anicycleRunRight.startSequence(70, 77, true, 0);
@@ -153,8 +156,8 @@ void Helena::shoot(double time, Player& player)
 {
 	if (shoot_cooldown > time) return;
 	if (magazine <= 0) {
-		magazine=8;
-		shoot_cooldown=time + 4.0f;
+		magazine = 8;
+		shoot_cooldown = time + 4.0f;
 		return;
 	}
 	if (orientation == Left && player.x > p.x) return;
@@ -162,31 +165,32 @@ void Helena::shoot(double time, Player& player)
 	if (movement == Jump || movement == Falling) return;
 
 
-	shoot_cooldown=time + 0.5f;
+	shoot_cooldown = time + 0.5f;
 
-	BulletFired* particle=new BulletFired();
-	particle->p.x=p.x;
-	particle->p.y=p.y - 98;
+	BulletFired* particle = new BulletFired();
+	particle->p.x = p.x;
+	particle->p.y = p.y - 98;
 
-	particle->spawned=true;
+	particle->spawned = true;
 	if (player.x < p.x) {
 		if (movement == Stand) {
 			animation.startSequence(144, 152, false, 144);
 		}
-		particle->velocity.x=-20;
-		particle->p.x=p.x - 74;
+		particle->velocity.x = -20;
+		particle->p.x = p.x - 74;
 		issueSmoke(ppl7::grafix::PointF(p.x - 55, p.y - 98));
-	} else {
+	}
+	else {
 		if (movement == Stand) {
 			animation.startSequence(153, 161, false, 153);
 
 		}
-		particle->velocity.x=20;
-		particle->p.x=p.x + 74;
+		particle->velocity.x = 20;
+		particle->p.x = p.x + 74;
 		issueSmoke(ppl7::grafix::PointF(p.x + 55, p.y - 98));
 	}
 	issueFireParticles(particle->p, player);
-	particle->initial_p=particle->p;
+	particle->initial_p = particle->p;
 	GetObjectSystem()->addObject(particle);
 	getAudioPool().playOnce(AudioClip::shoot, p, 1600, 0.6f);
 	magazine--;
@@ -200,21 +204,21 @@ void Helena::issueFireParticles(const ppl7::grafix::PointF& p, Player& player) c
 	color_gradient.push_back(Particle::ColorGradientItem(0.351, ppl7::grafix::Color(140, 0, 0, 112)));
 	color_gradient.push_back(Particle::ColorGradientItem(0.986, ppl7::grafix::Color(0, 0, 0, 0)));
 
-	float direction=90;
-	if (player.x < p.x) direction=270;
-	ParticleSystem* ps=GetParticleSystem();
-	int new_particles=ppl7::rand(81, 171);
-	for (int i=0;i < new_particles;i++) {
-		Particle* particle=new Particle();
-		particle->birth_time=time;
-		particle->death_time=randf(0.010, 0.198) + time;
-		particle->p=p;
+	float direction = 90;
+	if (player.x < p.x) direction = 270;
+	ParticleSystem* ps = GetParticleSystem();
+	int new_particles = ppl7::rand(81, 171);
+	for (int i = 0;i < new_particles;i++) {
+		Particle* particle = new Particle();
+		particle->birth_time = time;
+		particle->death_time = randf(0.010, 0.198) + time;
+		particle->p = p;
 		particle->initColorGradient(color_gradient);
-		particle->layer=Particle::Layer::BehindPlayer;
-		particle->weight=randf(0.000, 0.000);
+		particle->layer = Particle::Layer::BehindPlayer;
+		particle->weight = randf(0.000, 0.000);
 		particle->gravity.setPoint(0.000, 0.000);
-		particle->velocity=calculateVelocity(randf(5.660, 11.698), direction + randf(-8.491, 8.491));
-		particle->scale=randf(0.066, 0.434);
+		particle->velocity = calculateVelocity(randf(5.660, 11.698), direction + randf(-8.491, 8.491));
+		particle->scale = randf(0.066, 0.434);
 		particle->color_mod.set(255, 255, 255, 255);
 		particle->initAnimation(Particle::Type::RotatingParticleWhite);
 		ps->addParticle(particle);
@@ -233,18 +237,18 @@ void Helena::issueSmoke(const ppl7::grafix::PointF& p) const
 	color_gradient.push_back(Particle::ColorGradientItem(0.941, ppl7::grafix::Color(201, 199, 198, 0)));
 
 
-	ParticleSystem* ps=GetParticleSystem();
-	int new_particles=ppl7::rand(143, 194);
-	for (int i=0;i < new_particles;i++) {
-		Particle* particle=new Particle();
-		particle->birth_time=time;
-		particle->death_time=randf(0.010, 0.387) + time;
-		particle->p=p;
-		particle->layer=Particle::Layer::BehindPlayer;
-		particle->weight=randf(0.000, 0.000);
+	ParticleSystem* ps = GetParticleSystem();
+	int new_particles = ppl7::rand(143, 194);
+	for (int i = 0;i < new_particles;i++) {
+		Particle* particle = new Particle();
+		particle->birth_time = time;
+		particle->death_time = randf(0.010, 0.387) + time;
+		particle->p = p;
+		particle->layer = Particle::Layer::BehindPlayer;
+		particle->weight = randf(0.000, 0.000);
 		particle->gravity.setPoint(0.000, 0.000);
-		particle->velocity=calculateVelocity(randf(6.038, 9.623), 0.000 + randf(-25.472, 25.472));
-		particle->scale=randf(0.911, 1.987);
+		particle->velocity = calculateVelocity(randf(6.038, 9.623), 0.000 + randf(-25.472, 25.472));
+		particle->scale = randf(0.911, 1.987);
 		particle->color_mod.set(255, 255, 255, 255);
 		particle->initAnimation(Particle::Type::RotatingParticleWhite);
 		particle->initScaleGradient(scale_gradient, particle->scale);
@@ -256,7 +260,7 @@ void Helena::issueSmoke(const ppl7::grafix::PointF& p) const
 
 static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
 {
-	int r=ppl7::rand(1, 5);
+	int r = ppl7::rand(1, 5);
 	switch (r) {
 	case 1: ap.playOnce(AudioClip::helena_step1, position, 1600, 0.5f); break;
 	case 2: ap.playOnce(AudioClip::helena_step2, position, 1600, 0.5f); break;
@@ -270,7 +274,7 @@ static void play_step(AudioPool& ap, const ppl7::grafix::PointF& position)
 
 void Helena::playSoundOnAnimationSprite()
 {
-	AudioPool& ap=getAudioPool();
+	AudioPool& ap = getAudioPool();
 	//if (sprite_no == 245 || sprite_no == 224)  ap.playOnce(AudioClip::hackstone, 1.0f);
 	if (sprite_no == 3 || sprite_no == 7 || sprite_no == 12 || sprite_no == 16 || sprite_no == 64 || sprite_no == 68
 		|| sprite_no == 73 || sprite_no == 77) play_step(ap, p);
@@ -281,46 +285,50 @@ void Helena::playSoundOnAnimationSprite()
 void Helena::update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation)
 {
 	//printf ("s=%d, state=%s, keys=%d\n", state, (const char*)getState(), keys);
-	this->time=time;
+	this->time = time;
 	if (!enabled) return;
 	updateAnimation(time);
 	if (movement == Dead) {
 		if (animation.isFinished()) {
-			enabled=false;
+			enabled = false;
 		}
 		return;
 	}
-	AudioPool& ap=getAudioPool();
+	AudioPool& ap = getAudioPool();
 	if (!isOnGround()) {
 		if (airStart == 0.0f) {
-			airStart=time;
+			airStart = time;
 		}
-	} else if (airStart > 0.0f) {
-		double volume=(time - airStart) * 1.0f;
-		if (volume > 1.0f) volume=1.0f;
-		airStart=0.0f;
+	}
+	else if (airStart > 0.0f) {
+		double volume = (time - airStart) * 1.0f;
+		if (volume > 1.0f) volume = 1.0f;
+		airStart = 0.0f;
 		ap.playOnce(AudioClip::helena_jump, p, 1600, volume);
 	}
-	double dist=ppl7::grafix::Distance(p, player.position());
-	if (state == StateWaitForEnable && dist < 800) state=StatePatrol;
+	double dist = ppl7::grafix::Distance(p, player.position());
+	if (state == StateWaitForEnable && dist < 800) state = StatePatrol;
 	if (!player.isDead()) {
 		if (state != StateFollowPlayer && dist < 600) {
-			state=StateFollowPlayer;
+			state = StateFollowPlayer;
 			clearWaypoints();
 		}
 		if (state == StateFollowPlayer) {
 			if (dist < 1000 && attack == false) {
-				shoot_cooldown=time + 1.0f;
+				shoot_cooldown = time + 1.0f;
 				switchAttackMode(true);
-			} else if (dist > 1100 && attack == true) {
+			}
+			else if (dist > 1100 && attack == true) {
 				switchAttackMode(false);
-			} else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
+			}
+			else if (dist < 300 && abs(p.y - player.y) < 30 && attack == true && movement == Stand && movement != Turn) {
 				if (orientation == Right && player.x < p.x) {
 					//orientation=Left;
 					//stand();
 					turn(Left);
 					return;
-				} else if (orientation == Left && player.x > p.x) {
+				}
+				else if (orientation == Left && player.x > p.x) {
 					//orientation=Right;
 					//stand();
 					turn(Right);
@@ -330,23 +338,24 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 			}
 			if (attack && abs(player.y - p.y) < 20) shoot(time, player);
 		}
-	} else if (attack) {
+	}
+	else if (attack) {
 		switchAttackMode(false);
-		state=StateStand;
-		next_state=0.0f;
+		state = StateStand;
+		next_state = 0.0f;
 		clearWaypoints();
 	}
 
 	if (time < next_state && state == StateStand) {
-		state=StatePatrol;
+		state = StatePatrol;
 		if (ppl7::rand(0, 1) == 0) turn(Left);
 		else turn(Right);
 	}
 
 	if (movement == Turn) {
 		if (!animation.isFinished()) return;
-		movement=Stand;
-		orientation=turnTarget;
+		movement = Stand;
+		orientation = turnTarget;
 		velocity_move.stop();
 	}
 
@@ -355,7 +364,7 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 	if (movement == Slide || movement == Dead || movement == Jump) {
 		return;
 	}
-	keys=0;
+	keys = 0;
 	if (state == StatePatrol) updateStatePatrol(time, ttplane);
 	if (state == StateFollowPlayer) {
 		if (abs(player.x - p.x) < 300 && abs(player.y - p.y) < 20) {
@@ -363,7 +372,8 @@ void Helena::update(double time, TileTypePlane& ttplane, Player& player, float f
 				stand();
 				return;
 			}
-		} else {
+		}
+		else {
 			updateStateFollowPlayer(time, ttplane, ppl7::grafix::Point((int)player.x, (int)player.y));
 		}
 	}
@@ -380,26 +390,30 @@ void Helena::updateStatePatrol(double time, TileTypePlane& ttplane)
 		//printf ("next_state is turn\n");
 		if (orientation == Left) turn(Right);
 		else turn(Left);
-		substate=1;
-		return;
-	} else if (movement == Stand && substate == 0) {
+		substate = 1;
 		return;
 	}
-	substate=0;
+	else if (movement == Stand && substate == 0) {
+		return;
+	}
+	substate = 0;
 	if (orientation == Left) {
 		//printf("move left\n");
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 64));
+		TileType::Type t1 = ttplane.getType(ppl7::grafix::Point(p.x - 32, p.y - 64));
 		if (t1 != TileType::NonBlocking) {
 			stand();
-			next_state=time + ppl7::randf(1.0f, 5.0f);
-		} else keys=KeyboardKeys::Left;
-	} else {
+			next_state = time + ppl7::randf(1.0f, 5.0f);
+		}
+		else keys = KeyboardKeys::Left;
+	}
+	else {
 		//printf("move right\n");
-		TileType::Type t1=ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y - 64));
+		TileType::Type t1 = ttplane.getType(ppl7::grafix::Point(p.x + 32, p.y - 64));
 		if (t1 != TileType::NonBlocking) {
 			stand();
-			next_state=time + ppl7::randf(1.0f, 5.0f);
-		} else keys=KeyboardKeys::Right;
+			next_state = time + ppl7::randf(1.0f, 5.0f);
+		}
+		else keys = KeyboardKeys::Right;
 	}
 }
 
