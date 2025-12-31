@@ -104,20 +104,6 @@ void AudioSystem::enumerateDevices(std::list<ppl7::String>& device_names) const
 	SDL_free(devices);
 }
 
-void AudioSystem::initDriver(const ppl7::String& driver_name)
-/*!Initialize a specific audio driver
- *
- * @param[in] driver_name String with the name of a specific driver
- *
- * @note
- * If not calling this method, a default driver is used
- */
-{
-	if (0 != SDL_AudioInit((const char*)driver_name)) {
-		throw AudioSystemFailed("failed to initialize audio driver %s\n", (const char*)driver_name);
-	}
-}
-
 static void AudioSystem_AudioCallback(void* userdata, SDL_AudioStream* stream, int additional_amount, int total_amount)
 {
 	((AudioSystem*)userdata)->callback(stream, additional_amount, total_amount);
@@ -159,8 +145,12 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 	double start_time = ppl7::GetMicrotime();
 	size_t tracks_hearable = 0;
 	size_t samples = additional_amount / sizeof(ppl7::STEREOSAMPLE16);
+
+	// Allokiere temporären Output-Buffer
+	ppl7::STEREOSAMPLE16* output_buffer = (ppl7::STEREOSAMPLE16*)malloc(additional_amount);
+
 	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE32));
-	//ppl7::PrintDebugTime("callback called, len=%d\n", len);
+	//ppl7::PrintDebugTime("callback called, len=%d\n", additional_amount);
 	std::set<Audio*>::iterator it;
 	std::set<Audio*> to_remove;
 	mutex.lock();
@@ -175,10 +165,10 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 				to_remove.insert(audio);
 			}
 		}
-		ppl7::STEREOSAMPLE16* mergebuffer = (ppl7::STEREOSAMPLE16*)stream;
+		// Mix down zu 16-bit samples
 		for (size_t i = 0;i < samples;i++) {
-			mergebuffer[i].left = clamp(mixbuffer[i].left);
-			mergebuffer[i].right = clamp(mixbuffer[i].right);
+			output_buffer[i].left = clamp(mixbuffer[i].left);
+			output_buffer[i].right = clamp(mixbuffer[i].right);
 		}
 		if (to_remove.size() > 0) {
 			//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks to delete\n", to_remove.size());
@@ -195,8 +185,13 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 		}
 	}
 	else {
-		memset(stream, 0, additional_amount);
+		memset(output_buffer, 0, additional_amount);
 	}
+
+	// Schreibe gemixte Daten in den SDL_AudioStream
+	SDL_PutAudioStreamData(stream, output_buffer, additional_amount);
+	free(output_buffer);
+
 	metrics_mutex.lock();
 	metrics.tracks_total = num_tracks;
 	metrics.tracks_played = tracks_hearable;

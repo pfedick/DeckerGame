@@ -153,7 +153,6 @@ public:
 
 	void enumerateDrivers(std::list<ppl7::String>& driver_names) const;
 	void enumerateDevices(std::list<ppl7::String>& device_names) const;
-	void initDriver(const ppl7::String& driver_name);	// optional
 	void init();	// default device
 	void play(Audio* audio);
 	void stop(Audio* audio);
