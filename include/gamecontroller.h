@@ -1,3 +1,5 @@
+#ifndef GAMECONTROLLER_H
+#define GAMECONTROLLER_H
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -150,3 +152,5 @@ public:
     static ppl7::String getButtonName(int button);
 
 };
+
+#endif

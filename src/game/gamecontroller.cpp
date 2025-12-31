@@ -1,3 +1,4 @@
+#include "decker.h"
 #include "gamecontroller.h"
 
 GameController::GameController()
@@ -59,12 +60,15 @@ void GameController::open(SDL_JoystickID sdl_id)
     if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_RIGHT_PADDLE2)) has_button |= static_cast<uint32_t>(Button::paddle3);
     if (SDL_GamepadHasButton(gc, SDL_GAMEPAD_BUTTON_LEFT_PADDLE2)) has_button |= static_cast<uint32_t>(Button::paddle4);
 
-    has_led = SDL_GamepadControllerHasLED(gc);
-    has_rumble = SDL_GameControllerHasRumble(gc);
-    has_rumble_triggers = SDL_GameControllerHasRumbleTriggers(gc);
-
-    SDL_GameControllerEventState(SDL_ENABLE);
-
+    SDL_PropertiesID props = SDL_GetGamepadProperties(gc);
+    if (!props) {
+        // Failed to get properties
+        throw SDLException("Couldn't get gamecontroller properties: %s", SDL_GetError());
+    }
+    has_led = SDL_GetBooleanProperty(props, SDL_PROP_GAMEPAD_CAP_RGB_LED_BOOLEAN, false);
+    has_rumble = SDL_GetBooleanProperty(props, SDL_PROP_GAMEPAD_CAP_RUMBLE_BOOLEAN, false);
+    has_rumble_triggers = SDL_GetBooleanProperty(props, SDL_PROP_GAMEPAD_CAP_TRIGGER_RUMBLE_BOOLEAN, false);
+    SDL_SetGamepadEventsEnabled(true);
     //printf("has_axis: %x, has_button: %x, has_led: %d, has_rumble: %d, has_rumble_triggers: %d\n", has_axis, has_button, has_led, has_rumble, has_rumble_triggers);
 
 }
@@ -90,7 +94,7 @@ int GameController::deadzone() const
 
 ppl7::String GameController::name() const
 {
-    if (gc) return "";
+    if (!gc) return "";
     return SDL_GetGamepadName(gc);
 }
 
@@ -116,46 +120,52 @@ int GameController::getAxisState(int axis) const
 std::list<GameController::Device> GameController::enumerate()
 {
     std::list<GameController::Device> device_list;
-    int num = SDL_NumJoysticks();
+    int num = 0;
+    SDL_JoystickID* joysticks = SDL_GetGamepads(&num);
+    if (!joysticks) {
+        throw SDLException("Couldn't get gamecontroller list: %s", SDL_GetError());
+    }
     if (num > 0) {
         for (int i = 0;i < num;i++) {
-            SDL_GameController* gc = SDL_GameControllerOpen(i);
-            if (gc) {
+            SDL_Gamepad* gp = SDL_OpenGamepad(joysticks[i]);
+            if (gp) {
                 GameController::Device d;
-                d.id = i;
-                d.name.set(SDL_GameControllerName(gc));
+                d.id = joysticks[i];
+                d.name.set(SDL_GetGamepadName(gp));
+                SDL_CloseGamepad(gp);
                 device_list.push_back(d);
             }
         }
     }
+    SDL_free(joysticks);
     return device_list;
 }
 
 void GameController::rumbleTrigger(uint16_t left, uint16_t right, uint32_t duration_ms)
 {
-    if (has_rumble_triggers == true && gc != NULL)  SDL_GameControllerRumbleTriggers(gc, left, right, duration_ms);
+    if (has_rumble_triggers == true && gc != NULL)  SDL_RumbleGamepadTriggers(gc, left, right, duration_ms);
 }
 
 void GameController::rumble(uint16_t low, uint16_t high, uint32_t duration_ms)
 {
-    if (has_rumble == true && gc != NULL)  SDL_GameControllerRumble(gc, low, high, duration_ms);
+    if (has_rumble == true && gc != NULL)  SDL_RumbleGamepad(gc, low, high, duration_ms);
 }
 
 
 ppl7::String GameController::getAxisName(int axis)
 {
     switch (axis) {
-    case SDL_CONTROLLER_AXIS_LEFTX: return ppl7::String("Stick left horizontal");
+    case SDL_GAMEPAD_AXIS_LEFTX: return ppl7::String("Stick left horizontal");
         break;
-    case SDL_CONTROLLER_AXIS_LEFTY: return ppl7::String("Stick left vertical");
+    case SDL_GAMEPAD_AXIS_LEFTY: return ppl7::String("Stick left vertical");
         break;
-    case SDL_CONTROLLER_AXIS_RIGHTX: return ppl7::String("Stick right horizontal");
+    case SDL_GAMEPAD_AXIS_RIGHTX: return ppl7::String("Stick right horizontal");
         break;
-    case SDL_CONTROLLER_AXIS_RIGHTY: return ppl7::String("Stick right vertical");
+    case SDL_GAMEPAD_AXIS_RIGHTY: return ppl7::String("Stick right vertical");
         break;
-    case SDL_CONTROLLER_AXIS_TRIGGERLEFT: return ppl7::String("Trigger left");
+    case SDL_GAMEPAD_AXIS_LEFT_TRIGGER: return ppl7::String("Trigger left");
         break;
-    case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: return ppl7::String("Trigger right");
+    case SDL_GAMEPAD_AXIS_RIGHT_TRIGGER: return ppl7::String("Trigger right");
         break;
     }
     return ppl7::String("unknown");
@@ -165,45 +175,45 @@ ppl7::String GameController::getAxisName(int axis)
 ppl7::String GameController::getButtonName(int button)
 {
     switch (button) {
-    case SDL_CONTROLLER_BUTTON_A: return ppl7::String("Button A");
+    case SDL_GAMEPAD_BUTTON_SOUTH: return ppl7::String("Button A");
         break;
-    case SDL_CONTROLLER_BUTTON_B: return ppl7::String("Button B");
+    case SDL_GAMEPAD_BUTTON_EAST: return ppl7::String("Button B");
         break;
-    case SDL_CONTROLLER_BUTTON_X: return ppl7::String("Button X");
+    case SDL_GAMEPAD_BUTTON_WEST: return ppl7::String("Button X");
         break;
-    case SDL_CONTROLLER_BUTTON_Y: return ppl7::String("Button Y");
+    case SDL_GAMEPAD_BUTTON_NORTH: return ppl7::String("Button Y");
         break;
-    case SDL_CONTROLLER_BUTTON_BACK: return ppl7::String("Button back");
+    case SDL_GAMEPAD_BUTTON_BACK: return ppl7::String("Button back");
         break;
-    case SDL_CONTROLLER_BUTTON_GUIDE: return ppl7::String("Button guide");
+    case SDL_GAMEPAD_BUTTON_GUIDE: return ppl7::String("Button guide");
         break;
-    case SDL_CONTROLLER_BUTTON_START: return ppl7::String("Button start");
+    case SDL_GAMEPAD_BUTTON_START: return ppl7::String("Button start");
         break;
-    case SDL_CONTROLLER_BUTTON_LEFTSTICK: return ppl7::String("Stick left");
+    case SDL_GAMEPAD_BUTTON_LEFT_STICK: return ppl7::String("Stick left");
         break;
-    case SDL_CONTROLLER_BUTTON_RIGHTSTICK: return ppl7::String("Stick right");
+    case SDL_GAMEPAD_BUTTON_RIGHT_STICK: return ppl7::String("Stick right");
         break;
-    case SDL_CONTROLLER_BUTTON_LEFTSHOULDER: return ppl7::String("Shoulder left");
+    case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER: return ppl7::String("Shoulder left");
         break;
-    case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: return ppl7::String("Shoulder right");
+    case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER: return ppl7::String("Shoulder right");
         break;
-    case SDL_CONTROLLER_BUTTON_DPAD_UP: return ppl7::String("Pad up");
+    case SDL_GAMEPAD_BUTTON_DPAD_UP: return ppl7::String("Pad up");
         break;
-    case SDL_CONTROLLER_BUTTON_DPAD_DOWN: return ppl7::String("Pad down");
+    case SDL_GAMEPAD_BUTTON_DPAD_DOWN: return ppl7::String("Pad down");
         break;
-    case SDL_CONTROLLER_BUTTON_DPAD_LEFT: return ppl7::String("Pad left");
+    case SDL_GAMEPAD_BUTTON_DPAD_LEFT: return ppl7::String("Pad left");
         break;
-    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: return ppl7::String("Pad right");
+    case SDL_GAMEPAD_BUTTON_DPAD_RIGHT: return ppl7::String("Pad right");
         break;
-    case SDL_CONTROLLER_BUTTON_MISC1: return ppl7::String("Button misc");
+    case SDL_GAMEPAD_BUTTON_MISC1: return ppl7::String("Button misc");
         break;
-    case SDL_CONTROLLER_BUTTON_PADDLE1: return ppl7::String("Paddle 1");
+    case SDL_GAMEPAD_BUTTON_RIGHT_PADDLE1: return ppl7::String("Paddle 1");
         break;
-    case SDL_CONTROLLER_BUTTON_PADDLE2: return ppl7::String("Paddle 2");
+    case SDL_GAMEPAD_BUTTON_LEFT_PADDLE1: return ppl7::String("Paddle 2");
         break;
-    case SDL_CONTROLLER_BUTTON_PADDLE3: return ppl7::String("Paddle 3");
+    case SDL_GAMEPAD_BUTTON_RIGHT_PADDLE2: return ppl7::String("Paddle 3");
         break;
-    case SDL_CONTROLLER_BUTTON_PADDLE4: return ppl7::String("Paddle 4");
+    case SDL_GAMEPAD_BUTTON_LEFT_PADDLE2: return ppl7::String("Paddle 4");
         break;
 
     }
@@ -214,21 +224,21 @@ ppl7::String GameController::getButtonName(int button)
 
 GameControllerMapping::GameControllerMapping()
 {
-    player_axis_x = SDL_CONTROLLER_AXIS_LEFTX;
-    player_axis_y = SDL_CONTROLLER_AXIS_LEFTY;
-    player_axis_crouch = SDL_CONTROLLER_AXIS_TRIGGERLEFT;
+    player_axis_x = SDL_GAMEPAD_AXIS_LEFTX;
+    player_axis_y = SDL_GAMEPAD_AXIS_LEFTY;
+    player_axis_crouch = SDL_GAMEPAD_AXIS_LEFT_TRIGGER;
 
-    menu_button_up = SDL_CONTROLLER_BUTTON_DPAD_UP;
-    menu_button_down = SDL_CONTROLLER_BUTTON_DPAD_DOWN;
-    menu_button_left = SDL_CONTROLLER_BUTTON_DPAD_LEFT;
-    menu_button_right = SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
+    menu_button_up = SDL_GAMEPAD_BUTTON_DPAD_UP;
+    menu_button_down = SDL_GAMEPAD_BUTTON_DPAD_DOWN;
+    menu_button_left = SDL_GAMEPAD_BUTTON_DPAD_LEFT;
+    menu_button_right = SDL_GAMEPAD_BUTTON_DPAD_RIGHT;
 
-    menu_button = SDL_CONTROLLER_BUTTON_START;
-    action_button = SDL_CONTROLLER_BUTTON_A;
-    back_button = SDL_CONTROLLER_BUTTON_B;
-    jump_button = SDL_CONTROLLER_BUTTON_X;
-    flashlight_button = SDL_CONTROLLER_BUTTON_Y;
-    crouch_button = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+    menu_button = SDL_GAMEPAD_BUTTON_START;
+    action_button = SDL_GAMEPAD_BUTTON_SOUTH;
+    back_button = SDL_GAMEPAD_BUTTON_EAST;
+    jump_button = SDL_GAMEPAD_BUTTON_WEST;
+    flashlight_button = SDL_GAMEPAD_BUTTON_NORTH;
+    crouch_button = SDL_GAMEPAD_BUTTON_LEFT_SHOULDER;
     updateMapping();
 }
 
@@ -290,7 +300,7 @@ int GameControllerMapping::getSDLAxis(const Axis a)
     std::map<Axis, int>::const_iterator it;
     it = axis_mapping_rev.find(a);
     if (it != axis_mapping_rev.end()) return it->second;
-    return SDL_CONTROLLER_AXIS_INVALID;
+    return SDL_GAMEPAD_AXIS_INVALID;
 }
 
 int GameControllerMapping::getSDLButton(const Button b)
@@ -298,7 +308,7 @@ int GameControllerMapping::getSDLButton(const Button b)
     std::map<Button, int>::const_iterator it;
     it = button_mapping_rev.find(b);
     if (it != button_mapping_rev.end()) return it->second;
-    return SDL_CONTROLLER_BUTTON_INVALID;
+    return SDL_GAMEPAD_BUTTON_INVALID;
 }
 
 void GameControllerMapping::setMappingAxis(const Axis a, int id)
