@@ -223,7 +223,8 @@ ppl7::grafix::Drawable SDL::lockTexture(SDL_Texture* texture)
 {
 	void* pixels;
 	int pitch;
-	if (SDL_LockTexture(texture, NULL, &pixels, &pitch)) {
+	if (!SDL_LockTexture(texture, NULL, &pixels, &pitch)) {
+		//ppl7::PrintDebug("SDL_LockTexture failed: %s\n", SDL_GetError());
 		throw SDLException("Couldn't lock texture: %s", SDL_GetError());
 	}
 	return ppl7::grafix::Drawable(pixels, pitch, texture->w, texture->h, SDL2RGBFormat(texture->format));
