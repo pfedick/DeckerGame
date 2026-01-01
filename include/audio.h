@@ -47,7 +47,7 @@ public:
 	void setAudioClass(AudioClass a);
 	AudioClass audioclass() const;
 	bool autoDelete() const;
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume) = 0;
+	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE_FLOAT* buffer, float volume) = 0;
 	virtual bool isHearable() const = 0;
 };
 
@@ -57,7 +57,7 @@ private:
 	ppl7::File ff;
 	ppl7::AudioDecoder* decoder;
 	float volume;
-	ppl7::STEREOSAMPLE16* prebuffer;
+	ppl7::STEREOSAMPLE_FLOAT* prebuffer;
 	size_t buffersize;
 	float fade_start_volume;
 	float fade_time;
@@ -71,7 +71,7 @@ public:
 	void rewind();
 	void setVolume(float volume);
 	void fadeout(float seconds = 4.0f);
-	size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume) override;
+	size_t addSamples(size_t num, ppl7::STEREOSAMPLE_FLOAT* buffer, float volume) override;
 	bool isHearable() const override;
 };
 
@@ -86,7 +86,7 @@ public:
 	void load(const ppl7::String& filename);
 	size_t size() const;
 	size_t bufferSize() const;
-	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE32* buffer, int vol_left = 32768, int vol_right = 32768) const;
+	size_t addSamples(size_t position, size_t num, ppl7::STEREOSAMPLE_FLOAT* buffer, float vol_left = 1.0f, float vol_right = 1.0f) const;
 	size_t skipSamples(size_t position, size_t num) const;
 };
 
@@ -116,7 +116,7 @@ public:
 	void setLoop(bool loop);
 	void fadeout(float seconds = 4.0f);
 	void setPositional(const ppl7::grafix::Point& p, int max_distance = 1600);
-	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE32* buffer, float volume);
+	virtual size_t addSamples(size_t num, ppl7::STEREOSAMPLE_FLOAT* buffer, float volume);
 	bool isHearable() const override;
 	bool finished() const;
 };
@@ -130,6 +130,7 @@ public:
 		double time = 0.0f;
 		size_t tracks_total = 0;
 		size_t tracks_played = 0;
+		size_t clipped_samples = 0;
 	};
 
 private:
@@ -137,7 +138,7 @@ private:
 	SDL_AudioStream* audio_stream;
 	ppl7::Mutex mutex;
 	std::set<Audio*> tracks;
-	ppl7::STEREOSAMPLE32* mixbuffer;
+	ppl7::STEREOSAMPLE_FLOAT* mixbuffer;
 	size_t mixbuffer_size;
 	float globalVolume;
 	float a_class_volume[5];

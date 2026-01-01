@@ -38,7 +38,7 @@ AudioSystem::AudioSystem()
 	device_id = 0;
 	audio_stream = NULL;
 	mixbuffer = NULL;
-	mixbuffer_size = 1024 * 2 * sizeof(ppl7::STEREOSAMPLE32);
+	mixbuffer_size = 1024 * 2 * sizeof(ppl7::STEREOSAMPLE_FLOAT);
 	if (SDL_WasInit(SDL_INIT_AUDIO) == 0) {
 		//printf ("SDL_InitSubSystem(SDL_INIT_AUDIO)\n");
 		if (0 != SDL_InitSubSystem(SDL_INIT_AUDIO)) {
@@ -112,14 +112,15 @@ static void AudioSystem_AudioCallback(void* userdata, SDL_AudioStream* stream, i
 void AudioSystem::init()
 {
 	shutdown();
-	SDL_AudioSpec spec = { SDL_AUDIO_S16LE, 2, 44100 };
+	// Mix und Ausgabe in Float (F32LE)
+	SDL_AudioSpec spec = { SDL_AUDIO_F32LE, 2, 44100 };
 	device_id = SDL_OpenAudioDevice(
 		SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec);
 	if (device_id == 0) {
 		throw AudioSystemFailed("could not open audio device: %s", SDL_GetError());
 	}
 	// Setup Mixbuffer
-	mixbuffer = (ppl7::STEREOSAMPLE32*)malloc(mixbuffer_size);
+	mixbuffer = (ppl7::STEREOSAMPLE_FLOAT*)malloc(mixbuffer_size);
 
 	// Setup Audio Stream with Callback
 	audio_stream = SDL_CreateAudioStream(&spec, &spec);
@@ -132,10 +133,16 @@ void AudioSystem::init()
 	SDL_ResumeAudioDevice(device_id); /* start audio playing. */
 }
 
-static inline int clamp(int value)
+static inline float clamp(float value, size_t& clipcounter)
 {
-	if (value > 32767) return 32767;
-	if (value < -32767) return -32767;
+	if (value > 1.0f) {
+		clipcounter++;
+		return 1.0f;
+	}
+	if (value < -1.0f) {
+		clipcounter++;
+		return -1.0f;
+	}
 	return value;
 }
 
@@ -144,12 +151,19 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 {
 	double start_time = ppl7::GetMicrotime();
 	size_t tracks_hearable = 0;
-	size_t samples = additional_amount / sizeof(ppl7::STEREOSAMPLE16);
+	size_t samples = additional_amount / sizeof(ppl7::STEREOSAMPLE_FLOAT);
+	if (samples * sizeof(ppl7::STEREOSAMPLE_FLOAT) > mixbuffer_size) {
+		mixbuffer_size = samples * sizeof(ppl7::STEREOSAMPLE_FLOAT);
+		mixbuffer = (ppl7::STEREOSAMPLE_FLOAT*)realloc(mixbuffer, mixbuffer_size);
+		if (!mixbuffer) {
+			throw AudioSystemFailed("mixbuffer realloc failed");
+		}
+	}
 
 	// Allokiere temporären Output-Buffer
-	ppl7::STEREOSAMPLE16* output_buffer = (ppl7::STEREOSAMPLE16*)malloc(additional_amount);
+	ppl7::STEREOSAMPLE_FLOAT* output_buffer = (ppl7::STEREOSAMPLE_FLOAT*)malloc(additional_amount);
 
-	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE32));
+	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE_FLOAT));
 	//ppl7::PrintDebugTime("callback called, len=%d\n", additional_amount);
 	std::set<Audio*>::iterator it;
 	std::set<Audio*> to_remove;
@@ -165,10 +179,10 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 				to_remove.insert(audio);
 			}
 		}
-		// Mix down zu 16-bit samples
+		// mixbuffer in output_buffer übertragen und clampen
 		for (size_t i = 0;i < samples;i++) {
-			output_buffer[i].left = clamp(mixbuffer[i].left);
-			output_buffer[i].right = clamp(mixbuffer[i].right);
+			output_buffer[i].left = clamp(mixbuffer[i].left, metrics.clipped_samples);
+			output_buffer[i].right = clamp(mixbuffer[i].right, metrics.clipped_samples);
 		}
 		if (to_remove.size() > 0) {
 			//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks to delete\n", to_remove.size());
