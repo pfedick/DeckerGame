@@ -118,8 +118,6 @@ void MetricsSubMenu::paint(ppl7::grafix::Drawable& draw)
 	drawCountMetric(draw, c1, 120, 190, y, "Lights:", metrics.total_lights, metrics.visible_lights);
 	y += line;
 	drawCountMetric(draw, c1, 120, 190, y, "Audio Tracks:", metrics.total_audiotracks, metrics.hearable_audiotracks);
-	y += line;
-	drawIntMetric(draw, c1, 190, y, "Clipped Samples:", metrics.clipped_samples);
 
 	y = 5 + 2 * line;
 	c1 = 220;

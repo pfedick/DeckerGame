@@ -990,7 +990,6 @@ void Game::run()
 		metrics.time_audioengine.addDuration(audio_metrics.time);
 		metrics.total_audiotracks += audio_metrics.tracks_total;
 		metrics.hearable_audiotracks += audio_metrics.tracks_played;
-		metrics.clipped_samples += audio_metrics.clipped_samples;
 		metrics.time_total.stop();
 
 

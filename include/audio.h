@@ -130,7 +130,6 @@ public:
 		double time = 0.0f;
 		size_t tracks_total = 0;
 		size_t tracks_played = 0;
-		size_t clipped_samples = 0;
 	};
 
 private:

@@ -160,16 +160,12 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 		}
 	}
 
-	// Allokiere temporären Output-Buffer
-	ppl7::STEREOSAMPLE_FLOAT* output_buffer = (ppl7::STEREOSAMPLE_FLOAT*)malloc(additional_amount);
-
 	memset(mixbuffer, 0, samples * sizeof(ppl7::STEREOSAMPLE_FLOAT));
 	//ppl7::PrintDebugTime("callback called, len=%d\n", additional_amount);
 	std::set<Audio*>::iterator it;
 	std::set<Audio*> to_remove;
 	mutex.lock();
 	size_t num_tracks = tracks.size();
-	size_t clipped_samples = 0;
 	if (num_tracks) {
 		//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks\n", num_tracks);
 		for (it = tracks.begin();it != tracks.end();++it) {
@@ -180,11 +176,13 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 				to_remove.insert(audio);
 			}
 		}
+		/*
 		// mixbuffer in output_buffer übertragen und clampen
 		for (size_t i = 0;i < samples;i++) {
 			output_buffer[i].left = clamp(mixbuffer[i].left, clipped_samples);
 			output_buffer[i].right = clamp(mixbuffer[i].right, clipped_samples);
 		}
+		*/
 		if (to_remove.size() > 0) {
 			//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks to delete\n", to_remove.size());
 			for (it = to_remove.begin();it != to_remove.end();++it) {
@@ -199,18 +197,15 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 			}
 		}
 	}
-	else {
-		memset(output_buffer, 0, additional_amount);
-	}
+
 
 	// Schreibe gemixte Daten in den SDL_AudioStream
-	SDL_PutAudioStreamData(stream, output_buffer, additional_amount);
-	free(output_buffer);
+	SDL_PutAudioStreamData(stream, mixbuffer, additional_amount);
+
 
 	metrics_mutex.lock();
 	metrics.tracks_total = num_tracks;
 	metrics.tracks_played = tracks_hearable;
-	metrics.clipped_samples += clipped_samples;
 
 	mutex.unlock();
 	double total_time = ppl7::GetMicrotime() - start_time;
@@ -265,7 +260,6 @@ AudioSystem::Metrics AudioSystem::getMetrics(bool reset)
 		metrics.time = 0.0f;
 		metrics.tracks_total = 0;
 		metrics.tracks_played = 0;
-		metrics.clipped_samples = 0;
 	}
 	metrics_mutex.unlock();
 	//ppl7::PrintDebugTime("AudioSystem::getMetrics Time=%0.3f ms, total: %zd, hearable: %zd\n", m.time * 1000.0f, m.tracks_total, m.tracks_played);

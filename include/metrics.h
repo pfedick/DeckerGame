@@ -67,7 +67,6 @@ public:
     size_t hearable_audiotracks;
     size_t total_lights;
     size_t visible_lights;
-    size_t clipped_samples;
     double frame_rate_compensation;
     float frametime;
 
