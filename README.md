@@ -135,7 +135,7 @@ The following Tools/Libraries are required:
 - gcc or clang with c++ support (C++11 or greater)
 - gnu make
 - pcre2
-- sdl2
+- sdl3
 - iconv
 - zlib
 - bz2
@@ -147,7 +147,7 @@ The following Tools/Libraries are required:
 
 #### Fedora
 ```bash
-sudo dnf install -y git gcc gcc-c++ make pcre2-devel SDL2-devel zlib-devel \
+sudo dnf install -y git gcc gcc-c++ make pcre2-devel SDL3-devel zlib-devel \
     bzip2-devel libpng-devel mpg123-devel libjpeg-turbo-devel libdav1d-devel \
     libvorbis-devel libogg-devel
 ```
@@ -155,7 +155,7 @@ sudo dnf install -y git gcc gcc-c++ make pcre2-devel SDL2-devel zlib-devel \
 #### Ubuntu
 ```bash
 sudo apt-get install -y git gcc g++ libpcre2-dev libbz2-dev zlib1g-dev \
-    libsdl2-dev libpng-dev libmpg123-dev libdav1d-dev \
+    libsdl3-dev libpng-dev libmpg123-dev libdav1d-dev \
     libvorbis-dev libogg-dev
 ```
 
@@ -166,7 +166,7 @@ For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://w
 ```bash
 pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
     mingw-w64-ucrt-x86_64-libiconv mingw-w64-ucrt-x86_64-bzip2 \
-    mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-mpg123 \
+    mingw-w64-ucrt-x86_64-SDL3 mingw-w64-ucrt-x86_64-mpg123 \
     mingw-w64-ucrt-x86_64-pcre2 mingw-w64-ucrt-x86_64-libpng \
     mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-dav1d \
     mingw-w64-ucrt-x86_64-libvorbis mingw-w64-ucrt-x86_64-libogg \
@@ -176,7 +176,7 @@ pacman -S git make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-zlib \
 #### FreeBSD
 
 ```bash
-pkg install pcre2 sdl2 bzip2 png mpg123 jpeg-turbo dav1d libvorbis libogg pkgconf gmake
+pkg install pcre2 sdl3 bzip2 png mpg123 jpeg-turbo dav1d libvorbis libogg pkgconf gmake
 ```
 
 Use "gmake" instead of "make" for compiling below!
