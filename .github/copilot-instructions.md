@@ -7,22 +7,24 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 ## Technologie-Stack
 
 ### Core Libraries
-- **SDL**: Aktuell SDL2, Migration zu SDL3 (Version 3.2.28+) geplant
-- **ppltk**: Eigene UI-Toolkit-Library (SDL2-basiert), eingebunden als git submodule
-- **pplib**: Eigene Library für OS-Abstraktion (String, File-IO, Grafik), eingebunden als git submodule
+- **SDL**: SDL3 (Version 3.2.28+) – Migration abgeschlossen (Januar 2026)
+- **ppltk**: Eigene UI-Toolkit-Library (SDL3-basiert), eingebunden als git submodule
+- **pplib**: Eigene Library für OS-Abstraktion (String, File-IO, Grafik, Audio), eingebunden als git submodule
 - **Sprache**: C++
 - **Build-System**: autoconf, gcc/clang
 - **Plattformen**: Windows (mingw64/msys), Linux, FreeBSD
 
 ### Grafik-Pipeline
 - Alle 2D-Grafiken sind mit Lightwave 3D erstellt und vorgerendert
-- Aktuell: SDL_Renderer (Software/Hardware-Rendering)
-- Geplant: SDL3 GPU-Features mit Shader-Unterstützung
+- SDL3 Renderer (Hardware-accelerated) mit VSync
+- Geplant: SDL3 GPU-Features mit Shader-Unterstützung für visuelle Effekte
 
 ### Audio
-- SDL2 Audio-Subsystem
-- Aktuell: Integer-basierte Audio-Berechnung
-- Optional geplant: Float-basierte Audio-Engine
+- SDL3 Audio-Subsystem mit Float32-Pipeline (F32LE)
+- Float-basierte Audio-Engine (32-bit floating point)
+- Unterstützt MP3, OGG, WAVE, AIFF (16/24-bit)
+- Mono- und Stereo-Dateien werden unterstützt
+- AudioDecoder mit Float-Ausgabe für alle Formate
 
 ## Projektstruktur
 
@@ -36,58 +38,83 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 /ppltk       - Git submodule: ppltk UI-Toolkit
 ```
 
-## Modernisierungsziele
+## Abgeschlossene Modernisierungen
 
-### 1. SDL2 zu SDL3 Migration (Priorität: Hoch)
-- Migration von SDL2 auf SDL3 (Version 3.2.28 oder höher)
-- Betrifft: Grafik, Audio, Controller-Unterstützung
-- **Wichtig**: API-Änderungen beachten (viele Funktionen umbenannt/umstrukturiert)
+### ✅ SDL2 zu SDL3 Migration (Abgeschlossen: Januar 2026)
+- Migration von SDL2 auf SDL3 (Version 3.2.28+) vollständig umgesetzt
+- Grafik: SDL3 Renderer mit VSync-Unterstützung
+- Audio: SDL3 AudioStream mit Float32-Pipeline
+- Controller: SDL3 Gamepad-API integriert
+- ppltk und pplib auf SDL3 migriert
 
-### 2. GPU-Rendering (Priorität: Hoch)
+### ✅ Audio-Engine Modernisierung (Abgeschlossen: Januar 2026)
+- Umstellung auf Float-basierte Audio-Berechnung (32-bit float)
+- Alle AudioDecoder unterstützen Float-Ausgabe (STEREOSAMPLE_FLOAT)
+- Verbesserte Audioqualität durch native Float-Pipeline
+- Korrekte 24-Bit-Unterstützung für AIFF/WAVE
+- Mono-Dateien werden automatisch auf Stereo dupliziert
+
+## Zukünftige Modernisierungsziele
+
+### 1. GPU-Rendering mit SDL3 GPU API (Priorität: Hoch)
 - Umstellung von SDL_Renderer auf SDL3 GPU-Features
-- Ermöglicht moderne Rendering-Techniken
+- Ermöglicht moderne Rendering-Techniken (Vulkan, Metal, D3D12)
 - Basis für Shader-Integration
+- Bessere Performance und Flexibilität
 
-### 3. Shader-Integration (Priorität: Mittel)
+### 2. Shader-Integration (Priorität: Mittel)
 - Verwendung von Shadern für visuelle Effekte
 - Speziell: Unschärfe-Effekte für Parallax-Ebenen (Depth of Field)
 - Verbesserung der visuellen Tiefenwirkung
-
-### 4. Audio-Engine Modernisierung (Priorität: Niedrig/Optional)
-- Umstellung von Integer auf Float-basierte Audio-Berechnung
-- Verbesserte Audio-Qualität und moderne Standards
+- Post-Processing-Effekte
 
 ## Entwicklungsphilosophie
 
 **Unterstützungsmodus gewünscht**: Der Entwickler möchte beim Modernisierungsprozess **lernen**. 
 
 ### Copilot sollte:
-- ✅ Erklärungen und Hinweise zu SDL3-API-Änderungen geben
+- ✅ Erklärungen und Hinweise zu SDL3 GPU-API geben
 - ✅ Kleinere Code-Snippets und Beispiele vorschlagen
 - ✅ Auf potenzielle Probleme und Best Practices hinweisen
-- ✅ Schrittweise Anleitungen für komplexe Änderungen geben
+- ✅ Schrittweise Änderungen mit Erklärungen (nicht alles auf einmal)
 - ✅ Shader-Code und GPU-Integration erklären
+- ✅ Bei Fragen warten und nicht eigenständig Code ändern
+- ✅ **WICHTIG**: Wenn der Entwickler sagt "ich mache X", dann nur unterstützend helfen, aber **NICHT** selbst Code ändern
+- ✅ **Vermutungen kennzeichnen**: Wenn eine Lösung nur eine Vermutung ist, dies sofort kommunizieren
+- ✅ **Vermutungen prüfen**: Wenn möglich, Vermutungen durch Code-Analyse oder Tool-Verwendung überprüfen, bevor sie vorgeschlagen werden
 
 ### Copilot sollte NICHT:
-- ❌ Große Codeblöcke automatisch ersetzen ohne Erklärung
-- ❌ Vollständige Datei-Rewrites durchführen
-- ❌ Eigenständige umfangreiche Refactorings vornehmen
-- ❌ Änderungen ohne Kontext und Lernmöglichkeit einbauen
+- ❌ Ohne Rückfrage größere Refactorings durchführen
+- ❌ Ganze Dateien ohne Nachfrage umschreiben
+- ❌ Komplexe Änderungen ohne Erklärung vornehmen
+- ❌ Code ändern, wenn der Entwickler sagt "ich mache das"
+- ❌ Vermutungen als Fakten präsentieren
 
-## SDL2 → SDL3 Migrationshinweise
+## SDL3 Implementierungsdetails
 
-### Wichtige API-Änderungen (SDL3)
-- `SDL_Window` und `SDL_Renderer` API stark überarbeitet
-- Viele Funktionen von `SDL_*` zu `SDL3_*` umbenannt
-- Event-System modernisiert
-- Audio-System komplett neu designt
-- Controller-API vereinfacht
+### Grafik (Aktueller Stand)
+- `SDL_Renderer` mit Hardware-Beschleunigung
+- VSync via `SDL_SetRenderVSync(renderer, 1)`
+- Standard-Format: SDL_PIXELFORMAT_ARGB8888
+- Funktioniert stabil auf Windows/Linux/FreeBSD
 
-### GPU-Rendering in SDL3
+### Audio (Aktueller Stand)
+- Format: SDL_AUDIO_F32LE (Float32 Little-Endian)
+- Samplerate: 44100 Hz, Stereo
+- AudioStream mit Get-Callback für Echtzeit-Mixing
+- Float-Pipeline in pplib für alle Decoder (MP3, OGG, WAVE, AIFF)
+- Clipping-Detection im Mixer integriert
+
+### Controller (Aktueller Stand)
+- SDL3 Gamepad-API vollständig implementiert
+- Automatische Erkennung und Rumble-Support
+- Konfigurierbare Button-Mappings
+
+### Nächster Schritt: SDL3 GPU API
 - Neue `SDL_GPU*` API für modernes Rendering
 - Unterstützt Vulkan, Metal, D3D12
-- Shader-basierter Rendering-Pipeline
-- Bessere Performance und Flexibilität
+- Shader-basierte Rendering-Pipeline
+- Ermöglicht Post-Processing und Effekte
 
 ## Lizenz & Rechtliches
 
@@ -101,4 +128,4 @@ Weitere Details siehe [README.md](../README.md)
 
 ---
 
-**Zuletzt aktualisiert**: 31. Dezember 2025
+**Zuletzt aktualisiert**: 1. Januar 2026
