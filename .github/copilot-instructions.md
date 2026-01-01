@@ -62,6 +62,16 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - Basis für Shader-Integration
 - Bessere Performance und Flexibilität
 
+**Geplantes Vorgehen:**
+- Minimal-invasiver Ansatz: Alle `SDL_RenderTexture()` Aufrufe durch eigene `drawSprite()` Methode ersetzen
+- Koordinatensystem: GPU-seitige Umrechnung mit **Projection Matrix** (orthographic)
+  - Sprite-Positionen bleiben in Pixel-Koordinaten
+  - Projection Matrix im Vertex Shader rechnet Pixel → NDC um
+  - Bei Window-Resize nur Matrix neu berechnen
+- UV-Koordinaten: Einmalige Normalisierung beim Textur-Laden (Pixel → 0.0-1.0)
+- Graphics Pipeline mit Standard-Vertex/Fragment-Shader für Sprite-Rendering
+- Später: Zusätzliche Pipelines für Effekte (Blur, etc.)
+
 ### 2. Shader-Integration (Priorität: Mittel)
 - Verwendung von Shadern für visuelle Effekte
 - Speziell: Unschärfe-Effekte für Parallax-Ebenen (Depth of Field)
