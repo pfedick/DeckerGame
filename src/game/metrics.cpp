@@ -63,6 +63,7 @@ Metrics::Metrics()
     visible_lights = 0;
     hearable_audiotracks = 0;
     framecount = 0;
+    clipped_samples = 0;
     frame_rate_compensation = 0.0f;
     frametime = 0.0f;
 }
@@ -82,6 +83,7 @@ void Metrics::clear()
     visible_lights = 0;
 
     hearable_audiotracks = 0;
+    clipped_samples = 0;
 
     frame_rate_compensation = 0.0f;
     frametime = 0.0f;
@@ -146,6 +148,7 @@ Metrics Metrics::getAverage() const
         m.total_particles = total_particles / framecount;
         m.visible_particles = visible_particles / framecount;
         m.total_audiotracks = total_audiotracks / framecount;
+        m.clipped_samples = clipped_samples / framecount;
         m.hearable_audiotracks = hearable_audiotracks / framecount;
 
         m.frame_rate_compensation = frame_rate_compensation / framecount;
@@ -167,6 +170,7 @@ Metrics& Metrics::operator+=(const Metrics& other)
     visible_particles += other.visible_particles;
     total_audiotracks += other.total_audiotracks;
     hearable_audiotracks += other.hearable_audiotracks;
+    clipped_samples += other.clipped_samples;
     time_frame += other.time_frame;
     time_total += other.time_total;
     time_draw_ui += other.time_draw_ui;

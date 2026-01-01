@@ -169,6 +169,7 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 	std::set<Audio*> to_remove;
 	mutex.lock();
 	size_t num_tracks = tracks.size();
+	size_t clipped_samples = 0;
 	if (num_tracks) {
 		//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks\n", num_tracks);
 		for (it = tracks.begin();it != tracks.end();++it) {
@@ -181,8 +182,8 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 		}
 		// mixbuffer in output_buffer übertragen und clampen
 		for (size_t i = 0;i < samples;i++) {
-			output_buffer[i].left = clamp(mixbuffer[i].left, metrics.clipped_samples);
-			output_buffer[i].right = clamp(mixbuffer[i].right, metrics.clipped_samples);
+			output_buffer[i].left = clamp(mixbuffer[i].left, clipped_samples);
+			output_buffer[i].right = clamp(mixbuffer[i].right, clipped_samples);
 		}
 		if (to_remove.size() > 0) {
 			//ppl7::PrintDebugTime("AudioSystem::callback, we have %zd Tracks to delete\n", to_remove.size());
@@ -209,6 +210,7 @@ void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int t
 	metrics_mutex.lock();
 	metrics.tracks_total = num_tracks;
 	metrics.tracks_played = tracks_hearable;
+	metrics.clipped_samples += clipped_samples;
 
 	mutex.unlock();
 	double total_time = ppl7::GetMicrotime() - start_time;
@@ -259,7 +261,12 @@ AudioSystem::Metrics AudioSystem::getMetrics(bool reset)
 {
 	metrics_mutex.lock();
 	Metrics m = metrics;
-	if (reset) metrics.time = 0.0f;
+	if (reset) {
+		metrics.time = 0.0f;
+		metrics.tracks_total = 0;
+		metrics.tracks_played = 0;
+		metrics.clipped_samples = 0;
+	}
 	metrics_mutex.unlock();
 	//ppl7::PrintDebugTime("AudioSystem::getMetrics Time=%0.3f ms, total: %zd, hearable: %zd\n", m.time * 1000.0f, m.tracks_total, m.tracks_played);
 	return m;
