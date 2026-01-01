@@ -133,20 +133,6 @@ void AudioSystem::init()
 	SDL_ResumeAudioDevice(device_id); /* start audio playing. */
 }
 
-static inline float clamp(float value, size_t& clipcounter)
-{
-	if (value > 1.0f) {
-		clipcounter++;
-		return 1.0f;
-	}
-	if (value < -1.0f) {
-		clipcounter++;
-		return -1.0f;
-	}
-	return value;
-}
-
-
 void AudioSystem::callback(SDL_AudioStream* stream, int additional_amount, int total_amount)
 {
 	double start_time = ppl7::GetMicrotime();
