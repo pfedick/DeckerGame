@@ -10,9 +10,30 @@ RenderRangeArbitrary 0-120
 PreviewFirstFrame 0
 PreviewLastFrame 33
 PreviewFrameStep 1
-CurrentFrame 30
+CurrentFrame 13
 FramesPerSecond 30
 AutoKeyFixedFrame 0
+Preferences
+{ Preferences
+  Ver 1
+  { Parameter
+    Key "/Current Scene/Color Space/Apply Color Space"
+    Value
+  }
+  { Parameter
+    Key "/Current Scene/Color Space/Convert Color Space to Linear"
+    Value
+  }
+  { Parameter
+    Key "/Current Scene/Color Space/Set As Default"
+    Value
+  }
+  { Parameter
+    Key "/Current Scene/Viewport/Set Current Viewports as Default"
+    Value
+  }
+}
+EndAttribute
 ChangeScene 0
 Plugin MasterHandler 1 .SceneEditorStandardBanks
 EndPlugin
@@ -77,6 +98,8 @@ VERS 2
   DefaultLightColor f0 c0 20 ff
   DefaultCameraColor f0 f0 f0 ff
   AutoApplyToViewPorts 1
+  AutoHighlightViewportSelection 0
+  AutoExpandViewportSelectionAncestors 0
   MultiselectSimilarTypes 1
   LimitColorRange 1
   ColorsAsHSV 0
@@ -156,6 +179,8 @@ VERS 2
   DefaultLightColor f0 c0 20 ff
   DefaultCameraColor f0 f0 f0 ff
   AutoApplyToViewPorts 1
+  AutoHighlightViewportSelection 0
+  AutoExpandViewportSelectionAncestors 0
   MultiselectSimilarTypes 1
   LimitColorRange 1
   ColorsAsHSV 0
@@ -235,6 +260,8 @@ VERS 2
   DefaultLightColor f0 c0 20 ff
   DefaultCameraColor f0 f0 f0 ff
   AutoApplyToViewPorts 1
+  AutoHighlightViewportSelection 0
+  AutoExpandViewportSelectionAncestors 0
   MultiselectSimilarTypes 1
   LimitColorRange 1
   ColorsAsHSV 0
@@ -314,6 +341,8 @@ VERS 2
   DefaultLightColor f0 c0 20 ff
   DefaultCameraColor f0 f0 f0 ff
   AutoApplyToViewPorts 1
+  AutoHighlightViewportSelection 0
+  AutoExpandViewportSelectionAncestors 0
   MultiselectSimilarTypes 1
   LimitColorRange 1
   ColorsAsHSV 0
@@ -344,7 +373,7 @@ Plugin ViewportObjectHandler 1 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -361,7 +390,7 @@ Plugin ViewportObjectHandler 2 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -378,7 +407,7 @@ Plugin ViewportObjectHandler 3 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -395,7 +424,7 @@ Plugin ViewportObjectHandler 4 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -426,7 +455,7 @@ BufferList
       ""
       "LW_PNG32(.png)"
       ""
-      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\coin"
+      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\coin\\diffuse"
       "frame_%####%"
       35
       3
@@ -454,11 +483,11 @@ BufferList
     { List
       "Camera_Tangent_Space_XYZ"
       ""
+      "LW_PNG24(.png)"
       ""
-      ""
-      ""
-      "%buffername%_%###%"
-      0
+      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\coin\\normal"
+      "frame_%####%"
+      3
       3
     }
     { List
@@ -874,21 +903,21 @@ BufferList
     { List
       "Specular_Direct"
       ""
+      "LW_PNG24(.png)"
       ""
-      ""
-      ""
-      "%buffername%_%###%"
-      0
+      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\coin\\specular_direct"
+      "frame_%####%"
+      3
       3
     }
     { List
       "Specular_Indirect"
       ""
+      "LW_PNG24(.png)"
       ""
-      ""
-      ""
-      "%buffername%_%###%"
-      0
+      "C:\\git\\DeckerGame\\lightwave\\Render\\objects\\coin\\specular_indirect"
+      "frame_%####%"
+      3
       3
     }
     { List
@@ -1026,7 +1055,7 @@ NoiseFilter
 EndAttribute
 NoiseFilterGlobal 0
 NavigationDesiredDevice Keyboard
-Plugin GlobalIlluminationHandler 1 MonteCarlo
+Plugin GlobalIlluminationHandler 1 BruteForce
 { Attributes
   { Metadata
     Version 1
@@ -1034,7 +1063,7 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
     { AttributeData
       { Attr
         Name "Intensity"
-        Flags 0
+        Flags 4
         Tag "ENVELOPE" "On"
         Tag "FORMAT" "Percent"
         { Value
@@ -1046,244 +1075,34 @@ Plugin GlobalIlluminationHandler 1 MonteCarlo
         }
       }
       { Attr
-        Name "Rays"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
         Name "Caustics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
-        }
-      }
-      { Attr
-        Name "Sample Backdrop"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "ISBG Sampling"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "ISBG Samples"
-        Flags 0
-        { Value
-          "int"
-          512
         }
       }
       { Attr
         Name "Affected By Volumetrics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
         }
       }
       { Attr
-        Name "Interpolated"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Primary Rays"
-        Flags 0
-        { Value
-          "int"
-          128
-        }
-      }
-      { Attr
-        Name "Secondary Rays"
-        Flags 0
-        { Value
-          "int"
-          64
-        }
-      }
-      { Attr
-        Name "Enable Caching"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Save After Each Frame"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Animation"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Frame Step"
-        Flags 0
+        Name "Rays"
+        Flags 4
         { Value
           "int"
           1
-        }
-      }
-      { Attr
-        Name "Cache File"
-        Flags 0
-        { Value
-          "text"
-          "InterpolatedGI.cache"
-        }
-      }
-      { Attr
-        Name "Use Bumps"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Behind Test"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "Show Octree"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Color Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Samples"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Render"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Second Bounce"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Behind Test"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Minimum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          2
-        }
-      }
-      { Attr
-        Name "Maximum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          64
-        }
-      }
-      { Attr
-        Name "Angular Tolerance"
-        Flags 0
-        Tag "FORMAT" "Angle"
-        { Value
-          "double"
-          0.34906585039886589561
-        }
-      }
-      { Attr
-        Name "Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Interpolation Softness"
-        Flags 0
-        Tag "FORMAT" "Percent"
-        { Value
-          "double"
-          0.5
         }
       }
     }
   }
 }
 EndPlugin
-Plugin GlobalIlluminationHandler 2 MonteCarlo
+Plugin GlobalIlluminationHandler 2 BruteForce
 { Attributes
   { Metadata
     Version 1
@@ -1291,7 +1110,7 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
     { AttributeData
       { Attr
         Name "Intensity"
-        Flags 0
+        Flags 4
         Tag "ENVELOPE" "On"
         Tag "FORMAT" "Percent"
         { Value
@@ -1303,237 +1122,27 @@ Plugin GlobalIlluminationHandler 2 MonteCarlo
         }
       }
       { Attr
-        Name "Rays"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
         Name "Caustics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
-        }
-      }
-      { Attr
-        Name "Sample Backdrop"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "ISBG Sampling"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "ISBG Samples"
-        Flags 0
-        { Value
-          "int"
-          512
         }
       }
       { Attr
         Name "Affected By Volumetrics"
-        Flags 0
+        Flags 4
         { Value
           "int"
           0
         }
       }
       { Attr
-        Name "Interpolated"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Primary Rays"
-        Flags 0
-        { Value
-          "int"
-          128
-        }
-      }
-      { Attr
-        Name "Secondary Rays"
-        Flags 0
-        { Value
-          "int"
-          64
-        }
-      }
-      { Attr
-        Name "Enable Caching"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Save After Each Frame"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Animation"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Frame Step"
-        Flags 0
+        Name "Rays"
+        Flags 4
         { Value
           "int"
           1
-        }
-      }
-      { Attr
-        Name "Cache File"
-        Flags 0
-        { Value
-          "text"
-          "InterpolatedGI.cache"
-        }
-      }
-      { Attr
-        Name "Use Bumps"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Behind Test"
-        Flags 0
-        { Value
-          "int"
-          1
-        }
-      }
-      { Attr
-        Name "Show Octree"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Color Cells"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Samples"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Missing Render"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Second Bounce"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Show Behind Test"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Minimum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          2
-        }
-      }
-      { Attr
-        Name "Maximum Pixel Spacing"
-        Flags 0
-        { Value
-          "double"
-          64
-        }
-      }
-      { Attr
-        Name "Angular Tolerance"
-        Flags 0
-        Tag "FORMAT" "Angle"
-        { Value
-          "double"
-          0.34906585039886589561
-        }
-      }
-      { Attr
-        Name "Preprocess"
-        Flags 0
-        { Value
-          "int"
-          0
-        }
-      }
-      { Attr
-        Name "Interpolation Softness"
-        Flags 0
-        Tag "FORMAT" "Percent"
-        { Value
-          "double"
-          0.5
         }
       }
     }
@@ -1760,9 +1369,12 @@ Plugin VolumeIntegratorHandler 1 VolumeIntegrator
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 EndPlugin
@@ -1829,6 +1441,7 @@ Channel 8
   Key 1 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -1930,6 +1543,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -1968,6 +1582,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -1980,9 +1595,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2004,7 +1622,7 @@ Plugin MeshDeformerHandler 6 _DisplacementMap
 EndPlugin
 PluginEnabled 0
 MatteObject 1
-MatteColor 0.619608 0.619608 0.619608
+MatteColor 0.411765 0.411765 0.411765
 UnseenByCamera 1
 UseObjGI 0
 ObjGIBruteForceRays 1
@@ -2038,6 +1656,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2050,9 +1669,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -2077,10 +1699,10 @@ Channel 0
 Channel 1
 { Envelope
   5
-  Key 0 0 5 -0.19168687226596670126 3.8319630377823843967e-07 0.19168687226596670126 -3.8319630377823843967e-07 0.0020988336735834750568 0
-  Key 0.002099999692291021347 0.5 0 0 0 0 0 0 0
+  Key 0 0 5 -0.19168687226596670126 3.8319630377823838673e-07 0.19168687226596670126 -3.8319630377823838673e-07 0.0020988336735834750568 0
+  Key 0.0020999996922910209134 0.5 0 0 0 0 0 0 0
   Key 0 1 0 0 0 0 0 0 0
-  Key 0.002099999692291021347 1.5 0 0 0 0 0 0 0
+  Key 0.0020999996922910209134 1.5 0 0 0 0 0 0 0
   Key 0 2 0 0 0 0 -0.0020988336735834750568 0 0
   Behaviors 2 2
 }
@@ -2097,11 +1719,11 @@ Channel 2
 Channel 3
 { Envelope
   5
-  Key 0 0 0 0 0 0 0 3.1398483808010171359 0
-  Key 3.1415927410125732422 0.5 0 0 0 0 3.1415927410125732422 3.1415927410125732422 0
-  Key 6.2831854820251464844 1 0 0 0 0 0 0 0
-  Key 3.1415927410125732422 1.5 0 0 0 0 0 0 0
-  Key 6.2831854820251464844 2 0 0 0 0 3.1398483808010171359 0 0
+  Key 0 0 0 0 0 0 0 3.1398483808010162477 0
+  Key 3.141592741012572354 0.5 0 0 0 0 3.141592741012572354 3.141592741012572354 0
+  Key 6.283185482025144708 1 0 0 0 0 0 0 0
+  Key 3.141592741012572354 1.5 0 0 0 0 0 0 0
+  Key 6.283185482025144708 2 0 0 0 0 3.1398483808010166918 0 0
   Behaviors 1 1
 }
 Channel 4
@@ -2154,6 +1776,7 @@ Channel 8
   Key 1 2 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2255,6 +1878,7 @@ APSRender
 }
 BoneMode 2
 NumLimitedBones 4
+EndBones
 Plugin MeshDeformerHandler 1 _Morphing
 { Morphing
   Version 1
@@ -2293,6 +1917,7 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview ""
         Placement 2
+        Color 5f 64 78
       }
       Server "Input"
       { Tag
@@ -2305,9 +1930,12 @@ Plugin MeshDeformerHandler 4 _NodalDisplacement
         }
         Preview "Object Position"
         Placement 1
+        Color 5f 64 78
       }
     }
     { Connections
+    }
+    { Frames
     }
   }
   Mode 0
@@ -2360,6 +1988,7 @@ NodeEdges 0
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2372,9 +2001,12 @@ NodeEdges 0
       }
       Preview "Item ID"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 Plugin PrimitiveHandler 1 MeshPrimitive
@@ -2403,6 +2035,7 @@ RadiosityUseGradients 0
 RadiosityUseBehindTest 0
 BlurRadiosity 0
 RadiosityEnable0 1
+RadiosityEnable1 0
 RadiosityFlags 0
 RadiosityCacheModulus 1
 RadiositySaveEachFrame 0
@@ -2421,7 +2054,7 @@ Plugin ExtRendererHandler 1 .VPR
 0
 0
 0.25 0.25 0.25
-0
+1
 "Sphere"
 ""
 0
@@ -2490,6 +2123,7 @@ Channel 8
   Key 1 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2535,6 +2169,7 @@ LightShader 1
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2547,9 +2182,12 @@ LightShader 1
       }
       Preview "Direction"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 LightType 1
@@ -2632,6 +2270,7 @@ Channel 8
   Key 1 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2677,6 +2316,7 @@ LightShader 1
       }
       Preview ""
       Placement 2
+      Color 5f 64 78
     }
     Server "Input"
     { Tag
@@ -2689,9 +2329,12 @@ LightShader 1
       }
       Preview "Direction"
       Placement 1
+      Color 5f 64 78
     }
   }
   { Connections
+  }
+  { Frames
   }
 }
 LightType 0
@@ -2726,6 +2369,156 @@ Plugin LightHandler 1 DistantLight
 }
 EndPlugin
 
+AddLight 20000002
+LightName Environment
+ShowLight 1 6
+LightMotion
+NumChannels 9
+Channel 0
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 1
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 2
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 3
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 4
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 5
+{ Envelope
+  1
+  Key 0 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 6
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 7
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+Channel 8
+{ Envelope
+  1
+  Key 1 0 0 0 0 0 0 0 0
+  Behaviors 1 1
+}
+RotationOrder 3
+IKInitCustomFrame 0
+GoalStrength 1
+IKFKBlending 0
+IKSoftMin 0.25
+IKSoftMax 0.75
+CtrlPosItemBlend 1
+CtrlRotItemBlend 1
+CtrlScaleItemBlend 1
+
+PathAlignLookAhead 0.033
+PathAlignMaxLookSteps 10
+PathAlignReliableDist 0.001
+PivotPosition 0 0 0
+PivotRotation 0 0 0
+SplineFlags 0
+SplineFit 0
+IKInitialState 0
+UseIKChainValues 1
+LightColor 1 1 1
+LightIntensity 1
+VisibleToCamera 1
+VolumetricLighting 1
+VolumetricSamples 2
+VolumetricIntensity 1
+LightUseNodes 1
+LightShader 1
+{ LightShader_Block
+  { Root
+    Location 0 0
+    Zoom 1
+    Disabled 1
+  }
+  Version 1
+  { Nodes
+    Server "Light Shader"
+    { Tag
+      RealName "Light Shader"
+      Name "Light Shader"
+      Coordinates -10 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview ""
+      Placement 2
+      Color 5f 64 78
+    }
+    Server "Input"
+    { Tag
+      RealName "Input"
+      Name "Input"
+      Coordinates -30 -10
+      Mode 1
+      Selected 0
+      { Data
+      }
+      Preview "Direction"
+      Placement 1
+      Color 5f 64 78
+    }
+  }
+  { Connections
+  }
+  { Frames
+  }
+}
+LightType 100
+LensFlare 0
+FlareIntensity 0.5
+FlareDissolve 0
+LensFlareFade 4
+LensFlareOptions 11
+FlareRingColor 0.3137 0.0784 0.0392
+FlareRingSize 0.22
+FlareRandStreakInt 0.03
+FlareRandStreakDens 50
+FlareRandStreakSharp 6
+ShadowType 1
+ShadowColor 0 0 0
+Plugin LightHandler 1 EnvironmentLight
+{ EnvironmentLight
+  Version 2
+  Samples 4
+  MISSamples 512
+  UseGlobal 1
+  TimeDependent 1
+  VolumetricDistance 1
+}
+EndPlugin
+
 AddCamera 30000000
 CameraName Camera
 ShowCamera 1 14
@@ -2747,7 +2540,7 @@ Channel 1
 Channel 2
 { Envelope
   1
-  Key -0.12014472484588623047 0 0 0 0 0 0 0 0
+  Key -0.12014472484588624435 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
 Channel 3
@@ -2768,6 +2561,7 @@ Channel 5
   Key 0 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2879,6 +2673,7 @@ Channel 5
   Key 0 0 0 0 0 0 0 0 0
   Behaviors 1 1
 }
+RotationOrder 3
 IKInitCustomFrame 0
 GoalStrength 1
 IKFKBlending 0
@@ -2937,13 +2732,87 @@ AdaptiveSampling 1
 UseBackgroundColor 0
 BackgroundColor 0 0 0
 SolidBackdrop 1
-BackdropColor 0.2 0.2 0.2
+BackdropColor 0.345098 0.345098 0.345098
 ZenithColor 0.6167 0.7238 0.9647
 SkyColor 0.9155 0.9191 0.9647
 GroundColor 0.9155 0.9191 0.9647
 NadirColor 0.4706 0.4667 0.4667
 SkySqueezeAmount 6
 GroundSqueezeAmount 6
+Plugin EnvironmentHandler 1 Backdrop
+{ Attributes
+  { Metadata
+    Version 1
+    Enumerations 0
+    { AttributeData
+      { Attr
+        Name "Backdrop Color"
+        Flags 4
+        { Value
+          "double3"
+          0.34509804844856262207 0.34509804844856262207 0.34509804844856262207
+        }
+      }
+      { Attr
+        Name "Gradient Backdrop"
+        Flags 4
+        { Value
+          "int"
+          0
+        }
+      }
+      { Attr
+        Name "Zenith Color"
+        Flags 4
+        { Value
+          "double3"
+          0.61669999361038208008 0.7238000035285949707 0.96469998359680175781
+        }
+      }
+      { Attr
+        Name "Sky Color"
+        Flags 4
+        { Value
+          "double3"
+          0.9154999852180480957 0.91909998655319213867 0.96469998359680175781
+        }
+      }
+      { Attr
+        Name "Sky Squeeze"
+        Flags 4
+        { Value
+          "double"
+          6
+        }
+      }
+      { Attr
+        Name "Ground Squeeze"
+        Flags 4
+        { Value
+          "double"
+          6
+        }
+      }
+      { Attr
+        Name "Ground Color"
+        Flags 4
+        { Value
+          "double3"
+          0.9154999852180480957 0.91909998655319213867 0.96469998359680175781
+        }
+      }
+      { Attr
+        Name "Nadir Color"
+        Flags 4
+        { Value
+          "double3"
+          0.47060000896453857422 0.46669998764991760254 0.46669998764991760254
+        }
+      }
+    }
+  }
+}
+EndPlugin
 FogType 0
 FogMinDistance 0
 FogMaxDistance 1
@@ -2976,7 +2845,7 @@ LightSamples 1
 DataOverlayLabel  
 OutputFilenameFormat 3
 SaveRGB 1
-SaveRGBImagesPrefix C:\git\DeckerGame\lightwave\Render\objects\coin\frame_
+SaveRGBImagesPrefix C:\git\DeckerGame\lightwave\Render\objects\coin\diffuse\frame_
 RGBImageSaver LW_PNG32(.png)
 SaveAlpha 0
 SaveAlphaImagesPrefix C:\git\DeckerGame\lightwave\Renders\Alpha_
@@ -2991,11 +2860,11 @@ DefineView 0
 ViewType 9
 ViewLevel 5
 ViewAimpoint 9.604707e-05 0.0156 0.0006251197
-ViewZoomFactor 3.944932
+ViewZoomFactor 4.169865
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 9 37 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 DefineView 1
 ViewType 1
@@ -3005,7 +2874,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 9 37 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 DefineView 2
 ViewType 5
@@ -3015,7 +2884,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 9 37 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 DefineView 3
 ViewType 3
@@ -3025,7 +2894,7 @@ ViewZoomFactor 4
 ViewXRay 1
 ViewMBDofPreview 0
 ViewHeadlight 0
-ViewXYWidthHeight 9 37 500 300
+ViewXYWidthHeight 1920 23 500 300
 ViewFOVZoom 4
 
 GridNumber 80
@@ -3050,8 +2919,8 @@ Plugin VirtualStudio 1 VirtualStudio
 }
 EndPlugin
 
-CurrentObject 1
-CurrentLight 1
+CurrentObject 0
+CurrentLight 2
 CurrentCamera 0
 GraphEditorData
 { GraphEd_Favorites
@@ -3060,16 +2929,10 @@ GraphEditorData
   1
 }
 ImageEditorData
-NumberOfClips 2
+NumberOfClips 1
 Clip 0
 { ClipObject
   "scratches2.png"
-  128
-  0
-}
-Clip 1
-{ ClipObject
-  "skeleton_v2.png"
   128
   0
 }
