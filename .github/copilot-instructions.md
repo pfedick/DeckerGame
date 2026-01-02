@@ -126,6 +126,65 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - Shader-basierte Rendering-Pipeline
 - Ermöglicht Post-Processing und Effekte
 
+## Rendering-Architektur (Wichtig!)
+
+### Sprite-System
+- **SpriteTexture-Klasse**: Verwaltet komprimierte `.tex` Dateien (PFP-Format, Version 1)
+- **Format**: Chunk-basiert (INDX = Index, SURF = Surface Textur, NRML/SPEC = geplant)
+- **Index-Items**: Enthalten Sprite-ID, TextureId, Textur-Koordinaten, Pivot-Punkt, Offset
+- **Wichtig**: Pivot (Ursprungspunkt) und Offset (Platzierung) sind kritisch für Animation
+- **Buffers**: Unterstützt SDL-Buffer (GPU) und Memory-Buffer (CPU/Collision)
+
+### Rendering-Pipeline
+- **Layer-System**: 7 Ebenen (Horizon → Far → Player → Front → Near) mit jeweils 2 Sub-Layer
+- **Parallax-Faktor**: Jede Ebene hat eigene Bewegungsgeschwindigkeit (`planeFactor`)
+- **Render-Targets**: Texture-basiert für Lightmap-Mixing (additive Blending)
+- **Aktuell**: ~10.000 SDL_RenderTexture() Calls/Frame bei 2-3 ms Latenz → SDL_Renderer batched intern
+- **Zukunft**: Texture-Atlas bereits vorhanden (wenige große Texturen statt Hunderte) → ideal für GPU-Batching
+
+### Normale Workflow für Sprites pro Frame
+```cpp
+Level::draw(renderer, worldcoords, player, metrics, glimmer) {
+    for (plane in Horizon..Near) {
+        drawNonePlayerPlane(renderer, plane, ...);  // Tile + Sprite Layer
+        addLightmap(renderer, plane_lightmap);      // Multiplicative lighting
+        drawParticles(renderer, layer);
+    }
+}
+```
+
+### Farbmodulation & Lighting
+- **Diffuse Lighting**: `.tex` Dateien geladen mit optional Farbmodulation
+- **Lichtkarten**: Separate `lightmaps.tex` mit ADD Blending (`SDL_BLENDMODE_ADD`)
+- **Z-Koordinate**: Aktuell keine echte Tiefensortierung (Zeichenreihenfolge-abhängig)
+- **Geplant**: Normal-Map + Specular-Map für bessere Oberflächenbeleuchtung
+
+## Wichtige Code-Locations
+
+- [SpriteTexture](src/game/spritetexture.cpp#L116): Sprite-Verwaltung und Rendering
+- [Level::draw()](src/game/level.cpp#L463): Haupt-Rendering-Loop mit Ebenen-System
+- [Level-Format](include/decker.h#L200): SpriteSystem pro Ebene, Plane-Definition
+- [Lightmap-Handling](src/game/level.cpp#L419): prepareLayer(), addLightmap() mit Render-Targets
+- [Parallax-Faktoren](src/game/level.cpp#L165): spritesystem() für plane/layer Abfragen
+
+## Sprite-Format erweiterbar (Geplant)
+
+Sprite-Dateien erweitern um:
+- **NRML Chunk**: Normal-Map Surface (Camera_Tangent_Space_XYZ aus Lightwave)
+- **SPEC Chunk**: Specular-Map Surface (Specular Direct + Indirect kombiniert)
+- **Gleiche TextureId-Referenz**: Keine Index-Änderungen nötig
+- **Implementierung**: User entwickelt Tool zur Datei-Generierung, GPU-API später integriert
+
+## Build & Compile
+
+```bash
+./configure
+make -j 8              # Parallel build mit 8 Cores
+./decker              # Run game
+```
+
+**Dependencies**: SDL3, pplib, ppltk (Submodules), libmpg123, libvorbis, libpng, zlib, bzip2
+
 ## Lizenz & Rechtliches
 
 - OpenSource-Projekt
@@ -138,4 +197,4 @@ Weitere Details siehe [README.md](../README.md)
 
 ---
 
-**Zuletzt aktualisiert**: 1. Januar 2026
+**Zuletzt aktualisiert**: 2. Januar 2026
