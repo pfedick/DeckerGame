@@ -1149,7 +1149,6 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([autoconf/ax_cxx_compile_stdcxx.m4])
-m4_include([autoconf/ax_cxx_compile_stdcxx_17.m4])
 m4_include([autoconf/host-cpu-c-abi.m4])
 m4_include([autoconf/lib-ld.m4])
 m4_include([autoconf/lib-prefix.m4])
