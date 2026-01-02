@@ -6,10 +6,31 @@
 #include <ppl7-grafix.h>
 #include <ppltk.h>
 
+class SDLException : public ppl7::Exception
+{
+public:
+	using ppl7::Exception::Exception;
+
+	SDLException(const char* msg, ...) noexcept {
+		va_list args;
+		va_start(args, msg);
+		copyText(msg, args);
+		va_end(args);
+	}
+
+
+	const char* what() const noexcept override {
+		return "SDLException";
+	}
+};
+
+
+
 class SDL
 {
 private:
 	SDL_Renderer* renderer;
+	SDL_GPUDevice* gpu;
 	bool screensaver_enabled;
 
 
@@ -28,6 +49,9 @@ public:
 	SDL();
 	~SDL();
 	void setRenderer(SDL_Renderer* r);
+	void setGPUDevice(SDL_GPUDevice* device);
+	SDL_GPUDevice* getGPUDevice();
+
 	ppl7::grafix::Drawable lockTexture(SDL_Texture* texture);
 	void unlockTexture(SDL_Texture* texture);
 	SDL_Texture* createTexture(const ppl7::grafix::Drawable& d);
@@ -42,6 +66,9 @@ public:
 
 	ppl7::grafix::Size getDisplaySize(int display_no = 0) const;
 	ppl7::grafix::Rect getDisplayWindow(int display_no = 0) const;
+
+	SDL_GPUTexture* createGPUTexture(const ppl7::grafix::Drawable& surface);
+	void destroyGPUTexture(SDL_GPUTexture* texture);
 
 	static DisplayMode desktopDisplayMode(int display_id = 0);
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);

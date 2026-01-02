@@ -66,6 +66,7 @@ SDL::VideoDisplay::VideoDisplay(int id, const ppl7::String& name)
 SDL::SDL()
 {
 	renderer = NULL;
+	gpu = NULL;
 	screensaver_enabled = SDL_ScreenSaverEnabled();
 	if (screensaver_enabled) {
 		SDL_DisableScreenSaver();
@@ -214,6 +215,15 @@ SDL_Renderer* SDL::getRenderer()
 	return renderer;
 }
 
+void SDL::setGPUDevice(SDL_GPUDevice* device)
+{
+	gpu = device;
+}
+SDL_GPUDevice* SDL::getGPUDevice()
+{
+	return gpu;
+}
+
 void SDL::present()
 {
 	SDL_RenderPresent(renderer);
@@ -299,3 +309,70 @@ void SDL::getDisplayModes(int display_id, std::list<DisplayMode>& mode_list)
 	}
 	if (modes) SDL_free(modes);
 }
+
+
+
+SDL_GPUTexture* SDL::createGPUTexture(const ppl7::grafix::Drawable& surface)
+{
+	// Textur-Beschreibung
+	SDL_GPUTextureCreateInfo texture_info = {
+	.type = SDL_GPU_TEXTURETYPE_2D,
+	.format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM,  // Filterbar, Sampling-fähig
+	.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER,  // Für Shader-Sampling
+	.width = (Uint32)surface.width(),
+	.height = (Uint32)surface.height(),
+	};
+	// Textur erstellen
+	SDL_GPUTexture* texture = SDL_CreateGPUTexture(gpu, &texture_info);
+	if (!texture) {
+		throw SDLException("SDL_CreateGPUTexture failed: %s", SDL_GetError());
+	}
+	// Daten in GPU hochladen
+	SDL_GPUTransferBufferCreateInfo  transfer_info = {
+		.size = (Uint32)surface.width() * (Uint32)surface.height() * 4,  // RGBA8 = 4 Bytes/Pixel
+	};
+	SDL_GPUTransferBuffer* transfer_buffer = SDL_CreateGPUTransferBuffer(gpu, &transfer_info);
+	if (!transfer_buffer) {
+		SDL_ReleaseGPUTexture(gpu, texture);
+		throw SDLException("SDL_CreateGPUTransferBuffer failed: %s", SDL_GetError());
+	}
+
+	// Pixel-Daten kopieren
+	void* mapped = SDL_MapGPUTransferBuffer(gpu, transfer_buffer, false);
+	memcpy(mapped, surface.adr(), surface.width() * surface.height() * 4);
+	SDL_UnmapGPUTransferBuffer(gpu, transfer_buffer);
+
+	// Mit Command Buffer zur GPU transferieren
+	SDL_GPUCommandBuffer* cmd = SDL_AcquireGPUCommandBuffer(gpu);
+	SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(cmd);
+	SDL_GPUTextureTransferInfo transfer_region = {
+		.transfer_buffer = transfer_buffer,
+		.offset = 0
+	};
+	SDL_GPUTextureRegion texture_region = {
+		.texture = texture,
+		.mip_level = 0,
+		.layer = 0,
+		.x = 0,
+		.y = 0,
+		.z = 0,
+		.w = (Uint32)surface.width(),
+		.h = (Uint32)surface.height(),
+		.d = 1
+	};
+	SDL_UploadToGPUTexture(copy_pass, &transfer_region, &texture_region, false);
+	SDL_EndGPUCopyPass(copy_pass);
+	SDL_SubmitGPUCommandBuffer(cmd);
+
+	SDL_ReleaseGPUTransferBuffer(gpu, transfer_buffer);
+	return texture;
+}
+
+void SDL::destroyGPUTexture(SDL_GPUTexture* texture)
+{
+	if (texture) {
+		SDL_ReleaseGPUTexture(gpu, texture);
+	}
+}
+
+

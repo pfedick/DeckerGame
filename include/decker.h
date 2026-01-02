@@ -51,7 +51,7 @@
 #endif
 
 EXCEPTION(InitializationFailed, ppl7::Exception);
-EXCEPTION(SDLException, ppl7::Exception);
+//EXCEPTION(SDLException, ppl7::Exception);
 
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 38
