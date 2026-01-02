@@ -461,7 +461,7 @@ compile/texturecache.o: src/game/texturecache.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/texturecache.o -c src/game/texturecache.cpp $(CFLAGS)
 
-compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/decker.h
+compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/sprite.h
 	- @mkdir -p compile
 	$(CXX) -o compile/spritetexture.o -c src/game/spritetexture.cpp $(CFLAGS)
 
