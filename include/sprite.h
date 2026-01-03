@@ -1,3 +1,5 @@
+#ifndef DECKER_SPRITE_H
+#define DECKER_SPRITE_H
 #include <SDL3/SDL.h>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
@@ -126,7 +128,7 @@ public:
     public:
         int id;
         int textureId;
-        SDL_Texture* tex;
+        SDL_GPUTexture* tex;
         const ppl7::grafix::Drawable* drawable;
         SDL_FRect r;
         ppl7::grafix::Point Pivot;
@@ -149,33 +151,41 @@ public:
         }
     };
 private:
-    std::map<int, SDL_Texture*> TextureMap;
+    SDL* sdl;
+    std::map<int, SDL_GPUTexture*> TextureMap;
+    std::map<int, SDL_GPUTexture*> NormalMap;
+    std::map<int, SDL_GPUTexture*> SpecularMap;
     std::map<int, ppl7::grafix::Image> InMemoryTextureMap;
     std::map<int, SpriteIndexItem> SpriteList;
 
-    SDL_Texture* current_outline_texture;
+    SDL_GPUTexture* current_outline_texture;
+    uint64_t base_texture_id;
     int current_outline_sprite_id;
 
     bool bSDLBufferd;
     bool bMemoryBufferd;
     bool bOutlinesEnabled;
     bool bCollisionDetectionEnabled;
+    bool bHasNormals;
+    bool bHasSpeculars;
     SDL_BlendMode defaultBlendMode;
 
-    void loadTexture(SDL& sdl, ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
+    ppl7::grafix::Image loadTexture(ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
     void loadIndex(ppl7::PFPChunk* chunk);
-    SDL_Texture* postGenerateOutlines(SDL_Renderer* renderer, int sprite_id);
-    SDL_Texture* findTexture(int id) const;
+    SDL_GPUTexture* postGenerateOutlines(SDL& sdl, int sprite_id);
+    SDL_GPUTexture* findTexture(int id) const;
     const ppl7::grafix::Drawable* findInMemoryTexture(int id) const;
 
 public:
     SpriteTexture();
     ~SpriteTexture();
+    void init(SDL& sdl);
     void load(SDL& sdl, const ppl7::String& filename, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
     void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
     void clear();
     void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
     void draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
+    /*
     void draw(SDL_Renderer* renderer, int x, int y, int id) const;
     void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
     void draw(SDL_Renderer* renderer, int x, int y, int id, const SDL_Color& color_modulation) const;
@@ -187,7 +197,7 @@ public:
     void drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
     void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor);
     void drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle);
-
+    */
 
     ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
     ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;
@@ -206,4 +216,8 @@ public:
     SDL_FRect getSpriteSource(int id) const;
     const SpriteIndexItem* getSpriteIndex(int id) const;
     ppl7::grafix::Point spriteOffset(int id) const;
+
+    uint64_t getUniqueTextureId(int id) const;
 };
+
+#endif // DECKER_SPRITE_H

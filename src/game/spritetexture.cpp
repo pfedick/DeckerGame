@@ -1,27 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include "sprite.h"
+#include "decker.h"
 
 using namespace ppl7;
 
-
-
+int64_t unique_texture_base_id_counter = 1;
 
 SpriteTexture::SpriteTexture()
 {
 	bMemoryBufferd = false;
 	bOutlinesEnabled = false;
 	bCollisionDetectionEnabled = false;
+	bHasNormals = true;
+	bHasSpeculars = true;
 	bSDLBufferd = true;
 	defaultBlendMode = SDL_BLENDMODE_BLEND;
 	current_outline_texture = NULL;
 	current_outline_sprite_id = -1;
+	base_texture_id = (unique_texture_base_id_counter++) << 32;
+	sdl = NULL;
 }
 
 SpriteTexture::~SpriteTexture()
 {
 	clear();
+}
+
+void SpriteTexture::init(SDL& sdl)
+{
+	this->sdl = &sdl;
 }
 
 void SpriteTexture::enableMemoryBuffer(bool enabled)
@@ -46,11 +56,11 @@ void SpriteTexture::enableOutlines(bool enabled)
 
 void SpriteTexture::clear()
 {
-	std::map<int, SDL_Texture*>::const_iterator it;
+	std::map<int, SDL_GPUTexture*>::const_iterator it;
 	for (it = TextureMap.begin();it != TextureMap.end();++it) {
-		SDL_DestroyTexture(it->second);
+		sdl->destroyGPUTexture(it->second);
 	}
-	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
+	if (current_outline_texture) sdl->destroyGPUTexture(current_outline_texture);
 	current_outline_texture = NULL;
 	current_outline_sprite_id = -1;
 	TextureMap.clear();
@@ -58,10 +68,10 @@ void SpriteTexture::clear()
 	SpriteList.clear();
 }
 
-SDL_Texture* SpriteTexture::findTexture(int id) const
+SDL_GPUTexture* SpriteTexture::findTexture(int id) const
 {
 	if (bSDLBufferd) {
-		std::map<int, SDL_Texture*>::const_iterator it;
+		std::map<int, SDL_GPUTexture*>::const_iterator it;
 		it = TextureMap.find(id);
 		if (it != TextureMap.end()) return it->second;
 	}
@@ -104,14 +114,14 @@ void SpriteTexture::loadIndex(ppl7::PFPChunk* chunk)
 	}
 }
 
-void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::Color& tint)
+ppl7::grafix::Image SpriteTexture::loadTexture(PFPChunk* chunk, const ppl7::grafix::Color& tint)
 {
 	Compression Comp;
 	Comp.usePrefix(Compression::Prefix_V2);
 	char* buffer = (char*)chunk->data();
 
 	// Zunächst lesen wir dem Header
-	int id = Peek16(buffer + 0);
+	//int id = Peek16(buffer + 0);
 	ppl7::grafix::RGBFormat rgbformat;
 	switch (Peek8(buffer + 2)) {
 	case 9: rgbformat = grafix::RGBFormat::A8R8G8B8;
@@ -158,15 +168,10 @@ void SpriteTexture::loadTexture(SDL& sdl, PFPChunk* chunk, const ppl7::grafix::C
 			}
 		}
 	}
-	if (bMemoryBufferd) {
-		InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id, surface));
-	}
-	if (bSDLBufferd) {
-		SDL_Texture* tex = sdl.createTexture(surface);
-		SDL_SetTextureBlendMode(tex, defaultBlendMode);
-		TextureMap.insert(std::pair<int, SDL_Texture*>(id, tex));
-	}
+	return surface;
 }
+
+
 
 static inline void putOutlinePixel(ppl7::grafix::Image& surface, int x, int y, ppl7::grafix::Color& c)
 {
@@ -182,6 +187,7 @@ void SpriteTexture::load(SDL& sdl, const String& filename, const ppl7::grafix::C
 
 void SpriteTexture::load(SDL& sdl, FileObject& ff, const ppl7::grafix::Color& tint)
 {
+	this->sdl = &sdl;
 	PFPFile File;
 	clear();
 	File.load(ff);
@@ -195,8 +201,37 @@ void SpriteTexture::load(SDL& sdl, FileObject& ff, const ppl7::grafix::Color& ti
 	File.reset(it);
 	while ((chunk = File.findNextChunk(it, "SURF"))) {
 		//printf ("load SURF\n");
-		loadTexture(sdl, chunk, tint);
+		int id = Peek16(chunk->data() + 0);
+		ppl7::grafix::Image surface = loadTexture(chunk, tint);
+
+		if (bMemoryBufferd) {
+			InMemoryTextureMap.insert(std::pair<int, ppl7::grafix::Image>(id, surface));
+		}
+		if (bSDLBufferd) {
+			SDL_GPUTexture* tex = sdl.createGPUTexture(surface);
+			TextureMap.insert(std::pair<int, SDL_GPUTexture*>(id, tex));
+		}
 	}
+	if (bSDLBufferd) {
+		File.reset(it);
+		while ((chunk = File.findNextChunk(it, "NORM"))) {
+			int id = Peek16(chunk->data() + 0);
+			ppl7::grafix::Image surface = loadTexture(chunk, tint);
+			SDL_GPUTexture* tex = sdl.createGPUTexture(surface);
+			NormalMap.insert(std::pair<int, SDL_GPUTexture*>(id, tex));
+			bHasNormals = true;
+		}
+		File.reset(it);
+		while ((chunk = File.findNextChunk(it, "SPEC"))) {
+			int id = Peek16(chunk->data() + 0);
+			ppl7::grafix::Image surface = loadTexture(chunk, tint);
+			SDL_GPUTexture* tex = sdl.createGPUTexture(surface);
+			SpecularMap.insert(std::pair<int, SDL_GPUTexture*>(id, tex));
+			bHasSpeculars = true;
+
+		}
+	}
+
 	// Index Chunks laden
 	File.reset(it);
 	//printf ("DONE SURF\n");
@@ -245,6 +280,17 @@ const ppl7::grafix::Drawable SpriteTexture::getDrawable(int id) const
 	return draw;
 }
 
+SDL_FRect SpriteTexture::getSpriteSource(int id) const
+{
+	SDL_FRect r;
+	r.x = 0;r.y = 0;r.w = 0;r.h = 0;
+	std::map<int, SpriteIndexItem>::const_iterator it;
+	it = SpriteList.find(id);
+	if (it == SpriteList.end()) return r;
+	return (*it).second.r;
+}
+
+#ifdef OLDDRAWING_API
 void SpriteTexture::draw(SDL_Renderer* renderer, int x, int y, int id) const
 {
 	if (!bSDLBufferd) return;
@@ -399,18 +445,6 @@ void SpriteTexture::drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, in
 	SDL_RenderTextureRotated(renderer, item.tex, &item.r, &tr, angle, &center, SDL_FLIP_NONE);
 }
 
-
-SDL_FRect SpriteTexture::getSpriteSource(int id) const
-{
-	SDL_FRect r;
-	r.x = 0;r.y = 0;r.w = 0;r.h = 0;
-	std::map<int, SpriteIndexItem>::const_iterator it;
-	it = SpriteList.find(id);
-	if (it == SpriteList.end()) return r;
-	return (*it).second.r;
-}
-
-
 void SpriteTexture::drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor)
 {
 	if (!bOutlinesEnabled) return;
@@ -466,7 +500,7 @@ void SpriteTexture::drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, 
 
 	SDL_RenderTextureRotated(renderer, current_outline_texture, NULL, &tr, angle, &center, SDL_FLIP_NONE);
 }
-
+#endif
 
 
 ppl7::grafix::Size SpriteTexture::spriteSize(int id, float scale_factor) const
@@ -585,19 +619,22 @@ int SpriteTexture::numSprites() const
 
 void SpriteTexture::setTextureBlendMode(SDL_BlendMode blendMode)
 {
-	std::map<int, SDL_Texture*>::iterator it;
+	// TODO
+	std::map<int, SDL_GPUTexture*>::iterator it;
 	for (it = TextureMap.begin();it != TextureMap.end();++it) {
-		SDL_SetTextureBlendMode(it->second, blendMode);
+		// TODO
+		//SDL_SetTextureBlendMode(it->second, blendMode);
 	}
 	defaultBlendMode = blendMode;
 }
 
 SDL_BlendMode SpriteTexture::getTextureBlendMode() const
 {
-	std::map<int, SDL_Texture*>::const_iterator it;
+	std::map<int, SDL_GPUTexture*>::const_iterator it;
 	SDL_BlendMode bm = defaultBlendMode;
 	for (it = TextureMap.begin();it != TextureMap.end();++it) {
-		SDL_GetTextureBlendMode(it->second, &bm);
+		// TODO
+		//SDL_GetTextureBlendMode(it->second, &bm);
 		return bm;
 	}
 	return bm;
@@ -685,12 +722,12 @@ static void generateOutlinesForSprite(const ppl7::grafix::Drawable& source, ppl7
 	}
 }
 
-SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int sprite_id)
+SDL_GPUTexture* SpriteTexture::postGenerateOutlines(SDL& sdl, int sprite_id)
 {
 	if (!bMemoryBufferd || !bOutlinesEnabled) return NULL;
 	//ppl7::PrintDebugTime("SpriteTexture::postGenerateOutlines\n");
 	//double start=ppl7::GetMicrotime();
-	if (current_outline_texture) SDL_DestroyTexture(current_outline_texture);
+	if (current_outline_texture) sdl.destroyGPUTexture(current_outline_texture);
 	current_outline_texture = NULL;
 	current_outline_sprite_id = -1;
 	std::map<int, SpriteIndexItem>::iterator it;
@@ -702,8 +739,15 @@ SDL_Texture* SpriteTexture::postGenerateOutlines(SDL_Renderer* renderer, int spr
 	ppl7::grafix::Rect r(item.r.x, item.r.y, item.r.w, item.r.h);
 	ppl7::grafix::Drawable source = item.drawable->getDrawable(r);
 	generateOutlinesForSprite(source, target);
-	SDL_Texture* tex = SDL::createTexture(renderer, target);
+	SDL_GPUTexture* tex = sdl.createGPUTexture(target);
 	//ppl7::PrintDebugTime("  ===> %0.6f s\n", ppl7::GetMicrotime() - start);
 	return tex;
 
+}
+
+uint64_t SpriteTexture::getUniqueTextureId(int id) const
+{
+	const SpriteIndexItem* item = getSpriteIndex(id);
+	if (!item) return 0;
+	return base_texture_id | (uint64_t)(item->textureId);
 }

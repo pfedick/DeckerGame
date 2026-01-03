@@ -131,7 +131,6 @@ size_t SpriteSystem::countVisible() const
 }
 
 
-
 void SpriteSystem::draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const
 {
 	if (!bSpritesVisible) return;

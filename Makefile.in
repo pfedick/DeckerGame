@@ -429,11 +429,11 @@ update_version:
 	@diff tmp/version.h include/version.h > /dev/null 2>&1; if [ $$? -ne 0 ] ; then cp tmp/version.h include/version.h; fi
 
 
-compile/main.o: src/main.cpp Makefile include/decker.h
+compile/main.o: src/main.cpp Makefile include/decker.h include/decker_sdl.h
 	- @mkdir -p compile
 	$(CXX) -o compile/main.o -c src/main.cpp $(CFLAGS)
 
-compile/sdl.o: src/game/sdl.cpp Makefile include/decker.h
+compile/sdl.o: src/game/sdl.cpp Makefile include/decker.h include/decker_sdl.h
 	- @mkdir -p compile
 	$(CXX) -o compile/sdl.o -c src/game/sdl.cpp $(CFLAGS)
 
@@ -442,7 +442,8 @@ compile/metrics.o: src/game/metrics.cpp Makefile include/decker.h
 	$(CXX) -o compile/metrics.o -c src/game/metrics.cpp $(CFLAGS)
 
 compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h \
-	include/translate.h include/particle.h include/screens.h include/gamecontroller.h include/hud.h include/glimmer.h
+	include/translate.h include/particle.h include/screens.h include/gamecontroller.h include/hud.h include/glimmer.h \
+	include/gpu.h include/sprite.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
 
@@ -466,9 +467,9 @@ compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/sprite.h
 	- @mkdir -p compile
 	$(CXX) -o compile/spritetexture.o -c src/game/spritetexture.cpp $(CFLAGS)
 
-compile/spritedrawer.o: src/game/spritedrawer.cpp Makefile include/sprite.h
+compile/gpudrawer.o: src/game/gpudrawer.cpp Makefile include/gpu.h include/sprite.h
 	- @mkdir -p compile
-	$(CXX) -o compile/spritedrawer.o -c src/game/spritedrawer.cpp $(CFLAGS)
+	$(CXX) -o compile/gpudrawer.o -c src/game/gpudrawer.cpp $(CFLAGS)
 
 compile/resources.o: src/game/resources.cpp Makefile include/decker.h
 	- @mkdir -p compile
@@ -479,7 +480,7 @@ compile/color.o: src/game/color.cpp Makefile include/decker.h
 	$(CXX) -o compile/color.o -c src/game/color.cpp $(CFLAGS)
 
 compile/level.o: src/game/level.cpp Makefile include/decker.h include/objects.h \
-	include/waynet.h include/particle.h include/player.h
+	include/waynet.h include/particle.h include/player.h include/gpu.h include/sprite.h
 	- @mkdir -p compile
 	$(CXX) -o compile/level.o -c src/game/level.cpp $(CFLAGS)
 
