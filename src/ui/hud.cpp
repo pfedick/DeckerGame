@@ -2,6 +2,7 @@
 #include "decker.h"
 #include "hud.h"
 #include "player.h"
+#include "gpu.h"
 
 
 
@@ -34,7 +35,7 @@ GameHUD::GameHUD(SDL& sdl)
     if (!icons) return;
     icons->enableSDLBuffer(false);
     icons->enableMemoryBuffer(true);
-    icons->load(sdl, "res/hud.tex");
+    icons->load(getGlobalGPUContext(), "res/hud.tex");
 
     redraw_needed = true;
     const ppltk::WidgetStyle& style = ppltk::GetWidgetStyle();

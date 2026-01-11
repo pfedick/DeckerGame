@@ -7,7 +7,10 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 ## Technologie-Stack
 
 ### Core Libraries
-- **SDL**: SDL3 (Version 3.2.28+) – Migration abgeschlossen (Januar 2026)
+- **SDL**: SDL3 (Version 3.2.28+)
+  - Webseite: https://www.libsdl.org/
+  - Doku (speziell für die GPU-API): https://wiki.libsdl.org/SDL3/CategoryGPU
+  - Quellcode: https://github.com/libsdl-org/SDL
 - **ppltk**: Eigene UI-Toolkit-Library (SDL3-basiert), eingebunden als git submodule
 - **pplib**: Eigene Library für OS-Abstraktion (String, File-IO, Grafik, Audio), eingebunden als git submodule
 - **Sprache**: C++
@@ -99,6 +102,15 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - ❌ Komplexe Änderungen ohne Erklärung vornehmen
 - ❌ Code ändern, wenn der Entwickler sagt "ich mache das"
 - ❌ Vermutungen als Fakten präsentieren
+- ❌ **Nicht-existierende Funktionen oder APIs erfinden**
+- ❌ **Methoden vorschlagen, die nicht in der Codebasis existieren**
+
+### Code-Vorschläge und API-Verwendung (KRITISCH)
+- ✅ **NUR existierende Funktionen verwenden**: Vor dem Vorschlag einer Funktion/Methode IMMER prüfen, ob sie existiert
+- ✅ **Bei Unsicherheit nachschlagen**: Tools wie `grep_search`, `semantic_search` oder `list_code_usages` verwenden
+- ✅ **Bestehende APIs bevorzugen**: Vorhandene Klassen und Methoden aus pplib, ppltk, SDL3 verwenden
+- ✅ **Wenn neue Funktionalität nötig**: Explizit sagen "Diese Funktion existiert noch nicht und müsste implementiert werden"
+- ✅ **API-Dokumentation prüfen**: Bei SDL3 auf offizielle Dokumentation verweisen, nicht raten
 
 ## SDL3 Implementierungsdetails
 
@@ -141,6 +153,11 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - **Render-Targets**: Texture-basiert für Lightmap-Mixing (additive Blending)
 - **Aktuell**: ~10.000 SDL_RenderTexture() Calls/Frame bei 2-3 ms Latenz → SDL_Renderer batched intern
 - **Zukunft**: Texture-Atlas bereits vorhanden (wenige große Texturen statt Hunderte) → ideal für GPU-Batching
+
+### Shader/Build-Workflow (Vulkan-first)
+- Shader-Quelle: GLSL unter `res/shader/source`
+- Kompilate: SPIR-V unter `res/shader/vulkan` (glslangValidator im Makefile einhängen)
+- SDL3 GPU-Device: Vulkan bevorzugt (SPIR-V laden). DX12/Metal später mit DXIL/MSL nachrüstbar
 
 ### Normale Workflow für Sprites pro Frame
 ```cpp

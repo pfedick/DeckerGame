@@ -4,7 +4,7 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include <map>
-#include "decker_sdl.h"
+#include "gpu.h"
 
 /*!\page PFPSpriteTexture1 Format PFP Sprite-Textures, Version 1
  *
@@ -151,7 +151,7 @@ public:
         }
     };
 private:
-    SDL* sdl;
+    GPUContext* gpu;
     std::map<int, SDL_GPUTexture*> TextureMap;
     std::map<int, SDL_GPUTexture*> NormalMap;
     std::map<int, SDL_GPUTexture*> SpecularMap;
@@ -172,32 +172,31 @@ private:
 
     ppl7::grafix::Image loadTexture(ppl7::PFPChunk* chunk, const ppl7::grafix::Color& tint);
     void loadIndex(ppl7::PFPChunk* chunk);
-    SDL_GPUTexture* postGenerateOutlines(SDL& sdl, int sprite_id);
+    SDL_GPUTexture* postGenerateOutlines(int sprite_id);
     SDL_GPUTexture* findTexture(int id) const;
     const ppl7::grafix::Drawable* findInMemoryTexture(int id) const;
 
 public:
     SpriteTexture();
     ~SpriteTexture();
-    void init(SDL& sdl);
-    void load(SDL& sdl, const ppl7::String& filename, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
-    void load(SDL& sdl, ppl7::FileObject& ff, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
+    void load(GPUContext& gpu, const ppl7::String& filename, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
+    void load(GPUContext& gpu, ppl7::FileObject& ff, const ppl7::grafix::Color& tint = ppl7::grafix::Color());
     void clear();
     void draw(ppl7::grafix::Drawable& target, int x, int y, int id) const;
     void draw(ppl7::grafix::Drawable& target, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
-    /*
-    void draw(SDL_Renderer* renderer, int x, int y, int id) const;
-    void draw(SDL_Renderer* renderer, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
-    void draw(SDL_Renderer* renderer, int x, int y, int id, const SDL_Color& color_modulation) const;
-    void drawBoundingBox(SDL_Renderer* renderer, int x, int y, int id) const;
-    void drawBoundingBoxWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle) const;
-    void draw(SDL_Renderer* renderer, int id, const SDL_FRect& source, const SDL_FRect& target) const;
-    void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor) const;
-    void drawScaled(SDL_Renderer* renderer, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
-    void drawScaledWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
-    void drawOutlines(SDL_Renderer* renderer, int x, int y, int id, float scale_factor);
-    void drawOutlinesWithAngle(SDL_Renderer* renderer, int x, int y, int id, float scale_x, float scale_y, float angle);
-    */
+
+    void draw(GPUContext& gpu, int x, int y, int id) const;
+    void draw(GPUContext& gpu, int x, int y, int id, const ppl7::grafix::Color& color_modulation) const;
+    void draw(GPUContext& gpu, int x, int y, int id, const SDL_Color& color_modulation) const;
+    void drawBoundingBox(GPUContext& gpu, int x, int y, int id) const;
+    void drawBoundingBoxWithAngle(GPUContext& gpu, int x, int y, int id, float scale_x, float scale_y, float angle) const;
+    void draw(GPUContext& gpu, int id, const SDL_FRect& source, const SDL_FRect& target) const;
+    void drawScaled(GPUContext& gpu, int x, int y, int id, float scale_factor) const;
+    void drawScaled(GPUContext& gpu, int x, int y, int id, float scale_factor, const ppl7::grafix::Color& color_modulation) const;
+    void drawScaledWithAngle(GPUContext& gpu, int x, int y, int id, float scale_x, float scale_y, float angle, const ppl7::grafix::Color& color_modulation) const;
+    void drawOutlines(GPUContext& gpu, int x, int y, int id, float scale_factor);
+    void drawOutlinesWithAngle(GPUContext& gpu, int x, int y, int id, float scale_x, float scale_y, float angle);
+
 
     ppl7::grafix::Size spriteSize(int id, float scale_factor) const;
     ppl7::grafix::Rect spriteBoundary(int id, float scale_factor, int x, int y) const;

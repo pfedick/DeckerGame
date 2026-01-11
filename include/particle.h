@@ -6,24 +6,23 @@
 #include <ppl7.h>
 #include <ppl7-grafix.h>
 #include "animation.h"
+#include "gpu.h"
 #include <atomic>
 class TileTypePlane;
 class Player;
-class SDL;
-struct SDL_Renderer;
 class SpriteTexture;
 
 class ParticleSpriteset
 {
 public:
     enum SpritesetIds {
-        GenericParticles=0,
+        GenericParticles = 0,
         MaxSpritesets
     };
 };
 
 enum class EmitterType {
-    Point=0,
+    Point = 0,
     Rectangle,
     Ellipse
 };
@@ -46,13 +45,13 @@ class Particle
     friend class ParticleUpdateThread;
 public:
     enum class Layer {
-        BehindBricks=0,
-        BehindPlayer=1,
-        BeforePlayer=2,
-        BackplaneFront=3,
-        BackplaneBack=4,
-        FrontplaneFront=5,
-        FrontplaneBack=6,
+        BehindBricks = 0,
+        BehindPlayer = 1,
+        BeforePlayer = 2,
+        BackplaneFront = 3,
+        BackplaneBack = 4,
+        FrontplaneFront = 5,
+        FrontplaneBack = 6,
         NearPlaneBack,
         NearPlaneFront,
         MiddlePlaneBack,
@@ -65,7 +64,7 @@ public:
         maxLayer
     };
     enum class Type {
-        RotatingParticleTransparent=0,
+        RotatingParticleTransparent = 0,
         RotatingParticleWhite,
         RotatingSnowflakeTransparent,
         RotatingSnowflakeWhite,
@@ -212,11 +211,11 @@ public:
     ParticleSystem();
     ~ParticleSystem();
     void clear();
-    void loadSpritesets(SDL& sdl);
+    void loadSpritesets(GPUContext& gpu);
     void addParticle(Particle* particle);
     void update(double time, TileTypePlane& ttplane, Player& player, const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport, float frame_rate_compensation);
     double waitForUpdateThreadFinished();
-    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;
+    void draw(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, Particle::Layer layer) const;
     size_t count() const;
     size_t countVisible() const;
     //static ppl7::String layerName(Particle::Layer layer);
@@ -227,7 +226,7 @@ public:
 ParticleSystem* GetParticleSystem();
 float randf(float min, float max);
 ppl7::grafix::PointF calculateVelocity(float speed, float direction);
-ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const EmitterType type, const ppl7::grafix::Size emitter_size, float rotation=0.0f);
+ppl7::grafix::PointF getBirthPosition(const ppl7::grafix::PointF& emitter, const EmitterType type, const ppl7::grafix::Size emitter_size, float rotation = 0.0f);
 bool emitterInPlayerRange(int plane, const ppl7::grafix::PointF& emitter, const Player& player);
 bool emitterInPlayerRange(const ppl7::grafix::PointF& emitter, const Player& player);
 

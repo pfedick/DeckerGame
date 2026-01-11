@@ -67,12 +67,11 @@ public:
 	ppl7::grafix::Size getDisplaySize(int display_no = 0) const;
 	ppl7::grafix::Rect getDisplayWindow(int display_no = 0) const;
 
-	SDL_GPUTexture* createGPUTexture(const ppl7::grafix::Drawable& surface);
-	void destroyGPUTexture(SDL_GPUTexture* texture);
 
 	static DisplayMode desktopDisplayMode(int display_id = 0);
 	static void getVideoDisplays(std::list<VideoDisplay>& display_list);
 	static void getDisplayModes(int display_id, std::list<DisplayMode>& mode_list);
+
 
 	static SDL_Texture* createTexture(SDL_Renderer* renderer, const ppl7::grafix::Drawable& d);
 

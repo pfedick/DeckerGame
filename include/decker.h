@@ -20,6 +20,7 @@
 #include "gamecontroller.h"
 #include "light.h"
 #include "sprite.h"
+#include "gpu.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -244,12 +245,12 @@ public:
 	bool isVisible() const;
 	void setSpriteset(int no, SpriteTexture* spriteset);
 	void updateVisibleSpriteList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void draw(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	bool findMatchingSprite(const ppl7::grafix::Point& p, SpriteSystem::Item& sprite) const;
 
-	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
+	void drawSelectedSpriteOutline(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 
 	size_t count() const;
 	size_t countVisible() const;
@@ -388,7 +389,7 @@ public:
 	TileType::Type getType(const ppl7::grafix::Point& player) const;
 	int getPlayerGround(const ppl7::grafix::Point& player) const;
 	void setTileTypesSprites(SpriteTexture* sprites);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
+	void draw(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	ppl7::grafix::Rect getOccupiedArea() const;
@@ -449,7 +450,7 @@ public:
 	};
 	Resources();
 	BrickResource bricks[MAX_TILESETS];
-	void loadBricks(SDL& sdl);
+	void loadBricks(GPUContext& gpu);
 	int getMaxTilesetId() const;
 };
 
@@ -725,11 +726,11 @@ public:
 	};
 
 private:
-	void drawNonePlayerPlane(SDL_Renderer* renderer, PlaneId planeid, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics, Particle::Layer particle_back, Particle::Layer particle_front);
-	void drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
-	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
-	void addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
-	void prepareLayer(SDL_Renderer* renderer);
+	void drawNonePlayerPlane(GPUContext& gpu, PlaneId planeid, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics, Particle::Layer particle_back, Particle::Layer particle_front);
+	void drawPlane(GPUContext& gpu, const Plane& plane, const ppl7::grafix::Point& worldcoords) const;
+	void drawParticles(GPUContext& gpu, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void addLightmap(GPUContext& gpu, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
+	void prepareLayer(GPUContext& gpu);
 public:
 
 
@@ -746,7 +747,7 @@ public:
 	void load(const ppl7::String& Filename);
 	void save(const ppl7::String& Filename);
 	void backup(const ppl7::String& Filename);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer);
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer);
 	void setViewport(const ppl7::grafix::Rect& r);
 	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
 	Plane& plane(int id);
@@ -901,6 +902,7 @@ class Game : private ppltk::Window
 {
 private:
 	SDL sdl;
+	GPUContext gpu;
 	ppltk::WindowManager* wm;
 	ppltk::WidgetStyle Style;
 	//ppltk::Window window;
@@ -1054,6 +1056,7 @@ public:
 	GameState gameState;
 	MessageOverlay message_overlay = MessageOverlay(sdl);
 	TextureCache texture_cache = TextureCache(sdl);
+	GPUContext gpu_drawer;
 
 	Game();
 	~Game();
@@ -1094,6 +1097,7 @@ public:
 
 	SDL_Renderer* getSDLRenderer();
 	SDL& getSDL();
+	GPUContext& getGPUContext();
 	ppl7::grafix::Point getViewPos() const;
 
 	ppltk::Window& window();

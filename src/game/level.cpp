@@ -378,7 +378,7 @@ void Level::backup(const ppl7::String& Filename)
 	}
 }
 
-void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::grafix::Point& worldcoords) const
+void Level::drawPlane(GPUContext& gpu, const Plane& plane, const ppl7::grafix::Point& worldcoords) const
 {
 	//printf("viewport: x=%d, y=%d\n",viewport.x1, viewport.y1);
 	int tiles_width = viewport.width() / TILE_WIDTH + 9;
@@ -400,7 +400,7 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 					//if (tile->layer[z].tileset>8) printf ("draw %d, %d\n",tile->layer[z].tileset, tile->layer[z].tileno);
 					if (tileset[tile->layer[z].tileset]) {
 						//printf ("%d = %zd\n,",tile->tileset[z], tileset[tile->tileset[z]]);
-						tileset[tile->layer[z].tileset]->draw(renderer, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, palette.getColor(tile->layer[z].color_index));
+						tileset[tile->layer[z].tileset]->draw(gpu, x1 + x * TILE_WIDTH, y1 + y * TILE_HEIGHT, tile->layer[z].tileno, palette.getColor(tile->layer[z].color_index));
 					}
 				}
 			}
@@ -408,53 +408,53 @@ void Level::drawPlane(SDL_Renderer* renderer, const Plane& plane, const ppl7::gr
 	}
 }
 
-void Level::drawNonePlayerPlane(SDL_Renderer* renderer, PlaneId planeid, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics, Particle::Layer particle_back, Particle::Layer particle_front)
+void Level::drawNonePlayerPlane(GPUContext& gpu, PlaneId planeid, const Plane& plane, const SpriteSystem& sprites1, const SpriteSystem& sprites2, const ppl7::grafix::Point& worldcoords, Metrics& metrics, Particle::Layer particle_back, Particle::Layer particle_front)
 {
 	if (!plane.isVisible()) return;
 
 	if (showObjects) {	// Objects behind Bricks
 		metrics.time_objects.start();
 		if (!editMode)
-			objects->draw(renderer, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BehindBricks);
+			objects->draw(gpu, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BehindBricks);
 		metrics.time_objects.stop();
 	}
 
 	if (showSprites) {
 		metrics.time_sprites.start();
-		sprites1.draw(renderer, viewport, worldcoords);
+		sprites1.draw(gpu, viewport, worldcoords);
 		metrics.time_sprites.stop();
 	}
-	drawParticles(renderer, particle_back, worldcoords, metrics);
+	drawParticles(gpu, particle_back, worldcoords, metrics);
 
 	metrics.time_plane.start();
-	drawPlane(renderer, plane, worldcoords);
+	drawPlane(gpu, plane, worldcoords);
 	metrics.time_plane.stop();
 	if (showSprites) {
 		metrics.time_sprites.start();
-		sprites2.draw(renderer, viewport, worldcoords);
+		sprites2.draw(gpu, viewport, worldcoords);
 		metrics.time_sprites.stop();
 	}
 
 	if (showObjects) {	// Objects before Bricks
 		metrics.time_objects.start();
 		if (!editMode)
-			objects->draw(renderer, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BeforeBricks);
+			objects->draw(gpu, viewport, worldcoords, planeid, Decker::Objects::Object::Layer::BeforeBricks);
 		metrics.time_objects.stop();
 	}
-	drawParticles(renderer, particle_front, worldcoords, metrics);
+	drawParticles(gpu, particle_front, worldcoords, metrics);
 
 }
 
-void Level::drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
+void Level::drawParticles(GPUContext& gpu, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics)
 {
 	if (!showParticles) return;
 	metrics.time_draw_particles.start();
-	particles->draw(renderer, viewport, worldcoords, layer);
+	particles->draw(gpu, viewport, worldcoords, layer);
 	metrics.time_draw_particles.stop();
 }
 
 
-void Level::prepareLayer(SDL_Renderer* renderer)
+void Level::prepareLayer(GPUContext& gpu)
 {
 	if (lightsEnabled) {
 		SDL_SetRenderTarget(renderer, tex_render_lightmap);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ppl7.h>
 #include "decker.h"
+#include "gpu.h"
 
 
 MessageOverlay::MessageOverlay(SDL& sdl)
@@ -54,7 +55,7 @@ MessageOverlay::~MessageOverlay()
 
 void MessageOverlay::loadSprites()
 {
-	spriteset.load(sdl, "res/phonetics.tex");
+	spriteset.load(getGlobalGPUContext(), "res/phonetics.tex");
 }
 
 void MessageOverlay::resize(const ppl7::grafix::Size& size)

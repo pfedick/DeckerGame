@@ -5,14 +5,13 @@
 #include <list>
 #include <ppl7.h>
 #include <ppl7-grafix.h>
+#include "gpu.h"
 #include "decker.h"
 #include "animation.h"
 #include "particle.h"
 #include "light.h"
 
 
-class SDL;
-struct SDL_Renderer;
 class SpriteTexture;
 class LightObject;
 
@@ -34,80 +33,80 @@ class Type
 public:
 	// ID must be <256
 	enum ObjectType {
-		PlayerStartpoint=1,
-		Savepoint=2,
-		Medikit=3,
-		Crystal=4,
-		Diamond=5,
-		Coin=6,
-		Key=7,
-		Door=8,
-		FloaterHorizontal=9,
-		FloaterVertical=10,
-		BreakingGround=11,
-		Fire=12,
-		WindEmitter=13,
-		Vent=14,
-		Speaker=15,
-		Particle=16,
-		TouchEmitter=17,
-		TreasureChest=18,
-		WarpGate=19,
-		ExtraLife=20,
-		Switch=21,
-		LevelEnd=22,
-		RainEmitter=23,
-		Apple=24,
-		Cherry=25,
-		ParticleEmitter=26,
-		Oxygen=27,
-		BreakingWall=28,
-		Hammer=29,
-		Cheese=30,
-		VoiceTrigger=31,
-		ObjectWatcher=32,
-		Trigger=33,
-		Flashlight=34,
-		LightTrigger=35,
-		LevelModificator=36,
-		TouchPlateSwitch=37,
-		ButtonSwitch=38,
-		LightSignal=39,
-		Crate=40,
-		PowerCell=41,
-		SpawnPoint=42,
-		Peach=43,
-		MagicGround=44,
-		GlimmerNode=45,
-		GreatElevator=46,
-		PlayerTrigger=47,
-		Arrow=100,
-		ThreeSpeers=101,
-		Rat=102,
-		HangingSpider=103,
-		Skeleton=104,
-		Mummy=105,
-		LaserBeamHorizontal=106,
-		LaserBeamVertical=107,
-		Mushroom=108,
-		Scarabeus=109,
-		Stamper=110,
-		Wallenstein=111,
-		Helena=112,
-		Scorpion=113,
-		Bat=114,
-		Bird=115,
-		Yeti=116,
-		AutoGeorge=117,
-		Ostrich=118,
-		Fish=119,
-		Piranha=120,
-		Ghost=121,
-		Zombie=122,
-		FireCannon=123,
-		Skull=124,
-		SkullMaster=125,
-		Spider=126
+		PlayerStartpoint = 1,
+		Savepoint = 2,
+		Medikit = 3,
+		Crystal = 4,
+		Diamond = 5,
+		Coin = 6,
+		Key = 7,
+		Door = 8,
+		FloaterHorizontal = 9,
+		FloaterVertical = 10,
+		BreakingGround = 11,
+		Fire = 12,
+		WindEmitter = 13,
+		Vent = 14,
+		Speaker = 15,
+		Particle = 16,
+		TouchEmitter = 17,
+		TreasureChest = 18,
+		WarpGate = 19,
+		ExtraLife = 20,
+		Switch = 21,
+		LevelEnd = 22,
+		RainEmitter = 23,
+		Apple = 24,
+		Cherry = 25,
+		ParticleEmitter = 26,
+		Oxygen = 27,
+		BreakingWall = 28,
+		Hammer = 29,
+		Cheese = 30,
+		VoiceTrigger = 31,
+		ObjectWatcher = 32,
+		Trigger = 33,
+		Flashlight = 34,
+		LightTrigger = 35,
+		LevelModificator = 36,
+		TouchPlateSwitch = 37,
+		ButtonSwitch = 38,
+		LightSignal = 39,
+		Crate = 40,
+		PowerCell = 41,
+		SpawnPoint = 42,
+		Peach = 43,
+		MagicGround = 44,
+		GlimmerNode = 45,
+		GreatElevator = 46,
+		PlayerTrigger = 47,
+		Arrow = 100,
+		ThreeSpeers = 101,
+		Rat = 102,
+		HangingSpider = 103,
+		Skeleton = 104,
+		Mummy = 105,
+		LaserBeamHorizontal = 106,
+		LaserBeamVertical = 107,
+		Mushroom = 108,
+		Scarabeus = 109,
+		Stamper = 110,
+		Wallenstein = 111,
+		Helena = 112,
+		Scorpion = 113,
+		Bat = 114,
+		Bird = 115,
+		Yeti = 116,
+		AutoGeorge = 117,
+		Ostrich = 118,
+		Fish = 119,
+		Piranha = 120,
+		Ghost = 121,
+		Zombie = 122,
+		FireCannon = 123,
+		Skull = 124,
+		SkullMaster = 125,
+		Spider = 126
 	};
 	static ppl7::String name(Type::ObjectType type);
 };
@@ -116,7 +115,7 @@ class Spriteset
 {
 public:
 	enum SpritesetIds {
-		GenericObjects=0,
+		GenericObjects = 0,
 		ThreeSpeers,
 		Skeleton,
 		Mummy,
@@ -211,10 +210,10 @@ public:
 
 	ObjectCollision(const Object* this_object, const Object* other_object);
 	void update();
-	bool objectTop(int tolerance=1) const;
-	bool objectBottom(int tolerance=1) const;
-	bool objectLeft(int tolerance=1) const;
-	bool objectRight(int tolerance=1) const;
+	bool objectTop(int tolerance = 1) const;
+	bool objectBottom(int tolerance = 1) const;
+	bool objectLeft(int tolerance = 1) const;
+	bool objectRight(int tolerance = 1) const;
 };
 
 class Object
@@ -222,10 +221,10 @@ class Object
 	friend class ObjectSystem;
 public:
 	enum class Layer {
-		BehindBricks=0,
-		BeforeBricks=1,
-		BeforePlayer=2,
-		BehindPlayer=1,
+		BehindBricks = 0,
+		BeforeBricks = 1,
+		BeforePlayer = 2,
+		BehindPlayer = 1,
 	};
 private:
 	Type::ObjectType myType;
@@ -266,12 +265,12 @@ public:
 	virtual size_t load(const unsigned char* buffer, size_t size);
 	virtual size_t saveSize() const;
 	virtual void handleCollision(Player* player, const Collision& collision);
-	virtual void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	virtual void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	virtual void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
+	virtual void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
 	virtual void openUi();
 	virtual void reset();
-	virtual void toggle(bool enable, Object* source=NULL);
-	virtual void trigger(Object* source=NULL);
+	virtual void toggle(bool enable, Object* source = NULL);
+	virtual void trigger(Object* source = NULL);
 	virtual bool isEnabled() const;
 	static Representation representation();
 };
@@ -330,7 +329,7 @@ public:
 	int flags;
 	bool current_state;
 	enum class Flags {
-		initialStateEnabled=1,
+		initialStateEnabled = 1,
 
 	};
 
@@ -342,8 +341,8 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL);
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL);
 
 };
 
@@ -355,9 +354,9 @@ private:
 	void createParticle(ParticleSystem* ps, double time);
 public:
 	enum class Flags {
-		useColorGradient=1,
-		useScaleGradient=2,
-		initialStateDisabled=4,
+		useColorGradient = 1,
+		useScaleGradient = 2,
+		initialStateDisabled = 4,
 
 	};
 
@@ -389,8 +388,8 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL);
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL);
 
 	ppl7::String generateCode() const;
 
@@ -414,7 +413,7 @@ public:
 	unsigned char max_toggles;
 	unsigned char direction;	// 0=up, 1=right, 2=down, 3=left
 	unsigned char touchtype;	// Bit 0-3: Type, Bit 4-7: activation
-								// Bit 4: top, Bit 5: right, Bit 6: bottom, Bit 7: left
+	// Bit 4: top, Bit 5: right, Bit 6: bottom, Bit 7: left
 	Type::ObjectType emitted_object;
 
 	TouchEmitter();
@@ -423,7 +422,7 @@ public:
 	void init();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void trigger(Object* source=NULL);
+	void trigger(Object* source = NULL);
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -452,7 +451,7 @@ public:
 	void emmitObject();
 	//void handleCollision(Player* player, const Collision& collision) override;
 	//void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void trigger(Object* source=NULL);
+	void trigger(Object* source = NULL);
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -474,7 +473,7 @@ public:
 	bool initial_state;
 
 	enum class SampleType {
-		AudioLoop=0,
+		AudioLoop = 0,
 		Effect
 	};
 	SampleType sample_type;
@@ -484,14 +483,14 @@ public:
 	Speaker();
 	~Speaker();
 	static Representation representation();
-	void setSample(int id, float volume, int max_distance=1600);
+	void setSample(int id, float volume, int max_distance = 1600);
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 	void test();
 };
 
@@ -506,17 +505,17 @@ private:
 
 public:
 	enum class TargetState {
-		disable=0,
-		enable=1,
-		trigger=2
+		disable = 0,
+		enable = 1,
+		trigger = 2
 	};
 
 	enum class SwitchStyle {
-		SwitchWithLever=0,
-		SwitchWithLeverAndTop=1,
-		SwitchWithSmallLeverAndTop=2,
-		LightSwitch=3,
-		Lever=4
+		SwitchWithLever = 0,
+		SwitchWithLeverAndTop = 1,
+		SwitchWithSmallLeverAndTop = 2,
+		LightSwitch = 3,
+		Lever = 4
 	};
 
 	class TargetObject
@@ -542,8 +541,8 @@ public:
 	Switch();
 	static Representation representation();
 	void init();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
@@ -552,8 +551,8 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 	void reset() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 };
 
 
@@ -691,9 +690,9 @@ private:
 	AnimationCycle animation;
 public:
 	enum class KeyType {
-		silver=0,
-		golden=1,
-		colored=2
+		silver = 0,
+		golden = 1,
+		colored = 2
 	};
 	KeyType key_type;
 	int color_modification;
@@ -806,11 +805,11 @@ public:
 	~LaserBarrier();
 	static Representation representation(Type::ObjectType type);
 	void init();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -823,7 +822,7 @@ class Stamper : public Trap
 {
 private:
 	enum class State {
-		Open=0,
+		Open = 0,
 		Closing,
 		Closed,
 		Opening
@@ -839,18 +838,18 @@ private:
 
 	void updateStamperBoundary();
 
-	void drawDown(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	void drawUp(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	void drawLeft(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
-	void drawRight(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void drawDown(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
+	void drawUp(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
+	void drawLeft(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
+	void drawRight(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
 
 public:
 
 	enum class Orientation {
-		down=0,
-		up=1,
-		left=2,
-		right=3
+		down = 0,
+		up = 1,
+		left = 2,
+		right = 3
 	};
 
 	float time_active, time_inactive;
@@ -875,10 +874,10 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const;
 };
 
 
@@ -918,8 +917,8 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 
 	void openUi() override;
 
@@ -948,8 +947,8 @@ public:
 	Fireball();
 	~Fireball();
 	static Representation representation();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 
 	virtual void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	virtual void handleCollision(Player* player, const Collision& collision);
@@ -979,8 +978,8 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 
 
 };
@@ -1005,7 +1004,7 @@ private:
 	AudioInstance* audio;
 
 	enum class RatState {
-		idle=0,
+		idle = 0,
 		walk_left,
 		wait_left,
 		turn_left_to_right,
@@ -1065,7 +1064,7 @@ public:
 	float min_idle_time, max_idle_time;
 	float speed_acceleration;
 
-	Scorpion(ActionState initial_state=ActionState::FallingLeft);
+	Scorpion(ActionState initial_state = ActionState::FallingLeft);
 	~Scorpion();
 	void setState(ActionState state);
 	static Representation representation();
@@ -1102,7 +1101,7 @@ class Bird : public Enemy
 private:
 	enum class BirdState
 	{
-		FlyFront=0,
+		FlyFront = 0,
 		FlyLeft,
 		FlyRight,
 		FlyBack,
@@ -1141,7 +1140,7 @@ private:
 	};
 	enum class ActionState
 	{
-		Falling=0,
+		Falling = 0,
 		Stand,
 		Walk,
 		FollowPlayer,
@@ -1236,7 +1235,7 @@ public:
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 };
 
 
@@ -1246,7 +1245,7 @@ class Mummy : public Enemy
 private:
 	AnimationCycle animation;
 	double next_state, next_animation;
-	int velocity=1;
+	int velocity = 1;
 	int state;
 public:
 	Mummy();
@@ -1308,7 +1307,7 @@ public:
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
-	void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	void trigger(Object* source) override;
 
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -1485,7 +1484,7 @@ public:
 	static Representation representation();
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 };
 
 
@@ -1499,7 +1498,7 @@ private:
 public:
 	HangingSpider();
 	static Representation representation();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 
@@ -1516,7 +1515,7 @@ private:
 public:
 	BreakingGround();
 	static Representation representation();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 };
@@ -1525,7 +1524,7 @@ class MagicGround : public Object
 {
 public:
 	enum class State {
-		inactive=0,
+		inactive = 0,
 		appears,
 		active,
 		disappears
@@ -1553,7 +1552,7 @@ private:
 	void updateTransparency(double time, float frame_rate_compensation);
 	void randomizeFloatState();
 	void updateBoundary();
-	void drawCommon(SDL_Renderer* renderer, const ppl7::grafix::Point& coords, const ppl7::grafix::Point& pp, float transp) const;
+	void drawCommon(GPUContext& gpu, const ppl7::grafix::Point& coords, const ppl7::grafix::Point& pp, float transp) const;
 	bool copyFromOtherMagicGround();
 
 public:
@@ -1586,11 +1585,11 @@ public:
 
 	MagicGround();
 	static Representation representation();
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	void trigger(Object* source) override;
 	void reset();
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -1694,9 +1693,9 @@ public:
 	void init();
 	void reset() override;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const  override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const  override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	void trigger(Object* source) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -1737,28 +1736,28 @@ private:
 
 public:
 	enum class DoorOrientation {
-		right=0,
-		left=1,
-		front=2,
-		back=3
+		right = 0,
+		left = 1,
+		front = 2,
+		back = 3
 	};
 
 	enum class DoorType {
-		windowed=0,
-		flat=1,
-		lattice_metalic=2,
-		lattice_opaque=3,
-		no_door=4
+		windowed = 0,
+		flat = 1,
+		lattice_metalic = 2,
+		lattice_opaque = 3,
+		no_door = 4
 	};
 
 	enum class DoorState {
-		closed=0,
-		opening=1,
-		open=2,
-		closing=3
+		closed = 0,
+		opening = 1,
+		open = 2,
+		closing = 3
 	};
 	enum class WarpSide {
-		left=0,
+		left = 0,
 		right
 	};
 
@@ -1783,8 +1782,8 @@ public:
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
@@ -1810,9 +1809,9 @@ public:
 	};
 	enum class Flags
 	{
-		initialStateActive=1,
-		useBackgroundColorWhenActive=2,
-		transferOnCollision=4,
+		initialStateActive = 1,
+		useBackgroundColorWhenActive = 2,
+		transferOnCollision = 4,
 	};
 	uint32_t key_id;
 	uint32_t warp_to_id;
@@ -1833,16 +1832,15 @@ public:
 	static Representation representation();
 	void init();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
-	//void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
 	void handleCollision(Player* player, const Collision& collision) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
-	void toggle(bool enable, Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	void trigger(Object* source) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 
 };
 
@@ -1850,16 +1848,16 @@ class TriggerTarget
 {
 public:
 	enum class State {
-		disable=0,
-		enable=1,
-		trigger=2
+		disable = 0,
+		enable = 1,
+		trigger = 2
 	};
 
 	class Object
 	{
 	public:
-		uint16_t object_id=0;
-		State state=State::trigger;
+		uint16_t object_id = 0;
+		State state = State::trigger;
 	};
 };
 
@@ -1900,8 +1898,8 @@ public:
 	class TargetObject
 	{
 	public:
-		uint16_t object_id=0;
-		bool enable=true;
+		uint16_t object_id = 0;
+		bool enable = true;
 	};
 	TargetObject triggerObjects[5];
 
@@ -1914,10 +1912,10 @@ public:
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
+	virtual void toggle(bool enable, Object* source = NULL) override;
+	virtual void trigger(Object* source = NULL) override;
 
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 	void reset();
 };
@@ -1931,14 +1929,14 @@ public:
 	class WatchObject
 	{
 	public:
-		uint16_t object_id=0;
-		bool expectedState=false;
+		uint16_t object_id = 0;
+		bool expectedState = false;
 	};
 
 	class TriggerObject
 	{
 	public:
-		uint16_t object_id=0;
+		uint16_t object_id = 0;
 	};
 	WatchObject watchObjects[10];
 	TriggerObject triggerObjects[5];
@@ -1985,16 +1983,16 @@ public:
 	uint16_t maxTriggerCount;
 
 	enum class TargetState {
-		disable=0,
-		enable=1,
-		trigger=2
+		disable = 0,
+		enable = 1,
+		trigger = 2
 	};
 
 	class TargetObject
 	{
 	public:
-		uint16_t object_id=0;
-		TargetState state=TargetState::trigger;
+		uint16_t object_id = 0;
+		TargetState state = TargetState::trigger;
 	};
 	TargetObject triggerObjects[10];
 
@@ -2007,9 +2005,9 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset();
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	virtual void toggle(bool enable, Object* source = NULL) override;
+	virtual void trigger(Object* source = NULL) override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 
 	void test();
@@ -2037,7 +2035,7 @@ private:
 
 public:
 	enum class PlayerAction {
-		Nothing=0,
+		Nothing = 0,
 		WalkToNode,
 		Wait,
 		WaynetToNode,
@@ -2077,12 +2075,12 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
-	void trigger(Object* source=NULL) override;
-	void toggle(bool enable, Object* source=NULL) override;
+	void trigger(Object* source = NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
 	void openUi() override;
 	void reset();
 
@@ -2117,7 +2115,7 @@ public:
 	class TargetObject
 	{
 	public:
-		uint32_t light_id=0;
+		uint32_t light_id = 0;
 	};
 	TargetObject triggerObjects[10];
 
@@ -2130,9 +2128,9 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset();
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	virtual void toggle(bool enable, Object* source = NULL) override;
+	virtual void trigger(Object* source = NULL) override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 
 	void test();
@@ -2176,9 +2174,9 @@ public:
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void reset();
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	virtual void toggle(bool enable, Object* source = NULL) override;
+	virtual void trigger(Object* source = NULL) override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 	void test();
 };
@@ -2194,14 +2192,14 @@ private:
 
 public:
 	enum class TargetState {
-		disable=0,
-		enable=1,
-		trigger=2
+		disable = 0,
+		enable = 1,
+		trigger = 2
 	};
 
 	enum class PlateStyle {
-		Narrow=0,
-		Wide=1
+		Narrow = 0,
+		Wide = 1
 	};
 
 	class TargetObject
@@ -2231,8 +2229,8 @@ public:
 	size_t load(const unsigned char* buffer, size_t size) override;
 	void openUi() override;
 
-	void toggle(bool enable, Object* source=NULL);
-	void trigger(Object* source=NULL);
+	void toggle(bool enable, Object* source = NULL);
+	void trigger(Object* source = NULL);
 
 	void init();
 	void reset();
@@ -2249,14 +2247,14 @@ private:
 
 public:
 	enum class Style {
-		Style1=0,
-		Style2=1
+		Style1 = 0,
+		Style2 = 1
 	};
 
 	enum class TargetState {
-		disable=0,
-		enable=1,
-		trigger=2
+		disable = 0,
+		enable = 1,
+		trigger = 2
 	};
 
 	class TargetObject
@@ -2279,10 +2277,10 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	virtual void toggle(bool enable, Object* source=NULL) override;
-	virtual void trigger(Object* source=NULL) override;
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	virtual void toggle(bool enable, Object* source = NULL) override;
+	virtual void trigger(Object* source = NULL) override;
+	void draw(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 
 
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -2311,8 +2309,8 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	//void handleCollision(Player* player, const Collision& collision) override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 	bool isEnabled() const override;
 
 	size_t save(unsigned char* buffer, size_t size) const override;
@@ -2368,8 +2366,8 @@ public:
 	static Representation representation();
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation) override;
 	void handleCollision(Player* player, const Collision& collision) override;
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
@@ -2398,7 +2396,7 @@ private:
 
 public:
 	enum class GlimmerAction {
-		Awaken=1,
+		Awaken = 1,
 		Appear,
 		Disappear,
 		FollowPlayer,
@@ -2440,12 +2438,12 @@ public:
 	void handleCollisionByGlimmer();
 	void reset();
 	void test();
-	void toggle(bool enable, Object* source=NULL) override;
-	void trigger(Object* source=NULL) override;
+	void toggle(bool enable, Object* source = NULL) override;
+	void trigger(Object* source = NULL) override;
 	size_t save(unsigned char* buffer, size_t size) const override;
 	size_t saveSize() const override;
 	size_t load(const unsigned char* buffer, size_t size) override;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Point& coords) const override;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Point& coords) const override;
 	void openUi() override;
 };
 
@@ -2473,13 +2471,13 @@ public:
 	ObjectSystem(Waynet* waynet);
 	~ObjectSystem();
 	void clear();
-	void loadSpritesets(SDL& sdl);
+	void loadSpritesets(GPUContext& gpu);
 	void addObject(Object* object);
 	Object* getInstance(int object_type) const;
 	void update(double time, TileTypePlane& ttplane, Player& player, float frame_rate_compensation);
 	void updateVisibleObjectList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
-	void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
-	void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
+	void draw(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
+	void drawEditMode(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, PlaneId plane, Object::Layer layer) const;
 	void save(ppl7::FileObject& file, unsigned char id) const;
 	void load(const ppl7::ByteArrayPtr& ba);
 	Object* getObject(uint32_t object_id);
@@ -2490,8 +2488,8 @@ public:
 	void detectObjectCollision(const Object* object, std::list<Object*>& collision_object_list);
 	void detectObjectCollision(const ppl7::grafix::Rect& boundary, std::list<Object*>& collision_object_list);
 
-	void drawSelectedSpriteOutline(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
-	void drawPlaceSelection(SDL_Renderer* renderer, const ppl7::grafix::Point& p, int object_type);
+	void drawSelectedSpriteOutline(GPUContext& gpu, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
+	void drawPlaceSelection(GPUContext& gpu, const ppl7::grafix::Point& p, int object_type);
 	void deleteObject(int id);
 	bool findObjectsInRange(const ppl7::grafix::PointF& p, double range, std::list <Object*>& objects);
 	ppl7::grafix::Point findPlayerStart() const;

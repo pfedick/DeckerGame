@@ -270,12 +270,12 @@ LightSystem::~LightSystem()
     delete lightmaps;
 }
 
-void LightSystem::loadSpritesets(SDL& sdl)
+void LightSystem::loadSpritesets(GPUContext& gpu)
 {
     lightmaps->enableOutlines(true);
     lightmaps->enableMemoryBuffer(true);
     lightmaps->setTextureBlendMode(SDL_BLENDMODE_ADD);
-    lightmaps->load(sdl, "res/lightmaps.tex");
+    lightmaps->load(gpu, "res/lightmaps.tex");
     lightmaps->setPivot(8, 256, 27);
     lightmaps->setPivot(9, 256, 27);
     lightmaps->setPivot(10, 256, 27);
@@ -293,11 +293,11 @@ void LightSystem::loadSpritesets(SDL& sdl)
 
     light_objects->enableOutlines(true);
     light_objects->enableMemoryBuffer(true);
-    light_objects->load(sdl, "res/lightobjects.tex");
+    light_objects->load(gpu, "res/lightobjects.tex");
 
     lensflares->enableOutlines(false);
     lensflares->enableMemoryBuffer(true);
-    lensflares->load(sdl, "res/lensflares.tex");
+    lensflares->load(gpu, "res/lensflares.tex");
 
 }
 

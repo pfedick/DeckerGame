@@ -2,12 +2,35 @@
 #define INCLUDE_GPU_H
 
 #include <SDL3/SDL.h>
-#include "sprite.h"
 
-/*!\class GPUDrawer gpu.h include/gpu.h
+#include <ppl7.h>
+
+class SpriteTexture;
+
+class GPUException : public ppl7::Exception
+{
+public:
+    using ppl7::Exception::Exception;
+
+    GPUException(const char* msg, ...) noexcept {
+        va_list args;
+        va_start(args, msg);
+        copyText(msg, args);
+        va_end(args);
+    }
+
+
+    const char* what() const noexcept override {
+        return "GPUException";
+    }
+};
+
+
+
+/*!\class GPUContext gpu.h include/gpu.h
  * \brief Klasse zum Zeichnen von Sprites und Grafikprimitive auf einem GPU-Gerät
  *
- * Die Klasse GPUDrawer ermöglicht das Zeichnen von Sprites und Grafikprimitive
+ * Die Klasse GPUContext ermöglicht das Zeichnen von Sprites und Grafikprimitive
  * auf einem SDL_GPUDevice. Dabei wird ein Render-Pass verwendet, der mit
  * startRenderPass() gestartet und mit endRenderPass() beendet wird.
  * Die Klasse unterstützt das Zeichnen von Sprites mit Skalierung, Rotation
@@ -22,16 +45,15 @@
  \code
     SDL_GPUDevice* gpu = SDL_GPU_CreateDevice(...);
     SDL_GPURenderPass* pass = SDL_GPU_CreateRenderPass(gpu, ...);
-    GPUDrawer drawer;
-    drawer.startRenderPass(gpu, pass);
-    drawer.drawSprite(spriteTexture, spriteId, x, y, scaleX, scaleY, angle, colorModulation);
-    drawer.endRenderPass();
+    GPUContext gpu_ctx(gpu);
+    gpu_ctx.startRenderPass(gpu, pass);
+    gpu_ctx.drawSprite(spriteTexture, spriteId, x, y, scaleX, scaleY, angle, colorModulation);
+    gpu_ctx.endRenderPass();
 \endcode
  */
-class GPUDrawer
+class GPUContext
 {
 private:
-    SDL_GPUDevice* gpu;
     SDL_GPURenderPass* pass;
     float z;
 
@@ -78,20 +100,36 @@ private:
     std::map<uint64_t, std::list<SpriteCommand>> spriteCommands;
 
 
-
+    SDL_Window* window;
 public:
-    GPUDrawer();
-    ~GPUDrawer();
+    // Es wäre besser, wenn dass hier ein GPUContext wäre, den wir anstelle von
+    // SDL_Renderer verwenden könnten.
 
-    void startRenderPass(SDL_GPUDevice* gpu, SDL_GPURenderPass* pass);
+    SDL_GPUDevice* gpu;
+
+    GPUContext();
+    ~GPUContext();
+
+    void init(SDL_Window* window);
+    void shutdown();
+
+    void initGPUDevice();
+    SDL_GPUTexture* createGPUTexture(const ppl7::grafix::Drawable& surface);
+    void destroyGPUTexture(SDL_GPUTexture* texture);
+    void updateGPUTexture(SDL_GPUTexture* texture, const ppl7::grafix::Drawable& surface);
+
+    void clearQueues(); // temporary?
+    void startRenderPass(SDL_GPURenderPass* pass);
     void endRenderPass();
-    void drawSprite(const SpriteTexture& sprite, int sprite_id, float x, float y, float scale_x = 1.0f, float scale_y = 1.0f, float angle = 0.0f, const ppl7::grafix::Color& color_modulation = ppl7::grafix::Color(255, 255, 255, 255));
 
+    void drawSprite(const SpriteTexture& sprite, int sprite_id, float x, float y, float scale_x = 1.0f, float scale_y = 1.0f, float angle = 0.0f, const ppl7::grafix::Color& color_modulation = ppl7::grafix::Color(255, 255, 255, 255));
     void drawLine(float x1, float y1, float x2, float y2, const ppl7::grafix::Color& color, float thickness = 1.0f);
     void drawRect(float x, float y, float w, float h, const ppl7::grafix::Color& color, float thickness = 1.0f);
     void fillRect(float x, float y, float w, float h, const ppl7::grafix::Color& color);
 
 };
+
+GPUContext& getGlobalGPUContext();
 
 #endif // INCLUDE_GPU_H
 

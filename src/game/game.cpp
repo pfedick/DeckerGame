@@ -123,67 +123,67 @@ Game::~Game()
 void Game::loadGrafix()
 {
 	resources.Sprite_George.enableMemoryBuffer(true);
-	resources.Sprite_George.load(sdl, "res/george.tex");
+	resources.Sprite_George.load(gpu, "res/george.tex");
 
 	resources.Sprite_George_Adventure.enableMemoryBuffer(true);
-	resources.Sprite_George_Adventure.load(sdl, "res/george_adventure.tex");
+	resources.Sprite_George_Adventure.load(gpu, "res/george_adventure.tex");
 
 	resources.Sprites_Glimmer.enableMemoryBuffer(true);
-	resources.Sprites_Glimmer.load(sdl, "res/glimmer.tex");
+	resources.Sprites_Glimmer.load(gpu, "res/glimmer.tex");
 
 
-	resources.Cursor.load(sdl, "res/cursor.tex");
+	resources.Cursor.load(gpu, "res/cursor.tex");
 	resources.TileTypes.enableMemoryBuffer(true);
-	resources.TileTypes.load(sdl, "res/tiletypes.tex");
+	resources.TileTypes.load(gpu, "res/tiletypes.tex");
 	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	resources.Sprites_Nature.enableOutlines(true);
 	resources.Sprites_Nature.enableMemoryBuffer(true);
-	resources.Sprites_Nature.load(sdl, "res/sprites_nature.tex");
+	resources.Sprites_Nature.load(gpu, "res/sprites_nature.tex");
 
 	resources.Sprites_Plants.enableOutlines(true);
 	resources.Sprites_Plants.enableMemoryBuffer(true);
-	resources.Sprites_Plants.load(sdl, "res/sprites_plants.tex");
+	resources.Sprites_Plants.load(gpu, "res/sprites_plants.tex");
 
 	resources.Sprites_Objects.enableOutlines(true);
 	resources.Sprites_Objects.enableMemoryBuffer(true);
-	resources.Sprites_Objects.load(sdl, "res/sprites_objects.tex");
+	resources.Sprites_Objects.load(gpu, "res/sprites_objects.tex");
 
 	resources.Sprites_Nature_Blury.enableOutlines(true);
 	resources.Sprites_Nature_Blury.enableMemoryBuffer(true);
-	resources.Sprites_Nature_Blury.load(sdl, "res/sprites_nature_blury.tex");
+	resources.Sprites_Nature_Blury.load(gpu, "res/sprites_nature_blury.tex");
 
 	resources.Sprites_Rocks.enableOutlines(true);
 	resources.Sprites_Rocks.enableMemoryBuffer(true);
-	resources.Sprites_Rocks.load(sdl, "res/sprites_rocks.tex");
+	resources.Sprites_Rocks.load(gpu, "res/sprites_rocks.tex");
 
 	resources.Sprites_Flowers.enableOutlines(true);
 	resources.Sprites_Flowers.enableMemoryBuffer(true);
-	resources.Sprites_Flowers.load(sdl, "res/sprites_flowers.tex");
+	resources.Sprites_Flowers.load(gpu, "res/sprites_flowers.tex");
 
 	resources.Sprites_Treasure.enableOutlines(true);
 	resources.Sprites_Treasure.enableMemoryBuffer(true);
-	resources.Sprites_Treasure.load(sdl, "res/sprites_treasure.tex");
+	resources.Sprites_Treasure.load(gpu, "res/sprites_treasure.tex");
 
 	resources.Sprites_White.enableOutlines(true);
 	resources.Sprites_White.enableMemoryBuffer(true);
-	resources.Sprites_White.load(sdl, "res/sprites_white_x8.tex");
+	resources.Sprites_White.load(gpu, "res/sprites_white_x8.tex");
 
 	resources.Sprites_Tropical.enableOutlines(true);
 	resources.Sprites_Tropical.enableMemoryBuffer(true);
-	resources.Sprites_Tropical.load(sdl, "res/sprites_tropical.tex");
+	resources.Sprites_Tropical.load(gpu, "res/sprites_tropical.tex");
 
 	resources.Sprites_White1D.enableOutlines(true);
 	resources.Sprites_White1D.enableMemoryBuffer(true);
-	resources.Sprites_White1D.load(sdl, "res/sprites_white_x1.tex");
+	resources.Sprites_White1D.load(gpu, "res/sprites_white_x1.tex");
 
 	resources.Sprites_Decals.enableOutlines(true);
 	resources.Sprites_Decals.enableMemoryBuffer(true);
-	resources.Sprites_Decals.load(sdl, "res/sprites_decals.tex");
+	resources.Sprites_Decals.load(gpu, "res/sprites_decals.tex");
 
 	resources.Lightmaps.enableOutlines(true);
 	resources.Lightmaps.enableMemoryBuffer(true);
 	resources.Lightmaps.setTextureBlendMode(SDL_BLENDMODE_ADD);
-	resources.Lightmaps.load(sdl, "res/lightmaps.tex");
+	resources.Lightmaps.load(gpu, "res/lightmaps.tex");
 	resources.Lightmaps.setPivot(8, 256, 27);
 	resources.Lightmaps.setPivot(9, 256, 27);
 	resources.Lightmaps.setPivot(10, 256, 27);
@@ -194,10 +194,10 @@ void Game::loadGrafix()
 
 	resources.LightObjects.enableOutlines(true);
 	resources.LightObjects.enableMemoryBuffer(true);
-	resources.LightObjects.load(sdl, "res/lightobjects.tex");
+	resources.LightObjects.load(gpu, "res/lightobjects.tex");
 
 
-	resources.loadBricks(sdl);
+	resources.loadBricks(gpu);
 	brick_occupation.createFromSpriteTexture(resources.bricks[2].world, TILE_WIDTH, TILE_HEIGHT);
 	brick_occupation_solid.push_back(BrickOccupation::Item(0, 0, Tile::TileOccupation::OccupationBrick));
 	brick_occupation_solid.push_back(BrickOccupation::Item(0, 1, Tile::TileOccupation::OccupationBrick));
@@ -206,61 +206,61 @@ void Game::loadGrafix()
 
 	resources.uiSpritesNature.enableSDLBuffer(false);
 	resources.uiSpritesNature.enableMemoryBuffer(true);
-	resources.uiSpritesNature.load(sdl, "res/sprites_nature_ui.tex");
+	resources.uiSpritesNature.load(gpu, "res/sprites_nature_ui.tex");
 
 	resources.uiSpritesPlants.enableSDLBuffer(false);
 	resources.uiSpritesPlants.enableMemoryBuffer(true);
-	resources.uiSpritesPlants.load(sdl, "res/sprites_plants_ui.tex");
+	resources.uiSpritesPlants.load(gpu, "res/sprites_plants_ui.tex");
 
 	resources.uiSpritesObjects.enableSDLBuffer(false);
 	resources.uiSpritesObjects.enableMemoryBuffer(true);
-	resources.uiSpritesObjects.load(sdl, "res/sprites_objects_ui.tex");
+	resources.uiSpritesObjects.load(gpu, "res/sprites_objects_ui.tex");
 
 	resources.uiSpritesNatureBlury.enableSDLBuffer(false);
 	resources.uiSpritesNatureBlury.enableMemoryBuffer(true);
-	resources.uiSpritesNatureBlury.load(sdl, "res/sprites_nature_blury_ui.tex");
+	resources.uiSpritesNatureBlury.load(gpu, "res/sprites_nature_blury_ui.tex");
 
 	resources.uiSpritesRocks.enableSDLBuffer(false);
 	resources.uiSpritesRocks.enableMemoryBuffer(true);
-	resources.uiSpritesRocks.load(sdl, "res/sprites_rocks_ui.tex");
+	resources.uiSpritesRocks.load(gpu, "res/sprites_rocks_ui.tex");
 
 	resources.uiSpritesFlowers.enableSDLBuffer(false);
 	resources.uiSpritesFlowers.enableMemoryBuffer(true);
-	resources.uiSpritesFlowers.load(sdl, "res/sprites_flowers_ui.tex");
+	resources.uiSpritesFlowers.load(gpu, "res/sprites_flowers_ui.tex");
 
 	resources.uiSpritesTreasure.enableSDLBuffer(false);
 	resources.uiSpritesTreasure.enableMemoryBuffer(true);
-	resources.uiSpritesTreasure.load(sdl, "res/sprites_treasure_ui.tex");
+	resources.uiSpritesTreasure.load(gpu, "res/sprites_treasure_ui.tex");
 
 	resources.uiObjects.enableSDLBuffer(false);
 	resources.uiObjects.enableMemoryBuffer(true);
-	resources.uiObjects.load(sdl, "res/objects_ui.tex");
+	resources.uiObjects.load(gpu, "res/objects_ui.tex");
 
 	resources.uiSpritesWhite.enableSDLBuffer(false);
 	resources.uiSpritesWhite.enableMemoryBuffer(true);
-	resources.uiSpritesWhite.load(sdl, "res/sprites_white_ui.tex");
+	resources.uiSpritesWhite.load(gpu, "res/sprites_white_ui.tex");
 
 	resources.uiSprites_White1D.enableSDLBuffer(false);
 	resources.uiSprites_White1D.enableMemoryBuffer(true);
-	resources.uiSprites_White1D.load(sdl, "res/sprites_white_x1_ui.tex");
+	resources.uiSprites_White1D.load(gpu, "res/sprites_white_x1_ui.tex");
 
 	resources.uiSpritesDecals.enableSDLBuffer(false);
 	resources.uiSpritesDecals.enableMemoryBuffer(true);
-	resources.uiSpritesDecals.load(sdl, "res/sprites_decals_ui.tex");
+	resources.uiSpritesDecals.load(gpu, "res/sprites_decals_ui.tex");
 
 	resources.uiSpritesTropical.enableSDLBuffer(false);
 	resources.uiSpritesTropical.enableMemoryBuffer(true);
-	resources.uiSpritesTropical.load(sdl, "res/sprites_tropical_ui.tex");
+	resources.uiSpritesTropical.load(gpu, "res/sprites_tropical_ui.tex");
 
 	resources.uiLightmaps.enableSDLBuffer(false);
 	resources.uiLightmaps.enableMemoryBuffer(true);
-	resources.uiLightmaps.load(sdl, "res/lightmaps_ui.tex");
+	resources.uiLightmaps.load(gpu, "res/lightmaps_ui.tex");
 
-	resources.Waynet.load(sdl, "res/waynet.tex");
+	resources.Waynet.load(gpu, "res/waynet.tex");
 
-	level.objects->loadSpritesets(sdl);
-	level.particles->loadSpritesets(sdl);
-	level.lights.loadSpritesets(sdl);
+	level.objects->loadSpritesets(gpu);
+	level.particles->loadSpritesets(gpu);
+	level.lights.loadSpritesets(gpu);
 	level.waynet.setSpriteset(&resources.Waynet);
 	//level.setLightset(&resources.Lightmaps, &resources.LightObjects);
 
@@ -290,6 +290,8 @@ void Game::createWindow()
 	wm->createWindow(*this);
 	SDL_Renderer* renderer = (SDL_Renderer*)getRenderer();
 	sdl.setRenderer(renderer);
+
+	gpu.init((SDL_Window*)getSDLWindow());
 
 	//setPos(0,0);
 	//SDL_RenderSetLogicalSize(renderer, 1920, 1080);
@@ -335,6 +337,11 @@ SDL_Renderer* Game::getSDLRenderer()
 SDL& Game::getSDL()
 {
 	return sdl;
+}
+
+GPUContext& Game::getGPUContext()
+{
+	return gpu;
 }
 
 void Game::showUi(bool enable)
@@ -825,7 +832,7 @@ void Game::drawWorld(SDL_Renderer* renderer)
 	level.setShowSprites(mainmenue->visibility_sprites);
 	level.setShowObjects(mainmenue->visibility_objects);
 	level.setShowParticles(mainmenue->visibility_particles);
-	level.draw(renderer, WorldCoords, player, metrics, glimmer);
+	level.draw(gpu, WorldCoords, player, metrics, glimmer);
 	metrics.time_draw_tsop.stop();
 	if (screenshot) {
 		if (screenshot->mode() == Screenshot::Mode::File) {
@@ -946,7 +953,7 @@ void Game::run()
 		if (filedialog) checkFileDialog();
 		metrics.time_events.stop();
 
-
+		gpu.clearQueues();
 
 		drawWorld(renderer);
 
@@ -966,7 +973,7 @@ void Game::run()
 
 
 		if (mainmenue->visibility_plane_player) {
-			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(renderer, game_viewport, WorldCoords);
+			if (mainmenue->visibility_tiletypes) level.TileTypeMatrix.draw(gpu, game_viewport, WorldCoords);
 			if (mainmenue->visibility_collision) player->drawCollision(renderer, game_viewport, WorldCoords);
 			if (waynet_edit) level.waynet.draw(renderer, game_viewport, WorldCoords);
 		}
@@ -981,8 +988,8 @@ void Game::run()
 
 		drawWidgets();
 		// Mouse
-		if (settings_screen) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
-		else if (showui) resources.Cursor.draw(renderer, mouse.p.x, mouse.p.y, 1);
+		if (settings_screen) resources.Cursor.draw(gpu, mouse.p.x, mouse.p.y, 11, ppl7::grafix::Color(255, 200, 0, 255));
+		else if (showui) resources.Cursor.draw(gpu, mouse.p.x, mouse.p.y, 1);
 
 
 		metrics.time_draw_ui.stop();
@@ -1371,7 +1378,7 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 	}
 	if (sprite_mode == SpriteModeEdit && selected_sprite.id >= 0 && selected_sprite_system != NULL) {
 		int currentPlane = mainmenue->currentPlane();
-		selected_sprite_system->drawSelectedSpriteOutline(renderer, game_viewport,
+		selected_sprite_system->drawSelectedSpriteOutline(gpu, game_viewport,
 			WorldCoords * planeFactor[currentPlane], selected_sprite.id);
 	}
 	else if (sprite_mode == spriteModeDraw) {
@@ -1392,9 +1399,9 @@ void Game::drawSelectedSprite(SDL_Renderer* renderer, const ppl7::grafix::Point&
 		float scale = sprite_selection->spriteScale();
 		float rotation = sprite_selection->spriteRotation();
 		if (!level.spriteset[spriteset]) return;
-		level.spriteset[spriteset]->drawScaledWithAngle(renderer,
+		level.spriteset[spriteset]->drawScaledWithAngle(gpu,
 			tmouse.x, tmouse.y, nr, scale, scale, rotation, level.palette.getColor(sprite_selection->colorIndex()));
-		level.spriteset[spriteset]->drawOutlinesWithAngle(renderer,
+		level.spriteset[spriteset]->drawOutlinesWithAngle(gpu,
 			tmouse.x, tmouse.y, nr, scale, scale, rotation);
 	}
 }
@@ -1419,9 +1426,9 @@ void Game::drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Point& 
 		float angle = lights_selection->lightAngle();
 		ppl7::grafix::Color c = lights_selection->color();
 		c.setAlpha(lights_selection->colorIntensity());
-		resources.Lightmaps.drawScaledWithAngle(renderer,
+		resources.Lightmaps.drawScaledWithAngle(gpu,
 			tmouse.x, tmouse.y, nr, scale_x, scale_y, angle, c);
-		resources.Lightmaps.drawOutlinesWithAngle(renderer,
+		resources.Lightmaps.drawOutlinesWithAngle(gpu,
 			tmouse.x, tmouse.y, nr, scale_x, scale_y, angle);
 		return;
 	}
@@ -1454,7 +1461,7 @@ void Game::drawSelectedTile(SDL_Renderer* renderer, const ppl7::grafix::Point& m
 	if (!level.plane(currentPlane).isOccupied(tx, ty, currentLayer, occupation)) {
 		int x = tx * TILE_WIDTH + game_viewport.x1 - WorldCoords.x * planeFactor[currentPlane];;
 		int y = ty * TILE_HEIGHT + game_viewport.y1 - WorldCoords.y * planeFactor[currentPlane];;
-		level.tileset[tileset]->draw(renderer,
+		level.tileset[tileset]->draw(gpu,
 			x, y + TILE_HEIGHT, nr, level.palette.getColor(color_index));
 	}
 
@@ -1464,7 +1471,7 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 {
 	if (!object_selection) return;
 	if (sprite_mode == SpriteModeEdit && selected_object != NULL) {
-		level.objects->drawSelectedSpriteOutline(renderer, game_viewport,
+		level.objects->drawSelectedSpriteOutline(gpu, game_viewport,
 			WorldCoords * planeFactor[static_cast<int>(selected_object->myPlane)], selected_object->id);
 	}
 	else if (sprite_mode == spriteModeDraw) {
@@ -1472,7 +1479,7 @@ void Game::drawSelectedObject(SDL_Renderer* renderer, const ppl7::grafix::Point&
 		int object_type = object_selection->selectedObjectType();
 		if (object_type < 0) return;
 		ppl7::grafix::Point tmouse = game_viewport.translate(mouse);
-		level.objects->drawPlaceSelection(renderer, tmouse, object_type);
+		level.objects->drawPlaceSelection(gpu, tmouse, object_type);
 	}
 }
 

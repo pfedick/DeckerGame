@@ -56,12 +56,12 @@ void ParticleSystem::clear()
     nextid = 1;
 }
 
-void ParticleSystem::loadSpritesets(SDL& sdl)
+void ParticleSystem::loadSpritesets(GPUContext& gpu)
 {
     //SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     spriteset[ParticleSpriteset::GenericParticles]->enableOutlines(false);
     spriteset[ParticleSpriteset::GenericParticles]->enableMemoryBuffer(false);
-    spriteset[ParticleSpriteset::GenericParticles]->load(sdl, "res/particles.tex");
+    spriteset[ParticleSpriteset::GenericParticles]->load(gpu, "res/particles.tex");
 }
 
 void ParticleSystem::addParticle(Particle* particle)

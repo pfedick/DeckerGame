@@ -37,21 +37,21 @@ int Resources::getMaxTilesetId() const
 }
 
 
-void Resources::loadBricks(SDL& sdl)
+void Resources::loadBricks(GPUContext& gpu)
 {
 	bricks[1].name = "Solid Colors";
-	bricks[1].world.load(sdl, "res/bricks_solid.tex");
+	bricks[1].world.load(gpu, "res/bricks_solid.tex");
 	bricks[1].ui.enableMemoryBuffer(true);
-	bricks[1].ui.load(sdl, "res/bricks_solid_ui.tex");
+	bricks[1].ui.load(gpu, "res/bricks_solid_ui.tex");
 
 	bricks[2].name = "Default Bricks";
 	bricks[2].ldraw_material = 15;
 	bricks[2].world.enableOutlines(true);
 	bricks[2].world.enableMemoryBuffer(true);
-	bricks[2].world.load(sdl, "res/bricks_white.tex");
+	bricks[2].world.load(gpu, "res/bricks_white.tex");
 	bricks[2].ui.enableSDLBuffer(false);
 	bricks[2].ui.enableMemoryBuffer(true);
-	bricks[2].ui.load(sdl, "res/bricks_white_ui.tex");
+	bricks[2].ui.load(gpu, "res/bricks_white_ui.tex");
 	max_tileset_id = 2;
 
 

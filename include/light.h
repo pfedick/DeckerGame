@@ -2,11 +2,13 @@
 #define INCLUDE_LIGHTMAP_H_
 
 #include "decker_sdl.h"
+#include "gpu.h"
+
 class SpriteTexture;
 class LightLayer;
 
 enum class LightType {
-    Static=0,
+    Static = 0,
     Fire,
     Flicker,
     Fade,
@@ -15,20 +17,20 @@ enum class LightType {
 
 
 enum class LightPlaneId {
-    Near=6,
-    Player=0,
-    Middle=4,
-    Far=2,
-    Horizon=5,
-    Max=7
+    Near = 6,
+    Player = 0,
+    Middle = 4,
+    Far = 2,
+    Horizon = 5,
+    Max = 7
 };
 
 enum class LightPlayerPlaneMatrix {
-    None=0,
-    Front=1,
-    Player=2,
-    Back=4,
-    All=7
+    None = 0,
+    Front = 1,
+    Player = 2,
+    Back = 4,
+    All = 7
 };
 
 class LightSystem;
@@ -102,7 +104,7 @@ private:
 public:
     LightSystem();
     ~LightSystem();
-    void loadSpritesets(SDL& sdl);
+    void loadSpritesets(GPUContext& gpu);
     void clear();
     void update(double time, float frame_rate_compensation);
     void updateVisibleLightList(const ppl7::grafix::Point& worldcoords, const ppl7::grafix::Rect& viewport);
@@ -121,9 +123,9 @@ public:
     size_t countVisible() const;
     void setVisible(LightPlaneId plane, bool visible);
 
-    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
+    void draw(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane = LightPlayerPlaneMatrix::None) const;
     void drawEditMode(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane) const;
-    void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane=LightPlayerPlaneMatrix::None) const;
+    void drawLensFlares(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, LightPlaneId plane, LightPlayerPlaneMatrix pplane = LightPlayerPlaneMatrix::None) const;
 
     void drawSelectedLight(SDL_Renderer* renderer, const ppl7::grafix::Rect& viewport, const ppl7::grafix::Point& worldcoords, int id);
 

@@ -35,7 +35,7 @@ OBJECTS=compile/main.o \
 	compile/background.o \
 	compile/texturecache.o \
 	compile/spritetexture.o \
-	compile/spritedrawer.o \
+	compile/gpu.o \
 	compile/level.o \
 	compile/levelparameter.o \
 	compile/fps.o \
@@ -467,9 +467,9 @@ compile/spritetexture.o: src/game/spritetexture.cpp Makefile include/sprite.h
 	- @mkdir -p compile
 	$(CXX) -o compile/spritetexture.o -c src/game/spritetexture.cpp $(CFLAGS)
 
-compile/gpudrawer.o: src/game/gpudrawer.cpp Makefile include/gpu.h include/sprite.h
+compile/gpu.o: src/game/gpu.cpp Makefile include/gpu.h include/sprite.h
 	- @mkdir -p compile
-	$(CXX) -o compile/gpudrawer.o -c src/game/gpudrawer.cpp $(CFLAGS)
+	$(CXX) -o compile/gpu.o -c src/game/gpu.cpp $(CFLAGS)
 
 compile/resources.o: src/game/resources.cpp Makefile include/decker.h
 	- @mkdir -p compile
