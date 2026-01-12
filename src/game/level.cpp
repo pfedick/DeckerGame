@@ -504,6 +504,13 @@ void Level::blurLayer(SDL_Renderer* renderer, float factor)
 		SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
 		return;
 	}
+
+	// Funktioniert noch nicht richtig
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
+
+	return;
+
 	struct BlurUniforms {
 		float blurStrength;
 		float padding1;      // std140: vec2 alignment
@@ -511,10 +518,12 @@ void Level::blurLayer(SDL_Renderer* renderer, float factor)
 		float texelSizeY;
 	};
 
-	ppl7::PrintDebug("Level::blurLayer factor=%f\n", factor);
+	//ppl7::PrintDebug("Level::blurLayer factor=%f\n", factor);
 
 	float texWidth, texHeight;
 	SDL_GetTextureSize(tex_render_layer, &texWidth, &texHeight);
+
+	//ppl7::PrintDebug("Level::blurLayer texWidth=%f, texHeight=%f\n", texWidth, texHeight);
 
 	BlurUniforms uniforms;
 	uniforms.blurStrength = factor;
@@ -531,12 +540,12 @@ void Level::blurLayer(SDL_Renderer* renderer, float factor)
 	);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 
-	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_SetRenderTarget(renderer, tex_blur_temp);
 	SDL_SetGPURenderState(renderer, renderstate->blurHorizontalState);
 	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
 
 	SDL_SetGPURenderState(renderer, NULL);
-	return;
+
 
 	// Pass 2: Vertical Blur (analog mit anderem Shader)
 	SDL_SetGPURenderStateFragmentUniforms(
