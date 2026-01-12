@@ -142,9 +142,17 @@ void start(int argc, char** argv)
 
 	ppl7::grafix::Grafix gfx;
 	ppltk::WindowManager_SDL3 wm;
+
+	SDL_GPUDevice* gpu = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV, true, "vulkan");
+	if (!gpu) {
+		printf("Failed to create GPU device: %s", SDL_GetError());
+		return;
+	}
+	wm.enableGPURenderer(gpu);
 	Game game;
 	game.init();
 	game.init_grafix();
+	game.renderstate.init(gpu, game.getSDL().getRenderer());
 
 #ifdef DEBUGTIME
 	if (ppl7::HaveArgv(argc, argv, "-d") && ppl7::File::exists("Makefile")) {

@@ -28,6 +28,7 @@ Level::Level()
 	tex_render_layer = NULL;
 	tex_render_lightmap = NULL;
 	tex_render_target = NULL;
+	tex_blur_temp = NULL;
 	screenshot = NULL;
 }
 
@@ -175,11 +176,17 @@ SpriteSystem& Level::spritesystem(int plane, int layer)
 	return PlayerSprites[layer];
 }
 
-void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer)
+void Level::setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer, SDL_Texture* tex_blur_temp)
 {
 	this->tex_render_target = tex_render_target;
 	this->tex_render_lightmap = tex_render_lightmap;
 	this->tex_render_layer = tex_render_layer;
+	this->tex_blur_temp = tex_blur_temp;
+}
+
+void Level::setRenderState(RenderState* state)
+{
+	renderstate = state;
 }
 
 
@@ -482,10 +489,68 @@ void Level::addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerP
 	SDL_RenderTexture(renderer, tex_render_lightmap, NULL, NULL);
 	lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	if (screenshot) screenshot->save(plane, pplane, Screenshot::Type::Final);
-	SDL_SetRenderTarget(renderer, tex_render_target);
-	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
+	//SDL_SetRenderTarget(renderer, tex_render_target);
+	//SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
 	//lights.drawLensFlares(renderer, viewport, worldcoords, plane, pplane);
 	metrics.time_lights.stop();
+}
+
+void Level::blurLayer(SDL_Renderer* renderer, float factor)
+{
+	// Textur liegt zu beginn in tex_render_layer und soll am Ende
+	// nach tex_render_target kopiert werden
+	if (factor <= 0.0f) {
+		SDL_SetRenderTarget(renderer, tex_render_target);
+		SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
+		return;
+	}
+	struct BlurUniforms {
+		float blurStrength;
+		float padding1;      // std140: vec2 alignment
+		float texelSizeX;
+		float texelSizeY;
+	};
+
+	ppl7::PrintDebug("Level::blurLayer factor=%f\n", factor);
+
+	float texWidth, texHeight;
+	SDL_GetTextureSize(tex_render_layer, &texWidth, &texHeight);
+
+	BlurUniforms uniforms;
+	uniforms.blurStrength = factor;
+	uniforms.padding1 = 0.0f;
+	uniforms.texelSizeX = 1.0f / texWidth;
+	uniforms.texelSizeY = 1.0f / texHeight;
+
+	// Pass 1: Horizontal Blur
+	SDL_SetGPURenderStateFragmentUniforms(
+		renderstate->blurHorizontalState,
+		0,  // slot_index
+		&uniforms,
+		sizeof(BlurUniforms)
+	);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_SetGPURenderState(renderer, renderstate->blurHorizontalState);
+	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
+
+	SDL_SetGPURenderState(renderer, NULL);
+	return;
+
+	// Pass 2: Vertical Blur (analog mit anderem Shader)
+	SDL_SetGPURenderStateFragmentUniforms(
+		renderstate->blurVerticalState,
+		0,  // slot_index
+		&uniforms,
+		sizeof(BlurUniforms)
+	);
+	SDL_SetRenderTarget(renderer, tex_render_target);
+	SDL_SetGPURenderState(renderer, renderstate->blurVerticalState);
+	SDL_RenderTexture(renderer, tex_blur_temp, NULL, NULL);
+
+	// Shader deaktivieren
+	SDL_SetGPURenderState(renderer, NULL);
 }
 
 void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer)
@@ -494,25 +559,32 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawNonePlayerPlane(renderer, PlaneId::Horizon, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics,
 		Particle::Layer::HorizonPlaneBack, Particle::Layer::HorizonPlaneFront);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);
+	blurLayer(renderer, 1.0f);
+
 	prepareLayer(renderer);
 
 	drawParticles(renderer, Particle::Layer::FarPlaneBack, worldcoords * planeFactor[2], metrics);
 	drawNonePlayerPlane(renderer, PlaneId::Far, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics,
 		Particle::Layer::FarPlaneBack, Particle::Layer::FarPlaneFront);
 	addLightmap(renderer, LightPlaneId::Far, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], metrics);
+	blurLayer(renderer, 0.5f);
+
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, PlaneId::Middle, MiddlePlane, MiddleSprites[0], MiddleSprites[1], worldcoords * planeFactor[4], metrics,
 		Particle::Layer::MiddlePlaneBack, Particle::Layer::MiddlePlaneFront);
 	//addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	addLightmap(renderer, LightPlaneId::Middle, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], metrics);
+	blurLayer(renderer, 0.2f);
+
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, PlaneId::Back, BackPlane, BackSprites[0], BackSprites[1], worldcoords * planeFactor[3], metrics,
 		Particle::Layer::BackplaneBack, Particle::Layer::BackplaneFront);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Back, worldcoords * planeFactor[static_cast<int>(PlaneId::Back)], metrics);
-	prepareLayer(renderer);
+	blurLayer(renderer, 0.0f);
 
+	prepareLayer(renderer);
 	if (PlayerPlane.isVisible()) {
 		if (showSprites) {
 			metrics.time_sprites.start();
@@ -562,6 +634,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		}
 
 		addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Player, worldcoords * planeFactor[static_cast<int>(PlaneId::Player)], metrics);
+		blurLayer(renderer, 0.0f);
 
 		if (showObjects && editMode) {
 			metrics.time_objects.start();
@@ -587,12 +660,15 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		Particle::Layer::FrontplaneBack, Particle::Layer::FrontplaneFront);
 	//addLightmap(renderer, FrontLights, worldcoords * planeFactor[1], metrics);
 	addLightmap(renderer, LightPlaneId::Player, LightPlayerPlaneMatrix::Front, worldcoords * planeFactor[static_cast<int>(PlaneId::Front)], metrics);
+	blurLayer(renderer, 0.0f);
+
 	prepareLayer(renderer);
 
 	drawNonePlayerPlane(renderer, PlaneId::Near, NearPlane, NearSprites[0], NearSprites[1], worldcoords * planeFactor[6], metrics,
 		Particle::Layer::NearPlaneBack, Particle::Layer::NearPlaneFront);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
+	blurLayer(renderer, 1.0f);
 
 	if (showObjects && editMode) {
 		metrics.time_objects.start();

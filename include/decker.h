@@ -20,6 +20,7 @@
 #include "gamecontroller.h"
 #include "light.h"
 #include "sprite.h"
+#include "renderstate.h"
 
 #define APP_COMPANY "Patrick F.-Productions"
 #define APP_NAME "George Decker"
@@ -674,6 +675,8 @@ private:
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
+	SDL_Texture* tex_blur_temp;
+	RenderState* renderstate;
 
 	bool editMode;
 	bool showSprites;
@@ -730,6 +733,7 @@ private:
 	void drawParticles(SDL_Renderer* renderer, Particle::Layer layer, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void addLightmap(SDL_Renderer* renderer, LightPlaneId plane, LightPlayerPlaneMatrix pplane, const ppl7::grafix::Point& worldcoords, Metrics& metrics);
 	void prepareLayer(SDL_Renderer* renderer);
+	void blurLayer(SDL_Renderer* renderer, float factor = 0.0f);
 public:
 
 
@@ -748,7 +752,8 @@ public:
 	void backup(const ppl7::String& Filename);
 	void draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords, Player* player, Metrics& metrics, Glimmer* glimmer);
 	void setViewport(const ppl7::grafix::Rect& r);
-	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer);
+	void setRenderTargets(SDL_Texture* tex_render_target, SDL_Texture* tex_render_lightmap, SDL_Texture* tex_render_layer, SDL_Texture* tex_blur_temp);
+	void setRenderState(RenderState* state);
 	Plane& plane(int id);
 	SpriteSystem& spritesystem(int plane, int layer);
 	//LightLayer& lightsystem(int plane);
@@ -932,6 +937,7 @@ private:
 public:
 	AudioSystem audiosystem;
 	GameController controller;
+	RenderState renderstate;
 private:
 	AudioPool audiopool;
 	Resources resources;
@@ -941,6 +947,7 @@ private:
 	SDL_Texture* tex_render_target;
 	SDL_Texture* tex_render_lightmap;
 	SDL_Texture* tex_render_layer;
+	SDL_Texture* tex_blur_temp;;
 	ppl7::grafix::Size desktopSize;
 	ppl7::grafix::Font gui_font;
 	ppl7::grafix::Rect viewport;

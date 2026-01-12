@@ -171,6 +171,7 @@ OBJECTS=compile/main.o \
 	compile/video_videoplayer.o \
 	compile/video_ivfdemuxer.o \
 	compile/intro_screen.o \
+	compile/renderstate.o \
 
 
 TEXMAKER_OBJECTS	= compile/texm_main.o \
@@ -417,6 +418,11 @@ fonts:
 	pplfontmaker -t res/notosans.fnt6 -q /usr/share/fonts/google-noto/NotoSans-Bold.ttf -s "8,10,12,14,16,18,20,30" --idn --aa4 -n "NotoSans" --zlib -6 --isbold
 
 
+shader:
+	@mkdir -p res/shader/vulkan
+	glslc -fshader-stage=fragment res/shader/src/blur_horizontal.glsl -o res/shader/vulkan/blur_horizontal.spv
+	glslc -fshader-stage=fragment res/shader/src/blur_vertical.glsl -o res/shader/vulkan/blur_vertical.spv
+
 update_version:
 	@mkdir -p tmp
 	@echo "#ifndef VERSION_H_" > tmp/version.h
@@ -436,12 +442,17 @@ compile/sdl.o: src/game/sdl.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/sdl.o -c src/game/sdl.cpp $(CFLAGS)
 
+compile/renderstate.o: src/game/renderstate.cpp Makefile include/renderstate.h
+	- @mkdir -p compile
+	$(CXX) -o compile/renderstate.o -c src/game/renderstate.cpp $(CFLAGS)
+
 compile/metrics.o: src/game/metrics.cpp Makefile include/decker.h
 	- @mkdir -p compile
 	$(CXX) -o compile/metrics.o -c src/game/metrics.cpp $(CFLAGS)
 
 compile/game.o: src/game/game.cpp Makefile include/decker.h include/ui.h include/objects.h include/audio.h \
-	include/translate.h include/particle.h include/screens.h include/gamecontroller.h include/hud.h include/glimmer.h
+	include/translate.h include/particle.h include/screens.h include/gamecontroller.h include/hud.h include/glimmer.h \
+	include/renderstate.h
 	- @mkdir -p compile
 	$(CXX) -o compile/game.o -c src/game/game.cpp $(CFLAGS)
 
@@ -474,7 +485,7 @@ compile/color.o: src/game/color.cpp Makefile include/decker.h
 	$(CXX) -o compile/color.o -c src/game/color.cpp $(CFLAGS)
 
 compile/level.o: src/game/level.cpp Makefile include/decker.h include/objects.h \
-	include/waynet.h include/particle.h include/player.h
+	include/waynet.h include/particle.h include/player.h include/renderstate.h
 	- @mkdir -p compile
 	$(CXX) -o compile/level.o -c src/game/level.cpp $(CFLAGS)
 

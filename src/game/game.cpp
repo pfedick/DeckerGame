@@ -69,6 +69,7 @@ Game::Game()
 	tex_render_target = NULL;
 	tex_render_layer = NULL;
 	tex_render_lightmap = NULL;
+	tex_blur_temp = NULL;
 	wm = ppltk::GetWindowManager();
 	ppltk::WidgetStyle s(ppltk::WidgetStyle::Dark);
 	Style = s;
@@ -116,6 +117,7 @@ Game::~Game()
 	if (tex_render_target) sdl.destroyTexture(tex_render_target);
 	if (tex_render_lightmap) sdl.destroyTexture(tex_render_lightmap);
 	if (tex_render_layer) sdl.destroyTexture(tex_render_layer);
+	if (tex_blur_temp) sdl.destroyTexture(tex_blur_temp);
 	if (hud) delete hud;
 	if (screenshot != NULL && screenshot->mode() == Screenshot::Mode::File) delete screenshot;
 }
@@ -305,11 +307,12 @@ void Game::createRenderTarget()
 	if (tex_render_target) SDL_SetTextureScaleMode(tex_render_target, SDL_SCALEMODE_LINEAR);
 	tex_render_layer = sdl.createRenderTargetTexture(1920, 1080);
 	tex_render_lightmap = sdl.createRenderTargetTexture(1920, 1080);
+	tex_blur_temp = sdl.createRenderTargetTexture(1920, 1080);
 
 	SDL_SetTextureBlendMode(tex_render_layer, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(tex_render_lightmap, SDL_BLENDMODE_MUL);
-	level.setRenderTargets(tex_render_target, tex_render_lightmap, tex_render_layer);
-
+	level.setRenderTargets(tex_render_target, tex_render_lightmap, tex_render_layer, tex_blur_temp);
+	level.setRenderState(&renderstate);
 }
 
 ppltk::Window& Game::window()
