@@ -1,9 +1,14 @@
 // Horizontal Blur Fragment Shader
 #version 450
 
-layout(binding = 0) uniform sampler2D inputTexture;
-layout(binding = 1, std140) uniform BlurParams {
+// Texture Input -> Set 2, Binding 0
+layout(set = 2, binding = 0) uniform sampler2D inputTexture;
+
+// Params -> Set 3, Binding 0
+// Hinweis: Wir nutzen Binding 0, das müssen wir im C++ Code bei PushGPUFragmentUniformData beachten!
+layout(set = 3, binding = 0, std140) uniform BlurParams {
     float blurStrength;  // 0.0 - 1.0
+    float _padding;
     vec2 texelSize;
 };
 
@@ -16,14 +21,16 @@ void main() {
         0.147761, 0.118318, 0.094879, 0.075484, 0.060626,
         0.048297, 0.038771, 0.030001, 0.024177
     );
-    
-    color += texture(inputTexture, texCoord) * weights[0];
+    // Fallback: Bildschirmkoordinaten -> UV (0..1) aus gl_FragCoord,
+    // um fehlende TexCoord-Interpolation zu umgehen
+    vec2 uv = gl_FragCoord.xy * texelSize;
+
+    color += texture(inputTexture, uv) * weights[0];
     
     for(int i = 1; i < 9; ++i) {
         vec2 offset = vec2(texelSize.x * i * blurStrength, 0.0);
-        color += texture(inputTexture, texCoord + offset) * weights[i];
-        color += texture(inputTexture, texCoord - offset) * weights[i];
+        color += texture(inputTexture, uv + offset) * weights[i];
+        color += texture(inputTexture, uv - offset) * weights[i];
     }
-    
     fragColor = color;
 }

@@ -506,10 +506,10 @@ void Level::blurLayer(SDL_Renderer* renderer, float factor)
 	}
 
 	// Funktioniert noch nicht richtig
-	SDL_SetRenderTarget(renderer, tex_render_target);
-	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
+	//SDL_SetRenderTarget(renderer, tex_render_target);
+	//SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
 
-	return;
+	//return;
 
 	struct BlurUniforms {
 		float blurStrength;
@@ -538,9 +538,10 @@ void Level::blurLayer(SDL_Renderer* renderer, float factor)
 		&uniforms,
 		sizeof(BlurUniforms)
 	);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
 	SDL_SetRenderTarget(renderer, tex_blur_temp);
+	SDL_RenderClear(renderer);
 	SDL_SetGPURenderState(renderer, renderstate->blurHorizontalState);
 	SDL_RenderTexture(renderer, tex_render_layer, NULL, NULL);
 
@@ -677,7 +678,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		Particle::Layer::NearPlaneBack, Particle::Layer::NearPlaneFront);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
-	blurLayer(renderer, 1.0f);
+	blurLayer(renderer, 0.8f);
 
 	if (showObjects && editMode) {
 		metrics.time_objects.start();
