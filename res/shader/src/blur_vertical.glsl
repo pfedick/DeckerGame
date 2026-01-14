@@ -25,12 +25,29 @@ void main() {
     // um fehlende TexCoord-Interpolation zu umgehen
     vec2 uv = gl_FragCoord.xy * texelSize;
 
-    color += texture(inputTexture, uv) * weights[0];
+    // PRE-MULTIPLY ALPHA: Wichtig für korrekten Blur bei Transparenz
+    // Wir wandeln Straight Alpha in Premultiplied Alpha um, damit (0,0,0,0) nicht als "Schwarz" gewichtet wird
+    vec4 center = texture(inputTexture, uv);
+    center.rgb *= center.a;
+    color += center * weights[0];
     
     for(int i = 1; i < 9; ++i) {
         vec2 offset = vec2(0.0, texelSize.y * i * blurStrength);
-        color += texture(inputTexture, uv + offset) * weights[i];
-        color += texture(inputTexture, uv - offset) * weights[i];
+        
+        vec4 col1 = texture(inputTexture, uv + offset);
+        col1.rgb *= col1.a;  
+        color += col1 * weights[i];
+        
+        vec4 col2 = texture(inputTexture, uv - offset);
+        col2.rgb *= col2.a;
+        color += col2 * weights[i];
     }
-    fragColor = color;
+    
+    // UN-PREMULTIPLY ALPHA: Zurück zu Straight Alpha für SDL Renderer
+    // Dies verhindert die dunklen Ränder beim Blending
+    if(color.a > 0.0) {
+        fragColor = vec4(color.rgb / color.a, color.a);
+    } else {
+        fragColor = vec4(0.0);
+    }
 }

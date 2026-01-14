@@ -54,29 +54,18 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - Korrekte 24-Bit-Unterstützung für AIFF/WAVE
 - Mono-Dateien werden automatisch auf Stereo dupliziert
 
+### ✅ Shader-Integration: Parallax Blur (Abgeschlossen: Januar 2026)
+- Implementierung von Unschärfe-Effekten für Parallax-Ebenen
+- Nutzung der SDL 3.4 Shader-Features mit SDL_Renderer
+- Verbesserung der visuellen Tiefenwirkung (Depth of Field)
+
 ## Zukünftige Modernisierungsziele
 
-### 1. GPU-Rendering mit SDL3 GPU API (Priorität: Hoch)
-- Umstellung von SDL_Renderer auf SDL3 GPU-Features
-- Ermöglicht moderne Rendering-Techniken (Vulkan, Metal, D3D12)
-- Basis für Shader-Integration
-- Bessere Performance und Flexibilität
-
-**Geplantes Vorgehen:**
-- Minimal-invasiver Ansatz: Alle `SDL_RenderTexture()` Aufrufe durch eigene `drawSprite()` Methode ersetzen
-- Koordinatensystem: GPU-seitige Umrechnung mit **Projection Matrix** (orthographic)
-  - Sprite-Positionen bleiben in Pixel-Koordinaten
-  - Projection Matrix im Vertex Shader rechnet Pixel → NDC um
-  - Bei Window-Resize nur Matrix neu berechnen
-- UV-Koordinaten: Einmalige Normalisierung beim Textur-Laden (Pixel → 0.0-1.0)
-- Graphics Pipeline mit Standard-Vertex/Fragment-Shader für Sprite-Rendering
-- Später: Zusätzliche Pipelines für Effekte (Blur, etc.)
-
-### 2. Shader-Integration (Priorität: Mittel)
-- Verwendung von Shadern für visuelle Effekte
-- Speziell: Unschärfe-Effekte für Parallax-Ebenen (Depth of Field)
-- Verbesserung der visuellen Tiefenwirkung
-- Post-Processing-Effekte
+### 1. Erweiterung Sprite-Format (Priorität: Mittel)
+- Erweiterung der `.tex` Dateien (PFP-Format)
+- **NRML Chunk**: Normal-Map Surface
+- **SPEC Chunk**: Specular-Map Surface
+- Ziel: Bessere Oberflächenbeleuchtung in Kombination mit Shadern
 
 ## Entwicklungsphilosophie
 
@@ -120,11 +109,10 @@ DeckerGame ist ein Jump'n'Run Game mit einer eigenen 2D-GameEngine, basierend au
 - Automatische Erkennung und Rumble-Support
 - Konfigurierbare Button-Mappings
 
-### Nächster Schritt: SDL3 GPU API
-- Neue `SDL_GPU*` API für modernes Rendering
-- Unterstützt Vulkan, Metal, D3D12
-- Shader-basierte Rendering-Pipeline
-- Ermöglicht Post-Processing und Effekte
+### Nächster Schritt: Sprite-Format Erweiterung
+- Erweiterung des `.tex` Formats (PFP) um NRML und SPEC Chunks
+- Integration von Normal-Maps für Beleuchtungseffekte
+- Anpassung der Shader zur Nutzung der neuen Textur-Informationen
 
 ## Rendering-Architektur (Wichtig!)
 

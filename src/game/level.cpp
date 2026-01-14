@@ -569,7 +569,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawNonePlayerPlane(renderer, PlaneId::Horizon, HorizonPlane, HorizonSprites[0], HorizonSprites[1], worldcoords * planeFactor[5], metrics,
 		Particle::Layer::HorizonPlaneBack, Particle::Layer::HorizonPlaneFront);
 	addLightmap(renderer, LightPlaneId::Horizon, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Horizon)], metrics);
-	blurLayer(renderer, 1.0f);
+	blurLayer(renderer, 1.2f);
 
 	prepareLayer(renderer);
 
@@ -577,7 +577,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 	drawNonePlayerPlane(renderer, PlaneId::Far, FarPlane, FarSprites[0], FarSprites[1], worldcoords * planeFactor[2], metrics,
 		Particle::Layer::FarPlaneBack, Particle::Layer::FarPlaneFront);
 	addLightmap(renderer, LightPlaneId::Far, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Far)], metrics);
-	blurLayer(renderer, 0.5f);
+	blurLayer(renderer, 0.8f);
 
 	prepareLayer(renderer);
 
@@ -585,7 +585,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		Particle::Layer::MiddlePlaneBack, Particle::Layer::MiddlePlaneFront);
 	//addLightmap(renderer, MiddleLights, worldcoords * planeFactor[4], metrics);
 	addLightmap(renderer, LightPlaneId::Middle, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Middle)], metrics);
-	blurLayer(renderer, 0.2f);
+	blurLayer(renderer, 0.5f);
 
 	prepareLayer(renderer);
 
@@ -678,7 +678,7 @@ void Level::draw(SDL_Renderer* renderer, const ppl7::grafix::Point& worldcoords,
 		Particle::Layer::NearPlaneBack, Particle::Layer::NearPlaneFront);
 	//addLightmap(renderer, NearLights, worldcoords * planeFactor[6], metrics);
 	addLightmap(renderer, LightPlaneId::Near, LightPlayerPlaneMatrix::None, worldcoords * planeFactor[static_cast<int>(PlaneId::Near)], metrics);
-	blurLayer(renderer, 0.8f);
+	blurLayer(renderer, 1.5f);
 
 	if (showObjects && editMode) {
 		metrics.time_objects.start();
